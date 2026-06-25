@@ -85,6 +85,18 @@ body {
   }
 }
 
+/* reveal.js shows slides within view distance via the `hidden` attribute + a
+   non-important inline `display:block`. Tailwind v4 preflight ships
+   `[hidden]{display:none!important}` in @layer base, and a layered !important
+   beats reveal's inline style — so adjacent slides stay hidden and transitions
+   never render (instant cut). Re-allow them with a higher-specificity important
+   rule in the same layer. */
+@layer base {
+  .reveal section[hidden] {
+    display: block !important;
+  }
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .fade-up {
     opacity: 0;
