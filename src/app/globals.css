@@ -1,27 +1,58 @@
 @import "tailwindcss";
 
-/* Terracotta + Slate editorial palette. One accent, locked across the page.
-   No pure black / white. Light values here; dark overrides below. */
+/* Deep Emerald palette. One accent, locked across the page.
+   No pure black / white. Light values here; dark overrides below.
+   --accent = fills (white text, AA in both modes);
+   --accent-text = small accent text/dot (AA on each mode's bg). */
 :root {
-  --background: #f8f8f7;
-  --foreground: #1b1a18;
-  --muted: #6b6864;
-  --border: #e3e1dd;
+  --background: #f6f6f3;
+  --foreground: #14201b;
+  --muted: #5c6660;
+  --border: #e2e3dd;
   --surface: #ffffff;
-  --accent: #b23f2a; /* terracotta, white text passes AA (~5:1) */
+  --accent: #0a6b4f; /* white text passes AA (~5.3:1) */
+  --accent-text: #0a6b4f;
   --accent-foreground: #ffffff;
 }
 
+/* Dark tokens via system preference (no manual choice). */
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #14110f;
-    --foreground: #ededeb;
-    --muted: #a09b94;
-    --border: #2b2724;
-    --surface: #1c1916;
-    --accent: #cf553a; /* lifted for contrast on dark; white text >=3:1 on large/button */
+    --background: #0d1411;
+    --foreground: #eef1ec;
+    --muted: #9aa39c;
+    --border: #243029;
+    --surface: #121b16;
+    --accent: #0c7a59;
+    --accent-text: #34c896;
     --accent-foreground: #ffffff;
   }
+}
+
+/* Manual override classes set on <html> by the theme toggle. They come after
+   the media query (equal specificity, later wins), so a chosen theme always
+   beats the system preference. Class selectors survive the Tailwind compiler;
+   :root[data-theme] does not. */
+.dark {
+  --background: #0d1411;
+  --foreground: #eef1ec;
+  --muted: #9aa39c;
+  --border: #243029;
+  --surface: #121b16;
+  --accent: #0c7a59; /* white text passes AA (~4.6:1) */
+  --accent-text: #34c896; /* lighter, AA as text on dark bg */
+  --accent-foreground: #ffffff;
+}
+
+.light {
+  --background: #f6f6f3;
+  --foreground: #14201b;
+  --muted: #5c6660;
+  --border: #e2e3dd;
+  --surface: #ffffff;
+  --accent: #0a6b4f;
+  --accent-text: #0a6b4f;
+  --accent-foreground: #ffffff;
 }
 
 @theme inline {
@@ -31,10 +62,11 @@
   --color-border: var(--border);
   --color-surface: var(--surface);
   --color-accent: var(--accent);
+  --color-accent-text: var(--accent-text);
   --color-accent-foreground: var(--accent-foreground);
   --font-sans: var(--font-geist-sans);
-  --font-display: var(--font-newsreader);
-  --font-bangla: var(--font-noto-bengali);
+  --font-display: var(--font-space-grotesk);
+  --font-bangla: var(--font-hind-siliguri);
 }
 
 body {

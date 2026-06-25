@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Newsreader, Noto_Serif_Bengali } from "next/font/google";
+import { Geist, Space_Grotesk, Hind_Siliguri } from "next/font/google";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -7,19 +7,19 @@ const geistSans = Geist({
   subsets: ["latin"],
 });
 
-const newsreader = Newsreader({
-  variable: "--font-newsreader",
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-space-grotesk",
   subsets: ["latin"],
-  style: ["normal", "italic"],
 });
 
-const notoBengali = Noto_Serif_Bengali({
-  variable: "--font-noto-bengali",
+const hindSiliguri = Hind_Siliguri({
+  variable: "--font-hind-siliguri",
   subsets: ["bengali"],
+  weight: ["400", "600", "700"],
 });
 
 export const metadata: Metadata = {
-  title: "মেধা — Learn AI & Data Science",
+  title: "Bangla.AI — Let's Learn AI & Data Science",
   description:
     "Structured courses, hands-on notebooks, and real projects in AI and data science, built for Bengali and English learners.",
 };
@@ -32,8 +32,17 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${newsreader.variable} ${notoBengali.variable} h-full antialiased`}
+      suppressHydrationWarning
+      className={`${geistSans.variable} ${spaceGrotesk.variable} ${hindSiliguri.variable} h-full antialiased`}
     >
+      <head>
+        {/* Apply saved theme before paint to avoid a flash. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.classList.add(t);}catch(e){}})();`,
+          }}
+        />
+      </head>
       <body className="min-h-full flex flex-col bg-background text-foreground font-sans">
         {children}
       </body>

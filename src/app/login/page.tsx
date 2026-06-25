@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Sign in — মেধা",
+  title: "Sign in — Bangla.AI",
 };
 
 // ponytail: stub login, no auth wired. Static form, submits nowhere.
@@ -13,13 +13,13 @@ export default function LoginPage() {
       <div className="w-full max-w-sm">
         <Link
           href="/"
-          className="font-bangla text-2xl text-foreground"
-          aria-label="মেধা home"
+          className="font-display text-xl font-bold tracking-tight text-foreground"
+          aria-label="Bangla.AI home"
         >
-          মেধা
+          Bangla<span className="text-accent-text">.</span>AI
         </Link>
 
-        <h1 className="mt-8 font-display text-3xl tracking-tight text-foreground">
+        <h1 className="mt-8 font-display text-3xl font-bold tracking-tight text-foreground">
           Get started
         </h1>
         <p className="mt-2 text-sm text-muted">
