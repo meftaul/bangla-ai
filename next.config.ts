@@ -1,6 +1,8 @@
 import type { NextConfig } from "next";
+import createMDX from "@next/mdx";
 
 const nextConfig: NextConfig = {
+  pageExtensions: ["ts", "tsx", "md", "mdx"],
   images: {
     remotePatterns: [
       {
@@ -12,4 +14,12 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+// Plugins as strings/serializable tuples — Turbopack can't receive JS function refs.
+const withMDX = createMDX({
+  options: {
+    remarkPlugins: ["remark-math"],
+    rehypePlugins: [["rehype-katex", {}]],
+  },
+});
+
+export default withMDX(nextConfig);

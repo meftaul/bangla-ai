@@ -29,6 +29,15 @@ export default async function DashboardLayout({
           <ThemeToggle />
         </div>
 
+        <nav className="mt-8 flex flex-1 flex-col gap-1">
+          <Link
+            href="/dashboard/articles"
+            className="rounded-md px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-background"
+          >
+            Articles
+          </Link>
+        </nav>
+
         <div className="flex flex-col gap-3">
           <p className="truncate text-sm text-muted" title={email}>
             {email}
