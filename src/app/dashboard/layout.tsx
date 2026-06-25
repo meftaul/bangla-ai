@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { signOut } from "../login/actions";
+import ThemeToggle from "../theme-toggle";
 
 export default async function DashboardLayout({
   children,
@@ -17,13 +18,16 @@ export default async function DashboardLayout({
   return (
     <div className="flex min-h-[100dvh]">
       <aside className="flex w-60 shrink-0 flex-col justify-between border-r border-border bg-surface px-5 py-6">
-        <Link
-          href="/dashboard"
-          className="font-display text-xl font-bold tracking-tight text-foreground"
-          aria-label="Bangla.AI dashboard"
-        >
-          Bangla<span className="text-accent-text">.</span>AI
-        </Link>
+        <div className="flex items-center justify-between">
+          <Link
+            href="/dashboard"
+            className="font-display text-xl font-bold tracking-tight text-foreground"
+            aria-label="Bangla.AI dashboard"
+          >
+            Bangla<span className="text-accent-text">.</span>AI
+          </Link>
+          <ThemeToggle />
+        </div>
 
         <div className="flex flex-col gap-3">
           <p className="truncate text-sm text-muted" title={email}>
