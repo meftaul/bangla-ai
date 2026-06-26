@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { signOut } from "../login/actions";
 import ThemeToggle from "../theme-toggle";
+import { getRole } from "@/lib/articles";
 
 export default async function DashboardLayout({
   children,
@@ -14,6 +15,7 @@ export default async function DashboardLayout({
 
   if (!data) redirect("/login");
   const email = data.claims.email as string | undefined;
+  const isAdmin = (await getRole(supabase)) === "admin";
 
   return (
     <div className="flex min-h-[100dvh]">
@@ -36,6 +38,14 @@ export default async function DashboardLayout({
           >
             Articles
           </Link>
+          {isAdmin && (
+            <Link
+              href="/dashboard/articles/manage"
+              className="rounded-md px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-background"
+            >
+              Manage articles
+            </Link>
+          )}
         </nav>
 
         <div className="flex flex-col gap-3">

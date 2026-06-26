@@ -1,12 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import Deck from "@/components/deck";
-
-export function generateStaticParams() {
-  return [{ slug: "intro" }];
-}
-
-export const dynamicParams = false; // unknown slug → 404
+import { createClient } from "@/lib/supabase/server";
 
 export default async function ArticlePage({
   params,
@@ -14,6 +9,15 @@ export default async function ArticlePage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
+
+  // RLS returns a row only if the article is published or the viewer is admin.
+  const supabase = await createClient();
+  const { data: article } = await supabase
+    .from("articles")
+    .select("slug")
+    .eq("slug", slug)
+    .maybeSingle();
+  if (!article) notFound();
 
   let Article: React.ComponentType;
   try {
