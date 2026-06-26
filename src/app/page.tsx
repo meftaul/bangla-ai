@@ -21,16 +21,10 @@ function Header() {
         </Link>
         <div className="flex items-center gap-1 sm:gap-2">
           <ThemeToggle />
-          <Link
-            href="/login"
-            className="rounded-md px-3 py-2 text-sm text-muted transition-colors hover:text-foreground"
-          >
+          <Link href="/login" className="btn-ghost hidden sm:inline-flex">
             Sign in
           </Link>
-          <Link
-            href="/login"
-            className="rounded-md bg-accent px-4 py-2 text-sm font-medium text-accent-foreground transition-transform hover:-translate-y-px active:translate-y-0"
-          >
+          <Link href="/login" className="btn-primary">
             Get started
           </Link>
         </div>
@@ -51,7 +45,7 @@ function Hero() {
             চলো শিখি
           </p>
           <h1
-            className="fade-up mt-3 font-display text-5xl font-bold leading-[1.02] tracking-tight text-foreground sm:text-6xl"
+            className="fade-up mt-3 font-display text-5xl font-bold leading-[1.02] tracking-tight text-foreground sm:text-6xl lg:text-7xl"
             style={{ animationDelay: "80ms" }}
           >
             Let&apos;s learn AI and{" "}

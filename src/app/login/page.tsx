@@ -57,7 +57,7 @@ export default async function LoginPage({
               required
               autoComplete="email"
               placeholder="you@example.com"
-              className="rounded-md border border-border bg-surface px-3 py-2.5 text-foreground placeholder:text-muted focus:border-accent focus:ring-2 focus:ring-accent/40 focus:outline-none"
+              className="field-input"
             />
           </div>
 
@@ -74,20 +74,14 @@ export default async function LoginPage({
               type="password"
               autoComplete="current-password"
               placeholder="••••••••"
-              className="rounded-md border border-border bg-surface px-3 py-2.5 text-foreground placeholder:text-muted focus:border-accent focus:ring-2 focus:ring-accent/40 focus:outline-none"
+              className="field-input"
             />
           </div>
 
-          <button
-            formAction={signIn}
-            className="mt-1 rounded-md bg-accent px-4 py-2.5 text-base font-medium text-accent-foreground transition-transform hover:-translate-y-px active:translate-y-0"
-          >
+          <button formAction={signIn} className="btn-primary mt-1 py-3 text-base">
             Sign in
           </button>
-          <button
-            formAction={signUp}
-            className="rounded-md border border-border bg-surface px-4 py-2.5 text-sm font-medium text-foreground transition-colors hover:border-accent"
-          >
+          <button formAction={signUp} className="btn-secondary">
             Create account
           </button>
           <button

@@ -1,30 +1,30 @@
 @import "tailwindcss";
 
-/* Deep Emerald palette. One accent, locked across the page.
-   No pure black / white. Light values here; dark overrides below.
+/* Warm Terracotta palette. One accent, locked across the page.
+   No pure black / white. Bone/charcoal light; espresso/clay dark.
    --accent = fills (white text, AA in both modes);
    --accent-text = small accent text/dot (AA on each mode's bg). */
 :root {
-  --background: #f6f6f3;
-  --foreground: #14201b;
-  --muted: #5c6660;
-  --border: #e2e3dd;
+  --background: #f7f4ef;
+  --foreground: #1c1714;
+  --muted: #6f655d;
+  --border: #e6e0d8;
   --surface: #ffffff;
-  --accent: #0a6b4f; /* white text passes AA (~5.3:1) */
-  --accent-text: #0a6b4f;
+  --accent: #b8461f; /* white text passes AA (~4.8:1) */
+  --accent-text: #a83e1c; /* AA as text on bone bg */
   --accent-foreground: #ffffff;
 }
 
 /* Dark tokens via system preference (no manual choice). */
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0d1411;
-    --foreground: #eef1ec;
-    --muted: #9aa39c;
-    --border: #243029;
-    --surface: #121b16;
-    --accent: #0c7a59;
-    --accent-text: #34c896;
+    --background: #16110d;
+    --foreground: #f0ebe4;
+    --muted: #a39a90;
+    --border: #2c241d;
+    --surface: #1e1813;
+    --accent: #bf4a22; /* white text passes AA */
+    --accent-text: #ef8a5e; /* bright clay, AA as text on espresso */
     --accent-foreground: #ffffff;
   }
 }
@@ -34,24 +34,24 @@
    beats the system preference. Class selectors survive the Tailwind compiler;
    :root[data-theme] does not. */
 .dark {
-  --background: #0d1411;
-  --foreground: #eef1ec;
-  --muted: #9aa39c;
-  --border: #243029;
-  --surface: #121b16;
-  --accent: #0c7a59; /* white text passes AA (~4.6:1) */
-  --accent-text: #34c896; /* lighter, AA as text on dark bg */
+  --background: #16110d;
+  --foreground: #f0ebe4;
+  --muted: #a39a90;
+  --border: #2c241d;
+  --surface: #1e1813;
+  --accent: #bf4a22; /* white text passes AA */
+  --accent-text: #ef8a5e; /* bright clay, AA as text on dark bg */
   --accent-foreground: #ffffff;
 }
 
 .light {
-  --background: #f6f6f3;
-  --foreground: #14201b;
-  --muted: #5c6660;
-  --border: #e2e3dd;
+  --background: #f7f4ef;
+  --foreground: #1c1714;
+  --muted: #6f655d;
+  --border: #e6e0d8;
   --surface: #ffffff;
-  --accent: #0a6b4f;
-  --accent-text: #0a6b4f;
+  --accent: #b8461f;
+  --accent-text: #a83e1c;
   --accent-foreground: #ffffff;
 }
 
@@ -71,6 +71,32 @@
 
 body {
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}
+
+/* Shared UI classes. Button/input/card styles were copy-pasted inline across
+   login, dashboard, sessions, manage, live — collect them here so the overhaul
+   lands in one place and edits stay one-line. Tailwind utilities via @apply. */
+@layer components {
+  .btn-primary,
+  .btn-secondary,
+  .btn-ghost {
+    @apply inline-flex cursor-pointer items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium transition-all;
+  }
+  .btn-primary {
+    @apply bg-accent text-accent-foreground hover:-translate-y-px active:translate-y-0;
+  }
+  .btn-secondary {
+    @apply border border-border bg-surface text-foreground hover:border-accent;
+  }
+  .btn-ghost {
+    @apply text-muted hover:text-foreground;
+  }
+  .field-input {
+    @apply w-full rounded-lg border border-border bg-surface px-3 py-2.5 text-foreground placeholder:text-muted focus:border-accent focus:ring-2 focus:ring-accent/40 focus:outline-none;
+  }
+  .surface-card {
+    @apply rounded-xl border border-border bg-surface;
+  }
 }
 
 /* Motion: CSS-only, no JS. Gated by reduced-motion (content visible either way). */
@@ -106,6 +132,31 @@ body {
   .reveal section[hidden] {
     display: block !important;
   }
+}
+
+/* Deck theming: reveal's white.css is light-only. Drive slide colors from our
+   tokens so decks follow light/dark instead of always rendering on white. */
+.reveal-viewport {
+  background: var(--surface);
+}
+.reveal {
+  color: var(--foreground);
+}
+.reveal h1,
+.reveal h2,
+.reveal h3,
+.reveal h4 {
+  color: var(--foreground);
+  font-family: var(--font-display), sans-serif;
+}
+.reveal a {
+  color: var(--accent-text);
+}
+.reveal .controls {
+  color: var(--accent-text);
+}
+.reveal .progress {
+  color: var(--accent);
 }
 
 @media (prefers-reduced-motion: no-preference) {

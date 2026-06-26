@@ -34,12 +34,12 @@ export default async function ArticlePage({
         ← Articles
       </Link>
       {metadata.presentation === false ? (
-        <article className="article rounded-lg border border-border bg-surface p-8">
+        <article className="article surface-card max-w-3xl p-5 sm:p-8">
           <Article />
         </article>
       ) : (
-        // embedded deck needs an explicit height to lay out
-        <div className="h-[70vh] overflow-hidden rounded-lg border border-border">
+        // embedded deck needs an explicit height to lay out; shorter on phones
+        <div className="h-[60vh] overflow-hidden rounded-xl border border-border sm:h-[64vh] lg:h-[70vh]">
           <Deck>
             <Article />
           </Deck>

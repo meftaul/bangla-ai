@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
+import { listDiskArticles } from "@/lib/articles";
 import { scoreOf, type ActivityDef, type ResponseRow } from "@/lib/session";
 
 type Act = ActivityDef & { type: "quiz" | "poll" | "dragdrop" };
@@ -9,11 +10,17 @@ export default async function ResultsPage({ params }: { params: Promise<{ id: st
   const { id } = await params;
   const supabase = await createClient();
 
-  // session_activities is readable by any signed-in user; responses are own-only (RLS).
-  const [{ data: acts }, { data: mine }] = await Promise.all([
+  // session_activities is readable by any signed-in user; responses are own-only (RLS);
+  // the session row is readable by a participant (0003 policy) for topic + date context.
+  const [{ data: acts }, { data: mine }, { data: session }, disk] = await Promise.all([
     supabase.from("session_activities").select("activity_id, type, correct").eq("session_id", id),
     supabase.from("responses").select("activity_id, response, is_correct").eq("session_id", id),
+    supabase.from("sessions").select("slug, started_at").eq("id", id).maybeSingle(),
+    listDiskArticles(),
   ]);
+  const title = session
+    ? (disk.find((a) => a.slug === session.slug)?.title ?? session.slug)
+    : null;
   const activities = ((acts ?? []) as Act[]).sort((a, b) =>
     a.activity_id.localeCompare(b.activity_id),
   );
@@ -23,13 +30,19 @@ export default async function ResultsPage({ params }: { params: Promise<{ id: st
 
   return (
     <div className="max-w-2xl">
-      <Link href="/dashboard/articles" className="text-sm text-muted hover:text-accent-text">
-        ← Dashboard
+      <Link href="/dashboard/my-sessions" className="text-sm text-muted hover:text-accent-text">
+        ← My sessions
       </Link>
-      <h1 className="mt-2 font-display text-3xl font-bold tracking-tight text-foreground">
+      <h1 className="mt-2 font-display text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
         Your results
       </h1>
-      <p className="mt-2 text-lg text-foreground">
+      {title && (
+        <p className="mt-1 text-sm text-muted">
+          {title}
+          {session && ` · ${new Date(session.started_at).toLocaleDateString()}`}
+        </p>
+      )}
+      <p className="mt-3 text-lg text-foreground">
         Score: <span className="font-semibold">{score.correct}</span> / {score.total}
       </p>
 
@@ -47,10 +60,7 @@ export default async function ResultsPage({ params }: { params: Promise<{ id: st
                   ? (a.correct as string[])?.join(" → ")
                   : null;
             return (
-              <li
-                key={a.activity_id}
-                className="rounded-lg border border-border bg-surface p-4"
-              >
+              <li key={a.activity_id} className="surface-card p-4">
                 <div className="flex items-center justify-between gap-3">
                   <span className="font-display text-sm font-semibold text-foreground">
                     {a.activity_id}

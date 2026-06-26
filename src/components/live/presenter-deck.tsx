@@ -48,14 +48,14 @@ export default function PresenterDeck({
 
   return (
     <div className="flex flex-col gap-3">
-      <div className="h-[70vh] overflow-hidden rounded-lg border border-border">
+      <div className="h-[60vh] overflow-hidden rounded-xl border border-border sm:h-[64vh] lg:h-[70vh]">
         <Deck onReady={onReady}>{children}</Deck>
       </div>
       <button
         type="button"
         onClick={end}
         disabled={ending}
-        className="self-start rounded-md border border-border bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:border-accent disabled:opacity-60"
+        className="btn-secondary self-start disabled:opacity-60"
       >
         {ending ? "Ending…" : "End session"}
       </button>

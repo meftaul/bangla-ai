@@ -43,14 +43,15 @@ export default async function ReportPage({ params }: { params: Promise<{ id: str
         <PrintButton />
       </div>
 
-      <h1 className="mt-4 font-display text-3xl font-bold tracking-tight text-foreground">
+      <h1 className="mt-4 font-display text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
         Session report
       </h1>
       <p className="mt-1 text-sm text-muted">
         {session.slug} · {new Date(session.started_at).toLocaleString()} · {session.status}
       </p>
 
-      <table className="mt-8 w-full border-collapse text-left text-sm">
+      <div className="mt-8 overflow-x-auto">
+      <table className="w-full border-collapse text-left text-sm">
         <thead>
           <tr className="border-b border-border text-muted">
             <th className="py-2 font-medium">Student</th>
@@ -75,6 +76,7 @@ export default async function ReportPage({ params }: { params: Promise<{ id: str
           )}
         </tbody>
       </table>
+      </div>
     </div>
   );
 }
