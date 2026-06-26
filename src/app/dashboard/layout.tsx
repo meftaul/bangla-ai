@@ -25,7 +25,7 @@ export default async function DashboardLayout({
 
   return (
     <div className="flex min-h-[100dvh]">
-      <aside className="flex w-60 shrink-0 flex-col justify-between border-r border-border bg-surface px-5 py-6">
+      <aside className="flex w-60 shrink-0 flex-col justify-between border-r border-border bg-surface px-5 py-6 print:hidden">
         <div className="flex items-center justify-between">
           <Link
             href="/dashboard"
@@ -44,12 +44,27 @@ export default async function DashboardLayout({
           >
             Articles
           </Link>
-          {isAdmin && (
+          {isAdmin ? (
+            <>
+              <Link
+                href="/dashboard/articles/manage"
+                className="rounded-md px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-background"
+              >
+                Manage articles
+              </Link>
+              <Link
+                href="/dashboard/sessions"
+                className="rounded-md px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-background"
+              >
+                Live sessions
+              </Link>
+            </>
+          ) : (
             <Link
-              href="/dashboard/articles/manage"
+              href="/dashboard/live"
               className="rounded-md px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-background"
             >
-              Manage articles
+              Join live
             </Link>
           )}
         </nav>
