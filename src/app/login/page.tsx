@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { signIn, signUp, signInWithMagicLink } from "./actions";
 import OauthButtons from "./oauth-buttons";
+import { FormPendingOverlay } from "@/components/loading-overlay";
 
 export const metadata: Metadata = {
   title: "Sign in — Bangla.AI",
@@ -44,6 +45,7 @@ export default async function LoginPage({
         )}
 
         <form className="mt-8 flex flex-col gap-5">
+          <FormPendingOverlay />
           <div className="flex flex-col gap-2">
             <label htmlFor="email" className="text-sm font-medium text-foreground">
               Email

@@ -1,4 +1,4 @@
-export const metadata = { title: "Bangla.AI — intro" };
+export const metadata = { title: "Bangla.AI — intro", description: "Slides, a live quiz, and math." };
 
 <Slide>
 
@@ -15,12 +15,37 @@ Use the arrow keys (or the controls) to move through the slides.
 ## A live quiz
 
 <Quiz
+  id="water"
   question="বাংলায় 'water' কী?"
   options={["আগুন", "পানি", "বাতাস"]}
   answer={1}
 />
 
 This is a real React component running inside the slide.
+
+</Slide>
+
+<Slide>
+
+## A quick poll
+
+<Poll
+  id="favourite"
+  question="তোমার প্রিয় বিষয় কোনটি? / Your favourite subject?"
+  options={["গণিত / Math", "বিজ্ঞান / Science", "ভাষা / Language"]}
+/>
+
+</Slide>
+
+<Slide>
+
+## Put these in order
+
+<DragDrop
+  id="counting"
+  prompt="এক থেকে চার সাজাও / Order one to four"
+  items={["এক", "দুই", "তিন", "চার"]}
+/>
 
 </Slide>
 

@@ -3,6 +3,8 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { signOut } from "../login/actions";
 import ThemeToggle from "../theme-toggle";
+import { getRole } from "@/lib/articles";
+import { FormPendingOverlay } from "@/components/loading-overlay";
 
 export default async function DashboardLayout({
   children,
@@ -10,14 +12,20 @@ export default async function DashboardLayout({
   children: React.ReactNode;
 }) {
   const supabase = await createClient();
-  const { data } = await supabase.auth.getClaims();
+  // Run the claims check and the role lookup concurrently — they're independent
+  // round-trips; serial awaits added a needless RTT to every dashboard page.
+  const [{ data }, role] = await Promise.all([
+    supabase.auth.getClaims(),
+    getRole(supabase),
+  ]);
 
   if (!data) redirect("/login");
   const email = data.claims.email as string | undefined;
+  const isAdmin = role === "admin";
 
   return (
     <div className="flex min-h-[100dvh]">
-      <aside className="flex w-60 shrink-0 flex-col justify-between border-r border-border bg-surface px-5 py-6">
+      <aside className="flex w-60 shrink-0 flex-col justify-between border-r border-border bg-surface px-5 py-6 print:hidden">
         <div className="flex items-center justify-between">
           <Link
             href="/dashboard"
@@ -36,6 +44,29 @@ export default async function DashboardLayout({
           >
             Articles
           </Link>
+          {isAdmin ? (
+            <>
+              <Link
+                href="/dashboard/articles/manage"
+                className="rounded-md px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-background"
+              >
+                Manage articles
+              </Link>
+              <Link
+                href="/dashboard/sessions"
+                className="rounded-md px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-background"
+              >
+                Live sessions
+              </Link>
+            </>
+          ) : (
+            <Link
+              href="/dashboard/live"
+              className="rounded-md px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-background"
+            >
+              Join live
+            </Link>
+          )}
         </nav>
 
         <div className="flex flex-col gap-3">
@@ -43,6 +74,7 @@ export default async function DashboardLayout({
             {email}
           </p>
           <form action={signOut}>
+            <FormPendingOverlay />
             <button
               type="submit"
               className="w-full rounded-md border border-border bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:border-accent"
