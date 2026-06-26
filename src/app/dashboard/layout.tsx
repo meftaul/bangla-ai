@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { signOut } from "../login/actions";
 import ThemeToggle from "../theme-toggle";
 import { getRole } from "@/lib/articles";
+import { FormPendingOverlay } from "@/components/loading-overlay";
 
 export default async function DashboardLayout({
   children,
@@ -11,11 +12,16 @@ export default async function DashboardLayout({
   children: React.ReactNode;
 }) {
   const supabase = await createClient();
-  const { data } = await supabase.auth.getClaims();
+  // Run the claims check and the role lookup concurrently — they're independent
+  // round-trips; serial awaits added a needless RTT to every dashboard page.
+  const [{ data }, role] = await Promise.all([
+    supabase.auth.getClaims(),
+    getRole(supabase),
+  ]);
 
   if (!data) redirect("/login");
   const email = data.claims.email as string | undefined;
-  const isAdmin = (await getRole(supabase)) === "admin";
+  const isAdmin = role === "admin";
 
   return (
     <div className="flex min-h-[100dvh]">
@@ -53,6 +59,7 @@ export default async function DashboardLayout({
             {email}
           </p>
           <form action={signOut}>
+            <FormPendingOverlay />
             <button
               type="submit"
               className="w-full rounded-md border border-border bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:border-accent"

@@ -1,3 +1,4 @@
+import "katex/dist/katex.min.css";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import Deck from "@/components/deck";
@@ -20,8 +21,9 @@ export default async function ArticlePage({
   if (!article) notFound();
 
   let Article: React.ComponentType;
+  let metadata: { presentation?: boolean } = {};
   try {
-    ({ default: Article } = await import(`@/content/articles/${slug}.mdx`));
+    ({ default: Article, metadata = {} } = await import(`@/content/articles/${slug}.mdx`));
   } catch {
     notFound();
   }
@@ -31,12 +33,18 @@ export default async function ArticlePage({
       <Link href="/dashboard/articles" className="text-sm text-muted hover:text-accent-text">
         ← Articles
       </Link>
-      {/* embedded deck needs an explicit height to lay out */}
-      <div className="h-[70vh] overflow-hidden rounded-lg border border-border">
-        <Deck>
+      {metadata.presentation === false ? (
+        <article className="article rounded-lg border border-border bg-surface p-8">
           <Article />
-        </Deck>
-      </div>
+        </article>
+      ) : (
+        // embedded deck needs an explicit height to lay out
+        <div className="h-[70vh] overflow-hidden rounded-lg border border-border">
+          <Deck>
+            <Article />
+          </Deck>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import { readdir } from "node:fs/promises";
+import { readdir, readFile } from "node:fs/promises";
 import { join } from "node:path";
 import type { createClient } from "@/lib/supabase/server";
 
@@ -10,17 +10,27 @@ export type Article = DiskArticle & { status: Status };
 
 const ARTICLES_DIR = join(process.cwd(), "src/content/articles");
 
-// Reads every MDX file and pulls its `metadata` export ({ title, description }).
-// Filesystem is the source of truth for which articles exist.
+// Pulls title/description from the `export const metadata = {...}` block by reading
+// the raw file — NOT by importing the MDX, which would compile every article (katex
+// et al.) just to read a string. Filesystem is the source of truth for which exist.
+function readMeta(field: string, block: string): string | undefined {
+  // ponytail: regex over a flat object literal; switch to a real parser if metadata gains nesting.
+  return block.match(new RegExp(`${field}:\\s*["']([^"']*)["']`))?.[1];
+}
+
 export async function listDiskArticles(): Promise<DiskArticle[]> {
   const files = await readdir(ARTICLES_DIR);
   const slugs = files.filter((f) => f.endsWith(".mdx")).map((f) => f.slice(0, -4));
 
   const articles = await Promise.all(
     slugs.map(async (slug) => {
-      const mod = await import(`@/content/articles/${slug}.mdx`);
-      const meta = (mod.metadata ?? {}) as { title?: string; description?: string };
-      return { slug, title: meta.title ?? slug, description: meta.description ?? "" };
+      const text = await readFile(join(ARTICLES_DIR, `${slug}.mdx`), "utf8");
+      const block = text.match(/export const metadata\s*=\s*\{[\s\S]*?\}/)?.[0] ?? "";
+      return {
+        slug,
+        title: readMeta("title", block) ?? slug,
+        description: readMeta("description", block) ?? "",
+      };
     }),
   );
   return articles.sort((a, b) => a.title.localeCompare(b.title));
