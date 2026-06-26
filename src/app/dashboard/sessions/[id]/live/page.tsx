@@ -2,7 +2,7 @@ import "katex/dist/katex.min.css";
 import { notFound, redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { LiveSessionProvider } from "@/components/live/session-context";
-import ViewerDeck from "@/components/live/viewer-deck";
+import Stage from "@/components/live/stage";
 
 export default async function LivePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -11,7 +11,7 @@ export default async function LivePage({ params }: { params: Promise<{ id: strin
   // RLS lets students read only live sessions; once ended it disappears -> results.
   const { data: session } = await supabase
     .from("sessions")
-    .select("slug, status, current_slide")
+    .select("slug, status, current_slide, board, board_view")
     .eq("id", id)
     .maybeSingle();
   if (!session || session.status !== "live") redirect(`/dashboard/sessions/${id}/results`);
@@ -25,9 +25,15 @@ export default async function LivePage({ params }: { params: Promise<{ id: strin
 
   return (
     <LiveSessionProvider mode="viewer" sessionId={id}>
-      <ViewerDeck sessionId={id} initialSlide={session.current_slide}>
+      <Stage
+        mode="viewer"
+        sessionId={id}
+        initialView={session.board_view}
+        initialScene={session.board}
+        initialSlide={session.current_slide}
+      >
         <Article />
-      </ViewerDeck>
+      </Stage>
     </LiveSessionProvider>
   );
 }

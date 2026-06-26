@@ -3,7 +3,7 @@ import { notFound, redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { getRole } from "@/lib/articles";
 import { LiveSessionProvider } from "@/components/live/session-context";
-import PresenterDeck from "@/components/live/presenter-deck";
+import Stage from "@/components/live/stage";
 import Roster from "@/components/live/roster";
 
 export default async function PresentPage({ params }: { params: Promise<{ id: string }> }) {
@@ -13,7 +13,7 @@ export default async function PresentPage({ params }: { params: Promise<{ id: st
 
   const { data: session } = await supabase
     .from("sessions")
-    .select("slug, join_code, status")
+    .select("slug, join_code, status, board, board_view")
     .eq("id", id)
     .maybeSingle();
   if (!session) notFound();
@@ -30,9 +30,14 @@ export default async function PresentPage({ params }: { params: Promise<{ id: st
     <LiveSessionProvider mode="presenter" sessionId={id}>
       <div className="flex flex-col gap-4">
         <Roster joinCode={session.join_code} />
-        <PresenterDeck sessionId={id}>
+        <Stage
+          mode="presenter"
+          sessionId={id}
+          initialView={session.board_view}
+          initialScene={session.board}
+        >
           <Article />
-        </PresenterDeck>
+        </Stage>
       </div>
     </LiveSessionProvider>
   );
