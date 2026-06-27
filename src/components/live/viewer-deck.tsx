@@ -54,7 +54,7 @@ export default function ViewerDeck({
   };
 
   return (
-    <div className="h-[70vh] overflow-hidden rounded-lg border border-border">
+    <div className="h-[60vh] overflow-hidden rounded-xl border border-border sm:h-[64vh] lg:h-[70vh]">
       <Deck onReady={onReady} viewer>
         {children}
       </Deck>

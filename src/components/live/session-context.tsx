@@ -83,6 +83,7 @@ export function LiveSessionProvider({
   const supabase = useMemo(() => createClient(), []);
   const channelRef = useRef<RealtimeChannel | null>(null);
   const userIdRef = useRef<string | null>(null);
+  const ready = useRef(false); // channel joined — gate broadcasts onto the WS, not REST
 
   const [roster, setRoster] = useState<string[]>([]);
   const [answered, setAnswered] = useState<Counts>({});
@@ -147,6 +148,7 @@ export function LiveSessionProvider({
       setPolls(seedPolls);
 
       await channel.subscribe(async (status) => {
+        ready.current = status === "SUBSCRIBED";
         if (status === "SUBSCRIBED")
           await channel.track({ email: auth.user?.email ?? "anon" });
       });
@@ -154,6 +156,7 @@ export function LiveSessionProvider({
 
     return () => {
       cancelled = true;
+      ready.current = false;
       supabase.removeChannel(channel);
     };
   }, [supabase, sessionId]);
@@ -186,11 +189,12 @@ export function LiveSessionProvider({
         const pick = typeof response.pick === "number" ? response.pick : null;
         setMine((m) => ({ ...m, [activityId]: { response, is_correct: isCorrect } }));
         bump(activityId, pick); // self: broadcast doesn't echo, so count locally
-        channelRef.current?.send({
-          type: "broadcast",
-          event: "answer",
-          payload: { activityId, pick },
-        });
+        if (ready.current)
+          channelRef.current?.send({
+            type: "broadcast",
+            event: "answer",
+            payload: { activityId, pick },
+          });
       },
     [supabase, sessionId],
   );

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { signIn, signUp, signInWithMagicLink } from "./actions";
 import OauthButtons from "./oauth-buttons";
 import { FormPendingOverlay } from "@/components/loading-overlay";
+import { LogoLockup } from "@/components/logo";
 
 export const metadata: Metadata = {
   title: "Sign in — Bangla.AI",
@@ -18,12 +19,8 @@ export default async function LoginPage({
   return (
     <main className="grid min-h-[100dvh] place-items-center px-4 py-12">
       <div className="w-full max-w-sm">
-        <Link
-          href="/"
-          className="font-display text-xl font-bold tracking-tight text-foreground"
-          aria-label="Bangla.AI home"
-        >
-          Bangla<span className="text-accent-text">.</span>AI
+        <Link href="/" aria-label="Bangla.AI home">
+          <LogoLockup className="text-xl text-foreground" />
         </Link>
 
         <h1 className="mt-8 font-display text-3xl font-bold tracking-tight text-foreground">
@@ -57,7 +54,7 @@ export default async function LoginPage({
               required
               autoComplete="email"
               placeholder="you@example.com"
-              className="rounded-md border border-border bg-surface px-3 py-2.5 text-foreground placeholder:text-muted focus:border-accent focus:ring-2 focus:ring-accent/40 focus:outline-none"
+              className="field-input"
             />
           </div>
 
@@ -74,20 +71,14 @@ export default async function LoginPage({
               type="password"
               autoComplete="current-password"
               placeholder="••••••••"
-              className="rounded-md border border-border bg-surface px-3 py-2.5 text-foreground placeholder:text-muted focus:border-accent focus:ring-2 focus:ring-accent/40 focus:outline-none"
+              className="field-input"
             />
           </div>
 
-          <button
-            formAction={signIn}
-            className="mt-1 rounded-md bg-accent px-4 py-2.5 text-base font-medium text-accent-foreground transition-transform hover:-translate-y-px active:translate-y-0"
-          >
+          <button formAction={signIn} className="btn-primary mt-1 py-3 text-base">
             Sign in
           </button>
-          <button
-            formAction={signUp}
-            className="rounded-md border border-border bg-surface px-4 py-2.5 text-sm font-medium text-foreground transition-colors hover:border-accent"
-          >
+          <button formAction={signUp} className="btn-secondary">
             Create account
           </button>
           <button

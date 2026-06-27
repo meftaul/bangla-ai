@@ -1,10 +1,7 @@
-import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { signOut } from "../login/actions";
-import ThemeToggle from "../theme-toggle";
 import { getRole } from "@/lib/articles";
-import { FormPendingOverlay } from "@/components/loading-overlay";
+import DashboardShell from "./dashboard-shell";
 
 export default async function DashboardLayout({
   children,
@@ -24,68 +21,8 @@ export default async function DashboardLayout({
   const isAdmin = role === "admin";
 
   return (
-    <div className="flex min-h-[100dvh]">
-      <aside className="flex w-60 shrink-0 flex-col justify-between border-r border-border bg-surface px-5 py-6 print:hidden">
-        <div className="flex items-center justify-between">
-          <Link
-            href="/dashboard"
-            className="font-display text-xl font-bold tracking-tight text-foreground"
-            aria-label="Bangla.AI dashboard"
-          >
-            Bangla<span className="text-accent-text">.</span>AI
-          </Link>
-          <ThemeToggle />
-        </div>
-
-        <nav className="mt-8 flex flex-1 flex-col gap-1">
-          <Link
-            href="/dashboard/articles"
-            className="rounded-md px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-background"
-          >
-            Articles
-          </Link>
-          {isAdmin ? (
-            <>
-              <Link
-                href="/dashboard/articles/manage"
-                className="rounded-md px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-background"
-              >
-                Manage articles
-              </Link>
-              <Link
-                href="/dashboard/sessions"
-                className="rounded-md px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-background"
-              >
-                Live sessions
-              </Link>
-            </>
-          ) : (
-            <Link
-              href="/dashboard/live"
-              className="rounded-md px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-background"
-            >
-              Join live
-            </Link>
-          )}
-        </nav>
-
-        <div className="flex flex-col gap-3">
-          <p className="truncate text-sm text-muted" title={email}>
-            {email}
-          </p>
-          <form action={signOut}>
-            <FormPendingOverlay />
-            <button
-              type="submit"
-              className="w-full rounded-md border border-border bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:border-accent"
-            >
-              Sign out
-            </button>
-          </form>
-        </div>
-      </aside>
-
-      <main className="flex-1 px-8 py-10">{children}</main>
-    </div>
+    <DashboardShell isAdmin={isAdmin} email={email}>
+      {children}
+    </DashboardShell>
   );
 }

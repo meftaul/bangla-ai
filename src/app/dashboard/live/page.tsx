@@ -18,7 +18,7 @@ export default async function JoinLivePage({
 
   return (
     <div className="max-w-md">
-      <h1 className="font-display text-3xl font-bold tracking-tight text-foreground">
+      <h1 className="font-display text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
         Join a live session
       </h1>
       <p className="mt-2 text-sm text-muted">Enter the code your instructor is showing.</p>
@@ -29,13 +29,10 @@ export default async function JoinLivePage({
           autoFocus
           autoComplete="off"
           placeholder="e.g. K7M2QX"
-          className="rounded-md border border-border bg-background px-4 py-3 text-center text-2xl font-bold uppercase tracking-widest text-foreground"
+          className="field-input bg-background px-4 py-3 text-center text-xl font-bold uppercase tracking-widest sm:text-2xl"
         />
         {message && <p className="text-sm text-red-500">{message}</p>}
-        <button
-          type="submit"
-          className="rounded-md border border-border bg-background px-4 py-3 text-sm font-medium text-foreground transition-colors hover:border-accent"
-        >
+        <button type="submit" className="btn-primary py-3">
           Join
         </button>
       </form>
