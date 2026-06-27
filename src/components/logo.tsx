@@ -3,31 +3,40 @@
 export function Logo({
   className = "",
   float = false,
+  decorative = false,
+  interactive = false,
 }: {
   className?: string;
   float?: boolean;
+  // Inside LogoLockup the visible wordmark already names the brand, so the
+  // mark is decorative there — silence it to avoid a duplicate announcement.
+  decorative?: boolean;
+  // Hero only: hovering plucks the ektara's strings. Off everywhere else so the
+  // small nav/footer lockup marks stay inert.
+  interactive?: boolean;
 }) {
   return (
     <svg
       viewBox="5 -1 38 40"
       fill="none"
-      role="img"
-      aria-label="Pathshala by Bangla.ai"
-      className={`${float ? "float-y " : ""}${className}`}
+      {...(decorative
+        ? { "aria-hidden": true }
+        : { role: "img", "aria-label": "Pathshala by Bangla.ai" })}
+      className={`${float ? "float-y " : ""}${interactive ? "logo-interactive " : ""}${className}`}
     >
       <path fill="var(--color-primary)" d="m41.59,37.54h-10.24c-.58,0-1.05-.47-1.05-1.05v-3.61c0-.25.09-.49.25-.68.03-.03.06-.06.09-.09.1-.1.21-.19.31-.29,1.79-1.79,2.78-4.18,2.78-6.71,0-.49-.04-.97-.11-1.44-.3-1.99-1.22-3.82-2.67-5.27-.1-.1-.2-.2-.31-.29-.11-.1-.19-.22-.25-.35-.06-.13-.09-.27-.09-.42,0-.08,0-.16.03-.24l.99-4.24.71-3.02c.15-.66-.35-1.29-1.02-1.29h-10.27c-.27,0-.52.1-.71.28-.15.14-.27.33-.31.54l-1.69,7.34c-.02.08-.03.16-.03.24v.55c0,.29-.12.56-.32.76-.05.05-.11.1-.16.15-1.79,1.79-2.78,4.18-2.78,6.71,0,.71.08,1.4.23,2.07.39,1.74,1.26,3.35,2.55,4.64.05.05.1.1.16.15.21.2.32.47.32.76v3.76c0,.58-.47,1.05-1.05,1.05H6.93c-.69,0-1.19-.65-1.02-1.32l2.28-8.82,2.61-10.1,2.01-7.77L15.01,1.04c.12-.46.54-.79,1.02-.79h19.03c.51,0,.94.36,1.03.86l2.73,14.71,1.72,9.26,1.5,8.05.59,3.16c.12.65-.38,1.24-1.03,1.24Z" />
 
-      <path fill="var(--logo-string)" d="m18,20.45v9.31c0,.28-.36.39-.52.17-.97-1.36-1.54-3.02-1.54-4.82s.57-3.46,1.54-4.82c.16-.23.52-.11.52.17Z" />
-      <path fill="var(--logo-string)" d="m22.36,17.02c.28-.06.57-.11.86-.15v16.47c-.29-.04-.58-.09-.86-.15-.13-.03-.22-.15-.22-.28v-15.61c0-.13.09-.25.22-.28Z" />
-      <path fill="var(--logo-string)" d="m24.23,16.81c.17,0,.34,0,.51.02v16.56c-.17.01-.34.02-.51.02-.21,0-.41,0-.62-.02v-16.54c.2-.02.41-.02.62-.02Z" />
-      <path fill="var(--logo-string)" d="m26.16,17.27v15.68c0,.14-.09.25-.23.28-.26.05-.53.1-.8.13v-16.49c.27.03.54.07.8.13.13.03.23.15.23.28Z" />
+      <path className="logo-string" style={{ "--i": 0 } as React.CSSProperties} fill="var(--logo-string)" d="m18,20.45v9.31c0,.28-.36.39-.52.17-.97-1.36-1.54-3.02-1.54-4.82s.57-3.46,1.54-4.82c.16-.23.52-.11.52.17Z" />
+      <path className="logo-string" style={{ "--i": 1 } as React.CSSProperties} fill="var(--logo-string)" d="m22.36,17.02c.28-.06.57-.11.86-.15v16.47c-.29-.04-.58-.09-.86-.15-.13-.03-.22-.15-.22-.28v-15.61c0-.13.09-.25.22-.28Z" />
+      <path className="logo-string" style={{ "--i": 2 } as React.CSSProperties} fill="var(--logo-string)" d="m24.23,16.81c.17,0,.34,0,.51.02v16.56c-.17.01-.34.02-.51.02-.21,0-.41,0-.62-.02v-16.54c.2-.02.41-.02.62-.02Z" />
+      <path className="logo-string" style={{ "--i": 3 } as React.CSSProperties} fill="var(--logo-string)" d="m26.16,17.27v15.68c0,.14-.09.25-.23.28-.26.05-.53.1-.8.13v-16.49c.27.03.54.07.8.13.13.03.23.15.23.28Z" />
 
       <g fill="var(--color-primary)" opacity=".4">
         <path d="m16.37,16.89c.55.06,1.09.15,1.63.27v.32c0,.29-.12.56-.32.76-.05.05-.11.1-.16.15-1.79,1.79-2.78,4.18-2.78,6.71,0,.71.08,1.4.23,2.07.39,1.74,1.26,3.35,2.55,4.64.05.05.1.1.16.15.21.2.32.47.32.76v3.76c0,.58-.47,1.05-1.05,1.05H6.93c-.69,0-1.19-.65-1.02-1.32l2.28-8.82,2.61-10.1c1.79-.51,3.72-.63,5.57-.41Z" />
         <path d="m41.59,37.54h-10.24c-.58,0-1.05-.47-1.05-1.05v-3.61c0-.25.09-.49.25-.68.03-.03.06-.06.09-.09.1-.1.21-.19.31-.29,1.79-1.79,2.78-4.18,2.78-6.71,0-.49-.04-.97-.11-1.44,1.12.42,2.27.77,3.44,1.02,1.14.25,2.32.38,3.49.39l1.5,8.05.59,3.16c.12.65-.38,1.24-1.03,1.24Z" />
       </g>
 
-      <path fill="var(--logo-string)" d="m32.52,25.11c0,1.9-.64,3.65-1.71,5.04-.17.22-.52.1-.52-.17v-9.74c0-.27.35-.39.52-.17,1.07,1.4,1.71,3.15,1.71,5.04Z" />
+      <path className="logo-string" style={{ "--i": 4 } as React.CSSProperties} fill="var(--logo-string)" d="m32.52,25.11c0,1.9-.64,3.65-1.71,5.04-.17.22-.52.1-.52-.17v-9.74c0-.27.35-.39.52-.17,1.07,1.4,1.71,3.15,1.71,5.04Z" />
 
       <path fill="var(--color-primary)" d="m25.82,34.46c-.23.04-.46.07-.7.09v2.99h.74c.16,0,.29-.13.29-.29v-2.51c0-.18-.16-.31-.33-.28Zm-2.21.11v2.97h1.12v-2.96c-.17,0-.34.01-.51.01-.21,0-.41,0-.62-.02Zm-1.13-.14c-.18-.03-.34.1-.34.28v2.54c0,.16.13.29.29.29h.79v-3c-.25-.03-.5-.06-.74-.11Zm.82-21.75c-.13,0-.25.09-.28.22l-.55,2.47c-.04.2.12.38.32.35.19-.03.38-.05.57-.07l.71-2.97h-.77Zm3.58,0h-.9l-.71,2.99c.29.03.59.08.87.14.15.03.3-.06.34-.21l.68-2.56c.05-.18-.09-.36-.28-.36Zm-2.41,0l-.7,2.94c.15,0,.3-.01.46-.01.22,0,.44,0,.65.02l.71-2.95h-1.11Z" />
 
@@ -54,7 +63,7 @@ export function LogoLockup({
 }) {
   return (
     <span className={`inline-flex items-center gap-2.5 ${className}`}>
-      <Logo className="h-9 w-auto" />
+      <Logo decorative className="h-9 w-auto" />
       <span className="flex flex-col leading-none">
         <span className="font-display text-base font-bold tracking-tight">
           Pathshala

@@ -34,6 +34,8 @@
   --cat-teal: #0d9488;
   /* Soft elevation, tinted to the slate background hue. */
   --shadow-card: 0 1px 2px rgb(15 27 45 / 0.04), 0 10px 24px -14px rgb(15 27 45 / 0.14);
+  /* Hero highlighter swipe tint — forest green on the cool off-white. */
+  --marker-tint: color-mix(in srgb, var(--accent) 20%, transparent);
 }
 
 /* Dark tokens via system preference (no manual choice). */
@@ -56,6 +58,8 @@
     --cat-violet: #a78bfa;
     --cat-teal: #2dd4bf;
     --shadow-card: 0 1px 2px rgb(0 0 0 / 0.3), 0 12px 28px -14px rgb(0 0 0 / 0.55);
+    /* Mint pops on the deep navy where forest green would vanish. */
+    --marker-tint: color-mix(in srgb, var(--accent-bright) 22%, transparent);
   }
 }
 
@@ -80,6 +84,7 @@
   --cat-violet: #a78bfa;
   --cat-teal: #2dd4bf;
   --shadow-card: 0 1px 2px rgb(0 0 0 / 0.3), 0 12px 28px -14px rgb(0 0 0 / 0.55);
+  --marker-tint: color-mix(in srgb, var(--accent-bright) 22%, transparent);
 }
 
 .light {
@@ -99,6 +104,7 @@
   --cat-violet: #7c3aed;
   --cat-teal: #0d9488;
   --shadow-card: 0 1px 2px rgb(15 27 45 / 0.04), 0 10px 24px -14px rgb(15 27 45 / 0.14);
+  --marker-tint: color-mix(in srgb, var(--accent) 20%, transparent);
 }
 
 @theme inline {
@@ -111,6 +117,7 @@
   --color-accent-text: var(--accent-text);
   --color-accent-foreground: var(--accent-foreground);
   --color-accent-bright: var(--accent-bright);
+  --color-accent-deep: var(--accent-deep);
   --color-danger: var(--danger);
   --color-cat-blue: var(--cat-blue);
   --color-cat-amber: var(--cat-amber);
@@ -171,6 +178,20 @@ body {
     opacity: 1;
     transform: none;
   }
+}
+
+/* Highlighter swipe under the hero word. A slightly-rotated, organically-rounded
+   accent tint sitting behind the text (aria-hidden). Base state is fully drawn so
+   it shows without motion; the draw-in is added under no-preference below. */
+.marker-stroke {
+  transform: rotate(-1.5deg);
+}
+.marker-stroke-fill {
+  transform-origin: left center;
+  border-radius: 40% 60% 55% 45% / 60% 50% 50% 40%;
+  /* Per-theme so it reads at the same strength on the cool off-white (forest
+     green) and the deep navy (mint) — see --marker-tint in the token blocks. */
+  background: var(--marker-tint);
 }
 
 /* Route transition: opacity-only fade on each navigation (via app/template.tsx,
@@ -241,13 +262,52 @@ body {
     animation: float-y 6s ease-in-out infinite;
   }
 
+  /* Marker highlight draws left→right, just after the headline's fade-up. */
+  @keyframes marker-draw {
+    from {
+      transform: scaleX(0);
+    }
+    to {
+      transform: scaleX(1);
+    }
+  }
+  .marker-stroke-fill {
+    transform: scaleX(0);
+    animation: marker-draw 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both;
+  }
+
+  /* Ektara comes alive: hovering the hero logo plucks its strings in a damped,
+     staggered horizontal wobble. Child paths only — independent of .float-y on
+     the svg. Only fires where .logo-interactive is set (hero mark, not lockups). */
+  @keyframes string-pluck {
+    20% {
+      transform: translateX(0.5px);
+    }
+    45% {
+      transform: translateX(-0.35px);
+    }
+    70% {
+      transform: translateX(0.2px);
+    }
+    100% {
+      transform: translateX(0);
+    }
+  }
+  .logo-interactive:hover .logo-string {
+    animation: string-pluck 0.5s ease-out;
+    animation-delay: calc(var(--i) * 50ms);
+  }
+
   /* Scroll-driven reveal for sections below the fold. Visible by default;
-     only animates where the browser supports view-timeline. */
+     only animates where the browser supports view-timeline. Range completes
+     within `entry` so a short last section (footer right below) still reaches
+     full opacity — `cover` needs the element scrolled higher than a short page
+     allows, leaving the CTA stuck mid-fade. */
   @supports (animation-timeline: view()) {
     .scroll-reveal {
       animation: fade-up linear both;
       animation-timeline: view();
-      animation-range: entry 5% cover 28%;
+      animation-range: entry 5% entry 60%;
     }
   }
 }

@@ -38,15 +38,26 @@ export default function ThemeToggle() {
       type="button"
       onClick={toggle}
       aria-label="Toggle color theme"
-      className="grid h-9 w-9 place-items-center rounded-md text-muted transition-colors hover:bg-surface hover:text-foreground"
+      className="group grid h-11 w-11 place-items-center rounded-md text-muted transition-colors hover:bg-surface hover:text-foreground"
     >
-      {theme === "dark" ? (
-        <Sun size={18} weight="bold" />
-      ) : theme === "light" ? (
-        <Moon size={18} weight="bold" />
-      ) : (
-        <span className="h-[18px] w-[18px]" />
-      )}
+      {/* Both icons stacked; the active one rotates/fades in. `undefined`
+          (pre-hydration) keeps both hidden, preserving the no-flash placeholder. */}
+      <span className="relative h-[18px] w-[18px]">
+        <Sun
+          size={18}
+          weight="bold"
+          className={`absolute inset-0 transition-[transform,opacity] duration-200 motion-reduce:transition-none ${
+            theme === "dark" ? "rotate-0 opacity-100" : "-rotate-90 opacity-0"
+          }`}
+        />
+        <Moon
+          size={18}
+          weight="bold"
+          className={`absolute inset-0 transition-[transform,opacity] duration-200 motion-reduce:transition-none ${
+            theme === "light" ? "rotate-0 opacity-100" : "rotate-90 opacity-0"
+          }`}
+        />
+      </span>
     </button>
   );
 }
