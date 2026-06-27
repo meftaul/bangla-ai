@@ -1,0 +1,140 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-06-27",
+  "title": "Design System: Pathshala by Bangla.ai",
+  "extensions": {
+    "colorMeta": {
+      "accent": { "role": "primary", "displayName": "Forest Green", "canonical": "#047857", "tonalRamp": ["#03241c", "#043528", "#054735", "#047857", "#0a9d72", "#34c79a", "#6ee7b7", "#bdf6e0"] },
+      "accent-bright": { "role": "primary", "displayName": "Mint Bright", "canonical": "#6ee7b7", "tonalRamp": ["#0c3b30", "#0f5743", "#127458", "#1aa07a", "#34c79a", "#6ee7b7", "#a7f3d0", "#d9fbed"] },
+      "accent-deep": { "role": "primary", "displayName": "Deep Forest", "canonical": "#0c3b30", "tonalRamp": ["#04130f", "#082017", "#0c3b30", "#105843", "#147658", "#1aa07a", "#34c79a", "#6ee7b7"] },
+      "background": { "role": "neutral", "displayName": "Cool Off-White", "canonical": "#f6f8fb", "tonalRamp": ["#0e1626", "#16223a", "#26344c", "#5a6b7d", "#93a2b6", "#c8d2df", "#e4e9f0", "#f6f8fb"] },
+      "foreground": { "role": "neutral", "displayName": "Slate Ink", "canonical": "#0f1b2d", "tonalRamp": ["#0a121d", "#0f1b2d", "#1c2c44", "#34465f", "#5a6b7d", "#93a2b6", "#c8d2df", "#e9eef6"] },
+      "muted": { "role": "neutral", "displayName": "Slate Muted", "canonical": "#5a6b7d", "tonalRamp": ["#1c2632", "#2c3a49", "#3f5060", "#5a6b7d", "#76879a", "#93a2b6", "#bcc7d4", "#e0e6ee"] },
+      "border": { "role": "neutral", "displayName": "Hairline Border", "canonical": "#e4e9f0", "tonalRamp": ["#1a2231", "#26344c", "#374a64", "#5a6b7d", "#93a2b6", "#c8d2df", "#e4e9f0", "#f4f7fb"] },
+      "logo-string": { "role": "tertiary", "displayName": "Flag Red", "canonical": "#d92b2b", "tonalRamp": ["#3a0a0a", "#5c1212", "#841c1c", "#b32424", "#d92b2b", "#e85c5c", "#f29191", "#f9c8c8"] },
+      "cat-blue": { "role": "tertiary", "displayName": "Subject Blue", "canonical": "#2563eb", "tonalRamp": ["#0c1f4d", "#143075", "#1d479e", "#2563eb", "#5089f2", "#7da9f7", "#aecbfb", "#d9e6fd"] },
+      "cat-amber": { "role": "tertiary", "displayName": "Subject Amber", "canonical": "#d97706", "tonalRamp": ["#3a2002", "#5c3303", "#854a05", "#b36206", "#d97706", "#f29d3c", "#f8c179", "#fce0bc"] },
+      "cat-coral": { "role": "tertiary", "displayName": "Subject Coral", "canonical": "#e11d48", "tonalRamp": ["#3d0813", "#5f0d1f", "#88142c", "#b5193a", "#e11d48", "#ef5673", "#f58ba0", "#fbc4d0"] },
+      "cat-violet": { "role": "tertiary", "displayName": "Subject Violet", "canonical": "#7c3aed", "tonalRamp": ["#21094a", "#330d72", "#4a1499", "#631fc7", "#7c3aed", "#a172f2", "#c2a3f7", "#e1d1fb"] },
+      "cat-teal": { "role": "tertiary", "displayName": "Subject Teal", "canonical": "#0d9488", "tonalRamp": ["#04302c", "#064740", "#085f55", "#0a7a6f", "#0d9488", "#2dd4bf", "#74e3d4", "#bbf2ea"] },
+      "danger": { "role": "tertiary", "displayName": "Danger Red", "canonical": "#dc2626", "tonalRamp": ["#3d0a0a", "#5f1010", "#881818", "#b51e1e", "#dc2626", "#ea5b5b", "#f29191", "#f9c8c8"] }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Hero headline only (Space Grotesk, tight leading, ceiling ~6rem)." },
+      "headline": { "displayName": "Headline", "purpose": "Section and CTA-block headings, including Bangla CTAs." },
+      "body": { "displayName": "Body", "purpose": "Prose and UI text (Geist), measure capped ~65-75ch." },
+      "bangla": { "displayName": "Bangla", "purpose": "All Bangla copy (Hind Siliguri) as a first-class peer to Latin." },
+      "label": { "displayName": "Label / Kicker", "purpose": "Uppercase tracked eyebrow, sparingly on hero/CTA blocks with an accent dot." }
+    },
+    "shadows": [
+      { "name": "card", "value": "0 1px 2px rgb(15 27 45 / 0.04), 0 10px 24px -14px rgb(15 27 45 / 0.14)", "purpose": "The single elevation token, tinted to the slate bg. Light mode; cards only." },
+      { "name": "card-dark", "value": "0 1px 2px rgb(0 0 0 / 0.3), 0 12px 28px -14px rgb(0 0 0 / 0.55)", "purpose": "Dark-mode variant of the card shadow." }
+    ],
+    "motion": [
+      { "name": "ease-out-expo", "value": "cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "Fade-up entrance easing (0.7s). The system's signature ease." },
+      { "name": "fade-up", "value": "fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) both", "purpose": "Below-the-fold and hero reveals; opacity + 1rem translateY." },
+      { "name": "route-in", "value": "route-in 0.12s ease-out both", "purpose": "Opacity-only per-route transition (no layout shift)." },
+      { "name": "float-y", "value": "float-y 6s ease-in-out infinite", "purpose": "Gentle hero logo bob, transform-only, off under reduced-motion." },
+      { "name": "scroll-reveal", "value": "fade-up linear both; animation-timeline: view(); animation-range: entry 5% cover 28%", "purpose": "Scroll-driven section reveal where view-timeline is supported." }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" },
+      { "name": "container", "value": "1152px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Default action button. Forest Green fill, white text, lifts 1px on hover.",
+      "html": "<button class=\"ds-btn-primary\">Continue</button>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: #047857; color: #fff; font-size: 14px; font-weight: 500; padding: 10px 16px; border: none; border-radius: 12px; cursor: pointer; transition: transform 0.2s ease, background 0.2s ease; } .ds-btn-primary:hover { transform: translateY(-1px); } .ds-btn-primary:active { transform: translateY(0); } .ds-btn-primary:focus-visible { outline: none; box-shadow: 0 0 0 2px rgb(4 120 87 / 0.4); }"
+    },
+    {
+      "name": "CTA Pill",
+      "kind": "button",
+      "refersTo": "cta-pill",
+      "description": "Standalone hero/landing call to action. Pill radius, larger padding, arrow nudges on hover.",
+      "html": "<a class=\"ds-cta-pill\" href=\"#\">Let's Start Now <svg viewBox=\"0 0 256 256\" width=\"18\" height=\"18\" fill=\"currentColor\"><path d=\"M221.66 133.66l-72 72a8 8 0 0 1-11.32-11.32L196.69 136H40a8 8 0 0 1 0-16h156.69l-58.35-58.34a8 8 0 0 1 11.32-11.32l72 72a8 8 0 0 1 0 11.32z\"/></svg></a>",
+      "css": ".ds-cta-pill { display: inline-flex; align-items: center; gap: 8px; background: #047857; color: #fff; font-size: 16px; font-weight: 500; padding: 14px 28px; border-radius: 9999px; text-decoration: none; transition: transform 0.2s ease; } .ds-cta-pill:hover { transform: translateY(-1px); } .ds-cta-pill:hover svg { transform: translateX(4px); } .ds-cta-pill svg { transition: transform 0.2s ease; }"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Bordered surface button; border turns green on hover.",
+      "html": "<button class=\"ds-btn-secondary\">Cancel</button>",
+      "css": ".ds-btn-secondary { display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: #fff; color: #0f1b2d; font-size: 14px; font-weight: 500; padding: 10px 16px; border: 1px solid #e4e9f0; border-radius: 12px; cursor: pointer; transition: border-color 0.2s ease; } .ds-btn-secondary:hover { border-color: #047857; }"
+    },
+    {
+      "name": "Text Field",
+      "kind": "input",
+      "refersTo": "field-input",
+      "description": "Standard input. Hairline border; green border + 2px green ring on focus.",
+      "html": "<input class=\"ds-input\" type=\"text\" placeholder=\"you@example.com\" />",
+      "css": ".ds-input { width: 100%; background: #fff; color: #0f1b2d; font-size: 14px; padding: 10px 12px; border: 1px solid #e4e9f0; border-radius: 12px; transition: border-color 0.15s ease, box-shadow 0.15s ease; } .ds-input::placeholder { color: #5a6b7d; } .ds-input:focus { outline: none; border-color: #047857; box-shadow: 0 0 0 2px rgb(4 120 87 / 0.4); }"
+    },
+    {
+      "name": "Surface Card",
+      "kind": "card",
+      "refersTo": "surface-card",
+      "description": "Soft, slightly-raised card. Hairline border + the single card shadow.",
+      "html": "<div class=\"ds-card\"><h3>Live Session</h3><p>Join the interactive deck and answer in real time.</p></div>",
+      "css": ".ds-card { background: #fff; color: #0f1b2d; border: 1px solid #e4e9f0; border-radius: 16px; padding: 24px; box-shadow: 0 1px 2px rgb(15 27 45 / 0.04), 0 10px 24px -14px rgb(15 27 45 / 0.14); } .ds-card h3 { font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 18px; margin: 0 0 8px; } .ds-card p { color: #5a6b7d; font-size: 14px; line-height: 1.6; margin: 0; }"
+    },
+    {
+      "name": "Section Kicker",
+      "kind": "custom",
+      "refersTo": "label",
+      "description": "Uppercase tracked eyebrow with an accent dot. Hero/CTA blocks only.",
+      "html": "<p class=\"ds-kicker\"><span class=\"ds-kicker-dot\"></span>Interactive Learning</p>",
+      "css": ".ds-kicker { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.18em; color: #5a6b7d; margin: 0; } .ds-kicker-dot { width: 6px; height: 6px; border-radius: 9999px; background: #047857; }"
+    },
+    {
+      "name": "Deep CTA Block",
+      "kind": "card",
+      "refersTo": "cta-pill",
+      "description": "Drenched deep-forest CTA panel (constant in both themes). White text, bilingual heading, pill CTA.",
+      "html": "<div class=\"ds-cta-block\"><p class=\"ds-cta-eyebrow\">Join in</p><h2>Learning, made joyful — starting today.</h2><a class=\"ds-cta-block-btn\" href=\"#\">Get started</a></div>",
+      "css": ".ds-cta-block { background: #0c3b30; border-radius: 24px; padding: 64px 48px; text-align: center; } .ds-cta-block .ds-cta-eyebrow { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.18em; color: rgb(255 255 255 / 0.6); margin: 0; } .ds-cta-block h2 { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 32px; line-height: 1.15; color: #fff; margin: 16px 0 0; } .ds-cta-block-btn { display: inline-block; margin-top: 32px; background: #047857; color: #fff; font-size: 16px; font-weight: 500; padding: 14px 28px; border-radius: 9999px; text-decoration: none; transition: transform 0.2s ease; } .ds-cta-block-btn:hover { transform: translateY(-1px); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Joyful Lab",
+    "overview": "Pathshala is a place to do, not just read. The system is built like a clean, bright workbench: a calm cool-slate surface that gets out of the way, with energy and color spent deliberately on the moments that reward the learner. The resting interface is quiet and crisp (Khan Academy x Brilliant restraint); the interactive moments are where the delight lives. It is bilingual at its core: Bangla (Hind Siliguri) and English (Geist / Space Grotesk) are first-class peers, switching mid-sentence without a seam. It rejects corporate e-learning, generic AI-SaaS, and dense academic textbook looks alike. Joyful, never juvenile. No pure black or white anywhere; one green accent locked for all interaction.",
+    "keyCharacteristics": [
+      "Cool slate neutrals at rest; one locked green accent for go.",
+      "Bilingual-equal typography (Bangla + Latin), switching mid-sentence.",
+      "Soft, slightly-raised cards over flat boxes — a tactile workbench, not a spreadsheet.",
+      "Motion is rare and rewarding: fade-ups, scroll reveals, a gentle logo bob.",
+      "Light/dark follows system preference, with a manual override that always wins."
+    ],
+    "rules": [
+      { "name": "The One Green Rule", "body": "Exactly one accent — Forest Green — carries all interaction (CTAs, primary buttons, focus rings, active states, logo). The categorical palette colors subjects and illustrations only; promoting any --cat-* hue to a second brand accent is forbidden.", "section": "colors" },
+      { "name": "The No-Pure-Black-or-White Rule", "body": "Light is a cool off-white (#f6f8fb), dark is a slate-navy (#0e1626). #000 and #fff never appear as background or body text.", "section": "colors" },
+      { "name": "The Two-Token Accent Rule", "body": "Accent fills use --accent with white text; accent text/dots use --accent-text (green on light, mint on dark). Never set small green text from the fill token.", "section": "colors" },
+      { "name": "The Peer-Script Rule", "body": "Bangla is never a downgraded fallback. Any surface that can show Bangla gets Hind Siliguri at full size and proper line-height; mixed Bangla/English in one line must read evenly.", "section": "typography" },
+      { "name": "The Quiet-Kicker Rule", "body": "The uppercase tracked label is allowed only as a deliberate eyebrow on hero and CTA blocks (with the accent dot), not stamped above every section.", "section": "typography" },
+      { "name": "The One-Shadow Rule", "body": "There is exactly one elevation token. Cards use it; everything else is flat with a hairline border. No layered shadow scale, no glassmorphism.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do carry all interaction on the one Forest Green accent (#047857); use --accent for fills (white text) and --accent-text for small green/mint text.",
+      "Do treat Bangla (Hind Siliguri) as a first-class peer to Latin — full size, proper line-height, even in mixed lines.",
+      "Do keep surfaces flat with hairline borders; reach for elevation only via the single --shadow-card token on .surface-card.",
+      "Do use cool off-white / slate-navy backgrounds — never #000 or #fff.",
+      "Do give every animation a prefers-reduced-motion path; content must be fully visible without motion.",
+      "Do spend color and motion on interactive rewards (quizzes, polls, deck reveals), keeping the resting interface calm."
+    ],
+    "donts": [
+      "Don't promote any --cat-* hue to a second brand accent — categorical colors are for subject-coding and illustration only.",
+      "Don't ship the generic AI-SaaS look: no dark-purple gradients, neon glow, glassmorphism cards, or the big-number hero-metric template.",
+      "Don't drift into corporate-LMS density — no gray cluttered form-walls, no joyless compliance-module energy.",
+      "Don't become a dense academic textbook — no unhierarchied text-walls, no Times-New-Roman seriousness.",
+      "Don't go juvenile — no cartoon mascots, crayon-primary palette, or rounded-everything.",
+      "Don't use pure black or pure white, gradient text, or border-left color stripes as accents."
+    ]
+  }
+}
