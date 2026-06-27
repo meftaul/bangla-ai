@@ -40,8 +40,12 @@ export async function endSession(sessionId: string) {
 
 // Student joins by code. Logs a participation row, then opens the live deck.
 export async function joinSession(formData: FormData) {
+  // Where to bounce errors back to — the standalone /dashboard/live page by
+  // default, or whichever page embedded the form (the dashboard home passes its
+  // own path so the error shows inline rather than kicking the user elsewhere).
+  const from = String(formData.get("from") || "/dashboard/live");
   const code = String(formData.get("code") ?? "").trim().toUpperCase();
-  if (!code) redirect("/dashboard/live?error=empty");
+  if (!code) redirect(`${from}?error=empty`);
 
   const supabase = await createClient();
   const { data: session } = await supabase
@@ -50,7 +54,7 @@ export async function joinSession(formData: FormData) {
     .eq("join_code", code)
     .eq("status", "live")
     .maybeSingle();
-  if (!session) redirect("/dashboard/live?error=notfound");
+  if (!session) redirect(`${from}?error=notfound`);
 
   // One row per join event (the honest log); roster liveness comes from presence.
   // Stamp the student's own email so the admin report can name them.

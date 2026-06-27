@@ -1,31 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Atom, Brain, ChartLineUp, Code, Lightbulb } from "@phosphor-icons/react/dist/ssr";
 import { createClient } from "@/lib/supabase/server";
-import { listDiskArticles } from "@/lib/articles";
+import { listPublishedArticles, topicFor } from "@/lib/articles";
 import { Pager } from "@/components/pager";
 import { PAGE_SIZE, pageNum } from "@/lib/pagination";
 
 export const metadata: Metadata = {
   title: "Articles — Bangla.AI",
 };
-
-// Categorical accent set (subject coding only — green stays the one CTA accent).
-// Articles carry no category field, so pick a stable color+icon from the slug;
-// add a `category` frontmatter field later to make this semantic.
-const TOPICS = [
-  { color: "var(--cat-blue)", Icon: Brain },
-  { color: "var(--cat-amber)", Icon: Lightbulb },
-  { color: "var(--cat-coral)", Icon: ChartLineUp },
-  { color: "var(--cat-violet)", Icon: Atom },
-  { color: "var(--cat-teal)", Icon: Code },
-];
-
-function topicFor(slug: string) {
-  let h = 0;
-  for (let i = 0; i < slug.length; i++) h = (h * 31 + slug.charCodeAt(i)) >>> 0;
-  return TOPICS[h % TOPICS.length];
-}
 
 export default async function ArticlesPage({
   searchParams,
@@ -35,13 +17,7 @@ export default async function ArticlesPage({
   const sp = await searchParams;
   const page = pageNum(sp.page);
   const supabase = await createClient();
-  // Explicit published filter so admins are scoped too (RLS alone lets them read all).
-  const { data: rows } = await supabase
-    .from("articles")
-    .select("slug")
-    .eq("status", "published");
-  const visible = new Set((rows ?? []).map((r) => r.slug));
-  const all = (await listDiskArticles()).filter((a) => visible.has(a.slug));
+  const all = await listPublishedArticles(supabase);
   const totalPages = Math.ceil(all.length / PAGE_SIZE) || 1;
   const articles = all.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 

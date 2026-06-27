@@ -113,21 +113,30 @@ export default function DashboardShell({
               </button>
             </div>
 
-            <nav className="mt-2 flex flex-col gap-1 lg:mt-0">
+            <p className="px-3 pb-2 text-xs font-semibold uppercase tracking-wider text-muted lg:pt-1">
+              Menu
+            </p>
+            <nav className="flex flex-col gap-1">
               {links.map((link) => {
                 const active = pathname === link.href;
+                const Icon = link.icon;
                 return (
                   <Link
                     key={link.href}
                     href={link.href}
                     onClick={onNavClick}
                     aria-current={active ? "page" : undefined}
-                    className={`rounded-md px-3 py-2.5 text-sm font-medium transition-colors ${
+                    className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
                       active
                         ? "bg-accent/10 text-accent-text"
                         : "text-foreground hover:bg-background"
                     }`}
                   >
+                    <Icon
+                      size={18}
+                      weight={active ? "fill" : "regular"}
+                      className="shrink-0"
+                    />
                     {link.label}
                   </Link>
                 );
@@ -136,11 +145,22 @@ export default function DashboardShell({
           </div>
 
           <div className="flex flex-col gap-3">
-            {email && (
-              <p className="truncate text-sm text-muted" title={email}>
-                {email}
-              </p>
-            )}
+            <div className="flex items-center gap-3 rounded-xl border border-border bg-background/60 p-2.5">
+              <span
+                aria-hidden
+                className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-accent/10 font-display text-sm font-semibold text-accent-text"
+              >
+                {(email?.[0] ?? "?").toUpperCase()}
+              </span>
+              <div className="min-w-0">
+                {email && (
+                  <p className="truncate text-sm font-medium text-foreground" title={email}>
+                    {email}
+                  </p>
+                )}
+                <p className="text-xs text-muted">{isAdmin ? "Instructor" : "Learner"}</p>
+              </div>
+            </div>
             <form action={signOut}>
               <FormPendingOverlay />
               <button type="submit" className="btn-secondary w-full">

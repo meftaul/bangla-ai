@@ -1,5 +1,7 @@
 import { readdir, readFile } from "node:fs/promises";
 import { join } from "node:path";
+import { Atom, Brain, ChartLineUp, Code, Lightbulb } from "@phosphor-icons/react/dist/ssr";
+import type { Icon } from "@phosphor-icons/react";
 import type { createClient } from "@/lib/supabase/server";
 
 export type Status = "draft" | "published" | "live_session";
@@ -34,6 +36,38 @@ export async function listDiskArticles(): Promise<DiskArticle[]> {
     }),
   );
   return articles.sort((a, b) => a.title.localeCompare(b.title));
+}
+
+// Disk articles whose DB row is published, in disk (title) order. Shared by the
+// articles list and the dashboard "continue learning" rail. Explicit published
+// filter so admins are scoped too (RLS alone lets them read every row).
+export async function listPublishedArticles(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+): Promise<DiskArticle[]> {
+  const { data: rows } = await supabase
+    .from("articles")
+    .select("slug")
+    .eq("status", "published");
+  const visible = new Set((rows ?? []).map((r) => r.slug as string));
+  return (await listDiskArticles()).filter((a) => visible.has(a.slug));
+}
+
+// Categorical accent + icon per article (subject coding only — green stays the one
+// CTA accent). Articles carry no category field, so derive a stable choice from the
+// slug; add a `category` frontmatter field later to make this semantic.
+export type Topic = { color: string; Icon: Icon };
+const TOPICS: Topic[] = [
+  { color: "var(--cat-blue)", Icon: Brain },
+  { color: "var(--cat-amber)", Icon: Lightbulb },
+  { color: "var(--cat-coral)", Icon: ChartLineUp },
+  { color: "var(--cat-violet)", Icon: Atom },
+  { color: "var(--cat-teal)", Icon: Code },
+];
+
+export function topicFor(slug: string): Topic {
+  let h = 0;
+  for (let i = 0; i < slug.length; i++) h = (h * 31 + slug.charCodeAt(i)) >>> 0;
+  return TOPICS[h % TOPICS.length];
 }
 
 // UI gating only (not a security boundary — RLS is). Reads own profile row.
