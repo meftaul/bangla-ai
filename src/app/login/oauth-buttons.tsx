@@ -1,12 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import { GoogleLogo, GithubLogo } from "@phosphor-icons/react/dist/ssr";
 import { createClient } from "@/lib/supabase/client";
 import { LoadingOverlay } from "@/components/loading-overlay";
 
 const providers = [
-  { id: "google", label: "Continue with Google" },
-  { id: "github", label: "Continue with GitHub" },
+  { id: "google", label: "Continue with Google", Icon: GoogleLogo },
+  { id: "github", label: "Continue with GitHub", Icon: GithubLogo },
 ] as const;
 
 export default function OauthButtons() {
@@ -30,8 +31,9 @@ export default function OauthButtons() {
           key={p.id}
           type="button"
           onClick={() => signIn(p.id)}
-          className="rounded-md border border-border bg-surface px-4 py-2.5 text-sm font-medium text-foreground transition-colors hover:border-accent"
+          className="btn-secondary"
         >
+          <p.Icon size={18} weight="bold" />
           {p.label}
         </button>
       ))}
