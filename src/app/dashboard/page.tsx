@@ -402,7 +402,7 @@ async function AdminHome({
       <Section title="Your library" delay={300}>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           {links
-            .filter((l) => l.href !== "/dashboard/sessions")
+            .filter((l) => l.href !== "/dashboard" && l.href !== "/dashboard/sessions")
             .map((l) => (
               <Link
                 key={l.href}

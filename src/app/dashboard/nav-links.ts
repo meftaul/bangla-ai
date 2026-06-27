@@ -2,6 +2,7 @@ import {
   BookOpen,
   Broadcast,
   ClockCounterClockwise,
+  House,
   PencilSimple,
   Television,
 } from "@phosphor-icons/react/dist/ssr";
@@ -13,6 +14,12 @@ export type NavLink = { href: string; label: string; icon: Icon; blurb: string }
 
 export function navLinks(isAdmin: boolean): NavLink[] {
   const links: NavLink[] = [
+    {
+      href: "/dashboard",
+      label: "Dashboard",
+      icon: House,
+      blurb: "Your home base and recent activity.",
+    },
     {
       href: "/dashboard/articles",
       label: "Articles",
