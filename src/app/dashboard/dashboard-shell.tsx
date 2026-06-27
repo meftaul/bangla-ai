@@ -60,11 +60,7 @@ export default function DashboardShell({
     <div className="flex min-h-[100dvh] flex-col">
       {/* Top bar (all breakpoints) */}
       <header className="sticky top-0 z-40 flex h-14 shrink-0 items-center justify-between border-b border-border bg-background/85 px-4 backdrop-blur-md print:hidden">
-        <Link href="/dashboard" aria-label="Bangla.AI dashboard">
-          <LogoLockup className="text-lg text-foreground" />
-        </Link>
-        <div className="flex items-center gap-1">
-          <ThemeToggle />
+        <div className="flex items-center gap-2">
           <button
             type="button"
             onClick={toggle}
@@ -74,13 +70,17 @@ export default function DashboardShell({
           >
             <List size={22} weight="bold" />
           </button>
+          <Link href="/dashboard" aria-label="Bangla.AI dashboard">
+            <LogoLockup className="text-lg text-foreground" />
+          </Link>
         </div>
+        <ThemeToggle />
       </header>
 
       <div className="flex flex-1 flex-col lg:flex-row">
         {/* Mobile overlay backdrop */}
         <div
-          className={`fixed inset-0 z-50 bg-foreground/40 transition-opacity duration-200 motion-reduce:transition-none lg:hidden print:hidden ${
+          className={`fixed inset-0 z-50 bg-foreground/40 transition-opacity duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none lg:hidden print:hidden ${
             open ? "opacity-100" : "pointer-events-none opacity-0"
           }`}
           onClick={() => setOpen(false)}
@@ -89,16 +89,20 @@ export default function DashboardShell({
 
         {/* Sidebar: inline on lg+, slide-in drawer below lg */}
         <aside
-          className={`fixed inset-y-0 right-0 z-50 flex w-72 max-w-[85vw] flex-col justify-between border-l border-border bg-surface px-5 py-5 transition-transform duration-200 ease-out motion-reduce:transition-none lg:static lg:inset-auto lg:z-auto lg:w-60 lg:max-w-none lg:translate-x-0 lg:border-l-0 lg:border-r lg:py-6 print:hidden ${
-            open ? "translate-x-0" : "translate-x-full"
-          } ${open === false ? "lg:hidden" : "lg:flex"}`}
+          className={`fixed inset-y-0 left-0 z-50 flex w-72 max-w-[85vw] flex-col justify-between overflow-y-auto border-r border-border bg-surface px-5 py-5 transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform motion-reduce:transition-none lg:static lg:inset-auto lg:z-auto lg:max-w-none lg:translate-x-0 lg:overflow-hidden lg:py-6 lg:transition-[width,opacity] lg:will-change-auto print:hidden ${
+            open ? "translate-x-0" : "-translate-x-full"
+          } ${
+            open === false
+              ? "lg:w-0 lg:border-r-0 lg:opacity-0"
+              : "lg:w-60 lg:opacity-100"
+          }`}
           role="dialog"
           aria-modal="true"
           aria-label="Navigation menu"
         >
           <div>
             {/* Close button — only meaningful for the mobile drawer */}
-            <div className="flex justify-end lg:hidden">
+            <div className="flex justify-start lg:hidden">
               <button
                 type="button"
                 onClick={() => setOpen(false)}

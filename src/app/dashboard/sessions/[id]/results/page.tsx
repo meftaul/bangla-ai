@@ -68,7 +68,7 @@ export default async function ResultsPage({ params }: { params: Promise<{ id: st
                   {a.type === "poll" ? (
                     <span className="text-xs text-muted">poll</span>
                   ) : (
-                    <span className={r?.is_correct ? "text-accent-text" : "text-red-500"}>
+                    <span className={r?.is_correct ? "text-accent-text" : "text-danger"}>
                       {r ? (r.is_correct ? "✓ correct" : "✗ wrong") : "✗ not answered"}
                     </span>
                   )}

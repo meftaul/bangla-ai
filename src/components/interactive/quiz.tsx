@@ -48,7 +48,7 @@ export default function Quiz({
               ? isCorrect
                 ? "border-accent bg-accent text-accent-foreground"
                 : isChosen
-                  ? "border-red-500 bg-red-500/10"
+                  ? "border-danger bg-danger/10 text-danger"
                   : "border-border opacity-60"
               : isChosen
                 ? "border-accent bg-accent/10"
@@ -59,7 +59,7 @@ export default function Quiz({
                 type="button"
                 disabled={locked && !isPresenter}
                 onClick={() => choose(i)}
-                className={`w-full rounded-md border px-4 py-3 text-left text-lg transition-colors ${state}`}
+                className={`w-full rounded-xl border px-4 py-3 text-left text-lg transition-colors ${state}`}
               >
                 {opt}
               </button>

@@ -36,7 +36,7 @@ function Hero() {
             Interactive Learning
           </p>
           <h1
-            className="fade-up mt-5 font-display text-6xl font-bold leading-none tracking-tight text-accent-text sm:text-7xl lg:text-8xl"
+            className="fade-up mt-5 font-display text-6xl font-bold leading-none tracking-tight text-foreground sm:text-7xl lg:text-8xl"
             style={{ animationDelay: "80ms" }}
           >
             <span className="relative inline-block">

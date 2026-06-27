@@ -63,7 +63,7 @@ export function LogoLockup({
           className={`mt-1 text-[11px] font-medium ${light ? "text-white/60" : "text-muted"}`}
         >
           by Bangla
-          <span className={light ? "text-emerald-300" : "text-accent-text"}>.</span>
+          <span className={light ? "text-accent-bright" : "text-accent-text"}>.</span>
           ai
         </span>
       </span>

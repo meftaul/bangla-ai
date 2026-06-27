@@ -31,7 +31,7 @@ export default async function JoinLivePage({
           placeholder="e.g. K7M2QX"
           className="field-input bg-background px-4 py-3 text-center text-xl font-bold uppercase tracking-widest sm:text-2xl"
         />
-        {message && <p className="text-sm text-red-500">{message}</p>}
+        {message && <p className="text-sm text-danger">{message}</p>}
         <button type="submit" className="btn-primary py-3">
           Join
         </button>

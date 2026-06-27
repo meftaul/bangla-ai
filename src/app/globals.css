@@ -1,37 +1,61 @@
 @import "tailwindcss";
 
-/* Emerald palette. One accent, locked across the page.
-   No pure black / white. Bone/charcoal light; espresso/clay dark.
+/* Learning-platform palette (Khan Academy x Brilliant). Cool/crisp neutrals,
+   one green primary locked for interaction + CTAs, and a categorical color set
+   (--cat-*) used only for subject coding / illustration (not as a 2nd accent).
+   No pure black / white. Cool off-white light; deep slate-navy dark.
    --accent = fills (white text, AA in both modes);
-   --accent-text = small accent text/dot (AA on each mode's bg).
+   --accent-text = small accent text/dot (AA on each mode's bg);
+   --accent-bright = bright green for dark bands (footer / CTA / logo dot).
+   Radius scale: pill = CTAs, 2xl = cards, xl = buttons/inputs.
    --color-primary / --logo-string drive the inline SVG logo. */
 :root {
-  --background: #f7f4ef;
-  --foreground: #1c1714;
-  --muted: #6f655d;
-  --border: #e6e0d8;
+  --background: #f6f8fb; /* cool off-white */
+  --foreground: #0f1b2d; /* slate-ink */
+  --muted: #5a6b7d;
+  --border: #e4e9f0;
   --surface: #ffffff;
   --accent: #047857; /* white text passes AA (~5.5:1) */
-  --accent-text: #047857; /* AA as text on bone bg */
+  --accent-text: #047857; /* AA as text on the cool bg */
   --accent-foreground: #ffffff;
+  --accent-bright: #6ee7b7; /* bright green, AA on the deep band */
   /* Logo: body tracks the accent (resolved lazily); strings are flag-red. */
   --color-primary: var(--accent);
   --logo-string: #d92b2b;
-  /* Deep forest green for the dark CTA band + footer (constant, both themes). */
-  --accent-deep: #123d2c;
+  /* Deep teal-forest green for the dark CTA band + footer (constant, both themes). */
+  --accent-deep: #0c3b30;
+  /* Semantic status. Success reuses --accent (green). */
+  --danger: #dc2626;
+  /* Categorical palette: subject coding / illustration only. */
+  --cat-blue: #2563eb;
+  --cat-amber: #d97706;
+  --cat-coral: #e11d48;
+  --cat-violet: #7c3aed;
+  --cat-teal: #0d9488;
+  /* Soft elevation, tinted to the slate background hue. */
+  --shadow-card: 0 1px 2px rgb(15 27 45 / 0.04), 0 10px 24px -14px rgb(15 27 45 / 0.14);
 }
 
 /* Dark tokens via system preference (no manual choice). */
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #16110d;
-    --foreground: #f0ebe4;
-    --muted: #a39a90;
-    --border: #2c241d;
-    --surface: #1e1813;
+    --background: #0e1626; /* deep slate-navy */
+    --foreground: #e9eef6;
+    --muted: #93a2b6;
+    --border: #26344c;
+    --surface: #16223a;
     --accent: #047857; /* white text passes AA (~5.5:1) */
-    --accent-text: #6ee7b7; /* bright emerald, AA as text on espresso */
+    --accent-text: #6ee7b7; /* bright green, AA as text on slate */
     --accent-foreground: #ffffff;
+    --accent-bright: #6ee7b7;
+    --danger: #f87171;
+    /* Brighter categorical hues for contrast on the dark base. */
+    --cat-blue: #60a5fa;
+    --cat-amber: #fbbf24;
+    --cat-coral: #fb7185;
+    --cat-violet: #a78bfa;
+    --cat-teal: #2dd4bf;
+    --shadow-card: 0 1px 2px rgb(0 0 0 / 0.3), 0 12px 28px -14px rgb(0 0 0 / 0.55);
   }
 }
 
@@ -40,25 +64,41 @@
    beats the system preference. Class selectors survive the Tailwind compiler;
    :root[data-theme] does not. */
 .dark {
-  --background: #16110d;
-  --foreground: #f0ebe4;
-  --muted: #a39a90;
-  --border: #2c241d;
-  --surface: #1e1813;
+  --background: #0e1626; /* deep slate-navy */
+  --foreground: #e9eef6;
+  --muted: #93a2b6;
+  --border: #26344c;
+  --surface: #16223a;
   --accent: #047857; /* white text passes AA (~5.5:1) */
-  --accent-text: #6ee7b7; /* bright emerald, AA as text on dark bg */
+  --accent-text: #6ee7b7; /* bright green, AA as text on slate */
   --accent-foreground: #ffffff;
+  --accent-bright: #6ee7b7;
+  --danger: #f87171;
+  --cat-blue: #60a5fa;
+  --cat-amber: #fbbf24;
+  --cat-coral: #fb7185;
+  --cat-violet: #a78bfa;
+  --cat-teal: #2dd4bf;
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.3), 0 12px 28px -14px rgb(0 0 0 / 0.55);
 }
 
 .light {
-  --background: #f7f4ef;
-  --foreground: #1c1714;
-  --muted: #6f655d;
-  --border: #e6e0d8;
+  --background: #f6f8fb; /* cool off-white */
+  --foreground: #0f1b2d;
+  --muted: #5a6b7d;
+  --border: #e4e9f0;
   --surface: #ffffff;
   --accent: #047857;
   --accent-text: #047857;
   --accent-foreground: #ffffff;
+  --accent-bright: #6ee7b7;
+  --danger: #dc2626;
+  --cat-blue: #2563eb;
+  --cat-amber: #d97706;
+  --cat-coral: #e11d48;
+  --cat-violet: #7c3aed;
+  --cat-teal: #0d9488;
+  --shadow-card: 0 1px 2px rgb(15 27 45 / 0.04), 0 10px 24px -14px rgb(15 27 45 / 0.14);
 }
 
 @theme inline {
@@ -70,6 +110,13 @@
   --color-accent: var(--accent);
   --color-accent-text: var(--accent-text);
   --color-accent-foreground: var(--accent-foreground);
+  --color-accent-bright: var(--accent-bright);
+  --color-danger: var(--danger);
+  --color-cat-blue: var(--cat-blue);
+  --color-cat-amber: var(--cat-amber);
+  --color-cat-coral: var(--cat-coral);
+  --color-cat-violet: var(--cat-violet);
+  --color-cat-teal: var(--cat-teal);
   --font-sans: var(--font-geist-sans);
   --font-display: var(--font-space-grotesk);
   --font-bangla: var(--font-hind-siliguri);
@@ -93,7 +140,7 @@ body {
   .btn-primary,
   .btn-secondary,
   .btn-ghost {
-    @apply inline-flex cursor-pointer items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium transition-all;
+    @apply inline-flex cursor-pointer items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium transition-all;
   }
   .btn-primary {
     @apply bg-accent text-accent-foreground hover:-translate-y-px active:translate-y-0;
@@ -105,10 +152,12 @@ body {
     @apply text-muted hover:text-foreground;
   }
   .field-input {
-    @apply w-full rounded-lg border border-border bg-surface px-3 py-2.5 text-foreground placeholder:text-muted focus:border-accent focus:ring-2 focus:ring-accent/40 focus:outline-none;
+    @apply w-full rounded-xl border border-border bg-surface px-3 py-2.5 text-foreground placeholder:text-muted focus:border-accent focus:ring-2 focus:ring-accent/40 focus:outline-none;
   }
+  /* Soft, slightly raised cards (Khan/Brilliant feel) instead of flat boxes. */
   .surface-card {
-    @apply rounded-xl border border-border bg-surface;
+    @apply rounded-2xl border border-border bg-surface;
+    box-shadow: var(--shadow-card);
   }
 }
 
