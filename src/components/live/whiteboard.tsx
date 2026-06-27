@@ -19,8 +19,9 @@ type Elements = readonly any[];
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type AppState = any;
 // Persisted snapshot: elements + the presenter's viewport. Older rows stored a bare
-// elements array, so readers accept both.
-type Snapshot = { elements: Elements; scrollX: number; scrollY: number; zoom: number };
+// elements array, so readers accept both. Stage owns the viewport (it fits the
+// presenter's region to the viewer's own canvas); here we only need the elements.
+type Snapshot = { elements: Elements; [k: string]: unknown };
 
 // Presentational Excalidraw surface. The parent (Stage) owns the realtime channel: it
 // pushes the presenter's scene in through the api (onApi) and receives the presenter's
@@ -31,12 +32,14 @@ export default function Whiteboard({
   active,
   onApi,
   onChange,
+  containerRef,
 }: {
   readOnly: boolean;
   initialScene: Snapshot | Elements | null;
   active: boolean; // is the board the visible panel right now
   onApi: (api: Api) => void;
   onChange?: (elements: Elements, appState: AppState) => void;
+  containerRef?: React.Ref<HTMLDivElement>; // Stage measures this to fit the region
 }) {
   const apiRef = useRef<Api>(null);
 
@@ -45,20 +48,18 @@ export default function Whiteboard({
     if (active) apiRef.current?.refresh();
   }, [active]);
 
-  // A snapshot carries the presenter's viewport; a bare array (legacy) or null doesn't.
-  const snap =
-    initialScene && !Array.isArray(initialScene) ? (initialScene as Snapshot) : null;
-  const elements = Array.isArray(initialScene) ? initialScene : snap?.elements ?? [];
-  // Viewer with a saved viewport opens on the presenter's frame; otherwise center content.
-  // Loosely typed: Excalidraw brands zoom.value (NormalizedZoomValue), which a plain number
-  // can't satisfy — and we feed it a runtime number anyway.
-  const initialData: AppState =
-    readOnly && snap
-      ? { elements, appState: { scrollX: snap.scrollX, scrollY: snap.scrollY, zoom: { value: snap.zoom } } }
-      : { elements, scrollToContent: true };
+  // Initial paint: just the elements, centered. For the viewer, Stage.fit() overrides the
+  // viewport once the api is ready (fitting the presenter's region to this canvas's size).
+  const elements = Array.isArray(initialScene)
+    ? initialScene
+    : (initialScene as Snapshot | null)?.elements ?? [];
+  const initialData: AppState = { elements, scrollToContent: true };
 
   return (
-    <div className="h-[60vh] overflow-hidden rounded-xl border border-border sm:h-[64vh] lg:h-[70vh]">
+    <div
+      ref={containerRef}
+      className="h-[60vh] overflow-hidden rounded-xl border border-border sm:h-[64vh] lg:h-[70vh]"
+    >
       <Excalidraw
         viewModeEnabled={readOnly}
         initialData={initialData}

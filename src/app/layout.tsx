@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Geist, Space_Grotesk, Hind_Siliguri } from "next/font/google";
 import "./globals.css";
 
@@ -35,15 +36,13 @@ export default function RootLayout({
       suppressHydrationWarning
       className={`${geistSans.variable} ${spaceGrotesk.variable} ${hindSiliguri.variable} h-full antialiased`}
     >
-      <head>
-        {/* Apply saved theme before paint to avoid a flash. */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.classList.add(t);}catch(e){}})();`,
-          }}
-        />
-      </head>
       <body className="min-h-full flex flex-col bg-background text-foreground font-sans">
+        {/* Apply saved theme before paint to avoid a flash. next/script (beforeInteractive)
+            is hoisted into the initial HTML head and runs before hydration — a raw <script>
+            element trips Next 16's "scripts inside React components" warning. */}
+        <Script id="theme-init" strategy="beforeInteractive">
+          {`(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.classList.add(t);}catch(e){}})();`}
+        </Script>
         {children}
       </body>
     </html>
