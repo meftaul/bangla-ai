@@ -1,0 +1,283 @@
+export const metadata = {
+  title: "Retrieval-Augmented Generation",
+  description: "RAG from first principles to advanced retrieval — with live quizzes.",
+};
+
+<Slide>
+
+# Retrieval-Augmented Generation
+
+Give a language model an **open book** at answer time.
+
+No retraining. Just the right pages, at the right moment.
+
+</Slide>
+
+<Slide>
+
+## First, be honest
+
+<Poll
+  id="rag_warmup"
+  question="Has an LLM ever confidently made up a fact for you?"
+  options={["Yes, many times", "Once or twice", "Never noticed"]}
+/>
+
+That confident wrongness is exactly what RAG attacks.
+
+</Slide>
+
+<Slide>
+
+## The problem with a model alone
+
+- **Knowledge cutoff** — it doesn't know what happened after training.
+- **Hallucination** — gaps get filled with confident fiction.
+- **No private data** — your docs, your wiki, your tickets are invisible.
+- **No citations** — you can't check where an answer came from.
+
+</Slide>
+
+<Slide>
+
+## The core idea
+
+Don't bake knowledge into the weights. **Fetch it when asked.**
+
+> Retrieve relevant text → put it in the prompt → let the model answer *from that text*.
+
+Closed-book exam → open-book exam.
+
+</Slide>
+
+<Slide>
+
+## RAG in three steps
+
+1. **Retrieve** — find passages relevant to the question.
+2. **Augment** — paste them into the prompt as context.
+3. **Generate** — the model answers grounded in that context.
+
+Everything else is making each step better.
+
+</Slide>
+
+<Slide>
+
+## Build the mental model
+
+<DragDrop
+  id="rag_pipeline"
+  prompt="Order the full RAG pipeline, from raw docs to answer"
+  items={[
+    "Chunk the documents",
+    "Embed each chunk",
+    "Store vectors in a DB",
+    "Embed the user query",
+    "Retrieve top-k chunks",
+    "Augment the prompt",
+    "Generate the answer",
+  ]}
+/>
+
+</Slide>
+
+<Slide>
+
+## Embeddings: text → vectors
+
+An embedding model maps text to a point in high-dimensional space.
+
+- Similar **meaning** → nearby points.
+- "dog" and "puppy" sit close; "dog" and "invoice" sit far.
+
+This is what makes search *semantic* instead of keyword-matching.
+
+</Slide>
+
+<Slide>
+
+## Measuring "close"
+
+Similarity is the **angle** between two vectors — cosine similarity:
+
+$$
+\cos(\theta) = \frac{\mathbf{a} \cdot \mathbf{b}}{\lVert \mathbf{a} \rVert \, \lVert \mathbf{b} \rVert}
+$$
+
+$1$ = identical meaning · $0$ = unrelated · direction matters, length doesn't.
+
+</Slide>
+
+<Slide>
+
+## Vector databases
+
+Millions of chunks → you can't compare against all of them exactly.
+
+- **ANN** (approximate nearest neighbor) search: fast, ~exact.
+- Returns the **top-k** closest chunks for a query.
+- e.g. FAISS, pgvector, Pinecone, Qdrant, Weaviate.
+
+</Slide>
+
+<Slide>
+
+## Chunking: the quiet bottleneck
+
+How you split documents decides what can be retrieved.
+
+- **Too big** → noise dilutes the signal, wastes context.
+- **Too small** → meaning gets cut in half.
+- **Overlap** chunks so ideas aren't sliced at the seam.
+- **Structure-aware**: split on headings, paragraphs, code blocks — not blind character counts.
+
+</Slide>
+
+<Slide>
+
+## Quick check
+
+<Quiz
+  id="rag_query_first"
+  question="A user question just arrived. What happens first?"
+  options={[
+    "Generate a draft answer",
+    "Embed the query into a vector",
+    "Fine-tune the model",
+    "Return the most recent document",
+  ]}
+  answer={1}
+/>
+
+</Slide>
+
+<Slide>
+
+## Naive RAG breaks in predictable ways
+
+- **Bad chunks** → garbage retrieved, garbage generated.
+- **Similar ≠ relevant** → vectors match topic, not intent.
+- **Lost in the middle** → models ignore context buried mid-prompt.
+- **Single-shot** → one retrieval, no second chance.
+
+The rest of this deck fixes each one.
+
+</Slide>
+
+<Slide>
+
+## Better retrieval: hybrid search
+
+Dense vectors miss exact terms (names, IDs, error codes).
+
+- **Dense** (embeddings) → semantic meaning.
+- **Sparse** (BM25 / keyword) → exact matches.
+- **Fuse** both rankings (e.g. reciprocal rank fusion).
+
+Best of meaning *and* literal text.
+
+</Slide>
+
+<Slide>
+
+## Re-ranking
+
+Retrieval is recall-first and a bit sloppy. So retrieve wide, then refine.
+
+- Pull top-50 cheaply with vectors.
+- A **cross-encoder** reads each (query, chunk) pair together and scores relevance.
+- Keep the true top-5 for the prompt.
+
+Precision where it matters.
+
+</Slide>
+
+<Slide>
+
+## Transform the query
+
+The user's wording isn't always the best search query.
+
+- **Rewriting** — clean a messy or conversational question.
+- **Multi-query** — fan out into several phrasings, merge results.
+- **HyDE** — generate a *hypothetical answer*, embed **that**, and search with it.
+
+</Slide>
+
+<Slide>
+
+## Agentic / iterative RAG
+
+One retrieval often isn't enough.
+
+- **Loop**: retrieve → reason → notice a gap → retrieve again.
+- **Route**: pick the right source (docs vs. SQL vs. web) per question.
+- **Self-check**: "do I actually have enough to answer?"
+
+RAG becomes a strategy, not a single step.
+
+</Slide>
+
+<Slide>
+
+## Order an advanced query
+
+<DragDrop
+  id="rag_advanced_flow"
+  prompt="Order a modern retrieval pipeline for one query"
+  items={[
+    "Rewrite the query",
+    "Hybrid retrieve (dense + sparse)",
+    "Re-rank the candidates",
+    "Augment the prompt",
+    "Generate the answer",
+    "Cite the sources",
+  ]}
+/>
+
+</Slide>
+
+<Slide>
+
+## How do you know it works?
+
+Don't trust vibes — measure.
+
+- **Faithfulness** — is the answer supported by the retrieved context?
+- **Answer relevance** — does it actually address the question?
+- **Context precision / recall** — did retrieval surface the right chunks?
+
+Frameworks: RAGAS, and LLM-as-judge evals.
+
+</Slide>
+
+<Slide>
+
+## One more
+
+<Quiz
+  id="rag_fix_irrelevant"
+  question="Vectors keep returning similar-but-irrelevant chunks. Best fix?"
+  options={[
+    "Make chunks bigger",
+    "Add a cross-encoder re-ranker",
+    "Raise the model temperature",
+    "Retrieve more chunks (top-100)",
+  ]}
+  answer={1}
+/>
+
+</Slide>
+
+<Slide>
+
+## RAG vs. fine-tuning
+
+- **RAG** → knowledge that changes, needs citations, must stay private/fresh.
+- **Fine-tuning** → fixed style, format, or behavior; not new facts.
+- Often: **both** — fine-tune the *how*, retrieve the *what*.
+
+Retrieve → Augment → Generate. Then make each step smarter. 🎯
+
+</Slide>

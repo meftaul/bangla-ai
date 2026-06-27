@@ -1,31 +1,24 @@
-import Image from "next/image";
 import Link from "next/link";
+import { ArrowRight, Heart } from "@phosphor-icons/react/dist/ssr";
 import ThemeToggle from "./theme-toggle";
+import { Logo, LogoLockup } from "@/components/logo";
 
-// ponytail: whole landing in one file; four small sections, no per-section files needed.
-
-function Wordmark({ className = "" }: { className?: string }) {
-  return (
-    <span className={`font-display font-bold tracking-tight ${className}`}>
-      Bangla<span className="text-accent-text">.</span>AI
-    </span>
-  );
-}
+// ponytail: whole landing in one file; four sections, no per-section files needed.
 
 function Header() {
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur-md">
-      <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <Link href="/" aria-label="Bangla.AI home">
-          <Wordmark className="text-xl text-foreground" />
+      <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
+        <Link href="/" aria-label="Pathshala home">
+          <LogoLockup className="text-foreground" />
         </Link>
-        <div className="flex items-center gap-1 sm:gap-2">
+        <div className="flex items-center gap-2">
           <ThemeToggle />
-          <Link href="/login" className="btn-ghost hidden sm:inline-flex">
+          <Link
+            href="/login"
+            className="rounded-full bg-accent px-6 py-2 text-sm font-medium text-accent-foreground transition-transform hover:-translate-y-px active:translate-y-0"
+          >
             Sign in
-          </Link>
-          <Link href="/login" className="btn-primary">
-            Get started
           </Link>
         </div>
       </nav>
@@ -35,110 +28,95 @@ function Header() {
 
 function Hero() {
   return (
-    <section className="grid min-h-[calc(100dvh-4rem)] grid-cols-1 md:grid-cols-2">
-      <div className="order-2 flex items-center px-4 py-16 sm:px-6 md:order-1 lg:px-12">
-        <div className="w-full max-w-2xl">
-          <p
-            className="fade-up font-bangla text-base font-semibold text-accent-text"
-            style={{ animationDelay: "0ms" }}
-          >
-            চলো শিখি
+    <section className="hero-glow">
+      <div className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-12 px-4 py-20 sm:px-6 md:grid-cols-2 md:py-32 lg:px-8">
+        <div className="order-2 md:order-1">
+          <p className="fade-up flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-muted">
+            <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+            Interactive Learning
           </p>
           <h1
-            className="fade-up mt-3 font-display text-5xl font-bold leading-[1.02] tracking-tight text-foreground sm:text-6xl lg:text-7xl"
+            className="fade-up mt-5 font-display text-6xl font-bold leading-none tracking-tight text-accent-text sm:text-7xl lg:text-8xl"
             style={{ animationDelay: "80ms" }}
           >
-            Let&apos;s learn AI and{" "}
-            <span className="text-accent-text">data science.</span>
+            <span className="relative inline-block">
+              Let&apos;s Learn
+              <span
+                aria-hidden
+                className="absolute inset-x-0 bottom-2 -z-10 h-5 bg-accent/15"
+              />
+            </span>
           </h1>
-          <p
-            className="fade-up mt-6 max-w-prose text-base leading-relaxed text-muted sm:text-lg"
-            style={{ animationDelay: "160ms" }}
-          >
-            Structured courses, hands-on notebooks, and projects that take you from
-            fundamentals to real models. Built for Bengali learners.
-          </p>
-          <div
-            className="fade-up mt-8 flex flex-wrap items-center gap-3"
-            style={{ animationDelay: "240ms" }}
-          >
+          <div className="fade-up mt-10" style={{ animationDelay: "160ms" }}>
             <Link
               href="/login"
-              className="rounded-md bg-accent px-6 py-3 text-base font-medium text-accent-foreground transition-transform hover:-translate-y-px active:translate-y-0"
+              className="group inline-flex items-center gap-2 rounded-full bg-accent px-7 py-3.5 text-base font-medium text-accent-foreground transition-transform hover:-translate-y-px active:translate-y-0"
             >
-              Get started
-            </Link>
-            <Link
-              href="/login"
-              className="rounded-md border border-border px-6 py-3 text-base font-medium text-foreground transition-colors hover:bg-surface"
-            >
-              Sign in
+              Let&apos;s Start Now
+              <ArrowRight
+                weight="bold"
+                className="transition-transform group-hover:translate-x-1"
+              />
             </Link>
           </div>
         </div>
-      </div>
 
-      <div className="relative order-1 min-h-[42vh] md:order-2 md:min-h-0">
-        <Image
-          src="https://picsum.photos/seed/bangla-ai-learning/1200/1500?grayscale"
-          alt="A learner studying at a desk"
-          fill
-          priority
-          sizes="(max-width: 768px) 100vw, 50vw"
-          className="object-cover"
-        />
-        <div className="absolute inset-0 bg-accent/20 mix-blend-multiply" />
+        <div className="order-1 flex justify-center md:order-2">
+          <Logo float className="h-auto w-56 sm:w-72 lg:w-80" />
+        </div>
       </div>
     </section>
   );
 }
 
-function LoginCTA() {
+function JoinCTA() {
   return (
-    <section className="border-t border-border bg-surface">
-      <div className="scroll-reveal mx-auto max-w-3xl px-4 py-28 text-center sm:px-6 sm:py-36 lg:px-8">
-        <h2 className="font-display text-3xl font-bold leading-tight tracking-tight text-foreground sm:text-5xl">
-          Create your account and start your first course.
-        </h2>
-        <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-muted sm:text-lg">
-          Free to begin. Pick a track, open a notebook, and ship something real
-          this week.
-        </p>
-        <Link
-          href="/login"
-          className="mt-9 inline-block rounded-md bg-accent px-7 py-3 text-base font-medium text-accent-foreground transition-transform hover:-translate-y-px active:translate-y-0"
+    <section className="bg-background pb-24">
+      <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+        <div
+          className="scroll-reveal rounded-3xl px-6 py-16 text-center sm:px-12 sm:py-20"
+          style={{ background: "var(--accent-deep)" }}
         >
-          Get started
-        </Link>
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-white/60">
+            Join in
+          </p>
+          <h2 className="mt-4 font-bangla text-3xl font-bold leading-tight tracking-tight text-white sm:text-4xl">
+            শেখাটা মজার হোক, আজ থেকেই।
+          </h2>
+          <p className="mx-auto mt-4 max-w-xl font-bangla text-base leading-relaxed text-white/70">
+            পাঠশালায় ঢুকে পড়ো
+          </p>
+          <Link
+            href="/login"
+            className="mt-8 inline-block rounded-full bg-accent px-8 py-3.5 font-bangla text-base font-medium text-accent-foreground transition-transform hover:-translate-y-px active:translate-y-0"
+          >
+            শুরু করো
+          </Link>
+        </div>
       </div>
     </section>
   );
 }
 
 function Footer() {
-  const links = ["Courses", "About", "Privacy", "Contact"];
   return (
-    <footer className="mt-auto border-t border-border">
-      <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 py-12 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
-        <div>
-          <Wordmark className="text-lg text-foreground" />
-          <p className="mt-1 text-sm text-muted">Let&apos;s Learn.</p>
-        </div>
-        <nav className="flex flex-wrap gap-x-6 gap-y-2">
-          {links.map((label) => (
-            <a
-              key={label}
-              href="#"
-              className="text-sm text-muted transition-colors hover:text-foreground"
-            >
-              {label}
-            </a>
-          ))}
-        </nav>
+    <footer
+      className="relative overflow-hidden"
+      style={{ background: "var(--accent-deep)" }}
+    >
+      <div className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-12 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
+        <LogoLockup light className="relative z-10 text-white" />
+        <p className="relative z-10 flex items-center gap-1.5 font-bangla text-sm text-white/60">
+          © ২০২৬ Pathshala · পাঠশালা
+          <Heart weight="regular" className="text-white/60" />
+        </p>
       </div>
-      <div className="mx-auto max-w-7xl px-4 pb-10 sm:px-6 lg:px-8">
-        <p className="text-xs text-muted">© 2026 Bangla.AI. All rights reserved.</p>
-      </div>
+      <span
+        aria-hidden
+        className="pointer-events-none absolute -bottom-8 right-2 select-none font-bangla text-8xl font-bold text-white/5"
+      >
+        পাঠশালা
+      </span>
     </footer>
   );
 }
@@ -149,7 +127,7 @@ export default function Home() {
       <Header />
       <main>
         <Hero />
-        <LoginCTA />
+        <JoinCTA />
       </main>
       <Footer />
     </>

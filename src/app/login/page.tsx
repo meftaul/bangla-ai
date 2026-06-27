@@ -3,6 +3,7 @@ import Link from "next/link";
 import { signIn, signUp, signInWithMagicLink } from "./actions";
 import OauthButtons from "./oauth-buttons";
 import { FormPendingOverlay } from "@/components/loading-overlay";
+import { LogoLockup } from "@/components/logo";
 
 export const metadata: Metadata = {
   title: "Sign in — Bangla.AI",
@@ -18,12 +19,8 @@ export default async function LoginPage({
   return (
     <main className="grid min-h-[100dvh] place-items-center px-4 py-12">
       <div className="w-full max-w-sm">
-        <Link
-          href="/"
-          className="font-display text-xl font-bold tracking-tight text-foreground"
-          aria-label="Bangla.AI home"
-        >
-          Bangla<span className="text-accent-text">.</span>AI
+        <Link href="/" aria-label="Bangla.AI home">
+          <LogoLockup className="text-xl text-foreground" />
         </Link>
 
         <h1 className="mt-8 font-display text-3xl font-bold tracking-tight text-foreground">

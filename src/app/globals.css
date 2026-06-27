@@ -1,18 +1,24 @@
 @import "tailwindcss";
 
-/* Warm Terracotta palette. One accent, locked across the page.
+/* Emerald palette. One accent, locked across the page.
    No pure black / white. Bone/charcoal light; espresso/clay dark.
    --accent = fills (white text, AA in both modes);
-   --accent-text = small accent text/dot (AA on each mode's bg). */
+   --accent-text = small accent text/dot (AA on each mode's bg).
+   --color-primary / --logo-string drive the inline SVG logo. */
 :root {
   --background: #f7f4ef;
   --foreground: #1c1714;
   --muted: #6f655d;
   --border: #e6e0d8;
   --surface: #ffffff;
-  --accent: #b8461f; /* white text passes AA (~4.8:1) */
-  --accent-text: #a83e1c; /* AA as text on bone bg */
+  --accent: #047857; /* white text passes AA (~5.5:1) */
+  --accent-text: #047857; /* AA as text on bone bg */
   --accent-foreground: #ffffff;
+  /* Logo: body tracks the accent (resolved lazily); strings are flag-red. */
+  --color-primary: var(--accent);
+  --logo-string: #d92b2b;
+  /* Deep forest green for the dark CTA band + footer (constant, both themes). */
+  --accent-deep: #123d2c;
 }
 
 /* Dark tokens via system preference (no manual choice). */
@@ -23,8 +29,8 @@
     --muted: #a39a90;
     --border: #2c241d;
     --surface: #1e1813;
-    --accent: #bf4a22; /* white text passes AA */
-    --accent-text: #ef8a5e; /* bright clay, AA as text on espresso */
+    --accent: #047857; /* white text passes AA (~5.5:1) */
+    --accent-text: #6ee7b7; /* bright emerald, AA as text on espresso */
     --accent-foreground: #ffffff;
   }
 }
@@ -39,8 +45,8 @@
   --muted: #a39a90;
   --border: #2c241d;
   --surface: #1e1813;
-  --accent: #bf4a22; /* white text passes AA */
-  --accent-text: #ef8a5e; /* bright clay, AA as text on dark bg */
+  --accent: #047857; /* white text passes AA (~5.5:1) */
+  --accent-text: #6ee7b7; /* bright emerald, AA as text on dark bg */
   --accent-foreground: #ffffff;
 }
 
@@ -50,8 +56,8 @@
   --muted: #6f655d;
   --border: #e6e0d8;
   --surface: #ffffff;
-  --accent: #b8461f;
-  --accent-text: #a83e1c;
+  --accent: #047857;
+  --accent-text: #047857;
   --accent-foreground: #ffffff;
 }
 
@@ -71,6 +77,13 @@
 
 body {
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}
+
+/* Hero ambient wash: accent-tinted radial over the page background. Static. */
+.hero-glow {
+  background:
+    radial-gradient(70% 90% at 22% 28%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 62%),
+    linear-gradient(165deg, color-mix(in srgb, var(--accent) 7%, var(--background)), var(--background) 60%);
 }
 
 /* Shared UI classes. Button/input/card styles were copy-pasted inline across
@@ -167,6 +180,16 @@ body {
 
   .route-transition {
     animation: route-in 0.12s ease-out both;
+  }
+
+  /* Gentle hero logo bob. Transform-only; off under reduced-motion. */
+  @keyframes float-y {
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+  .float-y {
+    animation: float-y 6s ease-in-out infinite;
   }
 
   /* Scroll-driven reveal for sections below the fold. Visible by default;
