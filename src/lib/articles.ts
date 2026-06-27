@@ -4,8 +4,11 @@ import { Atom, Brain, ChartLineUp, Code, Lightbulb } from "@phosphor-icons/react
 import type { Icon } from "@phosphor-icons/react";
 import type { createClient } from "@/lib/supabase/server";
 
-export type Status = "draft" | "published" | "live_session";
-export const STATUSES: Status[] = ["draft", "published", "live_session"];
+// Status type/constants live in a client-safe module (no fs); re-export so existing
+// server callers can keep importing them from "@/lib/articles".
+export { STATUSES, STATUS_LABELS } from "./article-status";
+export type { Status } from "./article-status";
+import type { Status } from "./article-status";
 
 export type DiskArticle = { slug: string; title: string; description: string };
 export type Article = DiskArticle & { status: Status };
