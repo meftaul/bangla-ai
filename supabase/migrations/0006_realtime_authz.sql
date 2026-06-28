@@ -11,7 +11,10 @@
 -- realtime.messages already has RLS enabled by Supabase; we only add policies.
 
 -- The session id embedded in the current channel topic (null if not a session topic).
-create function public.realtime_session_id() returns uuid
+-- create-or-replace so this file is safe to (re-)run by hand even if a later migration
+-- (0007) already created a sibling function — a bare `create function` aborts the whole
+-- script on "already exists", which is exactly how the policies below got skipped.
+create or replace function public.realtime_session_id() returns uuid
   language sql stable set search_path = '' as $$
   select case
     when realtime.topic() ~ '^session:[0-9a-f-]{36}'
@@ -19,13 +22,15 @@ create function public.realtime_session_id() returns uuid
   end;
 $$;
 
--- True for the presenter-only control channels (:nav, :board).
-create function public.realtime_is_control_topic() returns boolean
+-- True for the presenter-only control channels (:nav, :board). 0007 widens this to add
+-- :phase; create-or-replace so whichever runs second wins without erroring.
+create or replace function public.realtime_is_control_topic() returns boolean
   language sql stable set search_path = '' as $$
   select realtime.topic() ~ ':(nav|board)$';
 $$;
 
 -- READ (receive broadcast + presence): admin, the session owner, or a participant.
+drop policy if exists "session realtime read" on realtime.messages;
 create policy "session realtime read" on realtime.messages
   for select to authenticated
   using (
@@ -44,6 +49,7 @@ create policy "session realtime read" on realtime.messages
 -- participants — those counts are cosmetic (seeded/scored from the responses table via
 -- RLS, not from broadcasts). The disruption vectors (fake nav / "ended" / whiteboard)
 -- live on the control topics, now owner-only.
+drop policy if exists "session realtime write" on realtime.messages;
 create policy "session realtime write" on realtime.messages
   for insert to authenticated
   with check (

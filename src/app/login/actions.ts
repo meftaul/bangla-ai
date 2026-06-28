@@ -32,7 +32,7 @@ export async function signUp(formData: FormData) {
   const { error } = await supabase.auth.signUp({
     email: String(formData.get("email")),
     password: String(formData.get("password")),
-    options: { emailRedirectTo: `${await origin()}/auth/confirm` },
+    options: { emailRedirectTo: `${await origin()}/auth/callback` },
   });
 
   if (error) fail(error.message);
@@ -44,7 +44,7 @@ export async function signInWithMagicLink(formData: FormData) {
   const supabase = await createClient();
   const { error } = await supabase.auth.signInWithOtp({
     email: String(formData.get("email")),
-    options: { emailRedirectTo: `${await origin()}/auth/confirm` },
+    options: { emailRedirectTo: `${await origin()}/auth/callback` },
   });
 
   if (error) fail(error.message);

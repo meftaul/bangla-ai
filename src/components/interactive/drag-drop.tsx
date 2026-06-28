@@ -2,10 +2,13 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useLiveActivity } from "@/components/live/session-context";
+import { BarChart, Countdown, IdleScreen } from "@/components/interactive/activity-ui";
 
 // Order the items correctly by dragging. `items` is the CORRECT order; the student
 // sees them shuffled. All-or-nothing grading. Native HTML5 drag-and-drop, no library.
-// ponytail: HTML5 DnD has weak touch support — add tap-to-place if run on phones.
+// In a live session the teacher drives idle -> running (30s) -> ended; the results
+// chart shows a right/wrong split. ponytail: HTML5 DnD has weak touch support —
+// add tap-to-place if run on phones.
 export default function DragDrop({
   id,
   prompt,
@@ -31,9 +34,6 @@ export default function DragDrop({
 
   const mineOrder = (live.mine?.response as { order?: string[] } | undefined)?.order;
   const shown = mineOrder ?? order;
-  const locked = isPresenter || live.recorded || submitted;
-  const reveal = live.mode === "practice" && (submitted || live.recorded);
-  const correct = JSON.stringify(shown) === JSON.stringify(items);
 
   const move = (from: number, to: number) =>
     setOrder((o) => {
@@ -43,35 +43,70 @@ export default function DragDrop({
       return a;
     });
 
+  // Practice mode: unchanged standalone behavior (instant right/wrong on submit).
+  if (live.mode === "practice") {
+    const locked = submitted;
+    const correct = JSON.stringify(shown) === JSON.stringify(items);
+    return (
+      <div className="mx-auto max-w-xl text-left">
+        <p className="text-2xl font-semibold text-foreground">{prompt}</p>
+        <ItemList shown={shown} locked={locked} dragIndex={dragIndex} move={move} />
+        {!submitted && (
+          <button
+            type="button"
+            onClick={() => setSubmitted(true)}
+            className="mt-4 rounded-md border border-border bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:border-accent"
+          >
+            Submit order
+          </button>
+        )}
+        {submitted && (
+          <p className="mt-4 text-base text-muted">
+            {correct ? "সঠিক! ✅ Correct order." : "ভুল ক্রম — wrong order."}
+          </p>
+        )}
+      </div>
+    );
+  }
+
+  // Live session (presenter / viewer).
+  if (live.phase === "idle")
+    return (
+      <IdleScreen
+        count={live.participantCount}
+        label="Start Activity"
+        presenter={isPresenter}
+        onStart={live.start}
+      />
+    );
+
+  if (live.phase === "ended")
+    return (
+      <div className="mx-auto max-w-xl text-left">
+        <p className="text-2xl font-semibold text-foreground">{prompt}</p>
+        <p className="mt-4 text-base text-muted">Correct order: {items.join(" → ")}</p>
+        <BarChart
+          bars={[
+            { label: "Got it right", count: live.results?.[0] ?? 0, highlight: true },
+            { label: "Got it wrong", count: live.results?.[1] ?? 0 },
+          ]}
+        />
+      </div>
+    );
+
+  // Running.
+  const locked = isPresenter || live.recorded || submitted;
   const submit = () => {
+    if (live.phase !== "running" || live.recorded) return;
     setSubmitted(true);
-    if (live.mode === "practice") return;
     live.submit({ order }, JSON.stringify(order) === JSON.stringify(items));
   };
 
   return (
     <div className="mx-auto max-w-xl text-left">
       <p className="text-2xl font-semibold text-foreground">{prompt}</p>
-      <ul className="mt-6 flex flex-col gap-2">
-        {shown.map((label, i) => (
-          <li
-            key={label}
-            draggable={!locked}
-            onDragStart={() => (dragIndex.current = i)}
-            onDragOver={(e) => e.preventDefault()}
-            onDrop={() => {
-              if (dragIndex.current !== null) move(dragIndex.current, i);
-              dragIndex.current = null;
-            }}
-            className={`rounded-md border px-4 py-3 text-lg ${
-              locked ? "border-border opacity-90" : "cursor-grab border-border hover:border-accent"
-            }`}
-          >
-            <span className="mr-2 text-muted">⠿</span>
-            {label}
-          </li>
-        ))}
-      </ul>
+      <ItemList shown={shown} locked={locked} dragIndex={dragIndex} move={move} />
+      <Countdown seconds={live.secondsLeft} />
       {!isPresenter && !live.recorded && !submitted && (
         <button
           type="button"
@@ -81,16 +116,53 @@ export default function DragDrop({
           Submit order
         </button>
       )}
-      {reveal && (
-        <p className="mt-4 text-base text-muted">
-          {correct ? "সঠিক! ✅ Correct order." : "ভুল ক্রম — wrong order."}
-        </p>
+      {live.recorded && !isPresenter && (
+        <p className="mt-4 text-center text-base text-muted">✓ Answer recorded</p>
       )}
-      {live.recorded && live.mode !== "practice" && (
-        <p className="mt-4 text-base text-muted">✓ Answer recorded</p>
+      {isPresenter && (
+        <div className="mt-4 flex items-center justify-between">
+          <span className="text-base text-muted">{live.answeredCount} answered</span>
+          <button type="button" onClick={live.end} className="btn-secondary">
+            End Activity
+          </button>
+        </div>
       )}
-      {isPresenter && <p className="mt-4 text-base text-muted">{live.answeredCount} answered</p>}
     </div>
+  );
+}
+
+function ItemList({
+  shown,
+  locked,
+  dragIndex,
+  move,
+}: {
+  shown: string[];
+  locked: boolean;
+  dragIndex: React.RefObject<number | null>;
+  move: (from: number, to: number) => void;
+}) {
+  return (
+    <ul className="mt-6 flex flex-col gap-2">
+      {shown.map((label, i) => (
+        <li
+          key={label}
+          draggable={!locked}
+          onDragStart={() => (dragIndex.current = i)}
+          onDragOver={(e) => e.preventDefault()}
+          onDrop={() => {
+            if (dragIndex.current !== null) move(dragIndex.current, i);
+            dragIndex.current = null;
+          }}
+          className={`rounded-md border px-4 py-3 text-lg ${
+            locked ? "border-border opacity-90" : "cursor-grab border-border hover:border-accent"
+          }`}
+        >
+          <span className="mr-2 text-muted">⠿</span>
+          {label}
+        </li>
+      ))}
+    </ul>
   );
 }
 

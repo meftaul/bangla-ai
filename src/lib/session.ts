@@ -14,6 +14,9 @@ export type ResponseRow = {
   is_correct: boolean | null;
 };
 
+// A row as stored, used for the live results tally (frozen on end()).
+export type TallyRow = { response: unknown; is_correct: boolean | null };
+
 export type Score = { correct: number; total: number };
 
 // Unambiguous alphabet (no O/0/I/1) — easier to read off a projector.
@@ -35,6 +38,23 @@ export function scoreOf(activities: ActivityDef[], responses: ResponseRow[]): Sc
   return { correct, total: scorable.length };
 }
 
+// Distribution shown in the results bar chart, frozen when the activity ends.
+// quiz/poll: count per option index (indexed by `response.pick`).
+// dragdrop: [right, wrong] — ordering has no fixed options, so we split on is_correct.
+export function tallyResults(type: ActivityType, rows: TallyRow[]): number[] {
+  if (type === "dragdrop") {
+    const right = rows.filter((r) => r.is_correct === true).length;
+    return [right, rows.length - right];
+  }
+  const counts: number[] = [];
+  for (const r of rows) {
+    const pick = (r.response as { pick?: number } | null)?.pick;
+    if (typeof pick === "number") counts[pick] = (counts[pick] ?? 0) + 1;
+  }
+  // Sparse picks (an option nobody chose) stay 0; components index with `?? 0`.
+  return Array.from(counts, (c) => c ?? 0);
+}
+
 // ponytail: env-guarded assert self-check — run with `SESSION_SELFCHECK=1 npx tsx src/lib/session.ts`.
 if (process.env.SESSION_SELFCHECK) {
   const assert = (cond: boolean, msg: string) => {
@@ -54,5 +74,19 @@ if (process.env.SESSION_SELFCHECK) {
   ]);
   assert(s.correct === 1 && s.total === 3, JSON.stringify(s));
   assert(generateJoinCode().length === 6, "code length");
+
+  const qt = tallyResults("quiz", [
+    { response: { pick: 1 }, is_correct: true },
+    { response: { pick: 1 }, is_correct: false },
+    { response: { pick: 0 }, is_correct: false },
+  ]);
+  assert(JSON.stringify(qt) === JSON.stringify([1, 2]), "quiz tally " + JSON.stringify(qt));
+  const dt = tallyResults("dragdrop", [
+    { response: {}, is_correct: true },
+    { response: {}, is_correct: false },
+    { response: {}, is_correct: true },
+  ]);
+  assert(JSON.stringify(dt) === JSON.stringify([2, 1]), "dragdrop tally " + JSON.stringify(dt));
+
   console.log("session self-check ok", s);
 }
