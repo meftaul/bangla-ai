@@ -22,18 +22,18 @@ export function navLinks(isAdmin: boolean): NavLink[] {
     },
     {
       href: "/dashboard/articles",
-      label: "Articles",
+      label: "Library",
       icon: BookOpen,
-      blurb: "Read every course and notebook.",
+      blurb: "Read every course, article, and deck.",
     },
   ];
   if (isAdmin) {
     links.push(
       {
         href: "/dashboard/articles/manage",
-        label: "Manage articles",
+        label: "Manage library",
         icon: PencilSimple,
-        blurb: "Publish, draft, or archive content.",
+        blurb: "Publish or draft articles, decks, and courses.",
       },
       {
         href: "/dashboard/sessions",

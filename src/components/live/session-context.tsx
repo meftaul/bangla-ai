@@ -104,7 +104,7 @@ export function LiveSessionProvider({
 
     // Default presence key = a unique id per client, so each connection is its own
     // roster entry (we dedupe by email below for the display).
-    const channel = supabase.channel(`session:${sessionId}`);
+    const channel = supabase.channel(`session:${sessionId}`, { config: { private: true } });
     channelRef.current = channel;
 
     // Other clients' answers (self: false by default) -> live counts/tally.

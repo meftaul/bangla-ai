@@ -27,7 +27,7 @@ export default function PresenterDeck({
   // memoized channel re-subscribed after removeChannel never rejoins, so its broadcasts
   // would fall back to REST). Mirrors viewer-deck / stage.
   useEffect(() => {
-    const channel = supabase.channel(`session:${sessionId}:nav`);
+    const channel = supabase.channel(`session:${sessionId}:nav`, { config: { private: true } });
     channelRef.current = channel;
     channel.subscribe((status) => (ready.current = status === "SUBSCRIBED"));
     return () => {

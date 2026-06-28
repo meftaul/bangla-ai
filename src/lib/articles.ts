@@ -3,14 +3,25 @@ import { join } from "node:path";
 import { Atom, Brain, ChartLineUp, Code, Lightbulb } from "@phosphor-icons/react/dist/ssr";
 import type { Icon } from "@phosphor-icons/react";
 import type { createClient } from "@/lib/supabase/server";
+import { COURSES, type Course } from "@/content/courses";
 
 // Status type/constants live in a client-safe module (no fs); re-export so existing
 // server callers can keep importing them from "@/lib/articles".
 export { STATUSES, STATUS_LABELS } from "./article-status";
 export type { Status } from "./article-status";
 import type { Status } from "./article-status";
+export type { Course };
 
-export type DiskArticle = { slug: string; title: string; description: string };
+// "article" = freeform prose (self-paced only); "slides" = reveal.js deck, the
+// only kind runnable as a live session. It's a disk fact (MDX metadata), never
+// stored in the DB.
+export type ItemType = "article" | "slides";
+export type DiskArticle = {
+  slug: string;
+  title: string;
+  description: string;
+  type: ItemType;
+};
 export type Article = DiskArticle & { status: Status };
 
 const ARTICLES_DIR = join(process.cwd(), "src/content/articles");
@@ -35,24 +46,83 @@ export async function listDiskArticles(): Promise<DiskArticle[]> {
         slug,
         title: readMeta("title", block) ?? slug,
         description: readMeta("description", block) ?? "",
-      };
+        // Default to the safe, non-runnable kind when omitted.
+        type: readMeta("type", block) === "slides" ? "slides" : "article",
+      } satisfies DiskArticle;
     }),
   );
   return articles.sort((a, b) => a.title.localeCompare(b.title));
 }
 
-// Disk articles whose DB row is published, in disk (title) order. Shared by the
-// articles list and the dashboard "continue learning" rail. Explicit published
-// filter so admins are scoped too (RLS alone lets them read every row).
+// Course slugs that contain this item (disk-only fact). Empty = standalone.
+export function coursesForSlug(slug: string): string[] {
+  return COURSES.filter((c) => c.items.includes(slug)).map((c) => c.slug);
+}
+
+// Pure visibility rule for a *published* item: a learner may view it iff it's
+// standalone (in no course) or in at least one published course. Status is
+// filtered separately (by the DB query); this only adds the course gate.
+export function isItemVisible(
+  memberships: string[],
+  publishedCourseSlugs: Set<string>,
+): boolean {
+  return (
+    memberships.length === 0 ||
+    memberships.some((s) => publishedCourseSlugs.has(s))
+  );
+}
+
+// Self-paced articles visible to a learner, in disk (title) order: type article
+// (slides are session-only — never browsable standalone) AND published AND
+// (standalone or in a published course). Shared by the Library and the dashboard
+// "continue learning" rail. Explicit filters so admins are scoped too.
 export async function listPublishedArticles(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+): Promise<DiskArticle[]> {
+  const [{ data: rows }, publishedCourses] = await Promise.all([
+    supabase.from("articles").select("slug").eq("status", "published"),
+    listPublishedCourseSlugs(supabase),
+  ]);
+  const published = new Set((rows ?? []).map((r) => r.slug as string));
+  return (await listDiskArticles()).filter(
+    (a) =>
+      a.type === "article" &&
+      published.has(a.slug) &&
+      isItemVisible(coursesForSlug(a.slug), publishedCourses),
+  );
+}
+
+// Published slide decks — the only items startable as a live session. No course
+// gate: an admin starts sessions regardless of course publication.
+export async function listLiveSlides(
   supabase: Awaited<ReturnType<typeof createClient>>,
 ): Promise<DiskArticle[]> {
   const { data: rows } = await supabase
     .from("articles")
     .select("slug")
     .eq("status", "published");
-  const visible = new Set((rows ?? []).map((r) => r.slug as string));
-  return (await listDiskArticles()).filter((a) => visible.has(a.slug));
+  const published = new Set((rows ?? []).map((r) => r.slug as string));
+  return (await listDiskArticles()).filter(
+    (a) => a.type === "slides" && published.has(a.slug),
+  );
+}
+
+async function listPublishedCourseSlugs(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+): Promise<Set<string>> {
+  const { data } = await supabase
+    .from("courses")
+    .select("slug")
+    .eq("status", "published");
+  return new Set((data ?? []).map((r) => r.slug as string));
+}
+
+// Disk courses whose DB row is published, in declaration order.
+export async function listPublishedCourses(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+): Promise<Course[]> {
+  const published = await listPublishedCourseSlugs(supabase);
+  return COURSES.filter((c) => published.has(c.slug));
 }
 
 // Categorical accent + icon per article (subject coding only — green stays the one

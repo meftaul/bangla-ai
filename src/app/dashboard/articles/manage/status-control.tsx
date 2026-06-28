@@ -9,8 +9,7 @@ import { setStatus } from "./actions";
 // admin knows the consequence before committing.
 const STATUS_HINTS: Record<Status, string> = {
   draft: "It will be hidden from learners.",
-  published: "Learners will be able to read it.",
-  live_session: "It becomes available to start as a live session.",
+  published: "Learners will be able to see it.",
 };
 
 // Segmented status control for one article. The current status is highlighted;
@@ -22,10 +21,12 @@ export default function StatusControl({
   slug,
   title,
   current,
+  kind = "article",
 }: {
   slug: string;
   title: string;
   current: Status;
+  kind?: "article" | "course";
 }) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const [pending, setPending] = useState<Status | null>(null);
@@ -82,6 +83,7 @@ export default function StatusControl({
             <FormPendingOverlay />
             <input type="hidden" name="slug" value={slug} />
             <input type="hidden" name="status" value={pending} />
+            <input type="hidden" name="kind" value={kind} />
             <h2 className="font-display text-lg font-semibold">
               Set to {STATUS_LABELS[pending]}?
             </h2>

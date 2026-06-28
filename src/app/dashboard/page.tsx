@@ -10,6 +10,7 @@ import { createClient } from "@/lib/supabase/server";
 import {
   getRole,
   listDiskArticles,
+  listLiveSlides,
   listPublishedArticles,
   topicFor,
 } from "@/lib/articles";
@@ -286,9 +287,9 @@ async function AdminHome({
 }: {
   supabase: Awaited<ReturnType<typeof createClient>>;
 }) {
-  const [disk, { data: liveRows }, { data: sessions }] = await Promise.all([
+  const [disk, liveSlides, { data: sessions }] = await Promise.all([
     listDiskArticles(),
-    supabase.from("articles").select("slug").eq("status", "live_session"),
+    listLiveSlides(supabase),
     supabase
       .from("sessions")
       .select("id, slug, status, started_at")
@@ -296,8 +297,7 @@ async function AdminHome({
       .limit(HOME_PREVIEW),
   ]);
 
-  const liveSet = new Set((liveRows ?? []).map((r) => r.slug as string));
-  const startable = disk.filter((a) => liveSet.has(a.slug)).slice(0, HOME_PREVIEW);
+  const startable = liveSlides.slice(0, HOME_PREVIEW);
   const recent = (sessions ?? []) as SessionRow[];
   const titleBySlug = new Map(disk.map((a) => [a.slug, a.title]));
   const links = navLinks(true);
@@ -350,12 +350,12 @@ async function AdminHome({
           </ul>
         ) : (
           <p className="mt-4 text-sm text-muted">
-            No articles are marked for live sessions yet. Flag one in{" "}
+            No published slide decks yet. Publish one in{" "}
             <Link
               href="/dashboard/articles/manage"
               className="text-accent-text hover:underline"
             >
-              Manage articles
+              Manage library
             </Link>
             .
           </p>

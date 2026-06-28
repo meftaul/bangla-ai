@@ -93,7 +93,7 @@ export default function Stage({
   // a memoized instance can't be re-subscribed after removeChannel. Mirrors viewer-deck.
   // Listeners are registered before subscribe(), so the viewer never misses a draw.
   useEffect(() => {
-    const channel = supabase.channel(`session:${sessionId}:board`);
+    const channel = supabase.channel(`session:${sessionId}:board`, { config: { private: true } });
     channelRef.current = channel;
     if (mode === "viewer") {
       channel.on("broadcast", { event: "view" }, ({ payload }) =>

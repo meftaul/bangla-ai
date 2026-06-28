@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, BookOpen } from "@phosphor-icons/react/dist/ssr";
+import { ArrowRight, BookOpen, Stack } from "@phosphor-icons/react/dist/ssr";
 import { createClient } from "@/lib/supabase/server";
-import { listPublishedArticles, topicFor } from "@/lib/articles";
+import { listPublishedArticles, listPublishedCourses, topicFor } from "@/lib/articles";
 import { Pager } from "@/components/pager";
 import { PAGE_SIZE, pageNum } from "@/lib/pagination";
 
 export const metadata: Metadata = {
-  title: "Articles — Bangla.AI",
+  title: "Library — Bangla.AI",
 };
 
 export default async function ArticlesPage({
@@ -18,7 +18,10 @@ export default async function ArticlesPage({
   const sp = await searchParams;
   const page = pageNum(sp.page);
   const supabase = await createClient();
-  const all = await listPublishedArticles(supabase);
+  const [all, courses] = await Promise.all([
+    listPublishedArticles(supabase),
+    listPublishedCourses(supabase),
+  ]);
   const totalPages = Math.ceil(all.length / PAGE_SIZE) || 1;
   const articles = all.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
@@ -27,18 +30,49 @@ export default async function ArticlesPage({
       <header className="fade-up flex flex-wrap items-end justify-between gap-x-6 gap-y-2">
         <div>
           <h1 className="font-display text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
-            Articles
+            Library
           </h1>
           <p className="mt-2 max-w-prose text-sm leading-relaxed text-muted">
-            Courses, notebooks, and primers — read at your own pace.
+            Courses, articles, and primers — read at your own pace.
           </p>
         </div>
         {all.length > 0 && (
           <p className="text-sm text-muted">
-            {all.length} {all.length === 1 ? "article" : "articles"}
+            {all.length} {all.length === 1 ? "item" : "items"}
           </p>
         )}
       </header>
+
+      {courses.length > 0 && (
+        <section className="fade-up mt-8">
+          <h2 className="font-display text-lg font-semibold text-foreground">Courses</h2>
+          <ul className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+            {courses.map((c) => (
+              <li key={c.slug}>
+                <Link
+                  href={`/dashboard/courses/${c.slug}`}
+                  className="surface-card group flex h-full items-start gap-4 p-5 transition-all hover:-translate-y-0.5 hover:border-accent"
+                >
+                  <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-accent/10 text-accent-text">
+                    <Stack size={22} weight="duotone" />
+                  </span>
+                  <span className="min-w-0 flex-1">
+                    <span className="block font-display text-base font-semibold text-foreground group-hover:text-accent-text">
+                      {c.title}
+                    </span>
+                    <span className="mt-1 line-clamp-2 block text-sm text-muted">
+                      {c.description}
+                    </span>
+                    <span className="mt-1 block text-xs text-muted">
+                      {c.items.length} {c.items.length === 1 ? "lesson" : "lessons"}
+                    </span>
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       {articles.length === 0 ? (
         <div className="fade-up mt-10 flex flex-col items-center gap-3 rounded-3xl border border-dashed border-border px-6 py-16 text-center">

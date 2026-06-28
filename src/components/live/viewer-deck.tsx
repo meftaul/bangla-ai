@@ -24,7 +24,7 @@ export default function ViewerDeck({
   const pendingIndex = useRef<number>(initialSlide);
 
   useEffect(() => {
-    const channel = supabase.channel(`session:${sessionId}:nav`);
+    const channel = supabase.channel(`session:${sessionId}:nav`, { config: { private: true } });
     channel.on("broadcast", { event: "nav" }, ({ payload }) => {
       const i = payload.index as number;
       pendingIndex.current = i;

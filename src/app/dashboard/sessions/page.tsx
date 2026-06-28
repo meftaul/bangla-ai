@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { getRole, listDiskArticles } from "@/lib/articles";
+import { getRole, listLiveSlides } from "@/lib/articles";
 import { Pager } from "@/components/pager";
 import { PAGE_SIZE, pageNum } from "@/lib/pagination";
 import { startSession } from "./actions";
@@ -28,9 +28,8 @@ export default async function SessionsPage({
   if ((await getRole(supabase)) !== "admin") notFound();
 
   const pastFrom = (pastPage - 1) * PAGE_SIZE;
-  const [disk, { data: liveRows }, { data: sessions, count }] = await Promise.all([
-    listDiskArticles(),
-    supabase.from("articles").select("slug").eq("status", "live_session"),
+  const [startAll, { data: sessions, count }] = await Promise.all([
+    listLiveSlides(supabase),
     supabase
       .from("sessions")
       .select("id, slug, status, started_at", { count: "exact" })
@@ -38,9 +37,7 @@ export default async function SessionsPage({
       .range(pastFrom, pastFrom + PAGE_SIZE - 1),
   ]);
 
-  // Start list: only articles marked live_session.
-  const liveSet = new Set((liveRows ?? []).map((r) => r.slug));
-  const startAll = disk.filter((a) => liveSet.has(a.slug));
+  // Start list: only published slide decks can be run live.
   const startTotalPages = Math.ceil(startAll.length / PAGE_SIZE) || 1;
   const startItems = startAll.slice((startPage - 1) * PAGE_SIZE, startPage * PAGE_SIZE);
 
@@ -73,7 +70,7 @@ export default async function SessionsPage({
           </li>
         ))}
         {startItems.length === 0 && (
-          <li className="text-sm text-muted">No articles marked for live sessions yet.</li>
+          <li className="text-sm text-muted">No published slide decks yet.</li>
         )}
       </ul>
       <Pager page={startPage} totalPages={startTotalPages} param="start" params={sp} />
