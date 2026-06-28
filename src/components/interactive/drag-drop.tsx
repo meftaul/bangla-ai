@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLiveActivity } from "@/components/live/session-context";
 
 // Order the items correctly by dragging. `items` is the CORRECT order; the student
@@ -18,10 +18,14 @@ export default function DragDrop({
   const live = useLiveActivity(id ?? prompt, "dragdrop", items);
   const isPresenter = live.mode === "presenter";
 
-  // Presenter shows the answer; everyone else starts shuffled (stable per mount).
-  const [order, setOrder] = useState<string[]>(() =>
-    isPresenter ? items : shuffle(items),
-  );
+  // Presenter shows the answer; everyone else starts shuffled. Shuffle runs in an
+  // effect (not the initializer) so SSR and first client render match — else hydration
+  // mismatches on the random order.
+  const [order, setOrder] = useState<string[]>(items);
+  useEffect(() => {
+    if (!isPresenter) setOrder(shuffle(items));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const [submitted, setSubmitted] = useState(false);
   const dragIndex = useRef<number | null>(null);
 
