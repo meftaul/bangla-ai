@@ -1,7 +1,10 @@
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
+import { cache } from "react";
 
-export async function createClient() {
+// cache() dedupes per request: layout + page + nested components share one client
+// (and one cookies() read) instead of constructing 3-4 independent ones per navigation.
+export const createClient = cache(async () => {
   const cookieStore = await cookies();
 
   return createServerClient(
@@ -26,4 +29,12 @@ export async function createClient() {
       },
     },
   );
-}
+});
+
+// Per-request memoized claims: middleware already validated/refreshed the token, so
+// the layout + page reads collapse to one. Wrapped in cache() (same client ref → hit).
+export const getClaims = cache(async () => {
+  const supabase = await createClient();
+  const { data } = await supabase.auth.getClaims();
+  return data;
+});

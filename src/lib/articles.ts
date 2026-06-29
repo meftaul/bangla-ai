@@ -1,5 +1,6 @@
 import { readdir, readFile } from "node:fs/promises";
 import { join } from "node:path";
+import { cache } from "react";
 import { Atom, Brain, ChartLineUp, Code, Lightbulb } from "@phosphor-icons/react/dist/ssr";
 import type { Icon } from "@phosphor-icons/react";
 import type { createClient } from "@/lib/supabase/server";
@@ -144,12 +145,16 @@ export function topicFor(slug: string): Topic {
 }
 
 // UI gating only (not a security boundary — RLS is). Reads own profile row.
-export async function getRole(
-  supabase: Awaited<ReturnType<typeof createClient>>,
-): Promise<"admin" | "user"> {
-  const { data } = await supabase.from("profiles").select("role").maybeSingle();
-  return data?.role === "admin" ? "admin" : "user";
-}
+// cache()'d on the client arg: with the request-cached client, layout + page pass the
+// same ref → one profiles read per request instead of one per call site.
+export const getRole = cache(
+  async (
+    supabase: Awaited<ReturnType<typeof createClient>>,
+  ): Promise<"admin" | "user"> => {
+    const { data } = await supabase.from("profiles").select("role").maybeSingle();
+    return data?.role === "admin" ? "admin" : "user";
+  },
+);
 
 // Pure join: disk articles + DB status rows. Missing row defaults to draft.
 export function mergeStatus(

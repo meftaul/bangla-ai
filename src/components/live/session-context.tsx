@@ -125,6 +125,10 @@ export function LiveSessionProvider({
   useEffect(() => {
     phasesRef.current = phases;
   }, [phases]);
+  const mineRef = useRef<Mine>(mine); // mirror so submit() can capture prior state for rollback
+  useEffect(() => {
+    mineRef.current = mine;
+  }, [mine]);
 
   const bump = (activityId: string, pick: number | null) => {
     setAnswered((a) => ({ ...a, [activityId]: (a[activityId] ?? 0) + 1 }));
@@ -132,6 +136,16 @@ export function LiveSessionProvider({
       setPolls((p) => ({
         ...p,
         [activityId]: { ...(p[activityId] ?? {}), [pick]: (p[activityId]?.[pick] ?? 0) + 1 },
+      }));
+  };
+
+  // Undo a bump (optimistic-submit rollback on a failed insert).
+  const unbump = (activityId: string, pick: number | null) => {
+    setAnswered((a) => ({ ...a, [activityId]: Math.max(0, (a[activityId] ?? 1) - 1) }));
+    if (pick != null)
+      setPolls((p) => ({
+        ...p,
+        [activityId]: { ...(p[activityId] ?? {}), [pick]: Math.max(0, (p[activityId]?.[pick] ?? 1) - 1) },
       }));
   };
 
@@ -322,16 +336,26 @@ export function LiveSessionProvider({
   const submit = useMemo(
     () =>
       async (activityId: string, response: { pick?: number; [k: string]: unknown }, isCorrect: boolean | null) => {
+        const pick = typeof response.pick === "number" ? response.pick : null;
+        // Optimistic: lock the answer + count it on tap, then reconcile with the insert.
+        const prevMine = mineRef.current[activityId];
+        setMine((m) => ({ ...m, [activityId]: { response, is_correct: isCorrect } }));
+        bump(activityId, pick); // self: broadcast doesn't echo, so count locally
+
         const { error } = await supabase.from("responses").insert({
           session_id: sessionId,
           activity_id: activityId,
           response,
           is_correct: isCorrect,
         });
-        if (error) return; // PK conflict (already answered) or RLS — keep prior state
-        const pick = typeof response.pick === "number" ? response.pick : null;
-        setMine((m) => ({ ...m, [activityId]: { response, is_correct: isCorrect } }));
-        bump(activityId, pick); // self: broadcast doesn't echo, so count locally
+        // 23505 = PK conflict: it IS recorded (just not by this tap) — keep the lock.
+        if (error && error.code !== "23505") {
+          // ponytail: roll back on a genuine failure (RLS/network). Broadcast is gated
+          // on success below, so peers never over-count from a rolled-back submit.
+          setMine((m) => ({ ...m, [activityId]: prevMine }));
+          unbump(activityId, pick);
+          return;
+        }
         if (ready.current)
           channelRef.current?.send({
             type: "broadcast",

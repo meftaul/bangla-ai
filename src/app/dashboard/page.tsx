@@ -6,7 +6,7 @@ import {
   Play,
   Television,
 } from "@phosphor-icons/react/dist/ssr";
-import { createClient } from "@/lib/supabase/server";
+import { createClient, getClaims } from "@/lib/supabase/server";
 import {
   getRole,
   listDiskArticles,
@@ -33,10 +33,7 @@ export default async function DashboardPage({
 }) {
   const { error } = await searchParams;
   const supabase = await createClient();
-  const [{ data }, role] = await Promise.all([
-    supabase.auth.getClaims(),
-    getRole(supabase),
-  ]);
+  const [data, role] = await Promise.all([getClaims(), getRole(supabase)]);
   const email = data?.claims.email as string | undefined;
   const name = email?.split("@")[0];
   const isAdmin = role === "admin";
