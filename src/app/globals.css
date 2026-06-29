@@ -298,6 +298,73 @@ body {
     animation-delay: calc(var(--i) * 50ms);
   }
 
+  /* Live-activity motion (quiz/poll/dragdrop). Energy spent on the reveal moment,
+     per the brand. All transform/opacity; base state is visible so reduced-motion
+     (which skips this whole block) loses nothing. */
+
+  /* Results bars grow in one after another when a tally reveals; --i sets the order. */
+  @keyframes bar-in {
+    from {
+      opacity: 0;
+      transform: translateY(0.5rem);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  .bar-in {
+    opacity: 0;
+    animation: bar-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: calc(var(--i, 0) * 60ms);
+  }
+
+  /* The correct/winning bar gives a gentle pop as it lands. */
+  @keyframes win-pop {
+    40% {
+      transform: scale(1.03);
+    }
+  }
+  .win-pop {
+    animation: win-pop 0.5s ease-out 0.25s both;
+  }
+
+  /* A learner's wrong pick nudges sideways on reveal — a calm "not quite", no bounce. */
+  @keyframes nudge {
+    20% {
+      transform: translateX(-4px);
+    }
+    40% {
+      transform: translateX(4px);
+    }
+    60% {
+      transform: translateX(-3px);
+    }
+    80% {
+      transform: translateX(2px);
+    }
+  }
+  .nudge {
+    animation: nudge 0.4s ease-in-out both;
+  }
+
+  /* Each learner chip pops in as they join the lobby (mount-only, so existing
+     chips never re-animate when a new one arrives). */
+  @keyframes chip-in {
+    from {
+      opacity: 0;
+      transform: scale(0.8) translateY(0.25rem);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  .chip-in {
+    opacity: 0;
+    animation: chip-in 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
   /* Scroll-driven reveal for sections below the fold. Visible by default;
      only animates where the browser supports view-timeline. Range completes
      within `entry` so a short last section (footer right below) still reaches

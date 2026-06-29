@@ -88,6 +88,7 @@ export function useLiveActivity(activityId: string, type: string, correct: unkno
     // Derived from the absolute deadline + the 1s tick, so refresh/late-join resume mid-countdown.
     secondsLeft: p.endsAt ? Math.max(0, Math.ceil((p.endsAt - ctx.now) / 1000)) : 0,
     participantCount: ctx.roster.length, // ponytail: includes the presenter; fine for a playful "joined" count
+    roster: ctx.roster, // emails present, for the lobby chips
     results: p.results,
     submit: (response: { pick?: number; [k: string]: unknown }, isCorrect: boolean | null) =>
       ctx.submit(activityId, response, isCorrect),
