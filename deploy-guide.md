@@ -5,6 +5,9 @@
 ```
 NEXT_PUBLIC_SUPABASE_URL=https://xxxx.supabase.co
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sb_publishable_xxx
+# Public origin used for OAuth redirects. Read at runtime (not baked in);
+# without it /auth/callback redirects to https://0.0.0.0:3000 behind nginx.
+SITE_URL=https://bangla.ai
 ```
 
 ## Build
@@ -52,6 +55,13 @@ server {
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-Host $host;
+
+        # Supabase writes large chunked session cookies on /auth/callback
+        proxy_buffer_size       16k;
+        proxy_buffers           8 16k;
+        proxy_busy_buffers_size 32k;
+
     }
 }
 ```
