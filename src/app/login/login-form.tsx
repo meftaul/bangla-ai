@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Eye, EyeSlash } from "@phosphor-icons/react/dist/ssr";
-import { signIn, signUp, signInWithMagicLink } from "./actions";
+import { signIn /*, signUp, signInWithMagicLink */ } from "./actions";
 import { FormPendingOverlay } from "@/components/loading-overlay";
 
 // Client-only because of the password show/hide toggle and the entrance stagger.
@@ -68,7 +68,9 @@ export default function LoginForm() {
         <button formAction={signIn} className="btn-primary mt-1 py-3 text-base">
           Sign in
         </button>
-        <button formAction={signUp} className="btn-secondary">
+        {/* ponytail: temporarily hidden — sign-up + magic-link. Restore both
+            (and their imports above) when enabling more login options. */}
+        {/* <button formAction={signUp} className="btn-secondary">
           Create account
         </button>
         <button
@@ -76,7 +78,7 @@ export default function LoginForm() {
           className="text-sm text-muted transition-colors hover:text-foreground"
         >
           Email me a magic link instead
-        </button>
+        </button> */}
       </div>
     </form>
   );

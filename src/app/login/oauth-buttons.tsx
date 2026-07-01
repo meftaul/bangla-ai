@@ -1,12 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { GoogleLogo, GithubLogo } from "@phosphor-icons/react/dist/ssr";
+import { /* GoogleLogo, */ GithubLogo } from "@phosphor-icons/react/dist/ssr";
 import { createClient } from "@/lib/supabase/client";
 import { LoadingOverlay } from "@/components/loading-overlay";
 
 const providers = [
-  { id: "google", label: "Continue with Google", Icon: GoogleLogo },
+  // ponytail: temporarily hidden — restore with the GoogleLogo import above.
+  // { id: "google", label: "Continue with Google", Icon: GoogleLogo },
   { id: "github", label: "Continue with GitHub", Icon: GithubLogo },
 ] as const;
 

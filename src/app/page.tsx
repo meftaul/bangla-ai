@@ -49,7 +49,7 @@ function Hero() {
               />
             </span>
           </h1>
-          <div className="fade-up mt-10" style={{ animationDelay: "160ms" }}>
+          {/*<div className="fade-up mt-10" style={{ animationDelay: "160ms" }}>
             <Link
               href="/login"
               className="group inline-flex items-center gap-2 rounded-full bg-accent px-7 py-3.5 text-base font-medium text-accent-foreground transition-transform hover:-translate-y-px active:translate-y-0"
@@ -60,7 +60,7 @@ function Hero() {
                 className="transition-transform group-hover:translate-x-1"
               />
             </Link>
-          </div>
+          </div>*/}
         </div>
 
         <div className="order-1 flex justify-center md:order-2">
@@ -80,12 +80,18 @@ function JoinCTA() {
             <span className="h-1.5 w-1.5 rounded-full bg-accent-bright" />
             Join in
           </p>
-          <h2 lang="bn" className="mt-4 font-bangla text-3xl font-bold leading-tight tracking-tight text-accent-foreground sm:text-4xl">
-            শেখাটা মজার হোক, আজ থেকেই।
+          <h2
+            lang="bn"
+            className="mt-4 font-bangla text-3xl font-bold leading-tight tracking-tight text-accent-foreground sm:text-4xl"
+          >
+            শেখাটা মজার হোক ।
           </h2>
-          <p lang="bn" className="mx-auto mt-4 max-w-xl font-bangla text-base leading-relaxed text-accent-foreground/70">
+          {/*<p
+            lang="bn"
+            className="mx-auto mt-4 max-w-xl font-bangla text-base leading-relaxed text-accent-foreground/70"
+          >
             পাঠশালায় ঢুকে পড়ো
-          </p>
+          </p>*/}
           <Link
             href="/login"
             lang="bn"
@@ -104,7 +110,10 @@ function Footer() {
     <footer className="relative overflow-hidden bg-accent-deep">
       <div className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-12 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
         <LogoLockup light className="relative z-10 text-accent-foreground" />
-        <p lang="bn" className="relative z-10 flex items-center gap-1.5 font-bangla text-sm text-accent-foreground/60">
+        <p
+          lang="bn"
+          className="relative z-10 flex items-center gap-1.5 font-bangla text-sm text-accent-foreground/60"
+        >
           © ২০২৬ Pathshala · পাঠশালা
           <Heart weight="regular" className="text-accent-foreground/60" />
         </p>
