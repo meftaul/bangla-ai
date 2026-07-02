@@ -28,7 +28,8 @@ export default function ViewerDeck({
     channel.on("broadcast", { event: "nav" }, ({ payload }) => {
       const i = payload.index as number;
       pendingIndex.current = i;
-      instanceRef.current?.slide(i);
+      // f follows the presenter's fragment steps; -1 = before the first fragment.
+      instanceRef.current?.slide(i, undefined, (payload.f as number | undefined) ?? -1);
     });
     channel.on("broadcast", { event: "control" }, ({ payload }) => {
       if (payload.type === "ended")

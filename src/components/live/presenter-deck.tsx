@@ -39,16 +39,23 @@ export default function PresenterDeck({
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onReady = (instance: any) => {
-    instance.on("slidechanged", (e: { indexh: number }) => {
+    const sendNav = () => {
+      const { h, f } = instance.getIndices();
       if (ready.current)
-        channelRef.current?.send({ type: "broadcast", event: "nav", payload: { index: e.indexh } });
+        channelRef.current?.send({ type: "broadcast", event: "nav", payload: { index: h, f: f ?? -1 } });
       // ponytail: trailing-throttle the DB write — only the latest index matters.
+      // ponytail: only the slide index persists (current_slide is an int) — late
+      // joiners see fragments reset until the presenter's next step; add a column
+      // if that ever matters.
       if (persistTimer.current) clearTimeout(persistTimer.current);
       persistTimer.current = setTimeout(() => {
         // .then fires the request — the PostgREST builder is lazy, a bare call never runs.
-        supabase.from("sessions").update({ current_slide: e.indexh }).eq("id", sessionId).then(() => {});
+        supabase.from("sessions").update({ current_slide: h }).eq("id", sessionId).then(() => {});
       }, 500);
-    });
+    };
+    instance.on("slidechanged", sendNav);
+    instance.on("fragmentshown", sendNav);
+    instance.on("fragmenthidden", sendNav);
   };
 
   const end = async () => {

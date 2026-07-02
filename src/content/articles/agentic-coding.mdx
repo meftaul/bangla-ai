@@ -1,0 +1,732 @@
+export const metadata = { title: "Agentic Coding with CLI Tools", description: "From typing code to directing agents — shown on real work.", type: "slides" };
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,340;0,9..144,560;1,9..144,340&family=IBM+Plex+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" />
+
+<style>{`
+/* Deck-local dark terminal theme. This style tag ships only with this article,
+   so scoping under .reveal is already article-scoped. */
+.reveal,
+.reveal-viewport {
+  background:
+    radial-gradient(1100px 700px at 78% -10%, #1b1410 0%, transparent 60%),
+    radial-gradient(900px 600px at -10% 110%, #10141a 0%, transparent 55%),
+    #0c0d10;
+}
+.reveal {
+  /* Re-scope the app tokens so Quiz/Poll/DragDrop follow the deck's dark theme
+     regardless of the user's light/dark choice. */
+  --foreground: #e9e7e1;
+  --muted: #9a978f;
+  --border: #2a2c34;
+  --surface: #16181e;
+  --accent: #e0764a;
+  --accent-text: #e0764a;
+  --accent-foreground: #16130f;
+  --danger: #f26d5f;
+  --shadow-card: 0 12px 28px -14px rgb(0 0 0 / 0.6);
+  font-family: "IBM Plex Sans", var(--font-sans), sans-serif;
+  font-size: 23px;
+  font-weight: 300;
+  color: #e9e7e1;
+}
+.reveal .slides section { text-align: left; height: 100%; }
+
+/* Typography */
+.reveal .kicker {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.48em;
+  letter-spacing: 0.22em;
+  color: #e0764a;
+  text-transform: uppercase;
+  margin: 0 0 0.5em;
+}
+.reveal .kicker .no { color: #9a978f; }
+.reveal h1,
+.reveal h2 {
+  font-family: "Fraunces", var(--font-display), serif;
+  font-weight: 560;
+  color: #e9e7e1;
+  text-transform: none;
+}
+.reveal h2 { font-size: 1.32em; line-height: 1.12; margin: 0 0 0.55em; letter-spacing: -0.01em; }
+.reveal h2 em { font-style: italic; color: #e0764a; }
+.reveal h1 { font-size: 2.15em; line-height: 1.05; margin: 0.1em 0 0.25em; letter-spacing: -0.015em; }
+.reveal h1 em { font-style: italic; color: #e0764a; }
+
+/* Split layout (points left/right of a terminal) */
+.reveal .split { display: flex; gap: 38px; align-items: stretch; height: 100%; }
+.reveal .points { flex: 0 0 44%; display: flex; flex-direction: column; justify-content: center; min-width: 0; }
+.reveal .termwrap { flex: 1 1 56%; display: flex; flex-direction: column; justify-content: center; min-width: 0; }
+.reveal .points ul { list-style: none; margin: 0; padding: 0; }
+.reveal .points li {
+  position: relative;
+  padding: 0.5em 0 0.5em 1.15em;
+  font-size: 0.62em;
+  font-weight: 300;
+  line-height: 1.45;
+  color: #e9e7e1;
+  border-bottom: 1px solid #2a2c34;
+}
+.reveal .points li:last-child { border-bottom: none; }
+.reveal .points li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.92em;
+  width: 0.42em;
+  height: 0.42em;
+  background: #e0764a;
+  border-radius: 1px;
+  transform: rotate(45deg);
+}
+.reveal .points li strong { font-weight: 600; color: #fff; }
+.reveal .points li .sub { display: block; color: #9a978f; font-size: 0.86em; margin-top: 0.15em; }
+
+/* Terminal panel (markup rendered by the Terminal component) */
+.reveal .term {
+  background: #16181e;
+  border: 1px solid #2a2c34;
+  border-radius: 12px;
+  box-shadow: 0 24px 60px -24px rgb(0 0 0 / 0.75);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: 520px;
+  max-height: 100%;
+}
+.reveal .tbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 13px;
+  background: linear-gradient(#1c1e25, #171920);
+  border-bottom: 1px solid #2a2c34;
+  flex: none;
+}
+.reveal .dot { width: 10px; height: 10px; border-radius: 50%; }
+.reveal .dot.r { background: #f26d5f; }
+.reveal .dot.y { background: #f2be55; }
+.reveal .dot.g { background: #57c76a; }
+.reveal .ttl { margin-left: 9px; font-family: "JetBrains Mono", monospace; font-size: 11px; color: #9a978f; }
+.reveal .tbody {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px 16px 12px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 13px;
+  line-height: 1.52;
+  text-align: left;
+}
+.reveal .tl { display: flex; white-space: pre-wrap; word-break: break-word; }
+.reveal .tl .pfx { flex: none; width: 1.4em; }
+.reveal .tl-cmd { color: #f2f0ea; margin-top: 0.55em; }
+.reveal .tl-cmd .pfx { color: #e0764a; }
+.reveal .tl-ag { color: #cfccc4; margin-top: 0.45em; }
+.reveal .tl-ag .pfx { color: #e0764a; }
+.reveal .tl-out { color: #9a978f; }
+.reveal .tl-dim { color: #6d6a63; }
+.reveal .tl-ok { color: #7fd08a; }
+.reveal .tl-warn { color: #e6b455; }
+.reveal .caret {
+  display: inline-block;
+  width: 0.55em;
+  height: 1.05em;
+  background: #e0764a;
+  vertical-align: -0.15em;
+  margin-left: 2px;
+  animation: deck-caret 1s steps(1) infinite;
+}
+@keyframes deck-caret { 50% { opacity: 0; } }
+
+/* Title slide */
+.reveal .titleslide .points { flex-basis: 46%; }
+.reveal .lede { font-size: 0.56em; font-weight: 300; color: #9a978f; line-height: 1.55; max-width: 16em; }
+.reveal .meta {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.4em;
+  color: #9a978f;
+  margin-top: 2.2em;
+  letter-spacing: 0.08em;
+}
+.reveal .meta b { color: #e0764a; font-weight: 500; }
+
+/* Full-bleed statement slides */
+.reveal .statement { display: flex; flex-direction: column; justify-content: center; align-items: flex-start; height: 100%; }
+.reveal .statement h1 { font-size: 1.9em; max-width: 12em; }
+.reveal .statement p { font-size: 0.62em; color: #9a978f; font-weight: 300; max-width: 26em; line-height: 1.55; }
+.reveal .statement .mono { font-family: "JetBrains Mono", monospace; color: #e0764a; }
+.reveal .rule { width: 72px; height: 3px; background: #e0764a; margin: 0 0 1.2em; }
+
+/* Interactive activity slides */
+.reveal .act { height: 100%; display: flex; flex-direction: column; justify-content: center; text-align: center; }
+.reveal .act ul { list-style: none; margin-left: 0; padding-left: 0; }
+
+/* reveal's white.css wins over globals.css in bundle order — recolor its chrome here
+   (this style tag renders after every stylesheet, so it takes the cascade). */
+.reveal .controls { color: #e0764a; }
+.reveal .progress { color: #e0764a; }
+`}</style>
+
+<Slide>
+
+<div className="split titleslide">
+  <div className="points">
+    <p className="kicker">MISL · Engineering Session</p>
+    <h1>Agentic Coding<br />with <em>CLI Tools</em></h1>
+    <p className="lede">From typing code to directing agents — a practical shift, shown on real work.</p>
+    <p className="meta"><b>❯</b> claude · codex · opencode · copilot</p>
+  </div>
+  <div className="termwrap">
+    <Terminal
+      title="~/work — claude"
+      steps={[
+        [
+          { t: "out", x: " ▐▛███▜▌   Claude Code v2.1" },
+          { t: "out", x: "▝▜█████▛▘  Opus 4.8 · Claude Max" },
+          { t: "out", x: "  ▘▘ ▝▝    ~/work/agentic-coding" },
+          { t: "cmd", x: "claude “let’s get to work”" },
+        ],
+      ]}
+    />
+  </div>
+</div>
+
+</Slide>
+
+<Slide>
+
+<div className="act">
+  <p className="kicker">Warm-up · Live Poll</p>
+  <Poll
+    id="how-today"
+    question="How do you use AI for coding today?"
+    options={["Copy-paste into a web chat", "IDE autocomplete (Copilot etc.)", "A CLI agent in the terminal", "Not yet — that's why I'm here"]}
+  />
+</div>
+
+</Slide>
+
+<Slide>
+
+<div className="split">
+  <div className="termwrap">
+    <Terminal
+      title="~/your-repo — claude"
+      steps={[
+        [{ t: "cmd", x: 'fix the 500 on login for emails containing "+"' }],
+        [
+          { t: "ag", x: "Grep(src/**/*auth*) — reading the actual code" },
+          { t: "out", x: "⎿ src/auth/login.ts · session.ts · 12 matches" },
+        ],
+        [
+          { t: "ag", x: "Bash(npm test -- auth)" },
+          { t: "out", x: '⎿ 1 failing: "accepts plus-addressed emails"' },
+        ],
+        [
+          { t: "ag", x: "Fixing the encoder, re-running the suite…" },
+          { t: "ok", x: "34 passing — verified its own work" },
+        ],
+        [
+          { t: "ag", x: "Bash(git diff --stat)" },
+          { t: "out", x: "⎿ src/auth/login.ts | 4 ±  tests/auth.test.ts | 21 +" },
+        ],
+        [
+          { t: "cmd", x: "claude -p “triage today’s issues” >> report.md" },
+          { t: "dim", x: "# headless — runs in CI, hooks, cron" },
+        ],
+      ]}
+    />
+  </div>
+  <div className="points">
+    <p className="kicker"><span className="no">01 /</span> CLI vs Web</p>
+    <h2>A different <em>category</em>,<br />not a different UI</h2>
+    <ul>
+      <li className="fragment"><strong>It sees your whole project.</strong><span className="sub">No more copy-pasting code into a chat window.</span></li>
+      <li className="fragment"><strong>It does the work, not just talks.</strong><span className="sub">Installs things, runs the app, runs the tests.</span></li>
+      <li className="fragment"><strong>It checks its own work.</strong><span className="sub">Writes code → tests it → sees mistakes → fixes them.</span></li>
+      <li className="fragment"><strong>Changes are easy to review.</strong><span className="sub">You see exactly what changed, line by line.</span></li>
+      <li className="fragment"><strong>It can run on autopilot.</strong><span className="sub">On a schedule or inside other tools — a browser tab can’t.</span></li>
+    </ul>
+  </div>
+</div>
+
+</Slide>
+
+<Slide>
+
+<div className="split">
+  <div className="points">
+    <p className="kicker"><span className="no">01 /</span> Honest caveat</p>
+    <h2>Right tool<br />for the <em>job</em></h2>
+    <ul>
+      <li className="fragment"><strong>Web chat is still great</strong> for ideas, learning, and quick questions.</li>
+      <li className="fragment"><strong>The terminal agent wins</strong> the moment the work is inside your own project.</li>
+      <li className="fragment">The point is <strong>“right tool for the job”</strong> — not “web chat is useless.”</li>
+    </ul>
+  </div>
+  <div className="termwrap">
+    <Terminal
+      title="which-tool"
+      steps={[
+        [{ t: "cmd", x: "which tool for this?" }],
+        [
+          { t: "out", x: "brainstorm an architecture   → web chat      ✓" },
+          { t: "out", x: "learn what a monad is        → web chat      ✓" },
+        ],
+        [
+          { t: "out", x: "fix a bug in this repo       → CLI agent     ✓" },
+          { t: "out", x: "refactor across 40 files     → CLI agent     ✓" },
+        ],
+        [{ t: "ok", x: "both stay in the toolbox — pick by task" }],
+      ]}
+    />
+  </div>
+</div>
+
+</Slide>
+
+<Slide>
+
+<div className="act">
+  <p className="kicker">Checkpoint · Quiz</p>
+  <Quiz
+    id="which-tool"
+    question="Your teammate needs to refactor across 40 files in your repo. Which tool?"
+    options={["Web chat — paste the files in", "A CLI agent in the repo", "Do it by hand over the weekend"]}
+    answer={1}
+  />
+</div>
+
+</Slide>
+
+<Slide>
+
+<div className="split">
+  <div className="termwrap">
+    <Terminal
+      title="~/your-repo — claude"
+      steps={[
+        [{ t: "cmd", x: "the task, the constraints, the finish line —" }],
+        [
+          { t: "dim", x: "THEN (autocomplete era)" },
+          { t: "out", x: "you type… it finishes your line… you type…" },
+          { t: "dim", x: "NOW (delegation era)" },
+          { t: "out", x: "you specify → it works → you review" },
+        ],
+        [{ t: "cmd", x: "add rate limiting to /api/orders, follow the pattern in middleware/" }],
+        [{ t: "cmd", x: "done = npm test green, lint clean, nothing outside src/api/" }],
+        [
+          { t: "ag", x: "2 background agents launched (↓ to manage)" },
+          { t: "out", x: " ├ Implement rate limiting" },
+          { t: "out", x: " └ Backfill tests for middleware/" },
+        ],
+        [
+          { t: "ag", x: "Done. 3 files changed — review the diff like a PR" },
+          { t: "ok", x: "you read diffs now, not keystrokes" },
+        ],
+      ]}
+    />
+  </div>
+  <div className="points">
+    <p className="kicker"><span className="no">02 /</span> The mind shift</p>
+    <h2>Stop typing.<br />Start <em>directing</em></h2>
+    <ul>
+      <li className="fragment"><strong>Old way:</strong> you type the code. <strong>New way:</strong> you describe the job — it does the work.</li>
+      <li className="fragment">Your value shifts from <strong>fast typing</strong> to <strong>clear instructions.</strong></li>
+      <li className="fragment"><strong>Say what “finished” means up front.</strong><span className="sub">“All tests pass, and nothing else was touched.”</span></li>
+      <li className="fragment"><strong>Hand out several jobs at once</strong> — like leading a small team.</li>
+      <li className="fragment"><strong>Then check the result carefully</strong> — like reviewing a new team member’s work.</li>
+    </ul>
+  </div>
+</div>
+
+</Slide>
+
+<Slide>
+
+<div className="split">
+  <div className="points">
+    <p className="kicker"><span className="no">02 /</span> The trust ladder</p>
+    <h2>Earned autonomy,<br />step by <em>step</em></h2>
+    <ul>
+      <li className="fragment"><strong>Start small:</strong> check everything it does.</li>
+      <li className="fragment"><strong>Learn</strong> what it’s good at in <em>your</em> project.</li>
+      <li className="fragment"><strong>Then</strong> hand over bigger pieces of work.</li>
+      <li className="fragment"><strong>Two traps:</strong> controlling every tiny step — or trusting the result blindly. Both waste the tool.</li>
+    </ul>
+  </div>
+  <div className="termwrap">
+    <Terminal
+      title="trust-ladder"
+      steps={[
+        [{ t: "cmd", x: "git log --oneline --author=agent" }],
+        [{ t: "out", x: "week 1 · fix typo in README        — reviewed 100%" }],
+        [{ t: "out", x: "week 3 · add validation to 2 forms — reviewed diff" }],
+        [{ t: "out", x: "week 6 · migrate module to new API — reviewed outcome" }],
+        [
+          { t: "warn", x: "never: accept without reading · micro-manage each line" },
+          { t: "ok", x: "sweet spot: delegate whole tasks, review rigorously" },
+        ],
+      ]}
+    />
+  </div>
+</div>
+
+</Slide>
+
+<Slide>
+
+<div className="act">
+  <p className="kicker">Checkpoint · Quiz</p>
+  <Quiz
+    id="week-one"
+    question="Week 1 with a new agent. How much of its work do you review?"
+    options={["Nothing — it's AI, it knows", "Everything, line by line", "Only the files I already know", "Just run it twice and compare"]}
+    answer={1}
+  />
+</div>
+
+</Slide>
+
+<Slide>
+
+<div className="split">
+  <div className="termwrap">
+    <Terminal
+      title="~/your-repo — claude"
+      steps={[
+        [
+          { t: "cmd", x: "fix the login bug" },
+          { t: "ag", x: "Guessing… changed logout redirect in session.ts" },
+          { t: "warn", x: "plausible — and wrong. Ambiguity filled with assumptions." },
+        ],
+        [{ t: "cmd", x: 'Users get a 500 logging in with an email containing "+".' }],
+        [{ t: "cmd", x: "Auth flow is in src/auth/login.ts — reproduce it first with a failing test in tests/auth/." }],
+        [{ t: "cmd", x: "Don’t modify the session logic." }],
+        [
+          { t: "cmd", x: "Run npm test to verify." },
+          { t: "ag", x: "Failing test written → root cause in encoder → fixed" },
+          { t: "ok", x: "npm test · 34 passing" },
+        ],
+      ]}
+    />
+  </div>
+  <div className="points">
+    <p className="kicker"><span className="no">03 /</span> Instructions</p>
+    <h2>Vague in,<br /><em>wrong</em> out</h2>
+    <ul>
+      <li className="fragment"><strong>1 · What</strong> — describe the problem clearly: what went wrong, and where you saw it.</li>
+      <li className="fragment"><strong>2 · Where</strong> — which files or which part of the app to look at.</li>
+      <li className="fragment"><strong>3 · Rules</strong> — what it must not touch.</li>
+      <li className="fragment"><strong>4 · Done</strong> — how to prove the fix worked.</li>
+    </ul>
+  </div>
+</div>
+
+</Slide>
+
+<Slide>
+
+<div className="split">
+  <div className="points">
+    <p className="kicker"><span className="no">03 /</span> Instructions</p>
+    <h2>It can’t read<br />your <em>mind</em></h2>
+    <ul>
+      <li className="fragment">Anything you leave unsaid gets filled with <strong>guesses</strong> — and its guesses won’t match your project.</li>
+      <li className="fragment">Vague requests produce code that <strong>looks right but is wrong</strong> — fixing it costs more time than you saved.</li>
+      <li className="fragment">Good instructions include the <strong>background, the rules, and the proof</strong> — all up front.</li>
+    </ul>
+  </div>
+  <div className="termwrap">
+    <Terminal
+      title="~/your-repo — claude"
+      steps={[
+        [
+          { t: "cmd", x: "make it faster" },
+          { t: "warn", x: "faster… what? by how much? measured how?" },
+        ],
+        [{ t: "cmd", x: "/api/orders takes ~3s. Profile it — I suspect the N+1 in OrderService.list." }],
+        [{ t: "cmd", x: "Don’t change the response shape — mobile depends on it." }],
+        [
+          { t: "ag", x: "Profiled: 212 queries/request → batched to 3" },
+          { t: "ok", x: "before 2.9s → after 180ms · response shape unchanged" },
+        ],
+      ]}
+    />
+  </div>
+</div>
+
+</Slide>
+
+<Slide>
+
+<div className="act">
+  <p className="kicker">Hands-on · Put it in order</p>
+  <DragDrop
+    id="anatomy-order"
+    prompt="Order the four parts of a good instruction"
+    items={["What — describe the problem", "Where — which files to look at", "Rules — what it must not touch", "Done — how to prove it worked"]}
+  />
+</div>
+
+</Slide>
+
+<Slide>
+
+<div className="split">
+  <div className="termwrap">
+    <Terminal
+      title="~/your-repo"
+      steps={[
+        [
+          { t: "cmd", x: "cat CLAUDE.md" },
+          { t: "out", x: "# Build: npm run build · Test: npm test" },
+          { t: "out", x: "# Never commit directly to main" },
+          { t: "out", x: "# API handlers follow src/api/_template.ts" },
+        ],
+        [{ t: "dim", x: "→ read every session. Keep it short — bloat costs context." }],
+        [
+          { t: "cmd", x: "ls .claude/skills/" },
+          { t: "out", x: "feature-testing/  release-checklist/  page-explorer/" },
+          { t: "dim", x: "→ loaded only when the task matches its trigger" },
+        ],
+        [
+          { t: "cmd", x: "cat .claude/agents/code-reviewer.md" },
+          { t: "out", x: "description: reviews diffs — never edits code" },
+          { t: "out", x: "tools: Read, Grep" },
+          { t: "dim", x: "→ own context, restricted tools, enforced role" },
+        ],
+        [{ t: "ok", x: "facts → CLAUDE.md · procedures → skill · roles → agent" }],
+      ]}
+    />
+  </div>
+  <div className="points">
+    <p className="kicker"><span className="no">04 /</span> Configuration</p>
+    <h2>CLAUDE.md →<br />Skills → <em>Agents</em></h2>
+    <ul>
+      <li className="fragment"><strong>CLAUDE.md</strong> — a notes file it always reads.<span className="sub">Your project’s basics and house rules. Keep it short.</span></li>
+      <li className="fragment"><strong>Skills</strong> — saved recipes it uses when needed.<span className="sub">Explained the same thing 3 times? Save it as a skill.</span></li>
+      <li className="fragment"><strong>Agents</strong> — helpers with one job each.<span className="sub">e.g. a reviewer that only reviews — it never edits code.</span></li>
+      <li className="fragment"><strong>Simple rule:</strong> things it should always know → CLAUDE.md · step-by-step recipes → skill · a separate role → agent.</li>
+    </ul>
+  </div>
+</div>
+
+</Slide>
+
+<Slide>
+
+<div className="act">
+  <p className="kicker">Checkpoint · Quiz</p>
+  <Quiz
+    id="where-belongs"
+    question="You've explained the release steps to the agent three times this month. Where does that knowledge belong?"
+    options={["CLAUDE.md — it should always know it", "A skill — a recipe loaded when needed", "An agent — a separate role", "A longer prompt, every time"]}
+    answer={1}
+  />
+</div>
+
+</Slide>
+
+<Slide>
+
+<div className="split">
+  <div className="points">
+    <p className="kicker"><span className="no">05 /</span> Real session · 1</p>
+    <h2>Explore a live app,<br /><em>document</em> it</h2>
+    <ul>
+      <li className="fragment"><strong>It checks the real app</strong> — opens a browser, logs in, looks at every field. No guessing from memory.</li>
+      <li className="fragment"><strong>It plays safe:</strong> refuses to press Save on a live banking system.</li>
+      <li className="fragment"><strong>It’s honest:</strong> the report clearly marks what was checked — and what wasn’t.</li>
+    </ul>
+  </div>
+  <div className="termwrap">
+    <Terminal
+      title="ababil-ng-cypress — claude"
+      steps={[
+        [{ t: "cmd", x: "open browser …/document-config/create — explore this url and determine the test areas, create a markdown file" }],
+        [
+          { t: "ag", x: "Called playwright 4 times — login required, signing in" },
+          { t: "warn", x: "Login failed (error=1001) — password was masked as *" },
+          { t: "cmd", x: "password is just * nothing else" },
+          { t: "ag", x: "Logged in. Mapping the form: 6 fields, 3 multiselects" },
+          { t: "out", x: "⎿ Events = Account, Sanction · Customer Types = 4 values" },
+        ],
+        [{ t: "ag", x: "Right — I won’t actually submit. Grabbing constraints via inspection instead (non-mutating)." }],
+        [
+          { t: "ag", x: "Write(document-config-create-test-areas.md)" },
+          { t: "out", x: "⎿ 9 test areas · verified vs needs-a-real-submit split" },
+          { t: "ok", x: "✻ Sautéed for 3m 44s" },
+        ],
+      ]}
+    />
+  </div>
+</div>
+
+</Slide>
+
+<Slide>
+
+<div className="split">
+  <div className="termwrap">
+    <Terminal
+      title="ababil-ng-cypress — claude"
+      steps={[
+        [
+          { t: "cmd", x: "did you cover all the edge cases?" },
+          { t: "ag", x: "Honest answer: no. Several are still assumptions —" },
+          { t: "ag", x: "let me actually probe the non-mutating ones now rather than guess." },
+        ],
+        [
+          { t: "ag", x: "Called playwright — focus/blur, search filters, ALL-vs-type" },
+          { t: "out", x: "⎿ no inline errors on blur — validation only fires on Save" },
+        ],
+        [{ t: "warn", x: "Found a real one: ALL and INDIVIDUAL can both be checked — no mutual exclusivity. Worth an explicit test." }],
+        [
+          { t: "cmd", x: "if necessary ask me clarification questions, do not make any assumptions" },
+          { t: "ag", x: "· Perform a real submit to confirm? → No — document only" },
+          { t: "ag", x: "· Scope? → Create form only, checklist only" },
+          { t: "ok", x: "edge cases added — verified / to-cover / not-verified" },
+        ],
+      ]}
+    />
+  </div>
+  <div className="points">
+    <p className="kicker"><span className="no">05 /</span> Real session · 2</p>
+    <h2>“Did you cover all<br />the <em>edge cases?</em>”</h2>
+    <ul>
+      <li className="fragment"><strong>It answers “no” honestly</strong> — then goes and checks, instead of guessing.</li>
+      <li className="fragment"><strong>It finds a real problem:</strong> two options that shouldn’t go together can both be selected.</li>
+      <li className="fragment"><strong>It asks before assuming:</strong> a few quick questions instead of silent guesses.</li>
+    </ul>
+  </div>
+</div>
+
+</Slide>
+
+<Slide>
+
+<div className="act">
+  <p className="kicker">Fun · Quiz</p>
+  <Quiz
+    id="login-bug"
+    question="In the real demo, the agent's login kept failing. What was the actual cause?"
+    options={["Wrong URL", "A trailing space in the saved password", "An expired account", "Caps Lock"]}
+    answer={1}
+  />
+</div>
+
+</Slide>
+
+<Slide>
+
+<div className="split">
+  <div className="points">
+    <p className="kicker"><span className="no">05 /</span> Real session · 3</p>
+    <h2>Distill it into<br />a <em>skill</em></h2>
+    <ul>
+      <li className="fragment"><strong>One request</strong> turns the whole session into a saved recipe.</li>
+      <li className="fragment"><strong>Lessons are kept</strong> — “never touch live data” came from this very session.</li>
+      <li className="fragment"><strong>The recipe lives in the project</strong> — the whole team gets it automatically.</li>
+    </ul>
+  </div>
+  <div className="termwrap">
+    <Terminal
+      title=".claude/skills — claude"
+      steps={[
+        [{ t: "cmd", x: "summarize what you have done so far, your goal is to create a reusable skill" }],
+        [
+          { t: "ag", x: "Write(.claude/skills/ababil-page-explorer/SKILL.md)" },
+          { t: "out", x: "⎿ login → snapshot → map fields → probe safely → checklist" },
+        ],
+        [
+          { t: "out", x: "Golden rule — never mutate shared banking data;" },
+          { t: "out", x: "no Save/Submit without explicit authorization." },
+          { t: "dim", x: "# the lesson from the blocked Save click, now permanent" },
+        ],
+        [
+          { t: "cmd", x: "git add .claude/skills/ && git commit" },
+          { t: "ok", x: "everyone who clones the repo inherits the know-how" },
+        ],
+      ]}
+    />
+  </div>
+</div>
+
+</Slide>
+
+<Slide>
+
+<div className="split">
+  <div className="termwrap">
+    <Terminal
+      title="ababil-ng-cypress — claude"
+      steps={[
+        [{ t: "cmd", x: "/ababil-automation-dev initiate two parallel agents for these test cases — ask clarifying questions, no assumptions" }],
+        [
+          { t: "ag", x: "2 background agents launched (↓ to manage)" },
+          { t: "out", x: " ├ Plan document-config create tests" },
+          { t: "out", x: " └ Plan charge-mapping create tests" },
+          { t: "dim", x: "# plan first — no code until the human approves" },
+        ],
+        [
+          { t: "warn", x: "Live DOM harvest failed — Auth0 says Bad credentials" },
+          { t: "ag", x: 'Root cause: stored password is "* " — trailing space.' },
+          { t: "ag", x: "Trimmed. Login works; real selectors harvested." },
+        ],
+        [{ t: "ag", x: "Both agents write only their own folders; shared files are merged by me afterward — no clobbering." }],
+        [
+          { t: "ag", x: "Smoke run: 20/23 → probe DOM → fix at root cause" },
+          { t: "out", x: "⎿ clicks hit wrapper, not .ui-chkbox-box → fixed" },
+          { t: "ok", x: "23/23 passing — doc-config suite fully green" },
+        ],
+      ]}
+    />
+  </div>
+  <div className="points">
+    <p className="kicker"><span className="no">05 /</span> Real session · 4</p>
+    <h2>Agents as a<br />small <em>team</em></h2>
+    <ul>
+      <li className="fragment"><strong>Two helpers work at the same time</strong> — they plan first; a human approves before any code is written.</li>
+      <li className="fragment"><strong>It digs to the real cause:</strong> login kept failing because of one invisible space in the saved password.</li>
+      <li className="fragment"><strong>It avoids collisions:</strong> each helper gets its own files, so they never overwrite each other.</li>
+      <li className="fragment"><strong>It fixes its own mistakes:</strong> 20 of 23 checks passed → found the causes → <strong>all 23 green.</strong></li>
+    </ul>
+  </div>
+</div>
+
+</Slide>
+
+<Slide>
+
+<div className="statement">
+  <p className="kicker">The flywheel</p>
+  <div className="rule"></div>
+  <h1>Every solved problem<br />becomes a skill.<br />Every skill makes the next<br />problem <em>cheaper</em>.</h1>
+</div>
+
+</Slide>
+
+<Slide>
+
+<div className="act">
+  <p className="kicker">Last word is yours · Poll</p>
+  <Poll
+    id="first-skill"
+    question="Which team workflow deserves a skill first?"
+    options={["Feature testing", "Release checklist", "Code review", "Onboarding docs"]}
+  />
+</div>
+
+</Slide>
+
+<Slide>
+
+<div className="statement">
+  <p className="kicker">Homework · Q&amp;A</p>
+  <div className="rule"></div>
+  <h1>Name one recurring workflow<br />on your team that<br />deserves a <em>skill</em>.</h1>
+  <p>That’s your first skill. Save it in the project under <span className="mono">.claude/skills/</span> — and the whole team gets it.</p>
+</div>
+
+</Slide>
