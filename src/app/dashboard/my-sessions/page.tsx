@@ -34,7 +34,7 @@ export default async function MySessionsPage({
 
   if (ids.length === 0) {
     return (
-      <div className="max-w-3xl">
+      <div className="mx-auto max-w-3xl">
         <Header />
         <div className="surface-card mt-8 flex flex-col items-start gap-3 p-8">
           <p className="text-sm text-muted">You haven&apos;t joined any sessions yet.</p>
@@ -112,7 +112,7 @@ export default async function MySessionsPage({
   const pageItems = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   return (
-    <div className="max-w-3xl">
+    <div className="mx-auto max-w-3xl">
       <Header
         stats={[
           { value: String(scored.length), label: "joined" },

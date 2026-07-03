@@ -58,8 +58,7 @@ export default async function ArticlePage({
           <Article />
         </article>
       ) : (
-        // embedded deck needs an explicit height to lay out; shorter on phones
-        <div className="h-[60vh] overflow-hidden rounded-xl border border-border sm:h-[64vh] lg:h-[70vh]">
+        <div className="deck-frame">
           <Deck>
             <Article />
           </Deck>

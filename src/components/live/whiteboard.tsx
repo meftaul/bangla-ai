@@ -56,10 +56,7 @@ export default function Whiteboard({
   const initialData: AppState = { elements, scrollToContent: true };
 
   return (
-    <div
-      ref={containerRef}
-      className="h-[60vh] overflow-hidden rounded-xl border border-border sm:h-[64vh] lg:h-[70vh]"
-    >
+    <div ref={containerRef} className="deck-frame">
       <Excalidraw
         viewModeEnabled={readOnly}
         initialData={initialData}

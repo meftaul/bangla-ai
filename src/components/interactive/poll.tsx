@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useLiveActivity } from "@/components/live/session-context";
 import { BarChart, Countdown, IdleScreen } from "@/components/interactive/activity-ui";
+import { OptionList } from "@/components/interactive/quiz";
 
 // A poll: no right answer. In a live session the teacher starts it, learners vote
 // during a 30s window and then watch the tally climb live (broadcasts cover every
@@ -87,41 +88,5 @@ export default function Poll({
         </div>
       )}
     </div>
-  );
-}
-
-// Vote options — same shape/badge as the quiz so the live vocabulary stays consistent,
-// but only a selected state (no right/wrong).
-function OptionList({
-  options,
-  chosen,
-  disabled,
-  onChoose,
-}: {
-  options: string[];
-  chosen: number | null;
-  disabled: boolean;
-  onChoose: (i: number) => void;
-}) {
-  return (
-    <ul className="mt-6 flex flex-col gap-3">
-      {options.map((opt, i) => (
-        <li key={i}>
-          <button
-            type="button"
-            disabled={disabled}
-            onClick={() => onChoose(i)}
-            className={`flex w-full items-center gap-3 rounded-xl border px-4 py-3.5 text-left text-lg transition-[color,background-color,border-color,transform] active:scale-[0.99] ${
-              chosen === i ? "border-accent bg-accent/10" : "border-border hover:border-accent"
-            }`}
-          >
-            <span className="grid h-7 w-7 shrink-0 place-items-center rounded-lg border border-current/30 text-sm font-semibold opacity-80">
-              {String.fromCharCode(65 + i)}
-            </span>
-            <span>{opt}</span>
-          </button>
-        </li>
-      ))}
-    </ul>
   );
 }

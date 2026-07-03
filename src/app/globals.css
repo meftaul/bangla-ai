@@ -166,6 +166,11 @@ body {
     @apply rounded-2xl border border-border bg-surface;
     box-shadow: var(--shadow-card);
   }
+  /* Embedded reveal/Excalidraw viewport — decks and boards need an explicit
+     height to lay out; shorter on phones. Shared by deck views + whiteboard. */
+  .deck-frame {
+    @apply h-[60vh] overflow-hidden rounded-xl border border-border sm:h-[64vh] lg:h-[70vh];
+  }
 }
 
 /* Motion: CSS-only, no JS. Gated by reduced-motion (content visible either way). */

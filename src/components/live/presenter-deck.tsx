@@ -69,7 +69,7 @@ export default function PresenterDeck({
 
   return (
     <div className="flex flex-col gap-3">
-      <div className="h-[60vh] overflow-hidden rounded-xl border border-border sm:h-[64vh] lg:h-[70vh]">
+      <div className="deck-frame">
         <Deck onReady={onReady}>{children}</Deck>
       </div>
       <button

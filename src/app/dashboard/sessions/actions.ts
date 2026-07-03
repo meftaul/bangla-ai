@@ -7,7 +7,10 @@ import { generateJoinCode } from "@/lib/session";
 // Admin starts a live session for an article. RLS rejects non-admins on the insert.
 export async function startSession(formData: FormData) {
   const slug = String(formData.get("slug"));
-  if (!slug) redirect("/dashboard/sessions?error=slug");
+  // ponytail: failures bounce back to the list without a message — the forms are
+  // ours (slug always set) and inserts only fail on RLS; render an error if one
+  // ever shows up in practice.
+  if (!slug) redirect("/dashboard/sessions");
 
   const supabase = await createClient();
   // Ensure an articles row exists (FK target) without disturbing its status.
@@ -22,9 +25,9 @@ export async function startSession(formData: FormData) {
       .select("id")
       .single();
     if (data) id = data.id;
-    else if (error && error.code !== "23505") redirect("/dashboard/sessions?error=start");
+    else if (error && error.code !== "23505") redirect("/dashboard/sessions");
   }
-  if (!id) redirect("/dashboard/sessions?error=start");
+  if (!id) redirect("/dashboard/sessions");
 
   redirect(`/dashboard/sessions/${id}/present`);
 }

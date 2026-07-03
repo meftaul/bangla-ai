@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, Heart } from "@phosphor-icons/react/dist/ssr";
+import { Heart } from "@phosphor-icons/react/dist/ssr";
 import ThemeToggle from "./theme-toggle";
 import Greeting from "./greeting";
 import { Logo, LogoLockup } from "@/components/logo";
@@ -49,18 +49,6 @@ function Hero() {
               />
             </span>
           </h1>
-          {/*<div className="fade-up mt-10" style={{ animationDelay: "160ms" }}>
-            <Link
-              href="/login"
-              className="group inline-flex items-center gap-2 rounded-full bg-accent px-7 py-3.5 text-base font-medium text-accent-foreground transition-transform hover:-translate-y-px active:translate-y-0"
-            >
-              Let&apos;s Start Now
-              <ArrowRight
-                weight="bold"
-                className="transition-transform group-hover:translate-x-1"
-              />
-            </Link>
-          </div>*/}
         </div>
 
         <div className="order-1 flex justify-center md:order-2">
@@ -86,12 +74,6 @@ function JoinCTA() {
           >
             শেখাটা মজার হোক ।
           </h2>
-          {/*<p
-            lang="bn"
-            className="mx-auto mt-4 max-w-xl font-bangla text-base leading-relaxed text-accent-foreground/70"
-          >
-            পাঠশালায় ঢুকে পড়ো
-          </p>*/}
           <Link
             href="/login"
             lang="bn"

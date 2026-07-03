@@ -132,21 +132,22 @@ export default function Quiz({
   );
 }
 
-// Shared option list for practice + live. A letter badge (A/B/C…) lets phone viewers
-// match their choice to the projected slide. On reveal the correct option pops, the
-// learner's wrong pick nudges.
-function OptionList({
+// Shared option list for practice + live, also used by Poll (which never reveals —
+// no right/wrong, just the selected state). A letter badge (A/B/C…) lets phone
+// viewers match their choice to the projected slide. On reveal the correct option
+// pops, the learner's wrong pick nudges.
+export function OptionList({
   options,
   chosen,
-  revealed,
-  answer,
+  revealed = false,
+  answer = -1,
   disabled,
   onChoose,
 }: {
   options: string[];
   chosen: number | null;
-  revealed: boolean;
-  answer: number;
+  revealed?: boolean;
+  answer?: number;
   disabled: boolean;
   onChoose: (i: number) => void;
 }) {

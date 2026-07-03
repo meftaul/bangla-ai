@@ -28,14 +28,6 @@ export default async function LoginPage({
       {/* Brand panel — the "Joyful Lab" identity. Desktop only; on mobile the
           form panel carries a compact branded header instead. */}
       <aside className="hero-glow relative hidden flex-col overflow-hidden p-12 lg:flex">
-        {/*<Link
-          href="/"
-          aria-label="Pathshala home"
-          className="relative z-10 w-fit"
-        >
-          <LogoLockup className="text-foreground" />
-        </Link>*/}
-
         <div className="relative z-10 flex flex-1 flex-col items-start justify-center gap-8">
           <Logo float interactive className="h-auto w-36 xl:w-44" />
           <div>
@@ -56,13 +48,6 @@ export default async function LoginPage({
                 />
               </span>
             </h2>
-            {/*<p
-              lang="bn"
-              className="fade-up mt-4 max-w-sm font-bangla text-base leading-relaxed text-muted"
-              style={{ animationDelay: "160ms" }}
-            >
-              পাঠশালায় ফিরে এসো — যেখানে থেমেছিলে, সেখান থেকেই শুরু করো।
-            </p>*/}
           </div>
         </div>
 

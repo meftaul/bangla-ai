@@ -1,4 +1,11 @@
 import Link from "next/link";
+import {
+  ArrowLeft,
+  ChartBar,
+  CheckCircle,
+  Circle,
+  XCircle,
+} from "@phosphor-icons/react/dist/ssr";
 import { createClient } from "@/lib/supabase/server";
 import { listDiskArticles } from "@/lib/articles";
 import { scoreOf, type ActivityDef, type ResponseRow } from "@/lib/session";
@@ -28,29 +35,78 @@ export default async function ResultsPage({ params }: { params: Promise<{ id: st
   const score = scoreOf(activities as ActivityDef[], responses as ResponseRow[]);
   const byId = new Map(responses.map((r) => [r.activity_id, r]));
 
+  const graded = activities.filter((a) => a.type !== "poll");
+  const wrong = graded.filter((a) => {
+    const r = byId.get(a.activity_id);
+    return r && !r.is_correct;
+  }).length;
+  const missed = graded.filter((a) => !byId.has(a.activity_id)).length;
+  const pct = score.total === 0 ? null : Math.round((score.correct / score.total) * 100);
+
   return (
-    <div className="max-w-2xl">
-      <Link href="/dashboard/my-sessions" className="text-sm text-muted hover:text-accent-text">
-        ← My sessions
+    <div className="mx-auto max-w-2xl">
+      <Link
+        href="/dashboard/my-sessions"
+        className="inline-flex items-center gap-1.5 text-sm text-muted transition-colors hover:text-accent-text"
+      >
+        <ArrowLeft size={15} weight="bold" />
+        My sessions
       </Link>
-      <h1 className="mt-2 font-display text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
-        Your results
-      </h1>
-      {title && (
-        <p className="mt-1 text-sm text-muted">
-          {title}
-          {session && ` · ${new Date(session.started_at).toLocaleDateString()}`}
+
+      <header className="mt-6">
+        <p className="fade-up flex items-center gap-2 text-sm font-semibold text-muted">
+          <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-accent" />
+          <span lang="bn" className="font-bangla">
+            আমার ফলাফল
+          </span>
         </p>
-      )}
-      <p className="mt-3 text-lg text-foreground">
-        Score: <span className="font-semibold">{score.correct}</span> / {score.total}
-      </p>
+        <h1
+          className="fade-up mt-2 font-display text-3xl font-bold tracking-tight text-foreground sm:text-4xl"
+          style={{ animationDelay: "60ms" }}
+        >
+          {title ?? "Your results"}
+        </h1>
+        {session && (
+          <p className="fade-up mt-2 text-sm text-muted" style={{ animationDelay: "100ms" }}>
+            {new Date(session.started_at).toLocaleDateString(undefined, {
+              day: "numeric",
+              month: "short",
+              year: "numeric",
+            })}
+          </p>
+        )}
+      </header>
+
+      {/* Score summary — the reward moment. */}
+      <div
+        className="fade-up surface-card mt-8 flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between sm:gap-6"
+        style={{ animationDelay: "140ms" }}
+      >
+        <div className="flex items-baseline gap-3">
+          <span className="font-display text-4xl font-bold tabular-nums text-foreground">
+            {score.correct}
+            <span className="text-2xl text-muted"> / {score.total}</span>
+          </span>
+          {pct !== null && (
+            <span className="rounded-full bg-accent/15 px-2.5 py-1 text-sm font-semibold text-accent-text">
+              {pct}%
+            </span>
+          )}
+        </div>
+        {score.total > 0 && (
+          <dl className="flex items-center gap-5 text-sm">
+            <Tally value={score.correct} label="correct" tone="accent" />
+            <Tally value={wrong} label="wrong" tone="danger" />
+            <Tally value={missed} label="missed" tone="muted" />
+          </dl>
+        )}
+      </div>
 
       {activities.length === 0 ? (
         <p className="mt-8 text-sm text-muted">No graded activities in this session yet.</p>
       ) : (
-        <ul className="mt-8 flex flex-col gap-3">
-          {activities.map((a) => {
+        <ul className="mt-6 flex flex-col gap-2.5">
+          {activities.map((a, i) => {
             const r = byId.get(a.activity_id);
             const mineText = answerText(a.type, r?.response);
             const correctText =
@@ -59,29 +115,62 @@ export default async function ResultsPage({ params }: { params: Promise<{ id: st
                 : a.type === "dragdrop"
                   ? (a.correct as string[])?.join(" → ")
                   : null;
+            const status =
+              a.type === "poll"
+                ? { Icon: ChartBar, tone: "text-muted", label: "Poll" }
+                : r?.is_correct
+                  ? { Icon: CheckCircle, tone: "text-accent-text", label: "Correct" }
+                  : r
+                    ? { Icon: XCircle, tone: "text-danger", label: "Wrong" }
+                    : { Icon: Circle, tone: "text-muted", label: "Not answered" };
             return (
-              <li key={a.activity_id} className="surface-card p-4">
+              <li
+                key={a.activity_id}
+                className="fade-up surface-card p-4"
+                style={{ animationDelay: `${160 + i * 40}ms` }}
+              >
                 <div className="flex items-center justify-between gap-3">
-                  <span className="font-display text-sm font-semibold text-foreground">
+                  <span className="truncate font-display text-sm font-semibold text-foreground">
                     {a.activity_id}
                   </span>
-                  {a.type === "poll" ? (
-                    <span className="text-xs text-muted">poll</span>
-                  ) : (
-                    <span className={r?.is_correct ? "text-accent-text" : "text-danger"}>
-                      {r ? (r.is_correct ? "✓ correct" : "✗ wrong") : "✗ not answered"}
-                    </span>
-                  )}
+                  <span className={`flex shrink-0 items-center gap-1.5 text-sm ${status.tone}`}>
+                    <status.Icon size={16} weight="fill" />
+                    {status.label}
+                  </span>
                 </div>
-                <p className="mt-1 text-sm text-muted">Your answer: {mineText ?? "—"}</p>
+                <p className="mt-2 text-sm text-muted">
+                  Your answer: <span className="text-foreground">{mineText ?? "—"}</span>
+                </p>
                 {correctText && a.type !== "poll" && !r?.is_correct && (
-                  <p className="text-sm text-muted">Correct: {correctText}</p>
+                  <p className="mt-0.5 text-sm text-muted">
+                    Correct: <span className="text-accent-text">{correctText}</span>
+                  </p>
                 )}
               </li>
             );
           })}
         </ul>
       )}
+    </div>
+  );
+}
+
+function Tally({
+  value,
+  label,
+  tone,
+}: {
+  value: number;
+  label: string;
+  tone: "accent" | "danger" | "muted";
+}) {
+  const dot =
+    tone === "accent" ? "bg-accent" : tone === "danger" ? "bg-danger" : "border border-muted/50";
+  return (
+    <div className="flex items-center gap-1.5">
+      <span aria-hidden className={`h-2 w-2 rounded-full ${dot}`} />
+      <dd className="font-semibold text-foreground tabular-nums">{value}</dd>
+      <dt className="text-muted">{label}</dt>
     </div>
   );
 }
