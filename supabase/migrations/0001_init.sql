@@ -19,13 +19,19 @@ create trigger on_auth_user_created
   after insert on auth.users
   for each row execute function public.handle_new_user();
 
+-- trigger-only fn: never a real /rest/v1/rpc call. Triggers check EXECUTE at
+-- creation time, not fire time, so this doesn't affect signup (lint 0028/0029).
+revoke execute on function public.handle_new_user() from public, anon, authenticated;
+
 -- backfill any existing users
 insert into public.profiles (id) select id from auth.users
   on conflict do nothing;
 
--- is_admin(): used by RLS and bypasses RLS itself (security definer)
+-- is_admin(): used by RLS. SECURITY INVOKER (the default) — it only reads the
+-- caller's OWN profile row (id = auth.uid()), which the "read own profile" policy
+-- already permits, so it needs no definer bypass (and definer trips lint 0028/0029).
 create function public.is_admin() returns boolean
-  language sql security definer stable set search_path = '' as $$
+  language sql stable set search_path = '' as $$
   select exists (select 1 from public.profiles
                  where id = auth.uid() and role = 'admin');
 $$;

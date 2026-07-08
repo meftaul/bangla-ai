@@ -3,6 +3,7 @@ import Link from "next/link";
 import {
   ArrowRight,
   CaretRight,
+  Eye,
   Play,
   Television,
 } from "@phosphor-icons/react/dist/ssr";
@@ -335,13 +336,24 @@ async function AdminHome({
                   </p>
                   <p className="truncate text-xs text-muted">{a.slug}</p>
                 </div>
-                <form action={startSession}>
-                  <input type="hidden" name="slug" value={a.slug} />
-                  <button type="submit" className="btn-primary w-full sm:w-auto">
-                    <Play weight="fill" size={16} />
-                    Start
-                  </button>
-                </form>
+                <div className="flex items-center gap-2">
+                  <Link
+                    href={`/dashboard/articles/${a.slug}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="btn-ghost inline-flex flex-1 items-center justify-center gap-1.5 sm:flex-none"
+                  >
+                    <Eye weight="duotone" size={16} />
+                    Preview
+                  </Link>
+                  <form action={startSession} className="flex-1 sm:flex-none">
+                    <input type="hidden" name="slug" value={a.slug} />
+                    <button type="submit" className="btn-primary w-full sm:w-auto">
+                      <Play weight="fill" size={16} />
+                      Start
+                    </button>
+                  </form>
+                </div>
               </li>
             ))}
           </ul>

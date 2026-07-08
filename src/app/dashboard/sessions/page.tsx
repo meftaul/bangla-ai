@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowRight, Broadcast, Play } from "@phosphor-icons/react/dist/ssr";
+import { ArrowRight, Broadcast, Eye, Play } from "@phosphor-icons/react/dist/ssr";
 import { createClient } from "@/lib/supabase/server";
 import { getRole, listDiskArticles, listLiveSlides, topicFor } from "@/lib/articles";
 import { Pager } from "@/components/pager";
@@ -115,16 +115,27 @@ export default async function SessionsPage({
                     </p>
                     <p className="truncate text-xs text-muted">{a.slug}</p>
                   </div>
-                  <form action={startSession} className="shrink-0">
-                    <input type="hidden" name="slug" value={a.slug} />
-                    <button
-                      type="submit"
-                      className="btn-primary inline-flex items-center gap-1.5 px-3.5 py-2"
+                  <div className="flex shrink-0 items-center gap-2">
+                    <Link
+                      href={`/dashboard/articles/${a.slug}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="btn-ghost inline-flex items-center gap-1.5 px-3.5 py-2"
                     >
-                      <Play size={15} weight="fill" />
-                      Start
-                    </button>
-                  </form>
+                      <Eye size={15} weight="duotone" />
+                      Preview
+                    </Link>
+                    <form action={startSession}>
+                      <input type="hidden" name="slug" value={a.slug} />
+                      <button
+                        type="submit"
+                        className="btn-primary inline-flex items-center gap-1.5 px-3.5 py-2"
+                      >
+                        <Play size={15} weight="fill" />
+                        Start
+                      </button>
+                    </form>
+                  </div>
                 </li>
               );
             })}
