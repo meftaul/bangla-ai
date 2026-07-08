@@ -1,0 +1,3401 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Using Coding Agents Effectively — Ep. 1</title>
+
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reset.min.css"
+        />
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.css"
+        />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap"
+            rel="stylesheet"
+        />
+
+        <style>
+            :root {
+                --ink: #0e1116;
+                --slate: #161b22;
+                --panel: #1b222c;
+                --line: #242c38;
+                --chalk: #eaeef2;
+                --ash: #7d8590;
+                --citron: #c9f24d; /* the agent / CLI */
+                --lilac: #b08cff; /* the human / chat */
+                --coral: #ff7b72; /* failure, blocked */
+                --sky: #79c0ff; /* references, links */
+                --amber: #f2c94c; /* work in progress */
+
+                --mono:
+                    "JetBrains Mono", "SF Mono", ui-monospace, Menlo, monospace;
+                --sans: "IBM Plex Sans", system-ui, -apple-system, sans-serif;
+                --disp: "Space Grotesk", "IBM Plex Sans", system-ui, sans-serif;
+            }
+
+            html,
+            body {
+                background: var(--ink);
+            }
+            .reveal {
+                font-family: var(--sans);
+                color: var(--chalk);
+                font-size: 26px;
+                font-weight: 400;
+            }
+            .reveal .slides {
+                text-align: left;
+            }
+            .reveal .slides section {
+                height: 100%;
+                display: flex !important;
+                flex-direction: column;
+                justify-content: center;
+            }
+
+            /* ambient grid */
+            body::before {
+                content: "";
+                position: fixed;
+                inset: 0;
+                pointer-events: none;
+                z-index: 0;
+                background-image: radial-gradient(
+                    circle at 1px 1px,
+                    rgba(255, 255, 255, 0.055) 1px,
+                    transparent 0
+                );
+                background-size: 34px 34px;
+                mask-image: radial-gradient(
+                    ellipse 90% 75% at 50% 45%,
+                    #000 40%,
+                    transparent 100%
+                );
+            }
+            body::after {
+                content: "";
+                position: fixed;
+                inset: 0;
+                pointer-events: none;
+                z-index: 0;
+                background:
+                    radial-gradient(
+                        ellipse 60% 50% at 15% 0%,
+                        rgba(201, 242, 77, 0.05),
+                        transparent 70%
+                    ),
+                    radial-gradient(
+                        ellipse 55% 55% at 90% 100%,
+                        rgba(176, 140, 255, 0.055),
+                        transparent 70%
+                    );
+            }
+            .reveal-viewport {
+                background: var(--ink);
+            }
+
+            /* ---------- typography ---------- */
+            .reveal h1,
+            .reveal h2,
+            .reveal h3 {
+                font-family: var(--disp);
+                font-weight: 700;
+                text-transform: none;
+                letter-spacing: -0.025em;
+                line-height: 1.02;
+                margin: 0 0 0.35em;
+                color: var(--chalk);
+                text-shadow: none;
+            }
+            .reveal h1 {
+                font-size: 3.05em;
+            }
+            .reveal h2 {
+                font-size: 1.95em;
+            }
+            .reveal h3 {
+                font-size: 1.18em;
+                letter-spacing: -0.015em;
+            }
+            .reveal p {
+                line-height: 1.5;
+                margin: 0 0 0.7em;
+            }
+            .reveal strong {
+                color: var(--chalk);
+                font-weight: 600;
+            }
+            .reveal em {
+                font-style: normal;
+                color: var(--citron);
+            }
+
+            .eyebrow {
+                font-family: var(--mono);
+                font-size: 0.52em;
+                letter-spacing: 0.22em;
+                text-transform: uppercase;
+                color: var(--ash);
+                margin: 0 0 1.1em;
+                display: flex;
+                align-items: center;
+                gap: 0.9em;
+            }
+            .eyebrow b {
+                color: var(--citron);
+                font-weight: 500;
+            }
+            .eyebrow::after {
+                content: "";
+                flex: 1;
+                height: 1px;
+                background: var(--line);
+            }
+
+            .lead {
+                font-size: 0.86em;
+                color: var(--ash);
+                max-width: 24em;
+                line-height: 1.55;
+            }
+            .tiny {
+                font-size: 0.6em;
+                color: var(--ash);
+                font-family: var(--mono);
+                letter-spacing: 0.04em;
+            }
+
+            .pull {
+                font-family: var(--disp);
+                font-size: 1.55em;
+                font-weight: 500;
+                line-height: 1.18;
+                letter-spacing: -0.02em;
+                border-left: 3px solid var(--citron);
+                padding-left: 0.7em;
+                max-width: 19em;
+            }
+            .pull span {
+                color: var(--ash);
+            }
+
+            /* ---------- layout ---------- */
+            .grid2 {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 34px;
+                align-items: start;
+            }
+            .grid2.tight {
+                gap: 22px;
+            }
+            .grid-side {
+                display: grid;
+                grid-template-columns: 0.85fr 1.15fr;
+                gap: 38px;
+                align-items: center;
+            }
+            .stack {
+                display: flex;
+                flex-direction: column;
+                gap: 14px;
+            }
+            .row {
+                display: flex;
+                gap: 12px;
+                align-items: center;
+                flex-wrap: wrap;
+            }
+            .spacer {
+                flex: 1;
+            }
+
+            .card {
+                background: linear-gradient(
+                    180deg,
+                    rgba(255, 255, 255, 0.028),
+                    rgba(255, 255, 255, 0)
+                );
+                border: 1px solid var(--line);
+                border-radius: 14px;
+                padding: 22px 24px;
+            }
+            .card h3 {
+                margin-bottom: 0.5em;
+            }
+            .card.agent {
+                border-color: rgba(201, 242, 77, 0.28);
+            }
+            .card.human {
+                border-color: rgba(176, 140, 255, 0.28);
+            }
+
+            .tag {
+                font-family: var(--mono);
+                font-size: 0.5em;
+                letter-spacing: 0.16em;
+                text-transform: uppercase;
+                padding: 5px 10px;
+                border-radius: 999px;
+                border: 1px solid var(--line);
+                color: var(--ash);
+                display: inline-block;
+            }
+            .tag.agent {
+                color: var(--citron);
+                border-color: rgba(201, 242, 77, 0.35);
+                background: rgba(201, 242, 77, 0.07);
+            }
+            .tag.human {
+                color: var(--lilac);
+                border-color: rgba(176, 140, 255, 0.35);
+                background: rgba(176, 140, 255, 0.07);
+            }
+
+            ul.ticks {
+                list-style: none;
+                margin: 0;
+                padding: 0;
+                font-size: 0.78em;
+            }
+            ul.ticks li {
+                padding: 7px 0;
+                border-bottom: 1px dashed rgba(255, 255, 255, 0.06);
+                display: flex;
+                gap: 12px;
+                align-items: baseline;
+            }
+            ul.ticks li:last-child {
+                border-bottom: 0;
+            }
+            ul.ticks li::before {
+                content: "✓";
+                font-family: var(--mono);
+                color: var(--citron);
+                font-size: 0.9em;
+            }
+            ul.ticks.human li::before {
+                color: var(--lilac);
+            }
+
+            /* ---------- terminal ---------- */
+            .term {
+                background: #0b0e13;
+                border: 1px solid var(--line);
+                border-radius: 12px;
+                overflow: hidden;
+                box-shadow: 0 24px 60px -30px rgba(0, 0, 0, 0.9);
+                font-family: var(--mono);
+                font-size: 0.6em;
+                line-height: 1.62;
+            }
+            .term.tall .term-body {
+                min-height: 420px;
+            }
+            .term-bar {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                padding: 9px 13px;
+                background: #11151c;
+                border-bottom: 1px solid var(--line);
+            }
+            .term-bar i {
+                width: 9px;
+                height: 9px;
+                border-radius: 50%;
+                background: #2c3441;
+                display: block;
+            }
+            .term-bar i:first-child {
+                background: #3b424e;
+            }
+            .term-title {
+                margin-left: 8px;
+                color: #5c6573;
+                font-size: 0.85em;
+                letter-spacing: 0.08em;
+                text-transform: uppercase;
+            }
+            .term-body {
+                padding: 16px 18px;
+                min-height: 300px;
+                white-space: pre-wrap;
+                word-break: break-word;
+            }
+            .term-body .ln {
+                display: block;
+            }
+            .term-body .fade-in {
+                animation: fadeUp 0.22s ease-out both;
+            }
+            @keyframes fadeUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(3px);
+                }
+                to {
+                    opacity: 1;
+                    transform: none;
+                }
+            }
+            .p-cmd {
+                color: var(--citron);
+            }
+            .p-ask {
+                color: var(--lilac);
+            }
+            .ok {
+                color: var(--citron);
+            }
+            .err {
+                color: var(--coral);
+            }
+            .warn {
+                color: var(--amber);
+            }
+            .muted {
+                color: #5c6573;
+            }
+            .sky {
+                color: var(--sky);
+            }
+            .plus {
+                color: var(--citron);
+            }
+            .minus {
+                color: var(--coral);
+            }
+            .file {
+                color: var(--chalk);
+            }
+            .cursor {
+                display: inline-block;
+                width: 0.55em;
+                height: 1.05em;
+                background: var(--chalk);
+                vertical-align: -2px;
+                animation: blink 1s steps(1) infinite;
+            }
+            @keyframes blink {
+                50% {
+                    opacity: 0;
+                }
+            }
+            .spin {
+                color: var(--amber);
+            }
+
+            /* ---------- buttons ---------- */
+            button {
+                font-family: var(--mono);
+            }
+            .btn {
+                font-family: var(--mono);
+                font-size: 0.56em;
+                letter-spacing: 0.1em;
+                text-transform: uppercase;
+                padding: 11px 18px;
+                border-radius: 8px;
+                cursor: pointer;
+                background: transparent;
+                color: var(--chalk);
+                border: 1px solid var(--line);
+                transition: 0.16s ease;
+            }
+            .btn:hover {
+                border-color: var(--ash);
+                background: rgba(255, 255, 255, 0.04);
+            }
+            .btn:focus-visible {
+                outline: 2px solid var(--citron);
+                outline-offset: 2px;
+            }
+            .btn.primary {
+                background: var(--citron);
+                color: #0b0e13;
+                border-color: var(--citron);
+                font-weight: 700;
+            }
+            .btn.primary:hover {
+                filter: brightness(1.1);
+            }
+            .btn.ghost-h {
+                border-color: rgba(176, 140, 255, 0.4);
+                color: var(--lilac);
+            }
+            .btn.ghost-a {
+                border-color: rgba(201, 242, 77, 0.4);
+                color: var(--citron);
+            }
+            .btn[disabled] {
+                opacity: 0.4;
+                cursor: not-allowed;
+            }
+            .btn.sm {
+                padding: 8px 13px;
+                font-size: 0.5em;
+            }
+
+            /* ---------- quiz ---------- */
+            .quiz {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 16px;
+            }
+            .q {
+                border: 1px solid var(--line);
+                border-radius: 12px;
+                padding: 18px 20px;
+                background: rgba(255, 255, 255, 0.02);
+                transition: 0.2s;
+            }
+            .q .qt {
+                font-size: 0.8em;
+                line-height: 1.35;
+                margin-bottom: 14px;
+                min-height: 2.6em;
+            }
+            .q .qa {
+                font-family: var(--mono);
+                font-size: 0.55em;
+                color: var(--ash);
+                line-height: 1.5;
+                opacity: 0;
+                height: 0;
+                overflow: hidden;
+                transition: opacity 0.3s;
+            }
+            .q.done .qa {
+                opacity: 1;
+                height: auto;
+                margin-top: 12px;
+            }
+            .q.right {
+                border-color: rgba(201, 242, 77, 0.45);
+                background: rgba(201, 242, 77, 0.05);
+            }
+            .q.wrong {
+                border-color: rgba(255, 123, 114, 0.45);
+                background: rgba(255, 123, 114, 0.05);
+            }
+            .q.done .btn {
+                pointer-events: none;
+                opacity: 0.35;
+            }
+            .q.done .btn.correct {
+                opacity: 1;
+                border-color: var(--citron);
+                color: var(--citron);
+            }
+
+            /* ---------- bars ---------- */
+            .meter {
+                height: 8px;
+                border-radius: 99px;
+                background: rgba(255, 255, 255, 0.07);
+                overflow: hidden;
+            }
+            .meter i {
+                display: block;
+                height: 100%;
+                width: 0;
+                border-radius: 99px;
+                transition: width 1.1s cubic-bezier(0.2, 0.8, 0.2, 1);
+                background: var(--citron);
+            }
+            .meter.down i {
+                background: var(--coral);
+            }
+            .metric {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 7px;
+                margin-bottom: 18px;
+            }
+            .metric .lb {
+                display: flex;
+                justify-content: space-between;
+                font-family: var(--mono);
+                font-size: 0.55em;
+                letter-spacing: 0.1em;
+                text-transform: uppercase;
+                color: var(--ash);
+            }
+
+            /* ---------- flow / pipeline ---------- */
+            .flow {
+                display: flex;
+                flex-direction: column;
+                gap: 0;
+            }
+            .node {
+                border: 1px solid var(--line);
+                border-radius: 10px;
+                padding: 11px 16px;
+                font-family: var(--mono);
+                font-size: 0.58em;
+                letter-spacing: 0.06em;
+                background: rgba(255, 255, 255, 0.02);
+                color: var(--ash);
+                transition: 0.28s ease;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                gap: 10px;
+            }
+            .node .st {
+                opacity: 0;
+                font-size: 0.85em;
+            }
+            .node.on {
+                border-color: rgba(201, 242, 77, 0.5);
+                color: var(--chalk);
+                background: rgba(201, 242, 77, 0.06);
+                transform: translateX(6px);
+            }
+            .node.on .st {
+                opacity: 1;
+                color: var(--citron);
+            }
+            .node.blocked {
+                border-color: rgba(255, 123, 114, 0.55);
+                color: var(--coral);
+                background: rgba(255, 123, 114, 0.07);
+            }
+            .node.blocked .st {
+                opacity: 1;
+                color: var(--coral);
+            }
+            .node.done {
+                border-color: var(--line);
+                color: var(--ash);
+                background: transparent;
+                transform: none;
+            }
+            .node.done .st {
+                opacity: 0.6;
+                color: var(--ash);
+            }
+            .arrow {
+                height: 16px;
+                width: 1px;
+                background: var(--line);
+                margin-left: 22px;
+            }
+            .arrow::after {
+                content: "";
+                display: block;
+            }
+
+            /* ---------- context window widget ---------- */
+            .cw {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            .cw-head {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                font-family: var(--mono);
+                font-size: 0.55em;
+                letter-spacing: 0.12em;
+                text-transform: uppercase;
+                color: var(--ash);
+            }
+            .cw-track {
+                border: 1px solid var(--line);
+                border-radius: 12px;
+                background: #0b0e13;
+                padding: 10px;
+                height: 396px;
+                overflow: hidden;
+                display: flex;
+                flex-direction: column;
+                gap: 6px;
+                position: relative;
+            }
+            .cw-item {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                font-family: var(--mono);
+                font-size: 0.52em;
+                letter-spacing: 0.05em;
+                padding: 8px 11px;
+                border-radius: 7px;
+                border: 1px solid var(--line);
+                background: rgba(255, 255, 255, 0.025);
+                color: var(--chalk);
+                animation: slideIn 0.3s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+                flex: 0 0 auto;
+            }
+            @keyframes slideIn {
+                from {
+                    opacity: 0;
+                    transform: translateX(-14px);
+                }
+                to {
+                    opacity: 1;
+                    transform: none;
+                }
+            }
+            .cw-item.evict {
+                animation: evict 0.5s ease forwards;
+            }
+            @keyframes evict {
+                to {
+                    opacity: 0;
+                    transform: translateX(-30px);
+                    height: 0;
+                    padding: 0;
+                    margin: 0;
+                    border-width: 0;
+                }
+            }
+            .cw-item .pin {
+                color: var(--ash);
+            }
+            .cw-item .sz {
+                margin-left: auto;
+                color: var(--ash);
+            }
+            .cw-item.pinned {
+                border-color: rgba(255, 255, 255, 0.14);
+                background: rgba(255, 255, 255, 0.05);
+            }
+            .cw-item.conv {
+                border-color: rgba(176, 140, 255, 0.3);
+            }
+            .cw-item.attach {
+                border-color: rgba(121, 192, 255, 0.3);
+            }
+            .cw-item.prompt {
+                border-color: rgba(201, 242, 77, 0.45);
+                background: rgba(201, 242, 77, 0.07);
+            }
+            .cw-toast {
+                position: absolute;
+                left: 10px;
+                right: 10px;
+                bottom: 10px;
+                font-family: var(--mono);
+                font-size: 0.5em;
+                letter-spacing: 0.06em;
+                background: rgba(255, 123, 114, 0.12);
+                border: 1px solid rgba(255, 123, 114, 0.4);
+                color: var(--coral);
+                padding: 8px 12px;
+                border-radius: 7px;
+                opacity: 0;
+                transition: 0.3s;
+            }
+            .cw-toast.show {
+                opacity: 1;
+            }
+
+            /* ---------- tabs ---------- */
+            .tabs {
+                display: flex;
+                gap: 8px;
+                margin-bottom: 16px;
+                flex-wrap: wrap;
+            }
+            .tab {
+                font-family: var(--mono);
+                font-size: 0.55em;
+                letter-spacing: 0.1em;
+                text-transform: uppercase;
+                padding: 9px 15px;
+                border-radius: 8px;
+                border: 1px solid var(--line);
+                background: transparent;
+                color: var(--ash);
+                cursor: pointer;
+                transition: 0.16s;
+            }
+            .tab:hover {
+                color: var(--chalk);
+            }
+            .tab[aria-selected="true"] {
+                background: rgba(201, 242, 77, 0.1);
+                border-color: rgba(201, 242, 77, 0.45);
+                color: var(--citron);
+            }
+            .tabpanel[hidden] {
+                display: none;
+            }
+
+            /* ---------- chips ---------- */
+            .chips {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+            .chip {
+                font-family: var(--mono);
+                font-size: 0.52em;
+                letter-spacing: 0.1em;
+                text-transform: uppercase;
+                padding: 9px 14px;
+                border-radius: 999px;
+                border: 1px solid var(--line);
+                background: transparent;
+                color: var(--ash);
+                cursor: pointer;
+                transition: 0.16s;
+            }
+            .chip:hover {
+                color: var(--chalk);
+                border-color: var(--ash);
+            }
+            .chip[aria-pressed="true"] {
+                background: rgba(176, 140, 255, 0.1);
+                border-color: rgba(176, 140, 255, 0.5);
+                color: var(--lilac);
+            }
+
+            /* ---------- TCD ---------- */
+            .tcd {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
+            .tcd-row {
+                display: grid;
+                grid-template-columns: 64px 1fr;
+                gap: 16px;
+                align-items: stretch;
+                border: 1px solid var(--line);
+                border-radius: 12px;
+                overflow: hidden;
+                background: rgba(255, 255, 255, 0.02);
+                opacity: 0.22;
+                transition: 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+                transform: translateY(6px);
+            }
+            .tcd-row.on {
+                opacity: 1;
+                transform: none;
+                border-color: rgba(201, 242, 77, 0.35);
+            }
+            .tcd-row .k {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-family: var(--disp);
+                font-size: 1.4em;
+                font-weight: 700;
+                background: rgba(201, 242, 77, 0.08);
+                color: var(--citron);
+                border-right: 1px solid var(--line);
+            }
+            .tcd-row .v {
+                padding: 14px 16px;
+            }
+            .tcd-row .v .kk {
+                font-family: var(--mono);
+                font-size: 0.5em;
+                letter-spacing: 0.16em;
+                text-transform: uppercase;
+                color: var(--ash);
+                margin-bottom: 5px;
+            }
+            .tcd-row .v .vv {
+                font-size: 0.72em;
+                line-height: 1.45;
+                color: var(--chalk);
+            }
+            .vague {
+                font-family: var(--mono);
+                font-size: 0.62em;
+                color: var(--coral);
+                border: 1px dashed rgba(255, 123, 114, 0.4);
+                border-radius: 10px;
+                padding: 14px 16px;
+                background: rgba(255, 123, 114, 0.05);
+            }
+
+            /* ---------- misc ---------- */
+            .kbd {
+                font-family: var(--mono);
+                font-size: 0.85em;
+                border: 1px solid var(--line);
+                border-radius: 5px;
+                padding: 1px 6px;
+                color: var(--ash);
+            }
+            .split-vs {
+                position: absolute;
+                left: 50%;
+                top: 0;
+                bottom: 0;
+                width: 1px;
+                background: linear-gradient(
+                    180deg,
+                    transparent,
+                    var(--line) 20%,
+                    var(--line) 80%,
+                    transparent
+                );
+            }
+            .reveal .progress {
+                color: var(--citron);
+                height: 2px;
+            }
+            .reveal .controls {
+                color: var(--ash);
+            }
+            .reveal .slide-number {
+                background: transparent;
+                color: #3b424e;
+                font-family: var(--mono);
+                font-size: 14px;
+            }
+
+            .code-inline {
+                font-family: var(--mono);
+                color: var(--citron);
+                background: rgba(201, 242, 77, 0.08);
+                padding: 2px 7px;
+                border-radius: 5px;
+                font-size: 0.86em;
+            }
+            .bad {
+                color: var(--coral);
+            }
+            .good {
+                color: var(--citron);
+            }
+
+            .badge {
+                font-family: var(--mono);
+                font-size: 0.48em;
+                letter-spacing: 0.14em;
+                text-transform: uppercase;
+                color: var(--ink);
+                background: var(--citron);
+                padding: 4px 9px;
+                border-radius: 5px;
+                font-weight: 700;
+            }
+
+            .filecard {
+                font-family: var(--mono);
+                font-size: 0.55em;
+                line-height: 1.6;
+                border: 1px solid var(--line);
+                border-radius: 10px;
+                padding: 14px 16px;
+                background: #0b0e13;
+            }
+            .filecard .h {
+                color: var(--ash);
+                letter-spacing: 0.12em;
+                text-transform: uppercase;
+                font-size: 0.82em;
+                margin-bottom: 9px;
+                display: flex;
+                justify-content: space-between;
+            }
+            .filecard.bad {
+                border-color: rgba(255, 123, 114, 0.35);
+                color: var(--chalk);
+            }
+            .filecard.good {
+                border-color: rgba(201, 242, 77, 0.35);
+                color: var(--chalk);
+            }
+
+            .ladder {
+                display: flex;
+                align-items: center;
+                gap: 0;
+            }
+            .rung {
+                flex: 1;
+                text-align: center;
+                padding: 18px 8px;
+                border: 1px solid var(--line);
+                border-radius: 12px;
+                font-family: var(--mono);
+                font-size: 0.55em;
+                letter-spacing: 0.1em;
+                text-transform: uppercase;
+                color: var(--ash);
+                background: rgba(255, 255, 255, 0.02);
+            }
+            .rung.hi {
+                border-color: rgba(201, 242, 77, 0.5);
+                color: var(--citron);
+                background: rgba(201, 242, 77, 0.07);
+            }
+            .rung-arrow {
+                color: var(--line);
+                padding: 0 12px;
+                font-family: var(--mono);
+            }
+
+            @media (prefers-reduced-motion: reduce) {
+                * {
+                    animation-duration: 0.001s !important;
+                    transition-duration: 0.001s !important;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="reveal">
+            <div class="slides">
+                <!-- ============ TITLE ============ -->
+                <section data-auto-animate>
+                    <p class="eyebrow">
+                        <b>Episode 01</b> Using coding agents effectively
+                    </p>
+                    <h1 style="max-width: 15em">
+                        Let's start with<br /><em style="color: var(--citron)"
+                            >Claude Code</em
+                        >.
+                    </h1>
+                    <p class="lead" style="margin-top: 0.6em">
+                        A working session on prompting, context, skills, and
+                        hooks — for developers who are about to stop typing and
+                        start delegating.
+                    </p>
+                    <div class="row" style="margin-top: 44px">
+                        <span class="tag agent">Agent</span>
+                        <span class="tag human">Human</span>
+                        <span class="tiny" style="margin-left: 8px"
+                            >Two colors. They mean something. Watch for
+                            them.</span
+                        >
+                    </div>
+                    <p class="tiny" style="margin-top: 60px">
+                        Press <span class="kbd">→</span> to advance ·
+                        <span class="kbd">↓</span> for depth ·
+                        <span class="kbd">ESC</span> for overview
+                    </p>
+                </section>
+
+                <!-- ============ SCENE 1 ============ -->
+                <section>
+                    <section>
+                        <p class="eyebrow">
+                            <b>Scene 01</b> Web chat vs. CLI agents
+                        </p>
+                        <h2>Same request.<br />Two different machines.</h2>
+                        <div class="grid2" style="margin-top: 26px">
+                            <div class="filecard" style="max-width: 320px">
+                                <div class="h">
+                                    <span>the project</span
+                                    ><span class="muted">14 files</span>
+                                </div>
+                                todo-app ├── src/ ├── tests/ └── package.json
+                            </div>
+                            <div>
+                                <p class="tiny" style="margin-bottom: 8px">
+                                    You type, into both:
+                                </p>
+                                <div
+                                    class="vague"
+                                    style="
+                                        color: var(--chalk);
+                                        border-color: var(--line);
+                                        background: rgba(255, 255, 255, 0.02);
+                                    "
+                                >
+                                    Add authentication.
+                                </div>
+                                <p
+                                    class="lead"
+                                    style="margin-top: 20px; font-size: 0.72em"
+                                >
+                                    One of them hands you homework. The other
+                                    one does the homework. Press
+                                    <span class="kbd">↓</span>.
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section data-run="s1">
+                        <p class="eyebrow">
+                            <b>Scene 01</b> Watch the difference
+                        </p>
+                        <div class="grid2 tight">
+                            <div>
+                                <div class="row" style="margin-bottom: 10px">
+                                    <span class="tag human">Web chat</span>
+                                </div>
+                                <div class="term" data-term="web">
+                                    <div class="term-bar">
+                                        <i></i><i></i><i></i
+                                        ><span class="term-title"
+                                            >browser · chat</span
+                                        >
+                                    </div>
+                                    <div class="term-body"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="row" style="margin-bottom: 10px">
+                                    <span class="tag agent">Claude Code</span>
+                                </div>
+                                <div class="term" data-term="cli">
+                                    <div class="term-bar">
+                                        <i></i><i></i><i></i
+                                        ><span class="term-title"
+                                            >zsh · ~/todo-app</span
+                                        >
+                                    </div>
+                                    <div class="term-body"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section>
+                        <p class="eyebrow">
+                            <b>Scene 01</b> Where each one wins
+                        </p>
+                        <div class="grid2">
+                            <div class="card agent">
+                                <div class="row" style="margin-bottom: 14px">
+                                    <span class="tag agent">CLI agent</span
+                                    ><span class="spacer"></span
+                                    ><span class="tiny">does work</span>
+                                </div>
+                                <ul class="ticks">
+                                    <li class="fragment fade-up">
+                                        Reads the entire project
+                                    </li>
+                                    <li class="fragment fade-up">
+                                        No copy-paste
+                                    </li>
+                                    <li class="fragment fade-up">
+                                        Writes code to disk
+                                    </li>
+                                    <li class="fragment fade-up">
+                                        Runs the tests
+                                    </li>
+                                    <li class="fragment fade-up">
+                                        Fixes its own failures
+                                    </li>
+                                    <li class="fragment fade-up">
+                                        Commits changes
+                                    </li>
+                                    <li class="fragment fade-up">
+                                        Can run unattended
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="card human">
+                                <div class="row" style="margin-bottom: 14px">
+                                    <span class="tag human">Web chat</span
+                                    ><span class="spacer"></span
+                                    ><span class="tiny">shapes thinking</span>
+                                </div>
+                                <ul class="ticks human">
+                                    <li class="fragment fade-up">
+                                        Brainstorming
+                                    </li>
+                                    <li class="fragment fade-up">
+                                        Learning something new
+                                    </li>
+                                    <li class="fragment fade-up">
+                                        Quick questions
+                                    </li>
+                                    <li class="fragment fade-up">
+                                        Architecture discussions
+                                    </li>
+                                </ul>
+                                <p
+                                    class="lead fragment fade-up"
+                                    style="margin-top: 20px; font-size: 0.7em"
+                                >
+                                    No repo access. No side effects. That's a
+                                    feature when you're still deciding what to
+                                    build.
+                                </p>
+                            </div>
+                        </div>
+                        <p
+                            class="pull fragment fade-up"
+                            style="margin-top: 34px"
+                        >
+                            The best developers don't choose one tool.<br /><span
+                                >They choose the right tool.</span
+                            >
+                        </p>
+                    </section>
+
+                    <section>
+                        <p class="eyebrow">
+                            <b>Scene 01</b> Your turn — pick a tool
+                        </p>
+                        <div class="quiz" data-quiz></div>
+                        <p class="tiny" style="margin-top: 18px">
+                            Click an answer on each card. Reasons appear after
+                            you commit.
+                        </p>
+                    </section>
+                </section>
+
+                <!-- ============ SCENE 2 ============ -->
+                <section>
+                    <section>
+                        <p class="eyebrow"><b>Scene 02</b> The mind shift</p>
+                        <h2>
+                            You stop writing code.<br />You start
+                            <em>directing</em> it.
+                        </h2>
+                        <div class="grid2" style="margin-top: 34px">
+                            <div class="card">
+                                <div
+                                    class="tag human"
+                                    style="margin-bottom: 16px"
+                                >
+                                    Old workflow
+                                </div>
+                                <div class="flow">
+                                    <div class="node">Think</div>
+                                    <div class="arrow"></div>
+                                    <div class="node">Write</div>
+                                    <div class="arrow"></div>
+                                    <div class="node">Debug</div>
+                                    <div class="arrow"></div>
+                                    <div class="node">Repeat</div>
+                                </div>
+                                <p class="tiny" style="margin-top: 16px">
+                                    Bottleneck: your hands.
+                                </p>
+                            </div>
+                            <div class="card agent fragment fade-right">
+                                <div
+                                    class="tag agent"
+                                    style="margin-bottom: 16px"
+                                >
+                                    New workflow
+                                </div>
+                                <div class="flow">
+                                    <div class="node on">
+                                        Think<span class="st">◆</span>
+                                    </div>
+                                    <div class="arrow"></div>
+                                    <div class="node on">
+                                        Delegate<span class="st">◆</span>
+                                    </div>
+                                    <div class="arrow"></div>
+                                    <div class="node on">
+                                        Review<span class="st">◆</span>
+                                    </div>
+                                    <div class="arrow"></div>
+                                    <div class="node on">
+                                        Refine<span class="st">◆</span>
+                                    </div>
+                                </div>
+                                <p class="tiny" style="margin-top: 16px">
+                                    Bottleneck: your clarity.
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+                </section>
+
+                <!-- ============ SCENE 3 ============ -->
+                <section>
+                    <section data-run="s3">
+                        <p class="eyebrow">
+                            <b>Scene 03</b> Infer intent, not read minds
+                        </p>
+                        <div class="grid2 tight">
+                            <div>
+                                <div class="vague" style="margin-bottom: 18px">
+                                    Fix this.
+                                </div>
+                                <div class="term" data-term="confused">
+                                    <div class="term-bar">
+                                        <i></i><i></i><i></i
+                                        ><span class="term-title"
+                                            >what does "this" mean</span
+                                        >
+                                    </div>
+                                    <div class="term-body"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <p class="lead" style="margin-bottom: 20px">
+                                    The model has no eyes, no ticket, no
+                                    standup. It has the words you gave it and
+                                    the files it can reach.
+                                </p>
+                                <p class="lead">
+                                    "Fix this" is not a request. It's a riddle
+                                    with a deadline.
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section data-run="s3b">
+                        <p class="eyebrow">
+                            <b>Scene 03</b> Now say it properly
+                        </p>
+                        <div class="grid-side">
+                            <div>
+                                <div
+                                    class="filecard good"
+                                    style="font-size: 0.62em; line-height: 1.75"
+                                >
+                                    <div class="h">
+                                        <span>the prompt</span
+                                        ><span class="ok">4 lines</span>
+                                    </div>
+                                    Fix the login redirect bug. The bug only
+                                    happens after token refresh. Do not modify
+                                    authentication middleware. Run tests
+                                    afterwards.
+                                </div>
+                            </div>
+                            <div data-metrics>
+                                <div class="metric">
+                                    <div class="lb">
+                                        <span>Ambiguity</span
+                                        ><span class="m-v">—</span>
+                                    </div>
+                                    <div class="meter down">
+                                        <i data-to="12"></i>
+                                    </div>
+                                </div>
+                                <div class="metric">
+                                    <div class="lb">
+                                        <span>Corrections needed</span
+                                        ><span class="m-v">—</span>
+                                    </div>
+                                    <div class="meter down">
+                                        <i data-to="18"></i>
+                                    </div>
+                                </div>
+                                <div class="metric">
+                                    <div class="lb">
+                                        <span>Output quality</span
+                                        ><span class="m-v">—</span>
+                                    </div>
+                                    <div class="meter">
+                                        <i data-to="91"></i>
+                                    </div>
+                                </div>
+                                <p
+                                    class="lead"
+                                    style="margin-top: 22px; font-size: 0.72em"
+                                >
+                                    Nothing about the model changed. Only what
+                                    you told it.
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+                </section>
+
+                <!-- ============ SCENE 4 ============ -->
+                <section>
+                    <section>
+                        <p class="eyebrow"><b>Scene 04</b> The framework</p>
+                        <div class="grid-side">
+                            <div>
+                                <h2 style="font-size: 2.4em">T · C · D</h2>
+                                <p class="lead">
+                                    Three things every good prompt carries. Miss
+                                    one and the agent guesses. Guessing is where
+                                    your afternoon goes.
+                                </p>
+                                <p class="tiny" style="margin-top: 24px">
+                                    Press <span class="kbd">↓</span> to practice
+                                    on real prompts.
+                                </p>
+                            </div>
+                            <div class="tcd">
+                                <div class="tcd-row fragment fade-up on">
+                                    <div class="k">T</div>
+                                    <div class="v">
+                                        <div class="kk">Task</div>
+                                        <div class="vv">
+                                            What, exactly, should change. One
+                                            outcome, stated as a verb.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tcd-row fragment fade-up on">
+                                    <div class="k">C</div>
+                                    <div class="v">
+                                        <div class="kk">Context</div>
+                                        <div class="vv">
+                                            Files, constraints, environment, and
+                                            the things it must
+                                            <em>not</em> touch.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tcd-row fragment fade-up on">
+                                    <div class="k">D</div>
+                                    <div class="v">
+                                        <div class="kk">Done signal</div>
+                                        <div class="vv">
+                                            How the agent knows it succeeded — a
+                                            command that passes, an output it
+                                            can read.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section>
+                        <p class="eyebrow">
+                            <b>Scene 04</b> Exercise — convert a vague prompt
+                        </p>
+                        <div
+                            class="chips"
+                            data-tcd-chips
+                            style="margin-bottom: 22px"
+                        ></div>
+                        <div class="grid-side" style="gap: 30px">
+                            <div>
+                                <p class="tiny" style="margin-bottom: 8px">
+                                    What people actually type
+                                </p>
+                                <div class="vague" data-tcd-vague>
+                                    Pick a category above.
+                                </div>
+                                <button
+                                    class="btn primary"
+                                    data-tcd-go
+                                    style="margin-top: 20px"
+                                    disabled
+                                >
+                                    Convert to T · C · D
+                                </button>
+                            </div>
+                            <div class="tcd" data-tcd-out>
+                                <div class="tcd-row">
+                                    <div class="k">T</div>
+                                    <div class="v">
+                                        <div class="kk">Task</div>
+                                        <div class="vv">—</div>
+                                    </div>
+                                </div>
+                                <div class="tcd-row">
+                                    <div class="k">C</div>
+                                    <div class="v">
+                                        <div class="kk">Context</div>
+                                        <div class="vv">—</div>
+                                    </div>
+                                </div>
+                                <div class="tcd-row">
+                                    <div class="k">D</div>
+                                    <div class="v">
+                                        <div class="kk">Done signal</div>
+                                        <div class="vv">—</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </section>
+
+                <!-- ============ SCENE 5 ============ -->
+                <section>
+                    <section>
+                        <p class="eyebrow">
+                            <b>Scene 05</b> The context window
+                        </p>
+                        <div class="grid-side" style="gap: 40px">
+                            <div>
+                                <h2 style="font-size: 1.9em">
+                                    Everything the agent<br />knows, right now.
+                                </h2>
+                                <p class="lead">
+                                    It is a fixed-size desk, not a filing
+                                    cabinet. Put something new on it and
+                                    something old slides off the edge.
+                                </p>
+                                <div class="stack" style="margin-top: 26px">
+                                    <button class="btn ghost-a" data-cw="file">
+                                        + Attach file · 18
+                                    </button>
+                                    <button class="btn ghost-a" data-cw="image">
+                                        + Drop image · 14
+                                    </button>
+                                    <button class="btn ghost-a" data-cw="url">
+                                        + Paste URL · 9
+                                    </button>
+                                    <button class="btn ghost-h" data-cw="conv">
+                                        + Chat turn · 7
+                                    </button>
+                                    <button class="btn sm" data-cw="reset">
+                                        Reset
+                                    </button>
+                                </div>
+                                <p class="tiny" style="margin-top: 20px">
+                                    Pinned rows
+                                    <span class="muted">◈</span> never leave.
+                                    Everything else is negotiable.
+                                </p>
+                            </div>
+                            <div class="cw">
+                                <div class="cw-head">
+                                    <span>Context window</span
+                                    ><span data-cw-count>0 / 100</span>
+                                </div>
+                                <div class="meter">
+                                    <i data-cw-meter style="width: 0"></i>
+                                </div>
+                                <div class="cw-track" data-cw-track></div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section>
+                        <p class="eyebrow"><b>Scene 05</b> The consequence</p>
+                        <p class="pull" style="max-width: 22em">
+                            When the desk fills, the agent doesn't tell you what
+                            it forgot.<br /><span
+                                >It just starts being wrong with
+                                confidence.</span
+                            >
+                        </p>
+                        <div class="grid2" style="margin-top: 40px">
+                            <div class="card fragment fade-up">
+                                <h3 style="color: var(--coral)">Symptom</h3>
+                                <p class="lead" style="font-size: 0.72em">
+                                    It re-asks something you answered. It
+                                    reverts a decision. It "forgets" a
+                                    constraint from ten turns ago.
+                                </p>
+                            </div>
+                            <div class="card fragment fade-up">
+                                <h3 style="color: var(--citron)">Cure</h3>
+                                <p class="lead" style="font-size: 0.72em">
+                                    Short instructions. Skills loaded on demand.
+                                    And a
+                                    <span class="code-inline">/clear</span>
+                                    before the desk collapses.
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+                </section>
+
+                <!-- ============ SCENE 6 ============ -->
+                <section>
+                    <section data-run="s6">
+                        <p class="eyebrow">
+                            <b>Scene 06</b> CLAUDE.md — build one, live
+                        </p>
+                        <div class="grid-side" style="gap: 34px">
+                            <div>
+                                <p class="lead">
+                                    Every session starts by reading this file.
+                                    It is the standing brief you never have to
+                                    repeat.
+                                </p>
+                                <p class="lead" style="margin-top: 18px">
+                                    Which is exactly why it must stay short. It
+                                    is paid for on <em>every single turn</em>.
+                                </p>
+                            </div>
+                            <div class="term tall" data-term="claudemd">
+                                <div class="term-bar">
+                                    <i></i><i></i><i></i
+                                    ><span class="term-title"
+                                        >zsh · touch CLAUDE.md</span
+                                    >
+                                </div>
+                                <div class="term-body"></div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section>
+                        <p class="eyebrow">
+                            <b>Scene 06</b> Same file. Two costs.
+                        </p>
+                        <div class="grid2">
+                            <div>
+                                <div
+                                    class="filecard bad"
+                                    style="min-height: 250px"
+                                >
+                                    <div class="h">
+                                        <span>CLAUDE.md · verbose</span
+                                        ><span class="err">2,400 tokens</span>
+                                    </div>
+                                    This project was started in 2021 by a team
+                                    of four engineers who wanted to build a
+                                    modern todo application using best
+                                    practices. We believe strongly in clean
+                                    code, and we have found over the years that…
+                                    <span class="muted"
+                                        >…41 more paragraphs</span
+                                    >
+                                </div>
+                                <div
+                                    class="meter down"
+                                    style="margin-top: 14px"
+                                >
+                                    <i style="width: 88%"></i>
+                                </div>
+                                <p class="tiny" style="margin-top: 10px">
+                                    Eats the desk. Gets skimmed. Ages badly.
+                                </p>
+                            </div>
+                            <div>
+                                <div
+                                    class="filecard good"
+                                    style="min-height: 250px"
+                                >
+                                    <div class="h">
+                                        <span>CLAUDE.md · sharp</span
+                                        ><span class="ok">180 tokens</span>
+                                    </div>
+                                    <span class="ok">## Code style</span>
+                                    - TypeScript strict. No `any`. - Named
+                                    exports only.
+
+                                    <span class="ok">## Testing</span>
+                                    - `npm test` must pass before commit.
+
+                                    <span class="ok">## Never</span>
+                                    - Edit `src/generated/**` - Commit to `main`
+                                    directly
+                                </div>
+                                <div class="meter" style="margin-top: 14px">
+                                    <i style="width: 9%"></i>
+                                </div>
+                                <p class="tiny" style="margin-top: 10px">
+                                    Rules, not prose. Bans, not vibes.
+                                </p>
+                            </div>
+                        </div>
+                        <p
+                            class="pull fragment fade-up"
+                            style="margin-top: 30px; font-size: 1.25em"
+                        >
+                            Concise instructions survive longer<br /><span
+                                >because they cost less to carry.</span
+                            >
+                        </p>
+                    </section>
+                </section>
+
+                <!-- ============ SCENE 7 ============ -->
+                <section>
+                    <section data-run="s7">
+                        <p class="eyebrow"><b>Scene 07</b> Skills</p>
+                        <div class="grid-side" style="gap: 44px">
+                            <div>
+                                <h2 style="font-size: 1.85em">
+                                    Knowledge that<br />waits on disk.
+                                </h2>
+                                <p class="lead">
+                                    A skill is a folder with instructions. The
+                                    agent reads it the moment it becomes
+                                    relevant — and not a second before.
+                                </p>
+                            </div>
+                            <div class="flow" data-pipeline="skills">
+                                <div class="node">
+                                    Conversation<span class="st">◆</span>
+                                </div>
+                                <div class="arrow"></div>
+                                <div class="node">
+                                    Needs the API skill<span class="st">◆</span>
+                                </div>
+                                <div class="arrow"></div>
+                                <div class="node">
+                                    Reads SKILL.md<span class="st">◆</span>
+                                </div>
+                                <div class="arrow"></div>
+                                <div class="node">
+                                    Injects instructions<span class="st"
+                                        >◆</span
+                                    >
+                                </div>
+                                <div class="arrow"></div>
+                                <div class="node">
+                                    Continues working<span class="st">◆</span>
+                                </div>
+                                <button
+                                    class="btn sm"
+                                    data-pipeline-run="skills"
+                                    style="
+                                        margin-top: 18px;
+                                        align-self: flex-start;
+                                    "
+                                >
+                                    Replay
+                                </button>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section>
+                        <p class="eyebrow"><b>Scene 07</b> Why this matters</p>
+                        <div class="grid2">
+                            <div class="card fragment fade-up">
+                                <div class="badge">01</div>
+                                <h3 style="margin-top: 14px">Lives on disk</h3>
+                                <p class="lead" style="font-size: 0.72em">
+                                    Version it. Review it. Share it across the
+                                    team like any other file.
+                                </p>
+                            </div>
+                            <div class="card fragment fade-up">
+                                <div class="badge">02</div>
+                                <h3 style="margin-top: 14px">
+                                    Loaded only when needed
+                                </h3>
+                                <p class="lead" style="font-size: 0.72em">
+                                    Ten skills installed, zero cost until one is
+                                    actually invoked.
+                                </p>
+                            </div>
+                        </div>
+                        <div
+                            class="card agent fragment fade-up"
+                            style="margin-top: 18px"
+                        >
+                            <div class="badge">03</div>
+                            <h3 style="margin-top: 14px">
+                                Doesn't consume permanent context
+                            </h3>
+                            <p
+                                class="lead"
+                                style="font-size: 0.72em; max-width: none"
+                            >
+                                This is the whole trick. CLAUDE.md is rent you
+                                pay every turn. A skill is a book you take off
+                                the shelf, read, and put back.
+                            </p>
+                        </div>
+                    </section>
+                </section>
+
+                <!-- ============ SCENE 8 ============ -->
+                <section>
+                    <section data-run="s8">
+                        <p class="eyebrow">
+                            <b>Scene 08</b> Build our first skill
+                        </p>
+                        <div class="grid-side" style="gap: 34px">
+                            <div class="stack">
+                                <div class="node on fragment fade-up">
+                                    1 · Make the folder<span class="st">◆</span>
+                                </div>
+                                <div class="node on fragment fade-up">
+                                    2 · Write the frontmatter<span class="st"
+                                        >◆</span
+                                    >
+                                </div>
+                                <div class="node on fragment fade-up">
+                                    3 · Write the body<span class="st">◆</span>
+                                </div>
+                                <div class="node on fragment fade-up">
+                                    4 · Invoke it<span class="st">◆</span>
+                                </div>
+                                <p
+                                    class="lead"
+                                    style="font-size: 0.72em; margin-top: 14px"
+                                >
+                                    The frontmatter is how the agent decides
+                                    <em>when</em> to reach for this. Write the
+                                    description for a stranger.
+                                </p>
+                            </div>
+                            <div class="term tall" data-term="skill">
+                                <div class="term-bar">
+                                    <i></i><i></i><i></i
+                                    ><span class="term-title"
+                                        >zsh · ~/todo-app</span
+                                    >
+                                </div>
+                                <div class="term-body"></div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section data-run="s8b">
+                        <p class="eyebrow"><b>Scene 08</b> Run it</p>
+                        <div
+                            class="term tall"
+                            data-term="skillrun"
+                            style="font-size: 0.58em"
+                        >
+                            <div class="term-bar">
+                                <i></i><i></i><i></i
+                                ><span class="term-title"
+                                    >claude · /skill tcd</span
+                                >
+                            </div>
+                            <div class="term-body"></div>
+                        </div>
+                    </section>
+                </section>
+
+                <!-- ============ SCENE 9 ============ -->
+                <section>
+                    <section>
+                        <p class="eyebrow">
+                            <b>Scene 09</b> Managing long sessions
+                        </p>
+                        <div class="grid-side" style="gap: 40px">
+                            <div>
+                                <h2 style="font-size: 1.85em">
+                                    Conversations rot.
+                                </h2>
+                                <p class="lead">
+                                    Every correction, every dead end, every
+                                    abandoned approach stays on the desk — and
+                                    keeps influencing the next answer.
+                                </p>
+                                <div class="row" style="margin-top: 26px">
+                                    <button class="btn ghost-h" data-rot="grow">
+                                        Keep chatting
+                                    </button>
+                                    <button
+                                        class="btn primary"
+                                        data-rot="clear"
+                                    >
+                                        /clear
+                                    </button>
+                                </div>
+                            </div>
+                            <div>
+                                <div
+                                    class="cw-head"
+                                    style="margin-bottom: 10px"
+                                >
+                                    <span>Session health</span
+                                    ><span data-rot-label>fresh</span>
+                                </div>
+                                <div class="meter" style="height: 14px">
+                                    <i data-rot-meter style="width: 8%"></i>
+                                </div>
+                                <div
+                                    class="stack"
+                                    data-rot-log
+                                    style="
+                                        margin-top: 20px;
+                                        font-family: var(--mono);
+                                        font-size: 0.55em;
+                                        gap: 6px;
+                                        color: var(--ash);
+                                        min-height: 220px;
+                                    "
+                                ></div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section>
+                        <p class="eyebrow">
+                            <b>Scene 09</b> The two-correction rule
+                        </p>
+                        <div class="grid-side" style="gap: 44px">
+                            <div class="flow" data-pipeline="tcr">
+                                <div class="node">
+                                    Wrong<span class="st">◆</span>
+                                </div>
+                                <div class="arrow"></div>
+                                <div class="node">
+                                    Correction<span class="st">◆</span>
+                                </div>
+                                <div class="arrow"></div>
+                                <div class="node">
+                                    Still wrong<span class="st">◆</span>
+                                </div>
+                                <div class="arrow"></div>
+                                <div class="node" data-blocked>
+                                    RESET · /clear<span class="st">■</span>
+                                </div>
+                                <div class="arrow"></div>
+                                <div class="node">
+                                    Fresh prompt, better written<span class="st"
+                                        >◆</span
+                                    >
+                                </div>
+                                <button
+                                    class="btn sm"
+                                    data-pipeline-run="tcr"
+                                    style="
+                                        margin-top: 18px;
+                                        align-self: flex-start;
+                                    "
+                                >
+                                    Replay
+                                </button>
+                            </div>
+                            <div>
+                                <p class="pull">
+                                    If two corrections haven't fixed it,<br /><span
+                                        >the third one won't either.</span
+                                    >
+                                </p>
+                                <p
+                                    class="lead"
+                                    style="margin-top: 26px; font-size: 0.74em"
+                                >
+                                    A third correction isn't more information.
+                                    It's more noise on top of a prompt that was
+                                    wrong from the start. Kill the session.
+                                    Rewrite the prompt using T·C·D. You'll be
+                                    done before you would have finished arguing.
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+                </section>
+
+                <!-- ============ SCENE 10 ============ -->
+                <section data-run="s10">
+                    <p class="eyebrow">
+                        <b>Scene 10</b> Adding external context
+                    </p>
+                    <div class="tabs" role="tablist" data-tabs>
+                        <button
+                            class="tab"
+                            role="tab"
+                            aria-selected="true"
+                            data-tab="files"
+                        >
+                            Files
+                        </button>
+                        <button
+                            class="tab"
+                            role="tab"
+                            aria-selected="false"
+                            data-tab="images"
+                        >
+                            Images
+                        </button>
+                        <button
+                            class="tab"
+                            role="tab"
+                            aria-selected="false"
+                            data-tab="urls"
+                        >
+                            URLs
+                        </button>
+                        <button
+                            class="tab"
+                            role="tab"
+                            aria-selected="false"
+                            data-tab="raw"
+                        >
+                            Raw data
+                        </button>
+                    </div>
+
+                    <div class="tabpanel" data-panel="files">
+                        <div class="grid-side" style="gap: 30px">
+                            <p class="lead">
+                                Point at a file with
+                                <span class="code-inline">@</span>. The agent
+                                reads it from disk — not from your clipboard,
+                                not from your description of it.
+                            </p>
+                            <div class="term" data-term="t-files">
+                                <div class="term-bar">
+                                    <i></i><i></i><i></i
+                                    ><span class="term-title"
+                                        >@src/auth.ts</span
+                                    >
+                                </div>
+                                <div class="term-body"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tabpanel" data-panel="images" hidden>
+                        <div class="grid-side" style="gap: 30px">
+                            <p class="lead">
+                                Drop a screenshot. Circle the broken thing. The
+                                agent now talks about <em>your</em> button, in
+                                <em>your</em> component, not a hypothetical one.
+                            </p>
+                            <div class="term" data-term="t-images">
+                                <div class="term-bar">
+                                    <i></i><i></i><i></i
+                                    ><span class="term-title"
+                                        >screenshot.png</span
+                                    >
+                                </div>
+                                <div class="term-body"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tabpanel" data-panel="urls" hidden>
+                        <div class="grid-side" style="gap: 30px">
+                            <p class="lead">
+                                Paste the docs URL. It cites the actual
+                                signature from the actual version — instead of
+                                the one it half-remembers from two years ago.
+                            </p>
+                            <div class="term" data-term="t-urls">
+                                <div class="term-bar">
+                                    <i></i><i></i><i></i
+                                    ><span class="term-title">fetch docs</span>
+                                </div>
+                                <div class="term-body"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tabpanel" data-panel="raw" hidden>
+                        <div class="grid-side" style="gap: 30px">
+                            <p class="lead">
+                                Pipe it. 40,000 lines of log that you will never
+                                scroll through, read in one gulp. Zero
+                                copy-paste.
+                            </p>
+                            <div class="term" data-term="t-raw">
+                                <div class="term-bar">
+                                    <i></i><i></i><i></i
+                                    ><span class="term-title"
+                                        >cat server.log | claude</span
+                                    >
+                                </div>
+                                <div class="term-body"></div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ============ SCENE 11 ============ -->
+                <section>
+                    <section>
+                        <p class="eyebrow">
+                            <b>Scene 11</b> Workflow one — feature development
+                        </p>
+                        <div class="grid-side" style="gap: 40px">
+                            <div>
+                                <p class="lead">
+                                    A skill can encode your architecture. Ask
+                                    for an endpoint; get the whole vertical
+                                    slice, in your team's shape, in your team's
+                                    order.
+                                </p>
+                                <button
+                                    class="btn primary"
+                                    data-pipeline-run="feature"
+                                    style="margin-top: 24px"
+                                >
+                                    Run the workflow
+                                </button>
+                                <div
+                                    class="stack"
+                                    data-log="feature"
+                                    style="
+                                        margin-top: 22px;
+                                        font-family: var(--mono);
+                                        font-size: 0.52em;
+                                        gap: 5px;
+                                        color: var(--ash);
+                                        min-height: 150px;
+                                    "
+                                ></div>
+                            </div>
+                            <div
+                                class="flow"
+                                data-pipeline="feature"
+                                style="font-size: 0.94em"
+                            >
+                                <div class="node">
+                                    New endpoint<span class="st">◆</span>
+                                </div>
+                                <div class="arrow"></div>
+                                <div class="node">
+                                    Controller<span class="st">◆</span>
+                                </div>
+                                <div class="arrow"></div>
+                                <div class="node">
+                                    Command<span class="st">◆</span>
+                                </div>
+                                <div class="arrow"></div>
+                                <div class="node">
+                                    Handler<span class="st">◆</span>
+                                </div>
+                                <div class="arrow"></div>
+                                <div class="node">
+                                    Service<span class="st">◆</span>
+                                </div>
+                                <div class="arrow"></div>
+                                <div class="node">
+                                    Repository<span class="st">◆</span>
+                                </div>
+                                <div class="arrow"></div>
+                                <div class="node">
+                                    Tests<span class="st">◆</span>
+                                </div>
+                                <div class="arrow"></div>
+                                <div class="node">
+                                    Run<span class="st">◆</span>
+                                </div>
+                                <div class="arrow"></div>
+                                <div class="node">
+                                    Commit<span class="st">◆</span>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section>
+                        <p class="eyebrow">
+                            <b>Scene 11</b> Workflow two — bug investigation
+                        </p>
+                        <div class="grid-side" style="gap: 40px">
+                            <div>
+                                <p class="lead">
+                                    This one interviews you first. It refuses to
+                                    guess. Watch it behave like a careful junior
+                                    engineer who has learned not to touch
+                                    things.
+                                </p>
+                                <button
+                                    class="btn primary"
+                                    data-pipeline-run="bug"
+                                    style="margin-top: 24px"
+                                >
+                                    Run the workflow
+                                </button>
+                                <div
+                                    class="stack"
+                                    data-log="bug"
+                                    style="
+                                        margin-top: 22px;
+                                        font-family: var(--mono);
+                                        font-size: 0.52em;
+                                        gap: 5px;
+                                        color: var(--ash);
+                                        min-height: 150px;
+                                    "
+                                ></div>
+                            </div>
+                            <div
+                                class="flow"
+                                data-pipeline="bug"
+                                style="font-size: 0.94em"
+                            >
+                                <div class="node">
+                                    Describe the bug<span class="st">◆</span>
+                                </div>
+                                <div class="arrow"></div>
+                                <div class="node">
+                                    Interview skill<span class="st">◆</span>
+                                </div>
+                                <div class="arrow"></div>
+                                <div class="node">
+                                    Clarifying questions<span class="st"
+                                        >◆</span
+                                    >
+                                </div>
+                                <div class="arrow"></div>
+                                <div class="node">
+                                    Locate files<span class="st">◆</span>
+                                </div>
+                                <div class="arrow"></div>
+                                <div class="node">
+                                    Build a plan<span class="st">◆</span>
+                                </div>
+                                <div class="arrow"></div>
+                                <div class="node">
+                                    Implement the fix<span class="st">◆</span>
+                                </div>
+                                <div class="arrow"></div>
+                                <div class="node">
+                                    Run tests<span class="st">◆</span>
+                                </div>
+                                <div class="arrow"></div>
+                                <div class="node">
+                                    Summarize changes<span class="st">◆</span>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </section>
+
+                <!-- ============ SCENE 12 ============ -->
+                <section>
+                    <section>
+                        <p class="eyebrow"><b>Scene 12</b> Hooks</p>
+                        <div class="grid-side" style="gap: 40px">
+                            <div>
+                                <h2 style="font-size: 1.85em">
+                                    Rules the agent<br />cannot talk its way out
+                                    of.
+                                </h2>
+                                <p class="lead">
+                                    A prompt is a request. A hook is a law. It
+                                    runs your script at a lifecycle event, and
+                                    it can say no.
+                                </p>
+                                <ul
+                                    class="ticks"
+                                    style="margin-top: 22px; font-size: 0.7em"
+                                >
+                                    <li>Auto-format code after edits</li>
+                                    <li>Prevent editing protected files</li>
+                                    <li>Automatically run tests</li>
+                                    <li>Notify Slack after completion</li>
+                                    <li>Enforce project conventions</li>
+                                </ul>
+                            </div>
+                            <div
+                                class="flow"
+                                data-pipeline="hooks"
+                                style="font-size: 0.94em"
+                            >
+                                <div class="node">
+                                    Before prompt<span class="st">◆</span>
+                                </div>
+                                <div class="arrow"></div>
+                                <div class="node">
+                                    Permission hook<span class="st">◆</span>
+                                </div>
+                                <div class="arrow"></div>
+                                <div class="node">
+                                    Claude runs<span class="st">◆</span>
+                                </div>
+                                <div class="arrow"></div>
+                                <div class="node">
+                                    Post-edit hook<span class="st">◆</span>
+                                </div>
+                                <div class="arrow"></div>
+                                <div class="node">
+                                    Formatting hook<span class="st">◆</span>
+                                </div>
+                                <div class="arrow"></div>
+                                <div class="node">
+                                    Notification hook<span class="st">◆</span>
+                                </div>
+                                <button
+                                    class="btn sm"
+                                    data-pipeline-run="hooks"
+                                    style="
+                                        margin-top: 18px;
+                                        align-self: flex-start;
+                                    "
+                                >
+                                    Replay
+                                </button>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section data-run="s12">
+                        <p class="eyebrow">
+                            <b>Scene 12</b> Live — a hook says no
+                        </p>
+                        <div
+                            class="term tall"
+                            data-term="hooks"
+                            style="font-size: 0.58em"
+                        >
+                            <div class="term-bar">
+                                <i></i><i></i><i></i
+                                ><span class="term-title"
+                                    >claude · hooks enabled</span
+                                >
+                            </div>
+                            <div class="term-body"></div>
+                        </div>
+                    </section>
+                </section>
+
+                <!-- ============ CLOSING DEMO ============ -->
+                <section>
+                    <section>
+                        <p class="eyebrow">
+                            <b>Closing</b> Putting everything together
+                        </p>
+                        <div class="grid-side" style="gap: 40px">
+                            <div>
+                                <h2 style="font-size: 1.8em">
+                                    One vague request.<br />Ten disciplined
+                                    steps.
+                                </h2>
+                                <button
+                                    class="btn primary"
+                                    data-pipeline-run="finale"
+                                    style="margin-top: 22px"
+                                >
+                                    Run end-to-end
+                                </button>
+                                <div
+                                    class="cw-head"
+                                    style="margin: 24px 0 10px"
+                                >
+                                    <span>Progress</span
+                                    ><span data-finale-count>0 / 10</span>
+                                </div>
+                                <div class="meter">
+                                    <i data-finale-meter style="width: 0"></i>
+                                </div>
+                            </div>
+                            <div
+                                class="flow"
+                                data-pipeline="finale"
+                                style="font-size: 0.88em"
+                            >
+                                <div class="node">
+                                    1 · Vague feature request<span class="st"
+                                        >◆</span
+                                    >
+                                </div>
+                                <div class="arrow"></div>
+                                <div class="node">
+                                    2 · T·C·D skill rewrites it<span class="st"
+                                        >◆</span
+                                    >
+                                </div>
+                                <div class="arrow"></div>
+                                <div class="node">
+                                    3 · Load CLAUDE.md<span class="st">◆</span>
+                                </div>
+                                <div class="arrow"></div>
+                                <div class="node">
+                                    4 · Attach @src/orders.ts<span class="st"
+                                        >◆</span
+                                    >
+                                </div>
+                                <div class="arrow"></div>
+                                <div class="node">
+                                    5 · Reference the API docs<span class="st"
+                                        >◆</span
+                                    >
+                                </div>
+                                <div class="arrow"></div>
+                                <div class="node">
+                                    6 · Generate a plan<span class="st">◆</span>
+                                </div>
+                                <div class="arrow"></div>
+                                <div class="node">
+                                    7 · Implement across 6 files<span class="st"
+                                        >◆</span
+                                    >
+                                </div>
+                                <div class="arrow"></div>
+                                <div class="node">
+                                    8 · Run tests, fix failures<span class="st"
+                                        >◆</span
+                                    >
+                                </div>
+                                <div class="arrow"></div>
+                                <div class="node">
+                                    9 · Show the git diff<span class="st"
+                                        >◆</span
+                                    >
+                                </div>
+                                <div class="arrow"></div>
+                                <div class="node">
+                                    10 · Summary + next steps<span class="st"
+                                        >◆</span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section>
+                        <p class="eyebrow"><b>Episode 01</b> Ends here</p>
+                        <h1 style="max-width: 16em; font-size: 2.6em">
+                            The future isn't about<br />replacing developers.
+                        </h1>
+                        <h1
+                            style="
+                                max-width: 16em;
+                                font-size: 2.6em;
+                                color: var(--citron);
+                                margin-top: 0.25em;
+                            "
+                        >
+                            It's about becoming an effective leader of AI
+                            software engineers.
+                        </h1>
+                        <div class="row" style="margin-top: 54px">
+                            <span class="tag agent">Agent</span
+                            ><span class="tag human">Human</span>
+                            <span class="tiny" style="margin-left: 10px"
+                                >You were always the one in the second
+                                color.</span
+                            >
+                        </div>
+                    </section>
+                </section>
+            </div>
+        </div>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.js"></script>
+        <script>
+            /* ============================================================
+   Small engine: cancellable typewriter terminals
+   ============================================================ */
+            const RM = window.matchMedia(
+                "(prefers-reduced-motion: reduce)",
+            ).matches;
+            const sleep = (ms) =>
+                new Promise((r) => setTimeout(r, RM ? 0 : ms));
+            const CANCEL = Symbol("cancel");
+
+            const TERMS = {
+                web: [
+                    { ask: "Add authentication." },
+                    { wait: 400 },
+                    {
+                        out: "Sure! Here's an example implementation:",
+                        cls: "muted",
+                    },
+                    { wait: 250 },
+                    { out: '  import bcrypt from "bcrypt";' },
+                    { out: "  export async function hashPassword(pw) {" },
+                    { out: "    return bcrypt.hash(pw, 10);" },
+                    { out: "  }" },
+                    { out: "  // ... 60 more lines" },
+                    { wait: 400 },
+                    { out: "" },
+                    { out: "Now, to use this:", cls: "muted" },
+                    { out: "  1. Create src/auth.ts", cls: "warn" },
+                    { out: "  2. Copy the code above", cls: "warn" },
+                    { out: "  3. npm install bcrypt", cls: "warn" },
+                    { out: "  4. Wire it into your routes", cls: "warn" },
+                    { out: "  5. Write the tests", cls: "warn" },
+                    { out: "  6. Run them yourself", cls: "warn" },
+                    { wait: 500 },
+                    { out: "" },
+                    {
+                        out: "you: copy → paste → run → paste error → repeat",
+                        cls: "err",
+                    },
+                ],
+                cli: [
+                    { cmd: 'claude "Add authentication."' },
+                    { wait: 300 },
+                    {
+                        work: "Reading project",
+                        ms: 700,
+                        done: "Read 14 files",
+                        cls: "ok",
+                    },
+                    {
+                        work: "Analyzing dependencies",
+                        ms: 600,
+                        done: "express, prisma, vitest",
+                        cls: "ok",
+                    },
+                    { out: "" },
+                    {
+                        out: '  ✎ src/auth.ts        <span class="plus">+62</span>',
+                        html: true,
+                    },
+                    {
+                        out: '  ✎ src/routes.ts      <span class="plus">+8</span> <span class="minus">-2</span>',
+                        html: true,
+                    },
+                    {
+                        out: '  ✎ tests/auth.test.ts <span class="plus">+41</span>',
+                        html: true,
+                    },
+                    { wait: 300 },
+                    {
+                        work: "Running tests",
+                        ms: 800,
+                        done: "1 failing · auth.test.ts:22",
+                        cls: "err",
+                    },
+                    {
+                        out: '  ✎ tests/auth.test.ts <span class="plus">+3</span> <span class="minus">-3</span>',
+                        html: true,
+                    },
+                    {
+                        work: "Running tests",
+                        ms: 700,
+                        done: "12 passing",
+                        cls: "ok",
+                    },
+                    {
+                        work: "Committing",
+                        ms: 500,
+                        done: "feat: add authentication",
+                        cls: "ok",
+                    },
+                    { out: "" },
+                    {
+                        out: "Done in 47s. Nothing for you to paste.",
+                        cls: "ok",
+                    },
+                ],
+                confused: [
+                    { ask: "Fix this." },
+                    { wait: 500 },
+                    { out: "Which file?", cls: "warn" },
+                    { wait: 350 },
+                    { out: "Which behavior is wrong?", cls: "warn" },
+                    { wait: 350 },
+                    { out: "Is it broken, or just ugly?", cls: "warn" },
+                    { wait: 350 },
+                    { out: "Should I run the tests?", cls: "warn" },
+                    { wait: 350 },
+                    {
+                        out: "Am I allowed to touch the middleware?",
+                        cls: "warn",
+                    },
+                    { wait: 500 },
+                    { out: "" },
+                    { out: "Guessing…", cls: "err" },
+                    { wait: 400 },
+                    {
+                        out: "  ✎ 11 files changed. Probably not what you meant.",
+                        cls: "err",
+                    },
+                ],
+                claudemd: [
+                    { cmd: "touch CLAUDE.md" },
+                    { cmd: "code CLAUDE.md" },
+                    { wait: 300 },
+                    { out: "" },
+                    { type: "## Project rules", cls: "ok" },
+                    { type: "Todo API. TypeScript strict mode." },
+                    { out: "" },
+                    { type: "## Code style", cls: "ok" },
+                    { type: "- Named exports only. No default exports." },
+                    { type: "- No `any`. Ever." },
+                    { out: "" },
+                    { type: "## Testing", cls: "ok" },
+                    { type: "- `npm test` must pass before any commit." },
+                    { out: "" },
+                    { type: "## Never", cls: "ok" },
+                    { type: "- Edit src/generated/**" },
+                    { type: "- Commit directly to main" },
+                    { out: "" },
+                    { type: "## Always", cls: "ok" },
+                    { type: "- Add a test with every behavior change." },
+                    { wait: 400 },
+                    { out: "" },
+                    {
+                        out: "Saved. 180 tokens. Read on every single turn.",
+                        cls: "muted",
+                    },
+                ],
+                skillrun: [
+                    { cmd: "claude" },
+                    { wait: 250 },
+                    { ask: "/skill tcd" },
+                    { wait: 350 },
+                    { out: "  Improve this prompt →", cls: "muted" },
+                    { ask: "make the dashboard faster" },
+                    { wait: 600 },
+                    {
+                        work: "Loading skill: tcd",
+                        ms: 600,
+                        done: "SKILL.md read (0 permanent context)",
+                        cls: "ok",
+                    },
+                    { out: "" },
+                    { out: '<span class="ok">TASK</span>', html: true },
+                    {
+                        type: "  Reduce time-to-interactive on /dashboard below 1.5s.",
+                    },
+                    { out: "" },
+                    { out: '<span class="ok">CONTEXT</span>', html: true },
+                    {
+                        type: "  See src/pages/Dashboard.tsx and src/api/metrics.ts.",
+                    },
+                    { type: "  Do not change the public API of useMetrics()." },
+                    { type: "  React 18, no new dependencies." },
+                    { out: "" },
+                    { out: '<span class="ok">DONE SIGNAL</span>', html: true },
+                    {
+                        type: "  `npm run bench:dashboard` reports TTI < 1500ms",
+                    },
+                    { type: "  and `npm test` still passes." },
+                    { wait: 400 },
+                    { out: "" },
+                    { out: "Same intent. Now executable.", cls: "muted" },
+                ],
+                "t-files": [
+                    { ask: "Why does @src/auth.ts reject valid tokens?" },
+                    { wait: 300 },
+                    {
+                        work: "Reading src/auth.ts",
+                        ms: 600,
+                        done: "214 lines",
+                        cls: "ok",
+                    },
+                    {
+                        out: '  Line 88: <span class="sky">exp</span> compared in ms, issued in s.',
+                        html: true,
+                    },
+                    { out: "  Every token looks expired.", cls: "err" },
+                    { out: "" },
+                    {
+                        out: "It read the file. You pasted nothing.",
+                        cls: "muted",
+                    },
+                ],
+                "t-images": [
+                    { ask: "[screenshot.png] the badge overlaps on mobile" },
+                    { wait: 400 },
+                    {
+                        work: "Inspecting image",
+                        ms: 700,
+                        done: "Found: <NotificationBadge />",
+                        cls: "ok",
+                    },
+                    {
+                        out: "  Overlap at &lt;390px. Absolute badge, no min-width.",
+                        html: true,
+                    },
+                    {
+                        out: "  → src/components/NotificationBadge.tsx:31",
+                        cls: "sky",
+                    },
+                    { out: "" },
+                    {
+                        out: "It named your component. Not a generic one.",
+                        cls: "muted",
+                    },
+                ],
+                "t-urls": [
+                    { ask: "Use https://docs.stripe.com/api/charges/create" },
+                    { wait: 350 },
+                    {
+                        work: "Fetching documentation",
+                        ms: 750,
+                        done: "Read current API reference",
+                        cls: "ok",
+                    },
+                    {
+                        out: '  Required: <span class="sky">amount</span>, <span class="sky">currency</span>, <span class="sky">source</span>',
+                        html: true,
+                    },
+                    {
+                        out: "  Note: `capture` deprecated in this version.",
+                        cls: "warn",
+                    },
+                    { out: "" },
+                    { out: "Cited, not remembered.", cls: "muted" },
+                ],
+                "t-raw": [
+                    { cmd: 'cat server.log | claude -p "find the root cause"' },
+                    { wait: 300 },
+                    {
+                        work: "Streaming 41,204 lines",
+                        ms: 900,
+                        done: "Ingested",
+                        cls: "ok",
+                    },
+                    { out: "  17:42:03 pool exhausted (max=10)", cls: "err" },
+                    { out: "  17:42:03 …repeated 1,882 times", cls: "muted" },
+                    { out: "" },
+                    {
+                        out: "  Root cause: connections never released in",
+                        cls: "warn",
+                    },
+                    {
+                        out: "  OrderRepository.findAll() on the error path.",
+                        cls: "warn",
+                    },
+                    { out: "" },
+                    { out: "No clipboard was harmed.", cls: "muted" },
+                ],
+                hooks: [
+                    {
+                        ask: "Rotate the API secret and reformat the payment module.",
+                    },
+                    { wait: 400 },
+                    {
+                        out: '  <span class="muted">→ hook: PreToolUse (permissions)</span>',
+                        html: true,
+                    },
+                    { wait: 500 },
+                    {
+                        out: '  ✎ .env                        <span class="err">BLOCKED</span>',
+                        html: true,
+                    },
+                    {
+                        out: "  hooks/protect.sh: .env is a protected path.",
+                        cls: "err",
+                    },
+                    { wait: 400 },
+                    {
+                        out: "  Claude: understood — skipping .env, continuing.",
+                        cls: "muted",
+                    },
+                    { out: "" },
+                    {
+                        out: '  ✎ src/payments/charge.ts     <span class="plus">+24</span> <span class="minus">-31</span>',
+                        html: true,
+                    },
+                    {
+                        out: '  <span class="muted">→ hook: PostToolUse (format)</span>',
+                        html: true,
+                    },
+                    {
+                        work: "prettier --write",
+                        ms: 600,
+                        done: "2 files formatted",
+                        cls: "ok",
+                    },
+                    {
+                        out: '  <span class="muted">→ hook: PostToolUse (test)</span>',
+                        html: true,
+                    },
+                    {
+                        work: "npm test -- payments",
+                        ms: 800,
+                        done: "18 passing",
+                        cls: "ok",
+                    },
+                    {
+                        out: '  <span class="muted">→ hook: Stop (notify)</span>',
+                        html: true,
+                    },
+                    {
+                        work: "posting to #eng-builds",
+                        ms: 500,
+                        done: "sent",
+                        cls: "ok",
+                    },
+                    { out: "" },
+                    {
+                        out: "The agent argued for nothing. The hook simply held.",
+                        cls: "ok",
+                    },
+                ],
+            };
+
+            // One segment per step in the Scene 08 left column.
+            const SKILL_SEGMENTS = [
+                // 1 · Make the folder
+                [
+                    { cmd: "mkdir -p .claude/skills/tcd" },
+                    { cmd: "touch .claude/skills/tcd/SKILL.md" },
+                    { wait: 250 },
+                    { out: "  ✓ .claude/skills/tcd/SKILL.md", cls: "ok" },
+                    { out: "" },
+                ],
+                // 2 · Write the frontmatter
+                [
+                    { type: "---", cls: "muted" },
+                    { type: "name: tcd" },
+                    { type: "description: Rewrite a vague prompt into Task," },
+                    {
+                        type: "  Context, and Done signal. Use whenever a request",
+                    },
+                    {
+                        type: "  lacks files, constraints, or success criteria.",
+                    },
+                    { type: "arguments:" },
+                    { type: "  - name: prompt" },
+                    { type: "    description: The raw prompt to improve" },
+                    { type: "---", cls: "muted" },
+                    { out: "" },
+                ],
+                // 3 · Write the body
+                [
+                    {
+                        type: "Rewrite $PROMPT as three labeled sections.",
+                        cls: "sky",
+                    },
+                    {
+                        type: "Never invent files. If context is missing, ask.",
+                        cls: "sky",
+                    },
+                    { wait: 400 },
+                    { out: "" },
+                ],
+                // 4 · Invoke it
+                [
+                    {
+                        out: "Skill registered. 0 tokens until invoked.",
+                        cls: "ok",
+                    },
+                ],
+            ];
+
+            async function typeChars(node, text, tok, el, speed = 16) {
+                for (const ch of text) {
+                    if (el._tok !== tok) throw CANCEL;
+                    node.textContent += ch;
+                    await sleep(speed);
+                }
+            }
+
+            function printLine(body, html, cls) {
+                const ln = document.createElement("span");
+                ln.className = "ln fade-in" + (cls ? " " + cls : "");
+                ln.innerHTML = html === "" ? "&nbsp;" : html;
+                body.appendChild(ln);
+                body.scrollTop = body.scrollHeight;
+                return ln;
+            }
+
+            async function processStep(step, body, el, tok) {
+                if (step.wait) {
+                    await sleep(step.wait);
+                    return;
+                }
+
+                if (step.cmd || step.ask) {
+                    const ln = printLine(body, "", "");
+                    const p = document.createElement("span");
+                    p.className = step.cmd ? "p-cmd" : "p-ask";
+                    p.textContent = step.cmd ? "$ " : "› ";
+                    ln.appendChild(p);
+                    const t = document.createElement("span");
+                    ln.appendChild(t);
+                    const cur = document.createElement("span");
+                    cur.className = "cursor";
+                    ln.appendChild(cur);
+                    await typeChars(t, step.cmd || step.ask, tok, el, 22);
+                    await sleep(220);
+                    cur.remove();
+                    return;
+                }
+
+                if (step.work) {
+                    const ln = printLine(body, "", "spin");
+                    const frames = [
+                        "⠋",
+                        "⠙",
+                        "⠹",
+                        "⠸",
+                        "⠼",
+                        "⠴",
+                        "⠦",
+                        "⠧",
+                        "⠇",
+                        "⠏",
+                    ];
+                    let i = 0;
+                    const end = Date.now() + (RM ? 0 : step.ms);
+                    while (Date.now() < end) {
+                        if (el._tok !== tok) return;
+                        ln.textContent =
+                            "  " +
+                            frames[i++ % frames.length] +
+                            " " +
+                            step.work +
+                            "…";
+                        await sleep(70);
+                    }
+                    ln.className = "ln " + (step.cls || "ok");
+                    ln.innerHTML = "  ✓ " + step.work + " — " + step.done;
+                    return;
+                }
+
+                if (step.type !== undefined) {
+                    const ln = printLine(body, "", step.cls);
+                    await typeChars(ln, step.type, tok, el, 12);
+                    return;
+                }
+
+                printLine(
+                    body,
+                    step.html ? step.out : escapeHtml(step.out),
+                    step.cls,
+                );
+                await sleep(90);
+            }
+
+            async function runTerm(el) {
+                const script = TERMS[el.dataset.term];
+                if (!script) return;
+                const body = el.querySelector(".term-body");
+                const tok = (el._tok = (el._tok || 0) + 1);
+                body.innerHTML = "";
+                try {
+                    for (const step of script) {
+                        if (el._tok !== tok) return;
+                        await processStep(step, body, el, tok);
+                    }
+                } catch (e) {
+                    if (e !== CANCEL) throw e;
+                }
+            }
+
+            /* Scene 08 skill terminal: typed one segment per revealed step.
+               Segments are serialized on a per-terminal queue so clicking
+               ahead never interleaves output. */
+            function playSkill(term, from, to) {
+                term._q = (term._q || Promise.resolve()).then(async () => {
+                    const body = term.querySelector(".term-body");
+                    const tok = term._tok;
+                    for (let s = from; s < to; s++) {
+                        for (const step of SKILL_SEGMENTS[s] || []) {
+                            if (term._tok !== tok) return;
+                            try {
+                                await processStep(step, body, term, tok);
+                            } catch (e) {
+                                if (e !== CANCEL) throw e;
+                                return;
+                            }
+                        }
+                    }
+                });
+            }
+
+            function syncSkillTerm(slide, fresh) {
+                const term =
+                    slide && slide.querySelector('[data-term="skill"]');
+                if (!term) return;
+                const body = term.querySelector(".term-body");
+                const vis = slide.querySelectorAll(
+                    ".stack .node.fragment.visible",
+                ).length;
+                const shown = term._shown || 0;
+                if (fresh || vis < shown) {
+                    // fresh entry or stepped backward → rebuild from scratch
+                    term._tok = (term._tok || 0) + 1;
+                    term._q = Promise.resolve().then(() => {
+                        body.innerHTML = "";
+                    });
+                    term._shown = vis;
+                    if (vis > 0) playSkill(term, 0, vis);
+                } else if (vis > shown) {
+                    // stepped forward → append the newly revealed segment(s)
+                    term._shown = vis;
+                    playSkill(term, shown, vis);
+                }
+            }
+            function escapeHtml(s) {
+                return String(s).replace(
+                    /[&<>]/g,
+                    (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" })[c],
+                );
+            }
+
+            /* ============================================================
+   Quiz
+   ============================================================ */
+            const QUIZ = [
+                {
+                    q: "I need help understanding OAuth.",
+                    a: "web",
+                    why: "Nothing to edit. You need a teacher, not a worker.",
+                },
+                {
+                    q: "I need to update 42 files.",
+                    a: "cli",
+                    why: "Forty-two copy-pastes is not a workflow. It is a punishment.",
+                },
+                {
+                    q: "My tests are failing.",
+                    a: "cli",
+                    why: "It can run them, read the output, and iterate. Chat can only speculate.",
+                },
+                {
+                    q: "I want architecture ideas.",
+                    a: "web",
+                    why: "No code yet. Cheap to explore, expensive to implement early.",
+                },
+            ];
+            function buildQuiz(root) {
+                if (root.dataset.built) return;
+                root.dataset.built = "1";
+                QUIZ.forEach((item) => {
+                    const card = document.createElement("div");
+                    card.className = "q";
+                    card.innerHTML = `
+      <div class="qt">${item.q}</div>
+      <div class="row">
+        <button class="btn ghost-h" data-a="web">Web chat</button>
+        <button class="btn ghost-a" data-a="cli">CLI agent</button>
+      </div>
+      <div class="qa">${item.why}</div>`;
+                    card.querySelectorAll("button").forEach((b) => {
+                        b.addEventListener("click", () => {
+                            const right = b.dataset.a === item.a;
+                            card.classList.add(
+                                "done",
+                                right ? "right" : "wrong",
+                            );
+                            card.querySelector(
+                                `[data-a="${item.a}"]`,
+                            ).classList.add("correct");
+                        });
+                    });
+                    root.appendChild(card);
+                });
+            }
+
+            /* ============================================================
+   Metrics bars (Scene 3)
+   ============================================================ */
+            function runMetrics(root) {
+                root.querySelectorAll(".meter i").forEach((bar, idx) => {
+                    bar.style.width = "0";
+                    const to = +bar.dataset.to;
+                    const label = root.querySelectorAll(".m-v")[idx];
+                    setTimeout(
+                        () => {
+                            bar.style.width = to + "%";
+                            let n = 0;
+                            const iv = setInterval(() => {
+                                n += Math.max(1, Math.round(to / 22));
+                                if (n >= to) {
+                                    n = to;
+                                    clearInterval(iv);
+                                }
+                                label.textContent = n + "%";
+                            }, 45);
+                        },
+                        260 + idx * 220,
+                    );
+                });
+            }
+
+            /* ============================================================
+   Context window widget (Scene 5)
+   ============================================================ */
+            const CW_BASE = [
+                { label: "System prompt", size: 9, pinned: true },
+                { label: "CLAUDE.md", size: 6, pinned: true },
+                { label: "Loaded skills", size: 4, pinned: true },
+            ];
+            const CW_TYPES = {
+                file: {
+                    label: "Attached file · src/auth.ts",
+                    size: 18,
+                    cls: "attach",
+                },
+                image: {
+                    label: "Image · screenshot.png",
+                    size: 14,
+                    cls: "attach",
+                },
+                url: { label: "URL · docs.stripe.com", size: 9, cls: "attach" },
+                conv: { label: "Conversation turn", size: 7, cls: "conv" },
+            };
+            let cwItems = [];
+            function cwRender(track, meter, count, toast) {
+                track
+                    .querySelectorAll(".cw-item:not(.prompt)")
+                    .forEach((n) => n.remove());
+                const promptRow = track.querySelector(".prompt");
+                cwItems.forEach((it) => {
+                    const d = document.createElement("div");
+                    d.className = "cw-item " + (it.pinned ? "pinned" : it.cls);
+                    d.innerHTML = `<span class="pin">${it.pinned ? "◈" : "·"}</span><span>${it.label}</span><span class="sz">${it.size}</span>`;
+                    track.insertBefore(d, promptRow);
+                });
+                const used = cwItems.reduce((s, i) => s + i.size, 0) + 5;
+                meter.style.width = Math.min(100, used) + "%";
+                meter.style.background =
+                    used > 85
+                        ? "var(--coral)"
+                        : used > 65
+                          ? "var(--amber)"
+                          : "var(--citron)";
+                count.textContent = used + " / 100";
+            }
+            function cwInit(section) {
+                const track = section.querySelector("[data-cw-track]");
+                const meter = section.querySelector("[data-cw-meter]");
+                const count = section.querySelector("[data-cw-count]");
+                if (!track) return;
+                if (!track.querySelector(".prompt")) {
+                    const p = document.createElement("div");
+                    p.className = "cw-item prompt";
+                    p.innerHTML =
+                        '<span class="pin">◈</span><span>Current prompt</span><span class="sz">5</span>';
+                    track.appendChild(p);
+                    const toast = document.createElement("div");
+                    toast.className = "cw-toast";
+                    track.appendChild(toast);
+                }
+                const toast = track.querySelector(".cw-toast");
+                const reset = () => {
+                    cwItems = CW_BASE.map((o) => ({ ...o }));
+                    cwRender(track, meter, count, toast);
+                };
+
+                if (!track.dataset.wired) {
+                    track.dataset.wired = "1";
+                    section.querySelectorAll("[data-cw]").forEach((btn) => {
+                        btn.addEventListener("click", () => {
+                            const kind = btn.dataset.cw;
+                            if (kind === "reset") {
+                                toast.classList.remove("show");
+                                reset();
+                                return;
+                            }
+                            cwItems.push({ ...CW_TYPES[kind] });
+                            let used = () =>
+                                cwItems.reduce((s, i) => s + i.size, 0) + 5;
+                            let evicted = 0;
+                            while (used() > 100) {
+                                const idx = cwItems.findIndex((i) => !i.pinned);
+                                if (idx === -1) break;
+                                cwItems.splice(idx, 1);
+                                evicted++;
+                            }
+                            cwRender(track, meter, count, toast);
+                            if (evicted) {
+                                toast.textContent = `Desk full — dropped ${evicted} older item${evicted > 1 ? "s" : ""}. The agent will not mention this.`;
+                                toast.classList.add("show");
+                            } else {
+                                toast.classList.remove("show");
+                            }
+                        });
+                    });
+                }
+                reset();
+            }
+
+            /* ============================================================
+   TCD exercise (Scene 4)
+   ============================================================ */
+            const TCD = {
+                Coding: {
+                    vague: "Add caching.",
+                    T: "Cache the result of getUser() in memory for 60 seconds.",
+                    C: "src/services/user.ts. Redis is unavailable in dev — use a Map. Do not change the exported signature.",
+                    D: 'npm test passes, and a second call within 60s logs "cache hit".',
+                },
+                Writing: {
+                    vague: "Write the docs.",
+                    T: "Write a README section documenting the /orders endpoint.",
+                    C: "Follow the tone of docs/api/users.md. Include the 409 error case. Max 200 words.",
+                    D: "The section renders in the docs site with no broken links.",
+                },
+                Research: {
+                    vague: "Look into queues.",
+                    T: "Compare BullMQ and pg-boss for our retry requirements.",
+                    C: "We are on Postgres 15, no Redis budget. We need delayed jobs and dead-letter handling.",
+                    D: "A table of trade-offs plus one recommendation with a stated reason.",
+                },
+                Debugging: {
+                    vague: "The app is slow.",
+                    T: "Find why /dashboard takes 4s to first paint.",
+                    C: "Reproduce with npm run bench:dashboard. Data layer is out of scope this sprint.",
+                    D: "You can name the single slowest call and prove it with a timing log.",
+                },
+                Review: {
+                    vague: "Check my PR.",
+                    T: "Review the diff on branch feat/orders for correctness and missing tests.",
+                    C: "Our rules are in CLAUDE.md. Ignore formatting — prettier handles it.",
+                    D: "A list of blocking issues, each with a file and line number.",
+                },
+                Refactoring: {
+                    vague: "Clean this up.",
+                    T: "Extract the validation logic out of OrderController into a Zod schema.",
+                    C: "src/controllers/order.ts. Behavior must not change. No new dependencies.",
+                    D: "npm test passes unchanged and OrderController drops below 120 lines.",
+                },
+            };
+            function tcdInit(section) {
+                const chips = section.querySelector("[data-tcd-chips]");
+                const vague = section.querySelector("[data-tcd-vague]");
+                const go = section.querySelector("[data-tcd-go]");
+                const rows = section.querySelectorAll(
+                    "[data-tcd-out] .tcd-row",
+                );
+                if (!chips || chips.dataset.built) return;
+                chips.dataset.built = "1";
+                let current = null;
+                const clear = () =>
+                    rows.forEach((r) => {
+                        r.classList.remove("on");
+                        r.querySelector(".vv").textContent = "—";
+                    });
+
+                Object.keys(TCD).forEach((k) => {
+                    const b = document.createElement("button");
+                    b.className = "chip";
+                    b.type = "button";
+                    b.setAttribute("aria-pressed", "false");
+                    b.textContent = k;
+                    b.addEventListener("click", () => {
+                        chips
+                            .querySelectorAll(".chip")
+                            .forEach((c) =>
+                                c.setAttribute("aria-pressed", "false"),
+                            );
+                        b.setAttribute("aria-pressed", "true");
+                        current = TCD[k];
+                        vague.textContent = current.vague;
+                        go.disabled = false;
+                        clear();
+                    });
+                    chips.appendChild(b);
+                });
+
+                go.addEventListener("click", () => {
+                    if (!current) return;
+                    clear();
+                    ["T", "C", "D"].forEach((key, i) => {
+                        setTimeout(() => {
+                            rows[i].classList.add("on");
+                            rows[i].querySelector(".vv").textContent =
+                                current[key];
+                        }, i * 420);
+                    });
+                });
+            }
+
+            /* ============================================================
+   Generic pipeline runner
+   ============================================================ */
+            const LOGS = {
+                feature: [
+                    "created src/http/OrderController.ts",
+                    "created src/app/CreateOrderCommand.ts",
+                    "created src/app/CreateOrderHandler.ts",
+                    "created src/domain/OrderService.ts",
+                    "created src/infra/OrderRepository.ts",
+                    "created tests/orders.spec.ts",
+                    "npm test → 23 passing",
+                    'git commit -m "feat(orders): create endpoint"',
+                ],
+                bug: [
+                    "symptom: checkout hangs after coupon applied",
+                    "interview: which coupon? which env? reproducible?",
+                    "you: SUMMER24, staging, always",
+                    "located src/pricing/coupon.ts, src/checkout/flow.ts",
+                    "plan: 3 steps, 2 files, no schema change",
+                    "applied fix — awaited promise never resolved",
+                    "npm test → 47 passing",
+                    "summary: 1 root cause, 2 files, 0 side effects",
+                ],
+            };
+            function runPipeline(name, root) {
+                const flow =
+                    root.querySelector(`[data-pipeline="${name}"]`) ||
+                    document.querySelector(`[data-pipeline="${name}"]`);
+                if (!flow) return;
+                const nodes = [...flow.querySelectorAll(".node")];
+                const logEl = root.querySelector(`[data-log="${name}"]`);
+                const meter = root.querySelector("[data-finale-meter]");
+                const count = root.querySelector("[data-finale-count]");
+                const tok = (flow._tok = (flow._tok || 0) + 1);
+                nodes.forEach((n) => (n.className = "node"));
+                if (logEl) logEl.innerHTML = "";
+                if (meter) meter.style.width = "0";
+                if (count) count.textContent = "0 / " + nodes.length;
+
+                nodes.forEach((n, i) => {
+                    setTimeout(
+                        () => {
+                            if (flow._tok !== tok) return;
+                            nodes.forEach((m) => {
+                                if (m.classList.contains("on"))
+                                    m.className = "node done";
+                            });
+                            n.classList.add(
+                                n.hasAttribute("data-blocked")
+                                    ? "blocked"
+                                    : "on",
+                            );
+                            if (meter)
+                                meter.style.width =
+                                    ((i + 1) / nodes.length) * 100 + "%";
+                            if (count)
+                                count.textContent =
+                                    i + 1 + " / " + nodes.length;
+                            if (logEl && LOGS[name] && LOGS[name][i]) {
+                                const l = document.createElement("div");
+                                l.className = "fade-in";
+                                l.innerHTML =
+                                    '<span class="ok">✓</span> ' +
+                                    LOGS[name][i];
+                                logEl.appendChild(l);
+                            }
+                        },
+                        RM ? 0 : 260 + i * 520,
+                    );
+                });
+            }
+
+            /* ============================================================
+   Session rot (Scene 9)
+   ============================================================ */
+            const ROT_LINES = [
+                "turn 4 · you correct a file path",
+                "turn 9 · abandoned approach still in context",
+                "turn 14 · it reverts a decision from turn 6",
+                "turn 19 · it re-asks a question you answered",
+                "turn 23 · it edits a file you told it not to touch",
+            ];
+            function rotInit(section) {
+                const meter = section.querySelector("[data-rot-meter]");
+                const label = section.querySelector("[data-rot-label]");
+                const log = section.querySelector("[data-rot-log]");
+                if (!meter || section.dataset.wired) return;
+                section.dataset.wired = "1";
+                let n = 0;
+                const paint = () => {
+                    const pct = Math.min(100, 8 + n * 19);
+                    meter.style.width = pct + "%";
+                    meter.style.background =
+                        pct > 80
+                            ? "var(--coral)"
+                            : pct > 55
+                              ? "var(--amber)"
+                              : "var(--citron)";
+                    label.textContent =
+                        pct > 80
+                            ? "unusable"
+                            : pct > 55
+                              ? "degrading"
+                              : pct > 25
+                                ? "noisy"
+                                : "fresh";
+                    label.style.color =
+                        pct > 80 ? "var(--coral)" : "var(--ash)";
+                };
+                section
+                    .querySelector('[data-rot="grow"]')
+                    .addEventListener("click", () => {
+                        if (n >= ROT_LINES.length) return;
+                        const d = document.createElement("div");
+                        d.className = "fade-in";
+                        d.innerHTML = `<span class="${n > 2 ? "err" : "warn"}">▍</span> ${ROT_LINES[n]}`;
+                        log.appendChild(d);
+                        n++;
+                        paint();
+                    });
+                section
+                    .querySelector('[data-rot="clear"]')
+                    .addEventListener("click", () => {
+                        n = 0;
+                        log.innerHTML = "";
+                        const d = document.createElement("div");
+                        d.className = "fade-in";
+                        d.innerHTML =
+                            '<span class="ok">✓</span> context cleared · CLAUDE.md and skills survive';
+                        log.appendChild(d);
+                        paint();
+                    });
+                paint();
+            }
+
+            /* ============================================================
+   Tabs (Scene 10)
+   ============================================================ */
+            function tabsInit(section) {
+                const bar = section.querySelector("[data-tabs]");
+                if (!bar || bar.dataset.wired) return;
+                bar.dataset.wired = "1";
+                bar.querySelectorAll(".tab").forEach((t) => {
+                    t.addEventListener("click", () => {
+                        bar.querySelectorAll(".tab").forEach((x) =>
+                            x.setAttribute("aria-selected", "false"),
+                        );
+                        t.setAttribute("aria-selected", "true");
+                        section
+                            .querySelectorAll(".tabpanel")
+                            .forEach(
+                                (p) =>
+                                    (p.hidden =
+                                        p.dataset.panel !== t.dataset.tab),
+                            );
+                        const term = section.querySelector(
+                            `[data-panel="${t.dataset.tab}"] .term`,
+                        );
+                        if (term) runTerm(term);
+                    });
+                });
+            }
+
+            /* ============================================================
+   Wiring
+   ============================================================ */
+            function activate(slide) {
+                if (!slide) return;
+                slide.querySelectorAll(".term").forEach((t) => {
+                    if (t.closest(".tabpanel") && t.closest(".tabpanel").hidden)
+                        return;
+                    runTerm(t);
+                });
+                if (slide.querySelector('[data-term="skill"]'))
+                    syncSkillTerm(slide, true);
+                const m = slide.querySelector("[data-metrics]");
+                if (m) runMetrics(m);
+                if (slide.querySelector("[data-cw-track]")) cwInit(slide);
+                if (slide.querySelector("[data-tcd-chips]")) tcdInit(slide);
+                if (slide.querySelector("[data-rot-meter]")) rotInit(slide);
+                if (slide.querySelector("[data-tabs]")) tabsInit(slide);
+                slide.querySelectorAll("[data-pipeline]").forEach((p) => {
+                    if (
+                        !p.querySelector("[data-pipeline-run]") &&
+                        !slide.querySelector(
+                            `[data-pipeline-run="${p.dataset.pipeline}"]`,
+                        )
+                    )
+                        return;
+                });
+                // auto-run non-button pipelines (skills, tcr, hooks flow)
+                ["skills", "tcr", "hooks"].forEach((name) => {
+                    if (slide.querySelector(`[data-pipeline="${name}"]`))
+                        runPipeline(name, slide);
+                });
+            }
+            function deactivate(slide) {
+                if (!slide) return;
+                slide.querySelectorAll(".term").forEach((t) => {
+                    t._tok = (t._tok || 0) + 1;
+                });
+                slide.querySelectorAll("[data-pipeline]").forEach((f) => {
+                    f._tok = (f._tok || 0) + 1;
+                });
+            }
+
+            document.addEventListener("click", (e) => {
+                const btn = e.target.closest("[data-pipeline-run]");
+                if (btn)
+                    runPipeline(
+                        btn.dataset.pipelineRun,
+                        btn.closest("section"),
+                    );
+            });
+
+            Reveal.initialize({
+                width: 1280,
+                height: 760,
+                margin: 0.045,
+                minScale: 0.2,
+                maxScale: 1.5,
+                hash: true,
+                controls: true,
+                progress: true,
+                slideNumber: "c/t",
+                transition: "fade",
+                transitionSpeed: "fast",
+                backgroundTransition: "fade",
+            }).then(() => {
+                const q = document.querySelector("[data-quiz]");
+                if (q) buildQuiz(q);
+                activate(Reveal.getCurrentSlide());
+            });
+
+            Reveal.on("slidechanged", (e) => {
+                deactivate(e.previousSlide);
+                activate(e.currentSlide);
+            });
+            Reveal.on("fragmentshown", (e) =>
+                syncSkillTerm(e.fragment.closest("section")),
+            );
+            Reveal.on("fragmenthidden", (e) =>
+                syncSkillTerm(e.fragment.closest("section")),
+            );
+        </script>
+    </body>
+</html>

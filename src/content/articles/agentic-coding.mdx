@@ -1,4 +1,4 @@
-export const metadata = { title: "Agentic Coding with CLI Tools", description: "From typing code to directing agents — shown on real work.", type: "slides" };
+export const metadata = { title: "Using Coding Agents Effectively — Ep. 1", description: "From prompting to hooks — directing coding agents, shown on real work.", type: "slides" };
 
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,340;0,9..144,560;1,9..144,340&family=IBM+Plex+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" />
 
@@ -23,6 +23,7 @@ export const metadata = { title: "Agentic Coding with CLI Tools", description: "
   --accent-text: #e0764a;
   --accent-foreground: #16130f;
   --danger: #f26d5f;
+  --human: #6ea8c7;
   --shadow-card: 0 12px 28px -14px rgb(0 0 0 / 0.6);
   font-family: "IBM Plex Sans", var(--font-sans), sans-serif;
   font-size: 23px;
@@ -165,28 +166,80 @@ export const metadata = { title: "Agentic Coding with CLI Tools", description: "
    (this style tag renders after every stylesheet, so it takes the cascade). */
 .reveal .controls { color: #e0764a; }
 .reveal .progress { color: #e0764a; }
+
+/* ---- Ep.1 layout additions (orange theme; agent = accent, human = cool) ---- */
+.reveal .tag { display: inline-block; font-family: "JetBrains Mono", monospace; font-size: 0.34em; letter-spacing: 0.14em; text-transform: uppercase; padding: 5px 11px; border-radius: 999px; border: 1px solid #2a2c34; color: #9a978f; }
+.reveal .tag.agent { color: #e0764a; border-color: rgba(224,118,74,0.4); background: rgba(224,118,74,0.08); }
+.reveal .tag.human { color: #6ea8c7; border-color: rgba(110,168,199,0.4); background: rgba(110,168,199,0.08); }
+.reveal .tiny { font-family: "JetBrains Mono", monospace; font-size: 0.38em; color: #9a978f; letter-spacing: 0.04em; }
+.reveal .row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.reveal .spacer { flex: 1; }
+.reveal .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; align-items: center; align-content: center; height: 100%; }
+.reveal .grid-side { display: grid; grid-template-columns: 0.85fr 1.15fr; gap: 36px; align-items: center; height: 100%; }
+.reveal .card { border: 1px solid #2a2c34; border-radius: 14px; padding: 20px 22px; background: linear-gradient(180deg, rgba(255,255,255,0.025), transparent); }
+.reveal .card.agent { border-color: rgba(224,118,74,0.3); }
+.reveal .card.human { border-color: rgba(110,168,199,0.3); }
+.reveal .card h3 { font-family: "Fraunces", serif; font-weight: 560; font-size: 0.8em; margin: 0 0 0.4em; color: #e9e7e1; }
+.reveal .card p { font-size: 0.56em; color: #9a978f; line-height: 1.5; margin: 0; }
+.reveal ul.ticks { list-style: none; margin: 0; padding: 0; font-size: 0.6em; }
+.reveal ul.ticks li { padding: 6px 0; border-bottom: 1px dashed rgba(255,255,255,0.07); display: flex; gap: 10px; align-items: baseline; }
+.reveal ul.ticks li:last-child { border-bottom: 0; }
+.reveal ul.ticks li::before { content: "✓"; font-family: "JetBrains Mono", monospace; color: #e0764a; font-size: 0.9em; }
+.reveal ul.ticks.human li::before { color: #6ea8c7; }
+.reveal .flow { display: flex; flex-direction: column; gap: 0; }
+.reveal .node { border: 1px solid #2a2c34; border-radius: 9px; padding: 9px 14px; font-family: "JetBrains Mono", monospace; font-size: 0.46em; letter-spacing: 0.04em; color: #9a978f; background: rgba(255,255,255,0.02); display: flex; justify-content: space-between; align-items: center; }
+.reveal .node.on { border-color: rgba(224,118,74,0.5); color: #f2f0ea; background: rgba(224,118,74,0.07); }
+.reveal .node.blocked { border-color: rgba(242,109,95,0.55); color: #f26d5f; background: rgba(242,109,95,0.08); }
+.reveal .node .st { color: #e0764a; }
+.reveal .node.blocked .st { color: #f26d5f; }
+.reveal .arrow { width: 1px; height: 11px; background: #2a2c34; margin-left: 20px; }
+.reveal .filecard { font-family: "JetBrains Mono", monospace; font-size: 0.44em; line-height: 1.62; border: 1px solid #2a2c34; border-radius: 10px; padding: 14px 16px; background: #0b0e13; }
+.reveal .filecard .h { color: #9a978f; letter-spacing: 0.1em; text-transform: uppercase; font-size: 0.9em; margin-bottom: 8px; display: flex; justify-content: space-between; }
+.reveal .filecard.bad { border-color: rgba(242,109,95,0.35); }
+.reveal .filecard.good { border-color: rgba(127,208,138,0.35); }
+.reveal .filecard .ok { color: #7fd08a; }
+.reveal .filecard .err { color: #f26d5f; }
+.reveal .filecard .muted { color: #6d6a63; }
+.reveal .pull { font-family: "Fraunces", serif; font-size: 1em; font-weight: 560; line-height: 1.2; border-left: 3px solid #e0764a; padding-left: 0.6em; max-width: 22em; color: #e9e7e1; }
+.reveal .pull span { color: #9a978f; }
+.reveal .metric { display: grid; gap: 7px; margin-bottom: 16px; }
+.reveal .metric .lb { display: flex; justify-content: space-between; font-family: "JetBrains Mono", monospace; font-size: 0.4em; letter-spacing: 0.08em; text-transform: uppercase; color: #9a978f; }
+.reveal .meter { height: 8px; border-radius: 99px; background: rgba(255,255,255,0.07); overflow: hidden; }
+.reveal .meter i { display: block; height: 100%; border-radius: 99px; background: #e0764a; }
+.reveal .meter.down i { background: #f26d5f; }
+.reveal .vague { font-family: "JetBrains Mono", monospace; font-size: 0.52em; color: #f26d5f; border: 1px dashed rgba(242,109,95,0.4); border-radius: 10px; padding: 14px 16px; background: rgba(242,109,95,0.05); }
+.reveal .tcd { display: flex; flex-direction: column; gap: 10px; }
+.reveal .tcd-row { display: grid; grid-template-columns: 52px 1fr; gap: 14px; border: 1px solid #2a2c34; border-radius: 12px; overflow: hidden; background: rgba(255,255,255,0.02); }
+.reveal .tcd-row .k { display: flex; align-items: center; justify-content: center; font-family: "Fraunces", serif; font-size: 1.1em; font-weight: 560; background: rgba(224,118,74,0.08); color: #e0764a; }
+.reveal .tcd-row .v { padding: 11px 14px; }
+.reveal .tcd-row .v .kk { font-family: "JetBrains Mono", monospace; font-size: 0.38em; letter-spacing: 0.12em; text-transform: uppercase; color: #9a978f; margin-bottom: 4px; }
+.reveal .tcd-row .v .vv { font-size: 0.56em; line-height: 1.4; color: #e9e7e1; }
+.reveal .deskrow { display: flex; align-items: center; gap: 10px; font-family: "JetBrains Mono", monospace; font-size: 0.46em; padding: 7px 11px; border-radius: 7px; border: 1px solid #2a2c34; background: rgba(255,255,255,0.025); margin-bottom: 6px; }
+.reveal .deskrow.pinned { border-color: rgba(255,255,255,0.16); background: rgba(255,255,255,0.05); }
+.reveal .deskrow.evict { border-color: rgba(242,109,95,0.4); color: #f26d5f; opacity: 0.55; text-decoration: line-through; }
+.reveal .deskrow .sz { margin-left: auto; color: #9a978f; }
+.reveal .lead2 { font-size: 0.58em; color: #9a978f; line-height: 1.55; }
 `}</style>
 
 <Slide>
 
 <div className="split titleslide">
   <div className="points">
-    <p className="kicker">MISL · Engineering Session</p>
-    <h1>Agentic Coding<br />with <em>CLI Tools</em></h1>
-    <p className="lede">From typing code to directing agents — a practical shift, shown on real work.</p>
-    <p className="meta"><b>❯</b> claude · codex · opencode · copilot</p>
+    <p className="kicker">Episode 01 · Using coding agents</p>
+    <h1>Let's start with<br /><em>Claude Code</em>.</h1>
+    <p className="lede">A working session on prompting, context, skills, and hooks — for developers about to stop typing and start directing.</p>
+    <div className="row" style={{ marginTop: "1.4em" }}><span className="tag agent">Agent</span><span className="tag human">Human</span><span className="tiny">Two colors. They mean something.</span></div>
   </div>
   <div className="termwrap">
     <Terminal
-      title="~/work — claude"
-      steps={[
-        [
-          { t: "out", x: " ▐▛███▜▌   Claude Code v2.1" },
-          { t: "out", x: "▝▜█████▛▘  Opus 4.8 · Claude Max" },
-          { t: "out", x: "  ▘▘ ▝▝    ~/work/agentic-coding" },
-          { t: "cmd", x: "claude “let’s get to work”" },
-        ],
-      ]}
+      title="~/todo-app — claude"
+      steps={[[
+        { t: "out", x: " ▐▛███▜▌   Claude Code" },
+        { t: "out", x: "▝▜█████▛▘  ~/todo-app · 14 files" },
+        { t: "cmd", x: "claude “let's get to work”" },
+        { t: "ag", x: "Reading project…" },
+        { t: "ok", x: "Ready." },
+      ]]}
     />
   </div>
 </div>
@@ -208,45 +261,16 @@ export const metadata = { title: "Agentic Coding with CLI Tools", description: "
 
 <Slide>
 
-<div className="split">
-  <div className="termwrap">
-    <Terminal
-      title="~/your-repo — claude"
-      steps={[
-        [{ t: "cmd", x: 'fix the 500 on login for emails containing "+"' }],
-        [
-          { t: "ag", x: "Grep(src/**/*auth*) — reading the actual code" },
-          { t: "out", x: "⎿ src/auth/login.ts · session.ts · 12 matches" },
-        ],
-        [
-          { t: "ag", x: "Bash(npm test -- auth)" },
-          { t: "out", x: '⎿ 1 failing: "accepts plus-addressed emails"' },
-        ],
-        [
-          { t: "ag", x: "Fixing the encoder, re-running the suite…" },
-          { t: "ok", x: "34 passing — verified its own work" },
-        ],
-        [
-          { t: "ag", x: "Bash(git diff --stat)" },
-          { t: "out", x: "⎿ src/auth/login.ts | 4 ±  tests/auth.test.ts | 21 +" },
-        ],
-        [
-          { t: "cmd", x: "claude -p “triage today’s issues” >> report.md" },
-          { t: "dim", x: "# headless — runs in CI, hooks, cron" },
-        ],
-      ]}
-    />
+<div className="grid-side">
+  <div>
+    <p className="kicker"><span className="no">01 /</span> Web chat vs CLI</p>
+    <h2>Same request.<br />Two different <em>machines</em>.</h2>
+    <p className="lead2">One of them hands you homework. The other one does the homework. You type the same three words into both.</p>
   </div>
-  <div className="points">
-    <p className="kicker"><span className="no">01 /</span> CLI vs Web</p>
-    <h2>A different <em>category</em>,<br />not a different UI</h2>
-    <ul>
-      <li className="fragment"><strong>It sees your whole project.</strong><span className="sub">No more copy-pasting code into a chat window.</span></li>
-      <li className="fragment"><strong>It does the work, not just talks.</strong><span className="sub">Installs things, runs the app, runs the tests.</span></li>
-      <li className="fragment"><strong>It checks its own work.</strong><span className="sub">Writes code → tests it → sees mistakes → fixes them.</span></li>
-      <li className="fragment"><strong>Changes are easy to review.</strong><span className="sub">You see exactly what changed, line by line.</span></li>
-      <li className="fragment"><strong>It can run on autopilot.</strong><span className="sub">On a schedule or inside other tools — a browser tab can’t.</span></li>
-    </ul>
+  <div>
+    <p className="tiny" style={{ marginBottom: "0.6em" }}>You type, into both:</p>
+    <div className="vague" style={{ color: "#e9e7e1", borderColor: "#2a2c34", background: "rgba(255,255,255,0.02)" }}>Add authentication.</div>
+    <p className="tiny" style={{ marginTop: "1.2em" }}>Watch the difference on the next slide.</p>
   </div>
 </div>
 
@@ -254,32 +278,73 @@ export const metadata = { title: "Agentic Coding with CLI Tools", description: "
 
 <Slide>
 
-<div className="split">
-  <div className="points">
-    <p className="kicker"><span className="no">01 /</span> Honest caveat</p>
-    <h2>Right tool<br />for the <em>job</em></h2>
-    <ul>
-      <li className="fragment"><strong>Web chat is still great</strong> for ideas, learning, and quick questions.</li>
-      <li className="fragment"><strong>The terminal agent wins</strong> the moment the work is inside your own project.</li>
-      <li className="fragment">The point is <strong>“right tool for the job”</strong> — not “web chat is useless.”</li>
+<div className="grid2">
+  <div>
+    <div className="row" style={{ marginBottom: "0.6em" }}><span className="tag human">Web chat</span></div>
+    <Terminal
+      title="browser · chat"
+      steps={[[
+        { t: "cmd", x: "Add authentication." },
+        { t: "out", x: "Sure! Here's an example implementation:" },
+        { t: "out", x: '  import bcrypt from "bcrypt";' },
+        { t: "out", x: "  export async function hashPassword(pw) {" },
+        { t: "out", x: "    return bcrypt.hash(pw, 10);" },
+        { t: "out", x: "  }  // …60 more lines" },
+        { t: "warn", x: "  1. Create src/auth.ts" },
+        { t: "warn", x: "  2. Copy the code above" },
+        { t: "warn", x: "  3. npm install bcrypt" },
+        { t: "warn", x: "  4. Wire it into your routes" },
+        { t: "warn", x: "  5. Write the tests · 6. Run them" },
+        { t: "warn", x: "you: copy → paste → run → paste error → repeat" },
+      ]]}
+    />
+  </div>
+  <div>
+    <div className="row" style={{ marginBottom: "0.6em" }}><span className="tag agent">Claude Code</span></div>
+    <Terminal
+      title="zsh · ~/todo-app"
+      steps={[[
+        { t: "cmd", x: 'claude "Add authentication."' },
+        { t: "ag", x: "Reading project…" },
+        { t: "ok", x: "Read 14 files · express, prisma, vitest" },
+        { t: "out", x: "  ✎ src/auth.ts        +62" },
+        { t: "out", x: "  ✎ src/routes.ts      +8 -2" },
+        { t: "out", x: "  ✎ tests/auth.test.ts +41" },
+        { t: "ag", x: "Running tests…" },
+        { t: "warn", x: "  1 failing · auth.test.ts:22" },
+        { t: "ag", x: "Fixing, re-running…" },
+        { t: "ok", x: "12 passing" },
+        { t: "ok", x: "committed: feat: add authentication" },
+        { t: "ok", x: "Done in 47s. Nothing for you to paste." },
+      ]]}
+    />
+  </div>
+</div>
+
+</Slide>
+
+<Slide>
+
+<div className="grid2">
+  <div className="card agent">
+    <div className="row" style={{ marginBottom: "0.7em" }}><span className="tag agent">CLI agent</span><span className="spacer"></span><span className="tiny">does work</span></div>
+    <ul className="ticks">
+      <li className="fragment">Reads the entire project</li>
+      <li className="fragment">Writes code to disk — no copy-paste</li>
+      <li className="fragment">Runs the tests, fixes its own failures</li>
+      <li className="fragment">Commits changes</li>
+      <li className="fragment">Can run unattended</li>
     </ul>
   </div>
-  <div className="termwrap">
-    <Terminal
-      title="which-tool"
-      steps={[
-        [{ t: "cmd", x: "which tool for this?" }],
-        [
-          { t: "out", x: "brainstorm an architecture   → web chat      ✓" },
-          { t: "out", x: "learn what a monad is        → web chat      ✓" },
-        ],
-        [
-          { t: "out", x: "fix a bug in this repo       → CLI agent     ✓" },
-          { t: "out", x: "refactor across 40 files     → CLI agent     ✓" },
-        ],
-        [{ t: "ok", x: "both stay in the toolbox — pick by task" }],
-      ]}
-    />
+  <div className="card human">
+    <div className="row" style={{ marginBottom: "0.7em" }}><span className="tag human">Web chat</span><span className="spacer"></span><span className="tiny">shapes thinking</span></div>
+    <ul className="ticks human">
+      <li className="fragment">Brainstorming</li>
+      <li className="fragment">Learning something new</li>
+      <li className="fragment">Quick questions</li>
+      <li className="fragment">Architecture discussions</li>
+    </ul>
+    <p className="fragment" style={{ marginTop: "0.9em", fontSize: "0.5em", color: "#9a978f" }}>No repo access, no side effects — a feature when you're still deciding what to build.</p>
   </div>
 </div>
 
@@ -291,8 +356,8 @@ export const metadata = { title: "Agentic Coding with CLI Tools", description: "
   <p className="kicker">Checkpoint · Quiz</p>
   <Quiz
     id="which-tool"
-    question="Your teammate needs to refactor across 40 files in your repo. Which tool?"
-    options={["Web chat — paste the files in", "A CLI agent in the repo", "Do it by hand over the weekend"]}
+    question="You need to update 42 files across your repo. Which tool?"
+    options={["Web chat — paste them in", "A CLI agent in the repo", "By hand over the weekend"]}
     answer={1}
   />
 </div>
@@ -301,42 +366,32 @@ export const metadata = { title: "Agentic Coding with CLI Tools", description: "
 
 <Slide>
 
-<div className="split">
-  <div className="termwrap">
-    <Terminal
-      title="~/your-repo — claude"
-      steps={[
-        [{ t: "cmd", x: "the task, the constraints, the finish line —" }],
-        [
-          { t: "dim", x: "THEN (autocomplete era)" },
-          { t: "out", x: "you type… it finishes your line… you type…" },
-          { t: "dim", x: "NOW (delegation era)" },
-          { t: "out", x: "you specify → it works → you review" },
-        ],
-        [{ t: "cmd", x: "add rate limiting to /api/orders, follow the pattern in middleware/" }],
-        [{ t: "cmd", x: "done = npm test green, lint clean, nothing outside src/api/" }],
-        [
-          { t: "ag", x: "2 background agents launched (↓ to manage)" },
-          { t: "out", x: " ├ Implement rate limiting" },
-          { t: "out", x: " └ Backfill tests for middleware/" },
-        ],
-        [
-          { t: "ag", x: "Done. 3 files changed — review the diff like a PR" },
-          { t: "ok", x: "you read diffs now, not keystrokes" },
-        ],
-      ]}
-    />
+<div className="grid2">
+  <div className="card">
+    <div className="tag human" style={{ marginBottom: "0.8em" }}>Old workflow</div>
+    <div className="flow">
+      <div className="node">Think</div>
+      <div className="arrow"></div>
+      <div className="node">Write</div>
+      <div className="arrow"></div>
+      <div className="node">Debug</div>
+      <div className="arrow"></div>
+      <div className="node">Repeat</div>
+    </div>
+    <p className="tiny" style={{ marginTop: "0.9em" }}>Bottleneck: your hands.</p>
   </div>
-  <div className="points">
-    <p className="kicker"><span className="no">02 /</span> The mind shift</p>
-    <h2>Stop typing.<br />Start <em>directing</em></h2>
-    <ul>
-      <li className="fragment"><strong>Old way:</strong> you type the code. <strong>New way:</strong> you describe the job — it does the work.</li>
-      <li className="fragment">Your value shifts from <strong>fast typing</strong> to <strong>clear instructions.</strong></li>
-      <li className="fragment"><strong>Say what “finished” means up front.</strong><span className="sub">“All tests pass, and nothing else was touched.”</span></li>
-      <li className="fragment"><strong>Hand out several jobs at once</strong> — like leading a small team.</li>
-      <li className="fragment"><strong>Then check the result carefully</strong> — like reviewing a new team member’s work.</li>
-    </ul>
+  <div className="card agent fragment">
+    <div className="tag agent" style={{ marginBottom: "0.8em" }}>New workflow</div>
+    <div className="flow">
+      <div className="node on">Think<span className="st">◆</span></div>
+      <div className="arrow"></div>
+      <div className="node on">Delegate<span className="st">◆</span></div>
+      <div className="arrow"></div>
+      <div className="node on">Review<span className="st">◆</span></div>
+      <div className="arrow"></div>
+      <div className="node on">Refine<span className="st">◆</span></div>
+    </div>
+    <p className="tiny" style={{ marginTop: "0.9em" }}>Bottleneck: your clarity.</p>
   </div>
 </div>
 
@@ -346,28 +401,26 @@ export const metadata = { title: "Agentic Coding with CLI Tools", description: "
 
 <div className="split">
   <div className="points">
-    <p className="kicker"><span className="no">02 /</span> The trust ladder</p>
-    <h2>Earned autonomy,<br />step by <em>step</em></h2>
+    <p className="kicker"><span className="no">03 /</span> Infer intent, not read minds</p>
+    <h2>“Fix this” is not<br />a request. It's a <em>riddle</em>.</h2>
     <ul>
-      <li className="fragment"><strong>Start small:</strong> check everything it does.</li>
-      <li className="fragment"><strong>Learn</strong> what it’s good at in <em>your</em> project.</li>
-      <li className="fragment"><strong>Then</strong> hand over bigger pieces of work.</li>
-      <li className="fragment"><strong>Two traps:</strong> controlling every tiny step — or trusting the result blindly. Both waste the tool.</li>
+      <li className="fragment">The model has no eyes, no ticket, no standup.<span className="sub">Only the words you gave it and the files it can reach.</span></li>
+      <li className="fragment">Vague in, guesses out.<span className="sub">And guessing is where your afternoon goes.</span></li>
     </ul>
   </div>
   <div className="termwrap">
     <Terminal
-      title="trust-ladder"
-      steps={[
-        [{ t: "cmd", x: "git log --oneline --author=agent" }],
-        [{ t: "out", x: "week 1 · fix typo in README        — reviewed 100%" }],
-        [{ t: "out", x: "week 3 · add validation to 2 forms — reviewed diff" }],
-        [{ t: "out", x: "week 6 · migrate module to new API — reviewed outcome" }],
-        [
-          { t: "warn", x: "never: accept without reading · micro-manage each line" },
-          { t: "ok", x: "sweet spot: delegate whole tasks, review rigorously" },
-        ],
-      ]}
+      title="what does “this” mean"
+      steps={[[
+        { t: "cmd", x: "fix this." },
+        { t: "warn", x: "Which file?" },
+        { t: "warn", x: "Which behavior is wrong?" },
+        { t: "warn", x: "Is it broken, or just ugly?" },
+        { t: "warn", x: "Should I run the tests?" },
+        { t: "warn", x: "Am I allowed to touch the middleware?" },
+        { t: "warn", x: "Guessing…" },
+        { t: "warn", x: "  ✎ 11 files changed. Probably not what you meant." },
+      ]]}
     />
   </div>
 </div>
@@ -376,50 +429,19 @@ export const metadata = { title: "Agentic Coding with CLI Tools", description: "
 
 <Slide>
 
-<div className="act">
-  <p className="kicker">Checkpoint · Quiz</p>
-  <Quiz
-    id="week-one"
-    question="Week 1 with a new agent. How much of its work do you review?"
-    options={["Nothing — it's AI, it knows", "Everything, line by line", "Only the files I already know", "Just run it twice and compare"]}
-    answer={1}
-  />
-</div>
-
-</Slide>
-
-<Slide>
-
-<div className="split">
-  <div className="termwrap">
-    <Terminal
-      title="~/your-repo — claude"
-      steps={[
-        [
-          { t: "cmd", x: "fix the login bug" },
-          { t: "ag", x: "Guessing… changed logout redirect in session.ts" },
-          { t: "warn", x: "plausible — and wrong. Ambiguity filled with assumptions." },
-        ],
-        [{ t: "cmd", x: 'Users get a 500 logging in with an email containing "+".' }],
-        [{ t: "cmd", x: "Auth flow is in src/auth/login.ts — reproduce it first with a failing test in tests/auth/." }],
-        [{ t: "cmd", x: "Don’t modify the session logic." }],
-        [
-          { t: "cmd", x: "Run npm test to verify." },
-          { t: "ag", x: "Failing test written → root cause in encoder → fixed" },
-          { t: "ok", x: "npm test · 34 passing" },
-        ],
-      ]}
-    />
+<div className="grid-side">
+  <div>
+    <p className="kicker"><span className="no">03 /</span> Now say it properly</p>
+    <div className="filecard good">
+      <div className="h"><span>the prompt</span><span className="ok">4 lines</span></div>
+      Fix the login redirect bug.<br />The bug only happens after token refresh.<br />Do not modify authentication middleware.<br />Run tests afterwards.
+    </div>
   </div>
-  <div className="points">
-    <p className="kicker"><span className="no">03 /</span> Instructions</p>
-    <h2>Vague in,<br /><em>wrong</em> out</h2>
-    <ul>
-      <li className="fragment"><strong>1 · What</strong> — describe the problem clearly: what went wrong, and where you saw it.</li>
-      <li className="fragment"><strong>2 · Where</strong> — which files or which part of the app to look at.</li>
-      <li className="fragment"><strong>3 · Rules</strong> — what it must not touch.</li>
-      <li className="fragment"><strong>4 · Done</strong> — how to prove the fix worked.</li>
-    </ul>
+  <div>
+    <div className="metric"><div className="lb"><span>Ambiguity</span><span>12%</span></div><div className="meter down"><i style={{ width: "12%" }}></i></div></div>
+    <div className="metric"><div className="lb"><span>Corrections needed</span><span>18%</span></div><div className="meter down"><i style={{ width: "18%" }}></i></div></div>
+    <div className="metric"><div className="lb"><span>Output quality</span><span>91%</span></div><div className="meter"><i style={{ width: "91%" }}></i></div></div>
+    <p className="lead2" style={{ marginTop: "1em" }}>Nothing about the model changed. Only what you told it.</p>
   </div>
 </div>
 
@@ -427,32 +449,15 @@ export const metadata = { title: "Agentic Coding with CLI Tools", description: "
 
 <Slide>
 
-<div className="split">
-  <div className="points">
-    <p className="kicker"><span className="no">03 /</span> Instructions</p>
-    <h2>It can’t read<br />your <em>mind</em></h2>
-    <ul>
-      <li className="fragment">Anything you leave unsaid gets filled with <strong>guesses</strong> — and its guesses won’t match your project.</li>
-      <li className="fragment">Vague requests produce code that <strong>looks right but is wrong</strong> — fixing it costs more time than you saved.</li>
-      <li className="fragment">Good instructions include the <strong>background, the rules, and the proof</strong> — all up front.</li>
-    </ul>
+<div className="grid-side">
+  <div>
+    <h2 style={{ fontSize: "2.2em" }}>T · C · D</h2>
+    <p className="lead2">Three things every good prompt carries. Miss one and the agent guesses.</p>
   </div>
-  <div className="termwrap">
-    <Terminal
-      title="~/your-repo — claude"
-      steps={[
-        [
-          { t: "cmd", x: "make it faster" },
-          { t: "warn", x: "faster… what? by how much? measured how?" },
-        ],
-        [{ t: "cmd", x: "/api/orders takes ~3s. Profile it — I suspect the N+1 in OrderService.list." }],
-        [{ t: "cmd", x: "Don’t change the response shape — mobile depends on it." }],
-        [
-          { t: "ag", x: "Profiled: 212 queries/request → batched to 3" },
-          { t: "ok", x: "before 2.9s → after 180ms · response shape unchanged" },
-        ],
-      ]}
-    />
+  <div className="tcd">
+    <div className="tcd-row fragment"><div className="k">T</div><div className="v"><div className="kk">Task</div><div className="vv">What, exactly, should change. One outcome, stated as a verb.</div></div></div>
+    <div className="tcd-row fragment"><div className="k">C</div><div className="v"><div className="kk">Context</div><div className="vv">Files, constraints, environment — and what it must <em>not</em> touch.</div></div></div>
+    <div className="tcd-row fragment"><div className="k">D</div><div className="v"><div className="kk">Done signal</div><div className="vv">How the agent knows it succeeded — a command that passes, an output it can read.</div></div></div>
   </div>
 </div>
 
@@ -464,8 +469,8 @@ export const metadata = { title: "Agentic Coding with CLI Tools", description: "
   <p className="kicker">Hands-on · Put it in order</p>
   <DragDrop
     id="anatomy-order"
-    prompt="Order the four parts of a good instruction"
-    items={["What — describe the problem", "Where — which files to look at", "Rules — what it must not touch", "Done — how to prove it worked"]}
+    prompt="Order a good instruction — the Task, its Context, then the Done signal"
+    items={["Task — what should change, stated as a verb", "Context — which files to look in", "Context — what it must not touch", "Done signal — a command that proves it worked"]}
   />
 </div>
 
@@ -473,42 +478,33 @@ export const metadata = { title: "Agentic Coding with CLI Tools", description: "
 
 <Slide>
 
-<div className="split">
-  <div className="termwrap">
-    <Terminal
-      title="~/your-repo"
-      steps={[
-        [
-          { t: "cmd", x: "cat CLAUDE.md" },
-          { t: "out", x: "# Build: npm run build · Test: npm test" },
-          { t: "out", x: "# Never commit directly to main" },
-          { t: "out", x: "# API handlers follow src/api/_template.ts" },
-        ],
-        [{ t: "dim", x: "→ read every session. Keep it short — bloat costs context." }],
-        [
-          { t: "cmd", x: "ls .claude/skills/" },
-          { t: "out", x: "feature-testing/  release-checklist/  page-explorer/" },
-          { t: "dim", x: "→ loaded only when the task matches its trigger" },
-        ],
-        [
-          { t: "cmd", x: "cat .claude/agents/code-reviewer.md" },
-          { t: "out", x: "description: reviews diffs — never edits code" },
-          { t: "out", x: "tools: Read, Grep" },
-          { t: "dim", x: "→ own context, restricted tools, enforced role" },
-        ],
-        [{ t: "ok", x: "facts → CLAUDE.md · procedures → skill · roles → agent" }],
-      ]}
-    />
+<div className="grid-side">
+  <div>
+    <p className="kicker"><span className="no">05 /</span> The context window</p>
+    <h2>Everything the agent<br />knows, <em>right now</em>.</h2>
+    <p className="lead2">A fixed-size desk, not a filing cabinet. Put something new on it and something old slides off the edge — silently.</p>
   </div>
-  <div className="points">
-    <p className="kicker"><span className="no">04 /</span> Configuration</p>
-    <h2>CLAUDE.md →<br />Skills → <em>Agents</em></h2>
-    <ul>
-      <li className="fragment"><strong>CLAUDE.md</strong> — a notes file it always reads.<span className="sub">Your project’s basics and house rules. Keep it short.</span></li>
-      <li className="fragment"><strong>Skills</strong> — saved recipes it uses when needed.<span className="sub">Explained the same thing 3 times? Save it as a skill.</span></li>
-      <li className="fragment"><strong>Agents</strong> — helpers with one job each.<span className="sub">e.g. a reviewer that only reviews — it never edits code.</span></li>
-      <li className="fragment"><strong>Simple rule:</strong> things it should always know → CLAUDE.md · step-by-step recipes → skill · a separate role → agent.</li>
-    </ul>
+  <div>
+    <div className="deskrow pinned"><span>◈</span><span>System prompt</span><span className="sz">9</span></div>
+    <div className="deskrow pinned"><span>◈</span><span>CLAUDE.md</span><span className="sz">6</span></div>
+    <div className="deskrow pinned"><span>◈</span><span>Loaded skills</span><span className="sz">4</span></div>
+    <div className="deskrow fragment"><span>·</span><span>Attached file · src/auth.ts</span><span className="sz">18</span></div>
+    <div className="deskrow fragment"><span>·</span><span>Image · screenshot.png</span><span className="sz">14</span></div>
+    <div className="deskrow fragment"><span>·</span><span>Conversation turns</span><span className="sz">7</span></div>
+    <div className="deskrow evict fragment"><span>·</span><span>Turn 3 — dropped, silently</span><span className="sz">—</span></div>
+  </div>
+</div>
+
+</Slide>
+
+<Slide>
+
+<div className="act" style={{ textAlign: "left" }}>
+  <p className="kicker"><span className="no">05 /</span> The consequence</p>
+  <p className="pull" style={{ maxWidth: "24em" }}>When the desk fills, the agent doesn't tell you what it forgot.<br /><span>It just starts being wrong with confidence.</span></p>
+  <div className="grid2" style={{ marginTop: "1.2em", height: "auto" }}>
+    <div className="card fragment"><h3 style={{ color: "#f26d5f" }}>Symptom</h3><p>It re-asks something you answered. It reverts a decision. It “forgets” a constraint from ten turns ago.</p></div>
+    <div className="card fragment"><h3 style={{ color: "#7fd08a" }}>Cure</h3><p>Short instructions. Skills loaded on demand. And a <span className="mono">/clear</span> before the desk collapses.</p></div>
   </div>
 </div>
 
@@ -519,10 +515,10 @@ export const metadata = { title: "Agentic Coding with CLI Tools", description: "
 <div className="act">
   <p className="kicker">Checkpoint · Quiz</p>
   <Quiz
-    id="where-belongs"
-    question="You've explained the release steps to the agent three times this month. Where does that knowledge belong?"
-    options={["CLAUDE.md — it should always know it", "A skill — a recipe loaded when needed", "An agent — a separate role", "A longer prompt, every time"]}
-    answer={1}
+    id="context-reset"
+    question="You just spent 40 minutes debugging a migration. Now you want a fresh, unrelated endpoint. First thing you type?"
+    options={["Just describe the endpoint", "/compact, then describe it", "/clear, then describe it", "Restart your terminal"]}
+    answer={2}
   />
 </div>
 
@@ -532,33 +528,117 @@ export const metadata = { title: "Agentic Coding with CLI Tools", description: "
 
 <div className="split">
   <div className="points">
-    <p className="kicker"><span className="no">05 /</span> Real session · 1</p>
-    <h2>Explore a live app,<br /><em>document</em> it</h2>
+    <p className="kicker"><span className="no">06 /</span> CLAUDE.md — build one, live</p>
     <ul>
-      <li className="fragment"><strong>It checks the real app</strong> — opens a browser, logs in, looks at every field. No guessing from memory.</li>
-      <li className="fragment"><strong>It plays safe:</strong> refuses to press Save on a live banking system.</li>
-      <li className="fragment"><strong>It’s honest:</strong> the report clearly marks what was checked — and what wasn’t.</li>
+      <li className="fragment">Every session starts by reading this file.<span className="sub">The standing brief you never have to repeat.</span></li>
+      <li className="fragment">Which is why it must stay short.<span className="sub">It is paid for on every single turn.</span></li>
     </ul>
   </div>
   <div className="termwrap">
     <Terminal
-      title="ababil-ng-cypress — claude"
-      steps={[
-        [{ t: "cmd", x: "open browser …/document-config/create — explore this url and determine the test areas, create a markdown file" }],
-        [
-          { t: "ag", x: "Called playwright 4 times — login required, signing in" },
-          { t: "warn", x: "Login failed (error=1001) — password was masked as *" },
-          { t: "cmd", x: "password is just * nothing else" },
-          { t: "ag", x: "Logged in. Mapping the form: 6 fields, 3 multiselects" },
-          { t: "out", x: "⎿ Events = Account, Sanction · Customer Types = 4 values" },
-        ],
-        [{ t: "ag", x: "Right — I won’t actually submit. Grabbing constraints via inspection instead (non-mutating)." }],
-        [
-          { t: "ag", x: "Write(document-config-create-test-areas.md)" },
-          { t: "out", x: "⎿ 9 test areas · verified vs needs-a-real-submit split" },
-          { t: "ok", x: "✻ Sautéed for 3m 44s" },
-        ],
-      ]}
+      title="zsh · touch CLAUDE.md"
+      steps={[[
+        { t: "cmd", x: "touch CLAUDE.md" },
+        { t: "ok", x: "## Project rules" },
+        { t: "out", x: "Todo API. TypeScript strict mode." },
+        { t: "ok", x: "## Code style" },
+        { t: "out", x: "- Named exports only. No default exports." },
+        { t: "out", x: "- No `any`. Ever." },
+        { t: "ok", x: "## Testing" },
+        { t: "out", x: "- `npm test` must pass before any commit." },
+        { t: "ok", x: "## Never" },
+        { t: "out", x: "- Edit src/generated/** · Commit to main" },
+        { t: "dim", x: "Saved. 180 tokens. Read on every single turn." },
+      ]]}
+    />
+  </div>
+</div>
+
+</Slide>
+
+<Slide>
+
+<div className="grid2">
+  <div>
+    <div className="filecard bad">
+      <div className="h"><span>CLAUDE.md · verbose</span><span className="err">2,400 tokens</span></div>
+      This project was started in 2021 by a team of four engineers who wanted to build a modern todo application using best practices. We believe strongly in clean code, and we have found over the years that… <span className="muted">…41 more paragraphs</span>
+    </div>
+    <p className="tiny" style={{ marginTop: "0.7em" }}>Eats the desk. Gets skimmed. Ages badly.</p>
+  </div>
+  <div>
+    <div className="filecard good">
+      <div className="h"><span>CLAUDE.md · sharp</span><span className="ok">180 tokens</span></div>
+      <span className="ok">## Code style</span><br />- TypeScript strict. No `any`.<br />- Named exports only.<br /><br /><span className="ok">## Never</span><br />- Edit src/generated/**<br />- Commit to main directly
+    </div>
+    <p className="tiny" style={{ marginTop: "0.7em" }}>Rules, not prose. Bans, not vibes.</p>
+  </div>
+</div>
+
+</Slide>
+
+<Slide>
+
+<div className="grid-side">
+  <div>
+    <p className="kicker"><span className="no">07 /</span> Skills</p>
+    <h2>Knowledge that<br />waits on <em>disk</em>.</h2>
+    <p className="lead2">A skill is a folder with instructions. The agent reads it the moment it becomes relevant — and not a second before.</p>
+  </div>
+  <div className="flow">
+    <div className="node fragment">Conversation<span className="st">◆</span></div>
+    <div className="arrow"></div>
+    <div className="node fragment">Needs the API skill<span className="st">◆</span></div>
+    <div className="arrow"></div>
+    <div className="node fragment">Reads SKILL.md<span className="st">◆</span></div>
+    <div className="arrow"></div>
+    <div className="node fragment">Injects instructions<span className="st">◆</span></div>
+    <div className="arrow"></div>
+    <div className="node fragment">Continues working<span className="st">◆</span></div>
+  </div>
+</div>
+
+</Slide>
+
+<Slide>
+
+<div className="grid2">
+  <div className="card fragment"><h3>Lives on disk</h3><p>Version it. Review it. Share it across the team like any other file.</p></div>
+  <div className="card fragment"><h3>Loaded only when needed</h3><p>Ten skills installed, zero cost until one is actually invoked.</p></div>
+  <div className="card agent fragment" style={{ gridColumn: "1 / -1" }}><h3>Doesn't consume permanent context</h3><p>CLAUDE.md is rent you pay every turn. A skill is a book you take off the shelf, read, and put back.</p></div>
+</div>
+
+</Slide>
+
+<Slide>
+
+<div className="split">
+  <div className="points">
+    <p className="kicker"><span className="no">08 /</span> Build our first skill</p>
+    <ul>
+      <li className="fragment"><strong>1 · Make the folder</strong></li>
+      <li className="fragment"><strong>2 · Write the frontmatter</strong><span className="sub">How the agent decides when to reach for this. Write it for a stranger.</span></li>
+      <li className="fragment"><strong>3 · Write the body</strong></li>
+      <li className="fragment"><strong>4 · Invoke it</strong></li>
+    </ul>
+  </div>
+  <div className="termwrap">
+    <Terminal
+      title="zsh · ~/todo-app"
+      steps={[[
+        { t: "cmd", x: "mkdir -p .claude/skills/tcd" },
+        { t: "cmd", x: "touch .claude/skills/tcd/SKILL.md" },
+        { t: "ok", x: "  ✓ .claude/skills/tcd/SKILL.md" },
+        { t: "dim", x: "---" },
+        { t: "out", x: "name: tcd" },
+        { t: "out", x: "description: Rewrite a vague prompt into Task," },
+        { t: "out", x: "  Context, and Done signal. Use when a request" },
+        { t: "out", x: "  lacks files, constraints, or success criteria." },
+        { t: "dim", x: "---" },
+        { t: "out", x: "Rewrite $PROMPT as three labeled sections." },
+        { t: "out", x: "Never invent files. If context is missing, ask." },
+        { t: "ok", x: "Skill registered. 0 tokens until invoked." },
+      ]]}
     />
   </div>
 </div>
@@ -568,37 +648,28 @@ export const metadata = { title: "Agentic Coding with CLI Tools", description: "
 <Slide>
 
 <div className="split">
+  <div className="points">
+    <p className="kicker"><span className="no">08 /</span> Run it</p>
+    <p className="lead2">Same intent you'd have typed anyway — now rewritten into something the agent can execute without guessing.</p>
+  </div>
   <div className="termwrap">
     <Terminal
-      title="ababil-ng-cypress — claude"
-      steps={[
-        [
-          { t: "cmd", x: "did you cover all the edge cases?" },
-          { t: "ag", x: "Honest answer: no. Several are still assumptions —" },
-          { t: "ag", x: "let me actually probe the non-mutating ones now rather than guess." },
-        ],
-        [
-          { t: "ag", x: "Called playwright — focus/blur, search filters, ALL-vs-type" },
-          { t: "out", x: "⎿ no inline errors on blur — validation only fires on Save" },
-        ],
-        [{ t: "warn", x: "Found a real one: ALL and INDIVIDUAL can both be checked — no mutual exclusivity. Worth an explicit test." }],
-        [
-          { t: "cmd", x: "if necessary ask me clarification questions, do not make any assumptions" },
-          { t: "ag", x: "· Perform a real submit to confirm? → No — document only" },
-          { t: "ag", x: "· Scope? → Create form only, checklist only" },
-          { t: "ok", x: "edge cases added — verified / to-cover / not-verified" },
-        ],
-      ]}
+      title="claude · /skill tcd"
+      steps={[[
+        { t: "cmd", x: "/skill tcd" },
+        { t: "cmd", x: "make the dashboard faster" },
+        { t: "ag", x: "Loading skill: tcd…" },
+        { t: "ok", x: "SKILL.md read · 0 permanent context" },
+        { t: "ok", x: "TASK" },
+        { t: "out", x: "  Reduce time-to-interactive on /dashboard below 1.5s." },
+        { t: "ok", x: "CONTEXT" },
+        { t: "out", x: "  See src/pages/Dashboard.tsx, src/api/metrics.ts." },
+        { t: "out", x: "  Do not change the public API of useMetrics()." },
+        { t: "ok", x: "DONE SIGNAL" },
+        { t: "out", x: "  `npm run bench:dashboard` reports TTI < 1500ms." },
+        { t: "dim", x: "Same intent. Now executable." },
+      ]]}
     />
-  </div>
-  <div className="points">
-    <p className="kicker"><span className="no">05 /</span> Real session · 2</p>
-    <h2>“Did you cover all<br />the <em>edge cases?</em>”</h2>
-    <ul>
-      <li className="fragment"><strong>It answers “no” honestly</strong> — then goes and checks, instead of guessing.</li>
-      <li className="fragment"><strong>It finds a real problem:</strong> two options that shouldn’t go together can both be selected.</li>
-      <li className="fragment"><strong>It asks before assuming:</strong> a few quick questions instead of silent guesses.</li>
-    </ul>
   </div>
 </div>
 
@@ -606,50 +677,43 @@ export const metadata = { title: "Agentic Coding with CLI Tools", description: "
 
 <Slide>
 
-<div className="act">
-  <p className="kicker">Fun · Quiz</p>
-  <Quiz
-    id="login-bug"
-    question="In the real demo, the agent's login kept failing. What was the actual cause?"
-    options={["Wrong URL", "A trailing space in the saved password", "An expired account", "Caps Lock"]}
-    answer={1}
-  />
+<div className="grid-side">
+  <div>
+    <p className="kicker"><span className="no">09 /</span> Managing long sessions</p>
+    <h2>Conversations <em>rot</em>.</h2>
+    <p className="lead2">Every correction, every dead end, every abandoned approach stays on the desk — and keeps influencing the next answer.</p>
+    <div className="meter" style={{ height: "12px", marginTop: "1.2em" }}><i style={{ width: "85%", background: "#f26d5f" }}></i></div>
+    <p className="tiny" style={{ marginTop: "0.5em" }}>session health: degrading</p>
+  </div>
+  <div>
+    <div className="deskrow fragment"><span style={{ color: "#e6b455" }}>▍</span><span>turn 4 · you correct a file path</span></div>
+    <div className="deskrow fragment"><span style={{ color: "#e6b455" }}>▍</span><span>turn 9 · abandoned approach still in context</span></div>
+    <div className="deskrow fragment"><span style={{ color: "#f26d5f" }}>▍</span><span>turn 14 · it reverts a decision from turn 6</span></div>
+    <div className="deskrow fragment"><span style={{ color: "#f26d5f" }}>▍</span><span>turn 19 · it re-asks a question you answered</span></div>
+    <div className="deskrow fragment"><span style={{ color: "#7fd08a" }}>✓</span><span>/clear · CLAUDE.md and skills survive</span></div>
+  </div>
 </div>
 
 </Slide>
 
 <Slide>
 
-<div className="split">
-  <div className="points">
-    <p className="kicker"><span className="no">05 /</span> Real session · 3</p>
-    <h2>Distill it into<br />a <em>skill</em></h2>
-    <ul>
-      <li className="fragment"><strong>One request</strong> turns the whole session into a saved recipe.</li>
-      <li className="fragment"><strong>Lessons are kept</strong> — “never touch live data” came from this very session.</li>
-      <li className="fragment"><strong>The recipe lives in the project</strong> — the whole team gets it automatically.</li>
-    </ul>
+<div className="grid-side">
+  <div className="flow">
+    <div className="node">Wrong<span className="st">◆</span></div>
+    <div className="arrow"></div>
+    <div className="node">Correction<span className="st">◆</span></div>
+    <div className="arrow"></div>
+    <div className="node">Still wrong<span className="st">◆</span></div>
+    <div className="arrow"></div>
+    <div className="node blocked">RESET · /clear<span className="st">■</span></div>
+    <div className="arrow"></div>
+    <div className="node on">Fresh prompt, better written<span className="st">◆</span></div>
   </div>
-  <div className="termwrap">
-    <Terminal
-      title=".claude/skills — claude"
-      steps={[
-        [{ t: "cmd", x: "summarize what you have done so far, your goal is to create a reusable skill" }],
-        [
-          { t: "ag", x: "Write(.claude/skills/ababil-page-explorer/SKILL.md)" },
-          { t: "out", x: "⎿ login → snapshot → map fields → probe safely → checklist" },
-        ],
-        [
-          { t: "out", x: "Golden rule — never mutate shared banking data;" },
-          { t: "out", x: "no Save/Submit without explicit authorization." },
-          { t: "dim", x: "# the lesson from the blocked Save click, now permanent" },
-        ],
-        [
-          { t: "cmd", x: "git add .claude/skills/ && git commit" },
-          { t: "ok", x: "everyone who clones the repo inherits the know-how" },
-        ],
-      ]}
-    />
+  <div>
+    <p className="kicker"><span className="no">09 /</span> The two-correction rule</p>
+    <p className="pull">If two corrections haven't fixed it,<br /><span>the third one won't either.</span></p>
+    <p className="lead2" style={{ marginTop: "1em" }}>A third correction isn't more information — it's more noise on a prompt that was wrong from the start. Kill the session, rewrite with T·C·D, and you'll be done before you'd have finished arguing.</p>
   </div>
 </div>
 
@@ -658,40 +722,235 @@ export const metadata = { title: "Agentic Coding with CLI Tools", description: "
 <Slide>
 
 <div className="split">
+  <div className="points">
+    <p className="kicker"><span className="no">10 /</span> External context · Files</p>
+    <p className="lead2">Point at a file with <span className="mono">@</span>. The agent reads it from disk — not from your clipboard, not from your description of it.</p>
+  </div>
   <div className="termwrap">
     <Terminal
-      title="ababil-ng-cypress — claude"
-      steps={[
-        [{ t: "cmd", x: "/ababil-automation-dev initiate two parallel agents for these test cases — ask clarifying questions, no assumptions" }],
-        [
-          { t: "ag", x: "2 background agents launched (↓ to manage)" },
-          { t: "out", x: " ├ Plan document-config create tests" },
-          { t: "out", x: " └ Plan charge-mapping create tests" },
-          { t: "dim", x: "# plan first — no code until the human approves" },
-        ],
-        [
-          { t: "warn", x: "Live DOM harvest failed — Auth0 says Bad credentials" },
-          { t: "ag", x: 'Root cause: stored password is "* " — trailing space.' },
-          { t: "ag", x: "Trimmed. Login works; real selectors harvested." },
-        ],
-        [{ t: "ag", x: "Both agents write only their own folders; shared files are merged by me afterward — no clobbering." }],
-        [
-          { t: "ag", x: "Smoke run: 20/23 → probe DOM → fix at root cause" },
-          { t: "out", x: "⎿ clicks hit wrapper, not .ui-chkbox-box → fixed" },
-          { t: "ok", x: "23/23 passing — doc-config suite fully green" },
-        ],
-      ]}
+      title="@src/auth.ts"
+      steps={[[
+        { t: "cmd", x: "Why does @src/auth.ts reject valid tokens?" },
+        { t: "ag", x: "Reading src/auth.ts…" },
+        { t: "ok", x: "214 lines" },
+        { t: "out", x: "  Line 88: exp compared in ms, issued in s." },
+        { t: "warn", x: "  Every token looks expired." },
+        { t: "dim", x: "It read the file. You pasted nothing." },
+      ]]}
     />
   </div>
+</div>
+
+</Slide>
+
+<Slide>
+
+<div className="split">
   <div className="points">
-    <p className="kicker"><span className="no">05 /</span> Real session · 4</p>
-    <h2>Agents as a<br />small <em>team</em></h2>
-    <ul>
-      <li className="fragment"><strong>Two helpers work at the same time</strong> — they plan first; a human approves before any code is written.</li>
-      <li className="fragment"><strong>It digs to the real cause:</strong> login kept failing because of one invisible space in the saved password.</li>
-      <li className="fragment"><strong>It avoids collisions:</strong> each helper gets its own files, so they never overwrite each other.</li>
-      <li className="fragment"><strong>It fixes its own mistakes:</strong> 20 of 23 checks passed → found the causes → <strong>all 23 green.</strong></li>
+    <p className="kicker"><span className="no">10 /</span> External context · Images</p>
+    <p className="lead2">Drop a screenshot. Circle the broken thing. The agent now talks about <em>your</em> button, in <em>your</em> component — not a hypothetical one.</p>
+  </div>
+  <div className="termwrap">
+    <Terminal
+      title="screenshot.png"
+      steps={[[
+        { t: "cmd", x: "[screenshot.png] the badge overlaps on mobile" },
+        { t: "ag", x: "Inspecting image…" },
+        { t: "ok", x: "Found: <NotificationBadge />" },
+        { t: "out", x: "  Overlap at <390px. Absolute badge, no min-width." },
+        { t: "out", x: "  → src/components/NotificationBadge.tsx:31" },
+        { t: "dim", x: "It named your component. Not a generic one." },
+      ]]}
+    />
+  </div>
+</div>
+
+</Slide>
+
+<Slide>
+
+<div className="split">
+  <div className="points">
+    <p className="kicker"><span className="no">10 /</span> External context · URLs</p>
+    <p className="lead2">Paste the docs URL. It cites the actual signature from the actual version — instead of the one it half-remembers from two years ago.</p>
+  </div>
+  <div className="termwrap">
+    <Terminal
+      title="fetch docs"
+      steps={[[
+        { t: "cmd", x: "Use https://docs.stripe.com/api/charges/create" },
+        { t: "ag", x: "Fetching documentation…" },
+        { t: "ok", x: "Read current API reference" },
+        { t: "out", x: "  Required: amount, currency, source" },
+        { t: "warn", x: "  Note: `capture` deprecated in this version." },
+        { t: "dim", x: "Cited, not remembered." },
+      ]]}
+    />
+  </div>
+</div>
+
+</Slide>
+
+<Slide>
+
+<div className="split">
+  <div className="points">
+    <p className="kicker"><span className="no">10 /</span> External context · Raw data</p>
+    <p className="lead2">Pipe it. 40,000 lines of log you'll never scroll through, read in one gulp. Zero copy-paste.</p>
+  </div>
+  <div className="termwrap">
+    <Terminal
+      title="cat server.log | claude"
+      steps={[[
+        { t: "cmd", x: 'cat server.log | claude -p "find the root cause"' },
+        { t: "ag", x: "Streaming 41,204 lines…" },
+        { t: "ok", x: "Ingested" },
+        { t: "warn", x: "  17:42:03 pool exhausted (max=10)" },
+        { t: "dim", x: "  …repeated 1,882 times" },
+        { t: "out", x: "  Root cause: connections never released in" },
+        { t: "out", x: "  OrderRepository.findAll() on the error path." },
+        { t: "dim", x: "No clipboard was harmed." },
+      ]]}
+    />
+  </div>
+</div>
+
+</Slide>
+
+<Slide>
+
+<div className="grid-side">
+  <div>
+    <p className="kicker"><span className="no">11 /</span> Workflow one — feature development</p>
+    <p className="lead2">A skill can encode your architecture. Ask for an endpoint; get the whole vertical slice, in your team's shape, in your team's order.</p>
+  </div>
+  <div className="termwrap">
+    <Terminal
+      title="claude · /skill endpoint"
+      steps={[[
+        { t: "cmd", x: "add a POST /orders endpoint" },
+        { t: "ok", x: "created src/http/OrderController.ts" },
+        { t: "ok", x: "created src/app/CreateOrderCommand.ts" },
+        { t: "ok", x: "created src/app/CreateOrderHandler.ts" },
+        { t: "ok", x: "created src/domain/OrderService.ts" },
+        { t: "ok", x: "created src/infra/OrderRepository.ts" },
+        { t: "ok", x: "created tests/orders.spec.ts" },
+        { t: "ok", x: "npm test → 23 passing" },
+        { t: "ok", x: 'git commit -m "feat(orders): create endpoint"' },
+      ]]}
+    />
+  </div>
+</div>
+
+</Slide>
+
+<Slide>
+
+<div className="grid-side">
+  <div>
+    <p className="kicker"><span className="no">11 /</span> Workflow two — bug investigation</p>
+    <p className="lead2">This one interviews you first. It refuses to guess — a careful junior engineer who has learned not to touch things.</p>
+  </div>
+  <div className="termwrap">
+    <Terminal
+      title="claude · /skill triage"
+      steps={[[
+        { t: "cmd", x: "checkout hangs after coupon applied" },
+        { t: "ag", x: "interview: which coupon? which env? reproducible?" },
+        { t: "cmd", x: "SUMMER24, staging, always" },
+        { t: "out", x: "located src/pricing/coupon.ts, src/checkout/flow.ts" },
+        { t: "out", x: "plan: 3 steps, 2 files, no schema change" },
+        { t: "ag", x: "applied fix — awaited promise never resolved" },
+        { t: "ok", x: "npm test → 47 passing" },
+        { t: "ok", x: "summary: 1 root cause, 2 files, 0 side effects" },
+      ]]}
+    />
+  </div>
+</div>
+
+</Slide>
+
+<Slide>
+
+<div className="grid-side">
+  <div>
+    <p className="kicker"><span className="no">12 /</span> Hooks</p>
+    <h2>Rules the agent<br />cannot <em>talk its way</em> out of.</h2>
+    <ul className="ticks" style={{ marginTop: "0.8em" }}>
+      <li>Auto-format code after edits</li>
+      <li>Prevent editing protected files</li>
+      <li>Automatically run tests</li>
+      <li>Notify Slack after completion</li>
+      <li>Enforce project conventions</li>
     </ul>
+  </div>
+  <div className="flow">
+    <div className="node">Before prompt<span className="st">◆</span></div>
+    <div className="arrow"></div>
+    <div className="node">Permission hook<span className="st">◆</span></div>
+    <div className="arrow"></div>
+    <div className="node">Claude runs<span className="st">◆</span></div>
+    <div className="arrow"></div>
+    <div className="node">Post-edit hook<span className="st">◆</span></div>
+    <div className="arrow"></div>
+    <div className="node">Formatting hook<span className="st">◆</span></div>
+    <div className="arrow"></div>
+    <div className="node">Notification hook<span className="st">◆</span></div>
+  </div>
+</div>
+
+</Slide>
+
+<Slide>
+
+<div className="split">
+  <div className="points">
+    <p className="kicker"><span className="no">12 /</span> Live — a hook says no</p>
+    <p className="lead2">A prompt is a request. A hook is a law. It runs your script at a lifecycle event, and it can say no.</p>
+  </div>
+  <div className="termwrap">
+    <Terminal
+      title="claude · hooks enabled"
+      steps={[[
+        { t: "cmd", x: "Rotate the API secret and reformat the payment module." },
+        { t: "dim", x: "→ hook: PreToolUse (permissions)" },
+        { t: "warn", x: "  ✎ .env  BLOCKED" },
+        { t: "warn", x: "  hooks/protect.sh: .env is a protected path." },
+        { t: "dim", x: "  Claude: understood — skipping .env, continuing." },
+        { t: "out", x: "  ✎ src/payments/charge.ts  +24 -31" },
+        { t: "dim", x: "→ hook: PostToolUse (format)" },
+        { t: "ok", x: "  prettier --write · 2 files formatted" },
+        { t: "dim", x: "→ hook: PostToolUse (test)" },
+        { t: "ok", x: "  npm test -- payments · 18 passing" },
+        { t: "dim", x: "→ hook: Stop (notify)" },
+        { t: "ok", x: "  posting to #eng-builds · sent" },
+        { t: "ok", x: "The agent argued for nothing. The hook simply held." },
+      ]]}
+    />
+  </div>
+</div>
+
+</Slide>
+
+<Slide>
+
+<div className="grid-side">
+  <div>
+    <p className="kicker">Closing · Putting it together</p>
+    <h2>One vague request.<br />Ten disciplined <em>steps</em>.</h2>
+    <p className="lead2">Everything in this episode, chained into a single run.</p>
+  </div>
+  <div className="flow">
+    <div className="node fragment">1 · Vague feature request<span className="st">◆</span></div>
+    <div className="node fragment">2 · T·C·D skill rewrites it<span className="st">◆</span></div>
+    <div className="node fragment">3 · Load CLAUDE.md<span className="st">◆</span></div>
+    <div className="node fragment">4 · Attach @src/orders.ts<span className="st">◆</span></div>
+    <div className="node fragment">5 · Reference the API docs<span className="st">◆</span></div>
+    <div className="node fragment">6 · Generate a plan<span className="st">◆</span></div>
+    <div className="node fragment">7 · Implement across 6 files<span className="st">◆</span></div>
+    <div className="node fragment">8 · Run tests, fix failures<span className="st">◆</span></div>
+    <div className="node fragment">9 · Show the git diff<span className="st">◆</span></div>
+    <div className="node on fragment">10 · Summary + next steps<span className="st">◆</span></div>
   </div>
 </div>
 
@@ -700,9 +959,10 @@ export const metadata = { title: "Agentic Coding with CLI Tools", description: "
 <Slide>
 
 <div className="statement">
-  <p className="kicker">The flywheel</p>
+  <p className="kicker">Episode 01 · Ends here</p>
   <div className="rule"></div>
-  <h1>Every solved problem<br />becomes a skill.<br />Every skill makes the next<br />problem <em>cheaper</em>.</h1>
+  <h1>The future isn't about replacing developers. It's about becoming an effective <em>leader</em> of AI software engineers.</h1>
+  <div className="row" style={{ marginTop: "1.4em" }}><span className="tag agent">Agent</span><span className="tag human">Human</span><span className="tiny">You were always the one in the second color.</span></div>
 </div>
 
 </Slide>
@@ -716,17 +976,6 @@ export const metadata = { title: "Agentic Coding with CLI Tools", description: "
     question="Which team workflow deserves a skill first?"
     options={["Feature testing", "Release checklist", "Code review", "Onboarding docs"]}
   />
-</div>
-
-</Slide>
-
-<Slide>
-
-<div className="statement">
-  <p className="kicker">Homework · Q&amp;A</p>
-  <div className="rule"></div>
-  <h1>Name one recurring workflow<br />on your team that<br />deserves a <em>skill</em>.</h1>
-  <p>That’s your first skill. Save it in the project under <span className="mono">.claude/skills/</span> — and the whole team gets it.</p>
 </div>
 
 </Slide>
