@@ -1,4 +1,4 @@
-export const metadata = { title: "Using Coding Agents Effectively — Ep. 1", description: "From prompting to hooks — directing coding agents, shown on real work.", type: "slides" };
+export const metadata = { title: "Using Coding Agents Effectively — Claude Code", description: "Web vs CLI, sharp prompts, the context window, CLAUDE.md, and skills — a live session on directing coding agents.", type: "slides" };
 
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,340;0,9..144,560;1,9..144,340&family=IBM+Plex+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" />
 
@@ -167,7 +167,7 @@ export const metadata = { title: "Using Coding Agents Effectively — Ep. 1", de
 .reveal .controls { color: #e0764a; }
 .reveal .progress { color: #e0764a; }
 
-/* ---- Ep.1 layout additions (orange theme; agent = accent, human = cool) ---- */
+/* ---- Layout additions (orange theme; agent = accent, human = cool) ---- */
 .reveal .tag { display: inline-block; font-family: "JetBrains Mono", monospace; font-size: 0.34em; letter-spacing: 0.14em; text-transform: uppercase; padding: 5px 11px; border-radius: 999px; border: 1px solid #2a2c34; color: #9a978f; }
 .reveal .tag.agent { color: #e0764a; border-color: rgba(224,118,74,0.4); background: rgba(224,118,74,0.08); }
 .reveal .tag.human { color: #6ea8c7; border-color: rgba(110,168,199,0.4); background: rgba(110,168,199,0.08); }
@@ -202,11 +202,6 @@ export const metadata = { title: "Using Coding Agents Effectively — Ep. 1", de
 .reveal .filecard .muted { color: #6d6a63; }
 .reveal .pull { font-family: "Fraunces", serif; font-size: 1em; font-weight: 560; line-height: 1.2; border-left: 3px solid #e0764a; padding-left: 0.6em; max-width: 22em; color: #e9e7e1; }
 .reveal .pull span { color: #9a978f; }
-.reveal .metric { display: grid; gap: 7px; margin-bottom: 16px; }
-.reveal .metric .lb { display: flex; justify-content: space-between; font-family: "JetBrains Mono", monospace; font-size: 0.4em; letter-spacing: 0.08em; text-transform: uppercase; color: #9a978f; }
-.reveal .meter { height: 8px; border-radius: 99px; background: rgba(255,255,255,0.07); overflow: hidden; }
-.reveal .meter i { display: block; height: 100%; border-radius: 99px; background: #e0764a; }
-.reveal .meter.down i { background: #f26d5f; }
 .reveal .vague { font-family: "JetBrains Mono", monospace; font-size: 0.52em; color: #f26d5f; border: 1px dashed rgba(242,109,95,0.4); border-radius: 10px; padding: 14px 16px; background: rgba(242,109,95,0.05); }
 .reveal .tcd { display: flex; flex-direction: column; gap: 10px; }
 .reveal .tcd-row { display: grid; grid-template-columns: 52px 1fr; gap: 14px; border: 1px solid #2a2c34; border-radius: 12px; overflow: hidden; background: rgba(255,255,255,0.02); }
@@ -214,20 +209,48 @@ export const metadata = { title: "Using Coding Agents Effectively — Ep. 1", de
 .reveal .tcd-row .v { padding: 11px 14px; }
 .reveal .tcd-row .v .kk { font-family: "JetBrains Mono", monospace; font-size: 0.38em; letter-spacing: 0.12em; text-transform: uppercase; color: #9a978f; margin-bottom: 4px; }
 .reveal .tcd-row .v .vv { font-size: 0.56em; line-height: 1.4; color: #e9e7e1; }
-.reveal .deskrow { display: flex; align-items: center; gap: 10px; font-family: "JetBrains Mono", monospace; font-size: 0.46em; padding: 7px 11px; border-radius: 7px; border: 1px solid #2a2c34; background: rgba(255,255,255,0.025); margin-bottom: 6px; }
-.reveal .deskrow.pinned { border-color: rgba(255,255,255,0.16); background: rgba(255,255,255,0.05); }
-.reveal .deskrow.evict { border-color: rgba(242,109,95,0.4); color: #f26d5f; opacity: 0.55; text-decoration: line-through; }
-.reveal .deskrow .sz { margin-left: auto; color: #9a978f; }
 .reveal .lead2 { font-size: 0.58em; color: #9a978f; line-height: 1.55; }
+.reveal .mono { font-family: "JetBrains Mono", monospace; color: #e0764a; }
+
+/* Context window visualizer (markup rendered by the ContextWindow component) */
+.reveal .cw {
+  background: #16181e;
+  border: 1px solid #2a2c34;
+  border-radius: 12px;
+  box-shadow: 0 24px 60px -24px rgb(0 0 0 / 0.75);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: 520px;
+  max-height: 100%;
+}
+.reveal .cwbody { flex: 1; overflow: hidden; padding: 14px 16px; display: flex; flex-direction: column; gap: 7px; }
+.reveal .cwb { display: flex; justify-content: space-between; align-items: center; gap: 10px; font-family: "JetBrains Mono", monospace; font-size: 12.5px; padding: 9px 13px; border-radius: 8px; border: 1px solid #2a2c34; color: #e9e7e1; background: rgba(255,255,255,0.03); }
+.reveal .cwb .lb { min-width: 0; }
+.reveal .cwb .sz { flex: none; color: #9a978f; }
+.reveal .cwb-sys { border-color: rgba(255,255,255,0.18); background: rgba(255,255,255,0.06); }
+.reveal .cwb-md { border-color: rgba(230,180,85,0.4); background: rgba(230,180,85,0.07); color: #e6b455; }
+.reveal .cwb-skill { border-color: rgba(224,118,74,0.5); background: rgba(224,118,74,0.09); color: #e0764a; }
+.reveal .cwb-user { border-color: rgba(110,168,199,0.45); background: rgba(110,168,199,0.08); color: #6ea8c7; }
+.reveal .cwb-tool { color: #9a978f; }
+.reveal .cwb-in { animation: cwb-in 0.32s ease-out; }
+.reveal .cwb-out { animation: cwb-out 0.3s ease-in forwards; }
+@keyframes cwb-in { from { opacity: 0; transform: translateY(-9px) scale(0.97); } to { opacity: 1; transform: none; } }
+@keyframes cwb-out { to { opacity: 0; transform: translateX(16px); } }
+.reveal .cwfoot { display: flex; align-items: center; gap: 10px; padding: 12px 16px; border-top: 1px solid #2a2c34; background: linear-gradient(#171920, #1c1e25); flex: none; }
+.reveal .cwmeter { flex: 1; height: 8px; border-radius: 99px; background: rgba(255,255,255,0.07); overflow: hidden; }
+.reveal .cwmeter i { display: block; height: 100%; width: 0; border-radius: 99px; background: #e0764a; transition: width 0.3s ease; }
+.reveal .cwmeter.hot i { background: #f26d5f; }
+.reveal .cwpct { font-family: "JetBrains Mono", monospace; font-size: 11px; color: #9a978f; min-width: 3em; text-align: right; }
 `}</style>
 
 <Slide>
 
 <div className="split titleslide">
   <div className="points">
-    <p className="kicker">Episode 01 · Using coding agents</p>
+    <p className="kicker">Episode 01 · Using coding agents effectively</p>
     <h1>Let's start with<br /><em>Claude Code</em>.</h1>
-    <p className="lede">A working session on prompting, context, skills, and hooks — for developers about to stop typing and start directing.</p>
+    <p className="lede">A working session on prompting, context windows, CLAUDE.md, and skills — for developers about to stop typing and start directing.</p>
     <div className="row" style={{ marginTop: "1.4em" }}><span className="tag agent">Agent</span><span className="tag human">Human</span><span className="tiny">Two colors. They mean something.</span></div>
   </div>
   <div className="termwrap">
@@ -332,8 +355,8 @@ export const metadata = { title: "Using Coding Agents Effectively — Ep. 1", de
       <li className="fragment">Reads the entire project</li>
       <li className="fragment">Writes code to disk — no copy-paste</li>
       <li className="fragment">Runs the tests, fixes its own failures</li>
-      <li className="fragment">Commits changes</li>
-      <li className="fragment">Can run unattended</li>
+      <li className="fragment">Commits changes, reviewable line by line</li>
+      <li className="fragment">Can run unattended — on a schedule, inside other tools</li>
     </ul>
   </div>
   <div className="card human">
@@ -344,7 +367,7 @@ export const metadata = { title: "Using Coding Agents Effectively — Ep. 1", de
       <li className="fragment">Quick questions</li>
       <li className="fragment">Architecture discussions</li>
     </ul>
-    <p className="fragment" style={{ marginTop: "0.9em", fontSize: "0.5em", color: "#9a978f" }}>No repo access, no side effects — a feature when you're still deciding what to build.</p>
+    <p className="fragment" style={{ marginTop: "0.9em", fontSize: "0.5em", color: "#9a978f" }}>Right tool for the job — the terminal wins the moment the work is inside your own project.</p>
   </div>
 </div>
 
@@ -393,6 +416,7 @@ export const metadata = { title: "Using Coding Agents Effectively — Ep. 1", de
     </div>
     <p className="tiny" style={{ marginTop: "0.9em" }}>Bottleneck: your clarity.</p>
   </div>
+  <p className="lead2 fragment" style={{ gridColumn: "1 / -1", margin: 0 }}>Your value shifts from fast typing to clear instructions. It's like leading a small team — and you check the result the way you'd review a new teammate's PR.</p>
 </div>
 
 </Slide>
@@ -405,7 +429,7 @@ export const metadata = { title: "Using Coding Agents Effectively — Ep. 1", de
     <h2>“Fix this” is not<br />a request. It's a <em>riddle</em>.</h2>
     <ul>
       <li className="fragment">The model has no eyes, no ticket, no standup.<span className="sub">Only the words you gave it and the files it can reach.</span></li>
-      <li className="fragment">Vague in, guesses out.<span className="sub">And guessing is where your afternoon goes.</span></li>
+      <li className="fragment">Vague in, guesses out.<span className="sub">The more precise the instruction, the fewer corrections you'll need.</span></li>
     </ul>
   </div>
   <div className="termwrap">
@@ -431,67 +455,14 @@ export const metadata = { title: "Using Coding Agents Effectively — Ep. 1", de
 
 <div className="grid-side">
   <div>
-    <p className="kicker"><span className="no">03 /</span> Now say it properly</p>
-    <div className="filecard good">
-      <div className="h"><span>the prompt</span><span className="ok">4 lines</span></div>
-      Fix the login redirect bug.<br />The bug only happens after token refresh.<br />Do not modify authentication middleware.<br />Run tests afterwards.
-    </div>
-  </div>
-  <div>
-    <div className="metric"><div className="lb"><span>Ambiguity</span><span>12%</span></div><div className="meter down"><i style={{ width: "12%" }}></i></div></div>
-    <div className="metric"><div className="lb"><span>Corrections needed</span><span>18%</span></div><div className="meter down"><i style={{ width: "18%" }}></i></div></div>
-    <div className="metric"><div className="lb"><span>Output quality</span><span>91%</span></div><div className="meter"><i style={{ width: "91%" }}></i></div></div>
-    <p className="lead2" style={{ marginTop: "1em" }}>Nothing about the model changed. Only what you told it.</p>
-  </div>
-</div>
-
-</Slide>
-
-<Slide>
-
-<div className="grid-side">
-  <div>
+    <p className="kicker"><span className="no">04 /</span> Write good instructions</p>
     <h2 style={{ fontSize: "2.2em" }}>T · C · D</h2>
-    <p className="lead2">Three things every good prompt carries. Miss one and the agent guesses.</p>
+    <p className="lead2">Before you hit enter, check that your prompt names all three. Miss one and the agent guesses.</p>
   </div>
   <div className="tcd">
-    <div className="tcd-row fragment"><div className="k">T</div><div className="v"><div className="kk">Task</div><div className="vv">What, exactly, should change. One outcome, stated as a verb.</div></div></div>
-    <div className="tcd-row fragment"><div className="k">C</div><div className="v"><div className="kk">Context</div><div className="vv">Files, constraints, environment — and what it must <em>not</em> touch.</div></div></div>
-    <div className="tcd-row fragment"><div className="k">D</div><div className="v"><div className="kk">Done signal</div><div className="vv">How the agent knows it succeeded — a command that passes, an output it can read.</div></div></div>
-  </div>
-</div>
-
-</Slide>
-
-<Slide>
-
-<div className="act">
-  <p className="kicker">Hands-on · Put it in order</p>
-  <DragDrop
-    id="anatomy-order"
-    prompt="Order a good instruction — the Task, its Context, then the Done signal"
-    items={["Task — what should change, stated as a verb", "Context — which files to look in", "Context — what it must not touch", "Done signal — a command that proves it worked"]}
-  />
-</div>
-
-</Slide>
-
-<Slide>
-
-<div className="grid-side">
-  <div>
-    <p className="kicker"><span className="no">05 /</span> The context window</p>
-    <h2>Everything the agent<br />knows, <em>right now</em>.</h2>
-    <p className="lead2">A fixed-size desk, not a filing cabinet. Put something new on it and something old slides off the edge — silently.</p>
-  </div>
-  <div>
-    <div className="deskrow pinned"><span>◈</span><span>System prompt</span><span className="sz">9</span></div>
-    <div className="deskrow pinned"><span>◈</span><span>CLAUDE.md</span><span className="sz">6</span></div>
-    <div className="deskrow pinned"><span>◈</span><span>Loaded skills</span><span className="sz">4</span></div>
-    <div className="deskrow fragment"><span>·</span><span>Attached file · src/auth.ts</span><span className="sz">18</span></div>
-    <div className="deskrow fragment"><span>·</span><span>Image · screenshot.png</span><span className="sz">14</span></div>
-    <div className="deskrow fragment"><span>·</span><span>Conversation turns</span><span className="sz">7</span></div>
-    <div className="deskrow evict fragment"><span>·</span><span>Turn 3 — dropped, silently</span><span className="sz">—</span></div>
+    <div className="tcd-row fragment"><div className="k">T</div><div className="v"><div className="kk">Task</div><div className="vv">What, concretely, do you want done. One outcome, stated as a verb.</div></div></div>
+    <div className="tcd-row fragment"><div className="k">C</div><div className="v"><div className="kk">Context</div><div className="vv">The constraints, files, examples, or background only you know — and what it must <em>not</em> touch.</div></div></div>
+    <div className="tcd-row fragment"><div className="k">D</div><div className="v"><div className="kk">Done signal</div><div className="vv">What does a good result look like? How would you — or the agent — check it?</div></div></div>
   </div>
 </div>
 
@@ -500,11 +471,50 @@ export const metadata = { title: "Using Coding Agents Effectively — Ep. 1", de
 <Slide>
 
 <div className="act" style={{ textAlign: "left" }}>
-  <p className="kicker"><span className="no">05 /</span> The consequence</p>
-  <p className="pull" style={{ maxWidth: "24em" }}>When the desk fills, the agent doesn't tell you what it forgot.<br /><span>It just starts being wrong with confidence.</span></p>
-  <div className="grid2" style={{ marginTop: "1.2em", height: "auto" }}>
-    <div className="card fragment"><h3 style={{ color: "#f26d5f" }}>Symptom</h3><p>It re-asks something you answered. It reverts a decision. It “forgets” a constraint from ten turns ago.</p></div>
-    <div className="card fragment"><h3 style={{ color: "#7fd08a" }}>Cure</h3><p>Short instructions. Skills loaded on demand. And a <span className="mono">/clear</span> before the desk collapses.</p></div>
+  <p className="kicker"><span className="no">04 /</span> The same request, twice · coding</p>
+  <div className="grid2" style={{ height: "auto", marginTop: "0.6em" }}>
+    <div>
+      <div className="filecard bad">
+        <div className="h"><span>vague</span><span className="err">guesswork</span></div>
+        add tests for foo.py
+      </div>
+      <p className="tiny" style={{ marginTop: "0.7em" }}>Which cases? Mocks allowed? How do we know it worked?</p>
+    </div>
+    <div>
+      <div className="filecard good">
+        <div className="h"><span>sharp</span><span className="ok">executable</span></div>
+        <span className="fragment"><span className="ok">T</span> — write a test for foo.py covering the edge case where the user is logged out<br /></span>
+        <span className="fragment"><span className="ok">C</span> — avoid mocks<br /></span>
+        <span className="fragment"><span className="ok">D</span> — run the tests after; they pass</span>
+      </div>
+      <p className="tiny fragment" style={{ marginTop: "0.7em" }}>Same intent. Zero riddles.</p>
+    </div>
+  </div>
+</div>
+
+</Slide>
+
+<Slide>
+
+<div className="act" style={{ textAlign: "left" }}>
+  <p className="kicker"><span className="no">04 /</span> The same request, twice · writing</p>
+  <div className="grid2" style={{ height: "auto", marginTop: "0.6em" }}>
+    <div>
+      <div className="filecard bad">
+        <div className="h"><span>vague</span><span className="err">guesswork</span></div>
+        make this email better
+      </div>
+      <p className="tiny" style={{ marginTop: "0.7em" }}>Better how? For whom? How long? Ending on what?</p>
+    </div>
+    <div>
+      <div className="filecard good">
+        <div className="h"><span>sharp</span><span className="ok">executable</span></div>
+        <span className="fragment"><span className="ok">T</span> — tighten this email to under 120 words<br /></span>
+        <span className="fragment"><span className="ok">C</span> — busy client, warm but direct<br /></span>
+        <span className="fragment"><span className="ok">D</span> — ends with one clear ask: a call next week</span>
+      </div>
+      <p className="tiny fragment" style={{ marginTop: "0.7em" }}>T·C·D works outside code, too.</p>
+    </div>
   </div>
 </div>
 
@@ -515,9 +525,9 @@ export const metadata = { title: "Using Coding Agents Effectively — Ep. 1", de
 <div className="act">
   <p className="kicker">Checkpoint · Quiz</p>
   <Quiz
-    id="context-reset"
-    question="You just spent 40 minutes debugging a migration. Now you want a fresh, unrelated endpoint. First thing you type?"
-    options={["Just describe the endpoint", "/compact, then describe it", "/clear, then describe it", "Restart your terminal"]}
+    id="spot-missing"
+    question="“Fix the flaky login test in tests/auth.spec.ts. Do not touch the fixtures.” — Which part is missing?"
+    options={["Task", "Context", "Done signal", "Nothing — it is complete"]}
     answer={2}
   />
 </div>
@@ -528,28 +538,84 @@ export const metadata = { title: "Using Coding Agents Effectively — Ep. 1", de
 
 <div className="split">
   <div className="points">
+    <p className="kicker"><span className="no">05 /</span> The context window</p>
+    <h2>Everything the agent<br />knows, <em>right now</em>.</h2>
+    <ul>
+      <li className="fragment">Your prompt goes in.<span className="sub">After the system prompt, CLAUDE.md, and skill descriptions.</span></li>
+      <li className="fragment">Every file it reads goes in.<span className="sub">All 214 lines of it, on the desk.</span></li>
+      <li className="fragment">Every test log and tool output goes in.</li>
+      <li className="fragment">And the window is finite.<span className="sub">When it fills, old things fall off — silently.</span></li>
+    </ul>
+  </div>
+  <div className="termwrap">
+    <ContextWindow
+      title="context · 200k window"
+      steps={[
+        [
+          { op: "add", t: "sys", x: "System prompt", n: 8 },
+          { op: "add", t: "md", x: "CLAUDE.md", n: 4 },
+          { op: "add", t: "skill", x: "Skill descriptions × 10", n: 2 },
+        ],
+        [{ op: "add", t: "user", x: "Your prompt", n: 4 }],
+        [{ op: "add", t: "tool", x: "@src/auth.ts · 214 lines", n: 16 }],
+        [{ op: "add", t: "tool", x: "npm test output", n: 18 }],
+        [
+          { op: "add", t: "user", x: "Turns 2–9", n: 12 },
+          { op: "add", t: "tool", x: "More file reads", n: 24 },
+        ],
+      ]}
+    />
+  </div>
+</div>
+
+</Slide>
+
+<Slide>
+
+<div className="act" style={{ textAlign: "left" }}>
+  <p className="kicker"><span className="no">05 /</span> The consequence</p>
+  <p className="pull" style={{ maxWidth: "24em" }}>When the window fills, the agent doesn't tell you what it forgot.<br /><span>It just starts being wrong with confidence.</span></p>
+  <div className="grid2" style={{ marginTop: "1.2em", height: "auto" }}>
+    <div className="card fragment"><h3 style={{ color: "#f26d5f" }}>Symptom</h3><p>It re-asks something you answered. It reverts a decision. It “forgets” a constraint from ten turns ago.</p></div>
+    <div className="card fragment"><h3 style={{ color: "#7fd08a" }}>Cure</h3><p>Short standing instructions. Skills loaded on demand. And a <span className="mono">/clear</span> before the desk collapses.</p></div>
+  </div>
+</div>
+
+</Slide>
+
+<Slide>
+
+<div className="split">
+  <div className="points">
     <p className="kicker"><span className="no">06 /</span> CLAUDE.md — build one, live</p>
     <ul>
-      <li className="fragment">Every session starts by reading this file.<span className="sub">The standing brief you never have to repeat.</span></li>
-      <li className="fragment">Which is why it must stay short.<span className="sub">It is paid for on every single turn.</span></li>
+      <li className="fragment"><strong>Rules that apply to every conversation.</strong><span className="sub">The standing brief you never have to repeat.</span></li>
+      <li className="fragment"><strong>Ruthlessly concise.</strong><span className="sub">It is paid for on every single turn.</span></li>
+      <li className="fragment"><strong>Review it periodically.</strong><span className="sub">Stale rules mislead with authority.</span></li>
+      <li className="fragment"><strong>Skip the obvious.</strong><span className="sub">The model can infer what any senior dev would.</span></li>
     </ul>
   </div>
   <div className="termwrap">
     <Terminal
-      title="zsh · touch CLAUDE.md"
-      steps={[[
-        { t: "cmd", x: "touch CLAUDE.md" },
-        { t: "ok", x: "## Project rules" },
-        { t: "out", x: "Todo API. TypeScript strict mode." },
-        { t: "ok", x: "## Code style" },
-        { t: "out", x: "- Named exports only. No default exports." },
-        { t: "out", x: "- No `any`. Ever." },
-        { t: "ok", x: "## Testing" },
-        { t: "out", x: "- `npm test` must pass before any commit." },
-        { t: "ok", x: "## Never" },
-        { t: "out", x: "- Edit src/generated/** · Commit to main" },
-        { t: "dim", x: "Saved. 180 tokens. Read on every single turn." },
-      ]]}
+      title="zsh · CLAUDE.md"
+      steps={[
+        [{ t: "cmd", x: "touch CLAUDE.md" }],
+        [
+          { t: "ok", x: "## Code style" },
+          { t: "out", x: "- TypeScript strict. No `any`. Ever." },
+          { t: "out", x: "- Named exports only." },
+        ],
+        [
+          { t: "ok", x: "## Testing" },
+          { t: "out", x: "- `npm test` must pass before any commit." },
+          { t: "dim", x: "(one line — not a testing philosophy essay)" },
+        ],
+        [
+          { t: "ok", x: "## Never" },
+          { t: "out", x: "- Edit src/generated/** · Commit to main" },
+        ],
+        [{ t: "dim", x: "Saved. 180 tokens. Read on every single turn." }],
+      ]}
     />
   </div>
 </div>
@@ -579,22 +645,30 @@ export const metadata = { title: "Using Coding Agents Effectively — Ep. 1", de
 
 <Slide>
 
-<div className="grid-side">
-  <div>
+<div className="split">
+  <div className="points">
     <p className="kicker"><span className="no">07 /</span> Skills</p>
     <h2>Knowledge that<br />waits on <em>disk</em>.</h2>
-    <p className="lead2">A skill is a folder with instructions. The agent reads it the moment it becomes relevant — and not a second before.</p>
+    <ul>
+      <li className="fragment">You ask for something the skill covers.<span className="sub">Until now, only its one-line description rode along.</span></li>
+      <li className="fragment">The agent reads SKILL.md from disk — only now.<span className="sub">Watch it slide into the window.</span></li>
+      <li className="fragment">Used, then put back.<span className="sub">No permanent rent on the window.</span></li>
+    </ul>
   </div>
-  <div className="flow">
-    <div className="node fragment">Conversation<span className="st">◆</span></div>
-    <div className="arrow"></div>
-    <div className="node fragment">Needs the API skill<span className="st">◆</span></div>
-    <div className="arrow"></div>
-    <div className="node fragment">Reads SKILL.md<span className="st">◆</span></div>
-    <div className="arrow"></div>
-    <div className="node fragment">Injects instructions<span className="st">◆</span></div>
-    <div className="arrow"></div>
-    <div className="node fragment">Continues working<span className="st">◆</span></div>
+  <div className="termwrap">
+    <ContextWindow
+      title="context · 10 skills installed"
+      steps={[
+        [
+          { op: "add", t: "sys", x: "System prompt", n: 8 },
+          { op: "add", t: "md", x: "CLAUDE.md", n: 4 },
+          { op: "add", t: "skill", x: "Skill descriptions × 10", n: 3 },
+        ],
+        [{ op: "add", t: "user", x: "“make the dashboard faster”", n: 4 }],
+        [{ op: "add", t: "skill", x: "SKILL.md: tcd — read from disk", n: 6 }],
+        [{ op: "add", t: "tool", x: "Prompt rewritten as T·C·D", n: 5 }],
+      ]}
+    />
   </div>
 </div>
 
@@ -604,8 +678,22 @@ export const metadata = { title: "Using Coding Agents Effectively — Ep. 1", de
 
 <div className="grid2">
   <div className="card fragment"><h3>Lives on disk</h3><p>Version it. Review it. Share it across the team like any other file.</p></div>
-  <div className="card fragment"><h3>Loaded only when needed</h3><p>Ten skills installed, zero cost until one is actually invoked.</p></div>
+  <div className="card fragment"><h3>Loaded only when needed</h3><p>Ten skills installed, one line of description each until one is actually invoked.</p></div>
   <div className="card agent fragment" style={{ gridColumn: "1 / -1" }}><h3>Doesn't consume permanent context</h3><p>CLAUDE.md is rent you pay every turn. A skill is a book you take off the shelf, read, and put back.</p></div>
+</div>
+
+</Slide>
+
+<Slide>
+
+<div className="act">
+  <p className="kicker">Checkpoint · Quiz</p>
+  <Quiz
+    id="skill-cost"
+    question="You have 10 skills installed. What do they cost in context before any is invoked?"
+    options={["All ten SKILL.md bodies", "Nothing at all", "One line of description each", "Depends on the model"]}
+    answer={2}
+  />
 </div>
 
 </Slide>
@@ -616,29 +704,36 @@ export const metadata = { title: "Using Coding Agents Effectively — Ep. 1", de
   <div className="points">
     <p className="kicker"><span className="no">08 /</span> Build our first skill</p>
     <ul>
-      <li className="fragment"><strong>1 · Make the folder</strong></li>
-      <li className="fragment"><strong>2 · Write the frontmatter</strong><span className="sub">How the agent decides when to reach for this. Write it for a stranger.</span></li>
-      <li className="fragment"><strong>3 · Write the body</strong></li>
-      <li className="fragment"><strong>4 · Invoke it</strong></li>
+      <li className="fragment"><strong>1 · Make the folder</strong><span className="sub">.claude/skills/&lt;name&gt;/SKILL.md — the filename is the contract.</span></li>
+      <li className="fragment"><strong>2 · Write the frontmatter</strong><span className="sub">name + description: how the agent decides when to reach for this. Write it for a stranger.</span></li>
+      <li className="fragment"><strong>3 · Write the body</strong><span className="sub">The actual instructions, in plain T·C·D language.</span></li>
+      <li className="fragment"><strong>4 · It registers</strong><span className="sub">No restart, no build. It waits on disk.</span></li>
     </ul>
   </div>
   <div className="termwrap">
     <Terminal
       title="zsh · ~/todo-app"
-      steps={[[
-        { t: "cmd", x: "mkdir -p .claude/skills/tcd" },
-        { t: "cmd", x: "touch .claude/skills/tcd/SKILL.md" },
-        { t: "ok", x: "  ✓ .claude/skills/tcd/SKILL.md" },
-        { t: "dim", x: "---" },
-        { t: "out", x: "name: tcd" },
-        { t: "out", x: "description: Rewrite a vague prompt into Task," },
-        { t: "out", x: "  Context, and Done signal. Use when a request" },
-        { t: "out", x: "  lacks files, constraints, or success criteria." },
-        { t: "dim", x: "---" },
-        { t: "out", x: "Rewrite $PROMPT as three labeled sections." },
-        { t: "out", x: "Never invent files. If context is missing, ask." },
-        { t: "ok", x: "Skill registered. 0 tokens until invoked." },
-      ]]}
+      steps={[
+        [{ t: "dim", x: "goal: a skill that rewrites vague prompts as T·C·D" }],
+        [
+          { t: "cmd", x: "mkdir -p .claude/skills/tcd" },
+          { t: "cmd", x: "touch .claude/skills/tcd/SKILL.md" },
+          { t: "ok", x: "  ✓ .claude/skills/tcd/SKILL.md" },
+        ],
+        [
+          { t: "dim", x: "---" },
+          { t: "out", x: "name: tcd" },
+          { t: "out", x: "description: Rewrite a vague prompt into Task," },
+          { t: "out", x: "  Context, and Done signal. Use when a request" },
+          { t: "out", x: "  lacks files, constraints, or success criteria." },
+          { t: "dim", x: "---" },
+        ],
+        [
+          { t: "out", x: "Rewrite $PROMPT as three labeled sections." },
+          { t: "out", x: "Never invent files. If context is missing, ask." },
+        ],
+        [{ t: "ok", x: "Skill registered. One line of context until invoked." }],
+      ]}
     />
   </div>
 </div>
@@ -677,20 +772,38 @@ export const metadata = { title: "Using Coding Agents Effectively — Ep. 1", de
 
 <Slide>
 
-<div className="grid-side">
-  <div>
-    <p className="kicker"><span className="no">09 /</span> Managing long sessions</p>
+<div className="split">
+  <div className="points">
+    <p className="kicker"><span className="no">09 /</span> Managing the session</p>
     <h2>Conversations <em>rot</em>.</h2>
-    <p className="lead2">Every correction, every dead end, every abandoned approach stays on the desk — and keeps influencing the next answer.</p>
-    <div className="meter" style={{ height: "12px", marginTop: "1.2em" }}><i style={{ width: "85%", background: "#f26d5f" }}></i></div>
-    <p className="tiny" style={{ marginTop: "0.5em" }}>session health: degrading</p>
+    <ul>
+      <li className="fragment">Corrections and dead ends stay on the desk.<span className="sub">Turn 19: it re-asks a question you answered.</span></li>
+      <li className="fragment">And keep influencing every next answer.<span className="sub">Turn 23: it reverts a decision from turn 6.</span></li>
+      <li className="fragment"><span className="mono">/clear</span> between unrelated tasks.<span className="sub">CLAUDE.md and skills survive. The rot does not.</span></li>
+    </ul>
   </div>
-  <div>
-    <div className="deskrow fragment"><span style={{ color: "#e6b455" }}>▍</span><span>turn 4 · you correct a file path</span></div>
-    <div className="deskrow fragment"><span style={{ color: "#e6b455" }}>▍</span><span>turn 9 · abandoned approach still in context</span></div>
-    <div className="deskrow fragment"><span style={{ color: "#f26d5f" }}>▍</span><span>turn 14 · it reverts a decision from turn 6</span></div>
-    <div className="deskrow fragment"><span style={{ color: "#f26d5f" }}>▍</span><span>turn 19 · it re-asks a question you answered</span></div>
-    <div className="deskrow fragment"><span style={{ color: "#7fd08a" }}>✓</span><span>/clear · CLAUDE.md and skills survive</span></div>
+  <div className="termwrap">
+    <ContextWindow
+      title="context · session, hour two"
+      steps={[
+        [
+          { op: "add", t: "sys", x: "System prompt", n: 8 },
+          { op: "add", t: "md", x: "CLAUDE.md", n: 4 },
+          { op: "add", t: "skill", x: "Skill descriptions", n: 2 },
+          { op: "add", t: "tool", x: "Migration debugging · turns 1–14", n: 38 },
+          { op: "add", t: "user", x: "Corrections × 3", n: 12 },
+          { op: "add", t: "tool", x: "Abandoned approach", n: 22 },
+        ],
+        [{ op: "add", t: "tool", x: "Turn 19 · re-asks an answered question", n: 6 }],
+        [{ op: "add", t: "tool", x: "Turn 23 · reverts a good decision", n: 5 }],
+        [
+          { op: "clear" },
+          { op: "add", t: "sys", x: "System prompt", n: 8 },
+          { op: "add", t: "md", x: "CLAUDE.md", n: 4 },
+          { op: "add", t: "skill", x: "Skill descriptions", n: 2 },
+        ],
+      ]}
+    />
   </div>
 </div>
 
@@ -713,8 +826,22 @@ export const metadata = { title: "Using Coding Agents Effectively — Ep. 1", de
   <div>
     <p className="kicker"><span className="no">09 /</span> The two-correction rule</p>
     <p className="pull">If two corrections haven't fixed it,<br /><span>the third one won't either.</span></p>
-    <p className="lead2" style={{ marginTop: "1em" }}>A third correction isn't more information — it's more noise on a prompt that was wrong from the start. Kill the session, rewrite with T·C·D, and you'll be done before you'd have finished arguing.</p>
+    <p className="lead2" style={{ marginTop: "1em" }}>A third correction isn't more information — it's more noise on a prompt that was wrong from the start. Course-correct early; don't let a wrong turn compound. Kill the session, rewrite with T·C·D.</p>
   </div>
+</div>
+
+</Slide>
+
+<Slide>
+
+<div className="act">
+  <p className="kicker">Checkpoint · Quiz</p>
+  <Quiz
+    id="context-reset"
+    question="You just spent 40 minutes debugging a migration. Now you want a fresh, unrelated endpoint. First thing you type?"
+    options={["Just describe the endpoint", "/compact, then describe it", "/clear, then describe it", "Restart your terminal"]}
+    answer={2}
+  />
 </div>
 
 </Slide>
@@ -748,7 +875,7 @@ export const metadata = { title: "Using Coding Agents Effectively — Ep. 1", de
 <div className="split">
   <div className="points">
     <p className="kicker"><span className="no">10 /</span> External context · Images</p>
-    <p className="lead2">Drop a screenshot. Circle the broken thing. The agent now talks about <em>your</em> button, in <em>your</em> component — not a hypothetical one.</p>
+    <p className="lead2">Drop a screenshot. Circle the broken thing. A picture carries what a sentence can't — and the agent now talks about <em>your</em> button, in <em>your</em> component.</p>
   </div>
   <div className="termwrap">
     <Terminal
@@ -772,7 +899,7 @@ export const metadata = { title: "Using Coding Agents Effectively — Ep. 1", de
 <div className="split">
   <div className="points">
     <p className="kicker"><span className="no">10 /</span> External context · URLs</p>
-    <p className="lead2">Paste the docs URL. It cites the actual signature from the actual version — instead of the one it half-remembers from two years ago.</p>
+    <p className="lead2">Paste the docs URL. It cites the actual signature from the actual version — instead of the one it half-remembers. Allowlist frequent domains with <span className="mono">/permissions</span>.</p>
   </div>
   <div className="termwrap">
     <Terminal
@@ -796,7 +923,7 @@ export const metadata = { title: "Using Coding Agents Effectively — Ep. 1", de
 <div className="split">
   <div className="points">
     <p className="kicker"><span className="no">10 /</span> External context · Raw data</p>
-    <p className="lead2">Pipe it. 40,000 lines of log you'll never scroll through, read in one gulp. Zero copy-paste.</p>
+    <p className="lead2">Pipe it. 40,000 lines of log you'll never scroll through, read in one gulp. No copy-paste, no truncation.</p>
   </div>
   <div className="termwrap">
     <Terminal
@@ -819,16 +946,88 @@ export const metadata = { title: "Using Coding Agents Effectively — Ep. 1", de
 
 <Slide>
 
+<div className="split">
+  <div className="points">
+    <p className="kicker"><span className="no">11 /</span> Workflow one — a new endpoint</p>
+    <h2>Encode your <em>architecture</em>.</h2>
+    <ul>
+      <li className="fragment"><strong>1 · Make the folder</strong><span className="sub">.claude/skills/endpoint/SKILL.md</span></li>
+      <li className="fragment"><strong>2 · Describe when to use it</strong><span className="sub">“Use when asked to add an endpoint or route.”</span></li>
+      <li className="fragment"><strong>3 · Spell out the layers, in order</strong><span className="sub">Controller → Command → Handler → Service → Repository. Your team's shape.</span></li>
+      <li className="fragment"><strong>4 · Name the done signal</strong><span className="sub">Tests written, npm test passing, committed.</span></li>
+    </ul>
+  </div>
+  <div className="termwrap">
+    <Terminal
+      title="zsh · ~/shop-api"
+      steps={[
+        [{ t: "dim", x: "goal: every new endpoint follows our layered architecture" }],
+        [
+          { t: "cmd", x: "mkdir -p .claude/skills/endpoint" },
+          { t: "cmd", x: "touch .claude/skills/endpoint/SKILL.md" },
+          { t: "ok", x: "  ✓ .claude/skills/endpoint/SKILL.md" },
+        ],
+        [
+          { t: "dim", x: "---" },
+          { t: "out", x: "name: endpoint" },
+          { t: "out", x: "description: Scaffold a new HTTP endpoint as a" },
+          { t: "out", x: "  full vertical slice. Use when asked to add an" },
+          { t: "out", x: "  endpoint or route." },
+          { t: "dim", x: "---" },
+        ],
+        [
+          { t: "out", x: "Create these layers, in this order:" },
+          { t: "out", x: "1. Controller — receives the HTTP request" },
+          { t: "out", x: "2. Command — the validated intent" },
+          { t: "out", x: "3. Command Handler — orchestrates the use case" },
+          { t: "out", x: "4. Service — the domain logic" },
+          { t: "out", x: "5. Repository — talks to the database" },
+        ],
+        [
+          { t: "out", x: "Write tests for the new endpoint." },
+          { t: "out", x: "Done when `npm test` passes. Then commit." },
+          { t: "ok", x: "Skill registered." },
+        ],
+      ]}
+    />
+  </div>
+</div>
+
+</Slide>
+
+<Slide>
+
 <div className="grid-side">
   <div>
-    <p className="kicker"><span className="no">11 /</span> Workflow one — feature development</p>
-    <p className="lead2">A skill can encode your architecture. Ask for an endpoint; get the whole vertical slice, in your team's shape, in your team's order.</p>
+    <p className="kicker"><span className="no">11 /</span> Workflow one — the file</p>
+    <h2>The whole skill.<br />One <em>readable</em> file.</h2>
+    <p className="lead2">Frontmatter tells the agent <em>when</em> to reach for it. The body tells it <em>what</em> to do. Notice it's just T·C·D, written down once for the whole team.</p>
+  </div>
+  <div>
+    <div className="filecard good">
+      <div className="h"><span>.claude/skills/endpoint/SKILL.md</span><span className="ok">~120 tokens</span></div>
+      <span className="muted">---</span><br />name: endpoint<br />description: Scaffold a new HTTP endpoint as a full<br />&nbsp;&nbsp;vertical slice. Use when asked to add an endpoint<br />&nbsp;&nbsp;or route.<br /><span className="muted">---</span><br /><br /><span className="ok">Create these layers, in this order:</span><br />1. Controller — receives the HTTP request<br />2. Command — the validated intent<br />3. Command Handler — orchestrates the use case<br />4. Service — the domain logic<br />5. Repository — talks to the database<br /><br /><span className="ok">Write tests for the new endpoint.</span><br />Done when `npm test` passes. Then commit.
+    </div>
+  </div>
+</div>
+
+</Slide>
+
+<Slide>
+
+<div className="grid-side">
+  <div>
+    <p className="kicker"><span className="no">11 /</span> Workflow one — run it</p>
+    <p className="lead2">One vague sentence in. The whole vertical slice out — in your team's shape, in your team's order, tests included.</p>
   </div>
   <div className="termwrap">
     <Terminal
       title="claude · /skill endpoint"
       steps={[[
+        { t: "cmd", x: "/skill endpoint" },
         { t: "cmd", x: "add a POST /orders endpoint" },
+        { t: "ag", x: "Loading skill: endpoint…" },
+        { t: "ok", x: "SKILL.md read · creating the slice, in order" },
         { t: "ok", x: "created src/http/OrderController.ts" },
         { t: "ok", x: "created src/app/CreateOrderCommand.ts" },
         { t: "ok", x: "created src/app/CreateOrderHandler.ts" },
@@ -846,10 +1045,23 @@ export const metadata = { title: "Using Coding Agents Effectively — Ep. 1", de
 
 <Slide>
 
+<div className="act">
+  <p className="kicker">Hands-on · Put it in order</p>
+  <DragDrop
+    id="endpoint-order"
+    prompt="Order the layers the endpoint skill creates — request first"
+    items={["Controller — receives the HTTP request", "Command — the validated intent", "Command Handler — orchestrates the use case", "Service — the domain logic", "Repository — talks to the database"]}
+  />
+</div>
+
+</Slide>
+
+<Slide>
+
 <div className="grid-side">
   <div>
     <p className="kicker"><span className="no">11 /</span> Workflow two — bug investigation</p>
-    <p className="lead2">This one interviews you first. It refuses to guess — a careful junior engineer who has learned not to touch things.</p>
+    <p className="lead2">This one interviews you first. It refuses to guess — it clarifies, locates the exact bug, and plans before touching a file.</p>
   </div>
   <div className="termwrap">
     <Terminal
@@ -872,86 +1084,13 @@ export const metadata = { title: "Using Coding Agents Effectively — Ep. 1", de
 
 <Slide>
 
-<div className="grid-side">
-  <div>
-    <p className="kicker"><span className="no">12 /</span> Hooks</p>
-    <h2>Rules the agent<br />cannot <em>talk its way</em> out of.</h2>
-    <ul className="ticks" style={{ marginTop: "0.8em" }}>
-      <li>Auto-format code after edits</li>
-      <li>Prevent editing protected files</li>
-      <li>Automatically run tests</li>
-      <li>Notify Slack after completion</li>
-      <li>Enforce project conventions</li>
-    </ul>
-  </div>
-  <div className="flow">
-    <div className="node">Before prompt<span className="st">◆</span></div>
-    <div className="arrow"></div>
-    <div className="node">Permission hook<span className="st">◆</span></div>
-    <div className="arrow"></div>
-    <div className="node">Claude runs<span className="st">◆</span></div>
-    <div className="arrow"></div>
-    <div className="node">Post-edit hook<span className="st">◆</span></div>
-    <div className="arrow"></div>
-    <div className="node">Formatting hook<span className="st">◆</span></div>
-    <div className="arrow"></div>
-    <div className="node">Notification hook<span className="st">◆</span></div>
-  </div>
-</div>
-
-</Slide>
-
-<Slide>
-
-<div className="split">
-  <div className="points">
-    <p className="kicker"><span className="no">12 /</span> Live — a hook says no</p>
-    <p className="lead2">A prompt is a request. A hook is a law. It runs your script at a lifecycle event, and it can say no.</p>
-  </div>
-  <div className="termwrap">
-    <Terminal
-      title="claude · hooks enabled"
-      steps={[[
-        { t: "cmd", x: "Rotate the API secret and reformat the payment module." },
-        { t: "dim", x: "→ hook: PreToolUse (permissions)" },
-        { t: "warn", x: "  ✎ .env  BLOCKED" },
-        { t: "warn", x: "  hooks/protect.sh: .env is a protected path." },
-        { t: "dim", x: "  Claude: understood — skipping .env, continuing." },
-        { t: "out", x: "  ✎ src/payments/charge.ts  +24 -31" },
-        { t: "dim", x: "→ hook: PostToolUse (format)" },
-        { t: "ok", x: "  prettier --write · 2 files formatted" },
-        { t: "dim", x: "→ hook: PostToolUse (test)" },
-        { t: "ok", x: "  npm test -- payments · 18 passing" },
-        { t: "dim", x: "→ hook: Stop (notify)" },
-        { t: "ok", x: "  posting to #eng-builds · sent" },
-        { t: "ok", x: "The agent argued for nothing. The hook simply held." },
-      ]]}
-    />
-  </div>
-</div>
-
-</Slide>
-
-<Slide>
-
-<div className="grid-side">
-  <div>
-    <p className="kicker">Closing · Putting it together</p>
-    <h2>One vague request.<br />Ten disciplined <em>steps</em>.</h2>
-    <p className="lead2">Everything in this episode, chained into a single run.</p>
-  </div>
-  <div className="flow">
-    <div className="node fragment">1 · Vague feature request<span className="st">◆</span></div>
-    <div className="node fragment">2 · T·C·D skill rewrites it<span className="st">◆</span></div>
-    <div className="node fragment">3 · Load CLAUDE.md<span className="st">◆</span></div>
-    <div className="node fragment">4 · Attach @src/orders.ts<span className="st">◆</span></div>
-    <div className="node fragment">5 · Reference the API docs<span className="st">◆</span></div>
-    <div className="node fragment">6 · Generate a plan<span className="st">◆</span></div>
-    <div className="node fragment">7 · Implement across 6 files<span className="st">◆</span></div>
-    <div className="node fragment">8 · Run tests, fix failures<span className="st">◆</span></div>
-    <div className="node fragment">9 · Show the git diff<span className="st">◆</span></div>
-    <div className="node on fragment">10 · Summary + next steps<span className="st">◆</span></div>
-  </div>
+<div className="act">
+  <p className="kicker">Last word is yours · Poll</p>
+  <Poll
+    id="first-skill"
+    question="Which team workflow deserves a skill first?"
+    options={["Feature testing", "Release checklist", "Code review", "Onboarding docs"]}
+  />
 </div>
 
 </Slide>
@@ -961,21 +1100,8 @@ export const metadata = { title: "Using Coding Agents Effectively — Ep. 1", de
 <div className="statement">
   <p className="kicker">Episode 01 · Ends here</p>
   <div className="rule"></div>
-  <h1>The future isn't about replacing developers. It's about becoming an effective <em>leader</em> of AI software engineers.</h1>
+  <h1>The future isn't about<br />replacing developers.<br />It's about becoming an effective <em>leader</em> of AI software engineers.</h1>
   <div className="row" style={{ marginTop: "1.4em" }}><span className="tag agent">Agent</span><span className="tag human">Human</span><span className="tiny">You were always the one in the second color.</span></div>
-</div>
-
-</Slide>
-
-<Slide>
-
-<div className="act">
-  <p className="kicker">Last word is yours · Poll</p>
-  <Poll
-    id="first-skill"
-    question="Which team workflow deserves a skill first?"
-    options={["Feature testing", "Release checklist", "Code review", "Onboarding docs"]}
-  />
 </div>
 
 </Slide>
