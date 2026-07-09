@@ -171,6 +171,17 @@ body {
   .deck-frame {
     @apply h-[60vh] overflow-hidden rounded-xl border border-border sm:h-[64vh] lg:h-[70vh];
   }
+  /* Learner fullscreen: Stage requests fullscreen on itself (.stage). The frame
+     fills the screen edge-to-edge; controls hide (Esc exits, the browser default). */
+  .stage:fullscreen {
+    @apply gap-0 bg-black;
+  }
+  .stage:fullscreen .deck-frame {
+    @apply h-screen rounded-none border-0;
+  }
+  .stage:fullscreen .stage-controls {
+    @apply hidden;
+  }
 }
 
 /* Motion: CSS-only, no JS. Gated by reduced-motion (content visible either way). */

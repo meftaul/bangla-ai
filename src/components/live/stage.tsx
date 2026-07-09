@@ -57,6 +57,7 @@ export default function Stage({
     initialScene && !Array.isArray(initialScene) ? (initialScene as Snapshot) : null,
   );
   const boardRef = useRef<HTMLDivElement>(null); // the viewer's whiteboard container, to size the fit
+  const stageRef = useRef<HTMLDivElement>(null); // fullscreen target — wraps deck + board so the view toggle keeps working
 
   // Viewer: fit the presenter's visible region into THIS canvas, whatever its size — so a
   // mobile student sees the same region a desktop teacher does (letterboxed when aspect
@@ -168,11 +169,29 @@ export default function Stage({
     }, 1000);
   };
 
+  // ponytail: no fullscreenchange listener — the button hides via CSS in fullscreen
+  // and Esc (the browser default) exits. iOS Safari lacks element fullscreen; the
+  // catch makes the button a no-op there.
+  const fullscreen = () => {
+    if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
+    else stageRef.current?.requestFullscreen().catch(() => {});
+  };
+
   return (
-    <div className="flex flex-col gap-3">
+    <div ref={stageRef} className="stage flex flex-col gap-3">
       {mode === "presenter" && (
-        <button type="button" onClick={toggle} className="btn-secondary self-start">
+        <button type="button" onClick={toggle} className="btn-secondary self-start stage-controls">
           {view === "deck" ? "Switch to whiteboard" : "Switch to slides"}
+        </button>
+      )}
+      {mode === "viewer" && (
+        <button
+          type="button"
+          onClick={fullscreen}
+          title="Fullscreen (Esc to exit)"
+          className="btn-secondary self-start stage-controls"
+        >
+          ⛶ Fullscreen
         </button>
       )}
       <div className={view === "board" ? "hidden" : undefined}>
