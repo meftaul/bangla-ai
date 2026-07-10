@@ -38,7 +38,7 @@ export default function Poll({
   if (live.phase === "idle")
     return (
       <IdleScreen
-        roster={live.roster}
+        count={live.participantCount}
         question={question}
         label="Start Poll"
         presenter={isPresenter}

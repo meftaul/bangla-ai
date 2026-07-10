@@ -62,7 +62,6 @@ export default function Quiz({
     return (
       <IdleScreen
         count={live.participantCount}
-        roster={live.roster}
         question={question}
         label="Start Quiz"
         presenter={isPresenter}

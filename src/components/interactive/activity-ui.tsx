@@ -5,7 +5,7 @@ import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 // Shared visuals for live activities (quiz / poll / dragdrop): the join lobby, the
 // 30s countdown, the results bar chart, and the calm reveal summary. Motion is the
 // brand's "lively moment" — gated by prefers-reduced-motion (the globals.css block
-// the .bar-in/.win-pop/.chip-in classes live in is skipped entirely under reduce),
+// the .bar-in/.win-pop classes live in is skipped entirely under reduce),
 // and the JS count-up below snaps instantly. Everything reads fine without motion.
 
 export type Bar = { label: string; count: number; highlight?: boolean };
@@ -132,26 +132,17 @@ export function Countdown({ seconds, total = 30 }: { seconds: number; total?: nu
   );
 }
 
-// Two-letter avatar from an email/name (e.g. "ada@x.com" -> "AD").
-function initials(email: string) {
-  const name = email.split("@")[0]?.replace(/[._-]+/g, " ").trim() || email;
-  const parts = name.split(/\s+/);
-  return ((parts[0]?.[0] ?? "") + (parts[1]?.[0] ?? parts[0]?.[1] ?? "")).toUpperCase();
-}
-
-// Pre-start lobby. Quiz/DragDrop pass a participant `count` (big and playful); Poll
-// omits it. Learner chips stream in as people join. The presenter sees the Start
-// button; learners see "waiting". `question` previews what's coming.
+// Pre-start lobby. Activities pass a participant `count` (big and playful). The
+// presenter sees the Start button; learners see "waiting". `question` previews
+// what's coming.
 export function IdleScreen({
   count,
-  roster,
   question,
   label,
   presenter,
   onStart,
 }: {
   count?: number;
-  roster?: string[];
   question?: string;
   label: string;
   presenter: boolean;
@@ -171,19 +162,6 @@ export function IdleScreen({
             {count === 1 ? "learner" : "learners"} joined ✨
           </span>
         </div>
-      )}
-      {roster && roster.length > 0 && (
-        <ul className="flex max-w-md flex-wrap justify-center gap-2">
-          {roster.map((email) => (
-            <li
-              key={email}
-              title={email}
-              className="chip-in grid h-9 w-9 place-items-center rounded-full border border-border bg-surface text-xs font-semibold text-muted"
-            >
-              {initials(email)}
-            </li>
-          ))}
-        </ul>
       )}
       {presenter ? (
         <button type="button" onClick={onStart} className="btn-primary px-6 py-3 text-base">

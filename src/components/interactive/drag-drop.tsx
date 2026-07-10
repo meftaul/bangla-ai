@@ -85,7 +85,6 @@ export default function DragDrop({
     return (
       <IdleScreen
         count={live.participantCount}
-        roster={live.roster}
         question={prompt}
         label="Start Activity"
         presenter={isPresenter}

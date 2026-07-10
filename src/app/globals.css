@@ -364,23 +364,6 @@ body {
     animation: nudge 0.4s ease-in-out both;
   }
 
-  /* Each learner chip pops in as they join the lobby (mount-only, so existing
-     chips never re-animate when a new one arrives). */
-  @keyframes chip-in {
-    from {
-      opacity: 0;
-      transform: scale(0.8) translateY(0.25rem);
-    }
-    to {
-      opacity: 1;
-      transform: none;
-    }
-  }
-  .chip-in {
-    opacity: 0;
-    animation: chip-in 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
-  }
-
   /* Scroll-driven reveal for sections below the fold. Visible by default;
      only animates where the browser supports view-timeline. Range completes
      within `entry` so a short last section (footer right below) still reaches
