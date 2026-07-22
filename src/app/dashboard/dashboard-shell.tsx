@@ -18,10 +18,13 @@ const isDesktop = () => window.matchMedia("(min-width: 1024px)").matches;
 export default function DashboardShell({
   isAdmin,
   email,
+  guest,
   children,
 }: {
   isAdmin: boolean;
   email?: string;
+  // Guest (anonymous) viewers get no nav/sidebar — just top bar + content.
+  guest?: boolean;
   children: React.ReactNode;
 }) {
   // Tri-state: null = untouched (CSS default — visible on desktop, hidden on
@@ -61,23 +64,31 @@ export default function DashboardShell({
       {/* Top bar (all breakpoints) */}
       <header className="sticky top-0 z-40 flex h-14 shrink-0 items-center justify-between border-b border-border bg-background/85 px-4 backdrop-blur-md print:hidden">
         <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={toggle}
-            aria-label="Toggle menu"
-            aria-expanded={open === true}
-            className="grid h-9 w-9 place-items-center rounded-md text-foreground hover:bg-surface"
-          >
-            <List size={22} weight="bold" />
-          </button>
-          <Link href="/dashboard" aria-label="Bangla.AI dashboard">
+          {!guest && (
+            <button
+              type="button"
+              onClick={toggle}
+              aria-label="Toggle menu"
+              aria-expanded={open === true}
+              className="grid h-9 w-9 place-items-center rounded-md text-foreground hover:bg-surface"
+            >
+              <List size={22} weight="bold" />
+            </button>
+          )}
+          {guest ? (
             <LogoLockup className="text-lg text-foreground" />
-          </Link>
+          ) : (
+            <Link href="/dashboard" aria-label="Bangla.AI dashboard">
+              <LogoLockup className="text-lg text-foreground" />
+            </Link>
+          )}
         </div>
         <ThemeToggle />
       </header>
 
       <div className="flex flex-1 flex-col lg:flex-row">
+        {!guest && (
+        <>
         {/* Mobile overlay backdrop */}
         <div
           className={`fixed inset-0 z-50 bg-foreground/40 transition-opacity duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none lg:hidden print:hidden ${
@@ -169,6 +180,8 @@ export default function DashboardShell({
             </form>
           </div>
         </aside>
+        </>
+        )}
 
         <main className="flex-1 px-4 py-6 sm:px-6 lg:px-8 lg:py-10">
           {children}

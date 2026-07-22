@@ -216,7 +216,12 @@ export function LiveSessionProvider({
       await channel.subscribe(async (status) => {
         ready.current = status === "SUBSCRIBED";
         if (status === "SUBSCRIBED")
-          await channel.track({ email: auth.user?.email ?? "anon" });
+          await channel.track({
+            email:
+              auth.user?.email ??
+              (auth.user?.user_metadata?.display_name as string | undefined) ??
+              "anon",
+          });
       });
     })();
 

@@ -35,6 +35,18 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
+  // Guests (anonymous sign-in) may only see the live session they joined —
+  // its viewer and its results. Everything else bounces home.
+  if (
+    data?.claims.is_anonymous &&
+    request.nextUrl.pathname.startsWith("/dashboard") &&
+    !/^\/dashboard\/sessions\/[^/]+\/(live|results)$/.test(request.nextUrl.pathname)
+  ) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/";
+    return NextResponse.redirect(url);
+  }
+
   // IMPORTANT: return supabaseResponse as-is so refreshed cookies propagate.
   return supabaseResponse;
 }

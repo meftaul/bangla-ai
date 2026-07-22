@@ -17,9 +17,12 @@ export default async function DashboardLayout({
   if (!data) redirect("/login");
   const email = data.claims.email as string | undefined;
   const isAdmin = role === "admin";
+  // Guests get chrome-less pages: middleware already blocks them from
+  // everything but their session's live/results routes.
+  const isGuest = data.claims.is_anonymous === true;
 
   return (
-    <DashboardShell isAdmin={isAdmin} email={email}>
+    <DashboardShell isAdmin={isAdmin} email={email} guest={isGuest}>
       {children}
     </DashboardShell>
   );
