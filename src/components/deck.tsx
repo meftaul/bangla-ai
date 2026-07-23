@@ -36,6 +36,9 @@ export default function Deck({
       const instance = new Reveal(ref.current, {
         embedded: true,
         hash: false,
+        // reveal 6 auto-switches to scroll view under 435px, which bypasses the
+        // viewer nav lock (native scrolling) and breaks slide-sync on phones.
+        scrollActivationWidth: 0,
         ...(viewer ? { controls: false, keyboard: false, touch: false } : {}),
       });
       await instance.initialize();
