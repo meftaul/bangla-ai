@@ -39,7 +39,7 @@ export default async function ReportPage({ params }: { params: Promise<{ id: str
   // Rank by score (unscored last), so the report reads as a leaderboard.
   const rows = Array.from(students.entries())
     .map(([user_id, email]) => ({
-      email: email ?? user_id,
+      email: email || user_id,
       score: scoreOf(activities, responses.filter((r) => r.user_id === user_id)),
     }))
     .sort((a, b) => pct(b.score) - pct(a.score) || a.email.localeCompare(b.email));

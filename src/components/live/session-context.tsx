@@ -218,8 +218,8 @@ export function LiveSessionProvider({
         if (status === "SUBSCRIBED")
           await channel.track({
             email:
-              auth.user?.email ??
-              (auth.user?.user_metadata?.display_name as string | undefined) ??
+              (auth.user?.user_metadata?.display_name as string | undefined) ||
+              auth.user?.email ||
               "anon",
           });
       });

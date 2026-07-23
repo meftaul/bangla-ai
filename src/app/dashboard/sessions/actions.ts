@@ -65,7 +65,10 @@ export async function joinSession(formData: FormData) {
   const { data: auth } = await supabase.auth.getUser();
   await supabase.from("session_participants").insert({
     session_id: session.id,
-    email: auth.user?.email ?? (auth.user?.user_metadata?.display_name as string | null),
+    email:
+      (auth.user?.user_metadata?.display_name as string | undefined) ||
+      auth.user?.email ||
+      null,
   });
   redirect(`/dashboard/sessions/${session.id}/live`);
 }
