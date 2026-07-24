@@ -1,0 +1,731 @@
+export const metadata = { title: "Agentic AI", description: "A seminar on why agents exist, how they work, when not to build one, and what it means for your career.", type: "slides" };
+
+{/* Ported from the standalone reveal.js seminar (ai-agent-seminar/). Content and
+    design are unchanged; only the delivery is adapted to Pathshala's shared Deck:
+    deck.js/svgs.js are folded in here, and the per-chapter hue moved from an
+    html.ch-* class to a class on each slide's <section>. */}
+
+export const SVGS = {
+  faq: `<svg viewBox="0 0 200 150" role="img" aria-label="A question matched to one of a fixed set of stored answers">
+    <circle class="f-surface s-accent" cx="28" cy="76" r="15" stroke-width="1.1"/>
+    <path class="f-accent" d="M17 87 L14 95 L24 88 Z"/>
+    <text class="glyph" x="28" y="82" text-anchor="middle">?</text>
+    <path class="s-accent" d="M45 76 H70" stroke-width="1.1" marker-end="url(#faq-a)"/>
+    <rect class="f-surface s-line"   x="76" y="34" width="110" height="26" rx="4" stroke-width="0.9"/>
+    <rect class="f-surface s-accent" x="76" y="64" width="110" height="26" rx="4" stroke-width="1.1"/>
+    <rect class="f-surface s-line"   x="76" y="94" width="110" height="26" rx="4" stroke-width="0.9"/>
+    <text class="lbl" x="90" y="50">Q</text><text class="lbl" x="170" y="50" text-anchor="end">A</text>
+    <text class="lbl" x="90" y="80">Q</text><text class="lbl" x="170" y="80" text-anchor="end">A</text>
+    <text class="lbl" x="90" y="110">Q</text><text class="lbl" x="170" y="110" text-anchor="end">A</text>
+    <path class="s-line"   d="M104 46 H158" stroke-width="0.7"/>
+    <path class="s-accent" d="M104 76 H158" stroke-width="0.9" marker-end="url(#faq-a)"/>
+    <path class="s-line"   d="M104 106 H158" stroke-width="0.7"/>
+    <defs><marker id="faq-a" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path class="f-accent" d="M0 0 L6 3 L0 6 Z"/></marker></defs>
+  </svg>`,
+  rag: `<svg viewBox="0 0 200 150" role="img" aria-label="A query retrieves documents that ground the model's answer">
+    <rect class="f-surface s-line"   x="26" y="54" width="34" height="44" rx="3" stroke-width="0.9"/>
+    <rect class="f-surface s-line"   x="21" y="49" width="34" height="44" rx="3" stroke-width="0.9"/>
+    <rect class="f-surface s-accent" x="16" y="44" width="34" height="44" rx="3" stroke-width="1.1"/>
+    <line class="s-line" x1="22" y1="54" x2="44" y2="54" stroke-width="0.7"/>
+    <line class="s-line" x1="22" y1="61" x2="44" y2="61" stroke-width="0.7"/>
+    <line class="s-line" x1="22" y1="68" x2="40" y2="68" stroke-width="0.7"/>
+    <circle class="f-surface s-accent" cx="44" cy="80" r="5" stroke-width="0.9"/>
+    <line class="s-accent" x1="47.5" y1="83.5" x2="52" y2="88" stroke-width="1.1"/>
+    <text class="lbl" x="33" y="106" text-anchor="middle">DOCS</text>
+    <rect class="f-surface s-accent" x="86" y="52" width="44" height="30" rx="6" stroke-width="1.1"/>
+    <text class="lbl-ink" x="108" y="71" text-anchor="middle">LLM</text>
+    <text class="lbl" x="108" y="22" text-anchor="middle">QUERY</text>
+    <path class="s-line"   d="M108 28 V50" stroke-width="0.9" marker-end="url(#rag-m)"/>
+    <path class="s-accent" d="M50 66 H84" stroke-width="1.1" marker-end="url(#rag-a)"/>
+    <path class="s-accent" d="M132 67 H166" stroke-width="1.1" marker-end="url(#rag-a)"/>
+    <text class="lbl" x="184" y="70" text-anchor="middle">ANS</text>
+    <defs>
+      <marker id="rag-a" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path class="f-accent" d="M0 0 L6 3 L0 6 Z"/></marker>
+      <marker id="rag-m" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path class="f-line" d="M0 0 L6 3 L0 6 Z"/></marker>
+    </defs>
+  </svg>`,
+  ro: `<svg viewBox="0 0 200 150" role="img" aria-label="The model reads live data from an API — read only, changing nothing">
+    <rect class="f-surface s-accent" x="18" y="58" width="52" height="34" rx="6" stroke-width="1.1"/>
+    <text class="lbl-ink" x="44" y="79" text-anchor="middle">LLM</text>
+    <path class="s-accent" d="M74 75 H128" stroke-width="1.1" marker-end="url(#ro-a)"/>
+    <text class="lbl" x="101" y="68" text-anchor="middle">GET</text>
+    <ellipse class="f-surface s-line" cx="158" cy="58" rx="22" ry="7" stroke-width="1"/>
+    <path class="s-line" d="M136 58 V90 a22 7 0 0 0 44 0 V58" stroke-width="1" fill="none"/>
+    <line class="s-line" x1="136" y1="74" x2="180" y2="74" stroke-width="0.7"/>
+    <circle class="s-accent" cx="150" cy="112" r="8" stroke-width="1"/>
+    <line class="s-accent" x1="156" y1="118" x2="164" y2="126" stroke-width="1.1"/>
+    <defs><marker id="ro-a" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path class="f-accent" d="M0 0 L6 3 L0 6 Z"/></marker></defs>
+  </svg>`,
+  write: `<svg viewBox="0 0 200 150" role="img" aria-label="The model now writes to systems — a pencil editing the data store">
+    <rect class="f-surface s-accent" x="18" y="58" width="52" height="34" rx="6" stroke-width="1.1"/>
+    <text class="lbl-ink" x="44" y="79" text-anchor="middle">LLM</text>
+    <path class="s-accent" d="M74 68 H128" stroke-width="1.1" marker-end="url(#wr-a)"/>
+    <path class="s-line"   d="M128 84 H74"  stroke-width="1" marker-end="url(#wr-m)"/>
+    <text class="lbl" x="101" y="61" text-anchor="middle">POST</text>
+    <ellipse class="f-surface s-accent" cx="150" cy="52" rx="22" ry="7" stroke-width="1.1"/>
+    <path class="s-accent" d="M128 52 V84 a22 7 0 0 0 44 0 V52" stroke-width="1.1" fill="none"/>
+    <line class="s-line" x1="128" y1="68" x2="172" y2="68" stroke-width="0.7"/>
+    <path class="f-surface s-accent" d="M176 92 L188 104 L167 125 L155 113 Z" stroke-width="1"/>
+    <line class="s-accent" x1="176" y1="92" x2="188" y2="104" stroke-width="1"/>
+    <path class="f-accent" d="M155 113 L167 125 L152 128 Z"/>
+    <path class="s-accent" d="M150 130 q4 -3 8 -1" stroke-width="0.9" fill="none"/>
+    <defs>
+      <marker id="wr-a" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path class="f-accent" d="M0 0 L6 3 L0 6 Z"/></marker>
+      <marker id="wr-m" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path class="f-line" d="M0 0 L6 3 L0 6 Z"/></marker>
+    </defs>
+  </svg>`,
+  agent: `<svg viewBox="0 0 200 150" role="img" aria-label="An agent plans sub-steps, then runs a self-directed loop until it is confident and done">
+    <rect class="f-surface s-accent" x="6" y="66" width="40" height="24" rx="6" stroke-width="1.1"/>
+    <text class="lbl-ink" x="26" y="82" text-anchor="middle">GOAL</text>
+    <path class="s-accent" d="M46 78 H64" stroke-width="1.1" marker-end="url(#ag-a)"/>
+    <rect class="f-surface s-line" x="66" y="44" width="42" height="20" rx="3" stroke-width="0.9"/>
+    <rect class="f-surface s-line" x="66" y="68" width="42" height="20" rx="3" stroke-width="0.9"/>
+    <rect class="f-surface s-line" x="66" y="92" width="42" height="20" rx="3" stroke-width="0.9"/>
+    <text class="lbl" x="78" y="58" text-anchor="middle">1</text>
+    <text class="lbl" x="78" y="82" text-anchor="middle">2</text>
+    <text class="lbl" x="78" y="106" text-anchor="middle">3</text>
+    <path class="s-line" d="M87 64 V68" stroke-width="0.7" marker-end="url(#ag-m)"/>
+    <path class="s-line" d="M87 88 V92" stroke-width="0.7" marker-end="url(#ag-m)"/>
+    <path class="s-accent" d="M108 78 H124" stroke-width="1.1" marker-end="url(#ag-a)"/>
+    <circle class="f-surface s-accent" cx="152" cy="78" r="16" stroke-width="1.1"/>
+    <path class="f-accent" d="M147 71 L159 78 L147 85 Z"/>
+    <path class="s-accent" d="M143 66 C137 44 167 44 161 66" stroke-width="1" fill="none" marker-end="url(#ag-a)"/>
+    <text class="lbl" x="152" y="106" text-anchor="middle">LOOP</text>
+    <path class="s-accent" d="M168 78 H179" stroke-width="1.1" marker-end="url(#ag-a)"/>
+    <circle class="f-surface s-accent" cx="190" cy="78" r="8" stroke-width="1"/>
+    <path class="s-accent" d="M186 78 l3 3 l6 -7" stroke-width="1.1" fill="none"/>
+    <defs>
+      <marker id="ag-a" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path class="f-accent" d="M0 0 L6 3 L0 6 Z"/></marker>
+      <marker id="ag-m" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path class="f-line" d="M0 0 L6 3 L0 6 Z"/></marker>
+    </defs>
+  </svg>`,
+  refl: `<svg viewBox="0 0 200 150" role="img" aria-label="The model drafts an answer, critiques it, and loops back to revise before accepting">
+    <rect class="f-surface s-accent" x="18" y="58" width="48" height="30" rx="6" stroke-width="1.1"/>
+    <text class="lbl-ink" x="42" y="77" text-anchor="middle">LLM</text>
+    <path class="s-accent" d="M66 73 H108" stroke-width="1.1" marker-end="url(#refl-a)"/>
+    <text class="lbl" x="87" y="66" text-anchor="middle">DRAFT</text>
+    <rect class="f-surface s-line" x="112" y="58" width="48" height="30" rx="6" stroke-width="0.9"/>
+    <text class="lbl" x="132" y="77" text-anchor="middle">v1</text>
+    <path class="s-accent" d="M150 62 l5 5 l-8 8 l-5 0 l0 -5 Z" fill="none" stroke-width="0.9"/>
+    <path class="s-accent" d="M150 88 Q150 124 100 124 Q50 124 42 92" stroke-width="1.1" fill="none" marker-end="url(#refl-a)"/>
+    <text class="lbl" x="100" y="118" text-anchor="middle">CRITIQUE</text>
+    <circle class="s-accent" cx="176" cy="66" r="8" stroke-width="1"/>
+    <path class="s-accent" d="M172 66 l3 3 l6 -7" stroke-width="1.1" fill="none"/>
+    <defs><marker id="refl-a" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path class="f-accent" d="M0 0 L6 3 L0 6 Z"/></marker></defs>
+  </svg>`,
+  tool: `<svg viewBox="0 0 200 150" role="img" aria-label="The model reaches out to several external tools — an API, a database, and a function">
+    <rect class="f-surface s-accent" x="14" y="58" width="50" height="34" rx="6" stroke-width="1.1"/>
+    <text class="lbl-ink" x="39" y="79" text-anchor="middle">LLM</text>
+    <path class="s-accent" d="M66 66 Q108 40 150 34" stroke-width="1.1" fill="none" marker-end="url(#tool-a)"/>
+    <path class="s-accent" d="M66 75 H150"           stroke-width="1.1" marker-end="url(#tool-a)"/>
+    <path class="s-accent" d="M66 84 Q108 110 150 116" stroke-width="1.1" fill="none" marker-end="url(#tool-a)"/>
+    <rect class="f-surface s-line" x="152" y="22" width="40" height="24" rx="4" stroke-width="0.9"/>
+    <rect class="f-accent" x="152" y="26" width="3" height="16" rx="1.5"/>
+    <text class="lbl" x="174" y="38" text-anchor="middle">API</text>
+    <rect class="f-surface s-line" x="152" y="63" width="40" height="24" rx="4" stroke-width="0.9"/>
+    <rect class="f-accent" x="152" y="67" width="3" height="16" rx="1.5"/>
+    <text class="lbl" x="174" y="79" text-anchor="middle">DB</text>
+    <rect class="f-surface s-line" x="152" y="104" width="40" height="24" rx="4" stroke-width="0.9"/>
+    <rect class="f-accent" x="152" y="108" width="3" height="16" rx="1.5"/>
+    <text class="lbl" x="174" y="120" text-anchor="middle">fn()</text>
+    <defs><marker id="tool-a" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path class="f-accent" d="M0 0 L6 3 L0 6 Z"/></marker></defs>
+  </svg>`,
+  plan: `<svg viewBox="0 0 200 150" role="img" aria-label="A goal is decomposed into an ordered checklist of three sub-steps">
+    <rect class="f-surface s-accent" x="16" y="62" width="46" height="28" rx="6" stroke-width="1.1"/>
+    <text class="lbl-ink" x="39" y="80" text-anchor="middle">GOAL</text>
+    <path class="s-accent" d="M62 76 H92" stroke-width="1.1" marker-end="url(#plan-a)"/>
+    <rect class="f-surface s-line" x="100" y="22" width="84" height="24" rx="4" stroke-width="0.9"/>
+    <rect class="f-surface s-line" x="100" y="63" width="84" height="24" rx="4" stroke-width="0.9"/>
+    <rect class="f-surface s-line" x="100" y="104" width="84" height="24" rx="4" stroke-width="0.9"/>
+    <text class="lbl" x="114" y="38" text-anchor="middle">1</text>
+    <text class="lbl" x="114" y="79" text-anchor="middle">2</text>
+    <text class="lbl" x="114" y="120" text-anchor="middle">3</text>
+    <rect class="f-surface s-accent" x="164" y="28" width="12" height="12" rx="2" stroke-width="0.9"/>
+    <path class="s-accent" d="M167 34 l2.5 2.5 l4.5 -5.5" stroke-width="1.1" fill="none"/>
+    <rect class="f-surface s-line" x="164" y="69" width="12" height="12" rx="2" stroke-width="0.9"/>
+    <rect class="f-surface s-line" x="164" y="110" width="12" height="12" rx="2" stroke-width="0.9"/>
+    <path class="s-line" d="M142 46 V63" stroke-width="0.7" marker-end="url(#plan-m)"/>
+    <path class="s-line" d="M142 87 V104" stroke-width="0.7" marker-end="url(#plan-m)"/>
+    <defs>
+      <marker id="plan-a" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path class="f-accent" d="M0 0 L6 3 L0 6 Z"/></marker>
+      <marker id="plan-m" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path class="f-line" d="M0 0 L6 3 L0 6 Z"/></marker>
+    </defs>
+  </svg>`,
+  react: `<svg viewBox="0 0 200 150" role="img" aria-label="A closed loop cycling through thought, action, and observation">
+    <circle class="s-accent" cx="100" cy="75" r="46" stroke-width="0.8" stroke-dasharray="2 4" fill="none"/>
+    <circle class="f-surface s-accent" cx="100" cy="29" r="14" stroke-width="1.1"/>
+    <text class="lbl-ink" x="100" y="33" text-anchor="middle">T</text>
+    <circle class="f-surface s-accent" cx="140" cy="98" r="14" stroke-width="1.1"/>
+    <text class="lbl-ink" x="140" y="102" text-anchor="middle">A</text>
+    <circle class="f-surface s-accent" cx="60" cy="98" r="14" stroke-width="1.1"/>
+    <text class="lbl-ink" x="60" y="102" text-anchor="middle">O</text>
+    <path class="s-accent" d="M112 37 Q136 52 141 82" stroke-width="1" fill="none" marker-end="url(#react-a)"/>
+    <path class="s-accent" d="M126 105 Q100 120 74 105" stroke-width="1" fill="none" marker-end="url(#react-a)"/>
+    <path class="s-accent" d="M59 82 Q64 52 88 37" stroke-width="1" fill="none" marker-end="url(#react-a)"/>
+    <defs><marker id="react-a" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path class="f-accent" d="M0 0 L6 3 L0 6 Z"/></marker></defs>
+  </svg>`,
+  multi: `<svg viewBox="0 0 200 150" role="img" aria-label="Four specialist agents chained left to right — customer service, fraud, risk, compliance — handing the case into a final response">
+    <circle class="f-surface s-accent" cx="22" cy="66" r="11" stroke-width="1.1"/>
+    <circle class="f-accent" cx="22" cy="62" r="2.6"/>
+    <path class="f-accent" d="M17 72 a5 4 0 0 1 10 0 Z"/>
+    <circle class="f-surface s-accent" cx="62" cy="66" r="11" stroke-width="1.1"/>
+    <circle class="f-accent" cx="62" cy="62" r="2.6"/>
+    <path class="f-accent" d="M57 72 a5 4 0 0 1 10 0 Z"/>
+    <circle class="f-surface s-accent" cx="102" cy="66" r="11" stroke-width="1.1"/>
+    <circle class="f-accent" cx="102" cy="62" r="2.6"/>
+    <path class="f-accent" d="M97 72 a5 4 0 0 1 10 0 Z"/>
+    <circle class="f-surface s-accent" cx="142" cy="66" r="11" stroke-width="1.1"/>
+    <circle class="f-accent" cx="142" cy="62" r="2.6"/>
+    <path class="f-accent" d="M137 72 a5 4 0 0 1 10 0 Z"/>
+    <text class="lbl" x="22" y="90" text-anchor="middle">CS</text>
+    <text class="lbl" x="62" y="90" text-anchor="middle">FRAUD</text>
+    <text class="lbl" x="102" y="90" text-anchor="middle">RISK</text>
+    <text class="lbl" x="142" y="90" text-anchor="middle">COMP</text>
+    <path class="s-accent" d="M33 66 H49"  stroke-width="1.1" marker-end="url(#ma-a)"/>
+    <path class="s-accent" d="M73 66 H89"  stroke-width="1.1" marker-end="url(#ma-a)"/>
+    <path class="s-accent" d="M113 66 H129" stroke-width="1.1" marker-end="url(#ma-a)"/>
+    <path class="s-accent" d="M153 66 H164" stroke-width="1.1" marker-end="url(#ma-a)"/>
+    <rect class="f-surface s-accent" x="166" y="53" width="30" height="26" rx="6" stroke-width="1.1"/>
+    <text class="lbl-ink" x="181" y="70" text-anchor="middle">ANS</text>
+    <defs><marker id="ma-a" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path class="f-accent" d="M0 0 L6 3 L0 6 Z"/></marker></defs>
+  </svg>`,
+};
+
+{/* The agent trace is injected as raw HTML (like the SVGs) rather than authored as
+    JSX: its inline <span> markup + fragment newlines are exactly the source's, and
+    this keeps MDX's JSX parser out of the console text. Reveal scans the slide DOM
+    for .fragment after React renders, so the data-fragment-index spans still drive
+    the numbered steps beside it. */}
+export const TRACE = `<span class="fragment" data-fragment-index="1"><span class="m">●</span> I'll look into the disputed Netflix charge.
+<span class="th">✻ Thinking… cancelled but billed — get txns + cancel date.</span></span><span class="fragment" data-fragment-index="2"><span class="th">✻ Thinking… plan: scan txns → verify cancel → refund.</span></span><span class="fragment" data-fragment-index="3"><span class="m">●</span> <span class="k">banking.get_transactions</span>(acct: "cust_8821")</span><span class="fragment" data-fragment-index="4"><span class="res">  ⎿ 42 txns · NETFLIX.COM  $15.99  Jul 18</span></span><span class="fragment" data-fragment-index="5"><span class="th">✻ Thinking… Jul 18 looks late — check the cancel date.</span></span><span class="fragment" data-fragment-index="6"><span class="m">●</span> <span class="k">billing.check_subscription</span>("Netflix")
+<span class="res">  ⎿ status: cancelled · effective Jul 10</span></span><span class="fragment" data-fragment-index="7"><span class="m">●</span> <span class="k">billing.issue_refund</span>(tx_4471, $15.99)
+<span class="res">  ⎿ rf_9920 · initiated</span>
+<span class="m">●</span> Refunded $15.99 · charge postdated cancel · notified.</span>`;
+
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Space+Grotesk:wght@600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+
+<style>{`
+/* Ported from ai-agent-seminar/styles.css. Two adaptations for Pathshala's shared
+   reveal (deck.tsx):
+   - The source anchored rem to a 26px root ("1 deck unit") via html{font-size}; that
+     would leak to the dashboard chrome here, so the whole scale is expressed in em
+     off .reveal's own font-size instead. 20px ≈ 26 × (960/1280): it lets content
+     authored for the source's 1280-wide stage fit reveal's default 960-wide stage.
+     ponytail: tune 18–22px to taste — it's the one knob for overall fit.
+   - Per-chapter hue: the source stamped a ch-* class on <html> via deck.js; here it's
+     a class on each slide's <section>. --hue cascades, so every derived token recolors.
+   Dropped as dead code: the deck-chrome label bar, the .deck-portrait/.deck-short
+   responsive stacks (both needed deck.js), and the unused .loop/.diagram diagram. */
+
+.reveal, .reveal-viewport {
+  --hue: 275;                          /* default: title + thank-you */
+  --bg:      oklch(0.962 0.028 var(--hue));
+  --bg-2:    oklch(0.928 0.038 var(--hue));
+  --surface: oklch(0.99 0.012 var(--hue));
+  --line:    oklch(0.85 0.045 var(--hue));
+  --ink:     oklch(0.22 0.03 var(--hue));
+  --muted:   oklch(0.42 0.035 var(--hue));
+  --faint:   oklch(0.50 0.035 var(--hue));
+  --accent:  oklch(0.56 0.21 var(--hue));
+  --accent-ink: oklch(0.45 0.19 var(--hue));
+  --accent-dim: oklch(0.56 0.21 var(--hue) / 0.16);
+  --accent-line: oklch(0.56 0.21 var(--hue) / 0.48);
+  --accent-glow: oklch(0.56 0.21 var(--hue) / 0.26);
+  --danger:  oklch(0.50 0.17 32);
+  --elev: 0 1px 2px oklch(0.22 0.02 var(--hue) / 0.06),
+          0 6px 20px oklch(0.22 0.02 var(--hue) / 0.07);
+  --display: "Space Grotesk", system-ui, sans-serif;
+  --sans: "Hanken Grotesk", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, monospace;
+  --t-chapter: 9em;
+  --t-display: 4.4em;
+  --t-quote:   2.4em;
+  --t-h2:      2em;
+  --t-h3:      1.25em;
+  --t-lead:    1.05em;
+  --t-body:    0.95em;
+  --t-small:   0.78em;
+  --t-label:   0.62em;
+  --s1: 0.35em;
+  --s2: 0.6em;
+  --s3: 1em;
+  --s4: 1.5em;
+  --s5: 2.2em;
+  --s6: 3.2em;
+}
+
+/* Per-chapter hue — set on each slide's <section>, cascades to its content. */
+.reveal .ch-why    { --hue: 245; }
+.reveal .ch-evo    { --hue: 170; }
+.reveal .ch-now    { --hue: 60;  }
+.reveal .ch-pat    { --hue: 300; }
+.reveal .ch-act    { --hue: 195; }
+.reveal .ch-risk   { --hue: 25;  }
+.reveal .ch-hitl   { --hue: 145; }
+.reveal .ch-gates  { --hue: 95;  }
+.reveal .ch-future { --hue: 330; }
+.reveal .ch-prep   { --hue: 210; }
+
+.reveal, .reveal-viewport {
+  background:
+    radial-gradient(90% 70% at 100% 0%, var(--accent-glow), transparent 60%),
+    radial-gradient(80% 80% at 0% 100%, oklch(0.99 0.02 var(--hue) / 0.55), transparent 55%),
+    linear-gradient(155deg, var(--bg) 30%, var(--bg-2) 100%);
+  transition: background-color 600ms ease;
+}
+.reveal *, .reveal *::before, .reveal *::after { box-sizing: border-box; }
+
+.reveal {
+  font-family: var(--sans);
+  font-size: 20px;
+  font-weight: 400;
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  font-kerning: normal;
+}
+.reveal .slides { text-align: left; }
+
+/* Type */
+:where(.reveal) :where(h1, h2, h3, h4, p, ul, ol, li, blockquote, table) { margin: 0; }
+.reveal h1, .reveal h2, .reveal h3, .reveal h4 {
+  font-family: var(--sans);
+  color: var(--ink);
+  font-weight: 600;
+  text-transform: none;
+  text-wrap: balance;
+}
+.reveal h1 {
+  font-family: var(--display);
+  font-size: var(--t-display); font-weight: 700;
+  line-height: 1; letter-spacing: -0.03em;
+}
+.reveal h2 { font-size: var(--t-h2); line-height: 1.12; letter-spacing: -0.025em; }
+.reveal h3 { font-size: var(--t-h3); line-height: 1.25; }
+.reveal h4 { font-size: var(--t-body); line-height: 1.3; }
+.reveal p, .reveal li { line-height: 1.6; }
+.reveal p  { color: var(--ink); text-wrap: pretty; max-width: 62ch; }
+.reveal strong { color: var(--ink); font-weight: 600; }
+.reveal em { color: var(--accent-ink); font-style: italic; }
+.reveal a  { color: var(--accent-ink); }
+.reveal li { max-width: 62ch; text-wrap: pretty; }
+.reveal li + li { margin-top: var(--s2); }
+.reveal ::selection { background: var(--accent); color: var(--bg); }
+
+.reveal .lead { color: var(--muted); font-size: var(--t-lead); max-width: 44ch; line-height: 1.55; }
+.reveal .fine { color: var(--faint); font-size: var(--t-small); }
+
+.reveal .slides section > *:not(section) + *:not(section),
+.title-slide > * + *,
+.pull > * + * { margin-top: var(--s4); }
+.reveal .slides section > h2 + .lead,
+.reveal .slides section > h2 + p,
+.reveal h3 + p { margin-top: var(--s3); }
+.reveal .slides section > h2 + .grid,
+.reveal .slides section > h2 + .duo,
+.reveal .slides section > h2 + .pipeline,
+.reveal .slides section > h2 + table,
+.reveal .slides section > h2 + .flow { margin-top: var(--s5); }
+
+/* Reveal chrome — this style tag renders after reveal's white.css, so it wins. */
+.reveal .progress { color: var(--accent); height: 3px; }
+.reveal .slide-number { background: transparent; color: var(--faint); font-family: var(--mono); font-size: 14px; }
+.reveal .controls { color: var(--accent); }
+
+/* Primitives */
+.panel .tag,
+.card .h,
+.reveal thead th,
+.pull cite {
+  font-family: var(--sans);
+  font-size: var(--t-label);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  line-height: 1.3;
+}
+
+.duo { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s4); align-items: stretch; }
+
+.panel {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: var(--surface);
+  border-radius: 0.55em;
+  padding: var(--s4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s3);
+  box-shadow: var(--elev);
+}
+.panel::before,
+.card::before {
+  content: "";
+  position: absolute; inset: 0; z-index: -1;
+  border-radius: inherit;
+  background-image: radial-gradient(circle, var(--accent) 0.7px, transparent 0.7px);
+  background-size: 0.72em 0.72em;
+  opacity: 0.16;
+  -webkit-mask-image: radial-gradient(115% 85% at 100% 0%, #000 0%, transparent 55%);
+          mask-image: radial-gradient(115% 85% at 100% 0%, #000 0%, transparent 55%);
+}
+.panel::after,
+.card::after {
+  content: "";
+  position: absolute; top: 0.85em; right: 0.85em; z-index: -1;
+  width: 0.8em; height: 0.8em;
+  border-top: 1.5px solid var(--accent);
+  border-right: 1.5px solid var(--accent);
+  opacity: 0.5;
+}
+.panel .tag { margin-bottom: calc(var(--s1) - var(--s3)); }
+.panel.accent {
+  background: linear-gradient(180deg, var(--accent-dim), transparent 70%), var(--surface);
+}
+.panel.accent::before,
+.card.is-accent::before { opacity: 0.22; }
+.panel.accent::after,
+.card.is-accent::after  { opacity: 0.7; }
+.panel .tag { color: var(--faint); display: block; }
+.panel.accent .tag { color: var(--accent-ink); }
+.panel .headline { font-size: var(--t-h3); color: var(--ink); font-weight: 500; line-height: 1.3; }
+.panel .headline .sub { color: var(--muted); font-weight: 400; }
+.panel .prose { color: var(--muted); }
+.panel ul { display: block; list-style: none; padding: 0; }
+.panel li { padding-left: 1.5em; position: relative; color: var(--muted); }
+.panel li::before, .evo-copy li::before, .card li::before {
+  content: ""; position: absolute; left: 0; top: 0.58em;
+  width: 0.42em; height: 0.42em;
+  border: 1.5px solid var(--accent); border-radius: 1px;
+  background: var(--surface); transform: rotate(45deg);
+}
+.panel li::after, .evo-copy li::after, .card li::after {
+  content: ""; position: absolute; left: 0.52em; top: 0.78em;
+  width: 0.5em; height: 1.5px; background: var(--accent-line);
+  transform-origin: left center;
+}
+.reveal li.fragment::before { opacity: 0; transform: rotate(45deg) scale(0.35); }
+.reveal li.fragment.visible::before {
+  opacity: 1; transform: rotate(45deg) scale(1);
+  transition: transform 220ms ease, opacity 220ms ease;
+}
+.reveal li.fragment::after { transform: scaleX(0); }
+.reveal li.fragment.visible::after { transform: scaleX(1); transition: transform 220ms ease 60ms; }
+.panel .verdict { margin-top: auto; }
+
+.prose { font-size: var(--t-small); }
+
+.verdict {
+  align-self: flex-start;
+  display: inline-flex; align-items: center; gap: 0.5em;
+  font-size: var(--t-small); font-weight: 500; color: var(--ink);
+  background: var(--bg-2); border: 1px solid var(--line); border-radius: 999px;
+  padding: 0.5em 1em;
+}
+.verdict.is-accent { border-color: var(--accent-line); }
+.verdict .dot {
+  width: 0.28em; height: 0.28em; border-radius: 50%; background: var(--accent);
+  box-shadow: 0 0 0 0 var(--accent-glow);
+}
+
+.pull blockquote {
+  border: none; background: none; box-shadow: none; margin: 0; padding: 0;
+  font-family: var(--display); font-weight: 600;
+  font-size: var(--t-quote); line-height: 1.14;
+  letter-spacing: -0.02em; color: var(--ink); text-wrap: balance; max-width: 22ch;
+}
+.pull blockquote .hl { color: var(--accent-ink); }
+.pull cite {
+  display: block; margin-top: var(--s5); font-style: normal; color: var(--faint);
+}
+
+.reveal .flow { list-style: none; padding: 0; margin: 0; counter-reset: step; }
+.flow li {
+  position: relative; padding: 0 var(--s4) var(--s3) 2.1em; max-width: none;
+  counter-increment: step;
+}
+.flow li + li { margin-top: 0; }
+.flow li::before {
+  content: counter(step, decimal-leading-zero);
+  position: absolute; left: 0; top: 0.3em;
+  font-family: var(--mono); font-size: var(--t-label); font-weight: 700;
+  color: var(--accent);
+}
+.flow .t { display: block; font-weight: 500; color: var(--ink); font-size: var(--t-body); line-height: 1.35; }
+.flow .d { display: block; color: var(--muted); font-size: var(--t-small); margin-top: 0.25em; }
+.flow.cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: repeat(var(--rows, 4), auto);
+  grid-auto-flow: column;
+  column-gap: var(--s5);
+  max-width: 34em;
+}
+
+/* Evolution / pattern steps — SVG paired with its argument */
+.evo { display: grid; grid-template-columns: minmax(0, 22em) minmax(0, 1fr);
+       gap: var(--s6); align-items: center; }
+.evo.is-flip { grid-template-columns: minmax(0, 1fr) minmax(0, 22em); }
+.evo.is-flip .evo-art { order: 2; }
+.evo-copy > * + * { margin-top: var(--s3); }
+.evo-copy .n { font-family: var(--mono); color: var(--accent);
+               font-size: var(--t-label); font-weight: 700; letter-spacing: 0.1em; }
+.evo-copy h2 { margin-top: var(--s1); }
+.evo-copy ul { list-style: none; padding: 0; }
+.evo-copy li { padding-left: 1.5em; position: relative; color: var(--muted); }
+.evo-art { display: flex; align-items: center; justify-content: center; }
+.evo-art svg { width: 100%; max-width: 20em; height: auto;
+               stroke-linecap: round; stroke-linejoin: round; }
+.evo-art .s-accent { stroke: var(--accent); fill: none; }
+.evo-art .s-line   { stroke: var(--line);   fill: none; }
+.evo-art .f-surface{ fill: var(--surface); }
+.evo-art .f-accent { fill: var(--accent); }
+.evo-art .f-line   { fill: var(--line); }
+.evo-art .lbl { font-family: var(--mono); fill: var(--faint);
+                font-size: 7px; letter-spacing: 0.06em; text-transform: uppercase; }
+.evo-art .lbl-ink { fill: var(--muted); font-family: var(--sans); font-size: 8px; font-weight: 600; }
+.evo-art .glyph { fill: var(--accent-ink); font-family: var(--sans); font-size: 13px; font-weight: 700; }
+
+/* In-action demo — the ReAct trace of the running example */
+.demo { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+        gap: var(--s6); align-items: start; }
+.reveal .steps { list-style: none; padding: 0; margin: var(--s4) 0 0; counter-reset: step; }
+.steps li {
+  position: relative; counter-increment: step;
+  padding: 0.35em 0 0.55em 2.4em;
+  color: var(--ink); font-size: var(--t-body); line-height: 1.3;
+}
+.steps li::before {
+  content: counter(step); position: absolute; left: 0; top: 0.15em;
+  width: 1.5em; height: 1.5em; display: grid; place-items: center;
+  border: 1px solid var(--accent-line); border-radius: 50%;
+  background: var(--accent-dim); color: var(--accent);
+  font-family: var(--mono); font-size: var(--t-label); font-weight: 700;
+}
+.steps li:not(:last-child)::after {
+  content: ""; position: absolute; left: 0.75em; top: 1.75em; bottom: 0;
+  border-left: 1px solid var(--accent-line);
+}
+.term {
+  align-self: start; border: 1px solid var(--line); border-radius: 0.6em;
+  background: var(--bg-2); overflow: hidden;
+}
+.term-bar {
+  display: flex; align-items: center; gap: 0.4em;
+  padding: 0.5em 0.7em; border-bottom: 1px solid var(--line);
+  background: var(--surface);
+}
+.term-bar > span { width: 0.5em; height: 0.5em; border-radius: 50%; background: var(--line); }
+.term-bar em {
+  margin-left: auto; font-style: normal; font-family: var(--mono);
+  font-size: var(--t-label); letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--faint);
+}
+.term pre { margin: 0; padding: 0.7em 0.8em; }
+.term code {
+  display: block; font-family: var(--mono); font-size: 0.6em;
+  line-height: 1.5; color: var(--ink); white-space: pre-wrap; word-break: break-word;
+}
+.term code > span { display: block; }
+.term code > span + span { margin-top: 0.28em; }
+.term .m   { color: var(--accent); font-weight: 700; }
+.term .th  { color: var(--faint); font-style: italic; }
+.term .k   { color: var(--accent-ink); }
+.term .res { color: var(--muted); }
+
+/* Feature grid */
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(var(--grid-min, 9em), 1fr)); gap: var(--s3); }
+.grid.is-2up { grid-template-columns: repeat(2, 1fr); }
+.grid.is-3up { grid-template-columns: repeat(3, 1fr); }
+.grid.is-tight { gap: var(--s2); max-width: 52em; }
+.grid.is-tight .card { padding: var(--s3); }
+.grid.is-tight .card h3 { font-size: var(--t-body); }
+.grid.is-tight .card p { font-size: var(--t-small); }
+.grid.is-tight .card > * + * { margin-top: var(--s1); }
+.card {
+  position: relative; isolation: isolate; overflow: hidden;
+  background: var(--surface); border-radius: 0.5em;
+  padding: var(--s4);
+  box-shadow: var(--elev);
+}
+.card > * + * { margin-top: var(--s3); }
+.card .h + * { margin-top: var(--s1); }
+.card .h {
+  color: var(--accent-ink); display: flex; gap: 0.6em; align-items: baseline;
+}
+.card .h .num { color: var(--faint); font-family: var(--mono); font-weight: 700; letter-spacing: 0; }
+.card h3.is-danger { color: var(--danger); }
+.card p { color: var(--muted); }
+.card p .dim { color: var(--faint); }
+.card .note { color: var(--accent-ink); font-size: var(--t-small); font-weight: 500; }
+.card ul { display: block; list-style: none; padding: 0; }
+.card li { color: var(--muted); font-size: var(--t-small); padding-left: 1.5em; position: relative; }
+.card.is-accent {
+  background: linear-gradient(180deg, var(--accent-dim), transparent 70%), var(--surface);
+}
+
+/* Table */
+.reveal table { border-collapse: collapse; width: 100%; max-width: 44em; font-size: var(--t-body); }
+.reveal thead th {
+  color: var(--accent-ink); text-align: left;
+  border-bottom: 1px solid var(--accent-line); padding: 0 0.9em 0.7em;
+}
+.reveal tbody td { padding: 0.75em 0.9em; border-bottom: 1px solid var(--line); color: var(--muted); vertical-align: top; }
+.reveal tbody td:first-child { color: var(--ink); font-weight: 500; padding-left: 0; }
+.reveal thead th:first-child { padding-left: 0; }
+.reveal tbody tr:last-child td { border-bottom: none; }
+
+/* Risk chips */
+.reveal .risks { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: var(--s2); }
+.risks li {
+  max-width: none; font-size: var(--t-small); font-weight: 500; color: var(--ink);
+  border: 1px solid var(--danger); border-radius: 999px; padding: 0.5em 1em;
+  background: oklch(0.50 0.17 32 / 0.08);
+}
+.risks li + li { margin-top: 0; }
+
+/* Quoted speech */
+.quote-inline {
+  border: none; box-shadow: none; background: none; padding: 0;
+  font-style: italic; color: var(--muted); font-size: var(--t-lead); line-height: 1.5;
+  max-width: 40ch; text-indent: -0.42em;
+}
+.quote-inline::before { content: "\\201C"; color: var(--accent); font-style: normal; }
+.quote-inline::after  { content: "\\201D"; color: var(--accent); font-style: normal; }
+.quote-inline.is-big { font-size: var(--t-h3); max-width: 32ch; }
+
+.caption-strong { font-weight: 500; color: var(--accent-ink); font-size: var(--t-lead); }
+
+/* Title slide */
+.title-slide { display: flex; flex-direction: column; align-items: center; text-align: center; }
+.title-slide h1 { max-width: 14ch; }
+.title-slide.is-hero h1 { font-size: 5.6em; }
+.title-slide .rule { width: 2.4em; height: 3px; background: var(--accent); border-radius: 2px; transform-origin: center; }
+.title-slide p { color: var(--muted); font-size: var(--t-lead); max-width: 30ch; }
+
+/* Chapter divider — a full-bleed background numeral with the title over it. */
+.reveal section.chapter {
+  text-align: center;
+  position: absolute !important; top: 0 !important; left: 0 !important;
+  width: 100% !important; height: 100% !important; margin: 0 !important;
+  display: flex !important; align-items: center; justify-content: center;
+}
+.reveal section.chapter .num {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  font-family: var(--display); font-weight: 700;
+  font-size: 34em; line-height: 1; letter-spacing: -0.04em;
+  color: var(--accent); opacity: 0.12;
+  pointer-events: none; z-index: 0;
+}
+.reveal section.chapter .ch-title {
+  position: relative; z-index: 1;
+  display: inline-block;
+  font-family: var(--display); font-weight: 700;
+  font-size: clamp(2em, 7vw, 5.5em); line-height: 1.05; letter-spacing: -0.03em;
+  color: var(--ink); max-width: 14ch; text-wrap: balance;
+}
+
+/* Touch: reveal's arrow controls need a real target. */
+@media (pointer: coarse) {
+  .reveal .controls { --controls-arrow-angle: 36deg; right: max(12px, env(safe-area-inset-right)); bottom: max(12px, env(safe-area-inset-bottom)); }
+  .reveal .controls [class*="navigate-"] { width: 44px; height: 44px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal .fragment {
+    transform: none !important;
+    transition: opacity 120ms linear !important;
+  }
+  .reveal-viewport { transition: none; }
+}
+
+@media print {
+  *, *::before, *::after {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  .reveal .fragment { opacity: 1 !important; visibility: visible !important; }
+}
+`}</style>
+
+<section data-auto-animate data-auto-animate-duration="1.1"><div className="title-slide is-hero"><h1 data-id="deck-title">Agentic AI</h1></div></section>
+
+<section data-auto-animate data-auto-animate-duration="1.1"><div className="title-slide"><h1 data-id="deck-title">Agentic AI</h1><div className="rule"></div><p>Understanding the future of intelligent systems & preparing your career</p></div></section>
+
+<section data-sec="About the speaker"><div className="duo"><div className="panel"><span className="tag">Myself</span><p className="headline">Md. Meftaul Haque</p><p className="prose">Senior Principal Software Engineer · Millennium Information Solution · 12+ years in AI & banking systems.</p><ul><li>MSc Applied Statistics & Data Science</li><li>Java · Spring Boot · Python · AWS</li><li>I love to inspire and share my learnings</li></ul></div><div className="panel accent fragment fade-up"><span className="tag">Why this talk</span><p className="headline">I build the agents<br />that fuels production systems</p><ul><li>AI agents for financial services</li><li>Document Extraction Agent</li><li>Code Review Agent</li><li>Investment Risk Management</li><li>Face-recognition Matching e-KYC</li><li>Building Risk Based Internal Auditing System</li></ul></div></div></section>
+
+<section className="chapter ch-why"><span className="num">01</span><span className="ch-title">Why do we need agents</span></section>
+
+<section className="ch-why" data-sec="01 · Scenario 1: Structured & deterministic"><h2>Scenario 1</h2><div className="duo"><div className="panel"><span className="tag">The problem</span><p className="headline">Transfer money from<br /><strong>Account A → Account B</strong></p><ul><li className="fragment">Clear business rules</li><li className="fragment">Fixed workflow</li><li className="fragment">Predictable outcomes</li><li className="fragment">Easy to validate</li></ul></div><div className="panel accent fragment fade-up"><span className="tag">Best solution</span><p className="headline">Traditional software</p><p className="fine">When the path is known, don't reason about it — encode it.</p><div className="verdict is-accent"><span className="dot"></span>Rule-based systems still win</div></div></div></section>
+
+<section className="ch-why" data-sec="01 · Scenario 2: Unstructured & dynamic"><h2>Scenario 2</h2><div className="duo"><div className="panel"><span className="tag">The problem — a customer emails</span><p className="quote-inline">I cancelled Netflix but still got charged. Can you check?</p><p className="fine fragment">The system must</p><ul><li className="fragment">Understand natural language</li><li className="fragment">Extract & classify intent</li><li className="fragment">Find the account, investigate transactions</li><li className="fragment">Notify stakeholders, initiate follow-up</li></ul></div><div className="panel accent fragment fade-up"><span className="tag">Best solution</span><p className="headline"><strong>LLM</strong> <span className="sub">→ understands language</span><br /><strong>AI Agent</strong> <span className="sub">→ takes actions</span></p><div className="verdict is-accent"><span className="dot"></span>Intelligence understands · Agents execute</div></div></div></section>
+
+<section className="ch-why" data-sec="01 · From understanding to action"><h2>Scenario 2 is really two problems</h2><div className="duo"><div className="panel fragment fade-up"><span className="tag">Problem 1 — understanding information</span><ul><li className="fragment">Read the customer email</li><li className="fragment">Extract entities</li><li className="fragment">Classify the complaint</li><li className="fragment">Retrieve relevant knowledge</li></ul><div className="verdict is-accent fragment"><span className="dot"></span>LLM + Knowledge + Tools</div></div><div className="panel fragment fade-up"><span className="tag">Problem 2 — doing something</span><ul><li className="fragment">Create a support ticket</li><li className="fragment">Freeze the card</li><li className="fragment">Notify the fraud team · escalate</li><li className="fragment">Send a confirmation email</li></ul><div className="verdict is-accent fragment"><span className="dot"></span>AI Agent</div></div></div></section>
+
+<section className="ch-why" data-sec="01 · Chatbot vs agent: One talks. One acts."><h2>Chatbot vs Agent</h2><div className="duo"><div className="panel"><span className="tag">Chatbot</span><ul><li className="fragment">Talks</li><li className="fragment">Explains</li><li className="fragment">Answers questions</li></ul><p className="fine fragment">Nothing changes in the real world.</p><div className="verdict fragment"><span className="dot"></span>Output = Text</div></div><div className="panel accent fragment fade-up"><span className="tag">AI Agent</span><ul><li className="fragment">Thinks</li><li className="fragment">Uses tools</li><li className="fragment">Takes actions</li><li className="fragment">Updates systems</li></ul><div className="verdict is-accent fragment"><span className="dot"></span>Output = Real-world effects</div></div></div></section>
+
+<section className="ch-why" data-sec="01 · Chatbot vs agent" data-transition="fade"><div className="pull"><blockquote>A chatbot is a <span className="hl">librarian</span>.<br /><br />An AI Agent is an <span className="hl">intern with system access</span>.</blockquote></div></section>
+
+<section className="chapter ch-evo"><span className="num">02</span><span className="ch-title">The evolution to agents</span></section>
+
+<section className="ch-evo" data-sec="02 · Evolution — 01 · FAQ Bot"><div className="evo"><div className="evo-art" dangerouslySetInnerHTML={{ __html: SVGS.faq }} /><div className="evo-copy"><span className="n">01</span><h2>FAQ Bot</h2><p className="lead">Answers.</p><ul><li className="fragment fade-up">Matches a question to a fixed, pre-written answer</li><li className="fragment fade-up">No real understanding — off-script questions dead-end</li><li className="fragment fade-up"><em>“What are your opening hours?”</em> → a stored reply</li></ul></div></div></section>
+
+<section className="ch-evo" data-sec="02 · Evolution — 02 · RAG Chatbot"><div className="evo is-flip"><div className="evo-art" dangerouslySetInnerHTML={{ __html: SVGS.rag }} /><div className="evo-copy"><span className="n">02</span><h2>RAG Chatbot</h2><p className="lead">Answers with knowledge.</p><ul><li className="fragment fade-up">Retrieves relevant documents, then answers grounded in them</li><li className="fragment fade-up">Knows your content — but still only talks</li><li className="fragment fade-up"><em>“What's my overdraft fee?”</em> → quotes the policy doc</li></ul></div></div></section>
+
+<section className="ch-evo" data-sec="02 · Evolution — 03 · Read-only tools"><div className="evo"><div className="evo-art" dangerouslySetInnerHTML={{ __html: SVGS.ro }} /><div className="evo-copy"><span className="n">03</span><h2>+ Read-only tools</h2><p className="lead">Looks things up.</p><ul><li className="fragment fade-up">Calls live APIs to fetch real, current data</li><li className="fragment fade-up">Can look up your actual account — but changes nothing</li><li className="fragment fade-up"><em>“What's my balance?”</em> → a banking API read</li></ul></div></div></section>
+
+<section className="ch-evo" data-sec="02 · Evolution — 04 · Write access"><div className="evo is-flip"><div className="evo-art" dangerouslySetInnerHTML={{ __html: SVGS.write }} /><div className="evo-copy"><span className="n">04</span><h2>+ Write access</h2><p className="lead">Performs actions.</p><ul><li className="fragment fade-up">Can now change state: create, update, send</li><li className="fragment fade-up">Real-world effects mean real-world risk — needs guardrails</li><li className="fragment fade-up">Freezes a card · opens a support ticket</li></ul></div></div></section>
+
+<section className="ch-evo" data-sec="02 · Evolution — 05 · Autonomous agent"><div className="evo"><div className="evo-art" dangerouslySetInnerHTML={{ __html: SVGS.agent }} /><div className="evo-copy"><span className="n">05</span><h2>Autonomous agent</h2><p className="lead">Plans, decides & executes.</p><ul><li className="fragment fade-up">Plans multi-step work and picks its own tools</li><li className="fragment fade-up">Loops reason → act → observe until confident</li><li className="fragment fade-up">Investigates the Netflix charge end-to-end</li></ul></div></div></section>
+
+<section className="chapter ch-now"><span className="num">03</span><span className="ch-title">Why agents, why now</span></section>
+
+<section className="ch-now" data-sec="03 · Why now"><h2>Why Agents are so popular now ? </h2><div className="grid"><div className="card fragment fade-up"><div className="h"><span className="num">01</span></div><h3>LLMs got good at thinking</h3><p>Modern models plan, choose tools, interpret results, and decide next steps.</p><p className="note">Think → Act → Observe → Repeat</p></div><div className="card fragment fade-up"><div className="h"><span className="num">02</span></div><h3>Tool use became easy</h3><ul><li>Function calling</li><li>Structured outputs</li><li>MCP — Model Context Protocol</li></ul><p>Wiring AI into enterprise systems is dramatically simpler.</p></div><div className="card fragment fade-up"><div className="h"><span className="num">03</span></div><h3>It got cheap enough</h3><p><strong>AI attempts + human verification</strong> is now often cheaper than humans doing everything by hand.</p></div></div></section>
+
+<section className="chapter ch-pat"><span className="num">04</span><span className="ch-title">Design patterns</span></section>
+
+<section className="ch-pat" data-sec="04 · Design patterns — 01 · Reflection"><div className="evo"><div className="evo-art" dangerouslySetInnerHTML={{ __html: SVGS.refl }} /><div className="evo-copy"><span className="n">01</span><h2>Reflection</h2><p className="lead">Reviews its own work.</p><ul><li className="fragment fade-up">Drafts, critiques its own output, then revises</li><li className="fragment fade-up">Catches its own errors before you ever see them</li><li className="fragment fade-up"><em>Reviews a credit memo it just wrote</em></li></ul></div></div></section>
+
+<section className="ch-pat" data-sec="04 · Design patterns — 02 · Tool Use"><div className="evo is-flip"><div className="evo-art" dangerouslySetInnerHTML={{ __html: SVGS.tool }} /><div className="evo-copy"><span className="n">02</span><h2>Tool Use</h2><p className="lead">Reaches for the right tool.</p><ul><li className="fragment fade-up">Calls APIs, databases, search, or code to act</li><li className="fragment fade-up">Picks the right tool for each sub-task</li><li className="fragment fade-up"><em>Looks up the live account balance</em></li></ul></div></div></section>
+
+<section className="ch-pat" data-sec="04 · Design patterns — 03 · Planning"><div className="evo"><div className="evo-art" dangerouslySetInnerHTML={{ __html: SVGS.plan }} /><div className="evo-copy"><span className="n">03</span><h2>Planning</h2><p className="lead">Decomposes the goal.</p><ul><li className="fragment fade-up">Breaks a goal into ordered sub-steps</li><li className="fragment fade-up">Sequences the work before executing</li><li className="fragment fade-up"><em>Loan approval · fraud investigation · audit workflow</em></li></ul></div></div></section>
+
+<section className="ch-pat" data-sec="04 · Design patterns — 04 · ReAct"><div className="evo is-flip"><div className="evo-art" dangerouslySetInnerHTML={{ __html: SVGS.react }} /><div className="evo-copy"><span className="n">04</span><h2>ReAct</h2><p className="lead">Thought → Action → Observation.</p><ul><li className="fragment fade-up">Loops reason → act → observe until confident</li><li className="fragment fade-up">The practical default — most production agents use it</li><li className="fragment fade-up"><em>Investigates the disputed charge step by step</em></li></ul></div></div></section>
+
+<section className="ch-pat" data-sec="04 · Design patterns — 05 · Multi-Agent"><div className="evo"><div className="evo-art" dangerouslySetInnerHTML={{ __html: SVGS.multi }} /><div className="evo-copy"><span className="n">05</span><h2>Multi-Agent</h2><p className="lead">Specialists hand off.</p><ul><li className="fragment fade-up">Specialized agents each own one competency</li><li className="fragment fade-up">The handoff carries the case forward</li><li className="fragment fade-up"><em>Customer Service → Fraud → Risk → Compliance</em></li></ul></div></div></section>
+
+<section className="chapter ch-act"><span className="num">05</span><span className="ch-title">See the agent in action</span></section>
+
+<section className="ch-act" data-sec="05 · See the agent in action"><h2>Watch it work</h2><div className="demo"><div className="demo-steps"><p className="quote-inline">I cancelled Netflix but I still got charged.</p><ol className="steps"><li className="fragment fade-right" data-fragment-index="1">Understand intent</li><li className="fragment fade-right" data-fragment-index="2">Plan investigation</li><li className="fragment fade-right" data-fragment-index="3">Call banking API</li><li className="fragment fade-right" data-fragment-index="4">Receive transactions</li><li className="fragment fade-right" data-fragment-index="5">Reason over results</li><li className="fragment fade-right" data-fragment-index="6">Call another tool if needed</li><li className="fragment fade-right" data-fragment-index="7">Respond or initiate action</li></ol></div><div className="term" role="img" aria-label="Claude agent trace: reasoning, tool calls, and results while investigating the disputed charge"><div className="term-bar"><span></span><span></span><span></span><em>claude · agent</em></div><pre><code dangerouslySetInnerHTML={{ __html: TRACE }} /></pre></div></div></section>
+
+<section className="chapter ch-risk"><span className="num">06</span><span className="ch-title">Challenges & risks</span></section>
+
+<section className="ch-risk" data-sec="06 · Challenges & risks"><h2>Agents are probabilistic systems</h2><p className="lead">Accuracy is a distribution — not a guarantee.</p></section>
+
+<section className="ch-risk" data-sec="06 · Failure modes"><h2>Where agents go wrong</h2><div className="grid"><div className="card fragment fade-up"><h3 className="is-danger">Hallucinated tool use</h3><p>“I checked your account…” <span className="dim">— without actually checking.</span></p></div><div className="card fragment fade-up"><h3 className="is-danger">Wrong parameters</h3><p>Correct tool. Wrong account. Wrong customer.</p></div><div className="card fragment fade-up"><h3 className="is-danger">Misinterpreted results</h3><p>Correct data. Incorrect conclusion.</p></div></div><p className="fine fragment fade-in">Additional enterprise risks</p><ul className="risks"><li className="fragment fade-up">Prompt injection</li><li className="fragment fade-up">Data leakage</li><li className="fragment fade-up">Unauthorized actions</li><li className="fragment fade-up">Tool abuse</li><li className="fragment fade-up">Compliance violations</li></ul></section>
+
+<section className="chapter ch-hitl"><span className="num">07</span><span className="ch-title">Human in the loop</span></section>
+
+<section className="ch-hitl" data-sec="07 · Human in the loop"><h2>Every action deserves the right level of supervision</h2><table><thead><tr><th>Level</th><th>Human role</th><th>Banking example</th></tr></thead><tbody><tr className="fragment fade-right"><td>AI assists</td><td data-label="Human role">Human performs the action</td><td data-label="Example">Draft a credit memo</td></tr><tr className="fragment fade-right"><td>Human approves</td><td data-label="Human role">AI queues the action</td><td data-label="Example">Large fund reversal</td></tr><tr className="fragment fade-right"><td>Human monitors</td><td data-label="Human role">AI executes</td><td data-label="Example">Balance inquiries</td></tr><tr className="fragment fade-right"><td>Human audits</td><td data-label="Human role">Periodic review</td><td data-label="Example">Transaction categorization</td></tr></tbody></table><p className="caption-strong fragment fade-in">Higher risk → more human oversight.</p></section>
+
+<section className="chapter ch-gates"><span className="num">08</span><span className="ch-title">Do you even need an agent</span></section>
+
+<section className="ch-gates" data-sec="08 · The best agent is often no agent"><h2>Six gates before you build</h2><p className="lead">Ask these in order. A “no” early on saves you an agent you'd regret.</p></section>
+
+<section className="ch-gates" data-sec="08 · The gates"><h2>Six gates before you build</h2><ol className="flow cols" style={{ "--rows": 3 }}><li className="fragment fade-up"><span className="t">Can rules solve it?</span><span className="d">→ Just write code.</span></li><li className="fragment fade-up"><span className="t">Only needs understanding?</span><span className="d">→ An LLM inside a workflow.</span></li><li className="fragment fade-up"><span className="t">Enough business value?</span><span className="d">High volume · high cost · high pain.</span></li><li className="fragment fade-up"><span className="t">Are failures tolerable?</span><span className="d">Always evaluate the worst case.</span></li><li className="fragment fade-up"><span className="t">Can you measure success?</span><span className="d">No evaluation → no deployment.</span></li><li className="fragment fade-up"><span className="t">Can humans supervise it?</span><span className="d">Risk determines oversight.</span></li></ol></section>
+
+<section className="ch-gates" data-sec="08 · The best agent is often no agent" data-transition="fade"><div className="pull"><blockquote>Don't build an AI agent because you <span className="hl">can</span>.<br />Build one only when you <span className="hl">should</span>.</blockquote></div></section>
+
+<section className="chapter ch-future"><span className="num">09</span><span className="ch-title">The future of AI agents</span></section>
+
+<section className="ch-future" data-sec="09 · The future of AI agents"><h2>My perspective</h2><div className="duo"><div className="panel fragment fade-up"><span className="tag">Prediction 01</span><p className="headline">Agents become infrastructure</p><p className="prose">Nobody will say “AI Agent” — just as nobody says “cloud-native” any more. Software will simply include agents.</p></div><div className="panel fragment fade-up"><span className="tag">Prediction 02</span><p className="headline">Standardization wins</p><p className="prose">MCP may become the HTTP of AI apps. Enterprise software will expose agent-ready interfaces alongside APIs.</p></div></div><ol className="flow"><li className="fragment fade-up"><span className="t">Does AI help defenders more than attackers?</span></li><li className="fragment fade-up"><span className="t">If AI does the junior work, how do experts form?</span></li><li className="fragment fade-up"><span className="t">How much autonomy should an organization allow?</span></li></ol></section>
+
+<section className="chapter ch-prep"><span className="num">10</span><span className="ch-title">Preparing for the future</span></section>
+
+<section className="ch-prep" data-sec="10 · Preparing for the future"><h2>What industry actually wants</h2><div className="duo"><div className="panel fragment fade-up"><span className="tag">Faulty System</span><p className="headline">Unfortunate Reality</p><ul><li className="fragment">Finish the assignment</li><li className="fragment">Find the one right answer</li><li className="fragment">Work alone, graded solo</li><li className="fragment">Master a fixed syllabus</li></ul></div><div className="panel accent fragment fade-up"><span className="tag">What industry pays for</span><p className="headline">The delivery frame</p><ul><li className="fragment">Ship software people actually use</li><li className="fragment">Own the outcome, not just the task</li><li className="fragment">Communicate and collaborate</li><li className="fragment">Use AI to deliver more, faster</li><li className="fragment">Learn whatever the problem needs</li></ul></div></div></section>
+
+<section className="ch-prep" data-sec="10 · Preparing for the future"><h2>Things worth doing</h2><div className="grid is-3up is-tight"><div className="card fragment fade-up"><div className="h"><span className="num">01</span></div><h3>Build strong roots</h3><p>Programming · systems · math · communication.</p></div><div className="card fragment fade-up"><div className="h"><span className="num">02</span></div><h3>Make AI your assistant</h3><p>Use it to think faster — never to stop thinking.</p></div><div className="card fragment fade-up"><div className="h"><span className="num">03</span></div><h3>Increase your leverage</h3><p>Use machines to accomplish more.</p></div><div className="card fragment fade-up"><div className="h"><span className="num">04</span></div><h3>Learn modern AI tools</h3><p>LLMs · agents · MCP · RAG · automation.</p></div><div className="card fragment fade-up"><div className="h"><span className="num">05</span></div><h3>Share and collaborate</h3><p>Learn in the open; grow with others.</p></div><div className="card fragment fade-up"><div className="h"><span className="num">06</span></div><h3>Build impactful together</h3><p>Ship things that matter, as a team.</p></div></div></section>
+
+<section className="ch-prep" data-sec="10 · Preparing for the future" data-transition="fade"><div className="pull"><blockquote>Don't learn to compete <span className="hl">against</span> AI.<br />Learn to build <span className="hl">with</span> it.</blockquote><cite>Final advice</cite></div></section>
+
+<section data-sec="11 · Thank you"><div className="title-slide"><h1>Thank you :)</h1><div className="rule"></div></div></section>
