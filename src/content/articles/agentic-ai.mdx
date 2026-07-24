@@ -243,17 +243,21 @@ export const SVGS = {
   --s6: 3.2em;
 }
 
-/* Per-chapter hue — set on each slide's <section>, cascades to its content. */
-.reveal .ch-why    { --hue: 245; }
-.reveal .ch-evo    { --hue: 170; }
-.reveal .ch-now    { --hue: 60;  }
-.reveal .ch-pat    { --hue: 300; }
-.reveal .ch-app    { --hue: 195; }
-.reveal .ch-risk   { --hue: 25;  }
-.reveal .ch-hitl   { --hue: 145; }
-.reveal .ch-gates  { --hue: 95;  }
-.reveal .ch-future { --hue: 330; }
-.reveal .ch-prep   { --hue: 210; }
+/* Per-chapter hue. The descendant form (.reveal .ch-*) recolors a slide's own
+   content; the compound form (.reveal.ch-*) recolors the deck background, which
+   lives on .reveal itself — deck.tsx mirrors the current slide's ch-* class onto
+   the .reveal root on each slidechanged (CSS custom props only cascade down, so
+   a class on the <section> alone can never reach the background above it). */
+.reveal.ch-why,    .reveal .ch-why    { --hue: 245; }
+.reveal.ch-evo,    .reveal .ch-evo    { --hue: 170; }
+.reveal.ch-now,    .reveal .ch-now    { --hue: 60;  }
+.reveal.ch-pat,    .reveal .ch-pat    { --hue: 300; }
+.reveal.ch-app,    .reveal .ch-app    { --hue: 195; }
+.reveal.ch-risk,   .reveal .ch-risk   { --hue: 25;  }
+.reveal.ch-hitl,   .reveal .ch-hitl   { --hue: 145; }
+.reveal.ch-gates,  .reveal .ch-gates  { --hue: 95;  }
+.reveal.ch-future, .reveal .ch-future { --hue: 330; }
+.reveal.ch-prep,   .reveal .ch-prep   { --hue: 210; }
 
 .reveal, .reveal-viewport {
   background:

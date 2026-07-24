@@ -44,6 +44,20 @@ export default function Deck({
       await instance.initialize();
       if (cancelled) return;
       deck = instance;
+
+      // Mirror the current slide's chapter class (ch-*) onto the .reveal root so a
+      // deck's per-chapter background hue recolors: CSS custom props only cascade
+      // down, so a --hue set on the <section> can't reach the background above it.
+      // No-op for decks that don't use ch-* classes.
+      const paintHue = () => {
+        const cur = instance.getCurrentSlide() as HTMLElement | undefined;
+        const ch = [...(cur?.classList ?? [])].find((c) => c.startsWith("ch-"));
+        [...el.classList].forEach((c) => c.startsWith("ch-") && el.classList.remove(c));
+        if (ch) el.classList.add(ch);
+      };
+      paintHue();
+      instance.on("slidechanged", paintHue);
+
       onReady?.(instance);
     })();
 
