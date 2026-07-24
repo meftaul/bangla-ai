@@ -1,4 +1,4 @@
-export const metadata = { title: "Agentic AI", description: "A seminar on why agents exist, how they work, when not to build one, and what it means for your career.", type: "slides" };
+export const metadata = { title: "Agentic AI", description: "A seminar on why agents exist, how they work, when not to build one, and what to do about your career.", type: "slides" };
 
 {/* Ported from the standalone reveal.js seminar (ai-agent-seminar/). Content and
     design are unchanged; only the delivery is adapted to Pathshala's shared Deck:
@@ -191,17 +191,6 @@ export const SVGS = {
   </svg>`,
 };
 
-{/* The agent trace is injected as raw HTML (like the SVGs) rather than authored as
-    JSX: its inline <span> markup + fragment newlines are exactly the source's, and
-    this keeps MDX's JSX parser out of the console text. Reveal scans the slide DOM
-    for .fragment after React renders, so the data-fragment-index spans still drive
-    the numbered steps beside it. */}
-export const TRACE = `<span class="fragment" data-fragment-index="1"><span class="m">●</span> I'll look into the disputed Netflix charge.
-<span class="th">✻ Thinking… cancelled but billed — get txns + cancel date.</span></span><span class="fragment" data-fragment-index="2"><span class="th">✻ Thinking… plan: scan txns → verify cancel → refund.</span></span><span class="fragment" data-fragment-index="3"><span class="m">●</span> <span class="k">banking.get_transactions</span>(acct: "cust_8821")</span><span class="fragment" data-fragment-index="4"><span class="res">  ⎿ 42 txns · NETFLIX.COM  $15.99  Jul 18</span></span><span class="fragment" data-fragment-index="5"><span class="th">✻ Thinking… Jul 18 looks late — check the cancel date.</span></span><span class="fragment" data-fragment-index="6"><span class="m">●</span> <span class="k">billing.check_subscription</span>("Netflix")
-<span class="res">  ⎿ status: cancelled · effective Jul 10</span></span><span class="fragment" data-fragment-index="7"><span class="m">●</span> <span class="k">billing.issue_refund</span>(tx_4471, $15.99)
-<span class="res">  ⎿ rf_9920 · initiated</span>
-<span class="m">●</span> Refunded $15.99 · charge postdated cancel · notified.</span>`;
-
 <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Space+Grotesk:wght@600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
 
 <style>{`
@@ -259,7 +248,7 @@ export const TRACE = `<span class="fragment" data-fragment-index="1"><span class
 .reveal .ch-evo    { --hue: 170; }
 .reveal .ch-now    { --hue: 60;  }
 .reveal .ch-pat    { --hue: 300; }
-.reveal .ch-act    { --hue: 195; }
+.reveal .ch-app    { --hue: 195; }
 .reveal .ch-risk   { --hue: 25;  }
 .reveal .ch-hitl   { --hue: 145; }
 .reveal .ch-gates  { --hue: 95;  }
@@ -486,52 +475,9 @@ export const TRACE = `<span class="fragment" data-fragment-index="1"><span class
 .evo-art .lbl-ink { fill: var(--muted); font-family: var(--sans); font-size: 8px; font-weight: 600; }
 .evo-art .glyph { fill: var(--accent-ink); font-family: var(--sans); font-size: 13px; font-weight: 700; }
 
-/* In-action demo — the ReAct trace of the running example */
-.demo { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
-        gap: var(--s6); align-items: start; }
-.reveal .steps { list-style: none; padding: 0; margin: var(--s4) 0 0; counter-reset: step; }
-.steps li {
-  position: relative; counter-increment: step;
-  padding: 0.35em 0 0.55em 2.4em;
-  color: var(--ink); font-size: var(--t-body); line-height: 1.3;
-}
-.steps li::before {
-  content: counter(step); position: absolute; left: 0; top: 0.15em;
-  width: 1.5em; height: 1.5em; display: grid; place-items: center;
-  border: 1px solid var(--accent-line); border-radius: 50%;
-  background: var(--accent-dim); color: var(--accent);
-  font-family: var(--mono); font-size: var(--t-label); font-weight: 700;
-}
-.steps li:not(:last-child)::after {
-  content: ""; position: absolute; left: 0.75em; top: 1.75em; bottom: 0;
-  border-left: 1px solid var(--accent-line);
-}
-.term {
-  align-self: start; border: 1px solid var(--line); border-radius: 0.6em;
-  background: var(--bg-2); overflow: hidden;
-}
-.term-bar {
-  display: flex; align-items: center; gap: 0.4em;
-  padding: 0.5em 0.7em; border-bottom: 1px solid var(--line);
-  background: var(--surface);
-}
-.term-bar > span { width: 0.5em; height: 0.5em; border-radius: 50%; background: var(--line); }
-.term-bar em {
-  margin-left: auto; font-style: normal; font-family: var(--mono);
-  font-size: var(--t-label); letter-spacing: 0.12em; text-transform: uppercase;
-  color: var(--faint);
-}
-.term pre { margin: 0; padding: 0.7em 0.8em; }
-.term code {
-  display: block; font-family: var(--mono); font-size: 0.6em;
-  line-height: 1.5; color: var(--ink); white-space: pre-wrap; word-break: break-word;
-}
-.term code > span { display: block; }
-.term code > span + span { margin-top: 0.28em; }
-.term .m   { color: var(--accent); font-weight: 700; }
-.term .th  { color: var(--faint); font-style: italic; }
-.term .k   { color: var(--accent-ink); }
-.term .res { color: var(--muted); }
+/* Governance photo */
+.shot { margin: 0; align-self: center; }
+.shot img { display: block; width: 100%; height: auto; border-radius: 0.55em; box-shadow: var(--elev); }
 
 /* Feature grid */
 .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(var(--grid-min, 9em), 1fr)); gap: var(--s3); }
@@ -658,7 +604,7 @@ export const TRACE = `<span class="fragment" data-fragment-index="1"><span class
 
 <section className="ch-why" data-sec="01 · Scenario 1: Structured & deterministic"><h2>Scenario 1</h2><div className="duo"><div className="panel"><span className="tag">The problem</span><p className="headline">Transfer money from<br /><strong>Account A → Account B</strong></p><ul><li className="fragment">Clear business rules</li><li className="fragment">Fixed workflow</li><li className="fragment">Predictable outcomes</li><li className="fragment">Easy to validate</li></ul></div><div className="panel accent fragment fade-up"><span className="tag">Best solution</span><p className="headline">Traditional software</p><p className="fine">When the path is known, don't reason about it — encode it.</p><div className="verdict is-accent"><span className="dot"></span>Rule-based systems still win</div></div></div></section>
 
-<section className="ch-why" data-sec="01 · Scenario 2: Unstructured & dynamic"><h2>Scenario 2</h2><div className="duo"><div className="panel"><span className="tag">The problem — a customer emails</span><p className="quote-inline">I cancelled Netflix but still got charged. Can you check?</p><p className="fine fragment">The system must</p><ul><li className="fragment">Understand natural language</li><li className="fragment">Extract & classify intent</li><li className="fragment">Find the account, investigate transactions</li><li className="fragment">Notify stakeholders, initiate follow-up</li></ul></div><div className="panel accent fragment fade-up"><span className="tag">Best solution</span><p className="headline"><strong>LLM</strong> <span className="sub">→ understands language</span><br /><strong>AI Agent</strong> <span className="sub">→ takes actions</span></p><div className="verdict is-accent"><span className="dot"></span>Intelligence understands · Agents execute</div></div></div></section>
+<section className="ch-why" data-sec="01 · Scenario 1: Unstructured & dynamic"><h2>Scenario 1</h2><div className="duo"><div className="panel"><span className="tag">The problem — a customer emails</span><p className="quote-inline">I cancelled Netflix but still got charged. Can you check?</p><p className="fine fragment">The system must</p><ul><li className="fragment">Understand natural language</li><li className="fragment">Extract & classify intent</li><li className="fragment">Find the account, investigate transactions</li><li className="fragment">Notify stakeholders, initiate follow-up</li></ul></div><div className="panel accent fragment fade-up"><span className="tag">Best solution</span><p className="headline"><strong>LLM</strong> <span className="sub">→ understands language</span><br /><strong>AI Agent</strong> <span className="sub">→ takes actions</span></p><div className="verdict is-accent"><span className="dot"></span>Intelligence understands · Agents execute</div></div></div></section>
 
 <section className="ch-why" data-sec="01 · From understanding to action"><h2>Scenario 2 is really two problems</h2><div className="duo"><div className="panel fragment fade-up"><span className="tag">Problem 1 — understanding information</span><ul><li className="fragment">Read the customer email</li><li className="fragment">Extract entities</li><li className="fragment">Classify the complaint</li><li className="fragment">Retrieve relevant knowledge</li></ul><div className="verdict is-accent fragment"><span className="dot"></span>LLM + Knowledge + Tools</div></div><div className="panel fragment fade-up"><span className="tag">Problem 2 — doing something</span><ul><li className="fragment">Create a support ticket</li><li className="fragment">Freeze the card</li><li className="fragment">Notify the fraud team · escalate</li><li className="fragment">Send a confirmation email</li></ul><div className="verdict is-accent fragment"><span className="dot"></span>AI Agent</div></div></div></section>
 
@@ -668,9 +614,9 @@ export const TRACE = `<span class="fragment" data-fragment-index="1"><span class
 
 <section className="chapter ch-evo"><span className="num">02</span><span className="ch-title">The evolution to agents</span></section>
 
-<section className="ch-evo" data-sec="02 · Evolution — 01 · FAQ Bot"><div className="evo"><div className="evo-art" dangerouslySetInnerHTML={{ __html: SVGS.faq }} /><div className="evo-copy"><span className="n">01</span><h2>FAQ Bot</h2><p className="lead">Answers.</p><ul><li className="fragment fade-up">Matches a question to a fixed, pre-written answer</li><li className="fragment fade-up">No real understanding — off-script questions dead-end</li><li className="fragment fade-up"><em>“What are your opening hours?”</em> → a stored reply</li></ul></div></div></section>
+<section className="ch-evo" data-sec="02 · Evolution — 01 · FAQ Bot"><div className="evo"><div className="evo-art" dangerouslySetInnerHTML={{ __html: SVGS.faq }} /><div className="evo-copy"><span className="n">01</span><h2>Chatbot Bot</h2><p className="lead">Answers.</p><ul><li className="fragment fade-up">Matches a question to a fixed, pre-written answer</li><li className="fragment fade-up">No real understanding — off-script questions dead-end</li><li className="fragment fade-up"><em>“How to learn Python?”</em> → a stored reply</li></ul></div></div></section>
 
-<section className="ch-evo" data-sec="02 · Evolution — 02 · RAG Chatbot"><div className="evo is-flip"><div className="evo-art" dangerouslySetInnerHTML={{ __html: SVGS.rag }} /><div className="evo-copy"><span className="n">02</span><h2>RAG Chatbot</h2><p className="lead">Answers with knowledge.</p><ul><li className="fragment fade-up">Retrieves relevant documents, then answers grounded in them</li><li className="fragment fade-up">Knows your content — but still only talks</li><li className="fragment fade-up"><em>“What's my overdraft fee?”</em> → quotes the policy doc</li></ul></div></div></section>
+<section className="ch-evo" data-sec="02 · Evolution — 02 · RAG Chatbot"><div className="evo is-flip"><div className="evo-art" dangerouslySetInnerHTML={{ __html: SVGS.rag }} /><div className="evo-copy"><span className="n">02</span><h2>RAG - Retrieval Augmented Generation</h2><p className="lead">Answers with knowledge.</p><ul><li className="fragment fade-up">Retrieves relevant documents, then answers grounded in them</li><li className="fragment fade-up">Knows your content — but still only talks</li><li className="fragment fade-up"><em>“What's my overdraft fee?”</em> → quotes the policy doc</li></ul></div></div></section>
 
 <section className="ch-evo" data-sec="02 · Evolution — 03 · Read-only tools"><div className="evo"><div className="evo-art" dangerouslySetInnerHTML={{ __html: SVGS.ro }} /><div className="evo-copy"><span className="n">03</span><h2>+ Read-only tools</h2><p className="lead">Looks things up.</p><ul><li className="fragment fade-up">Calls live APIs to fetch real, current data</li><li className="fragment fade-up">Can look up your actual account — but changes nothing</li><li className="fragment fade-up"><em>“What's my balance?”</em> → a banking API read</li></ul></div></div></section>
 
@@ -694,9 +640,9 @@ export const TRACE = `<span class="fragment" data-fragment-index="1"><span class
 
 <section className="ch-pat" data-sec="04 · Design patterns — 05 · Multi-Agent"><div className="evo"><div className="evo-art" dangerouslySetInnerHTML={{ __html: SVGS.multi }} /><div className="evo-copy"><span className="n">05</span><h2>Multi-Agent</h2><p className="lead">Specialists hand off.</p><ul><li className="fragment fade-up">Specialized agents each own one competency</li><li className="fragment fade-up">The handoff carries the case forward</li><li className="fragment fade-up"><em>Customer Service → Fraud → Risk → Compliance</em></li></ul></div></div></section>
 
-<section className="chapter ch-act"><span className="num">05</span><span className="ch-title">See the agent in action</span></section>
+<section className="chapter ch-app"><span className="num">05</span><span className="ch-title">How AI is used in applications</span></section>
 
-<section className="ch-act" data-sec="05 · See the agent in action"><h2>Watch it work</h2><div className="demo"><div className="demo-steps"><p className="quote-inline">I cancelled Netflix but I still got charged.</p><ol className="steps"><li className="fragment fade-right" data-fragment-index="1">Understand intent</li><li className="fragment fade-right" data-fragment-index="2">Plan investigation</li><li className="fragment fade-right" data-fragment-index="3">Call banking API</li><li className="fragment fade-right" data-fragment-index="4">Receive transactions</li><li className="fragment fade-right" data-fragment-index="5">Reason over results</li><li className="fragment fade-right" data-fragment-index="6">Call another tool if needed</li><li className="fragment fade-right" data-fragment-index="7">Respond or initiate action</li></ol></div><div className="term" role="img" aria-label="Claude agent trace: reasoning, tool calls, and results while investigating the disputed charge"><div className="term-bar"><span></span><span></span><span></span><em>claude · agent</em></div><pre><code dangerouslySetInnerHTML={{ __html: TRACE }} /></pre></div></div></section>
+<section className="ch-app" data-sec="05 · How AI is used in applications"><h2>Where AI shows up in real software</h2><p className="lead">Same models — different shapes inside the product.</p><div className="grid is-3up is-tight"><div className="card fragment fade-up"><div className="h"><span className="num">01</span></div><h3>Conversational assistants</h3><p>Chat and voice interfaces in natural language.</p></div><div className="card fragment fade-up"><div className="h"><span className="num">02</span></div><h3>Copilots</h3><p>AI that suggests and drafts inside your workflow.</p></div><div className="card fragment fade-up"><div className="h"><span className="num">03</span></div><h3>Retrieval (RAG)</h3><p>Answers grounded in your own documents.</p></div><div className="card fragment fade-up"><div className="h"><span className="num">04</span></div><h3>Workflow automation</h3><p>Agents that run multi-step tasks in the background.</p></div><div className="card fragment fade-up"><div className="h"><span className="num">05</span></div><h3>Content intelligence</h3><p>Summarize, classify, extract, translate.</p></div><div className="card fragment fade-up"><div className="h"><span className="num">06</span></div><h3>Semantic search</h3><p>Match intent, not just keywords.</p></div></div></section>
 
 <section className="chapter ch-risk"><span className="num">06</span><span className="ch-title">Challenges & risks</span></section>
 
@@ -704,9 +650,11 @@ export const TRACE = `<span class="fragment" data-fragment-index="1"><span class
 
 <section className="ch-risk" data-sec="06 · Failure modes"><h2>Where agents go wrong</h2><div className="grid"><div className="card fragment fade-up"><h3 className="is-danger">Hallucinated tool use</h3><p>“I checked your account…” <span className="dim">— without actually checking.</span></p></div><div className="card fragment fade-up"><h3 className="is-danger">Wrong parameters</h3><p>Correct tool. Wrong account. Wrong customer.</p></div><div className="card fragment fade-up"><h3 className="is-danger">Misinterpreted results</h3><p>Correct data. Incorrect conclusion.</p></div></div><p className="fine fragment fade-in">Additional enterprise risks</p><ul className="risks"><li className="fragment fade-up">Prompt injection</li><li className="fragment fade-up">Data leakage</li><li className="fragment fade-up">Unauthorized actions</li><li className="fragment fade-up">Tool abuse</li><li className="fragment fade-up">Compliance violations</li></ul></section>
 
+<section className="ch-risk" data-sec="06 · Enterprise AI governance & security"><h2>Enterprise AI governance & security</h2><div className="duo"><div className="grid is-2up is-tight"><div className="card"><h3 className="is-danger">Data leakage</h3></div><div className="card"><h3 className="is-danger">Ungoverned agents on devices</h3></div><div className="card"><h3 className="is-danger">Prompt injection</h3></div><div className="card"><h3 className="is-danger">Unsafe outputs</h3></div></div><figure className="shot"><img src="/misl-auroscope.png" alt="Millennium team and NYSE Floor Talk appearance" /></figure></div></section>
+
 <section className="chapter ch-hitl"><span className="num">07</span><span className="ch-title">Human in the loop</span></section>
 
-<section className="ch-hitl" data-sec="07 · Human in the loop"><h2>Every action deserves the right level of supervision</h2><table><thead><tr><th>Level</th><th>Human role</th><th>Banking example</th></tr></thead><tbody><tr className="fragment fade-right"><td>AI assists</td><td data-label="Human role">Human performs the action</td><td data-label="Example">Draft a credit memo</td></tr><tr className="fragment fade-right"><td>Human approves</td><td data-label="Human role">AI queues the action</td><td data-label="Example">Large fund reversal</td></tr><tr className="fragment fade-right"><td>Human monitors</td><td data-label="Human role">AI executes</td><td data-label="Example">Balance inquiries</td></tr><tr className="fragment fade-right"><td>Human audits</td><td data-label="Human role">Periodic review</td><td data-label="Example">Transaction categorization</td></tr></tbody></table><p className="caption-strong fragment fade-in">Higher risk → more human oversight.</p></section>
+<section className="ch-hitl" data-sec="07 · Human in the loop"><h2>Human In The Loop (HTL)</h2><table><thead><tr><th>Level</th><th>Human role</th><th>Banking example</th></tr></thead><tbody><tr className="fragment fade-right"><td>AI assists</td><td data-label="Human role">Human performs the action</td><td data-label="Example">Draft a credit memo</td></tr><tr className="fragment fade-right"><td>Human approves</td><td data-label="Human role">AI queues the action</td><td data-label="Example">Large fund reversal</td></tr><tr className="fragment fade-right"><td>Human monitors</td><td data-label="Human role">AI executes</td><td data-label="Example">Balance inquiries</td></tr><tr className="fragment fade-right"><td>Human audits</td><td data-label="Human role">Periodic review</td><td data-label="Example">Transaction categorization</td></tr></tbody></table><p className="caption-strong fragment fade-in">Higher risk → more human oversight.</p></section>
 
 <section className="chapter ch-gates"><span className="num">08</span><span className="ch-title">Do you even need an agent</span></section>
 
