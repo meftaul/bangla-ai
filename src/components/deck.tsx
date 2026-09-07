@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import "reveal.js/reveal.css";
-import "reveal.js/theme/white.css";
+import "@/app/deck.css";
 import "katex/dist/katex.min.css";
 
 // ponytail: init reveal once, never re-render children — interactive components
@@ -35,7 +35,6 @@ export default function Deck({
       if (cancelled || !ref.current) return;
       const instance = new Reveal(ref.current, {
         embedded: true,
-        hash: false,
         // reveal 6 auto-switches to scroll view under 435px, which bypasses the
         // viewer nav lock (native scrolling) and breaks slide-sync on phones.
         scrollActivationWidth: 0,

@@ -191,493 +191,113 @@ export const SVGS = {
   </svg>`,
 };
 
-<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Space+Grotesk:wght@600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
-
 <style>{`
-/* Ported from ai-agent-seminar/styles.css. Two adaptations for Pathshala's shared
-   reveal (deck.tsx):
-   - The source anchored rem to a 26px root ("1 deck unit") via html{font-size}; that
-     would leak to the dashboard chrome here, so the whole scale is expressed in em
-     off .reveal's own font-size instead. 20px ≈ 26 × (960/1280): it lets content
-     authored for the source's 1280-wide stage fit reveal's default 960-wide stage.
-     ponytail: tune 18–22px to taste — it's the one knob for overall fit.
-   - Per-chapter hue: the source stamped a ch-* class on <html> via deck.js; here it's
-     a class on each slide's <section>. --hue cascades, so every derived token recolors.
-   Dropped as dead code: the deck-chrome label bar, the .deck-portrait/.deck-short
-   responsive stacks (both needed deck.js), and the unused .loop/.diagram diagram. */
+/* Deck-specific only — tokens, type scale and every primitive live in
+   src/app/deck.css, which deck.tsx imports for all decks. Add here only what this
+   deck alone needs. */
 
-.reveal, .reveal-viewport {
-  --hue: 275;                          /* default: title + thank-you */
-  --bg:      oklch(0.962 0.028 var(--hue));
-  --bg-2:    oklch(0.928 0.038 var(--hue));
-  --surface: oklch(0.99 0.012 var(--hue));
-  --line:    oklch(0.85 0.045 var(--hue));
-  --ink:     oklch(0.22 0.03 var(--hue));
-  --muted:   oklch(0.42 0.035 var(--hue));
-  --faint:   oklch(0.50 0.035 var(--hue));
-  --accent:  oklch(0.56 0.21 var(--hue));
-  --accent-ink: oklch(0.45 0.19 var(--hue));
-  --accent-dim: oklch(0.56 0.21 var(--hue) / 0.16);
-  --accent-line: oklch(0.56 0.21 var(--hue) / 0.48);
-  --accent-glow: oklch(0.56 0.21 var(--hue) / 0.26);
-  --danger:  oklch(0.50 0.17 32);
-  --elev: 0 1px 2px oklch(0.22 0.02 var(--hue) / 0.06),
-          0 6px 20px oklch(0.22 0.02 var(--hue) / 0.07);
-  --display: "Space Grotesk", system-ui, sans-serif;
-  --sans: "Hanken Grotesk", system-ui, sans-serif;
-  --mono: "JetBrains Mono", ui-monospace, monospace;
-  --t-chapter: 9em;
-  --t-display: 4.4em;
-  --t-quote:   2.4em;
-  --t-h2:      2em;
-  --t-h3:      1.25em;
-  --t-lead:    1.05em;
-  --t-body:    0.95em;
-  --t-small:   0.78em;
-  --t-label:   0.62em;
-  --s1: 0.35em;
-  --s2: 0.6em;
-  --s3: 1em;
-  --s4: 1.5em;
-  --s5: 2.2em;
-  --s6: 3.2em;
-}
-
-/* Per-chapter hue. The descendant form (.reveal .ch-*) recolors a slide's own
-   content; the compound form (.reveal.ch-*) recolors the deck background, which
-   lives on .reveal itself — deck.tsx mirrors the current slide's ch-* class onto
-   the .reveal root on each slidechanged (CSS custom props only cascade down, so
-   a class on the <section> alone can never reach the background above it). */
-.reveal.ch-why,    .reveal .ch-why    { --hue: 245; }
-.reveal.ch-evo,    .reveal .ch-evo    { --hue: 170; }
-.reveal.ch-now,    .reveal .ch-now    { --hue: 60;  }
-.reveal.ch-pat,    .reveal .ch-pat    { --hue: 300; }
-.reveal.ch-app,    .reveal .ch-app    { --hue: 195; }
-.reveal.ch-risk,   .reveal .ch-risk   { --hue: 25;  }
-.reveal.ch-hitl,   .reveal .ch-hitl   { --hue: 145; }
-.reveal.ch-gates,  .reveal .ch-gates  { --hue: 95;  }
-.reveal.ch-future, .reveal .ch-future { --hue: 330; }
-.reveal.ch-prep,   .reveal .ch-prep   { --hue: 210; }
-
-.reveal, .reveal-viewport {
-  background:
-    radial-gradient(90% 70% at 100% 0%, var(--accent-glow), transparent 60%),
-    radial-gradient(80% 80% at 0% 100%, oklch(0.99 0.02 var(--hue) / 0.55), transparent 55%),
-    linear-gradient(155deg, var(--bg) 30%, var(--bg-2) 100%);
-  transition: background-color 600ms ease;
-}
-.reveal *, .reveal *::before, .reveal *::after { box-sizing: border-box; }
-
-.reveal {
-  font-family: var(--sans);
-  font-size: 20px;
-  font-weight: 400;
-  color: var(--ink);
-  -webkit-font-smoothing: antialiased;
-  font-kerning: normal;
-}
-.reveal .slides { text-align: left; }
-
-/* Type */
-:where(.reveal) :where(h1, h2, h3, h4, p, ul, ol, li, blockquote, table) { margin: 0; }
-.reveal h1, .reveal h2, .reveal h3, .reveal h4 {
-  font-family: var(--sans);
-  color: var(--ink);
-  font-weight: 600;
-  text-transform: none;
-  text-wrap: balance;
-}
-.reveal h1 {
-  font-family: var(--display);
-  font-size: var(--t-display); font-weight: 700;
-  line-height: 1; letter-spacing: -0.03em;
-}
-.reveal h2 { font-size: var(--t-h2); line-height: 1.12; letter-spacing: -0.025em; }
-.reveal h3 { font-size: var(--t-h3); line-height: 1.25; }
-.reveal h4 { font-size: var(--t-body); line-height: 1.3; }
-.reveal p, .reveal li { line-height: 1.6; }
-.reveal p  { color: var(--ink); text-wrap: pretty; max-width: 62ch; }
-.reveal strong { color: var(--ink); font-weight: 600; }
-.reveal em { color: var(--accent-ink); font-style: italic; }
-.reveal a  { color: var(--accent-ink); }
-.reveal li { max-width: 62ch; text-wrap: pretty; }
-.reveal li + li { margin-top: var(--s2); }
-.reveal ::selection { background: var(--accent); color: var(--bg); }
-
-.reveal .lead { color: var(--muted); font-size: var(--t-lead); max-width: 44ch; line-height: 1.55; }
-.reveal .fine { color: var(--faint); font-size: var(--t-small); }
-
-.reveal .slides section > *:not(section) + *:not(section),
-.title-slide > * + *,
-.pull > * + * { margin-top: var(--s4); }
-.reveal .slides section > h2 + .lead,
-.reveal .slides section > h2 + p,
-.reveal h3 + p { margin-top: var(--s3); }
-.reveal .slides section > h2 + .grid,
-.reveal .slides section > h2 + .duo,
-.reveal .slides section > h2 + .pipeline,
-.reveal .slides section > h2 + table,
-.reveal .slides section > h2 + .flow { margin-top: var(--s5); }
-
-/* Reveal chrome — this style tag renders after reveal's white.css, so it wins. */
-.reveal .progress { color: var(--accent); height: 3px; }
-.reveal .slide-number { background: transparent; color: var(--faint); font-family: var(--mono); font-size: 14px; }
-.reveal .controls { color: var(--accent); }
-
-/* Primitives */
-.panel .tag,
-.card .h,
-.reveal thead th,
-.pull cite {
-  font-family: var(--sans);
-  font-size: var(--t-label);
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  line-height: 1.3;
-}
-
-.duo { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s4); align-items: stretch; }
-
-.panel {
-  position: relative;
-  isolation: isolate;
-  overflow: hidden;
-  background: var(--surface);
-  border-radius: 0.55em;
-  padding: var(--s4);
-  display: flex;
-  flex-direction: column;
-  gap: var(--s3);
-  box-shadow: var(--elev);
-}
-.panel::before,
-.card::before {
-  content: "";
-  position: absolute; inset: 0; z-index: -1;
-  border-radius: inherit;
-  background-image: radial-gradient(circle, var(--accent) 0.7px, transparent 0.7px);
-  background-size: 0.72em 0.72em;
-  opacity: 0.16;
-  -webkit-mask-image: radial-gradient(115% 85% at 100% 0%, #000 0%, transparent 55%);
-          mask-image: radial-gradient(115% 85% at 100% 0%, #000 0%, transparent 55%);
-}
-.panel::after,
-.card::after {
-  content: "";
-  position: absolute; top: 0.85em; right: 0.85em; z-index: -1;
-  width: 0.8em; height: 0.8em;
-  border-top: 1.5px solid var(--accent);
-  border-right: 1.5px solid var(--accent);
-  opacity: 0.5;
-}
-.panel .tag { margin-bottom: calc(var(--s1) - var(--s3)); }
-.panel.accent {
-  background: linear-gradient(180deg, var(--accent-dim), transparent 70%), var(--surface);
-}
-.panel.accent::before,
-.card.is-accent::before { opacity: 0.22; }
-.panel.accent::after,
-.card.is-accent::after  { opacity: 0.7; }
-.panel .tag { color: var(--faint); display: block; }
-.panel.accent .tag { color: var(--accent-ink); }
-.panel .headline { font-size: var(--t-h3); color: var(--ink); font-weight: 500; line-height: 1.3; }
-.panel .headline .sub { color: var(--muted); font-weight: 400; }
-.panel .prose { color: var(--muted); }
-.panel ul { display: block; list-style: none; padding: 0; }
-.panel li { padding-left: 1.5em; position: relative; color: var(--muted); }
-.panel li::before, .evo-copy li::before, .card li::before {
-  content: ""; position: absolute; left: 0; top: 0.58em;
-  width: 0.42em; height: 0.42em;
-  border: 1.5px solid var(--accent); border-radius: 1px;
-  background: var(--surface); transform: rotate(45deg);
-}
-.panel li::after, .evo-copy li::after, .card li::after {
-  content: ""; position: absolute; left: 0.52em; top: 0.78em;
-  width: 0.5em; height: 1.5px; background: var(--accent-line);
-  transform-origin: left center;
-}
-.reveal li.fragment::before { opacity: 0; transform: rotate(45deg) scale(0.35); }
-.reveal li.fragment.visible::before {
-  opacity: 1; transform: rotate(45deg) scale(1);
-  transition: transform 220ms ease, opacity 220ms ease;
-}
-.reveal li.fragment::after { transform: scaleX(0); }
-.reveal li.fragment.visible::after { transform: scaleX(1); transition: transform 220ms ease 60ms; }
-.panel .verdict { margin-top: auto; }
-
-.prose { font-size: var(--t-small); }
-
-.verdict {
-  align-self: flex-start;
-  display: inline-flex; align-items: center; gap: 0.5em;
-  font-size: var(--t-small); font-weight: 500; color: var(--ink);
-  background: var(--bg-2); border: 1px solid var(--line); border-radius: 999px;
-  padding: 0.5em 1em;
-}
-.verdict.is-accent { border-color: var(--accent-line); }
-.verdict .dot {
-  width: 0.28em; height: 0.28em; border-radius: 50%; background: var(--accent);
-  box-shadow: 0 0 0 0 var(--accent-glow);
-}
-
-.pull blockquote {
-  border: none; background: none; box-shadow: none; margin: 0; padding: 0;
-  font-family: var(--display); font-weight: 600;
-  font-size: var(--t-quote); line-height: 1.14;
-  letter-spacing: -0.02em; color: var(--ink); text-wrap: balance; max-width: 22ch;
-}
-.pull blockquote .hl { color: var(--accent-ink); }
-.pull cite {
-  display: block; margin-top: var(--s5); font-style: normal; color: var(--faint);
-}
-
-.reveal .flow { list-style: none; padding: 0; margin: 0; counter-reset: step; }
-.flow li {
-  position: relative; padding: 0 var(--s4) var(--s3) 2.1em; max-width: none;
-  counter-increment: step;
-}
-.flow li + li { margin-top: 0; }
-.flow li::before {
-  content: counter(step, decimal-leading-zero);
-  position: absolute; left: 0; top: 0.3em;
-  font-family: var(--mono); font-size: var(--t-label); font-weight: 700;
-  color: var(--accent);
-}
-.flow .t { display: block; font-weight: 500; color: var(--ink); font-size: var(--t-body); line-height: 1.35; }
-.flow .d { display: block; color: var(--muted); font-size: var(--t-small); margin-top: 0.25em; }
-.flow.cols {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: repeat(var(--rows, 4), auto);
-  grid-auto-flow: column;
-  column-gap: var(--s5);
-  max-width: 34em;
-}
-
-/* Evolution / pattern steps — SVG paired with its argument */
-.evo { display: grid; grid-template-columns: minmax(0, 22em) minmax(0, 1fr);
-       gap: var(--s6); align-items: center; }
-.evo.is-flip { grid-template-columns: minmax(0, 1fr) minmax(0, 22em); }
-.evo.is-flip .evo-art { order: 2; }
-.evo-copy > * + * { margin-top: var(--s3); }
-.evo-copy .n { font-family: var(--mono); color: var(--accent);
-               font-size: var(--t-label); font-weight: 700; letter-spacing: 0.1em; }
-.evo-copy h2 { margin-top: var(--s1); }
-.evo-copy ul { list-style: none; padding: 0; }
-.evo-copy li { padding-left: 1.5em; position: relative; color: var(--muted); }
-.evo-art { display: flex; align-items: center; justify-content: center; }
-.evo-art svg { width: 100%; max-width: 20em; height: auto;
-               stroke-linecap: round; stroke-linejoin: round; }
-.evo-art .s-accent { stroke: var(--accent); fill: none; }
-.evo-art .s-line   { stroke: var(--line);   fill: none; }
-.evo-art .f-surface{ fill: var(--surface); }
-.evo-art .f-accent { fill: var(--accent); }
-.evo-art .f-line   { fill: var(--line); }
-.evo-art .lbl { font-family: var(--mono); fill: var(--faint);
-                font-size: 7px; letter-spacing: 0.06em; text-transform: uppercase; }
-.evo-art .lbl-ink { fill: var(--muted); font-family: var(--sans); font-size: 8px; font-weight: 600; }
-.evo-art .glyph { fill: var(--accent-ink); font-family: var(--sans); font-size: 13px; font-weight: 700; }
+/* Per-chapter hue. Only the compound form (.reveal.ch-*) is needed: every derived
+   token in deck.css resolves var(--hue) on .reveal itself, and a custom property's
+   computed value is fixed at the element that declares it — so setting --hue further
+   down the tree changes nothing. deck.tsx mirrors the current slide's ch-* class onto
+   the .reveal root on each slidechanged; that mirror is what recolors both the
+   background and the slide content. */
+.reveal.ch-why { --hue: 245; }
+.reveal.ch-evo { --hue: 170; }
+.reveal.ch-now { --hue: 60;  }
+.reveal.ch-pat { --hue: 300; }
+.reveal.ch-app { --hue: 195; }
+.reveal.ch-risk { --hue: 25;  }
+.reveal.ch-hitl { --hue: 145; }
+.reveal.ch-gates { --hue: 95;  }
+.reveal.ch-future { --hue: 330; }
+.reveal.ch-prep { --hue: 210; }
 
 /* Governance photo */
 .shot { margin: 0; align-self: center; }
 .shot img { display: block; width: 100%; height: auto; border-radius: 0.55em; box-shadow: var(--elev); }
-
-/* Feature grid */
-.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(var(--grid-min, 9em), 1fr)); gap: var(--s3); }
-.grid.is-2up { grid-template-columns: repeat(2, 1fr); }
-.grid.is-3up { grid-template-columns: repeat(3, 1fr); }
-.grid.is-tight { gap: var(--s2); max-width: 52em; }
-.grid.is-tight .card { padding: var(--s3); }
-.grid.is-tight .card h3 { font-size: var(--t-body); }
-.grid.is-tight .card p { font-size: var(--t-small); }
-.grid.is-tight .card > * + * { margin-top: var(--s1); }
-.card {
-  position: relative; isolation: isolate; overflow: hidden;
-  background: var(--surface); border-radius: 0.5em;
-  padding: var(--s4);
-  box-shadow: var(--elev);
-}
-.card > * + * { margin-top: var(--s3); }
-.card .h + * { margin-top: var(--s1); }
-.card .h {
-  color: var(--accent-ink); display: flex; gap: 0.6em; align-items: baseline;
-}
-.card .h .num { color: var(--faint); font-family: var(--mono); font-weight: 700; letter-spacing: 0; }
-.card h3.is-danger { color: var(--danger); }
-.card p { color: var(--muted); }
-.card p .dim { color: var(--faint); }
-.card .note { color: var(--accent-ink); font-size: var(--t-small); font-weight: 500; }
-.card ul { display: block; list-style: none; padding: 0; }
-.card li { color: var(--muted); font-size: var(--t-small); padding-left: 1.5em; position: relative; }
-.card.is-accent {
-  background: linear-gradient(180deg, var(--accent-dim), transparent 70%), var(--surface);
-}
-
-/* Table */
-.reveal table { border-collapse: collapse; width: 100%; max-width: 44em; font-size: var(--t-body); }
-.reveal thead th {
-  color: var(--accent-ink); text-align: left;
-  border-bottom: 1px solid var(--accent-line); padding: 0 0.9em 0.7em;
-}
-.reveal tbody td { padding: 0.75em 0.9em; border-bottom: 1px solid var(--line); color: var(--muted); vertical-align: top; }
-.reveal tbody td:first-child { color: var(--ink); font-weight: 500; padding-left: 0; }
-.reveal thead th:first-child { padding-left: 0; }
-.reveal tbody tr:last-child td { border-bottom: none; }
-
-/* Risk chips */
-.reveal .risks { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: var(--s2); }
-.risks li {
-  max-width: none; font-size: var(--t-small); font-weight: 500; color: var(--ink);
-  border: 1px solid var(--danger); border-radius: 999px; padding: 0.5em 1em;
-  background: oklch(0.50 0.17 32 / 0.08);
-}
-.risks li + li { margin-top: 0; }
-
-/* Quoted speech */
-.quote-inline {
-  border: none; box-shadow: none; background: none; padding: 0;
-  font-style: italic; color: var(--muted); font-size: var(--t-lead); line-height: 1.5;
-  max-width: 40ch; text-indent: -0.42em;
-}
-.quote-inline::before { content: "\\201C"; color: var(--accent); font-style: normal; }
-.quote-inline::after  { content: "\\201D"; color: var(--accent); font-style: normal; }
-.quote-inline.is-big { font-size: var(--t-h3); max-width: 32ch; }
-
-.caption-strong { font-weight: 500; color: var(--accent-ink); font-size: var(--t-lead); }
-
-/* Title slide */
-.title-slide { display: flex; flex-direction: column; align-items: center; text-align: center; }
-.title-slide h1 { max-width: 14ch; }
-.title-slide.is-hero h1 { font-size: 5.6em; }
-.title-slide .rule { width: 2.4em; height: 3px; background: var(--accent); border-radius: 2px; transform-origin: center; }
-.title-slide p { color: var(--muted); font-size: var(--t-lead); max-width: 30ch; }
-
-/* Chapter divider — a full-bleed background numeral with the title over it. */
-.reveal section.chapter {
-  text-align: center;
-  position: absolute !important; top: 0 !important; left: 0 !important;
-  width: 100% !important; height: 100% !important; margin: 0 !important;
-  display: flex !important; align-items: center; justify-content: center;
-}
-.reveal section.chapter .num {
-  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-  font-family: var(--display); font-weight: 700;
-  font-size: 34em; line-height: 1; letter-spacing: -0.04em;
-  color: var(--accent); opacity: 0.12;
-  pointer-events: none; z-index: 0;
-}
-.reveal section.chapter .ch-title {
-  position: relative; z-index: 1;
-  display: inline-block;
-  font-family: var(--display); font-weight: 700;
-  font-size: clamp(2em, 7vw, 5.5em); line-height: 1.05; letter-spacing: -0.03em;
-  color: var(--ink); max-width: 14ch; text-wrap: balance;
-}
-
-/* Touch: reveal's arrow controls need a real target. */
-@media (pointer: coarse) {
-  .reveal .controls { --controls-arrow-angle: 36deg; right: max(12px, env(safe-area-inset-right)); bottom: max(12px, env(safe-area-inset-bottom)); }
-  .reveal .controls [class*="navigate-"] { width: 44px; height: 44px; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .reveal .fragment {
-    transform: none !important;
-    transition: opacity 120ms linear !important;
-  }
-  .reveal-viewport { transition: none; }
-}
-
-@media print {
-  *, *::before, *::after {
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-  }
-  .reveal .fragment { opacity: 1 !important; visibility: visible !important; }
-}
 `}</style>
 
-<section data-auto-animate data-auto-animate-duration="1.1"><div className="title-slide is-hero"><h1 data-id="deck-title">Agentic AI</h1></div></section>
+<Slide data-auto-animate data-auto-animate-duration="1.1"><div className="title-slide is-hero"><h1 data-id="deck-title">Agentic AI</h1></div></Slide>
 
-<section data-auto-animate data-auto-animate-duration="1.1"><div className="title-slide"><h1 data-id="deck-title">Agentic AI</h1><div className="rule"></div><p>Understanding the future of intelligent systems & preparing your career</p></div></section>
+<Slide data-auto-animate data-auto-animate-duration="1.1"><div className="title-slide"><h1 data-id="deck-title">Agentic AI</h1><div className="rule"></div><p>Understanding the future of intelligent systems & preparing your career</p></div></Slide>
 
-<section data-sec="About the speaker"><div className="duo"><div className="panel"><span className="tag">Myself</span><p className="headline">Md. Meftaul Haque</p><p className="prose">Senior Principal Software Engineer · Millennium Information Solution · 12+ years in AI & banking systems.</p><ul><li>MSc Applied Statistics & Data Science</li><li>Java · Spring Boot · Python · AWS</li><li>I love to inspire and share my learnings</li></ul></div><div className="panel accent fragment fade-up"><span className="tag">Why this talk</span><p className="headline">I build the agents<br />that fuels production systems</p><ul><li>AI agents for financial services</li><li>Document Extraction Agent</li><li>Code Review Agent</li><li>Investment Risk Management</li><li>Face-recognition Matching e-KYC</li><li>Building Risk Based Internal Auditing System</li></ul></div></div></section>
+<Slide><div className="duo"><div className="panel"><span className="tag">Myself</span><p className="headline">Md. Meftaul Haque</p><p className="prose">Senior Principal Software Engineer · Millennium Information Solution · 12+ years in AI & banking systems.</p><ul><li>MSc Applied Statistics & Data Science</li><li>Java · Spring Boot · Python · AWS</li><li>I love to inspire and share my learnings</li></ul></div><div className="panel accent fragment fade-up"><span className="tag">Why this talk</span><p className="headline">I build the agents<br />that fuels production systems</p><ul><li>AI agents for financial services</li><li>Document Extraction Agent</li><li>Code Review Agent</li><li>Investment Risk Management</li><li>Face-recognition Matching e-KYC</li><li>Building Risk Based Internal Auditing System</li></ul></div></div></Slide>
 
-<section className="chapter ch-why"><span className="num">01</span><span className="ch-title">Why do we need agents</span></section>
+<Chapter n="01" ch="ch-why" title="Why do we need agents" />
 
-<section className="ch-why" data-sec="01 · Scenario 1: Structured & deterministic"><h2>Scenario 1</h2><div className="duo"><div className="panel"><span className="tag">The problem</span><p className="headline">Transfer money from<br /><strong>Account A → Account B</strong></p><ul><li className="fragment">Clear business rules</li><li className="fragment">Fixed workflow</li><li className="fragment">Predictable outcomes</li><li className="fragment">Easy to validate</li></ul></div><div className="panel accent fragment fade-up"><span className="tag">Best solution</span><p className="headline">Traditional software</p><p className="fine">When the path is known, don't reason about it — encode it.</p><div className="verdict is-accent"><span className="dot"></span>Rule-based systems still win</div></div></div></section>
+<Slide className="ch-why"><h2>Scenario 1</h2><div className="duo"><div className="panel"><span className="tag">The problem</span><p className="headline">Transfer money from<br /><strong>Account A → Account B</strong></p><ul><li className="fragment">Clear business rules</li><li className="fragment">Fixed workflow</li><li className="fragment">Predictable outcomes</li><li className="fragment">Easy to validate</li></ul></div><div className="panel accent fragment fade-up"><span className="tag">Best solution</span><p className="headline">Traditional software</p><p className="fine">When the path is known, don't reason about it — encode it.</p><Verdict tone="accent">Rule-based systems still win</Verdict></div></div></Slide>
 
-<section className="ch-why" data-sec="01 · Scenario 1: Unstructured & dynamic"><h2>Scenario 1</h2><div className="duo"><div className="panel"><span className="tag">The problem — a customer emails</span><p className="quote-inline">I cancelled Netflix but still got charged. Can you check?</p><p className="fine fragment">The system must</p><ul><li className="fragment">Understand natural language</li><li className="fragment">Extract & classify intent</li><li className="fragment">Find the account, investigate transactions</li><li className="fragment">Notify stakeholders, initiate follow-up</li></ul></div><div className="panel accent fragment fade-up"><span className="tag">Best solution</span><p className="headline"><strong>LLM</strong> <span className="sub">→ understands language</span><br /><strong>AI Agent</strong> <span className="sub">→ takes actions</span></p><div className="verdict is-accent"><span className="dot"></span>Intelligence understands · Agents execute</div></div></div></section>
+<Slide className="ch-why"><h2>Scenario 1</h2><div className="duo"><div className="panel"><span className="tag">The problem — a customer emails</span><p className="quote-inline">I cancelled Netflix but still got charged. Can you check?</p><p className="fine fragment">The system must</p><ul><li className="fragment">Understand natural language</li><li className="fragment">Extract & classify intent</li><li className="fragment">Find the account, investigate transactions</li><li className="fragment">Notify stakeholders, initiate follow-up</li></ul></div><div className="panel accent fragment fade-up"><span className="tag">Best solution</span><p className="headline"><strong>LLM</strong> <span className="sub">→ understands language</span><br /><strong>AI Agent</strong> <span className="sub">→ takes actions</span></p><Verdict tone="accent">Intelligence understands · Agents execute</Verdict></div></div></Slide>
 
-<section className="ch-why" data-sec="01 · From understanding to action"><h2>Scenario 2 is really two problems</h2><div className="duo"><div className="panel fragment fade-up"><span className="tag">Problem 1 — understanding information</span><ul><li className="fragment">Read the customer email</li><li className="fragment">Extract entities</li><li className="fragment">Classify the complaint</li><li className="fragment">Retrieve relevant knowledge</li></ul><div className="verdict is-accent fragment"><span className="dot"></span>LLM + Knowledge + Tools</div></div><div className="panel fragment fade-up"><span className="tag">Problem 2 — doing something</span><ul><li className="fragment">Create a support ticket</li><li className="fragment">Freeze the card</li><li className="fragment">Notify the fraud team · escalate</li><li className="fragment">Send a confirmation email</li></ul><div className="verdict is-accent fragment"><span className="dot"></span>AI Agent</div></div></div></section>
+<Slide className="ch-why"><h2>Scenario 2 is really two problems</h2><div className="duo"><div className="panel fragment fade-up"><span className="tag">Problem 1 — understanding information</span><ul><li className="fragment">Read the customer email</li><li className="fragment">Extract entities</li><li className="fragment">Classify the complaint</li><li className="fragment">Retrieve relevant knowledge</li></ul><Verdict tone="accent" fragment>LLM + Knowledge + Tools</Verdict></div><div className="panel fragment fade-up"><span className="tag">Problem 2 — doing something</span><ul><li className="fragment">Create a support ticket</li><li className="fragment">Freeze the card</li><li className="fragment">Notify the fraud team · escalate</li><li className="fragment">Send a confirmation email</li></ul><Verdict tone="accent" fragment>AI Agent</Verdict></div></div></Slide>
 
-<section className="ch-why" data-sec="01 · Chatbot vs agent: One talks. One acts."><h2>Chatbot vs Agent</h2><div className="duo"><div className="panel"><span className="tag">Chatbot</span><ul><li className="fragment">Talks</li><li className="fragment">Explains</li><li className="fragment">Answers questions</li></ul><p className="fine fragment">Nothing changes in the real world.</p><div className="verdict fragment"><span className="dot"></span>Output = Text</div></div><div className="panel accent fragment fade-up"><span className="tag">AI Agent</span><ul><li className="fragment">Thinks</li><li className="fragment">Uses tools</li><li className="fragment">Takes actions</li><li className="fragment">Updates systems</li></ul><div className="verdict is-accent fragment"><span className="dot"></span>Output = Real-world effects</div></div></div></section>
+<Slide className="ch-why"><h2>Chatbot vs Agent</h2><div className="duo"><div className="panel"><span className="tag">Chatbot</span><ul><li className="fragment">Talks</li><li className="fragment">Explains</li><li className="fragment">Answers questions</li></ul><p className="fine fragment">Nothing changes in the real world.</p><Verdict fragment>Output = Text</Verdict></div><div className="panel accent fragment fade-up"><span className="tag">AI Agent</span><ul><li className="fragment">Thinks</li><li className="fragment">Uses tools</li><li className="fragment">Takes actions</li><li className="fragment">Updates systems</li></ul><Verdict tone="accent" fragment>Output = Real-world effects</Verdict></div></div></Slide>
 
-<section className="ch-why" data-sec="01 · Chatbot vs agent" data-transition="fade"><div className="pull"><blockquote>A chatbot is a <span className="hl">librarian</span>.<br /><br />An AI Agent is an <span className="hl">intern with system access</span>.</blockquote></div></section>
+<Slide className="ch-why" data-transition="fade"><div className="pull"><blockquote>A chatbot is a <span className="hl">librarian</span>.<br /><br />An AI Agent is an <span className="hl">intern with system access</span>.</blockquote></div></Slide>
 
-<section className="chapter ch-evo"><span className="num">02</span><span className="ch-title">The evolution to agents</span></section>
+<Chapter n="02" ch="ch-evo" title="The evolution to agents" />
 
-<section className="ch-evo" data-sec="02 · Evolution — 01 · FAQ Bot"><div className="evo"><div className="evo-art" dangerouslySetInnerHTML={{ __html: SVGS.faq }} /><div className="evo-copy"><span className="n">01</span><h2>Chatbot Bot</h2><p className="lead">Answers.</p><ul><li className="fragment fade-up">Matches a question to a fixed, pre-written answer</li><li className="fragment fade-up">No real understanding — off-script questions dead-end</li><li className="fragment fade-up"><em>“How to learn Python?”</em> → a stored reply</li></ul></div></div></section>
+<Evo ch="ch-evo" art={SVGS.faq} n="01" title={<>Chatbot Bot</>} lead={<>Answers.</>} points={[<>Matches a question to a fixed, pre-written answer</>, <>No real understanding — off-script questions dead-end</>, <><em>“How to learn Python?”</em> → a stored reply</>]} />
 
-<section className="ch-evo" data-sec="02 · Evolution — 02 · RAG Chatbot"><div className="evo is-flip"><div className="evo-art" dangerouslySetInnerHTML={{ __html: SVGS.rag }} /><div className="evo-copy"><span className="n">02</span><h2>RAG - Retrieval Augmented Generation</h2><p className="lead">Answers with knowledge.</p><ul><li className="fragment fade-up">Retrieves relevant documents, then answers grounded in them</li><li className="fragment fade-up">Knows your content — but still only talks</li><li className="fragment fade-up"><em>“What's my overdraft fee?”</em> → quotes the policy doc</li></ul></div></div></section>
+<Evo ch="ch-evo" art={SVGS.rag} n="02" title={<>RAG - Retrieval Augmented Generation</>} lead={<>Answers with knowledge.</>} points={[<>Retrieves relevant documents, then answers grounded in them</>, <>Knows your content — but still only talks</>, <><em>“What's my overdraft fee?”</em> → quotes the policy doc</>]} flip />
 
-<section className="ch-evo" data-sec="02 · Evolution — 03 · Read-only tools"><div className="evo"><div className="evo-art" dangerouslySetInnerHTML={{ __html: SVGS.ro }} /><div className="evo-copy"><span className="n">03</span><h2>+ Read-only tools</h2><p className="lead">Looks things up.</p><ul><li className="fragment fade-up">Calls live APIs to fetch real, current data</li><li className="fragment fade-up">Can look up your actual account — but changes nothing</li><li className="fragment fade-up"><em>“What's my balance?”</em> → a banking API read</li></ul></div></div></section>
+<Evo ch="ch-evo" art={SVGS.ro} n="03" title={<>+ Read-only tools</>} lead={<>Looks things up.</>} points={[<>Calls live APIs to fetch real, current data</>, <>Can look up your actual account — but changes nothing</>, <><em>“What's my balance?”</em> → a banking API read</>]} />
 
-<section className="ch-evo" data-sec="02 · Evolution — 04 · Write access"><div className="evo is-flip"><div className="evo-art" dangerouslySetInnerHTML={{ __html: SVGS.write }} /><div className="evo-copy"><span className="n">04</span><h2>+ Write access</h2><p className="lead">Performs actions.</p><ul><li className="fragment fade-up">Can now change state: create, update, send</li><li className="fragment fade-up">Real-world effects mean real-world risk — needs guardrails</li><li className="fragment fade-up">Freezes a card · opens a support ticket</li></ul></div></div></section>
+<Evo ch="ch-evo" art={SVGS.write} n="04" title={<>+ Write access</>} lead={<>Performs actions.</>} points={[<>Can now change state: create, update, send</>, <>Real-world effects mean real-world risk — needs guardrails</>, <>Freezes a card · opens a support ticket</>]} flip />
 
-<section className="ch-evo" data-sec="02 · Evolution — 05 · Autonomous agent"><div className="evo"><div className="evo-art" dangerouslySetInnerHTML={{ __html: SVGS.agent }} /><div className="evo-copy"><span className="n">05</span><h2>Autonomous agent</h2><p className="lead">Plans, decides & executes.</p><ul><li className="fragment fade-up">Plans multi-step work and picks its own tools</li><li className="fragment fade-up">Loops reason → act → observe until confident</li><li className="fragment fade-up">Investigates the Netflix charge end-to-end</li></ul></div></div></section>
+<Evo ch="ch-evo" art={SVGS.agent} n="05" title={<>Autonomous agent</>} lead={<>Plans, decides & executes.</>} points={[<>Plans multi-step work and picks its own tools</>, <>Loops reason → act → observe until confident</>, <>Investigates the Netflix charge end-to-end</>]} />
 
-<section className="chapter ch-now"><span className="num">03</span><span className="ch-title">Why agents, why now</span></section>
+<Chapter n="03" ch="ch-now" title="Why agents, why now" />
 
-<section className="ch-now" data-sec="03 · Why now"><h2>Why Agents are so popular now ? </h2><div className="grid"><div className="card fragment fade-up"><div className="h"><span className="num">01</span></div><h3>LLMs got good at thinking</h3><p>Modern models plan, choose tools, interpret results, and decide next steps.</p><p className="note">Think → Act → Observe → Repeat</p></div><div className="card fragment fade-up"><div className="h"><span className="num">02</span></div><h3>Tool use became easy</h3><ul><li>Function calling</li><li>Structured outputs</li><li>MCP — Model Context Protocol</li></ul><p>Wiring AI into enterprise systems is dramatically simpler.</p></div><div className="card fragment fade-up"><div className="h"><span className="num">03</span></div><h3>It got cheap enough</h3><p><strong>AI attempts + human verification</strong> is now often cheaper than humans doing everything by hand.</p></div></div></section>
+<Slide className="ch-now"><h2>Why Agents are so popular now ? </h2><div className="cards"><div className="card fragment fade-up"><div className="h"><span className="num">01</span></div><h3>LLMs got good at thinking</h3><p>Modern models plan, choose tools, interpret results, and decide next steps.</p><p className="note">Think → Act → Observe → Repeat</p></div><div className="card fragment fade-up"><div className="h"><span className="num">02</span></div><h3>Tool use became easy</h3><ul><li>Function calling</li><li>Structured outputs</li><li>MCP — Model Context Protocol</li></ul><p>Wiring AI into enterprise systems is dramatically simpler.</p></div><div className="card fragment fade-up"><div className="h"><span className="num">03</span></div><h3>It got cheap enough</h3><p><strong>AI attempts + human verification</strong> is now often cheaper than humans doing everything by hand.</p></div></div></Slide>
 
-<section className="chapter ch-pat"><span className="num">04</span><span className="ch-title">Design patterns</span></section>
+<Chapter n="04" ch="ch-pat" title="Design patterns" />
 
-<section className="ch-pat" data-sec="04 · Design patterns — 01 · Reflection"><div className="evo"><div className="evo-art" dangerouslySetInnerHTML={{ __html: SVGS.refl }} /><div className="evo-copy"><span className="n">01</span><h2>Reflection</h2><p className="lead">Reviews its own work.</p><ul><li className="fragment fade-up">Drafts, critiques its own output, then revises</li><li className="fragment fade-up">Catches its own errors before you ever see them</li><li className="fragment fade-up"><em>Reviews a credit memo it just wrote</em></li></ul></div></div></section>
+<Evo ch="ch-pat" art={SVGS.refl} n="01" title={<>Reflection</>} lead={<>Reviews its own work.</>} points={[<>Drafts, critiques its own output, then revises</>, <>Catches its own errors before you ever see them</>, <><em>Reviews a credit memo it just wrote</em></>]} />
 
-<section className="ch-pat" data-sec="04 · Design patterns — 02 · Tool Use"><div className="evo is-flip"><div className="evo-art" dangerouslySetInnerHTML={{ __html: SVGS.tool }} /><div className="evo-copy"><span className="n">02</span><h2>Tool Use</h2><p className="lead">Reaches for the right tool.</p><ul><li className="fragment fade-up">Calls APIs, databases, search, or code to act</li><li className="fragment fade-up">Picks the right tool for each sub-task</li><li className="fragment fade-up"><em>Looks up the live account balance</em></li></ul></div></div></section>
+<Evo ch="ch-pat" art={SVGS.tool} n="02" title={<>Tool Use</>} lead={<>Reaches for the right tool.</>} points={[<>Calls APIs, databases, search, or code to act</>, <>Picks the right tool for each sub-task</>, <><em>Looks up the live account balance</em></>]} flip />
 
-<section className="ch-pat" data-sec="04 · Design patterns — 03 · Planning"><div className="evo"><div className="evo-art" dangerouslySetInnerHTML={{ __html: SVGS.plan }} /><div className="evo-copy"><span className="n">03</span><h2>Planning</h2><p className="lead">Decomposes the goal.</p><ul><li className="fragment fade-up">Breaks a goal into ordered sub-steps</li><li className="fragment fade-up">Sequences the work before executing</li><li className="fragment fade-up"><em>Loan approval · fraud investigation · audit workflow</em></li></ul></div></div></section>
+<Evo ch="ch-pat" art={SVGS.plan} n="03" title={<>Planning</>} lead={<>Decomposes the goal.</>} points={[<>Breaks a goal into ordered sub-steps</>, <>Sequences the work before executing</>, <><em>Loan approval · fraud investigation · audit workflow</em></>]} />
 
-<section className="ch-pat" data-sec="04 · Design patterns — 04 · ReAct"><div className="evo is-flip"><div className="evo-art" dangerouslySetInnerHTML={{ __html: SVGS.react }} /><div className="evo-copy"><span className="n">04</span><h2>ReAct</h2><p className="lead">Thought → Action → Observation.</p><ul><li className="fragment fade-up">Loops reason → act → observe until confident</li><li className="fragment fade-up">The practical default — most production agents use it</li><li className="fragment fade-up"><em>Investigates the disputed charge step by step</em></li></ul></div></div></section>
+<Evo ch="ch-pat" art={SVGS.react} n="04" title={<>ReAct</>} lead={<>Thought → Action → Observation.</>} points={[<>Loops reason → act → observe until confident</>, <>The practical default — most production agents use it</>, <><em>Investigates the disputed charge step by step</em></>]} flip />
 
-<section className="ch-pat" data-sec="04 · Design patterns — 05 · Multi-Agent"><div className="evo"><div className="evo-art" dangerouslySetInnerHTML={{ __html: SVGS.multi }} /><div className="evo-copy"><span className="n">05</span><h2>Multi-Agent</h2><p className="lead">Specialists hand off.</p><ul><li className="fragment fade-up">Specialized agents each own one competency</li><li className="fragment fade-up">The handoff carries the case forward</li><li className="fragment fade-up"><em>Customer Service → Fraud → Risk → Compliance</em></li></ul></div></div></section>
+<Evo ch="ch-pat" art={SVGS.multi} n="05" title={<>Multi-Agent</>} lead={<>Specialists hand off.</>} points={[<>Specialized agents each own one competency</>, <>The handoff carries the case forward</>, <><em>Customer Service → Fraud → Risk → Compliance</em></>]} />
 
-<section className="chapter ch-app"><span className="num">05</span><span className="ch-title">How AI is used in applications</span></section>
+<Chapter n="05" ch="ch-app" title="How AI is used in applications" />
 
-<section className="ch-app" data-sec="05 · How AI is used in applications"><h2>Where AI shows up in real software</h2><p className="lead">Same models — different shapes inside the product.</p><div className="grid is-3up is-tight"><div className="card fragment fade-up"><div className="h"><span className="num">01</span></div><h3>Conversational assistants</h3><p>Chat and voice interfaces in natural language.</p></div><div className="card fragment fade-up"><div className="h"><span className="num">02</span></div><h3>Copilots</h3><p>AI that suggests and drafts inside your workflow.</p></div><div className="card fragment fade-up"><div className="h"><span className="num">03</span></div><h3>Retrieval (RAG)</h3><p>Answers grounded in your own documents.</p></div><div className="card fragment fade-up"><div className="h"><span className="num">04</span></div><h3>Workflow automation</h3><p>Agents that run multi-step tasks in the background.</p></div><div className="card fragment fade-up"><div className="h"><span className="num">05</span></div><h3>Content intelligence</h3><p>Summarize, classify, extract, translate.</p></div><div className="card fragment fade-up"><div className="h"><span className="num">06</span></div><h3>Semantic search</h3><p>Match intent, not just keywords.</p></div></div></section>
+<Slide className="ch-app"><h2>Where AI shows up in real software</h2><p className="lead">Same models — different shapes inside the product.</p><div className="cards is-3up is-tight"><div className="card fragment fade-up"><div className="h"><span className="num">01</span></div><h3>Conversational assistants</h3><p>Chat and voice interfaces in natural language.</p></div><div className="card fragment fade-up"><div className="h"><span className="num">02</span></div><h3>Copilots</h3><p>AI that suggests and drafts inside your workflow.</p></div><div className="card fragment fade-up"><div className="h"><span className="num">03</span></div><h3>Retrieval (RAG)</h3><p>Answers grounded in your own documents.</p></div><div className="card fragment fade-up"><div className="h"><span className="num">04</span></div><h3>Workflow automation</h3><p>Agents that run multi-step tasks in the background.</p></div><div className="card fragment fade-up"><div className="h"><span className="num">05</span></div><h3>Content intelligence</h3><p>Summarize, classify, extract, translate.</p></div><div className="card fragment fade-up"><div className="h"><span className="num">06</span></div><h3>Semantic search</h3><p>Match intent, not just keywords.</p></div></div></Slide>
 
-<section className="chapter ch-risk"><span className="num">06</span><span className="ch-title">Challenges & risks</span></section>
+<Chapter n="06" ch="ch-risk" title="Challenges & risks" />
 
-<section className="ch-risk" data-sec="06 · Challenges & risks"><h2>Agents are probabilistic systems</h2><p className="lead">Accuracy is a distribution — not a guarantee.</p></section>
+<Slide className="ch-risk"><h2>Agents are probabilistic systems</h2><p className="lead">Accuracy is a distribution — not a guarantee.</p></Slide>
 
-<section className="ch-risk" data-sec="06 · Failure modes"><h2>Where agents go wrong</h2><div className="grid"><div className="card fragment fade-up"><h3 className="is-danger">Hallucinated tool use</h3><p>“I checked your account…” <span className="dim">— without actually checking.</span></p></div><div className="card fragment fade-up"><h3 className="is-danger">Wrong parameters</h3><p>Correct tool. Wrong account. Wrong customer.</p></div><div className="card fragment fade-up"><h3 className="is-danger">Misinterpreted results</h3><p>Correct data. Incorrect conclusion.</p></div></div><p className="fine fragment fade-in">Additional enterprise risks</p><ul className="risks"><li className="fragment fade-up">Prompt injection</li><li className="fragment fade-up">Data leakage</li><li className="fragment fade-up">Unauthorized actions</li><li className="fragment fade-up">Tool abuse</li><li className="fragment fade-up">Compliance violations</li></ul></section>
+<Slide className="ch-risk"><h2>Where agents go wrong</h2><div className="cards"><div className="card fragment fade-up"><h3 className="is-danger">Hallucinated tool use</h3><p>“I checked your account…” <span className="dim">— without actually checking.</span></p></div><div className="card fragment fade-up"><h3 className="is-danger">Wrong parameters</h3><p>Correct tool. Wrong account. Wrong customer.</p></div><div className="card fragment fade-up"><h3 className="is-danger">Misinterpreted results</h3><p>Correct data. Incorrect conclusion.</p></div></div><p className="fine fragment fade-in">Additional enterprise risks</p><ul className="risks"><li className="fragment fade-up">Prompt injection</li><li className="fragment fade-up">Data leakage</li><li className="fragment fade-up">Unauthorized actions</li><li className="fragment fade-up">Tool abuse</li><li className="fragment fade-up">Compliance violations</li></ul></Slide>
 
-<section className="ch-risk" data-sec="06 · Enterprise AI governance & security"><h2>Enterprise AI governance & security</h2><div className="duo"><div className="grid is-2up is-tight"><div className="card"><h3 className="is-danger">Data leakage</h3></div><div className="card"><h3 className="is-danger">Ungoverned agents on devices</h3></div><div className="card"><h3 className="is-danger">Prompt injection</h3></div><div className="card"><h3 className="is-danger">Unsafe outputs</h3></div></div><figure className="shot"><img src="/misl-auroscope.png" alt="Millennium team and NYSE Floor Talk appearance" /></figure></div></section>
+<Slide className="ch-risk"><h2>Enterprise AI governance & security</h2><div className="duo"><div className="cards is-2up is-tight"><div className="card"><h3 className="is-danger">Data leakage</h3></div><div className="card"><h3 className="is-danger">Ungoverned agents on devices</h3></div><div className="card"><h3 className="is-danger">Prompt injection</h3></div><div className="card"><h3 className="is-danger">Unsafe outputs</h3></div></div><figure className="shot"><img src="/misl-auroscope.png" alt="Millennium team and NYSE Floor Talk appearance" /></figure></div></Slide>
 
-<section className="chapter ch-hitl"><span className="num">07</span><span className="ch-title">Human in the loop</span></section>
+<Chapter n="07" ch="ch-hitl" title="Human in the loop" />
 
-<section className="ch-hitl" data-sec="07 · Human in the loop"><h2>Human In The Loop (HTL)</h2><table><thead><tr><th>Level</th><th>Human role</th><th>Banking example</th></tr></thead><tbody><tr className="fragment fade-right"><td>AI assists</td><td data-label="Human role">Human performs the action</td><td data-label="Example">Draft a credit memo</td></tr><tr className="fragment fade-right"><td>Human approves</td><td data-label="Human role">AI queues the action</td><td data-label="Example">Large fund reversal</td></tr><tr className="fragment fade-right"><td>Human monitors</td><td data-label="Human role">AI executes</td><td data-label="Example">Balance inquiries</td></tr><tr className="fragment fade-right"><td>Human audits</td><td data-label="Human role">Periodic review</td><td data-label="Example">Transaction categorization</td></tr></tbody></table><p className="caption-strong fragment fade-in">Higher risk → more human oversight.</p></section>
+<Slide className="ch-hitl"><h2>Human In The Loop (HTL)</h2><table><thead><tr><th>Level</th><th>Human role</th><th>Banking example</th></tr></thead><tbody><tr className="fragment fade-right"><td>AI assists</td><td data-label="Human role">Human performs the action</td><td data-label="Example">Draft a credit memo</td></tr><tr className="fragment fade-right"><td>Human approves</td><td data-label="Human role">AI queues the action</td><td data-label="Example">Large fund reversal</td></tr><tr className="fragment fade-right"><td>Human monitors</td><td data-label="Human role">AI executes</td><td data-label="Example">Balance inquiries</td></tr><tr className="fragment fade-right"><td>Human audits</td><td data-label="Human role">Periodic review</td><td data-label="Example">Transaction categorization</td></tr></tbody></table><p className="caption-strong fragment fade-in">Higher risk → more human oversight.</p></Slide>
 
-<section className="chapter ch-gates"><span className="num">08</span><span className="ch-title">Do you even need an agent</span></section>
+<Chapter n="08" ch="ch-gates" title="Do you even need an agent" />
 
-<section className="ch-gates" data-sec="08 · The best agent is often no agent"><h2>Six gates before you build</h2><p className="lead">Ask these in order. A “no” early on saves you an agent you'd regret.</p></section>
+<Slide className="ch-gates"><h2>Six gates before you build</h2><p className="lead">Ask these in order. A “no” early on saves you an agent you'd regret.</p></Slide>
 
-<section className="ch-gates" data-sec="08 · The gates"><h2>Six gates before you build</h2><ol className="flow cols" style={{ "--rows": 3 }}><li className="fragment fade-up"><span className="t">Can rules solve it?</span><span className="d">→ Just write code.</span></li><li className="fragment fade-up"><span className="t">Only needs understanding?</span><span className="d">→ An LLM inside a workflow.</span></li><li className="fragment fade-up"><span className="t">Enough business value?</span><span className="d">High volume · high cost · high pain.</span></li><li className="fragment fade-up"><span className="t">Are failures tolerable?</span><span className="d">Always evaluate the worst case.</span></li><li className="fragment fade-up"><span className="t">Can you measure success?</span><span className="d">No evaluation → no deployment.</span></li><li className="fragment fade-up"><span className="t">Can humans supervise it?</span><span className="d">Risk determines oversight.</span></li></ol></section>
+<Slide className="ch-gates"><h2>Six gates before you build</h2><ol className="flow cols" style={{ "--rows": 3 }}><li className="fragment fade-up"><span className="t">Can rules solve it?</span><span className="d">→ Just write code.</span></li><li className="fragment fade-up"><span className="t">Only needs understanding?</span><span className="d">→ An LLM inside a workflow.</span></li><li className="fragment fade-up"><span className="t">Enough business value?</span><span className="d">High volume · high cost · high pain.</span></li><li className="fragment fade-up"><span className="t">Are failures tolerable?</span><span className="d">Always evaluate the worst case.</span></li><li className="fragment fade-up"><span className="t">Can you measure success?</span><span className="d">No evaluation → no deployment.</span></li><li className="fragment fade-up"><span className="t">Can humans supervise it?</span><span className="d">Risk determines oversight.</span></li></ol></Slide>
 
-<section className="ch-gates" data-sec="08 · The best agent is often no agent" data-transition="fade"><div className="pull"><blockquote>Don't build an AI agent because you <span className="hl">can</span>.<br />Build one only when you <span className="hl">should</span>.</blockquote></div></section>
+<Slide className="ch-gates" data-transition="fade"><div className="pull"><blockquote>Don't build an AI agent because you <span className="hl">can</span>.<br />Build one only when you <span className="hl">should</span>.</blockquote></div></Slide>
 
-<section className="chapter ch-future"><span className="num">09</span><span className="ch-title">The future of AI agents</span></section>
+<Chapter n="09" ch="ch-future" title="The future of AI agents" />
 
-<section className="ch-future" data-sec="09 · The future of AI agents"><h2>My perspective</h2><div className="duo"><div className="panel fragment fade-up"><span className="tag">Prediction 01</span><p className="headline">Agents become infrastructure</p><p className="prose">Nobody will say “AI Agent” — just as nobody says “cloud-native” any more. Software will simply include agents.</p></div><div className="panel fragment fade-up"><span className="tag">Prediction 02</span><p className="headline">Standardization wins</p><p className="prose">MCP may become the HTTP of AI apps. Enterprise software will expose agent-ready interfaces alongside APIs.</p></div></div><ol className="flow"><li className="fragment fade-up"><span className="t">Does AI help defenders more than attackers?</span></li><li className="fragment fade-up"><span className="t">If AI does the junior work, how do experts form?</span></li><li className="fragment fade-up"><span className="t">How much autonomy should an organization allow?</span></li></ol></section>
+<Slide className="ch-future"><h2>My perspective</h2><div className="duo"><div className="panel fragment fade-up"><span className="tag">Prediction 01</span><p className="headline">Agents become infrastructure</p><p className="prose">Nobody will say “AI Agent” — just as nobody says “cloud-native” any more. Software will simply include agents.</p></div><div className="panel fragment fade-up"><span className="tag">Prediction 02</span><p className="headline">Standardization wins</p><p className="prose">MCP may become the HTTP of AI apps. Enterprise software will expose agent-ready interfaces alongside APIs.</p></div></div><ol className="flow"><li className="fragment fade-up"><span className="t">Does AI help defenders more than attackers?</span></li><li className="fragment fade-up"><span className="t">If AI does the junior work, how do experts form?</span></li><li className="fragment fade-up"><span className="t">How much autonomy should an organization allow?</span></li></ol></Slide>
 
-<section className="chapter ch-prep"><span className="num">10</span><span className="ch-title">Preparing for the future</span></section>
+<Chapter n="10" ch="ch-prep" title="Preparing for the future" />
 
-<section className="ch-prep" data-sec="10 · Preparing for the future"><h2>What industry actually wants</h2><div className="duo"><div className="panel fragment fade-up"><span className="tag">Faulty System</span><p className="headline">Unfortunate Reality</p><ul><li className="fragment">Finish the assignment</li><li className="fragment">Find the one right answer</li><li className="fragment">Work alone, graded solo</li><li className="fragment">Master a fixed syllabus</li></ul></div><div className="panel accent fragment fade-up"><span className="tag">What industry pays for</span><p className="headline">The delivery frame</p><ul><li className="fragment">Ship software people actually use</li><li className="fragment">Own the outcome, not just the task</li><li className="fragment">Communicate and collaborate</li><li className="fragment">Use AI to deliver more, faster</li><li className="fragment">Learn whatever the problem needs</li></ul></div></div></section>
+<Slide className="ch-prep"><h2>What industry actually wants</h2><div className="duo"><div className="panel fragment fade-up"><span className="tag">Faulty System</span><p className="headline">Unfortunate Reality</p><ul><li className="fragment">Finish the assignment</li><li className="fragment">Find the one right answer</li><li className="fragment">Work alone, graded solo</li><li className="fragment">Master a fixed syllabus</li></ul></div><div className="panel accent fragment fade-up"><span className="tag">What industry pays for</span><p className="headline">The delivery frame</p><ul><li className="fragment">Ship software people actually use</li><li className="fragment">Own the outcome, not just the task</li><li className="fragment">Communicate and collaborate</li><li className="fragment">Use AI to deliver more, faster</li><li className="fragment">Learn whatever the problem needs</li></ul></div></div></Slide>
 
-<section className="ch-prep" data-sec="10 · Preparing for the future"><h2>Things worth doing</h2><div className="grid is-3up is-tight"><div className="card fragment fade-up"><div className="h"><span className="num">01</span></div><h3>Build strong roots</h3><p>Programming · systems · math · communication.</p></div><div className="card fragment fade-up"><div className="h"><span className="num">02</span></div><h3>Make AI your assistant</h3><p>Use it to think faster — never to stop thinking.</p></div><div className="card fragment fade-up"><div className="h"><span className="num">03</span></div><h3>Increase your leverage</h3><p>Use machines to accomplish more.</p></div><div className="card fragment fade-up"><div className="h"><span className="num">04</span></div><h3>Learn modern AI tools</h3><p>LLMs · agents · MCP · RAG · automation.</p></div><div className="card fragment fade-up"><div className="h"><span className="num">05</span></div><h3>Share and collaborate</h3><p>Learn in the open; grow with others.</p></div><div className="card fragment fade-up"><div className="h"><span className="num">06</span></div><h3>Build impactful together</h3><p>Ship things that matter, as a team.</p></div></div></section>
+<Slide className="ch-prep"><h2>Things worth doing</h2><div className="cards is-3up is-tight"><div className="card fragment fade-up"><div className="h"><span className="num">01</span></div><h3>Build strong roots</h3><p>Programming · systems · math · communication.</p></div><div className="card fragment fade-up"><div className="h"><span className="num">02</span></div><h3>Make AI your assistant</h3><p>Use it to think faster — never to stop thinking.</p></div><div className="card fragment fade-up"><div className="h"><span className="num">03</span></div><h3>Increase your leverage</h3><p>Use machines to accomplish more.</p></div><div className="card fragment fade-up"><div className="h"><span className="num">04</span></div><h3>Learn modern AI tools</h3><p>LLMs · agents · MCP · RAG · automation.</p></div><div className="card fragment fade-up"><div className="h"><span className="num">05</span></div><h3>Share and collaborate</h3><p>Learn in the open; grow with others.</p></div><div className="card fragment fade-up"><div className="h"><span className="num">06</span></div><h3>Build impactful together</h3><p>Ship things that matter, as a team.</p></div></div></Slide>
 
-<section className="ch-prep" data-sec="10 · Preparing for the future" data-transition="fade"><div className="pull"><blockquote>Don't learn to compete <span className="hl">against</span> AI.<br />Learn to build <span className="hl">with</span> it.</blockquote><cite>Final advice</cite></div></section>
+<Slide className="ch-prep" data-transition="fade"><div className="pull"><blockquote>Don't learn to compete <span className="hl">against</span> AI.<br />Learn to build <span className="hl">with</span> it.</blockquote><cite>Final advice</cite></div></Slide>
 
-<section data-sec="11 · Thank you"><div className="title-slide"><h1>Thank you :)</h1><div className="rule"></div></div></section>
+<Slide><div className="title-slide"><h1>Thank you :)</h1><div className="rule"></div></div></Slide>

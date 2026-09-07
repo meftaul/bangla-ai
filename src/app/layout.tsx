@@ -1,6 +1,12 @@
 import type { Metadata } from "next";
 import Script from "next/script";
-import { Geist, Space_Grotesk, Hind_Siliguri } from "next/font/google";
+import {
+  Geist,
+  Space_Grotesk,
+  Hind_Siliguri,
+  Hanken_Grotesk,
+  JetBrains_Mono,
+} from "next/font/google";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -10,6 +16,19 @@ const geistSans = Geist({
 
 const spaceGrotesk = Space_Grotesk({
   variable: "--font-space-grotesk",
+  subsets: ["latin"],
+});
+
+// Deck typography (src/app/deck.css). Self-hosted here rather than <link>-ed from
+// each deck's MDX: same families, but preloaded and with no render-blocking
+// third-party request or font-swap shift.
+const hankenGrotesk = Hanken_Grotesk({
+  variable: "--font-hanken-grotesk",
+  subsets: ["latin"],
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-jetbrains-mono",
   subsets: ["latin"],
 });
 
@@ -34,7 +53,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${geistSans.variable} ${spaceGrotesk.variable} ${hindSiliguri.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${spaceGrotesk.variable} ${hindSiliguri.variable} ${hankenGrotesk.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-background text-foreground font-sans">
         {/* Apply saved theme before paint to avoid a flash. next/script (beforeInteractive)

@@ -196,351 +196,24 @@ export const SVGS = {
   </svg>`,
 };
 
-<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Space+Grotesk:wght@600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
-
 <style>{`
-/* Token system, type scale and primitives are agentic-ai.mdx's — same em-based scale
-   off .reveal's own font-size (never html{font-size}, which leaks to the dashboard).
-   New here: .act (live activities), .pwm-* (PasswordMeter), .mail (the phishing mock),
-   .lanes (the fraud chart) and .stats. */
+/* Deck-specific only — tokens, type scale and every primitive (.card/.cards,
+   .panel, .verdict, .evo, .act, .pwm-*, .stats, .chips …) live in src/app/deck.css,
+   which deck.tsx imports for all decks. Add here only what this deck alone needs. */
 
-.reveal, .reveal-viewport {
-  --hue: 275;                          /* default: title + close */
-  --bg:      oklch(0.962 0.028 var(--hue));
-  --bg-2:    oklch(0.928 0.038 var(--hue));
-  --surface: oklch(0.99 0.012 var(--hue));
-  --line:    oklch(0.85 0.045 var(--hue));
-  --ink:     oklch(0.22 0.03 var(--hue));
-  --muted:   oklch(0.42 0.035 var(--hue));
-  --faint:   oklch(0.50 0.035 var(--hue));
-  --accent:  oklch(0.56 0.21 var(--hue));
-  --accent-ink: oklch(0.45 0.19 var(--hue));
-  --accent-dim: oklch(0.56 0.21 var(--hue) / 0.16);
-  --accent-line: oklch(0.56 0.21 var(--hue) / 0.48);
-  --accent-glow: oklch(0.56 0.21 var(--hue) / 0.26);
-  --danger:  oklch(0.50 0.17 32);
-  --caution: oklch(0.58 0.14 75);
-  --safe:    oklch(0.52 0.14 150);
-  --elev: 0 1px 2px oklch(0.22 0.02 var(--hue) / 0.06),
-          0 6px 20px oklch(0.22 0.02 var(--hue) / 0.07);
-  --display: "Space Grotesk", system-ui, sans-serif;
-  --sans: "Hanken Grotesk", system-ui, sans-serif;
-  --mono: "JetBrains Mono", ui-monospace, monospace;
-  --t-display: 4.4em;
-  --t-quote:   2.4em;
-  --t-h2:      2em;
-  --t-h3:      1.25em;
-  --t-lead:    1.05em;
-  --t-body:    0.95em;
-  --t-small:   0.78em;
-  --t-label:   0.62em;
-  --s1: 0.35em;
-  --s2: 0.6em;
-  --s3: 1em;
-  --s4: 1.5em;
-  --s5: 2.2em;
-  --s6: 3.2em;
-}
-
-/* Per-chapter hue. The descendant form recolors a slide's content; the compound
-   form recolors the deck background (deck.tsx mirrors the current slide's ch-*
-   class onto .reveal, because custom props only cascade down). */
-.reveal.ch-cost,   .reveal .ch-cost   { --hue: 25;  }
-.reveal.ch-threat, .reveal .ch-threat { --hue: 300; }
-.reveal.ch-decep,  .reveal .ch-decep  { --hue: 60;  }
-.reveal.ch-pass,   .reveal .ch-pass   { --hue: 145; }
-.reveal.ch-owned,  .reveal .ch-owned  { --hue: 195; }
-.reveal.ch-defend, .reveal .ch-defend { --hue: 245; }
-.reveal.ch-gov,    .reveal .ch-gov    { --hue: 330; }
-
-.reveal, .reveal-viewport {
-  background:
-    radial-gradient(90% 70% at 100% 0%, var(--accent-glow), transparent 60%),
-    radial-gradient(80% 80% at 0% 100%, oklch(0.99 0.02 var(--hue) / 0.55), transparent 55%),
-    linear-gradient(155deg, var(--bg) 30%, var(--bg-2) 100%);
-  transition: background-color 600ms ease;
-}
-.reveal *, .reveal *::before, .reveal *::after { box-sizing: border-box; }
-
-.reveal {
-  font-family: var(--sans);
-  font-size: 20px;
-  font-weight: 400;
-  color: var(--ink);
-  -webkit-font-smoothing: antialiased;
-  font-kerning: normal;
-
-  /* App tokens re-scoped so Quiz/Poll/DragDrop follow the deck palette. They are
-     Tailwind token classes (text-foreground, border-border, bg-accent…) mapped to
-     these vars by @theme inline in globals.css. --muted/--surface/--accent/--danger
-     are already deck tokens above and double as the app's. */
-  --background: var(--bg);
-  --foreground: var(--ink);
-  --border: var(--line);
-  --accent-text: var(--accent-ink);
-  --accent-foreground: oklch(0.99 0.012 var(--hue));
-  --accent-bright: oklch(0.66 0.19 var(--hue));
-  --accent-deep: oklch(0.42 0.17 var(--hue));
-}
-.reveal .slides { text-align: left; }
-
-/* Type */
-:where(.reveal) :where(h1, h2, h3, h4, p, ul, ol, li, blockquote, table) { margin: 0; }
-.reveal h1, .reveal h2, .reveal h3, .reveal h4 {
-  font-family: var(--sans);
-  color: var(--ink);
-  font-weight: 600;
-  text-transform: none;
-  text-wrap: balance;
-}
-.reveal h1 {
-  font-family: var(--display);
-  font-size: var(--t-display); font-weight: 700;
-  line-height: 1; letter-spacing: -0.03em;
-}
-.reveal h2 { font-size: var(--t-h2); line-height: 1.12; letter-spacing: -0.025em; }
-.reveal h3 { font-size: var(--t-h3); line-height: 1.25; }
-.reveal h4 { font-size: var(--t-body); line-height: 1.3; }
-.reveal p, .reveal li { line-height: 1.6; }
-.reveal p  { color: var(--ink); text-wrap: pretty; max-width: 62ch; }
-.reveal strong { color: var(--ink); font-weight: 600; }
-.reveal em { color: var(--accent-ink); font-style: italic; }
-.reveal a  { color: var(--accent-ink); }
-.reveal li { max-width: 62ch; text-wrap: pretty; }
-.reveal li + li { margin-top: var(--s2); }
-.reveal ::selection { background: var(--accent); color: var(--bg); }
-
-.reveal .lead { color: var(--muted); font-size: var(--t-lead); max-width: 44ch; line-height: 1.55; }
-.reveal .fine { color: var(--faint); font-size: var(--t-small); }
-.reveal .dim  { color: var(--faint); }
-.mono { font-family: var(--mono); font-size: 0.9em; color: var(--accent-ink);
-        background: var(--accent-dim); border-radius: 0.25em; padding: 0.1em 0.4em; }
-
-.reveal .slides section > *:not(section) + *:not(section),
-.title-slide > * + *,
-.pull > * + * { margin-top: var(--s4); }
-.reveal .slides section > h2 + .lead,
-.reveal .slides section > h2 + p,
-.reveal h3 + p { margin-top: var(--s3); }
-.reveal .slides section > h2 + .cards,
-.reveal .slides section > h2 + .duo,
-.reveal .slides section > h2 + .lanes,
-.reveal .slides section > h2 + .stats,
-.reveal .slides section > h2 + table,
-.reveal .slides section > h2 + .flow { margin-top: var(--s5); }
-
-/* Reveal chrome — this style tag renders after reveal's white.css, so it wins. */
-.reveal .progress { color: var(--accent); height: 3px; }
-.reveal .slide-number { background: transparent; color: var(--faint); font-family: var(--mono); font-size: 14px; }
-.reveal .controls { color: var(--accent); }
-
-/* Primitives */
-.panel .tag,
-.card .h,
-.reveal thead th,
-.pull cite {
-  font-family: var(--sans);
-  font-size: var(--t-label);
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  line-height: 1.3;
-}
-
-.duo { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s4); align-items: stretch; }
-
-.panel {
-  position: relative; isolation: isolate; overflow: hidden;
-  background: var(--surface); border-radius: 0.55em; padding: var(--s4);
-  display: flex; flex-direction: column; gap: var(--s3);
-  box-shadow: var(--elev);
-}
-.panel::before, .card::before {
-  content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit;
-  background-image: radial-gradient(circle, var(--accent) 0.7px, transparent 0.7px);
-  background-size: 0.72em 0.72em;
-  opacity: 0.16;
-  -webkit-mask-image: radial-gradient(115% 85% at 100% 0%, #000 0%, transparent 55%);
-          mask-image: radial-gradient(115% 85% at 100% 0%, #000 0%, transparent 55%);
-}
-.panel::after, .card::after {
-  content: ""; position: absolute; top: 0.85em; right: 0.85em; z-index: -1;
-  width: 0.8em; height: 0.8em;
-  border-top: 1.5px solid var(--accent); border-right: 1.5px solid var(--accent);
-  opacity: 0.5;
-}
-.panel.accent { background: linear-gradient(180deg, var(--accent-dim), transparent 70%), var(--surface); }
-.panel.accent::before, .card.is-accent::before { opacity: 0.22; }
-.panel.accent::after,  .card.is-accent::after  { opacity: 0.7; }
-.panel .tag { color: var(--faint); display: block; margin-bottom: calc(var(--s1) - var(--s3)); }
-.panel.accent .tag { color: var(--accent-ink); }
-.panel.danger .tag { color: var(--danger); }
-.panel.danger::after { border-color: var(--danger); }
-.panel .headline { font-size: var(--t-h3); color: var(--ink); font-weight: 500; line-height: 1.3; }
-.panel .headline .sub { color: var(--muted); font-weight: 400; }
-.panel .prose { color: var(--muted); font-size: var(--t-small); }
-.panel ul, .card ul, .evo-copy ul { display: block; list-style: none; padding: 0; }
-.panel li, .evo-copy li { padding-left: 1.5em; position: relative; color: var(--muted); }
-.panel li::before, .evo-copy li::before, .card li::before {
-  content: ""; position: absolute; left: 0; top: 0.58em;
-  width: 0.42em; height: 0.42em;
-  border: 1.5px solid var(--accent); border-radius: 1px;
-  background: var(--surface); transform: rotate(45deg);
-}
-.panel li::after, .evo-copy li::after, .card li::after {
-  content: ""; position: absolute; left: 0.52em; top: 0.78em;
-  width: 0.5em; height: 1.5px; background: var(--accent-line);
-  transform-origin: left center;
-}
-.reveal li.fragment::before { opacity: 0; transform: rotate(45deg) scale(0.35); }
-.reveal li.fragment.visible::before {
-  opacity: 1; transform: rotate(45deg) scale(1);
-  transition: transform 220ms ease, opacity 220ms ease;
-}
-.reveal li.fragment::after { transform: scaleX(0); }
-.reveal li.fragment.visible::after { transform: scaleX(1); transition: transform 220ms ease 60ms; }
-.panel .verdict { margin-top: auto; }
-
-.verdict {
-  align-self: flex-start;
-  display: inline-flex; align-items: center; gap: 0.5em;
-  font-size: var(--t-small); font-weight: 500; color: var(--ink);
-  background: var(--bg-2); border: 1px solid var(--line); border-radius: 999px;
-  padding: 0.5em 1em;
-}
-.verdict.is-accent { border-color: var(--accent-line); }
-.verdict.is-danger { border-color: var(--danger); }
-.verdict .dot { width: 0.28em; height: 0.28em; border-radius: 50%; background: var(--accent); }
-.verdict.is-danger .dot { background: var(--danger); }
-
-.pull blockquote {
-  border: none; background: none; box-shadow: none; margin: 0; padding: 0;
-  font-family: var(--display); font-weight: 600;
-  font-size: var(--t-quote); line-height: 1.14;
-  letter-spacing: -0.02em; color: var(--ink); text-wrap: balance; max-width: 22ch;
-}
-.pull blockquote .hl { color: var(--accent-ink); }
-.pull cite { display: block; margin-top: var(--s5); font-style: normal; color: var(--faint); }
-
-.reveal .flow { list-style: none; padding: 0; margin: 0; counter-reset: step; }
-.flow li { position: relative; padding: 0 var(--s4) var(--s3) 2.1em; max-width: none; counter-increment: step; }
-.flow li + li { margin-top: 0; }
-.flow li::before {
-  content: counter(step, decimal-leading-zero);
-  position: absolute; left: 0; top: 0.3em;
-  font-family: var(--mono); font-size: var(--t-label); font-weight: 700;
-  color: var(--accent);
-}
-.flow .t { display: block; font-weight: 500; color: var(--ink); font-size: var(--t-body); line-height: 1.35; }
-.flow .d { display: block; color: var(--muted); font-size: var(--t-small); margin-top: 0.25em; }
-.flow.cols {
-  display: grid; grid-template-columns: 1fr 1fr;
-  grid-template-rows: repeat(var(--rows, 4), auto);
-  grid-auto-flow: column; column-gap: var(--s5); max-width: 40em;
-}
-
-/* Concept + its diagram */
-.evo { display: grid; grid-template-columns: minmax(0, 22em) minmax(0, 1fr); gap: var(--s6); align-items: center; }
-.evo.is-flip { grid-template-columns: minmax(0, 1fr) minmax(0, 22em); }
-.evo.is-flip .evo-art { order: 2; }
-.evo-copy > * + * { margin-top: var(--s3); }
-.evo-copy .n { font-family: var(--mono); color: var(--accent);
-               font-size: var(--t-label); font-weight: 700; letter-spacing: 0.1em; }
-.evo-copy h2 { margin-top: var(--s1); }
-.evo-art { display: flex; align-items: center; justify-content: center; }
-.evo-art svg { width: 100%; max-width: 20em; height: auto; stroke-linecap: round; stroke-linejoin: round; }
-.evo-art .s-accent { stroke: var(--accent); fill: none; }
-.evo-art .s-line   { stroke: var(--line);   fill: none; }
-.evo-art .f-surface{ fill: var(--surface); }
-.evo-art .f-accent { fill: var(--accent); }
-.evo-art .f-line   { fill: var(--line); }
-.evo-art .lbl { font-family: var(--mono); fill: var(--faint);
-                font-size: 7px; letter-spacing: 0.06em; text-transform: uppercase; }
-.evo-art .lbl-ink { fill: var(--muted); font-family: var(--sans); font-size: 8px; font-weight: 600; }
-.evo-art .glyph { fill: var(--accent-ink); font-family: var(--sans); font-size: 13px; font-weight: 700; }
-
-/* Feature grid. Named .cards, not .grid: this style tag is not scoped to the deck's
-   own markup, and Quiz/Poll/DragDrop use Tailwind's "grid" utility internally — a bare
-   .grid rule here retargets their option badge and the countdown ring (the option
-   letter lands mid-label). Never redefine a Tailwind utility name in an article. */
-.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(var(--cards-min, 9em), 1fr)); gap: var(--s3); }
-.cards.is-2up { grid-template-columns: repeat(2, 1fr); }
-.cards.is-3up { grid-template-columns: repeat(3, 1fr); }
-.cards.is-tight { gap: var(--s2); max-width: 52em; }
-.cards.is-tight .card { padding: var(--s3); }
-.cards.is-tight .card h3 { font-size: var(--t-body); }
-.cards.is-tight .card p { font-size: var(--t-small); }
-.cards.is-tight .card > * + * { margin-top: var(--s1); }
-.card {
-  position: relative; isolation: isolate; overflow: hidden;
-  background: var(--surface); border-radius: 0.5em; padding: var(--s4);
-  box-shadow: var(--elev);
-}
-.card > * + * { margin-top: var(--s3); }
-.card .h + * { margin-top: var(--s1); }
-.card .h { color: var(--accent-ink); display: flex; gap: 0.6em; align-items: baseline; }
-.card .h .num { color: var(--faint); font-family: var(--mono); font-weight: 700; letter-spacing: 0; }
-.card h3.is-danger { color: var(--danger); }
-.card p { color: var(--muted); }
-.card .note { color: var(--accent-ink); font-size: var(--t-small); font-weight: 500; }
-.card li { color: var(--muted); font-size: var(--t-small); padding-left: 1.5em; position: relative; }
-.card.is-accent { background: linear-gradient(180deg, var(--accent-dim), transparent 70%), var(--surface); }
-.card.is-danger::after { border-color: var(--danger); opacity: 0.7; }
-.card.is-danger .h { color: var(--danger); }
-
-/* Table */
-.reveal table { border-collapse: collapse; width: 100%; max-width: 46em; font-size: var(--t-body); }
-.reveal thead th {
-  color: var(--accent-ink); text-align: left;
-  border-bottom: 1px solid var(--accent-line); padding: 0 0.9em 0.7em;
-}
-.reveal tbody td { padding: 0.62em 0.9em; border-bottom: 1px solid var(--line); color: var(--muted); vertical-align: top; }
-.reveal tbody td:first-child { color: var(--ink); font-weight: 500; padding-left: 0; }
-.reveal thead th:first-child { padding-left: 0; }
-.reveal tbody tr:last-child td { border-bottom: none; }
-.reveal td.num { font-family: var(--mono); font-size: var(--t-small); }
-.reveal td.is-danger  { color: var(--danger); font-weight: 500; }
-.reveal td.is-caution { color: var(--caution); font-weight: 500; }
-.reveal td.is-safe    { color: var(--safe); font-weight: 500; }
-
-/* Chips */
-.reveal .risks, .reveal .chips {
-  list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: var(--s2);
-}
-.risks li, .chips li {
-  max-width: none; font-size: var(--t-small); font-weight: 500; color: var(--ink);
-  border-radius: 999px; padding: 0.5em 1em;
-}
-.risks li { border: 1px solid var(--danger); background: oklch(0.50 0.17 32 / 0.08); }
-.chips li { border: 1px solid var(--line); background: var(--surface); color: var(--muted); }
-.risks li + li, .chips li + li { margin-top: 0; }
-
-/* Quoted speech */
-.quote-inline {
-  border: none; box-shadow: none; background: none; padding: 0;
-  font-style: italic; color: var(--muted); font-size: var(--t-lead); line-height: 1.5;
-  max-width: 40ch; text-indent: -0.42em;
-}
-.quote-inline::before { content: "\\201C"; color: var(--accent); font-style: normal; }
-.quote-inline::after  { content: "\\201D"; color: var(--accent); font-style: normal; }
-
-.caption-strong { font-weight: 500; color: var(--accent-ink); font-size: var(--t-lead); }
-
-/* Numbers */
-.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(8em, 1fr)); gap: var(--s5) var(--s4); }
-.stat .n { display: block; font-family: var(--display); font-size: 2.6em; font-weight: 700;
-           color: var(--accent-ink); line-height: 1; letter-spacing: -0.03em; }
-.stat .l { display: block; margin-top: var(--s2); color: var(--muted); font-size: var(--t-small); max-width: 16ch; }
-
-/* Fraud-detection chart */
-.lanes { display: grid; gap: var(--s2); max-width: 42em; }
-.lane { display: grid; grid-template-columns: 9.5em 1fr 3em; align-items: center; gap: var(--s3);
-        font-size: var(--t-small); color: var(--muted); }
-.lane .track { height: 0.55em; background: var(--bg-2); border-radius: 999px; overflow: hidden; }
-.lane .track > i { display: block; height: 100%; border-radius: 999px; background: var(--accent-line); }
-.lane.is-top .track > i { background: var(--accent); }
-.lane.is-top { color: var(--ink); font-weight: 500; }
-.lane .v { font-family: var(--mono); color: var(--ink); text-align: right; }
+/* Per-chapter hue. Only the compound form (.reveal.ch-*) is needed: every derived
+   token in deck.css resolves var(--hue) on .reveal itself, and a custom property's
+   computed value is fixed at the element that declares it — so setting --hue further
+   down the tree changes nothing. deck.tsx mirrors the current slide's ch-* class onto
+   the .reveal root on each slidechanged; that mirror is what recolors both the
+   background and the slide content. */
+.reveal.ch-cost { --hue: 25;  }
+.reveal.ch-threat { --hue: 300; }
+.reveal.ch-decep { --hue: 60;  }
+.reveal.ch-pass { --hue: 145; }
+.reveal.ch-owned { --hue: 195; }
+.reveal.ch-defend { --hue: 245; }
+.reveal.ch-gov { --hue: 330; }
 
 /* The phishing mock — a document, not a screenshot */
 .mail {
@@ -558,186 +231,109 @@ export const SVGS = {
 .flag { color: var(--ink); background: oklch(0.50 0.17 32 / 0.10);
         box-shadow: inset 0 -1.5px 0 var(--danger); border-radius: 2px; padding: 0 0.15em; }
 
-/* Live activities. Quiz/Poll/DragDrop style themselves with Tailwind
-   (mt-6 flex flex-col gap-*), but reveal's white.css ".reveal ul" is specificity
-   0,1,1 against a utility's 0,1,0 — so it wins and makes the option list an
-   inline-block with a 1em indent and no top margin: the list shrink-wraps, the
-   flex gap never applies, and mt-6 is dead. Undo exactly those four properties and
-   let the components' own gap / flex-direction utilities take it from there. */
-.act { max-width: 34em; margin: 0 auto; }
-.reveal .act ul, .reveal .act ol {
-  display: flex;
-  margin: 1.5rem 0 0;
-  padding: 0;
-  list-style: none;
-  text-align: inherit;
-}
-.reveal .act li { max-width: none; color: var(--ink); }
-.reveal .act li + li { margin-top: 0; }
-.reveal .act li::before, .reveal .act li::after { content: none; }
-.reveal .act p { max-width: none; }
-
-/* PasswordMeter — the component ships unstyled by design. */
-.pwm { max-width: 30em; margin: 0 auto; }
-.pwm > * + * { margin-top: var(--s2); }
-.pwm-in {
-  font-family: var(--mono); font-size: var(--t-lead); width: 100%;
-  padding: 0.7em 0.9em; border-radius: 0.5em;
-  background: var(--surface); color: var(--ink);
-  border: 1px solid var(--accent-line); outline: none; box-shadow: var(--elev);
-}
-.pwm-in:focus { border-color: var(--accent); }
-.pwm-in::placeholder { color: var(--faint); }
-.pwm-meter { height: 0.5em; border-radius: 999px; background: var(--bg-2); overflow: hidden; }
-.pwm-meter > i { display: block; height: 100%; width: 0; border-radius: 999px;
-                 background: var(--danger); transition: width 250ms ease, background 250ms ease; }
-.pwm-meter > i.hot  { background: var(--danger); }
-.pwm-meter > i.warn { background: var(--caution); }
-.pwm-meter > i.ok   { background: var(--safe); }
-.pwm-verdict { font-family: var(--display); font-size: var(--t-h3); font-weight: 700; color: var(--faint); }
-.pwm-verdict.hot  { color: var(--danger); }
-.pwm-verdict.warn { color: var(--caution); }
-.pwm-verdict.ok   { color: var(--safe); }
-.pwm-detail { font-family: var(--mono); font-size: var(--t-small); color: var(--muted); min-height: 1.4em; }
-.pwm-note { font-size: var(--t-label); color: var(--faint); letter-spacing: 0.06em; text-transform: uppercase; }
-
-/* Title slide */
-.title-slide { display: flex; flex-direction: column; align-items: center; text-align: center; }
-.title-slide h1 { max-width: 14ch; }
-.title-slide.is-hero h1 { font-size: 5.6em; }
-.title-slide .rule { width: 2.4em; height: 3px; background: var(--accent); border-radius: 2px; }
-.title-slide p { color: var(--muted); font-size: var(--t-lead); max-width: 34ch; }
-
-/* Chapter divider — a full-bleed background numeral with the title over it. */
-.reveal section.chapter {
-  text-align: center;
-  position: absolute !important; top: 0 !important; left: 0 !important;
-  width: 100% !important; height: 100% !important; margin: 0 !important;
-  display: flex !important; align-items: center; justify-content: center;
-}
-.reveal section.chapter .num {
-  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-  font-family: var(--display); font-weight: 700;
-  font-size: 34em; line-height: 1; letter-spacing: -0.04em;
-  color: var(--accent); opacity: 0.12;
-  pointer-events: none; z-index: 0;
-}
-.reveal section.chapter .ch-title {
-  position: relative; z-index: 1; display: inline-block;
-  font-family: var(--display); font-weight: 700;
-  font-size: clamp(2em, 7vw, 5.5em); line-height: 1.05; letter-spacing: -0.03em;
-  color: var(--ink); max-width: 14ch; text-wrap: balance;
-}
-
-/* Touch: reveal's arrow controls need a real target. */
-@media (pointer: coarse) {
-  .reveal .controls { --controls-arrow-angle: 36deg; right: max(12px, env(safe-area-inset-right)); bottom: max(12px, env(safe-area-inset-bottom)); }
-  .reveal .controls [class*="navigate-"] { width: 44px; height: 44px; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .reveal .fragment { transform: none !important; transition: opacity 120ms linear !important; }
-  .reveal-viewport { transition: none; }
-}
-
-@media print {
-  *, *::before, *::after { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-  .reveal .fragment { opacity: 1 !important; visibility: visible !important; }
-}
+/* Fraud-detection chart */
+.lanes { display: grid; gap: var(--s2); max-width: 42em; }
+.lane { display: grid; grid-template-columns: 9.5em 1fr 3em; align-items: center; gap: var(--s3);
+        font-size: var(--t-small); color: var(--muted); }
+.lane .track { height: 0.55em; background: var(--bg-2); border-radius: 999px; overflow: hidden; }
+.lane .track > i { display: block; height: 100%; border-radius: 999px; background: var(--accent-line); }
+.lane.is-top .track > i { background: var(--accent); }
+.lane.is-top { color: var(--ink); font-weight: 500; }
+.lane .v { font-family: var(--mono); color: var(--ink); text-align: right; }
 `}</style>
 
-<section data-auto-animate data-auto-animate-duration="1.1"><div className="title-slide is-hero"><h1 data-id="deck-title">Security Is Everyone’s Job</h1></div></section>
+<Slide data-auto-animate data-auto-animate-duration="1.1"><div className="title-slide is-hero"><h1 data-id="deck-title">Security Is Everyone’s Job</h1></div></Slide>
 
-<section data-auto-animate data-auto-animate-duration="1.1"><div className="title-slide"><h1 data-id="deck-title">Security Is Everyone’s Job</h1><div className="rule"></div><p>User awareness and practices — the threats, the passwords, and the habits that actually hold</p></div></section>
+<Slide data-auto-animate data-auto-animate-duration="1.1"><div className="title-slide"><h1 data-id="deck-title">Security Is Everyone’s Job</h1><div className="rule"></div><p>User awareness and practices — the threats, the passwords, and the habits that actually hold</p></div></Slide>
 
-<section><h2>Before we start</h2><div className="act"><Poll id="sec-warmup" question="Be honest — have you ever clicked a link you regretted?" options={["Yes, and I told someone", "Yes, and I told nobody", "No, never", "I have no idea — that is the scary part"]} /></div></section>
+<Slide><h2>Before we start</h2><div className="act"><Poll id="sec-warmup" question="Be honest — have you ever clicked a link you regretted?" options={["Yes, and I told someone", "Yes, and I told nobody", "No, never", "I have no idea — that is the scary part"]} /></div></Slide>
 
-<section className="chapter ch-cost"><span className="num">01</span><span className="ch-title">Why this is your problem</span></section>
+<Chapter n="01" ch="ch-cost" title="Why this is your problem" />
 
-<section className="ch-cost"><div className="evo"><div className="evo-art" dangerouslySetInnerHTML={{ __html: SVGS.globe }} /><div className="evo-copy"><span className="n">01</span><h2>Your attacker is not in the building</h2><p className="lead">Distance stopped being a defence.</p><ul><li className="fragment fade-up">Anyone, anywhere on the planet, can reach your machine</li><li className="fragment fade-up">They never need to see your face</li><li className="fragment fade-up">They never need to be awake — the tools run without them</li></ul></div></div></section>
+<Evo ch="ch-cost" art={SVGS.globe} n="01" title={<>Your attacker is not in the building</>} lead={<>Distance stopped being a defence.</>} points={[<>Anyone, anywhere on the planet, can reach your machine</>, <>They never need to see your face</>, <>They never need to be awake — the tools run without them</>]} />
 
-<section className="ch-cost"><h2>What bad habits cost you</h2><div className="cards is-2up"><div className="card is-danger fragment fade-up"><div className="h"><span className="num">01</span>Identity theft</div><h3>Someone else becomes you</h3><p>Not for an afternoon. For years, across every institution that trusted the record.</p></div><div className="card is-danger fragment fade-up"><div className="h"><span className="num">02</span>Monetary theft</div><h3>Your money leaves</h3><p>Slowly, then all at once — and the trail ends in a jurisdiction nobody will chase.</p></div><div className="card is-danger fragment fade-up"><div className="h"><span className="num">03</span>Legal fallout</div><h3>For you and your employer</h3><p>Regulatory exposure does not stop at the person who clicked.</p></div><div className="card is-danger fragment fade-up"><div className="h"><span className="num">04</span>Termination</div><h3>Policy exists for a reason</h3><p>Ignoring it has a price, and it is usually paid by one named individual.</p></div></div></section>
+<Slide className="ch-cost"><h2>What bad habits cost you</h2><div className="cards is-2up"><div className="card is-danger fragment fade-up"><div className="h"><span className="num">01</span>Identity theft</div><h3>Someone else becomes you</h3><p>Not for an afternoon. For years, across every institution that trusted the record.</p></div><div className="card is-danger fragment fade-up"><div className="h"><span className="num">02</span>Monetary theft</div><h3>Your money leaves</h3><p>Slowly, then all at once — and the trail ends in a jurisdiction nobody will chase.</p></div><div className="card is-danger fragment fade-up"><div className="h"><span className="num">03</span>Legal fallout</div><h3>For you and your employer</h3><p>Regulatory exposure does not stop at the person who clicked.</p></div><div className="card is-danger fragment fade-up"><div className="h"><span className="num">04</span>Termination</div><h3>Policy exists for a reason</h3><p>Ignoring it has a price, and it is usually paid by one named individual.</p></div></div></Slide>
 
-<section className="ch-cost"><h2>Where they come in</h2><p className="lead">SANS ranks these as the most-attacked surfaces on a normal desk.</p><ul className="risks"><li className="fragment">Web browser</li><li className="fragment">Chat clients</li><li className="fragment">Web applications</li><li className="fragment">Excessive user rights</li></ul><p className="fine fragment">Notice what all four have in common: you use every one of them, all day, without thinking about it.</p></section>
+<Slide className="ch-cost"><h2>Where they come in</h2><p className="lead">SANS ranks these as the most-attacked surfaces on a normal desk.</p><ul className="risks"><li className="fragment">Web browser</li><li className="fragment">Chat clients</li><li className="fragment">Web applications</li><li className="fragment">Excessive user rights</li></ul><p className="fine fragment">Notice what all four have in common: you use every one of them, all day, without thinking about it.</p></Slide>
 
-<section className="ch-cost"><div className="evo is-flip"><div className="evo-art" dangerouslySetInnerHTML={{ __html: SVGS.door }} /><div className="evo-copy"><span className="n">02</span><h2>Security is not safety</h2><p className="lead">Two different jobs. You only control one of them.</p><ul><li className="fragment fade-up"><strong>Security</strong> protects the machine and the data — locks, patches, firewalls</li><li className="fragment fade-up"><strong>Safety</strong> is how you behave — what you open, what you type, who you trust</li><li className="fragment fade-up">IT owns most of the first. You own all of the second.</li></ul></div></div></section>
+<Evo ch="ch-cost" art={SVGS.door} n="02" title={<>Security is not safety</>} lead={<>Two different jobs. You only control one of them.</>} points={[<><strong>Security</strong> protects the machine and the data — locks, patches, firewalls</>, <><strong>Safety</strong> is how you behave — what you open, what you type, who you trust</>, <>IT owns most of the first. You own all of the second.</>]} flip />
 
-<section className="ch-cost" data-transition="fade"><div className="pull"><blockquote>A deadbolt is <span className="hl">security</span>.<br /><br />Not opening the door is <span className="hl">safety</span>.</blockquote></div></section>
+<Slide className="ch-cost" data-transition="fade"><div className="pull"><blockquote>A deadbolt is <span className="hl">security</span>.<br /><br />Not opening the door is <span className="hl">safety</span>.</blockquote></div></Slide>
 
-<section className="chapter ch-threat"><span className="num">02</span><span className="ch-title">Know your enemy</span></section>
+<Chapter n="02" ch="ch-threat" title="Know your enemy" />
 
-<section className="ch-threat"><h2>The cast of characters</h2><div className="cards is-2up"><div className="card fragment fade-up"><div className="h"><span className="num">01</span>The cracker</div><h3>Actually good at this</h3><p>Writes the attack tools. You will never meet them, and they are not the one who hits you.</p></div><div className="card fragment fade-up"><div className="h"><span className="num">02</span>Script kiddies</div><h3>Cannot code. Can download.</h3><p>Runs someone else’s tool at you anyway. Volume, not skill.</p></div><div className="card fragment fade-up"><div className="h"><span className="num">03</span>Criminals</div><h3>It is a business</h3><p>Bots, spam, stolen cards, resale. Margins, targets, and a support desk.</p></div><div className="card fragment fade-up"><div className="h"><span className="num">04</span>The market</div><h3>Where tools get traded</h3><p>Forums and marketplaces — the reason an amateur can rent a professional attack.</p></div></div></section>
+<Slide className="ch-threat"><h2>The cast of characters</h2><div className="cards is-2up"><div className="card fragment fade-up"><div className="h"><span className="num">01</span>The cracker</div><h3>Actually good at this</h3><p>Writes the attack tools. You will never meet them, and they are not the one who hits you.</p></div><div className="card fragment fade-up"><div className="h"><span className="num">02</span>Script kiddies</div><h3>Cannot code. Can download.</h3><p>Runs someone else’s tool at you anyway. Volume, not skill.</p></div><div className="card fragment fade-up"><div className="h"><span className="num">03</span>Criminals</div><h3>It is a business</h3><p>Bots, spam, stolen cards, resale. Margins, targets, and a support desk.</p></div><div className="card fragment fade-up"><div className="h"><span className="num">04</span>The market</div><h3>Where tools get traded</h3><p>Forums and marketplaces — the reason an amateur can rent a professional attack.</p></div></div></Slide>
 
-<section className="ch-threat"><h2>What you are worth, wholesale</h2><div className="stats"><div className="stat fragment fade-up"><span className="n">&#36;1–2K</span><span className="l">a ready-made malware package</span></div><div className="stat fragment fade-up"><span className="n">&#36;8</span><span className="l">to send one million emails</span></div><div className="stat fragment fade-up"><span className="n">&#36;1,000</span><span className="l">for ten thousand hijacked PCs</span></div></div><div className="pull fragment"><blockquote>You are <span className="hl">cheap</span>. That is exactly why you are worth attacking.</blockquote></div></section>
+<Slide className="ch-threat"><h2>What you are worth, wholesale</h2><div className="stats"><div className="stat fragment fade-up"><span className="n">&#36;1–2K</span><span className="l">a ready-made malware package</span></div><div className="stat fragment fade-up"><span className="n">&#36;8</span><span className="l">to send one million emails</span></div><div className="stat fragment fade-up"><span className="n">&#36;1,000</span><span className="l">for ten thousand hijacked PCs</span></div></div><div className="pull fragment"><blockquote>You are <span className="hl">cheap</span>. That is exactly why you are worth attacking.</blockquote></div></Slide>
 
-<section className="ch-threat"><div className="evo"><div className="evo-art" dangerouslySetInnerHTML={{ __html: SVGS.virus }} /><div className="evo-copy"><span className="n">01</span><h2>Virus</h2><p className="lead">Hitches a ride.</p><ul><li className="fragment fade-up">Attaches itself to a program, file, or disk</li><li className="fragment fade-up">Runs when the host runs — then copies itself</li><li className="fragment fade-up">The payload may be a prank or a wipe. It fires eventually.</li></ul><div className="verdict is-accent fragment"><span className="dot"></span>Antivirus → system restore → reinstall. Each hurts more than the last.</div></div></div></section>
+<Evo ch="ch-threat" art={SVGS.virus} n="01" title={<>Virus</>} lead={<>Hitches a ride.</>} points={[<>Attaches itself to a program, file, or disk</>, <>Runs when the host runs — then copies itself</>, <>The payload may be a prank or a wipe. It fires eventually.</>]} verdict={<>Antivirus → system restore → reinstall. Each hurts more than the last.</>} />
 
-<section className="ch-threat"><div className="evo is-flip"><div className="evo-art" dangerouslySetInnerHTML={{ __html: SVGS.worm }} /><div className="evo-copy"><span className="n">02</span><h2>Worm</h2><p className="lead">Spreads itself.</p><ul><li className="fragment fade-up">Needs no host program and no help from you</li><li className="fragment fade-up">Copies itself machine to machine across the network</li><li className="fragment fade-up">Feeds on weak passwords, open shares, unpatched systems, USB sticks</li></ul><div className="verdict is-danger fragment"><span className="dot"></span>One infected laptop on the office wifi is an office-wide problem</div></div></div></section>
+<Evo ch="ch-threat" art={SVGS.worm} n="02" title={<>Worm</>} lead={<>Spreads itself.</>} points={[<>Needs no host program and no help from you</>, <>Copies itself machine to machine across the network</>, <>Feeds on weak passwords, open shares, unpatched systems, USB sticks</>]} flip verdict={<>One infected laptop on the office wifi is an office-wide problem</>} verdictTone="danger" />
 
-<section className="ch-threat"><div className="evo"><div className="evo-art" dangerouslySetInnerHTML={{ __html: SVGS.trojan }} /><div className="evo-copy"><span className="n">03</span><h2>Trojan &amp; logic bomb</h2><p className="lead">Lies to you.</p><ul><li className="fragment fade-up"><strong>Trojan</strong> — looks like a gift. The free game is fun, and it mails your saved passwords out the back door.</li><li className="fragment fade-up"><strong>Logic bomb</strong> — legitimate-looking code waiting for a condition. The fired admin’s “delete everything the day my account dies” script.</li></ul><div className="verdict is-danger fragment"><span className="dot"></span>Free, cracked, and “just this once” are the three most expensive words in software</div></div></div></section>
+<Evo ch="ch-threat" art={SVGS.trojan} n="03" title={<>Trojan &amp; logic bomb</>} lead={<>Lies to you.</>} points={[<><strong>Trojan</strong> — looks like a gift. The free game is fun, and it mails your saved passwords out the back door.</>, <><strong>Logic bomb</strong> — legitimate-looking code waiting for a condition. The fired admin’s “delete everything the day my account dies” script.</>]} verdict={<>Free, cracked, and “just this once” are the three most expensive words in software</>} verdictTone="danger" />
 
-<section className="ch-threat"><div className="evo is-flip"><div className="evo-art" dangerouslySetInnerHTML={{ __html: SVGS.social }} /><div className="evo-copy"><span className="n">04</span><h2>Social engineering</h2><p className="lead">Hacks you, not the machine.</p><ul><li className="fragment fade-up"><em>“Hi, John from IT — quick password check?”</em></li><li className="fragment fade-up"><em>“Your bank noticed a problem with your account…”</em></li><li className="fragment fade-up"><em>“So fun! What was your mother’s maiden name?”</em></li><li className="fragment fade-up"><em>“Here to repair the machine — I have got some patches.”</em></li></ul><div className="verdict is-accent fragment"><span className="dot"></span>No exploit needed. They exploit politeness.</div></div></div></section>
+<Evo ch="ch-threat" art={SVGS.social} n="04" title={<>Social engineering</>} lead={<>Hacks you, not the machine.</>} points={[<><em>“Hi, John from IT — quick password check?”</em></>, <><em>“Your bank noticed a problem with your account…”</em></>, <><em>“So fun! What was your mother’s maiden name?”</em></>, <><em>“Here to repair the machine — I have got some patches.”</em></>]} flip verdict={<>No exploit needed. They exploit politeness.</>} />
 
-<section className="ch-threat"><div className="evo"><div className="evo-art" dangerouslySetInnerHTML={{ __html: SVGS.rootkit }} /><div className="evo-copy"><span className="n">05</span><h2>Rootkit</h2><p className="lead">Hides the evidence.</p><ul><li className="fragment fade-up">A toolkit installed <em>after</em> they are already in</li><li className="fragment fade-up">Opens a permanent back door — for them and their friends</li><li className="fragment fade-up">Logs your keystrokes and modifies the OS so you cannot see it</li></ul><div className="verdict is-danger fragment"><span className="dot"></span>The scary part is not the break-in. It is that the alarm was rewired.</div></div></div></section>
+<Evo ch="ch-threat" art={SVGS.rootkit} n="05" title={<>Rootkit</>} lead={<>Hides the evidence.</>} points={[<>A toolkit installed <em>after</em> they are already in</>, <>Opens a permanent back door — for them and their friends</>, <>Logs your keystrokes and modifies the OS so you cannot see it</>]} verdict={<>The scary part is not the break-in. It is that the alarm was rewired.</>} verdictTone="danger" />
 
-<section className="ch-threat"><div className="evo is-flip"><div className="evo-art" dangerouslySetInnerHTML={{ __html: SVGS.botnet }} /><div className="evo-copy"><span className="n">06</span><h2>Botnet</h2><p className="lead">Rents you out.</p><ul><li className="fragment fade-up">Thousands of compromised machines under one handler</li><li className="fragment fade-up">Sends spam and malware on your behalf</li><li className="fragment fade-up">Floods targets offline, and hosts illegal content from your address</li></ul><div className="verdict is-danger fragment"><span className="dot"></span>The traffic is yours. So is the liability.</div></div></div></section>
+<Evo ch="ch-threat" art={SVGS.botnet} n="06" title={<>Botnet</>} lead={<>Rents you out.</>} points={[<>Thousands of compromised machines under one handler</>, <>Sends spam and malware on your behalf</>, <>Floods targets offline, and hosts illegal content from your address</>]} flip verdict={<>The traffic is yours. So is the liability.</>} verdictTone="danger" />
 
-<section className="ch-threat"><div className="evo"><div className="evo-art" dangerouslySetInnerHTML={{ __html: SVGS.mitm }} /><div className="evo-copy"><span className="n">07</span><h2>Man in the middle</h2><p className="lead">Sits between you and where you meant to go.</p><ul><li className="fragment fade-up">The attacker impersonates your destination — an access point, a server</li><li className="fragment fade-up">You connect to <em>them</em>; they pass it along and read everything in transit</li><li className="fragment fade-up"><em>“Airport_Free_WiFi” is not run by the airport</em></li></ul><div className="verdict is-accent fragment"><span className="dot"></span>Defence: https everywhere, and a VPN on networks you do not own</div></div></div></section>
+<Evo ch="ch-threat" art={SVGS.mitm} n="07" title={<>Man in the middle</>} lead={<>Sits between you and where you meant to go.</>} points={[<>The attacker impersonates your destination — an access point, a server</>, <>You connect to <em>them</em>; they pass it along and read everything in transit</>, <><em>“Airport_Free_WiFi” is not run by the airport</em></>]} verdict={<>Defence: https everywhere, and a VPN on networks you do not own</>} />
 
-<section className="ch-threat"><h2>Checkpoint</h2><div className="act"><Quiz id="sec-threats" question="Which one spreads on its own, with no help from you at all?" options={["A virus", "A worm", "A trojan horse", "A logic bomb"]} answer={1} /></div></section>
+<Slide className="ch-threat"><h2>Checkpoint</h2><div className="act"><Quiz id="sec-threats" question="Which one spreads on its own, with no help from you at all?" options={["A virus", "A worm", "A trojan horse", "A logic bomb"]} answer={1} /></div></Slide>
 
-<section className="chapter ch-decep"><span className="num">03</span><span className="ch-title">The art of asking nicely</span></section>
+<Chapter n="03" ch="ch-decep" title="The art of asking nicely" />
 
-<section className="ch-decep"><h2>Spot the phish</h2><div className="mail"><div className="hdr"><b>FROM</b> eBay Billing Department &lt;<span className="flag">billing@ebay-secure-update.com</span>&gt;<br /><b>SUBJECT</b> Credit/debit card update</div><p>Dear <span className="flag">eBay customer</span>,</p><p>During our regularly scheduled account maintenance we detected a slight error in your billing information. <span className="flag">You must verify within 24 hours or your account will be suspended.</span></p><p>Please <span className="flag">click here</span> to confirm your card number and password.</p><p>Thank you, eBay Billing</p></div><ul className="risks fragment"><li>Wrong domain</li><li>Generic greeting</li><li>Manufactured urgency</li><li>A link, not a typed address</li><li>Asks for secrets</li></ul><p className="caption-strong fragment">Five red flags. It took four seconds.</p></section>
+<Slide className="ch-decep"><h2>Spot the phish</h2><div className="mail"><div className="hdr"><b>FROM</b> eBay Billing Department &lt;<span className="flag">billing@ebay-secure-update.com</span>&gt;<br /><b>SUBJECT</b> Credit/debit card update</div><p>Dear <span className="flag">eBay customer</span>,</p><p>During our regularly scheduled account maintenance we detected a slight error in your billing information. <span className="flag">You must verify within 24 hours or your account will be suspended.</span></p><p>Please <span className="flag">click here</span> to confirm your card number and password.</p><p>Thank you, eBay Billing</p></div><ul className="risks fragment"><li>Wrong domain</li><li>Generic greeting</li><li>Manufactured urgency</li><li>A link, not a typed address</li><li>Asks for secrets</li></ul><p className="caption-strong fragment">Five red flags. It took four seconds.</p></Slide>
 
-<section className="ch-decep"><div className="evo"><div className="evo-art" dangerouslySetInnerHTML={{ __html: SVGS.phish }} /><div className="evo-copy"><span className="n">01</span><h2>Phishing becomes pharming</h2><p className="lead">The email is only the delivery. The website is the trap.</p><ul><li className="fragment fade-up"><strong>Phishing</strong> — a “trustworthy” sender asks for your NID, card number, or login</li><li className="fragment fade-up"><strong>Pharming</strong> — the link lands on a perfect clone of the real site</li><li className="fragment fade-up">You type your credentials into their form, and it politely forwards you to the real site afterwards</li></ul><div className="verdict is-accent fragment"><span className="dot"></span>Never reach your bank through a link. Type it, or use your own bookmark.</div></div></div></section>
+<Evo ch="ch-decep" art={SVGS.phish} n="01" title={<>Phishing becomes pharming</>} lead={<>The email is only the delivery. The website is the trap.</>} points={[<><strong>Phishing</strong> — a “trustworthy” sender asks for your NID, card number, or login</>, <><strong>Pharming</strong> — the link lands on a perfect clone of the real site</>, <>You type your credentials into their form, and it politely forwards you to the real site afterwards</>]} verdict={<>Never reach your bank through a link. Type it, or use your own bookmark.</>} />
 
-<section className="ch-decep"><h2>Quick call: what do you do?</h2><p className="lead">A caller says he is from the helpdesk, gets your manager’s name right, and needs your password to “finish the migration tonight.”</p><div className="act"><Quiz id="sec-helpdesk" question="He knows your manager’s name. Now what?" options={["Give it — he knew my manager’s name.", "Give a wrong password to test him.", "Hang up. Call IT back on the number you already have.", "Email it instead, so there is a record."]} answer={2} /></div><p className="fine">Knowing an internal detail is the <em>cheapest</em> thing in the world to fake.</p></section>
+<Slide className="ch-decep"><h2>Quick call: what do you do?</h2><p className="lead">A caller says he is from the helpdesk, gets your manager’s name right, and needs your password to “finish the migration tonight.”</p><div className="act"><Quiz id="sec-helpdesk" question="He knows your manager’s name. Now what?" options={["Give it — he knew my manager’s name.", "Give a wrong password to test him.", "Hang up. Call IT back on the number you already have.", "Email it instead, so there is a record."]} answer={2} /></div><p className="fine">Knowing an internal detail is the <em>cheapest</em> thing in the world to fake.</p></Slide>
 
-<section className="chapter ch-pass"><span className="num">04</span><span className="ch-title">The one control you own</span></section>
+<Chapter n="04" ch="ch-pass" title="The one control you own" />
 
-<section className="ch-pass"><h2>How fast does yours fall?</h2><table><thead><tr><th>Pattern</th><th>Possibilities</th><th>Time to guess</th></tr></thead><tbody><tr><td>Your interests, pets, relatives</td><td className="num">20</td><td className="is-danger">5 minutes, by hand</td></tr><tr><td>Just asking you nicely</td><td className="num">1</td><td className="is-danger">2 minutes</td></tr><tr><td>A dictionary word</td><td className="num">80,000</td><td className="is-danger">under a second</td></tr><tr><td>8 characters, alphanumeric</td><td className="num">2×10¹⁴</td><td className="is-danger">3.4 minutes</td></tr><tr><td>8 characters, full keyboard</td><td className="num">7×10¹⁵</td><td className="is-caution">2 hours</td></tr><tr><td>12 characters, alphanumeric</td><td className="num">3×10²¹</td><td className="is-safe">96 years</td></tr><tr><td>12 characters, full keyboard</td><td className="num">5×10²³</td><td className="is-safe">centuries</td></tr></tbody></table><p className="fine">Assumes 2.6×10¹⁸ guesses per month.</p></section>
+<Slide className="ch-pass"><h2>How fast does yours fall?</h2><table><thead><tr><th>Pattern</th><th>Possibilities</th><th>Time to guess</th></tr></thead><tbody><tr><td>Your interests, pets, relatives</td><td className="num">20</td><td className="is-danger">5 minutes, by hand</td></tr><tr><td>Just asking you nicely</td><td className="num">1</td><td className="is-danger">2 minutes</td></tr><tr><td>A dictionary word</td><td className="num">80,000</td><td className="is-danger">under a second</td></tr><tr><td>8 characters, alphanumeric</td><td className="num">2×10¹⁴</td><td className="is-danger">3.4 minutes</td></tr><tr><td>8 characters, full keyboard</td><td className="num">7×10¹⁵</td><td className="is-caution">2 hours</td></tr><tr><td>12 characters, alphanumeric</td><td className="num">3×10²¹</td><td className="is-safe">96 years</td></tr><tr><td>12 characters, full keyboard</td><td className="num">5×10²³</td><td className="is-safe">centuries</td></tr></tbody></table><p className="fine">Assumes 2.6×10¹⁸ guesses per month.</p></Slide>
 
-<section className="ch-pass"><div className="evo is-flip"><div className="evo-art" dangerouslySetInnerHTML={{ __html: SVGS.keylen }} /><div className="evo-copy"><span className="n">01</span><h2>Complexity helps. Length wins.</h2><p className="lead">Every character you add multiplies the search space. Every symbol only widens it.</p><ul><li className="fragment fade-up">Adding one character beats adding one symbol — every time</li><li className="fragment fade-up">A long passphrase is easier to remember <em>and</em> harder to crack</li><li className="fragment fade-up">Twelve is the floor, not the target</li></ul></div></div></section>
+<Evo ch="ch-pass" art={SVGS.keylen} n="01" title={<>Complexity helps. Length wins.</>} lead={<>Every character you add multiplies the search space. Every symbol only widens it.</>} points={[<>Adding one character beats adding one symbol — every time</>, <>A long passphrase is easier to remember <em>and</em> harder to crack</>, <>Twelve is the floor, not the target</>]} flip />
 
-<section className="ch-pass"><h2>Try it — nothing leaves this page</h2><PasswordMeter /></section>
+<Slide className="ch-pass"><h2>Try it — nothing leaves this page</h2><PasswordMeter /></Slide>
 
-<section className="ch-pass"><h2>Build one you will actually remember</h2><div className="cards is-3up"><div className="card fragment fade-up"><div className="h"><span className="num">01</span>Two unrelated words</div><p>mail + phone</p><p><span className="mono">m@!lf0n3</span></p></div><div className="card fragment fade-up"><div className="h"><span className="num">02</span>Abbreviate a phrase</div><p>“My favourite colour is blue”</p><p><span className="mono">Mfcib1ue!</span></p></div><div className="card fragment fade-up"><div className="h"><span className="num">03</span>Take a song lyric</div><p>Happy birthday, dear John</p><p><span className="mono">hb2uhb2uhbdJhb2u</span></p></div></div><p className="fragment">Or take one phrase and mutate it — <span className="mono">Merry Christmas</span> becomes <span className="mono">MXemrays</span> by intertwining, <span className="mono">M5rryXm1s</span> by swapping vowels for digits, <span className="mono">mErcHr2yOu</span> by abbreviating.</p></section>
+<Slide className="ch-pass"><h2>Build one you will actually remember</h2><div className="cards is-3up"><div className="card fragment fade-up"><div className="h"><span className="num">01</span>Two unrelated words</div><p>mail + phone</p><p><span className="mono">m@!lf0n3</span></p></div><div className="card fragment fade-up"><div className="h"><span className="num">02</span>Abbreviate a phrase</div><p>“My favourite colour is blue”</p><p><span className="mono">Mfcib1ue!</span></p></div><div className="card fragment fade-up"><div className="h"><span className="num">03</span>Take a song lyric</div><p>Happy birthday, dear John</p><p><span className="mono">hb2uhb2uhbdJhb2u</span></p></div></div><p className="fragment">Or take one phrase and mutate it — <span className="mono">Merry Christmas</span> becomes <span className="mono">MXemrays</span> by intertwining, <span className="mono">M5rryXm1s</span> by swapping vowels for digits, <span className="mono">mErcHr2yOu</span> by abbreviating.</p></Slide>
 
-<section className="ch-pass"><h2>Rules that survive contact</h2><ol className="flow cols" style={{ "--rows": 3 }}><li className="fragment fade-up"><span className="t">Private</span><span className="d">One person knows it. One.</span></li><li className="fragment fade-up"><span className="t">Secret</span><span className="d">Not in a file, not in a script, not under the keyboard.</span></li><li className="fragment fade-up"><span className="t">Memorable</span><span className="d">So you never need to write it down.</span></li><li className="fragment fade-up"><span className="t">Long and mixed</span><span className="d">12+ characters across upper, lower, digits, punctuation.</span></li><li className="fragment fade-up"><span className="t">Unguessable</span><span className="d">Not by a person, not by a program running all week.</span></li><li className="fragment fade-up"><span className="t">Never reused</span><span className="d">One breach elsewhere should not become a breach here.</span></li></ol><ul className="risks fragment"><li>Never admin, root, or administrator as a login name</li><li>People watch you type</li><li>A password typed into the username box lands in the logs in plain text</li></ul></section>
+<Slide className="ch-pass"><h2>Rules that survive contact</h2><ol className="flow cols" style={{ "--rows": 3 }}><li className="fragment fade-up"><span className="t">Private</span><span className="d">One person knows it. One.</span></li><li className="fragment fade-up"><span className="t">Secret</span><span className="d">Not in a file, not in a script, not under the keyboard.</span></li><li className="fragment fade-up"><span className="t">Memorable</span><span className="d">So you never need to write it down.</span></li><li className="fragment fade-up"><span className="t">Long and mixed</span><span className="d">12+ characters across upper, lower, digits, punctuation.</span></li><li className="fragment fade-up"><span className="t">Unguessable</span><span className="d">Not by a person, not by a program running all week.</span></li><li className="fragment fade-up"><span className="t">Never reused</span><span className="d">One breach elsewhere should not become a breach here.</span></li></ol><ul className="risks fragment"><li>Never admin, root, or administrator as a login name</li><li>People watch you type</li><li>A password typed into the username box lands in the logs in plain text</li></ul></Slide>
 
-<section className="chapter ch-owned"><span className="num">05</span><span className="ch-title">Am I already owned</span></section>
+<Chapter n="05" ch="ch-owned" title="Am I already owned" />
 
-<section className="ch-owned"><h2>Signs of a break-in</h2><div className="cards is-3up is-tight"><div className="card fragment fade-up"><h3>Antivirus speaks up</h3><p>It flagged something and you clicked past it.</p></div><div className="card fragment fade-up"><h3>Pop-ups return</h3><p>Often selling you “security software”.</p></div><div className="card fragment fade-up"><h3>Disk space vanishes</h3><p>Something is storing something.</p></div><div className="card fragment fade-up"><h3>Records you did not create</h3><p>Files, emails, transactions.</p></div><div className="card fragment fade-up"><h3>Everything crawls</h3><p>Your machine is busy working for someone else.</p></div><div className="card fragment fade-up"><h3>The pointer moves</h3><p>Without you. Shut it down and call IT.</p></div><div className="card fragment fade-up"><h3>It powers itself off</h3><p>Unprompted restarts and shutdowns.</p></div><div className="card fragment fade-up"><h3>The laptop is gone</h3><p>One in ten are stolen in their lifetime.</p></div><div className="card is-accent fragment fade-up"><h3>Nothing at all</h3><p>The most common symptom by far.</p></div></div></section>
+<Slide className="ch-owned"><h2>Signs of a break-in</h2><div className="cards is-3up is-tight"><div className="card fragment fade-up"><h3>Antivirus speaks up</h3><p>It flagged something and you clicked past it.</p></div><div className="card fragment fade-up"><h3>Pop-ups return</h3><p>Often selling you “security software”.</p></div><div className="card fragment fade-up"><h3>Disk space vanishes</h3><p>Something is storing something.</p></div><div className="card fragment fade-up"><h3>Records you did not create</h3><p>Files, emails, transactions.</p></div><div className="card fragment fade-up"><h3>Everything crawls</h3><p>Your machine is busy working for someone else.</p></div><div className="card fragment fade-up"><h3>The pointer moves</h3><p>Without you. Shut it down and call IT.</p></div><div className="card fragment fade-up"><h3>It powers itself off</h3><p>Unprompted restarts and shutdowns.</p></div><div className="card fragment fade-up"><h3>The laptop is gone</h3><p>One in ten are stolen in their lifetime.</p></div><div className="card is-accent fragment fade-up"><h3>Nothing at all</h3><p>The most common symptom by far.</p></div></div></Slide>
 
-<section className="ch-owned"><h2>Spyware tells on itself</h2><ol className="flow cols" style={{ "--rows": 3 }}><li className="fragment fade-up"><span className="t">Your homepage changed</span><span className="d">And you did not change it.</span></li><li className="fragment fade-up"><span className="t">Searches land somewhere else</span><span className="d">Results you never chose.</span></li><li className="fragment fade-up"><span className="t">The firewall switched itself off</span><span className="d">Nothing legitimate does this.</span></li><li className="fragment fade-up"><span className="t">Traffic while you are idle</span><span className="d">Heavy network activity, doing nothing.</span></li><li className="fragment fade-up"><span className="t">New icons and bookmarks</span><span className="d">Programs you did not install.</span></li><li className="fragment fade-up"><span className="t">Unknown programs calling out</span><span className="d">The firewall keeps asking about them.</span></li></ol><div className="verdict is-danger fragment"><span className="dot"></span>Any one of these: stop, disconnect, call IT. Do not “see if it clears up.”</div></section>
+<Slide className="ch-owned"><h2>Spyware tells on itself</h2><ol className="flow cols" style={{ "--rows": 3 }}><li className="fragment fade-up"><span className="t">Your homepage changed</span><span className="d">And you did not change it.</span></li><li className="fragment fade-up"><span className="t">Searches land somewhere else</span><span className="d">Results you never chose.</span></li><li className="fragment fade-up"><span className="t">The firewall switched itself off</span><span className="d">Nothing legitimate does this.</span></li><li className="fragment fade-up"><span className="t">Traffic while you are idle</span><span className="d">Heavy network activity, doing nothing.</span></li><li className="fragment fade-up"><span className="t">New icons and bookmarks</span><span className="d">Programs you did not install.</span></li><li className="fragment fade-up"><span className="t">Unknown programs calling out</span><span className="d">The firewall keeps asking about them.</span></li></ol><Verdict tone="danger" fragment>Any one of these: stop, disconnect, call IT. Do not “see if it clears up.”</Verdict></Slide>
 
-<section className="chapter ch-defend"><span className="num">06</span><span className="ch-title">Defend yourself</span></section>
+<Chapter n="06" ch="ch-defend" title="Defend yourself" />
 
-<section className="ch-defend"><h2>Stack the defences</h2><div className="act"><DragDrop id="sec-layers" prompt="Order these from the outside in — what an attacker has to beat first, and what is left last." items={["Router / hardware firewall", "OS / software firewall", "Antivirus and least privilege", "You, not clicking the thing"]} /></div></section>
+<Slide className="ch-defend"><h2>Stack the defences</h2><div className="act"><DragDrop id="sec-layers" prompt="Order these from the outside in — what an attacker has to beat first, and what is left last." items={["Router / hardware firewall", "OS / software firewall", "Antivirus and least privilege", "You, not clicking the thing"]} /></div></Slide>
 
-<section className="ch-defend"><div className="evo"><div className="evo-art" dangerouslySetInnerHTML={{ __html: SVGS.layers }} /><div className="evo-copy"><span className="n">01</span><h2>Defense in depth</h2><p className="lead">No single control holds. Make the attacker beat all of them.</p><ul><li className="fragment fade-up">Each ring is cheap on its own and weak on its own</li><li className="fragment fade-up">Together they turn one mistake into a survivable one</li><li className="fragment fade-up">The innermost layer is the only one that thinks</li></ul><div className="verdict is-accent fragment"><span className="dot"></span>Every ring buys time. You decide what happens with it.</div></div></div></section>
+<Evo ch="ch-defend" art={SVGS.layers} n="01" title={<>Defense in depth</>} lead={<>No single control holds. Make the attacker beat all of them.</>} points={[<>Each ring is cheap on its own and weak on its own</>, <>Together they turn one mistake into a survivable one</>, <>The innermost layer is the only one that thinks</>]} verdict={<>Every ring buys time. You decide what happens with it.</>} />
 
-<section className="ch-defend"><h2>The unglamorous four</h2><div className="cards is-2up"><div className="card fragment fade-up"><div className="h"><span className="num">01</span>Antivirus and antispyware</div><p>Install it, then keep it <strong>updated</strong> — yesterday’s signatures catch yesterday’s malware. Free options are fine.</p></div><div className="card fragment fade-up"><div className="h"><span className="num">02</span>Firewall</div><p>A wall between your machine and the internet. It filters what comes in, and just as importantly, what goes out.</p></div><div className="card fragment fade-up"><div className="h"><span className="num">03</span>Patch everything</div><p>Turn on automatic updates. An unapplied patch is a published instruction manual for attacking you.</p></div><div className="card fragment fade-up"><div className="h"><span className="num">04</span>Do not run as admin</div><p>Your daily account should be boring and powerless. Elevate only when the task genuinely needs it.</p></div></div></section>
+<Slide className="ch-defend"><h2>The unglamorous four</h2><div className="cards is-2up"><div className="card fragment fade-up"><div className="h"><span className="num">01</span>Antivirus and antispyware</div><p>Install it, then keep it <strong>updated</strong> — yesterday’s signatures catch yesterday’s malware. Free options are fine.</p></div><div className="card fragment fade-up"><div className="h"><span className="num">02</span>Firewall</div><p>A wall between your machine and the internet. It filters what comes in, and just as importantly, what goes out.</p></div><div className="card fragment fade-up"><div className="h"><span className="num">03</span>Patch everything</div><p>Turn on automatic updates. An unapplied patch is a published instruction manual for attacking you.</p></div><div className="card fragment fade-up"><div className="h"><span className="num">04</span>Do not run as admin</div><p>Your daily account should be boring and powerless. Elevate only when the task genuinely needs it.</p></div></div></Slide>
 
-<section className="ch-defend"><h2>Email and downloads</h2><ol className="flow"><li className="fragment fade-up"><span className="t">Do not open attachments unless you were expecting them</span><span className="d">Expecting it <em>and</em> trusting the sender. Both, not either.</span></li><li className="fragment fade-up"><span className="t">Do not click links unless you are certain where they go</span><span className="d">Hover first and read the actual destination, not the text.</span></li><li className="fragment fade-up"><span className="t">Download software only from sources you trust</span><span className="d">The vendor’s own site, or your organisation’s software centre.</span></li></ol><div className="pull fragment"><blockquote>“But it came from my colleague” — so did the <span className="hl">worm</span> that read their address book.</blockquote></div></section>
+<Slide className="ch-defend"><h2>Email and downloads</h2><ol className="flow"><li className="fragment fade-up"><span className="t">Do not open attachments unless you were expecting them</span><span className="d">Expecting it <em>and</em> trusting the sender. Both, not either.</span></li><li className="fragment fade-up"><span className="t">Do not click links unless you are certain where they go</span><span className="d">Hover first and read the actual destination, not the text.</span></li><li className="fragment fade-up"><span className="t">Download software only from sources you trust</span><span className="d">The vendor’s own site, or your organisation’s software centre.</span></li></ol><div className="pull fragment"><blockquote>“But it came from my colleague” — so did the <span className="hl">worm</span> that read their address book.</blockquote></div></Slide>
 
-<section className="ch-defend"><h2>Other tricks worth knowing</h2><ul><li className="fragment fade-up">Run a pop-up blocker, and assume some get through anyway</li><li className="fragment fade-up">Close a suspicious pop-up with the window control in the corner. <span className="dim">Never “Yes”, never “Accept”, never even “Cancel” — the whole box may be a picture of a box.</span></li><li className="fragment fade-up">Found a USB stick in the car park? <strong>It was left there on purpose.</strong> Hand it to IT.</li><li className="fragment fade-up">Banking and business: check for <span className="mono">https</span> and the padlock, every single time</li><li className="fragment fade-up">On a shared machine, clear temp files, cookies, history and saved passwords before you walk away</li></ul></section>
+<Slide className="ch-defend"><h2>Other tricks worth knowing</h2><ul><li className="fragment fade-up">Run a pop-up blocker, and assume some get through anyway</li><li className="fragment fade-up">Close a suspicious pop-up with the window control in the corner. <span className="dim">Never “Yes”, never “Accept”, never even “Cancel” — the whole box may be a picture of a box.</span></li><li className="fragment fade-up">Found a USB stick in the car park? <strong>It was left there on purpose.</strong> Hand it to IT.</li><li className="fragment fade-up">Banking and business: check for <span className="mono">https</span> and the padlock, every single time</li><li className="fragment fade-up">On a shared machine, clear temp files, cookies, history and saved passwords before you walk away</li></ul></Slide>
 
-<section className="ch-defend"><div className="evo is-flip"><div className="evo-art" dangerouslySetInnerHTML={{ __html: SVGS.backup }} /><div className="evo-copy"><span className="n">02</span><h2>Back up before you need to</h2><p className="lead">No security measure is 100%. Plan for the day one fails.</p><ul><li className="fragment fade-up">Ask what would genuinely hurt to lose — then ask about <em>that</em> backup</li><li className="fragment fade-up">Recent · off-site · documented · encrypted · automatic</li><li className="fragment fade-up">And tested, because a restore you have never run is a guess</li></ul><div className="verdict is-danger fragment"><span className="dot"></span>An untested backup is a rumour</div></div></div></section>
+<Evo ch="ch-defend" art={SVGS.backup} n="02" title={<>Back up before you need to</>} lead={<>No security measure is 100%. Plan for the day one fails.</>} points={[<>Ask what would genuinely hurt to lose — then ask about <em>that</em> backup</>, <>Recent · off-site · documented · encrypted · automatic</>, <>And tested, because a restore you have never run is a guess</>]} flip verdict={<>An untested backup is a rumour</>} verdictTone="danger" />
 
-<section className="chapter ch-gov"><span className="num">07</span><span className="ch-title">When it goes wrong</span></section>
+<Chapter n="07" ch="ch-gov" title="When it goes wrong" />
 
-<section className="ch-gov"><h2>Data that carries legal weight</h2><p className="lead">Under the Cyber Security Act 2023 and Bangladesh Bank’s ICT Security Guideline, this is the data you are accountable for.</p><div className="cards is-3up is-tight"><div className="card fragment fade-up"><h3>NID number</h3><p>The single key to every other record.</p></div><div className="card fragment fade-up"><h3>Passport or driving licence</h3><p>Government-issued identity documents.</p></div><div className="card fragment fade-up"><h3>Account plus PIN</h3><p>Bank or MFS credentials together.</p></div><div className="card fragment fade-up"><h3>Biometric data</h3><p>Fingerprint and face. You cannot reissue these.</p></div><div className="card fragment fade-up"><h3>Health records</h3><p>Status, treatment, and payment history.</p></div><div className="card fragment fade-up"><h3>TIN and tax records</h3><p>Financial identity, end to end.</p></div></div><div className="verdict is-danger fragment"><span className="dot"></span>Lose these and disclosure is not optional — the regulator, every affected person, and the bill</div></section>
+<Slide className="ch-gov"><h2>Data that carries legal weight</h2><p className="lead">Under the Cyber Security Act 2023 and Bangladesh Bank’s ICT Security Guideline, this is the data you are accountable for.</p><div className="cards is-3up is-tight"><div className="card fragment fade-up"><h3>NID number</h3><p>The single key to every other record.</p></div><div className="card fragment fade-up"><h3>Passport or driving licence</h3><p>Government-issued identity documents.</p></div><div className="card fragment fade-up"><h3>Account plus PIN</h3><p>Bank or MFS credentials together.</p></div><div className="card fragment fade-up"><h3>Biometric data</h3><p>Fingerprint and face. You cannot reissue these.</p></div><div className="card fragment fade-up"><h3>Health records</h3><p>Status, treatment, and payment history.</p></div><div className="card fragment fade-up"><h3>TIN and tax records</h3><p>Financial identity, end to end.</p></div></div><Verdict tone="danger" fragment>Lose these and disclosure is not optional — the regulator, every affected person, and the bill</Verdict></Slide>
 
-<section className="ch-gov"><h2>The fraud problem</h2><div className="stats"><div className="stat fragment fade-up"><span className="n">5–6%</span><span className="l">of annual revenue lost to internal fraud</span></div><div className="stat fragment fade-up"><span className="n">18mo</span><span className="l">average scheme duration before discovery</span></div><div className="stat fragment fade-up"><span className="n">&#36;159K</span><span className="l">average cost per scheme</span></div><div className="stat fragment fade-up"><span className="n">25%</span><span className="l">of cases exceed one million dollars</span></div></div><p className="fragment">Smaller companies lose <strong>more per incident</strong>, not less.</p><p className="fine">Figures from US-based research: <em>Essentials of Corporate Fraud</em>, T. L. Coenen, 2008, John Wiley &amp; Sons.</p></section>
+<Slide className="ch-gov"><h2>The fraud problem</h2><div className="stats"><div className="stat fragment fade-up"><span className="n">5–6%</span><span className="l">of annual revenue lost to internal fraud</span></div><div className="stat fragment fade-up"><span className="n">18mo</span><span className="l">average scheme duration before discovery</span></div><div className="stat fragment fade-up"><span className="n">&#36;159K</span><span className="l">average cost per scheme</span></div><div className="stat fragment fade-up"><span className="n">25%</span><span className="l">of cases exceed one million dollars</span></div></div><p className="fragment">Smaller companies lose <strong>more per incident</strong>, not less.</p><p className="fine">Figures from US-based research: <em>Essentials of Corporate Fraud</em>, T. L. Coenen, 2008, John Wiley &amp; Sons.</p></Slide>
 
-<section className="ch-gov"><h2>How fraud actually gets found</h2><div className="lanes"><div className="lane is-top fragment fade-up"><span>Tip</span><span className="track"><i style={{ width: "100%" }}></i></span><span className="v">34%</span></div><div className="lane fragment fade-up"><span>By accident</span><span className="track"><i style={{ width: "74%" }}></i></span><span className="v">25%</span></div><div className="lane fragment fade-up"><span>Internal audit</span><span className="track"><i style={{ width: "59%" }}></i></span><span className="v">20%</span></div><div className="lane fragment fade-up"><span>Internal controls</span><span className="track"><i style={{ width: "56%" }}></i></span><span className="v">19%</span></div><div className="lane fragment fade-up"><span>External audit</span><span className="track"><i style={{ width: "35%" }}></i></span><span className="v">12%</span></div><div className="lane fragment fade-up"><span>Police</span><span className="track"><i style={{ width: "12%" }}></i></span><span className="v">4%</span></div></div><p className="fine fragment">Tips come from coworkers 64% · anonymous 18% · customers 11% · vendors 7%</p></section>
+<Slide className="ch-gov"><h2>How fraud actually gets found</h2><div className="lanes"><div className="lane is-top fragment fade-up"><span>Tip</span><span className="track"><i style={{ width: "100%" }}></i></span><span className="v">34%</span></div><div className="lane fragment fade-up"><span>By accident</span><span className="track"><i style={{ width: "74%" }}></i></span><span className="v">25%</span></div><div className="lane fragment fade-up"><span>Internal audit</span><span className="track"><i style={{ width: "59%" }}></i></span><span className="v">20%</span></div><div className="lane fragment fade-up"><span>Internal controls</span><span className="track"><i style={{ width: "56%" }}></i></span><span className="v">19%</span></div><div className="lane fragment fade-up"><span>External audit</span><span className="track"><i style={{ width: "35%" }}></i></span><span className="v">12%</span></div><div className="lane fragment fade-up"><span>Police</span><span className="track"><i style={{ width: "12%" }}></i></span><span className="v">4%</span></div></div><p className="fine fragment">Tips come from coworkers 64% · anonymous 18% · customers 11% · vendors 7%</p></Slide>
 
-<section className="ch-gov"><div className="evo"><div className="evo-art" dangerouslySetInnerHTML={{ __html: SVGS.speak }} /><div className="evo-copy"><span className="n">01</span><h2>The best detection system is a person</h2><p className="lead">More fraud is caught by someone saying something than by every audit and control combined.</p><ul><li className="fragment fade-up">You do not need proof — you need to raise it</li><li className="fragment fade-up">Two thirds of tips come from a coworker, not an outsider</li></ul><div className="verdict is-accent fragment"><span className="dot"></span>Suspect fraud? Contact <span className="mono">[ your reporting contact here ]</span></div></div></div></section>
+<Evo ch="ch-gov" art={SVGS.speak} n="01" title={<>The best detection system is a person</>} lead={<>More fraud is caught by someone saying something than by every audit and control combined.</>} points={[<>You do not need proof — you need to raise it</>, <>Two thirds of tips come from a coworker, not an outsider</>]} verdict={<>Suspect fraud? Contact <span className="mono">[ your reporting contact here ]</span></>} />
 
-<section><h2>If you remember six things</h2><ol className="flow cols" style={{ "--rows": 3 }}><li className="fragment fade-up"><span className="t">Long passwords</span><span className="d">Never reused, never shared.</span></li><li className="fragment fade-up"><span className="t">Patch and update</span><span className="d">Automatically, so you never have to decide.</span></li><li className="fragment fade-up"><span className="t">Do not click — type</span><span className="d">Reach important sites through your own bookmark.</span></li><li className="fragment fade-up"><span className="t">Nobody legitimate asks for your password</span><span className="d">Not IT, not your bank, not your manager.</span></li><li className="fragment fade-up"><span className="t">Back it up, then test the restore</span><span className="d">Untested is untrue.</span></li><li className="fragment fade-up"><span className="t">See something odd? Say it today</span><span className="d">The tip is the control that works.</span></li></ol></section>
+<Slide><h2>If you remember six things</h2><ol className="flow cols" style={{ "--rows": 3 }}><li className="fragment fade-up"><span className="t">Long passwords</span><span className="d">Never reused, never shared.</span></li><li className="fragment fade-up"><span className="t">Patch and update</span><span className="d">Automatically, so you never have to decide.</span></li><li className="fragment fade-up"><span className="t">Do not click — type</span><span className="d">Reach important sites through your own bookmark.</span></li><li className="fragment fade-up"><span className="t">Nobody legitimate asks for your password</span><span className="d">Not IT, not your bank, not your manager.</span></li><li className="fragment fade-up"><span className="t">Back it up, then test the restore</span><span className="d">Untested is untrue.</span></li><li className="fragment fade-up"><span className="t">See something odd? Say it today</span><span className="d">The tip is the control that works.</span></li></ol></Slide>
 
-<section><h2>One thing, this week</h2><div className="act"><Poll id="sec-commit" question="What are you actually going to change before Friday?" options={["Replace a password I reuse everywhere", "Turn on automatic updates", "Set up a backup — and test it", "Stop opening links in email"]} /></div></section>
+<Slide><h2>One thing, this week</h2><div className="act"><Poll id="sec-commit" question="What are you actually going to change before Friday?" options={["Replace a password I reuse everywhere", "Turn on automatic updates", "Set up a backup — and test it", "Stop opening links in email"]} /></div></Slide>
 
-<section><div className="title-slide"><h1>Security is everyone’s responsibility</h1><div className="rule"></div><p>Yours included. Especially yours.</p><p className="fine">Most of this is NIST best practice. It applies at work and at home — your employer’s policies exist for the same reason.</p></div></section>
+<Slide><div className="title-slide"><h1>Security is everyone’s responsibility</h1><div className="rule"></div><p>Yours included. Especially yours.</p><p className="fine">Most of this is NIST best practice. It applies at work and at home — your employer’s policies exist for the same reason.</p></div></Slide>

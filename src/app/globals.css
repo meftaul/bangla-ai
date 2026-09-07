@@ -233,31 +233,6 @@ body {
   }
 }
 
-/* Deck theming: reveal's white.css is light-only. Drive slide colors from our
-   tokens so decks follow light/dark instead of always rendering on white. */
-.reveal-viewport {
-  background: var(--surface);
-}
-.reveal {
-  color: var(--foreground);
-}
-.reveal h1,
-.reveal h2,
-.reveal h3,
-.reveal h4 {
-  color: var(--foreground);
-  font-family: var(--font-display), sans-serif;
-}
-.reveal a {
-  color: var(--accent-text);
-}
-.reveal .controls {
-  color: var(--accent-text);
-}
-.reveal .progress {
-  color: var(--accent);
-}
-
 @media (prefers-reduced-motion: no-preference) {
   .fade-up {
     opacity: 0;

@@ -1,6 +1,8 @@
 export const metadata = { title: "Using Coding Agents Effectively — Claude Code", description: "Web vs CLI, sharp prompts, the context window, CLAUDE.md, and skills — a live session on directing coding agents.", type: "slides" };
 
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,340;0,9..144,560;1,9..144,340&family=IBM+Plex+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" />
+{/* Fraunces + IBM Plex are used by this deck alone, so they stay a deck-local link
+    rather than a global next/font preload. JetBrains Mono is self-hosted in layout.tsx. */}
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,340;0,9..144,560;1,9..144,340&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" />
 
 <style>{`
 /* Deck-local dark terminal theme. This style tag ships only with this article,
@@ -13,8 +15,23 @@ export const metadata = { title: "Using Coding Agents Effectively — Claude Cod
     #0c0d10;
 }
 .reveal {
-  /* Re-scope the app tokens so Quiz/Poll/DragDrop follow the deck's dark theme
-     regardless of the user's light/dark choice. */
+  /* This deck inverts the house palette (src/app/deck.css) to a dark terminal look.
+     Re-point deck.css's own tokens rather than hardcoding hex over its rules — then
+     every shared primitive, and reveal's chrome, recolors on its own.
+     The app tokens (--foreground/--border/--accent-text…) are re-scoped too, so
+     Quiz/Poll/DragDrop follow the deck regardless of the user's light/dark choice. */
+  --ink: #e9e7e1;
+  --faint: #6d6a63;
+  --line: #2a2c34;
+  --bg: #0c0d10;
+  --bg-2: #10141a;
+  --accent-ink: #e0764a;
+  --accent-line: rgb(224 118 74 / 0.5);
+  --accent-dim: rgb(224 118 74 / 0.1);
+  --accent-glow: rgb(224 118 74 / 0.18);
+  --display: "Fraunces", serif;
+  --sans: "IBM Plex Sans", sans-serif;
+  --mono: "JetBrains Mono", monospace;
   --foreground: #e9e7e1;
   --muted: #9a978f;
   --border: #2a2c34;
@@ -23,13 +40,20 @@ export const metadata = { title: "Using Coding Agents Effectively — Claude Cod
   --accent-text: #e0764a;
   --accent-foreground: #16130f;
   --danger: #f26d5f;
+  --ok: #7fd08a;
   --human: #6ea8c7;
   --shadow-card: 0 12px 28px -14px rgb(0 0 0 / 0.6);
-  font-family: "IBM Plex Sans", var(--font-sans), sans-serif;
+  font-family: var(--sans);
   font-size: 27px;
   font-weight: 300;
-  color: #e9e7e1;
+  color: var(--ink);
 }
+
+/* This deck's .card is a plain bordered panel — drop deck.css's dot-grid wash,
+   corner bracket and stacked-child spacing. */
+.reveal .card::before,
+.reveal .card::after { content: none; }
+.reveal .card > * + * { margin-top: 0; }
 .reveal .slides section { text-align: left; height: 100%; }
 
 /* Typography */
@@ -83,61 +107,6 @@ export const metadata = { title: "Using Coding Agents Effectively — Claude Cod
 .reveal .points li strong { font-weight: 600; color: #fff; }
 .reveal .points li .sub { display: block; color: #9a978f; font-size: 0.86em; margin-top: 0.15em; }
 
-/* Terminal panel (markup rendered by the Terminal component) */
-.reveal .term {
-  background: #16181e;
-  border: 1px solid #2a2c34;
-  border-radius: 12px;
-  box-shadow: 0 24px 60px -24px rgb(0 0 0 / 0.75);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  height: 520px;
-  max-height: 100%;
-}
-.reveal .tbar {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 13px;
-  background: linear-gradient(#1c1e25, #171920);
-  border-bottom: 1px solid #2a2c34;
-  flex: none;
-}
-.reveal .dot { width: 10px; height: 10px; border-radius: 50%; }
-.reveal .dot.r { background: #f26d5f; }
-.reveal .dot.y { background: #f2be55; }
-.reveal .dot.g { background: #57c76a; }
-.reveal .ttl { margin-left: 9px; font-family: "JetBrains Mono", monospace; font-size: 12px; color: #9a978f; }
-.reveal .tbody {
-  flex: 1;
-  overflow-y: auto;
-  padding: 14px 16px 12px;
-  font-family: "JetBrains Mono", monospace;
-  font-size: 15px;
-  line-height: 1.52;
-  text-align: left;
-}
-.reveal .tl { display: flex; white-space: pre-wrap; word-break: break-word; }
-.reveal .tl .pfx { flex: none; width: 1.4em; }
-.reveal .tl-cmd { color: #f2f0ea; margin-top: 0.55em; }
-.reveal .tl-cmd .pfx { color: #e0764a; }
-.reveal .tl-ag { color: #cfccc4; margin-top: 0.45em; }
-.reveal .tl-ag .pfx { color: #e0764a; }
-.reveal .tl-out { color: #9a978f; }
-.reveal .tl-dim { color: #6d6a63; }
-.reveal .tl-ok { color: #7fd08a; }
-.reveal .tl-warn { color: #e6b455; }
-.reveal .caret {
-  display: inline-block;
-  width: 0.55em;
-  height: 1.05em;
-  background: #e0764a;
-  vertical-align: -0.15em;
-  margin-left: 2px;
-  animation: deck-caret 1s steps(1) infinite;
-}
-@keyframes deck-caret { 50% { opacity: 0; } }
 
 /* Title slide */
 .reveal .titleslide .points { flex-basis: 46%; }
@@ -161,11 +130,6 @@ export const metadata = { title: "Using Coding Agents Effectively — Claude Cod
 /* Interactive activity slides */
 .reveal .act { height: 100%; display: flex; flex-direction: column; justify-content: center; text-align: center; }
 .reveal .act ul { list-style: none; margin-left: 0; padding-left: 0; }
-
-/* reveal's white.css wins over globals.css in bundle order — recolor its chrome here
-   (this style tag renders after every stylesheet, so it takes the cascade). */
-.reveal .controls { color: #e0764a; }
-.reveal .progress { color: #e0764a; }
 
 /* ---- Layout additions (orange theme; agent = accent, human = cool) ---- */
 .reveal .tag { display: inline-block; font-family: "JetBrains Mono", monospace; font-size: 0.38em; letter-spacing: 0.14em; text-transform: uppercase; padding: 5px 11px; border-radius: 999px; border: 1px solid #2a2c34; color: #9a978f; }
@@ -202,7 +166,11 @@ export const metadata = { title: "Using Coding Agents Effectively — Claude Cod
 .reveal .filecard .muted { color: #6d6a63; }
 .reveal .pull { font-family: "Fraunces", serif; font-size: 1em; font-weight: 560; line-height: 1.2; border-left: 3px solid #e0764a; padding-left: 0.6em; max-width: 22em; color: #e9e7e1; }
 .reveal .pull span { color: #9a978f; }
-.reveal .vague { font-family: "JetBrains Mono", monospace; font-size: 0.52em; color: #f26d5f; border: 1px dashed rgba(242,109,95,0.4); border-radius: 10px; padding: 14px 16px; background: rgba(242,109,95,0.05); }
+.reveal .vague { font-family: var(--mono); font-size: 0.52em; color: var(--danger); border: 1px dashed rgb(242 109 95 / 0.4); border-radius: 10px; padding: 14px 16px; background: rgb(242 109 95 / 0.05); }
+/* Same box, neutral reading — the "after" half of a bad-prompt/good-prompt pair. */
+.reveal .vague.is-neutral { color: var(--ink); border-color: var(--line); background: rgb(255 255 255 / 0.02); }
+.reveal .card h3.is-danger { color: var(--danger); }
+.reveal .card h3.is-ok { color: var(--ok); }
 .reveal .tcd { display: flex; flex-direction: column; gap: 10px; }
 .reveal .tcd-row { display: grid; grid-template-columns: 52px 1fr; gap: 14px; border: 1px solid #2a2c34; border-radius: 12px; overflow: hidden; background: rgba(255,255,255,0.02); }
 .reveal .tcd-row .k { display: flex; align-items: center; justify-content: center; font-family: "Fraunces", serif; font-size: 1.1em; font-weight: 560; background: rgba(224,118,74,0.08); color: #e0764a; }
@@ -212,36 +180,6 @@ export const metadata = { title: "Using Coding Agents Effectively — Claude Cod
 .reveal .lead2 { font-size: 0.58em; color: #9a978f; line-height: 1.55; }
 .reveal .mono { font-family: "JetBrains Mono", monospace; color: #e0764a; }
 
-/* Context window visualizer (markup rendered by the ContextWindow component) */
-.reveal .cw {
-  background: #16181e;
-  border: 1px solid #2a2c34;
-  border-radius: 12px;
-  box-shadow: 0 24px 60px -24px rgb(0 0 0 / 0.75);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  height: 520px;
-  max-height: 100%;
-}
-.reveal .cwbody { flex: 1; overflow: hidden; padding: 14px 16px; display: flex; flex-direction: column; gap: 7px; }
-.reveal .cwb { display: flex; justify-content: space-between; align-items: center; gap: 10px; font-family: "JetBrains Mono", monospace; font-size: 14.5px; padding: 9px 13px; border-radius: 8px; border: 1px solid #2a2c34; color: #e9e7e1; background: rgba(255,255,255,0.03); }
-.reveal .cwb .lb { min-width: 0; }
-.reveal .cwb .sz { flex: none; color: #9a978f; }
-.reveal .cwb-sys { border-color: rgba(255,255,255,0.18); background: rgba(255,255,255,0.06); }
-.reveal .cwb-md { border-color: rgba(230,180,85,0.4); background: rgba(230,180,85,0.07); color: #e6b455; }
-.reveal .cwb-skill { border-color: rgba(224,118,74,0.5); background: rgba(224,118,74,0.09); color: #e0764a; }
-.reveal .cwb-user { border-color: rgba(110,168,199,0.45); background: rgba(110,168,199,0.08); color: #6ea8c7; }
-.reveal .cwb-tool { color: #9a978f; }
-.reveal .cwb-in { animation: cwb-in 0.32s ease-out; }
-.reveal .cwb-out { animation: cwb-out 0.3s ease-in forwards; }
-@keyframes cwb-in { from { opacity: 0; transform: translateY(-9px) scale(0.97); } to { opacity: 1; transform: none; } }
-@keyframes cwb-out { to { opacity: 0; transform: translateX(16px); } }
-.reveal .cwfoot { display: flex; align-items: center; gap: 10px; padding: 12px 16px; border-top: 1px solid #2a2c34; background: linear-gradient(#171920, #1c1e25); flex: none; }
-.reveal .cwmeter { flex: 1; height: 8px; border-radius: 99px; background: rgba(255,255,255,0.07); overflow: hidden; }
-.reveal .cwmeter i { display: block; height: 100%; width: 0; border-radius: 99px; background: #e0764a; transition: width 0.3s ease; }
-.reveal .cwmeter.hot i { background: #f26d5f; }
-.reveal .cwpct { font-family: "JetBrains Mono", monospace; font-size: 12px; color: #9a978f; min-width: 3em; text-align: right; }
 `}</style>
 
 <Slide>
@@ -292,7 +230,7 @@ export const metadata = { title: "Using Coding Agents Effectively — Claude Cod
   </div>
   <div>
     <p className="tiny" style={{ marginBottom: "0.6em" }}>You type, into both:</p>
-    <div className="vague" style={{ color: "#e9e7e1", borderColor: "#2a2c34", background: "rgba(255,255,255,0.02)" }}>Add authentication.</div>
+    <div className="vague is-neutral">Add authentication.</div>
     <p className="tiny" style={{ marginTop: "1.2em" }}>Watch the difference on the next slide.</p>
   </div>
 </div>
@@ -576,8 +514,8 @@ export const metadata = { title: "Using Coding Agents Effectively — Claude Cod
   <p className="kicker"><span className="no">05 /</span> The consequence</p>
   <p className="pull" style={{ maxWidth: "24em" }}>When the window fills, the agent doesn't tell you what it forgot.<br /><span>It just starts being wrong with confidence.</span></p>
   <div className="grid2" style={{ marginTop: "1.2em", height: "auto" }}>
-    <div className="card fragment"><h3 style={{ color: "#f26d5f" }}>Symptom</h3><p>It re-asks something you answered. It reverts a decision. It “forgets” a constraint from ten turns ago.</p></div>
-    <div className="card fragment"><h3 style={{ color: "#7fd08a" }}>Cure</h3><p>Short standing instructions. Skills loaded on demand. And a <span className="mono">/clear</span> before the desk collapses.</p></div>
+    <div className="card fragment"><h3 className="is-danger">Symptom</h3><p>It re-asks something you answered. It reverts a decision. It “forgets” a constraint from ten turns ago.</p></div>
+    <div className="card fragment"><h3 className="is-ok">Cure</h3><p>Short standing instructions. Skills loaded on demand. And a <span className="mono">/clear</span> before the desk collapses.</p></div>
   </div>
 </div>
 

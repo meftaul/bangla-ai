@@ -19,6 +19,19 @@ export const COURSES: Course[] = [
     slug: "intro-to-ai",
     title: "Intro to AI",
     description: "Start here — what AI is, a live intro deck, and RAG.",
-    items: ["what-is-ai"],
+    items: ["what-is-ai", "rag"],
+  },
+  {
+    slug: "llm",
+    title: "Intro to LLMs",
+    description: "What large language models are, how they work, and where they fail.",
+    items: ["llm/01-what-is-llm"],
+  },
+  {
+    // Slug matches the src/content/articles/ folder its items live in.
+    slug: "deep-learning",
+    title: "Intro to Deep Learning",
+    description: "Neural networks from first principles — layers, training, and real uses.",
+    items: ["deep-learning/01-intro-to-dl"],
   },
 ];

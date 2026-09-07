@@ -1,5 +1,5 @@
 import { readdir, readFile } from "node:fs/promises";
-import { join } from "node:path";
+import { join, sep } from "node:path";
 import { cache } from "react";
 import { Atom, Brain, ChartLineUp, Code, Lightbulb } from "@phosphor-icons/react/dist/ssr";
 import type { Icon } from "@phosphor-icons/react";
@@ -36,8 +36,12 @@ function readMeta(field: string, block: string): string | undefined {
 }
 
 export async function listDiskArticles(): Promise<DiskArticle[]> {
-  const files = await readdir(ARTICLES_DIR);
-  const slugs = files.filter((f) => f.endsWith(".mdx")).map((f) => f.slice(0, -4));
+  // Recursive: articles may be grouped in subdirectories (a course folder), and
+  // the slug is the path relative to ARTICLES_DIR — "llm/01-what-is-llm".
+  const files = await readdir(ARTICLES_DIR, { recursive: true });
+  const slugs = files
+    .filter((f) => f.endsWith(".mdx"))
+    .map((f) => f.slice(0, -4).split(sep).join("/"));
 
   const articles = await Promise.all(
     slugs.map(async (slug) => {

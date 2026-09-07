@@ -1,4 +1,3 @@
-import "katex/dist/katex.min.css";
 import { notFound, redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { getRole } from "@/lib/articles";

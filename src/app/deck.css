@@ -1,0 +1,786 @@
+/* Pathshala deck stylesheet — the shared design system for every `type: "slides"`
+   article. Imported once by src/components/deck.tsx, so a new deck writes content,
+   not CSS.
+ *
+ * This replaces reveal's `theme/white.css`, which we no longer import: it was 564 KB
+ * (~500 KB of that a base64 Source Sans Pro no deck uses) and every deck repainted it
+ * anyway, from an inline <style> tag, purely to win bundle order. reveal.css defines
+ * every --r-* token it consumes except --r-link-color, so replacing the theme costs
+ * the one declaration below.
+ *
+ * Scale: everything is em off `.reveal`'s own font-size, never `html { font-size }`
+ * — a root-relative scale would leak into the dashboard chrome around the deck.
+ * ponytail: `.reveal { font-size }` (below) is the one knob for overall fit; tune
+ * 18–22px to taste.
+ *
+ * Per-chapter hue: each deck maps its own `ch-*` classes onto `--hue` (see any deck's
+ * style block). Custom properties only cascade down, so deck.tsx mirrors the current
+ * slide's ch-* class onto the .reveal root — that's what lets the background recolor.
+ */
+
+/* Only token reveal.css consumes that the theme used to supply (overview-mode outline). */
+.reveal-viewport { --r-link-color: var(--accent); }
+
+/* ---- Deck tokens ---------------------------------------------------------- */
+
+.reveal,
+.reveal-viewport {
+  --hue: 275; /* deck default; per-chapter ch-* classes override it */
+  --bg: oklch(0.962 0.028 var(--hue));
+  --bg-2: oklch(0.928 0.038 var(--hue));
+  --surface: oklch(0.99 0.012 var(--hue));
+  --line: oklch(0.85 0.045 var(--hue));
+  --ink: oklch(0.22 0.03 var(--hue));
+  --muted: oklch(0.42 0.035 var(--hue));
+  --faint: oklch(0.5 0.035 var(--hue));
+  --accent: oklch(0.56 0.21 var(--hue));
+  --accent-ink: oklch(0.45 0.19 var(--hue));
+  --accent-dim: oklch(0.56 0.21 var(--hue) / 0.16);
+  --accent-line: oklch(0.56 0.21 var(--hue) / 0.48);
+  --accent-glow: oklch(0.56 0.21 var(--hue) / 0.26);
+  --danger: oklch(0.5 0.17 32);
+  --caution: oklch(0.62 0.15 75);
+  --safe: oklch(0.55 0.14 155);
+  --elev:
+    0 1px 2px oklch(0.22 0.02 var(--hue) / 0.06),
+    0 6px 20px oklch(0.22 0.02 var(--hue) / 0.07);
+  /* Loaded by next/font in src/app/layout.tsx — no <link> in deck MDX. */
+  --display: var(--font-space-grotesk), system-ui, sans-serif;
+  --sans: var(--font-hanken-grotesk), system-ui, sans-serif;
+  --mono: var(--font-jetbrains-mono), ui-monospace, monospace;
+  --t-display: 4.4em;
+  --t-quote: 2.4em;
+  --t-h2: 2em;
+  --t-h3: 1.25em;
+  --t-lead: 1.05em;
+  --t-body: 0.95em;
+  --t-small: 0.78em;
+  --t-label: 0.62em;
+  --s1: 0.35em;
+  --s2: 0.6em;
+  --s3: 1em;
+  --s4: 1.5em;
+  --s5: 2.2em;
+  --s6: 3.2em;
+}
+
+.reveal,
+.reveal-viewport {
+  background:
+    radial-gradient(90% 70% at 100% 0%, var(--accent-glow), transparent 60%),
+    radial-gradient(80% 80% at 0% 100%, oklch(0.99 0.02 var(--hue) / 0.55), transparent 55%),
+    linear-gradient(155deg, var(--bg) 30%, var(--bg-2) 100%);
+  transition: background-color 600ms ease;
+}
+
+/* ---- Type ----------------------------------------------------------------- */
+
+.reveal {
+  font-family: var(--sans);
+  font-size: 20px;
+  font-weight: 400;
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  font-kerning: normal;
+}
+.reveal .slides { text-align: left; }
+
+:where(.reveal) :where(h1, h2, h3, h4, p, ul, ol, li, blockquote, table) { margin: 0; }
+.reveal h1,
+.reveal h2,
+.reveal h3,
+.reveal h4 { font-family: var(--sans); color: var(--ink); font-weight: 600; text-wrap: balance; }
+.reveal h1 {
+  font-family: var(--display);
+  font-size: var(--t-display);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+.reveal h2 { font-size: var(--t-h2); line-height: 1.12; letter-spacing: -0.025em; }
+.reveal h3 { font-size: var(--t-h3); line-height: 1.25; }
+.reveal h4 { font-size: var(--t-body); line-height: 1.3; }
+.reveal p,
+.reveal li { line-height: 1.6; }
+.reveal p { color: var(--ink); text-wrap: pretty; max-width: 62ch; }
+.reveal strong { color: var(--ink); font-weight: 600; }
+.reveal em { color: var(--accent-ink); font-style: italic; }
+.reveal a { color: var(--accent-ink); }
+.reveal li { max-width: 62ch; text-wrap: pretty; }
+.reveal li + li { margin-top: var(--s2); }
+.reveal ::selection { background: var(--accent); color: var(--bg); }
+
+.reveal .lead { color: var(--muted); font-size: var(--t-lead); max-width: 44ch; line-height: 1.55; }
+.reveal .fine { color: var(--faint); font-size: var(--t-small); }
+.reveal .dim { color: var(--faint); }
+.reveal .mono {
+  font-family: var(--mono);
+  font-size: 0.9em;
+  color: var(--accent-ink);
+  background: var(--accent-dim);
+  border-radius: 0.25em;
+  padding: 0.1em 0.4em;
+}
+
+/* Vertical rhythm. `section > *` only — nested sections are reveal's own stacks. */
+.reveal .slides section > *:not(section) + *:not(section),
+.title-slide > * + *,
+.pull > * + * { margin-top: var(--s4); }
+.reveal .slides section > h2 + .lead,
+.reveal .slides section > h2 + p,
+.reveal h3 + p { margin-top: var(--s3); }
+.reveal .slides section > h2 + .cards,
+.reveal .slides section > h2 + .duo,
+.reveal .slides section > h2 + .lanes,
+.reveal .slides section > h2 + .stats,
+.reveal .slides section > h2 + table,
+.reveal .slides section > h2 + .flow { margin-top: var(--s5); }
+
+/* ---- reveal chrome -------------------------------------------------------- */
+
+.reveal .progress { color: var(--accent); }
+.reveal .controls { color: var(--accent); }
+.reveal .slide-number {
+  background: transparent;
+  color: var(--faint);
+  font-family: var(--mono);
+  font-size: 14px;
+}
+
+/* ---- Primitives ----------------------------------------------------------- */
+
+.panel .tag,
+.card .h,
+.reveal thead th,
+.pull cite {
+  font-family: var(--sans);
+  font-size: var(--t-label);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  line-height: 1.3;
+}
+
+.duo { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s4); align-items: stretch; }
+
+/* Card grid. Named .cards, not .grid: this stylesheet is not scoped to deck markup,
+   and Quiz/Poll/DragDrop use Tailwind's `grid` utility — a `.grid` rule here would
+   retarget their option badges and countdown ring. */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(var(--cards-min, 9em), 1fr));
+  gap: var(--s3);
+}
+.cards.is-2up { grid-template-columns: repeat(2, 1fr); }
+.cards.is-3up { grid-template-columns: repeat(3, 1fr); }
+.cards.is-tight { gap: var(--s2); max-width: 52em; }
+.cards.is-tight .card { padding: var(--s3); }
+.cards.is-tight .card h3 { font-size: var(--t-body); }
+.cards.is-tight .card p { font-size: var(--t-small); }
+.cards.is-tight .card > * + * { margin-top: var(--s1); }
+
+.panel {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: var(--surface);
+  border-radius: 0.55em;
+  padding: var(--s4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s3);
+  box-shadow: var(--elev);
+}
+.card {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: var(--surface);
+  border-radius: 0.5em;
+  padding: var(--s4);
+  box-shadow: var(--elev);
+}
+/* Dot-grid wash + corner bracket, masked to the top-right. */
+.panel::before,
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background-image: radial-gradient(circle, var(--accent) 0.7px, transparent 0.7px);
+  background-size: 0.72em 0.72em;
+  opacity: 0.16;
+  -webkit-mask-image: radial-gradient(115% 85% at 100% 0%, #000 0%, transparent 55%);
+  mask-image: radial-gradient(115% 85% at 100% 0%, #000 0%, transparent 55%);
+}
+.panel::after,
+.card::after {
+  content: "";
+  position: absolute;
+  top: 0.85em;
+  right: 0.85em;
+  z-index: -1;
+  width: 0.8em;
+  height: 0.8em;
+  border-top: 1.5px solid var(--accent);
+  border-right: 1.5px solid var(--accent);
+  opacity: 0.5;
+}
+.panel.accent,
+.card.is-accent { background: linear-gradient(180deg, var(--accent-dim), transparent 70%), var(--surface); }
+.panel.accent::before,
+.card.is-accent::before { opacity: 0.22; }
+.panel.accent::after,
+.card.is-accent::after { opacity: 0.7; }
+.panel.danger::after,
+.card.is-danger::after { border-color: var(--danger); opacity: 0.7; }
+.panel .tag { color: var(--faint); display: block; margin-bottom: calc(var(--s1) - var(--s3)); }
+.panel.accent .tag { color: var(--accent-ink); }
+.panel.danger .tag { color: var(--danger); }
+.panel .headline { font-size: var(--t-h3); color: var(--ink); font-weight: 500; line-height: 1.3; }
+.panel .headline .sub { color: var(--muted); font-weight: 400; }
+.panel .prose,
+.card p { color: var(--muted); }
+.prose { font-size: var(--t-small); }
+.panel .verdict { margin-top: auto; }
+.card > * + * { margin-top: var(--s3); }
+.card .h + * { margin-top: var(--s1); }
+.card .h { color: var(--accent-ink); display: flex; gap: 0.6em; align-items: baseline; }
+.card .h .num { color: var(--faint); font-family: var(--mono); font-weight: 700; letter-spacing: 0; }
+.card.is-danger .h,
+.card h3.is-danger { color: var(--danger); }
+.card p .dim { color: var(--faint); }
+.card .note { color: var(--accent-ink); font-size: var(--t-small); font-weight: 500; }
+.card li { color: var(--muted); font-size: var(--t-small); }
+
+/* Diamond bullets, shared by every list primitive. */
+.panel ul,
+.card ul,
+.evo-copy ul { display: block; list-style: none; padding: 0; }
+.panel li,
+.card li,
+.evo-copy li { padding-left: 1.5em; position: relative; color: var(--muted); }
+.panel li::before,
+.card li::before,
+.evo-copy li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.58em;
+  width: 0.42em;
+  height: 0.42em;
+  border: 1.5px solid var(--accent);
+  border-radius: 1px;
+  background: var(--surface);
+  transform: rotate(45deg);
+}
+.panel li::after,
+.card li::after,
+.evo-copy li::after {
+  content: "";
+  position: absolute;
+  left: 0.52em;
+  top: 0.78em;
+  width: 0.5em;
+  height: 1.5px;
+  background: var(--accent-line);
+  transform-origin: left center;
+}
+/* The bullet draws itself in as its fragment reveals. */
+.reveal li.fragment::before { opacity: 0; transform: rotate(45deg) scale(0.35); }
+.reveal li.fragment.visible::before {
+  opacity: 1;
+  transform: rotate(45deg) scale(1);
+  transition:
+    transform 220ms ease,
+    opacity 220ms ease;
+}
+.reveal li.fragment::after { transform: scaleX(0); }
+.reveal li.fragment.visible::after { transform: scaleX(1); transition: transform 220ms ease 60ms; }
+
+.verdict {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  font-size: var(--t-small);
+  font-weight: 500;
+  color: var(--ink);
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.5em 1em;
+}
+.verdict.is-accent { border-color: var(--accent-line); }
+.verdict.is-danger { border-color: var(--danger); }
+/* The status dot is decoration — no empty <span> needed in the markup. */
+.verdict::before {
+  content: "";
+  width: 0.28em;
+  height: 0.28em;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 0 var(--accent-glow);
+}
+.verdict.is-danger::before { background: var(--danger); }
+
+.pull blockquote {
+  border: none;
+  background: none;
+  box-shadow: none;
+  margin: 0;
+  padding: 0;
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: var(--t-quote);
+  line-height: 1.14;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  text-wrap: balance;
+  max-width: 22ch;
+}
+.pull blockquote .hl { color: var(--accent-ink); }
+.pull cite { display: block; margin-top: var(--s5); font-style: normal; color: var(--faint); }
+
+/* Numbered process list. */
+.reveal .flow { list-style: none; padding: 0; margin: 0; counter-reset: step; }
+.flow li {
+  position: relative;
+  padding: 0 var(--s4) var(--s3) 2.1em;
+  max-width: none;
+  counter-increment: step;
+}
+.flow li + li { margin-top: 0; }
+.flow li::before {
+  content: counter(step, decimal-leading-zero);
+  position: absolute;
+  left: 0;
+  top: 0.3em;
+  font-family: var(--mono);
+  font-size: var(--t-label);
+  font-weight: 700;
+  color: var(--accent);
+}
+.flow .t {
+  display: block;
+  font-weight: 500;
+  color: var(--ink);
+  font-size: var(--t-body);
+  line-height: 1.35;
+}
+.flow .d { display: block; color: var(--muted); font-size: var(--t-small); margin-top: 0.25em; }
+.flow.cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: repeat(var(--rows, 4), auto);
+  grid-auto-flow: column;
+  column-gap: var(--s5);
+  max-width: 34em;
+}
+
+/* Concept paired with its diagram. */
+.evo {
+  display: grid;
+  grid-template-columns: minmax(0, 22em) minmax(0, 1fr);
+  gap: var(--s6);
+  align-items: center;
+}
+.evo.is-flip { grid-template-columns: minmax(0, 1fr) minmax(0, 22em); }
+.evo.is-flip .evo-art { order: 2; }
+.evo-copy > * + * { margin-top: var(--s3); }
+.evo-copy .n {
+  font-family: var(--mono);
+  color: var(--accent);
+  font-size: var(--t-label);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+.evo-copy h2 { margin-top: var(--s1); }
+.evo-art { display: flex; align-items: center; justify-content: center; }
+.evo-art svg {
+  width: 100%;
+  max-width: 20em;
+  height: auto;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+/* SVG paint classes — decks reference these from inline <svg class="…">. */
+.evo-art .s-accent { stroke: var(--accent); fill: none; }
+.evo-art .s-line { stroke: var(--line); fill: none; }
+.evo-art .f-surface { fill: var(--surface); }
+.evo-art .f-accent { fill: var(--accent); }
+.evo-art .f-line { fill: var(--line); }
+.evo-art .lbl {
+  font-family: var(--mono);
+  fill: var(--faint);
+  font-size: 7px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.evo-art .lbl-ink { fill: var(--muted); font-family: var(--sans); font-size: 8px; font-weight: 600; }
+.evo-art .glyph { fill: var(--accent-ink); font-family: var(--sans); font-size: 13px; font-weight: 700; }
+
+/* ---- Table ---------------------------------------------------------------- */
+
+.reveal table { border-collapse: collapse; width: 100%; max-width: 46em; font-size: var(--t-body); }
+.reveal thead th {
+  color: var(--accent-ink);
+  text-align: left;
+  border-bottom: 1px solid var(--accent-line);
+  padding: 0 0.9em 0.7em;
+}
+.reveal thead th:first-child { padding-left: 0; }
+.reveal tbody td {
+  padding: 0.7em 0.9em;
+  border-bottom: 1px solid var(--line);
+  color: var(--muted);
+  vertical-align: top;
+}
+.reveal tbody td:first-child { color: var(--ink); font-weight: 500; padding-left: 0; }
+.reveal td.num { font-family: var(--mono); font-size: var(--t-small); }
+.reveal td.is-danger { color: var(--danger); font-weight: 500; }
+.reveal td.is-caution { color: var(--caution); font-weight: 500; }
+.reveal td.is-safe { color: var(--safe); font-weight: 500; }
+
+/* ---- Chips, quotes, stats ------------------------------------------------- */
+
+.reveal .risks,
+.reveal .chips {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s2);
+}
+.risks li,
+.chips li {
+  max-width: none;
+  font-size: var(--t-small);
+  font-weight: 500;
+  color: var(--ink);
+  border-radius: 999px;
+  padding: 0.5em 1em;
+}
+.risks li { border: 1px solid var(--danger); background: oklch(0.5 0.17 32 / 0.08); }
+.chips li { border: 1px solid var(--line); background: var(--surface); color: var(--muted); }
+.risks li + li,
+.chips li + li { margin-top: 0; }
+
+.quote-inline {
+  border: none;
+  box-shadow: none;
+  background: none;
+  padding: 0;
+  font-style: italic;
+  color: var(--muted);
+  font-size: var(--t-lead);
+  line-height: 1.5;
+  max-width: 40ch;
+  text-indent: -0.42em;
+}
+.quote-inline::before { content: "\201C"; color: var(--accent); font-style: normal; }
+.quote-inline::after { content: "\201D"; color: var(--accent); font-style: normal; }
+.caption-strong { font-weight: 500; color: var(--accent-ink); font-size: var(--t-lead); }
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(8em, 1fr));
+  gap: var(--s5) var(--s4);
+}
+.stat .n {
+  display: block;
+  font-family: var(--display);
+  font-size: 2.6em;
+  font-weight: 700;
+  color: var(--accent-ink);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+.stat .l {
+  display: block;
+  margin-top: var(--s2);
+  color: var(--muted);
+  font-size: var(--t-small);
+  max-width: 16ch;
+}
+
+/* ---- Title & chapter slides ----------------------------------------------- */
+
+.title-slide { display: flex; flex-direction: column; align-items: center; text-align: center; }
+.title-slide h1 { max-width: 14ch; }
+.title-slide.is-hero h1 { font-size: 5.6em; }
+.title-slide .rule {
+  width: 2.4em;
+  height: 3px;
+  background: var(--accent);
+  border-radius: 2px;
+  transform-origin: center;
+}
+.title-slide p { color: var(--muted); font-size: var(--t-lead); max-width: 32ch; }
+
+/* Full-bleed background numeral with the chapter title over it. reveal sets an inline
+   `display` on the current slide, so centering lives on the inner .chapter-in wrapper
+   rather than fighting it with !important on the <section>. */
+.chapter-in {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+}
+.chapter-in .num {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 34em;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--accent);
+  opacity: 0.12;
+  pointer-events: none;
+  z-index: 0;
+}
+.chapter-in .ch-title {
+  position: relative;
+  z-index: 1;
+  display: inline-block;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: clamp(2em, 7vw, 5.5em);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+  max-width: 14ch;
+  text-wrap: balance;
+}
+
+/* ---- Live activities ------------------------------------------------------ */
+
+/* Quiz/Poll/DragDrop style themselves with Tailwind (mt-6 flex flex-col gap-*), but
+   the list rules above are specificity 0,1,1 against a utility's 0,1,0 — they'd win
+   and shrink-wrap the option list, killing the flex gap. Undo exactly those, then let
+   the components' own utilities take over. */
+.act { max-width: 34em; margin: 0 auto; }
+.reveal .act ul,
+.reveal .act ol {
+  display: flex;
+  margin: 1.5rem 0 0;
+  padding: 0;
+  list-style: none;
+  text-align: inherit;
+}
+.reveal .act li { max-width: none; color: var(--ink); }
+.reveal .act li + li { margin-top: 0; }
+.reveal .act li::before,
+.reveal .act li::after { content: none; }
+.reveal .act p { max-width: none; }
+
+/* PasswordMeter — the component ships unstyled by design. */
+.pwm { max-width: 30em; margin: 0 auto; }
+.pwm > * + * { margin-top: var(--s2); }
+.pwm-in {
+  font-family: var(--mono);
+  font-size: var(--t-lead);
+  width: 100%;
+  padding: 0.7em 0.9em;
+  border-radius: 0.5em;
+  background: var(--surface);
+  color: var(--ink);
+  border: 1px solid var(--accent-line);
+  outline: none;
+  box-shadow: var(--elev);
+}
+.pwm-in:focus { border-color: var(--accent); }
+.pwm-in::placeholder { color: var(--faint); }
+.pwm-meter { height: 0.5em; border-radius: 999px; background: var(--bg-2); overflow: hidden; }
+.pwm-meter > i {
+  display: block;
+  height: 100%;
+  width: 0;
+  border-radius: 999px;
+  background: var(--danger);
+  transition:
+    width 250ms ease,
+    background 250ms ease;
+}
+.pwm-meter > i.hot { background: var(--danger); }
+.pwm-meter > i.warn { background: var(--caution); }
+.pwm-meter > i.ok { background: var(--safe); }
+.pwm-verdict { font-family: var(--display); font-size: var(--t-h3); font-weight: 700; color: var(--faint); }
+.pwm-verdict.hot { color: var(--danger); }
+.pwm-verdict.warn { color: var(--caution); }
+.pwm-verdict.ok { color: var(--safe); }
+
+/* ---- Terminal (markup rendered by the Terminal component) ------------------ */
+
+/* Terminal and ContextWindow are dark instrument panels — deliberately not
+   hue-tokenized, they read as a screen inside the slide in every chapter. */
+.reveal .term,
+.reveal .cw {
+  background: #16181e;
+  border: 1px solid #2a2c34;
+  border-radius: 12px;
+  box-shadow: 0 24px 60px -24px rgb(0 0 0 / 0.75);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: 520px;
+  max-height: 100%;
+}
+.reveal .tbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 13px;
+  background: linear-gradient(#1c1e25, #171920);
+  border-bottom: 1px solid #2a2c34;
+  flex: none;
+}
+/* Scoped to .tbar so it can't collide with .verdict's status dot. */
+.reveal .tbar .dot { width: 10px; height: 10px; border-radius: 50%; }
+.reveal .tbar .dot.r { background: #f26d5f; }
+.reveal .tbar .dot.y { background: #f2be55; }
+.reveal .tbar .dot.g { background: #57c76a; }
+.reveal .ttl { margin-left: 9px; font-family: var(--mono); font-size: 12px; color: #9a978f; }
+.reveal .tbody {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px 16px 12px;
+  font-family: var(--mono);
+  font-size: 15px;
+  line-height: 1.52;
+  text-align: left;
+}
+.reveal .tl { display: flex; white-space: pre-wrap; word-break: break-word; }
+.reveal .tl .pfx { flex: none; width: 1.4em; }
+.reveal .tl-cmd { color: #f2f0ea; margin-top: 0.55em; }
+.reveal .tl-cmd .pfx { color: #e0764a; }
+.reveal .tl-ag { color: #cfccc4; margin-top: 0.45em; }
+.reveal .tl-ag .pfx { color: #e0764a; }
+.reveal .tl-out { color: #9a978f; }
+.reveal .tl-dim { color: #6d6a63; }
+.reveal .tl-ok { color: #7fd08a; }
+.reveal .tl-warn { color: #e6b455; }
+.reveal .caret {
+  display: inline-block;
+  width: 0.55em;
+  height: 1.05em;
+  background: #e0764a;
+  vertical-align: -0.15em;
+  margin-left: 2px;
+  animation: deck-caret 1s steps(1) infinite;
+}
+@keyframes deck-caret {
+50% { opacity: 0; }
+}
+
+/* ---- ContextWindow (markup rendered by the ContextWindow component) -------- */
+
+.reveal .cwbody {
+  flex: 1;
+  overflow: hidden;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.reveal .cwb {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--mono);
+  font-size: 14.5px;
+  padding: 9px 13px;
+  border-radius: 8px;
+  border: 1px solid #2a2c34;
+  color: #e9e7e1;
+  background: rgb(255 255 255 / 0.03);
+}
+.reveal .cwb .lb { min-width: 0; }
+.reveal .cwb .sz { flex: none; color: #9a978f; }
+.reveal .cwb-sys { border-color: rgb(255 255 255 / 0.18); background: rgb(255 255 255 / 0.06); }
+.reveal .cwb-md { border-color: rgb(230 180 85 / 0.4); background: rgb(230 180 85 / 0.07); color: #e6b455; }
+.reveal .cwb-skill {
+  border-color: rgb(224 118 74 / 0.5);
+  background: rgb(224 118 74 / 0.09);
+  color: #e0764a;
+}
+.reveal .cwb-user {
+  border-color: rgb(110 168 199 / 0.45);
+  background: rgb(110 168 199 / 0.08);
+  color: #6ea8c7;
+}
+.reveal .cwb-tool { color: #9a978f; }
+.reveal .cwb-in { animation: cwb-in 0.32s ease-out; }
+.reveal .cwb-out { animation: cwb-out 0.3s ease-in forwards; }
+@keyframes cwb-in {
+from { opacity: 0; transform: translateY(-9px) scale(0.97); }
+to { opacity: 1; transform: none; }
+}
+@keyframes cwb-out {
+to { opacity: 0; transform: translateX(16px); }
+}
+.reveal .cwfoot {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border-top: 1px solid #2a2c34;
+  background: linear-gradient(#171920, #1c1e25);
+  flex: none;
+}
+.reveal .cwmeter {
+  flex: 1;
+  height: 8px;
+  border-radius: 99px;
+  background: rgb(255 255 255 / 0.07);
+  overflow: hidden;
+}
+.reveal .cwmeter i {
+  display: block;
+  height: 100%;
+  width: 0;
+  border-radius: 99px;
+  background: #e0764a;
+  transition: width 0.3s ease;
+}
+.reveal .cwmeter.hot i { background: #f26d5f; }
+.reveal .cwpct {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: #9a978f;
+  min-width: 3em;
+  text-align: right;
+}
+
+/* ---- Responsive & motion -------------------------------------------------- */
+
+/* Touch: reveal's arrow controls need a real target. */
+@media (pointer: coarse) {
+  .reveal .controls {
+    --controls-arrow-angle: 36deg;
+    right: max(12px, env(safe-area-inset-right));
+    bottom: max(12px, env(safe-area-inset-bottom));
+  }
+.reveal .controls [class*="navigate-"] { width: 44px; height: 44px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+.reveal .fragment { transform: none !important; transition: opacity 120ms linear !important; }
+.reveal-viewport { transition: none; }
+}
+
+@media print {
+  *,
+  *::before,
+*::after { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+.reveal .fragment { opacity: 1 !important; visibility: visible !important; }
+}

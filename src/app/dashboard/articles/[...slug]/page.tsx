@@ -8,9 +8,11 @@ import { coursesForSlug, getRole } from "@/lib/articles";
 export default async function ArticlePage({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  // Catch-all: articles may live in a subdirectory, so the slug can have
+  // segments ("llm/01-what-is-llm"). Rejoin them into the on-disk slug.
+  params: Promise<{ slug: string[] }>;
 }) {
-  const { slug } = await params;
+  const slug = (await params).slug.join("/");
 
   // RLS returns a row only if the item is published or the viewer is admin.
   const supabase = await createClient();
