@@ -3,8 +3,8 @@
 import { useMemo, useRef, useState } from "react";
 
 import { Btn, Head, useInView } from "./figure-kit";
-import { NumberLine } from "./matrices-deck/src/components/matrices/lib/number-line";
-import { useSketch } from "./matrices-deck/src/components/matrices/lib/use-slide";
+import { NumberLine } from "./matrix-engine/number-line";
+import { useSketch } from "./matrix-engine/use-sketch";
 
 // Figures for the "ডাটা কীভাবে সংখ্যা হয়" section of the deep-learning article.
 //

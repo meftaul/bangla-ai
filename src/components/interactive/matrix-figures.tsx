@@ -3,18 +3,18 @@
 import { useRef, useState } from "react";
 
 import { Btn, Head, useInView } from "./figure-kit";
-import { COL, fmt, ID, matEq, mul, rot, type Mat } from "./matrices-deck/src/components/matrices/lib/math";
-import { Plane } from "./matrices-deck/src/components/matrices/lib/plane";
-import { Scatter } from "./matrices-deck/src/components/matrices/lib/scatter";
-import { Space3D } from "./matrices-deck/src/components/matrices/lib/space-3d";
-import { useSketch } from "./matrices-deck/src/components/matrices/lib/use-slide";
+import { COL, fmt, ID, matEq, mul, rot, type Mat } from "./matrix-engine/math";
+import { Plane } from "./matrix-engine/plane";
+import { Scatter } from "./matrix-engine/scatter";
+import { Space3D } from "./matrix-engine/space-3d";
+import { useSketch } from "./matrix-engine/use-sketch";
 
 // Interactive figures for src/content/articles/deep-learning/01-intro-to-dl.mdx.
 //
-// The canvas engines are the deck's (matrices-deck/lib) — unchanged. What is NOT
-// reused is the deck's slides/: each of those is a reveal <section> driven by
-// useSlideLifecycle, which watches for the `present` class reveal writes and so
-// never wakes up on a prose page. These bind to useInView (figure-kit) instead.
+// The canvas engines live in ./matrix-engine — ported from a reveal.js deck of
+// the same material, with the slide components dropped. A slide knew it was on
+// screen from a class reveal wrote on it; on a prose page there is no such
+// signal, so these bind to useInView (figure-kit) and wake on scroll instead.
 
 // ---------------------------------------------------------------------------
 // 1 · The straight cut. Two cooperating blobs, one line, a live accuracy score.

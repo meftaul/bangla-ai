@@ -1,10 +1,10 @@
 /* Interactive figures for the "Introduction to Deep Learning" article.
  *
- * These reuse the canvas engine from matrices-deck (Plane, Scatter, Space3D), but
- * NOT its slides or its stylesheet: that CSS is scoped under `.reveal` and assumes
- * a full-bleed dark deck. A figure here is a self-contained dark panel embedded in
- * a light prose page — dark on purpose, because the canvas palette (COL in
- * lib/math.ts) draws light ink on a dark ground. Keep the two in sync.
+ * These style the canvas figures built on ./matrix-engine (Plane, Scatter,
+ * Space3D) plus the SVG/DOM ones in vector-figures.tsx. A figure is a
+ * self-contained dark panel embedded in a light prose page — dark on purpose,
+ * because the canvas palette (COL in matrix-engine/math.ts) draws light ink on a
+ * dark ground. Keep the two in sync.
  */
 
 .mfig {

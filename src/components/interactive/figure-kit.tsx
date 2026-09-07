@@ -5,15 +5,15 @@ import { useEffect, useRef, type ReactNode, type RefObject } from "react";
 import "./matrix-figures.css";
 
 // Shared scaffolding for the interactive figures in the deep-learning article.
-// Kept separate so matrix-figures.tsx (canvas demos ported from the deck) and
-// vector-figures.tsx (SVG/DOM demos written for the article) share one shell,
-// one stylesheet and one lifecycle rule.
+// Kept separate so matrix-figures.tsx (canvas demos on ./matrix-engine) and
+// vector-figures.tsx (SVG/DOM demos) share one shell, one stylesheet and one
+// lifecycle rule.
 
 /**
- * The article's answer to the deck's useSlideLifecycle.
+ * Wake a figure when it is on screen, sleep it when it is not.
  *
- * A slide knows it is on screen because reveal writes a `present` class on it. A
- * scrolling article has no such signal, so a figure watches its own visibility:
+ * A scrolling article gives a figure no "you are visible now" signal, so it
+ * watches its own visibility:
  * it wakes when scrolled into view and sleeps when it leaves, which keeps
  * long-running loops (an angle sweep, a 3D orbit) off the frame budget.
  */
