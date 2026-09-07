@@ -1,0 +1,88 @@
+"use client";
+
+import { useEffect, useRef } from "react";
+import "reveal.js/reveal.css";
+import "reveal.js/theme/white.css";
+import "katex/dist/katex.min.css";
+
+// ponytail: init reveal once, never re-render children — interactive components
+// (Quiz, etc.) own their own state, so React reconciliation never fights reveal's
+// DOM mutations. Don't add deck-level state that re-renders children.
+//
+// onReady hands the live Reveal instance to a parent (presenter broadcasts slide
+// changes, viewer follows them). viewer locks navigation so students can't roam.
+//
+// `options` is a per-deck escape hatch, added for decks authored against a
+// specific canvas size: "Matrices are Transformers" is laid out for 1280×760 with
+// fixed-pixel diagrams, and at reveal's default 960×700 its type overflows. An
+// article opts in through `export const metadata.deck` — see
+// src/app/dashboard/articles/[slug]/page.tsx. Viewer overrides still win.
+export default function Deck({
+  children,
+  onReady,
+  viewer = false,
+  options,
+}: {
+  children: React.ReactNode;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onReady?: (instance: any) => void;
+  viewer?: boolean;
+  options?: Record<string, unknown>;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    let deck: { destroy: () => void } | undefined;
+    let cancelled = false;
+
+    (async () => {
+      const Reveal = (await import("reveal.js")).default;
+      if (cancelled || !ref.current) return;
+      const instance = new Reveal(ref.current, {
+        embedded: true,
+        hash: false,
+        // reveal 6 auto-switches to scroll view under 435px, which bypasses the
+        // viewer nav lock (native scrolling) and breaks slide-sync on phones.
+        scrollActivationWidth: 0,
+        ...options,
+        ...(viewer ? { controls: false, keyboard: false, touch: false } : {}),
+      });
+      await instance.initialize();
+      if (cancelled) return;
+      deck = instance;
+
+      // Mirror the current slide's chapter class (ch-*) onto the .reveal root so a
+      // deck's per-chapter background hue recolors: CSS custom props only cascade
+      // down, so a --hue set on the <section> can't reach the background above it.
+      // No-op for decks that don't use ch-* classes.
+      const paintHue = () => {
+        const cur = instance.getCurrentSlide() as HTMLElement | undefined;
+        const ch = [...(cur?.classList ?? [])].find((c) => c.startsWith("ch-"));
+        [...el.classList].forEach((c) => c.startsWith("ch-") && el.classList.remove(c));
+        if (ch) el.classList.add(ch);
+      };
+      paintHue();
+      instance.on("slidechanged", paintHue);
+
+      onReady?.(instance);
+    })();
+
+    // React 19 StrictMode double-invokes effects in dev — destroy() prevents a
+    // duplicate deck and leaked listeners.
+    return () => {
+      cancelled = true;
+      deck?.destroy();
+    };
+    // Init once; onReady/viewer/options are read on first mount by design.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return (
+    <div className="reveal" ref={ref}>
+      <div className="slides">{children}</div>
+    </div>
+  );
+}
