@@ -1,26 +1,88 @@
 export const metadata = {
   title: "Introduction to Deep Learning",
-  description: "Neural networks from first principles — layers, training, and real uses.",
+  description: "Why every layer of a neural network moves space, and how a matrix does the moving.",
   type: "article",
 };
 
-# Introduction to Deep Learning
+{/* Interactive figures. Canvas demos are built on src/components/interactive/
+    matrix-engine (Plane, Scatter, Space3D, NumberLine); the vector/embedding
+    ones are SVG, so their Bangla labels shape correctly. */}
 
-TODO — one paragraph framing: instead of writing the rules, you show the machine
-examples and let it find the rules.
+import {
+  CutFigure,
+  TangleFigure,
+  UntangleFigure,
+  PerspectiveFigure,
+  SpaceFigure,
+  LiftFigure,
+  LinearFigure,
+} from "@/components/interactive/matrix-figures";
+import {
+  FunctionLineFigure,
+  VectorizeFigure,
+  EmbeddingFigure,
+} from "@/components/interactive/vector-figures";
 
-## From written rules to learned patterns
+# নিউরাল নেটওয়ার্ক প্রতি লেয়ারে স্পেস ট্রান্সফরম করে কেন?
 
-TODO — the classic contrast: a spam filter you code by hand vs one you train.
+আমাদের অফিসে প্রতি বৃহস্পতিবার এ কানেক্ট সেশন নামে একটা নলেজ শেয়ারিং সেশন হয়। গত সেশনটা আমার কন্ডাক্ট করার সৌভাগ্য হয়। টপিক ছিল নিউরাল নেটওয়ার্ক এর একদম ফান্ডামেন্টাল একটা বিষয় নিয়ে। নিউরাল নেটওয়ার্ক প্রতি লেয়ার এ স্পেস ট্রান্সফরমেশন কেন করে। আর এটাতে ম্যাট্রিক্স এর ভূমিকাই বা কী?
 
-## Neurons, layers, and weights
+## শেষ ধাপটা আসলে খুবই সরল 
 
-TODO — what a single unit computes, why stacking layers builds up abstraction.
+খুবি সিম্পল একটা এক্সাম্পল দেয়া যাক। আমরা খুবি সরল একটা ক্লাসিফায়ার এর কথা চিন্তা করি। যার কাজ হবে একটা সাদা পৃষ্ঠায় আঁকা circle আর square এর মধ্যে কোনটা circle আর কোনটা square সেটা ঠিকঠাক বলে দেয়া । ক্লাসিফায়ারকে না দিয়ে আপনার হাতে পৃষ্ঠাটা দিয়ে যদি বলা হত শেপ দুইটা আলাদা করতে। ধরা যাক পৃষ্ঠার একপাশে সব circle আরেক পাশে সব square। আপনি নিশ্চয়ই মাঝ বরাবার একটা দাগ দিয়ে আলদা করে ফেলবেন। ক্লাসিফায়ার একদম শেষ স্টেজে ঠিক এই কাজটাই করে। সে একটা স্ট্রেট লাইন টেনে শেপ দুইটাকে আলাদা করে ফেলে। এখন প্রশ্ন হল একটা স্ট্রেট লাইন টানতে নিউরাল নেটওয়ার্ক এর এতগুলা লেয়ার কেন লাগবে?
 
-## How a network learns from its mistakes
+<CutFigure />
 
-TODO — loss, gradient descent, backpropagation, at an intuitive level.
+## কারণ, ডাটা আসে দুমড়ানো অবস্থায়
 
-## Where deep learning shows up
+আপনাকে যদি আগের কাগজটাই দুমড়ে মুচড়ে কেউ দেয় তাহলে কি আর শেপগুলো সুন্দর মত আলাদা আলাদা থাকল। এখন আপনি কাগজটা দুমড়ানো অবস্থাতেই কি শেপগুলা আলাদা করার ট্রাই করবেন।
 
-TODO — vision, speech, translation, and the line from here to LLMs.
+<TangleFigure />
+
+না কি আপনি কাগজের ভাজ খুলবেন যেন শেপগুলো সুন্দর মত অ্যারেঞ্জ হয়। রিয়েল লাইফ এ ডাটা আসলে এমন দুমড়ানো মুচড়ানই হয় । খুব সুন্দরভাবে অ্যারেঞ্জ করা থাকে না। ক্লাসিফায়ার ও আপনার মতই ভাজ খুলতে চায় যেন হিজিবিজি হিজিবিজি ডাটাকে সে একটা নতুন perspective থেকে দেখতে পারে। কেতাবি ভাষায় এই ভাজ খোলাটাকে transformation বলে।
+
+<UntangleFigure />
+
+নতুন perspective কথাটা এখানে আক্ষরিক অর্থেই সত্যি — ডাটার কিছু না বদলেও শুধু অন্য দিক থেকে তাকালে সমস্যাটা সহজ হয়ে যেতে পারে।
+
+<PerspectiveFigure />
+
+## ফাংশন মানে একটা মেশিন
+
+আমরা ফাংশন সম্পর্কে জানি। ফাংশন কে চাইলে একটা ব্লেন্ডার এর সাথে তুলনা করা যায়। ব্লেন্ডারে আপনি কোন ফল দিলে সেটা সে জুস বানিয়ে আপনাকে দেবে। এটা কিন্তু এক প্রকার ট্রান্সফরমেশন। f(x) = 3x এমন একটা ফাংশন এ 
+২ ইনপুট দিলে সে আমাকে ৬ ফেরত দিবে। এখানে ২ সংখ্যাটাকে একটা পয়েন্ট মনে করলে সে এই পয়েন্টটাকে ট্রান্সফরম করে আমাকে ৬ হিসাবে ফেরত দিবে।
+
+<FunctionLineFigure />
+
+## ডাটা কীভাবে সংখ্যা হয় — ভেক্টর
+
+এখন প্রশ্ন হল ফাংশন না হয় সংখ্যাকে ইনপুট হিসাবে পাচ্ছে। ম্যাট্রিক্স কি
+ডাটাকে সংখ্যা হিসাবে পাবে? হ্যাঁ সংখ্যা হিসাবে পাবে তবে একটা সংখ্যা না। বেপারটা একটু খুলে বলা যাক। ধরুন আপনাকে একটা এপার্টমেন্ট কত sqaurefeet এটা বলা হল। আপনি নিশ্চয়ই সেটা শুনে একটা দাম guess করবেন।
+তাহলে আমি বলতেই পারি একটা apartment কে আমরা দুইটা সংখ্যা দিয়ে প্রকাশ করতে পারি। গ্রাফ পেপার হাতে পেলে আমারা X অক্ষ বরাবর area আর Y অক্ষ বরাবর price বসিয়ে দিয়ে আমরা কিন্তু apartment কে এই 2D co ordinate সিস্টেম এ এক্সপ্রেস করে ফেলতে পারি। মানুষকেও কিন্তু তার features অনুযায়ী সংখ্যায় প্রকাশ করা যাবে। এখন এটা মনে হতে পারে, দশটা সংখ্যা গ্রাফ পেপারে বসাবো কীভাবে? রিয়েল লাইফে সম্ভব না হলেও ভেক্টর স্পেসে দশটা ডাইমেনশন কল্পনা করা খুবই সম্ভব। তার মানে প্রত্যেকটা ডেটাকেই কো-অর্ডিনেট সিস্টেমে একটা পয়েন্ট হিসেবে বিবেচনা করা যেতেই পারে। এবং এটা এক্সপ্রেস করা হয় ভেক্টর দিয়ে।
+
+<VectorizeFigure />
+
+ভেক্টর হলো আসলে একটা লিস্ট অব নাম্বারস। আর এই যে ডাটাকে যে আমরা নাম্বারে কনভার্ট করছি এই ব্যাপারটাকে বলা হয় ভেক্টরাইজেশন। আর যদি টেক্সট নিয়ে কাজ করি, তখন একে বলা হয় embedding । মজার ব্যাপার হলো, কাছাকাছি অর্থের শব্দগুলো embedding স্পেসেও কাছাকাছি অবস্থান করে। এই নিয়ে পরবর্তী কোনো পর্বে বিস্তারিত লেখা হবে।
+
+<EmbeddingFigure />
+
+## ট্রান্সফরমেশনের হাতিয়ার — Matrix
+আর এই transformation এর জন্য নিউরাল নেটওয়ার্ক এর লাগে Matrix। Function যেমন একটা পয়েন্ট নিয়ে তাকে transform করে ফেলতে পারে। ম্যাট্রিক্স তেমন স্পেস এর প্রতিটা পয়েন্ট নিয়ে তা transform করে ফেলতে পারে। Rotation matrix, Scaling matrix এরা কিন্তু একেকটা Transformer ই বলা যায়।
+
+<SpaceFigure />
+
+Matrix আবার স্পেস কে এক ডিমেনশন থেকে আরেক ডিমেনশন এও নিয়ে যেতে পারে। 2D space কে 3D space এ নিয়ে যেতে একটা 3 X 2 ম্যাট্রিক্স দিয়ে গুণ করতে হয়।
+
+<LiftFigure />
+
+নিউরাল নেটওয়ার্ক প্রতি লেয়ার এই ম্যাট্রিক্স এর হেল্প নিয়ে একটু একটু করে স্পেস transform করে আর পায়তারা করে কখন একটা সোজা দাগ(2D perspective এ) দিয়ে শেপগুলাকে আলাদা করে ফেলা যায়।
+
+## তবে একটা বড় কিন্তু আছে
+
+তবে এখানে একটা বড় কিন্তু আছে। লাখ লাখ ম্যাট্রিক্স গুন করলেও দিন শেষে ম্যাট্রিক্স ই থাকে। অর্থাৎ ম্যাট্রিক্স শুধু লিনিয়ার ট্রান্সফরমেশন করতে পারে।
+
+<LinearFigure />
+
+নন লিনিয়ার ট্রান্সফরমেশন এর জন্য নন লিনিয়ারিটি introduce করা প্রয়োজন। এবং এটা করা হয় রেলু অ্যাক্টিভেশন ফাংশন এর মাধ্যমে। এটা নিয়ে সামনের কোন পর্বে কথা বলা যাবে।
+
+চলবে........

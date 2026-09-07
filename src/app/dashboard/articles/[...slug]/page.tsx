@@ -50,13 +50,17 @@ export default async function ArticlePage({
   // never as a self-paced page. Admins may still open one to preview.
   if (role !== "admin" && metadata.type === "slides") notFound();
 
+  // Prose is a centered reading column (matching loading.tsx and every other
+  // dashboard page); a deck stays full-bleed, since reveal scales to its frame.
+  const isSlides = metadata.type === "slides";
+
   return (
-    <div className="flex flex-col gap-4">
+    <div className={`flex flex-col gap-4${isSlides ? "" : " mx-auto w-full max-w-3xl"}`}>
       <Link href="/dashboard/articles" className="text-sm text-muted hover:text-accent-text">
         ← Library
       </Link>
-      {metadata.type !== "slides" ? (
-        <article className="article surface-card max-w-3xl p-5 sm:p-8">
+      {!isSlides ? (
+        <article className="article surface-card p-5 sm:p-8">
           <Article />
         </article>
       ) : (

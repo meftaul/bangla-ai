@@ -1,0 +1,230 @@
+/* Interactive figures for the "Introduction to Deep Learning" article.
+ *
+ * These style the canvas figures built on ./matrix-engine (Plane, Scatter,
+ * Space3D) plus the SVG/DOM ones in vector-figures.tsx. A figure is a
+ * self-contained dark panel embedded in a light prose page — dark on purpose,
+ * because the canvas palette (COL in matrix-engine/math.ts) draws light ink on a
+ * dark ground. Keep the two in sync.
+ */
+
+.mfig {
+  --mi: #2dd4bf;
+  --mj: #f472b6;
+  --mv: #fbbf24;
+  --macc: #818cf8;
+  --mbad: #fb7185;
+  --mdim: #8d97ae;
+  --mink: #e9edf7;
+
+  margin: 1.75rem 0;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 14px;
+  background: #0b1020;
+  color: var(--mink);
+  overflow: hidden;
+  font-size: 0.875rem;
+  line-height: 1.55;
+}
+
+.mfig-head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  padding: 0.7rem 0.9rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+.mfig-head b { font-weight: 600; }
+.mfig-n {
+  flex: none;
+  font-size: 0.66rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--macc);
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+}
+
+/* The canvas host. Sketch appends a <canvas> and measures this box, so it needs a
+   real height of its own — aspect-ratio gives it one at every width. */
+.mfig-stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  background: radial-gradient(120% 100% at 50% 0%, #131a30 0%, #0b1020 70%);
+}
+.mfig-stage canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.mfig-badge {
+  position: absolute;
+  right: 0.55rem;
+  bottom: 0.5rem;
+  padding: 0.15rem 0.45rem;
+  border-radius: 5px;
+  background: rgba(11, 16, 32, 0.72);
+  color: var(--mdim);
+  font-size: 0.66rem;
+  pointer-events: none;
+}
+
+.mfig-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.7rem 0.9rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+.mfig-btn {
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+  padding: 0.3rem 0.75rem;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--mink);
+  font: inherit;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+.mfig-btn:hover { background: rgba(255, 255, 255, 0.1); }
+.mfig-btn[aria-pressed="true"] {
+  background: var(--macc);
+  border-color: var(--macc);
+  color: #0b1020;
+  font-weight: 600;
+}
+.mfig-read {
+  margin-left: auto;
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+  font-size: 0.75rem;
+  color: var(--mdim);
+  white-space: nowrap;
+}
+.mfig-read b { color: var(--mink); font-weight: 600; }
+
+.mfig figcaption {
+  padding: 0.7rem 0.9rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  color: var(--mdim);
+  font-size: 0.8rem;
+}
+.mfig figcaption strong { color: var(--mink); font-weight: 600; }
+
+/* Live 2x2 readout — the bracketed matrix beside the plane. */
+.mfig-mat {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.1rem 0.7rem;
+  padding: 0.35rem 0.6rem;
+  border-left: 2px solid var(--mdim);
+  border-right: 2px solid var(--mdim);
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+  font-size: 0.75rem;
+  text-align: right;
+}
+.mfig-mat span:nth-child(odd) { color: var(--mi); }
+.mfig-mat span:nth-child(even) { color: var(--mj); }
+
+/* Two planes side by side (linear vs not) — stacks on a phone. */
+.mfig-duo { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: rgba(255,255,255,.07); }
+.mfig-duo .mfig-stage { aspect-ratio: 1 / 1; }
+@media (max-width: 34rem) {
+  .mfig-duo { grid-template-columns: 1fr; }
+}
+
+/* ---- vector-figures.tsx: SVG/DOM figures ---------------------------------- */
+/* Bangla labels shape reliably in HTML/SVG but not in canvas fillText, so the
+   vectorization and embedding figures are drawn as markup, not on a canvas. */
+
+.mfig-stage-short { aspect-ratio: 16 / 6; }
+
+.mfig-plot { position: relative; }
+.mfig-svg { display: block; width: 100%; height: auto; background: transparent; }
+
+.mfig-axis { stroke: rgba(160, 185, 235, 0.32); stroke-width: 1; transition: opacity 0.4s; }
+.mfig-axlabel {
+  fill: var(--mdim);
+  font-size: 9px;
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+  transition: opacity 0.4s;
+}
+
+.mfig-pt { cursor: pointer; }
+.mfig-dot {
+  fill: var(--macc);
+  opacity: 0.75;
+  /* the 1D -> 2D move is the whole point of the figure: let it travel */
+  transition: cy 0.7s cubic-bezier(0.4, 0, 0.2, 1), r 0.2s, opacity 0.2s;
+}
+.mfig-pt:hover .mfig-dot { opacity: 1; }
+.mfig-dot.on { fill: var(--mv); opacity: 1; }
+.mfig-ptlabel {
+  fill: var(--mdim);
+  font-size: 9px;
+  text-anchor: middle;
+  transition: cy 0.7s cubic-bezier(0.4, 0, 0.2, 1), y 0.7s cubic-bezier(0.4, 0, 0.2, 1), fill 0.2s;
+}
+.mfig-ptlabel.on { fill: var(--mv); font-weight: 600; }
+.mfig-drop { stroke: var(--mv); stroke-width: 1; stroke-dasharray: 3 3; opacity: 0.5; }
+
+/* The "10 features" state: the plot is genuinely undrawable, so cover it. */
+.mfig-veil {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.8rem;
+  background: rgba(11, 16, 32, 0.93);
+  text-align: center;
+}
+.mfig-veil p { margin: 0; }
+.mfig-veil .mfig-sub { color: var(--mdim); font-size: 0.8rem; }
+.mfig-vec { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.3rem; max-width: 26rem; }
+.mfig-vec span {
+  padding: 0.15rem 0.45rem;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.05);
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+  font-size: 0.72rem;
+  color: var(--mi);
+  cursor: help;
+}
+
+/* Embedding space: word chips positioned in percent, links behind them. */
+.mfig-embed { position: relative; width: 100%; aspect-ratio: 16 / 10; }
+.mfig-lines { position: absolute; inset: 0; width: 100%; height: 100%; }
+.mfig-link {
+  stroke: var(--mv);
+  stroke-width: 0.4;
+  opacity: 0.65;
+  vector-effect: non-scaling-stroke;
+}
+.mfig-word {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  padding: 0.2rem 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+  background: rgba(11, 16, 32, 0.85);
+  color: var(--mdim);
+  font: inherit;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+.mfig-word:hover { color: var(--mink); border-color: var(--macc); }
+.mfig-word.near { color: var(--mink); border-color: var(--mv); }
+.mfig-word.on {
+  background: var(--mv);
+  border-color: var(--mv);
+  color: #0b1020;
+  font-weight: 600;
+}
