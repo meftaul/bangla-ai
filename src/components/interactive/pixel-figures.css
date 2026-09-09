@@ -1,0 +1,216 @@
+/* Interactive figures for "AI-এর গণিত ১ — ছবি আসলে সংখ্যা".
+ *
+ * These reuse the dark panel shell (.mfig, .mfig-head, .mfig-controls, .mfig-btn,
+ * .mfig-read, figcaption) defined in matrix-figures.css — figure-kit.tsx already
+ * imports it — so only the pixel-specific pieces live here. Keep the palette vars
+ * (--mi, --mv, --macc, --mdim, --mink) in sync with that file.
+ */
+
+.pfig-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  padding: 0.9rem;
+}
+
+/* Two columns that collapse on a phone: grid on one side, controls on the other. */
+.pfig-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 1rem;
+  align-items: start;
+}
+.pfig-split.wide { grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); }
+@media (max-width: 36rem) {
+  .pfig-split, .pfig-split.wide { grid-template-columns: 1fr; }
+}
+
+.pfig-col { display: flex; flex-direction: column; gap: 0.55rem; min-width: 0; }
+
+.pfig-label {
+  margin: 0;
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+  color: var(--mdim);
+}
+.pfig-label b { color: var(--mink); font-weight: 600; }
+
+/* ---- the pixel grid ------------------------------------------------------ */
+/* container-type lets a cell size its digits off the grid's own width, so the
+   same component is readable at 3x3 and at 14x14 on any screen. */
+.pfig-grid {
+  container-type: inline-size;
+  display: grid;
+  grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+  gap: 2px;
+  width: 100%;
+  /* dragging to paint must not scroll the page under the finger */
+  touch-action: none;
+}
+.pfig-cell {
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 3px;
+  outline: 2px solid transparent;
+  outline-offset: -2px;
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+  font-size: clamp(6px, calc(100cqw / var(--cols) * 0.27), 20px);
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.12s, outline-color 0.12s;
+}
+.pfig-cell:hover { outline-color: rgba(255, 255, 255, 0.5); }
+.pfig-cell.sel { outline-color: var(--mv); }
+.pfig-cell.flat { cursor: default; }
+.pfig-cell.flat:hover { outline-color: rgba(255, 255, 255, 0.3); }
+
+.pfig-frame {
+  padding: 6px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+/* ---- readouts ------------------------------------------------------------ */
+.pfig-mono {
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+  font-size: 0.75rem;
+  color: var(--mdim);
+  word-break: break-word;
+}
+.pfig-mono b { color: var(--mink); font-weight: 600; }
+.pfig-big {
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+  font-size: 1.7rem;
+  font-weight: 600;
+  color: var(--mv);
+  line-height: 1.1;
+}
+.pfig-big small { display: block; font-size: 0.72rem; font-weight: 400; color: var(--mdim); }
+
+.pfig-slider { width: 100%; accent-color: var(--macc); cursor: pointer; }
+.pfig-slider.r { accent-color: #f87171; }
+.pfig-slider.g { accent-color: #4ade80; }
+.pfig-slider.b { accent-color: #60a5fa; }
+
+.pfig-row { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+.pfig-row .pfig-slider { flex: 1 1 8rem; }
+
+/* ---- binary counter ------------------------------------------------------ */
+.pfig-bits { display: flex; gap: 0.3rem; flex-wrap: wrap; }
+.pfig-bit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+.pfig-bit i {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2.3rem;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.04);
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+  font-size: 1.05rem;
+  font-style: normal;
+  color: var(--mdim);
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.pfig-bit.on i {
+  background: var(--mi);
+  border-color: var(--mi);
+  color: #0b1020;
+  font-weight: 700;
+}
+.pfig-bit u {
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+  font-size: 0.6rem;
+  text-decoration: none;
+  color: var(--mdim);
+}
+.pfig-bit.on u { color: var(--mi); }
+
+/* ---- colour mixer -------------------------------------------------------- */
+.pfig-sw {
+  aspect-ratio: 16 / 9;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  display: grid;
+  place-items: center;
+}
+.pfig-sw span {
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+  background: rgba(11, 16, 32, 0.72);
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+  font-size: 0.75rem;
+  color: var(--mink);
+}
+
+/* ---- channel stack ------------------------------------------------------- */
+.pfig-chans {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.6rem;
+}
+@media (max-width: 36rem) {
+  .pfig-chans { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+.pfig-chan { display: flex; flex-direction: column; gap: 0.35rem; min-width: 0; }
+.pfig-chan h4 {
+  margin: 0;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+}
+.pfig-chan.off { opacity: 0.32; }
+.pfig-chan.r h4 { color: #f87171; }
+.pfig-chan.g h4 { color: #4ade80; }
+.pfig-chan.b h4 { color: #60a5fa; }
+.pfig-chan.out h4 { color: var(--mink); }
+
+/* ---- scale figure -------------------------------------------------------- */
+.pfig-bar {
+  position: relative;
+  height: 0.55rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.07);
+  overflow: hidden;
+}
+.pfig-bar i {
+  position: absolute;
+  inset: 0 auto 0 0;
+  display: block;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--mi), var(--mv));
+  transition: width 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.pfig-scale-row {
+  display: grid;
+  grid-template-columns: 7.5rem minmax(0, 1fr) 6rem;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  color: var(--mdim);
+}
+.pfig-scale-row.on { color: var(--mink); }
+.pfig-scale-row span:last-child {
+  text-align: right;
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+}
+@media (max-width: 30rem) {
+  .pfig-scale-row { grid-template-columns: 5.5rem minmax(0, 1fr); }
+  .pfig-scale-row span:last-child { grid-column: 2; text-align: left; }
+}

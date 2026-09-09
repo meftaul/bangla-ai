@@ -34,4 +34,10 @@ export const COURSES: Course[] = [
     description: "Neural networks from first principles — layers, training, and real uses.",
     items: ["deep-learning/01-intro-to-dl"],
   },
+  {
+    slug: "math_for_ai",
+    title: "Math for AI",
+    description: "The maths under the hood, from first principles — starting with what an image actually is.",
+    items: ["math_for_ai/01_intro"],
+  },
 ];

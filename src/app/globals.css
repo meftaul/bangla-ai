@@ -365,3 +365,16 @@ body {
 .article li { margin: 0.25rem 0; }
 .article a { color: var(--accent-text); text-decoration: underline; }
 .article strong { font-weight: 600; }
+/* Code/number blocks: preflight leaves <pre> unstyled, and articles use one to
+   hold a literal grid of pixel values, which needs its line breaks kept. */
+.article pre {
+  margin: 0.75rem 0;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: rgba(127, 127, 127, 0.09);
+  overflow-x: auto;
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
