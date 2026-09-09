@@ -1,0 +1,143 @@
+/* Figures for the vector half of "AI-এর গণিত ১ — ছবি আসলে সংখ্যা".
+ *
+ * The panel shell (.mfig*), the SVG plot classes and .mfig-veil come from
+ * matrix-figures.css; the layout helpers (.pfig-body, .pfig-split, .pfig-col,
+ * .pfig-label, .pfig-mono) come from pixel-figures.css. Only what is new to
+ * these three figures lives here.
+ */
+
+/* ---- a vector, drawn as labelled elements -------------------------------- */
+.ffig-vec { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+.ffig-el {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+  padding: 0.3rem 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+}
+.ffig-el b {
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--mi);
+}
+.ffig-el u {
+  font-size: 0.6rem;
+  text-decoration: none;
+  white-space: nowrap;
+  color: var(--mdim);
+}
+.ffig-vec.tight .ffig-el { padding: 0.25rem 0.4rem; }
+
+/* The reading of the vector in words — red when the order has been broken. */
+.ffig-say {
+  margin: 0;
+  padding: 0.4rem 0.55rem;
+  border-left: 2px solid var(--mi);
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 0 6px 6px 0;
+  font-size: 0.8rem;
+}
+.ffig-say.bad { border-left-color: var(--mbad); color: var(--mbad); }
+
+/* the "where they should have been" ring in the swap figure */
+.ffig-ghost { fill: none; stroke: var(--mdim); stroke-width: 1.2; stroke-dasharray: 3 3; }
+
+/* ---- the email figure ---------------------------------------------------- */
+.ffig-mail {
+  width: 100%;
+  min-height: 15rem;
+  resize: vertical;
+  padding: 0.55rem 0.6rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--mink);
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+  font-size: 0.68rem;
+  line-height: 1.5;
+  white-space: pre;
+  overflow-wrap: normal;
+}
+.ffig-mail:focus { outline: 2px solid var(--macc); outline-offset: -1px; }
+
+.ffig-switch {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.75rem;
+  color: var(--mdim);
+  cursor: pointer;
+}
+.ffig-switch input { accent-color: var(--macc); cursor: pointer; }
+
+.ffig-table { width: 100%; border-collapse: collapse; font-size: 0.72rem; }
+.ffig-table th,
+.ffig-table td {
+  padding: 0.35rem 0.4rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  text-align: left;
+  color: var(--mdim);
+}
+.ffig-table th { font-weight: 600; font-size: 0.66rem; text-transform: uppercase; letter-spacing: 0.05em; }
+.ffig-table th:not(:first-child), .ffig-table td.num { text-align: right; }
+.ffig-table th.on { color: var(--mv); }
+.ffig-table td.num {
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+  font-size: 0.85rem;
+}
+.ffig-table td.num.on { color: var(--mv); font-weight: 600; }
+.ffig-vn {
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+  font-size: 0.65rem;
+  color: var(--macc);
+}
+
+/* ---- the representation flow --------------------------------------------- */
+.ffig-flow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1.3fr) auto minmax(0, 1fr);
+  align-items: stretch;
+  gap: 0.5rem;
+}
+.ffig-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  padding: 0.7rem 0.6rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  text-align: center;
+}
+.ffig-card.mid { border-color: rgba(45, 212, 191, 0.45); }
+.ffig-card b { font-weight: 600; font-size: 0.85rem; }
+.ffig-card small { font-size: 0.68rem; color: var(--mdim); }
+.ffig-icon { font-size: 1.5rem; line-height: 1; }
+
+.ffig-arrow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.2rem;
+  min-width: 4.5rem;
+  color: var(--macc);
+  font-size: 0.62rem;
+  letter-spacing: 0.04em;
+}
+.ffig-arrow::after {
+  content: "→";
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+@media (max-width: 40rem) {
+  .ffig-flow { grid-template-columns: 1fr; }
+  .ffig-arrow::after { content: "↓"; }
+}

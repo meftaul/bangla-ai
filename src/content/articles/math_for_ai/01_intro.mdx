@@ -16,6 +16,11 @@ import {
   ScaleFigure,
   EyeVsMachineFigure,
 } from "@/components/interactive/pixel-figures";
+import {
+  StudentVectorFigure,
+  EmailVectorFigure,
+  RepresentationFigure,
+} from "@/components/interactive/feature-figures";
 
 # ছবি আসলে সংখ্যা — আপনার ফোন যেভাবে পাখি চেনে
 
@@ -75,3 +80,86 @@ Thirty-six million numbers!!!
   options={["20,000", "60,000", "300", "200,000"]}
   answer={1}
 />
+
+## ভেক্টর
+
+ছবির ব্যাপারটা তো বোঝা গেল। এখন চলেন একটা classroom এর example দেওয়া যাক। ধরেন একটা classroom এর প্রত্যেকটা student এর height আমরা centimeter আর weight kg তে মাপবো। তাহলে আমি এভাবে বলতে পারি, প্রত্যেকটা studentকে express করার জন্য আমরা দুইটা number use করছি। একটা হলো তার height, আরেকটা হলো তার weight। কীভাবে তাদেরকে represent করছি একটু দেখা যাক।
+
+<Table
+  head={["Student", "height (cm)", "weight (kg)", "vector"]}
+  rows={[
+    ["Nasib", "180", "78", "(180, 78)"],
+    ["Samin", "170", "60", "(170, 60)"],
+    ["Shom", "175", "75", "(175, 75)"],
+  ]}
+/>
+
+এবং এখানে কিন্তু order matter করে। (180,78) দিয়ে আমরা এমন কাউকে বুঝবো যার height 180 cm এবং weight 78 kg। Order বদলে (78,180) করে দিলে কিন্তু ভিন্ন কিছু বোঝাবে? কী বোঝাবে তা আপনারা চিন্তা করে বের করুন।
+
+এই representation টার কিন্তু একটা নাম আছে। নামটা হলো vector। একটু কেতাবি ভাষায় বললে vector হলো ordered list of numbers যেখানে প্রত্যেকটা number কোনো না কোনো অর্থ বহন করে। আমরা জিনিসটাকে এভাবে লিখতে পারি চাইলে। $V = (172, 68)$
+
+এখানে চাইলে আমরা বলতে পারি $V$ একজন student কে express করতেছে ওই particular classroom এ। Mathematics এর first act ই এটা, একটা complex বিষয়ের একটা সরল সোজা নাম দেওয়া যেন পরবর্তীতে এটাকে express করতে বা এটা নিয়ে কথা বলতে সুবিধা হয়।
+
+এখন $V$ এর ভেতরের দুইটা element কে আমরা কীভাবে পড়বো। ওদেরকে যথাক্রমে $v_1$ আর $v_2$ বলা যাক। মানে $v_1$ হলো 172 আর $v_2$ হলো 68।
+
+আচ্ছা আমরা শুধু দুইটা number এই থেমে যাবো কেন। দেখা গেল দুইজন student এর weight আর height হুবহু same। তখন তো তাদের আলাদা করতে পারবো না। তাই বুদ্ধি করে আমরা ভাবলাম যে ওরা কত size এর জুতা পরে আর ওদের বয়স, এই দুইটাও add করে দেওয়া যাক। তখন $V = (172, 68, 42, 17)$। এখন এখানে $v_3 = 42$ আর $v_4 = 17$। এখন আরেকটা শব্দের সাথে পরিচয় করিয়ে দেই। এই প্রত্যেকটা element কে একেকটা dimension বলা যায়। তাহলে আপনাকে যদি জিজ্ঞেস করি $V$ এর dimension কত?
+
+<StudentVectorFigure />
+
+যদি আপনার উত্তর 4 হয়, Congratulations, আপনি vector এর concept টা আত্মস্থ করতে পেরেছেন। তাহলে একটু আগে যে আমরা phone এ save থাকা photo কে একটা list of numbers দিয়ে প্রকাশ করলাম। কত ছিল কানি number টা। 36,000,000!!! তাহলে ওই photo কে যে vector(list) এ আমরা রাখছি, তার dimension কত হবে? 36,000,000. Vector এর প্রত্যেকটা element কে আরেকটা নামেও ডাকা যায়। সেটা হলো feature।
+
+## যে জিনিসে সংখ্যাই নাই, তাকে কিভাবে সংখ্যা বানাব ?
+
+এতক্ষণ তো খুব সুন্দর মতো আমরা জিনিসগুলোকে number দিয়ে express করে ফেলছিলাম। কিন্তু কেচালটা বাধলো হলো, সবজিনিসকে কি আসলেই number দিয়ে express করা সম্ভব? একটা email কে আবার number দিয়ে express করে কীভাবে?
+
+আচ্ছা চলুন email এর কিছু feature pick করা যাক যেগুলা আমরা count করতে পারবো। এবং ওদের classify ও করবো যে কোনগুলো spam আর কোনগুলো legit mail।
+
+<Table
+  head={["Feature", "Spam", "Normal"]}
+  rows={[
+    ["“Free” শব্দটা কতবার আছে mail এ", "6", "0"],
+    ["Number of links", "14", "1"],
+    ["Mail এর কত অংশ capital letter এ লেখা", "31%", "2%"],
+    ["Mail গুলো কি রাত ৩টা থেকে ভোর ৫টার মধ্যে পাঠানো", "1", "0"],
+  ]}
+  note="শেষ row-এ 1 মানে yes, 0 মানে no।"
+/>
+
+তাহলে spam mail গুলোর ক্ষেত্রে কিছু বৈশিষ্ট্য দেখা যাচ্ছে। Spam এ free শব্দটা বেশ কয়েকবার এসেছে। Links ও বেশি। সন্দেহজনক সময়ে mail আসছে এবং capital letter এ লেখা শব্দও দেখা যাচ্ছে বেশি। Spam mail এর এই featureগুলোকেও একটা vector এর মাধ্যমে express করে ফেলি।
+
+$\mathrm{Spam} = (6, 14, 0.31, 1)$। এখানে 31 কে 100 দিয়ে ভাগ করে লিখেছি যেহেতু percentage দেখাচ্ছে।
+
+Normal mail কেও একটা vector দিয়ে express করে ফেলা যাক:
+
+$\mathrm{Normal} = (0, 1, 0.02, 0)$
+
+<EmailVectorFigure />
+
+দুই ধরনের mail এর জন্য দুইটা list of numbers। একটা জিনিস খেয়াল করবেন, আমরা কিন্তু machine কে এখনও শিখাইনি free মানে কী, spam মানেই বা কী। আমরা just measure করেছি। এতটুকুই।
+
+এবার চলেন একটা movie কে score করা যাক। Score দিবো আমরা 0 থেকে 5 এর মাঝে। First feature টাকে বলবো drama, secondটাকে বলবো comedy
+
+<Table
+  head={["Movie", "drama", "comedy", "vector", "কী বোঝাচ্ছে"]}
+  rows={[
+    ["“Toy story”", "2", "5", "(2, 5)", "mostly funny"],
+    ["“The shawshank redemption”", "5", "1", "(5, 1)", "mostly serious"],
+  ]}
+/>
+
+Surprising ব্যাপার হচ্ছে এখানে কিন্তু আমরা কিছু শব্দকেও সংখ্যা দিয়ে express করতে পারছি।
+
+## Representation — দুনিয়া থেকে সংখ্যায়
+
+আমরা কি একটা pattern খেয়াল করতে পারছি? Machine learning এর প্রত্যেকটা application এই flow follow করে।
+
+```
+একটা real life thing  ->  ordered list of numbers  ->  arithmetic
+(A patient)               (age, bp, glucose, ...)       (diagnosis)
+```
+
+মাঝের যে arrow গুলা দেখছেন এগুলাকে বলে representation। আরেকটু ভেঙে বলি। উপরের arrowগুলা আমাদের বলছে, real world এর এই জিনিসটাকে নিয়ে এই numberগুলা দিয়ে represent করো বা numberগুলার মাধ্যমে real world এর এই জিনিসটাকে express করো।
+
+আমরা বলতে পারি patientকে এই numberগুলা (42,142,180….) দিয়ে represent করো
+
+<RepresentationFigure />

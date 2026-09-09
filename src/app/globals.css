@@ -378,3 +378,56 @@ body {
   font-size: 0.85rem;
   line-height: 1.6;
 }
+
+/* Tables in prose (components/article-table.tsx). Scrolls inside its own box on
+   a phone rather than widening the reading column. */
+.atable-wrap {
+  margin: 1.25rem 0;
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+.atable {
+  width: 100%;
+  /* Below this the wrapper scrolls; cells never get crushed to one word a line. */
+  min-width: 26rem;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+.atable th,
+.atable td {
+  padding: 0.6rem 1.1rem;
+  text-align: left;
+  vertical-align: top;
+}
+/* A hairline between columns. Several narrow number columns in a row are all
+   right-aligned, so without this "2  5  (2, 5)" reads as one run of digits. */
+.atable th + th,
+.atable td + td { border-left: 1px solid var(--border); }
+.atable thead th {
+  border-bottom: 1px solid var(--border);
+  background: rgba(127, 127, 127, 0.07);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.atable tbody tr + tr td { border-top: 1px solid var(--border); }
+/* Number columns: mono and right-aligned, so place values line up down the column. */
+.atable .num {
+  text-align: right;
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+  white-space: nowrap;
+}
+.atable tbody .num { font-size: 0.95rem; }
+.atable-note {
+  margin: 0;
+  padding: 0.5rem 0.85rem;
+  border-top: 1px solid var(--border);
+  background: rgba(127, 127, 127, 0.05);
+  font-size: 0.8rem;
+  color: var(--muted);
+}
