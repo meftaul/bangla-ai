@@ -44,9 +44,10 @@
   grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
   gap: 2px;
   width: 100%;
-  /* dragging to paint must not scroll the page under the finger */
-  touch-action: none;
 }
+/* dragging to paint must not scroll the page under the finger — but only on a
+   paintable grid; the big display-only grids must still let a phone scroll */
+.pfig-grid.paint { touch-action: none; }
 .pfig-cell {
   aspect-ratio: 1;
   display: grid;
@@ -158,59 +159,150 @@
 }
 
 /* ---- channel stack ------------------------------------------------------- */
-.pfig-chans {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 0.6rem;
-}
-@media (max-width: 36rem) {
-  .pfig-chans { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-}
-.pfig-chan { display: flex; flex-direction: column; gap: 0.35rem; min-width: 0; }
-.pfig-chan h4 {
-  margin: 0;
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
-}
-.pfig-chan.off { opacity: 0.32; }
-.pfig-chan.r h4 { color: #f87171; }
-.pfig-chan.g h4 { color: #4ade80; }
-.pfig-chan.b h4 { color: #60a5fa; }
-.pfig-chan.out h4 { color: var(--mink); }
-
-/* ---- scale figure -------------------------------------------------------- */
-.pfig-bar {
+/* Everything is sized in cqw of the stage so the 3D pose scales with the figure.
+   A sheet is 54cqw square; tipped over (rotateX 60°, rotateZ −45° — keep in sync
+   with TIP_X / TIP_Z in the tsx) it becomes a diamond 76cqw wide and 38cqw tall.
+   Pulled apart the sheets sit 28cqw apart, so the whole stack fits a square.
+   --spread (1 apart → 0 stacked) and --tilt (1 tipped → 0 face-on) drive it. */
+.pfig-stack {
+  --dur: 0.12s;
+  --ease: cubic-bezier(0.65, 0, 0.35, 1);
+  container-type: inline-size;
   position: relative;
-  height: 0.55rem;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.07);
-  overflow: hidden;
+  aspect-ratio: 1;
+  /* the sheets screen-blend with each other, never with the page behind */
+  isolation: isolate;
 }
-.pfig-bar i {
+.pfig-stack.glide { --dur: 0.8s; }
+
+.pfig-layer {
   position: absolute;
-  inset: 0 auto 0 0;
-  display: block;
-  border-radius: 999px;
-  background: linear-gradient(90deg, var(--mi), var(--mv));
-  transition: width 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  left: calc(50% - 27cqw);
+  top: calc(50% - 27cqw);
+  width: 54cqw;
+  height: 54cqw;
+  mix-blend-mode: screen;
+  /* nudged right while tipped, to leave room for the labels on the left */
+  transform: translate(calc(8cqw * var(--tilt)), calc(var(--k) * 28cqw * var(--spread)));
+  transition: transform var(--dur) var(--ease);
 }
-.pfig-scale-row {
+.pfig-layer.r { --edge: rgba(248, 113, 113, 0.75); }
+.pfig-layer.g { --edge: rgba(74, 222, 128, 0.75); }
+.pfig-layer.b { --edge: rgba(96, 165, 250, 0.75); }
+.pfig-layer.off { --edge: rgba(255, 255, 255, 0.2); }
+.pfig-plane {
+  width: 100%;
+  height: 100%;
+  border-radius: 3px;
+  /* black is "nothing" under screen, so the gaps and an off sheet add no light */
+  background: #000;
+  box-shadow: 0 0 0 1px var(--edge);
+  transform: rotateX(calc(60deg * var(--tilt))) rotateZ(calc(-45deg * var(--tilt)));
+  transition: transform var(--dur) var(--ease);
+}
+.pfig-plane .pfig-grid { gap: 1px; }
+.pfig-plane .pfig-cell { border-radius: 1px; }
+
+.pfig-tag {
+  position: absolute;
+  left: 0;
+  top: calc(50% + var(--k) * 28cqw * var(--spread));
+  width: 17cqw;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  transform: translateY(-50%);
+  opacity: var(--spread);
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  line-height: 1.25;
+  pointer-events: none;
+  transition: top var(--dur) var(--ease), opacity var(--dur);
+}
+.pfig-tag b { font-size: 0.85rem; font-weight: 600; letter-spacing: 0; color: var(--mink); }
+.pfig-tag.r { color: #f87171; }
+.pfig-tag.g { color: #4ade80; }
+.pfig-tag.b { color: #60a5fa; }
+
+/* The pin through one pixel of every sheet. The outer box sits on the middle
+   sheet's cell; the line grows and shrinks with --spread. */
+.pfig-skewer {
+  position: absolute;
+  left: calc(50% + 8cqw * var(--tilt) + var(--sx) * 54cqw);
+  top: calc(50% + var(--sy) * 54cqw);
+  width: 0;
+  height: 0;
+  opacity: var(--spread);
+  pointer-events: none;
+  transition: left 0.12s, top 0.12s, opacity 0.2s;
+}
+.pfig-skewer i {
+  position: absolute;
+  left: -1px;
+  top: calc(-28cqw * var(--spread));
+  width: 2px;
+  height: calc(56cqw * var(--spread));
+  background: var(--mv);
+  transition: top var(--dur) var(--ease), height var(--dur) var(--ease);
+}
+.pfig-skewer::after,
+.pfig-skewer i::before,
+.pfig-skewer i::after {
+  content: "";
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  margin: -3.5px 0 0 -3.5px;
+  border: 1.5px solid #0b1020;
+  border-radius: 50%;
+  background: var(--mv);
+  box-sizing: border-box;
+}
+.pfig-skewer i::before { left: 1px; top: 0; }
+.pfig-skewer i::after { left: 1px; top: 100%; }
+
+/* The readout: red + green + blue = the pixel. */
+.pfig-sum { display: grid; gap: 0.3rem; }
+.pfig-term {
   display: grid;
-  grid-template-columns: 7.5rem minmax(0, 1fr) 6rem;
+  grid-template-columns: 0.8rem 1.8rem minmax(0, 1fr) auto;
   align-items: center;
   gap: 0.5rem;
-  font-size: 0.75rem;
-  color: var(--mdim);
-}
-.pfig-scale-row.on { color: var(--mink); }
-.pfig-scale-row span:last-child {
-  text-align: right;
   font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+  font-size: 0.78rem;
+  color: var(--mdim);
+  transition: opacity 0.15s;
 }
-@media (max-width: 30rem) {
-  .pfig-scale-row { grid-template-columns: 5.5rem minmax(0, 1fr); }
-  .pfig-scale-row span:last-child { grid-column: 2; text-align: left; }
+.pfig-term em { font-style: normal; text-align: center; }
+.pfig-term i {
+  display: block;
+  height: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 5px;
 }
+.pfig-term b { color: var(--mink); font-weight: 600; }
+.pfig-term.r span { color: #f87171; }
+.pfig-term.g span { color: #4ade80; }
+.pfig-term.b span { color: #60a5fa; }
+.pfig-term.off { opacity: 0.4; }
+.pfig-term.out {
+  padding-top: 0.4rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--mink);
+}
+.pfig-term.out i { height: 2rem; }
+/* reserve two lines so the buttons below don't jump as the note changes */
+.pfig-note { margin: 0; min-height: 3.1em; font-size: 0.8rem; color: var(--mink); }
+
+/* ---- bird ---------------------------------------------------------------- */
+.pfig-frame.fine .pfig-grid { gap: 1px; }
+/* no 6px floor here: at 40 columns a floor makes three digits overflow the cell */
+.pfig-frame.fine .pfig-cell { border-radius: 1px; font-size: calc(100cqw / var(--cols) * 0.34); }
+/* "What you see" drops the grid lines so the sprite reads as a photo */
+.pfig-frame.seamless .pfig-grid { gap: 0; }
+/* cells land on fractional pixels, and their anti-aliased edges show as hairline
+   seams; bleeding each cell's own colour a little past its edge hides them */
+.pfig-frame.seamless .pfig-cell { border-radius: 0; box-shadow: 0 0 0 0.75px var(--fill); }
+

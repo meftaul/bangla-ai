@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { memo, useEffect, useRef, useState, type PointerEvent } from "react";
 
 import { Btn, Head, useInView } from "./figure-kit";
 import "./pixel-figures.css";
@@ -70,38 +70,83 @@ function PixelGrid({
 
   const idle = !onPick && !onPaint;
 
+  // One listener on the grid instead of two per cell: with no per-cell
+  // closures the cells stay memoised, so a hover re-renders two cells, not 1600.
+  const cellAt = (e: PointerEvent) => {
+    const at = (e.target as HTMLElement).closest<HTMLElement>("[data-i]")?.dataset.i;
+    return at === undefined ? null : Number(at);
+  };
+
   return (
     <div
-      className="pfig-grid"
+      className={`pfig-grid${onPaint ? " paint" : ""}`}
       style={{ ["--cols" as string]: cols }}
       onPointerLeave={() => onHover?.(null)}
+      onPointerDown={(e) => {
+        const i = cellAt(e);
+        if (i === null) return;
+        onPick?.(i);
+        if (onPaint) {
+          // touch captures the pointer to the first cell; release it so the
+          // drag reaches the cells it crosses
+          (e.target as HTMLElement).releasePointerCapture?.(e.pointerId);
+          down.current = true;
+          onPaint(i);
+        }
+      }}
+      onPointerOver={(e) => {
+        const i = cellAt(e);
+        if (i === null) return;
+        onHover?.(i);
+        if (onPaint && down.current) onPaint(i);
+      }}
     >
-      {values.map((v, i) => (
-        <button
-          type="button"
-          key={i}
-          className={`pfig-cell${selected === i ? " sel" : ""}${idle ? " flat" : ""}`}
-          style={{ background: fill(v, i), color: text ? text(v, i) : ink(v) }}
-          aria-label={label ? label(v, i) : `row ${Math.floor(i / cols) + 1}, column ${(i % cols) + 1}, value ${v}`}
-          tabIndex={idle ? -1 : 0}
-          onPointerDown={() => {
-            onPick?.(i);
-            if (onPaint) {
-              down.current = true;
-              onPaint(i);
-            }
-          }}
-          onPointerEnter={() => {
-            onHover?.(i);
-            if (onPaint && down.current) onPaint(i);
-          }}
-        >
-          {numbers ? v : ""}
-        </button>
-      ))}
+      {values.map((v, i) => {
+        const bg = fill(v, i);
+        return (
+          <Cell
+            key={i}
+            i={i}
+            v={v}
+            bg={bg}
+            fg={text ? text(v, i) : ink(v)}
+            label={label ? label(v, i) : `row ${Math.floor(i / cols) + 1}, column ${(i % cols) + 1}, value ${v}`}
+            sel={selected === i}
+            flat={idle}
+            numbers={numbers}
+          />
+        );
+      })}
     </div>
   );
 }
+
+type CellProps = {
+  i: number;
+  v: number;
+  bg: string;
+  fg: string;
+  label: string;
+  sel: boolean;
+  flat: boolean;
+  numbers: boolean;
+};
+
+// Every prop is a primitive, so memo skips any cell whose look did not change.
+const Cell = memo(function Cell({ i, v, bg, fg, label, sel, flat, numbers }: CellProps) {
+  return (
+    <button
+      type="button"
+      data-i={i}
+      className={`pfig-cell${sel ? " sel" : ""}${flat ? " flat" : ""}`}
+      style={{ background: bg, color: fg, ["--fill" as string]: bg }}
+      aria-label={label}
+      tabIndex={flat ? -1 : 0}
+    >
+      {numbers ? v : ""}
+    </button>
+  );
+});
 
 // ---------------------------------------------------------------------------
 // 1 · Counting with two digits. Toggle the bits, or let it count and watch the
@@ -250,76 +295,184 @@ export function ColorMixerFigure() {
 }
 
 // ---------------------------------------------------------------------------
-// 3 · The three stacked grids, pulled apart. Switching a channel off is the
-//     fastest way to feel that a colour image really is three grayscale images.
+// 3 · The three grids as physical sheets. They start pulled apart in 3D, slide
+//     together, and the stack turns to face the reader — so "three grids make a
+//     colour image" is something you watch happen, not a sentence.
+//
+// The trick that makes it honest: each sheet is blended with `screen`, and a
+// sheet only carries its own channel (rgb(v 0 0), …), so where sheets overlap
+// screen gives exactly (r, g, b). The picture at the end is not drawn anywhere —
+// it is the three grids, added.
 
-const FLAG_COLS = 11;
-// ponytail: the sprite is generated, not decoded — a flag is two flat colours,
-// which is exactly what makes the channel split legible at this size.
-const FLAG: number[][] = Array.from({ length: FLAG_COLS * FLAG_COLS }, (_, i) => {
-  const x = i % FLAG_COLS;
-  const y = Math.floor(i / FLAG_COLS);
-  const inCircle = Math.hypot(x - (FLAG_COLS / 2 - 1), y - (FLAG_COLS - 1) / 2) < 2.9;
-  return inCircle ? [244, 42, 65] : [0, 106, 78];
+type RGB = [number, number, number];
+const STACK_COLS = 12;
+const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+/** Sample a picture at every cell centre. */
+const sprite = (f: (x: number, y: number) => RGB) =>
+  Array.from({ length: STACK_COLS * STACK_COLS }, (_, i) =>
+    f((i % STACK_COLS) + 0.5, Math.floor(i / STACK_COLS) + 0.5).map(clamp255) as RGB,
+  );
+
+// ponytail: the pictures are generated, not decoded — flat colours are exactly
+// what makes the channel split legible at 12 × 12.
+const SCENE = sprite((x, y) => {
+  // the sun is red + green with no blue, the cloud is all three at full
+  if (Math.hypot(x - 9, y - 3.5) < 2.2) return [255, 210, 40];
+  if (Math.hypot(x - 3, y - 3.2) < 1.3 || Math.hypot(x - 4.6, y - 2.6) < 1.5 || Math.hypot(x - 5.8, y - 3.4) < 1.1)
+    return [242, 244, 248];
+  const ground = 8.4 + Math.sin(x * 0.55) * 1.1;
+  if (y > ground) return y > ground + 2 ? [28, 118, 52] : [52, 164, 72];
+  const t = y / 9;
+  return [lerp(40, 150, t), lerp(110, 200, t), lerp(215, 250, t)];
 });
+const FLAG = sprite((x, y) => (Math.hypot(x - 5.4, y - 6) < 3.2 ? [244, 42, 65] : [0, 106, 78]));
+
+const PICTURES = [
+  { name: "Sun & sky", px: SCENE, start: 45 }, // start on the sun
+  { name: "Bangladesh flag", px: FLAG, start: 77 }, // …or the red circle
+];
 const CH = [
   { i: 0, cls: "r", name: "Red", tint: (v: number) => `rgb(${v} 0 0)` },
   { i: 1, cls: "g", name: "Green", tint: (v: number) => `rgb(0 ${v} 0)` },
   { i: 2, cls: "b", name: "Blue", tint: (v: number) => `rgb(0 0 ${v})` },
 ];
+// One slider, three stops: pulled apart (0) → stacked (50) → seen face-on (100).
+const STEPS = [
+  {
+    at: 0,
+    label: "1 · Three grids",
+    note: "Three separate grids, the same size. Each holds only how much of its own color goes in every cell.",
+  },
+  {
+    at: 50,
+    label: "2 · Stack them",
+    note: "Laid on top of each other, the lights add up: red + green is yellow, all three at full is white.",
+  },
+  {
+    at: 100,
+    label: "3 · Look from the front",
+    note: "From the front it is an ordinary color picture — but every pixel is still three numbers.",
+  },
+];
+/** Tipped-over pose of a sheet: the same numbers go into the CSS transform. */
+const TIP_X = 60;
+const TIP_Z = -45;
+const rad = (d: number) => (d * Math.PI) / 180;
 
 export function ChannelStackFigure() {
   const box = useRef<HTMLElement>(null);
+  const [pic, setPic] = useState(0);
   const [use, setUse] = useState([true, true, true]);
-  const [numbers, setNumbers] = useState(false);
+  const [step, setStep] = useState(0);
+  // buttons glide between poses; dragging the slider should track the thumb
+  const [glide, setGlide] = useState(true);
   const [at, setAt] = useState<number | null>(null);
   useInView(box, {});
 
-  const i = at ?? Math.floor((FLAG_COLS * FLAG_COLS) / 2);
-  const p = FLAG[i];
+  const { px, start } = PICTURES[pic];
+  const i = at ?? start;
+  const p = px[i].map((v, k) => (use[k] ? v : 0));
+  const spread = Math.max(0, 1 - step / 50);
+  const tilt = Math.min(1, 2 - step / 50);
+  const note = STEPS[step < 25 ? 0 : step < 75 ? 1 : 2].note;
+
+  // Where cell i lands once its sheet is tipped over, as a fraction of the
+  // sheet's side — the skewer pierces that point on all three sheets.
+  const u = ((i % STACK_COLS) + 0.5) / STACK_COLS - 0.5;
+  const v = (Math.floor(i / STACK_COLS) + 0.5) / STACK_COLS - 0.5;
+  const z = rad(TIP_Z * tilt);
+  const sx = u * Math.cos(z) - v * Math.sin(z);
+  const sy = (u * Math.sin(z) + v * Math.cos(z)) * Math.cos(rad(TIP_X * tilt));
+
+  const go = (s: number, smooth: boolean) => {
+    setGlide(smooth);
+    setStep(s);
+  };
 
   return (
     <figure className="mfig" ref={box}>
       <Head n="Figure 3" title="A color image is three grids, stacked" />
-      <div className="pfig-body">
-        <div className="pfig-chans">
-          {CH.map((c) => (
-            <div key={c.cls} className={`pfig-chan ${c.cls}${use[c.i] ? "" : " off"}`}>
-              <h4>{c.name}</h4>
-              <PixelGrid
-                cols={FLAG_COLS}
-                values={FLAG.map((q) => q[c.i])}
-                numbers={numbers}
-                onHover={setAt}
-                onPick={setAt}
-                selected={at}
-                fill={(v) => c.tint(v)}
-                text={() => "rgba(255,255,255,.85)"}
-              />
+      <div className="pfig-body pfig-split wide">
+        <div
+          className={`pfig-stack${glide ? " glide" : ""}`}
+          style={{ ["--spread" as string]: spread, ["--tilt" as string]: tilt }}
+        >
+          {CH.map((c, k) => (
+            <div
+              key={c.cls}
+              className={`pfig-layer ${c.cls}${use[c.i] ? "" : " off"}`}
+              style={{ ["--k" as string]: k - 1 }}
+            >
+              <div className="pfig-plane">
+                <PixelGrid
+                  cols={STACK_COLS}
+                  values={px.map((q) => (use[c.i] ? q[c.i] : 0))}
+                  onHover={setAt}
+                  onPick={setAt}
+                  selected={at}
+                  fill={c.tint}
+                  label={(val, j) => `${c.name} grid, row ${Math.floor(j / STACK_COLS) + 1}, column ${(j % STACK_COLS) + 1}, value ${val}`}
+                />
+              </div>
             </div>
           ))}
-          <div className="pfig-chan out">
-            <h4>Result</h4>
-            <PixelGrid
-              cols={FLAG_COLS}
-              values={FLAG.map((_, j) => j)}
-              onHover={setAt}
-              onPick={setAt}
-              selected={at}
-              fill={(_, j) => {
-                const q = FLAG[j];
-                return `rgb(${use[0] ? q[0] : 0} ${use[1] ? q[1] : 0} ${use[2] ? q[2] : 0})`;
-              }}
-              label={(_, j) => `pixel ${j + 1}`}
-            />
+          {CH.map((c, k) => (
+            <span key={c.cls} className={`pfig-tag ${c.cls}`} style={{ ["--k" as string]: k - 1 }}>
+              {c.name}
+              <b>{p[c.i]}</b>
+            </span>
+          ))}
+          <div className="pfig-skewer" style={{ ["--sx" as string]: sx, ["--sy" as string]: sy }}>
+            <i />
           </div>
         </div>
-        <p className="pfig-label">
-          Point at a cell — every grid highlights <b>the same position</b>: red <b>{p[0]}</b>, green{" "}
-          <b>{p[1]}</b>, blue <b>{p[2]}</b>.
-        </p>
+
+        <div className="pfig-col">
+          <p className="pfig-label">
+            Row <b>{Math.floor(i / STACK_COLS) + 1}</b>, column <b>{(i % STACK_COLS) + 1}</b> — one
+            pixel, one number from each grid:
+          </p>
+          <div className="pfig-sum">
+            {CH.map((c) => (
+              <div key={c.cls} className={`pfig-term ${c.cls}${use[c.i] ? "" : " off"}`}>
+                <em>{c.i ? "+" : ""}</em>
+                <i style={{ background: c.tint(p[c.i]) }} />
+                <span>{c.name}</span>
+                <b>{p[c.i]}</b>
+              </div>
+            ))}
+            <div className="pfig-term out">
+              <em>=</em>
+              <i style={{ background: `rgb(${p.join(" ")})` }} />
+              <span>Pixel</span>
+              <b>({p.join(", ")})</b>
+            </div>
+          </div>
+          <p className="pfig-note">{note}</p>
+          <div className="pfig-row">
+            {STEPS.map((s) => (
+              <Btn key={s.at} on={step === s.at} onClick={() => go(s.at, true)}>
+                {s.label}
+              </Btn>
+            ))}
+          </div>
+          <input
+            className="pfig-slider"
+            type="range"
+            min={0}
+            max={100}
+            value={step}
+            aria-label="stack the three grids"
+            onChange={(e) => go(Number(e.target.value), false)}
+          />
+        </div>
       </div>
       <div className="mfig-controls">
+        {PICTURES.map((q, k) => (
+          <Btn key={q.name} on={pic === k} onClick={() => { setPic(k); setAt(null); }}>
+            {q.name}
+          </Btn>
+        ))}
         {CH.map((c) => (
           <Btn
             key={c.cls}
@@ -329,14 +482,13 @@ export function ChannelStackFigure() {
             {c.name} {use[c.i] ? "on" : "off"}
           </Btn>
         ))}
-        <Btn on={numbers} onClick={() => setNumbers((s) => !s)}>
-          {numbers ? "Hide numbers" : "Show numbers"}
-        </Btn>
       </div>
       <figcaption>
-        Each of the three grids is <strong>a grayscale image on its own</strong>, just shown in its
-        own color. Switch one off and the result on the right changes. Turn off red and the red
-        circle goes black, because those cells had nothing in them but red.
+        Each sheet is <strong>a grayscale image on its own</strong>, tinted so you can tell them
+        apart. Press <strong>Stack them</strong> and they slide into one — where they overlap, their
+        light adds, and the picture appears. Point at any cell: the line pierces{" "}
+        <strong>the same position</strong> in all three grids. Switch a color off and its sheet
+        turns to zeros — turn off green and the yellow sun goes red.
       </figcaption>
     </figure>
   );
@@ -476,117 +628,82 @@ export function PaintFigure() {
 }
 
 // ---------------------------------------------------------------------------
-// 6 · Where the count goes. The article's punchline number, but reachable by
-//     dragging — the jump from 9 to 36,000,000 should be felt, not read.
-
-const SIZES = [
-  { w: 3, h: 3, name: "the 3×3 above" },
-  { w: 28, h: 28, name: "a handwritten digit" },
-  { w: 224, h: 224, name: "an AI model's input" },
-  { w: 1920, h: 1080, name: "one HD video frame" },
-  { w: 3000, h: 4000, name: "a photo from your phone" },
-];
-
-/** Drop the trailing zeros a fixed decimal leaves behind: 36.0 -> 36, 2.10 -> 2.1. */
-const trim = (s: string) => (s.includes(".") ? s.replace(/0+$/, "").replace(/\.$/, "") : s);
-
-const inWords = (n: number) => {
-  if (n >= 1e6) return `${trim((n / 1e6).toFixed(1))} million`;
-  if (n >= 1e3) return `${trim((n / 1e3).toFixed(1))} thousand`;
-  return `${n}`;
-};
-
-/** One number per second, read aloud — the count in a unit a body understands. */
-const readTime = (n: number) => {
-  if (n < 90) return `${n} seconds`;
-  if (n < 5400) return `${Math.round(n / 60)} minutes`;
-  if (n < 172800) return `${trim((n / 3600).toFixed(1))} hours`;
-  if (n < 3.15e7) return `${Math.round(n / 86400)} days`;
-  return `${trim((n / 3.15e7).toFixed(1))} years`;
-};
-
-export function ScaleFigure() {
-  const box = useRef<HTMLElement>(null);
-  const [pick, setPick] = useState(0);
-  const [color, setColor] = useState(false);
-  useInView(box, {});
-
-  const size = SIZES[pick];
-  const ch = color ? 3 : 1;
-  const total = size.w * size.h * ch;
-  const max = useMemo(() => 3000 * 4000 * 3, []);
-
-  return (
-    <figure className="mfig" ref={box}>
-      <Head n="Figure 6" title="How many numbers is one image?" />
-      <div className="pfig-body">
-        <p className="pfig-big">
-          {total.toLocaleString("en-US")}
-          <small>
-            {size.w} × {size.h}
-            {color ? " × 3" : ""} — that is {inWords(total)} numbers in a single image
-          </small>
-        </p>
-        <div className="pfig-col">
-          {SIZES.map((s, i) => {
-            const t = s.w * s.h * ch;
-            return (
-              <button
-                type="button"
-                key={s.name}
-                className={`pfig-scale-row${i === pick ? " on" : ""}`}
-                onClick={() => setPick(i)}
-              >
-                <span>{s.name}</span>
-                {/* log scale: on a linear one the first four rows are invisible */}
-                <span className="pfig-bar">
-                  <i style={{ width: `${(Math.log10(t) / Math.log10(max)) * 100}%` }} />
-                </span>
-                <span>{inWords(t)}</span>
-              </button>
-            );
-          })}
-        </div>
-        <p className="pfig-label">
-          At one number per second, reading this one image out loud would take <b>{readTime(total)}</b>.
-        </p>
-      </div>
-      <div className="mfig-controls">
-        <Btn on={!color} onClick={() => setColor(false)}>Grayscale (1 grid)</Btn>
-        <Btn on={color} onClick={() => setColor(true)}>Color (3 grids)</Btn>
-        <span className="mfig-read">{size.w} × {size.h} × {ch}</span>
-      </div>
-      <figcaption>
-        The bars are on a log scale — on a linear one the first rows would be invisible, they are
-        that small. From 9 grayscale numbers to 36 million for a color phone photo is{" "}
-        <strong>five steps</strong>.
-      </figcaption>
-    </figure>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// 7 · The closer. Same idea as figure 1 of an earlier draft, but placed last on
+// 6 · The closer. Same idea as figure 1 of an earlier draft, but placed last on
 //     purpose: once the reader knows what a grid of brightness values is, the
 //     "computer sees only this" view lands as a conclusion instead of a puzzle.
 
-// ponytail: a hand-drawn sprite, not a decoded photo — a real image would need a
-// file + a decoder in the bundle to make exactly this one point.
-const BIRD = [
-  "............",
-  ".....###....",
-  "....#####...",
-  "....##o##+..",
-  "....#####...",
-  "...#######..",
-  "..#########.",
-  ".####***###.",
-  ".###*****##.",
-  "..#########.",
-  "...##...##..",
-  "..++++++++..",
+// ponytail: a bird built from a few shapes and sampled, not a decoded photo — a
+// real image would need a file + a decoder in the bundle to make this one point.
+// A chickadee: its black cap, white cheek and black bib are high-contrast marks
+// that still read as "bird" at 40 × 40.
+const BIRD_COLS = 40;
+
+type Shape = (x: number, y: number) => boolean;
+type Tone = number | ((x: number, y: number) => number);
+const ellipse = (cx: number, cy: number, rx: number, ry: number, deg = 0): Shape => {
+  const c = Math.cos((deg * Math.PI) / 180);
+  const s = Math.sin((deg * Math.PI) / 180);
+  return (x, y) => {
+    const u = ((x - cx) * c + (y - cy) * s) / rx;
+    const v = (-(x - cx) * s + (y - cy) * c) / ry;
+    return u * u + v * v <= 1;
+  };
+};
+const polygon = (pts: [number, number][]): Shape => (x, y) => {
+  let inside = false;
+  for (let i = 0, j = pts.length - 1; i < pts.length; j = i++) {
+    const [xi, yi] = pts[i];
+    const [xj, yj] = pts[j];
+    if (yi > y !== yj > y && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi) inside = !inside;
+  }
+  return inside;
+};
+const stroke = (x1: number, y1: number, x2: number, y2: number, w: number): Shape => (x, y) => {
+  const dx = x2 - x1;
+  const dy = y2 - y1;
+  const t = Math.max(0, Math.min(1, ((x - x1) * dx + (y - y1) * dy) / (dx * dx + dy * dy)));
+  return Math.hypot(x - (x1 + t * dx), y - (y1 + t * dy)) <= w / 2;
+};
+
+const both = (a: Shape, b: Shape): Shape => (x, y) => a(x, y) && b(x, y);
+/** Light from the top-left: a part gets brighter toward (cx, cy)'s upper left. */
+const lit = (base: number, cx: number, cy: number, k: number) => (x: number, y: number) =>
+  base + k * (cx - x + (cy - y));
+
+const HEAD = ellipse(27, 13, 6, 5.8);
+// [shape, brightness], painted back to front, in cell units.
+const BIRD_PARTS: [Shape, Tone][] = [
+  [stroke(-1, 33.5, 41, 30.5, 3.2), (x, y) => (y < 32.3 - x * 0.071 ? 104 : 58)], // branch, lit on top
+  [stroke(30, 31, 37, 25, 1.2), 70], // twig
+  [ellipse(37.6, 23.8, 2.6, 1.2, -45), 132], // leaf
+  [polygon([[13.5, 22.5], [3.2, 31], [5.6, 33.4], [16, 25.6]]), 46], // tail
+  [stroke(13.2, 24.6, 4.6, 32.2, 0.6), 112],
+  [ellipse(19.5, 22, 10, 7.6, -28), lit(212, 19, 18, 2.2)], // pale belly
+  [ellipse(22.5, 17.2, 5.8, 4.2, -30), lit(118, 22, 15, 3)], // grey back
+  [ellipse(17.6, 20.6, 8.4, 4.6, -28), lit(96, 16, 18, 2)], // wing
+  [stroke(11.2, 25, 21.8, 18.8, 0.8), 176], // pale feather edges
+  [stroke(11.6, 26.4, 21.2, 20.8, 0.7), 150],
+  [polygon([[9.8, 25.6], [12.6, 22.4], [14.2, 25.4]]), 52], // wingtip
+  [HEAD, 236], // white cheek
+  [both(HEAD, (x, y) => y < 11.3 - (x - 27) * 0.08), 24], // black cap
+  [both(HEAD, (x, y) => x < 22.6 + (y - 13) * 0.5), 110], // grey nape
+  [ellipse(29.2, 18.8, 3, 2.1, -15), 26], // black bib
+  [ellipse(30.1, 12.3, 1.15, 1.15), 10], // eye
+  [ellipse(30.45, 11.95, 0.45, 0.45), 255], // its catch-light
+  [polygon([[32.6, 12.1], [36.4, 13.4], [32.6, 14.7]]), 34], // beak
+  [stroke(20.6, 28.4, 20, 31.8, 0.9), 64], // legs
+  [stroke(23.6, 27.8, 23.9, 31.4, 0.9), 64],
 ];
-const TONE: Record<string, number> = { ".": 231, "#": 38, "*": 112, o: 250, "+": 168 };
+// An out-of-focus backdrop, like a photo: a soft bright patch top-left.
+const backdrop = (x: number, y: number) =>
+  150 - y * 0.6 + 28 * Math.exp(-((x - 8) ** 2 + (y - 7) ** 2) / 90) - 18 * Math.exp(-((x - 38) ** 2 + (y - 38) ** 2) / 120);
+const birdTone = (x: number, y: number) => {
+  for (let k = BIRD_PARTS.length - 1; k >= 0; k--) {
+    const [inside, tone] = BIRD_PARTS[k];
+    if (inside(x, y)) return typeof tone === "number" ? tone : tone(x, y);
+  }
+  return backdrop(x, y);
+};
 
 // Deterministic jitter, so the sprite reads like sampled light instead of flat
 // paint — and so server and client render the identical array.
@@ -594,9 +711,17 @@ const jitter = (i: number) => {
   const s = Math.sin(i * 127.1) * 43758.5453;
   return s - Math.floor(s);
 };
-const BIRD_PX = BIRD.flatMap((row, r) =>
-  [...row].map((ch, c) => clamp255(TONE[ch] + (jitter(r * 12 + c) - 0.5) * 18)),
-);
+// Each cell averages 4 × 4 samples, the way a camera sensor averages the light
+// that lands on it — which is what gives the edges their in-between greys.
+const SS = 4;
+const BIRD_PX = Array.from({ length: BIRD_COLS * BIRD_COLS }, (_, i) => {
+  const c = i % BIRD_COLS;
+  const r = Math.floor(i / BIRD_COLS);
+  let sum = 0;
+  for (let sy = 0; sy < SS; sy++)
+    for (let sx = 0; sx < SS; sx++) sum += birdTone(c + (sx + 0.5) / SS, r + (sy + 0.5) / SS);
+  return clamp255(sum / (SS * SS) + (jitter(i) - 0.5) * 8);
+});
 
 export function EyeVsMachineFigure() {
   const box = useRef<HTMLElement>(null);
@@ -604,16 +729,16 @@ export function EyeVsMachineFigure() {
   const [at, setAt] = useState<number | null>(null);
   useInView(box, {});
 
-  const i = at ?? 41; // a body pixel, so the readout is never empty
+  const i = at ?? 20 * BIRD_COLS + 17; // a wing pixel, so the readout is never empty
   const v = BIRD_PX[i];
 
   return (
     <figure className="mfig" ref={box}>
-      <Head n="Figure 7" title="You see a bird. It sees 144 numbers." />
+      <Head n="Figure 6" title={`You see a bird. It sees ${BIRD_PX.length.toLocaleString("en-US")} numbers.`} />
       <div className="pfig-body">
-        <div className="pfig-frame">
+        <div className={`pfig-frame fine${view === "eye" ? " seamless" : ""}`}>
           <PixelGrid
-            cols={12}
+            cols={BIRD_COLS}
             values={BIRD_PX}
             numbers={view !== "eye"}
             onHover={setAt}
@@ -624,7 +749,7 @@ export function EyeVsMachineFigure() {
           />
         </div>
         <p className="pfig-label">
-          Point at any cell — row <b>{Math.floor(i / 12) + 1}</b>, column <b>{(i % 12) + 1}</b> holds
+          Point at any cell — row <b>{Math.floor(i / BIRD_COLS) + 1}</b>, column <b>{(i % BIRD_COLS) + 1}</b> holds
           brightness <b>{v}</b>. 0 is pitch black, 255 is pure white.
         </p>
       </div>
@@ -641,9 +766,9 @@ export function EyeVsMachineFigure() {
       </div>
       <figcaption>
         The picture and the list of numbers are <strong>the same thing</strong>, shown two ways.
-        Press <strong>What the computer gets</strong>: the bird is gone and 12 × 12 = 144 numbers
-        remain. Searching your photos for “bird” means finding the answer in numbers like these — and
-        a real photo hands it 36 million of them.
+        Press <strong>What the computer gets</strong>: the bird is gone and {BIRD_COLS} × {BIRD_COLS} ={" "}
+        {BIRD_PX.length.toLocaleString("en-US")} numbers remain. Searching your photos for “bird” means finding the answer in
+        numbers like these — and a real photo hands it 36 million of them.
       </figcaption>
     </figure>
   );
