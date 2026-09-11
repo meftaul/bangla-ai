@@ -99,13 +99,30 @@
 .pfig-row { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
 .pfig-row .pfig-slider { flex: 1 1 8rem; }
 
-/* ---- binary counter ------------------------------------------------------ */
-.pfig-bits { display: flex; gap: 0.3rem; flex-wrap: wrap; }
-.pfig-bit {
+/* ---- the two counters (figure 1) ----------------------------------------- */
+/* Both rows are the same component — only the base and the place values differ,
+   which is the whole argument of the figure. Every box in both rows is sized off
+   eight-to-a-row, so the ones column of the ten-digit row sits directly above the
+   ones column of the two-digit one at every width. */
+
+.pfig-od-block { display: flex; flex-direction: column; gap: 0.4rem; }
+
+.pfig-od-row {
+  --gap: 0.3rem;
+  --w: min(3.1rem, calc((100% - 7 * var(--gap)) / 8));
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--gap);
+}
+
+.pfig-od {
+  position: relative;
+  flex: none;
+  width: var(--w);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.2rem;
+  gap: 0.22rem;
   padding: 0;
   border: 0;
   background: none;
@@ -113,33 +130,141 @@
   font: inherit;
   cursor: pointer;
 }
-.pfig-bit i {
+.pfig-od.flat { cursor: default; }
+
+/* The window a digit rolls through. Two digits live here during a step: the one
+   leaving slides up and out, the one arriving slides in from below. */
+.pfig-od-win {
+  position: relative;
   display: grid;
-  place-items: center;
-  width: 2rem;
-  height: 2.3rem;
+  overflow: hidden;
+  width: 100%;
+  aspect-ratio: 5 / 6;
   border: 1px solid rgba(255, 255, 255, 0.16);
   border-radius: 7px;
   background: rgba(255, 255, 255, 0.04);
-  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
-  font-size: 1.05rem;
-  font-style: normal;
-  color: var(--mdim);
-  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  transition: background 0.18s, border-color 0.18s, box-shadow 0.18s;
 }
-.pfig-bit.on i {
+.pfig-od-win em {
+  grid-area: 1 / 1;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+  font-size: clamp(0.8rem, 4.2vw, 1.05rem);
+  font-style: normal;
+  font-weight: 600;
+  color: var(--mdim);
+}
+
+.pfig-od u {
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+  font-size: clamp(0.48rem, 2.1vw, 0.6rem);
+  text-decoration: none;
+  color: var(--mdim);
+  transition: color 0.18s;
+}
+
+/* A box holding anything at all is lit. In binary that means a switch is on; in
+   decimal it is the same rule, which is why leading zeros stay dim in both. */
+.pfig-od.on .pfig-od-win { background: var(--mi); border-color: var(--mi); }
+.pfig-od.on .pfig-od-win em { color: #0b1020; font-weight: 700; }
+.pfig-od.on u { color: var(--mi); }
+
+/* Out of digits — one more and it must roll. Ringed so the reader can see the
+   carry coming before it happens; in binary every lit box wears this, which is
+   exactly why binary carries so often. */
+.pfig-od.full .pfig-od-win {
+  border-color: var(--mv);
+  box-shadow: 0 0 0 2px var(--mv), 0 0 12px rgba(251, 191, 36, 0.45);
+}
+
+@keyframes pfig-roll-in {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+@keyframes pfig-roll-out {
+  from { transform: translateY(0); }
+  to { transform: translateY(-100%); }
+}
+.pfig-od-win em.in { animation: pfig-roll-in 0.22s cubic-bezier(0.4, 0, 0.2, 1) both; }
+.pfig-od-win em.out { animation: pfig-roll-out 0.22s cubic-bezier(0.4, 0, 0.2, 1) both; }
+
+/* The box that just emptied, and the carry leaving it: a spark that travels one
+   box to the left and lands on the neighbour, which bumps as it arrives. */
+@keyframes pfig-drain {
+  from { box-shadow: 0 0 0 2px var(--mv), 0 0 12px rgba(251, 191, 36, 0.45); }
+  to { box-shadow: 0 0 0 0 transparent; }
+}
+.pfig-od.roll .pfig-od-win { animation: pfig-drain 0.4s ease-out both; }
+
+.pfig-carry {
+  position: absolute;
+  left: calc(50% - 0.25rem);
+  top: 18%;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: var(--mv);
+  box-shadow: 0 0 10px var(--mv);
+  pointer-events: none;
+  animation: pfig-carry 0.48s ease-in both;
+}
+@keyframes pfig-carry {
+  0% { opacity: 0; transform: translate(0, 0) scale(0.4); }
+  22% { opacity: 1; transform: translate(-20%, -34%) scale(1); }
+  100% { opacity: 0; transform: translate(calc(-1 * (var(--w) + var(--gap))), 0) scale(0.5); }
+}
+
+@keyframes pfig-hit {
+  0%, 45% { transform: none; }
+  64% { transform: translateY(-16%) scale(1.09); }
+  100% { transform: none; }
+}
+.pfig-od.hit .pfig-od-win { animation: pfig-hit 0.55s ease-out both; }
+
+/* The rule itself, printed between the two rows because that is where it happens. */
+.pfig-rule {
+  margin: 0;
+  padding: 0.5rem 0.7rem;
+  border-left: 2px solid var(--mv);
+  border-radius: 0 8px 8px 0;
+  background: rgba(251, 191, 36, 0.08);
+  font-size: 0.8rem;
+  color: var(--mink);
+}
+.pfig-rule b { color: var(--mv); font-weight: 700; }
+
+/* What the lit boxes add up to — the same sentence in both number systems. */
+.pfig-add {
+  margin: 0;
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+  font-size: 0.74rem;
+  color: var(--mdim);
+  text-align: right;
+  word-break: break-word;
+}
+.pfig-add b { color: var(--mv); font-weight: 700; }
+
+.pfig-hint { margin: 0; font-size: 0.78rem; color: var(--mi); }
+
+.mfig-btn.go {
+  padding-inline: 1.1rem;
   background: var(--mi);
   border-color: var(--mi);
   color: #0b1020;
   font-weight: 700;
 }
-.pfig-bit u {
-  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
-  font-size: 0.6rem;
-  text-decoration: none;
-  color: var(--mdim);
+.mfig-btn.go:hover { background: var(--mi); filter: brightness(1.08); }
+.mfig-btn.go:disabled { opacity: 0.4; cursor: default; filter: none; }
+.pfig-gap { flex: 1 1 0.5rem; }
+
+@media (prefers-reduced-motion: reduce) {
+  .pfig-od-win em.in,
+  .pfig-carry,
+  .pfig-od.roll .pfig-od-win,
+  .pfig-od.hit .pfig-od-win { animation: none; }
+  .pfig-od-win em.out { display: none; }
 }
-.pfig-bit.on u { color: var(--mi); }
 
 /* ---- colour mixer -------------------------------------------------------- */
 .pfig-sw {
@@ -295,6 +420,49 @@
 .pfig-term.out i { height: 2rem; }
 /* reserve two lines so the buttons below don't jump as the note changes */
 .pfig-note { margin: 0; min-height: 3.1em; font-size: 0.8rem; color: var(--mink); }
+
+/* ---- the phone-call story (figure 2) ------------------------------------- */
+/* Two real sheets of paper side by side — yours and your friend's. The paper
+   tone itself comes from PAPER in the tsx, since it is also a pixel value. */
+.pfig-sheets {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+.pfig-sheet { display: flex; flex-direction: column; gap: 0.35rem; min-width: 0; }
+.pfig-sheet svg { border-radius: 6px; }
+
+.pfig-ruling { fill: none; stroke: rgba(37, 99, 235, 0.5); stroke-width: 0.75px; }
+.pfig-ruling.fine { stroke: rgba(37, 99, 235, 0.22); stroke-width: 0.5px; }
+
+/* In sheet units, not px: a cell is 6 units wide at 8 × 8. The chip under each
+   number is filled with the cell's own average grey, so the digits read over
+   ink and paper alike — and the chip shows what the number means. */
+.pfig-sheet-num {
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+  font-size: 1.9px;
+  font-weight: 600;
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+.pfig-sheet-chip { stroke: rgba(15, 27, 45, 0.25); stroke-width: 0.15px; }
+.pfig-sheet-now { fill: none; stroke: var(--mv); stroke-width: 2px; }
+
+.pfig-doodle {
+  fill: none;
+  stroke: #0f1b2d;
+  stroke-width: 1.3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.pfig-guess circle { fill: none; stroke: #5a6b7d; stroke-width: 0.6; stroke-dasharray: 1.6 1.2; }
+.pfig-guess text {
+  fill: #e11d48;
+  font-size: 4px;
+  font-weight: 700;
+  text-anchor: middle;
+  dominant-baseline: central;
+}
 
 /* ---- bird ---------------------------------------------------------------- */
 .pfig-frame.fine .pfig-grid { gap: 1px; }

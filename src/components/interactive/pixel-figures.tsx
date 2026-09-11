@@ -2,8 +2,10 @@
 
 import { memo, useEffect, useRef, useState, type PointerEvent } from "react";
 
-import { Btn, Head, useInView } from "./figure-kit";
+import { Btn, Head, bn, useInView } from "./figure-kit";
 import "./pixel-figures.css";
+// the story figure borrows the graph-paper lesson's step list and verdict line
+import "./grid-figures.css";
 
 // Figures for "AI-এর গণিত ১ — ছবি আসলে সংখ্যা".
 //
@@ -11,9 +13,12 @@ import "./pixel-figures.css";
 // else, so every figure here lets the reader hold both halves at once: touch a
 // pixel and watch its number move, or type a number and watch the pixel move.
 //
-// Copy inside the figures is English on purpose — the surrounding prose is
-// Bangla, but translated UI microcopy read stilted, and the values are digits
-// either way. All DOM/SVG rather than canvas, same as vector-figures.tsx.
+// Copy inside the figures is Bangla, in the same register as the prose around
+// them: Bangla sentences with the technical words left in English, which is how
+// the reader actually talks about this. Bangla numerals in the sentences, ASCII
+// digits in the data itself — a pixel value and a place value are the machine's
+// numbers, and they have to line up in a monospaced grid. All DOM/SVG rather
+// than canvas, same as vector-figures.tsx.
 
 const clamp255 = (v: number) => Math.max(0, Math.min(255, Math.round(v)));
 const gray = (v: number) => `rgb(${v} ${v} ${v})`;
@@ -149,89 +154,229 @@ const Cell = memo(function Cell({ i, v, bg, fg, label, sel, flat, numbers }: Cel
 });
 
 // ---------------------------------------------------------------------------
-// 1 · Counting with two digits. Toggle the bits, or let it count and watch the
-//     carry happen — that is the article's "২ মানে ১০, ৩ মানে ১১" claim, live.
+// 1 · One rule, two number systems.
+//
+//     The reader already owns the hard half of binary: they carry every day in
+//     decimal, they just never say it out loud. So both rows here count off the
+//     same +1 and the only difference on screen is how soon a box runs out of
+//     digits — ten-deep on top, two-deep underneath. It stops at 255 on purpose:
+//     that is a full eight boxes, and it is where the article's pixel values
+//     come from a few paragraphs later.
 
-const PLACES = [128, 64, 32, 16, 8, 4, 2, 1];
-const BIN_PRESETS = [2, 3, 10, 240, 255];
+type Counter = {
+  /** how many digits one box is allowed to hold */
+  base: number;
+  /** what each box is worth, biggest first */
+  places: number[];
+  label: string;
+  note: string;
+};
+
+const DECIMAL: Counter = {
+  base: 10,
+  places: [100, 10, 1],
+  label: "আমরা যেভাবে গুনি",
+  note: "এক ঘরে দশটা ডিজিট ধরে — 0 থেকে 9",
+};
+
+const BINARY: Counter = {
+  base: 2,
+  places: [128, 64, 32, 16, 8, 4, 2, 1],
+  label: "কম্পিউটার যেভাবে গোনে",
+  note: "এক ঘরে ধরে মোটে দুইটা — 0 আর 1",
+};
+
+const MAX = 255;
+const BIN_PRESETS = [9, 15, 99, 255];
+
+const digitsOf = ({ base, places }: Counter, n: number) => places.map((w) => Math.floor(n / w) % base);
+
+/** A move between two numbers. `from` drives the roll, `carried` the carry chip. */
+type Step = { n: number; from: number | null; carried: boolean };
+
+// One row of odometer boxes. Both counters are the same component — the base and
+// the place values are all that differ, which is the entire point of the figure.
+function Odometer({
+  counter,
+  step,
+  onToggle,
+}: {
+  counter: Counter;
+  step: Step;
+  onToggle?: (place: number) => void;
+}) {
+  const { base, places } = counter;
+  const now = digitsOf(counter, step.n);
+  const was = step.from === null ? null : digitsOf(counter, step.from);
+
+  // A box "rolled" when it ran out of digits and went back to 0. That is the
+  // carry; the box to its left — index i - 1 — is where the carry lands.
+  const rolled = places.map((_, i) => step.carried && was !== null && was[i] === base - 1 && now[i] === 0);
+
+  return (
+    <div className="pfig-od-row">
+      {places.map((w, i) => {
+        const d = now[i];
+        const moved = was !== null && was[i] !== d;
+        // Only the binary boxes are switches you can flip; a base-ten box has
+        // nine other digits it could hold, so there is nothing for a click to
+        // mean. It stays a plain element rather than a button nobody can press.
+        const Box = onToggle ? "button" : "div";
+        return (
+          <Box
+            key={w}
+            {...(onToggle
+              ? { type: "button" as const, onClick: () => onToggle(w), "aria-label": `the ${w} place, digit ${d}` }
+              : {})}
+            className={`pfig-od${d > 0 ? " on" : ""}${d === base - 1 ? " full" : ""}${
+              rolled[i] ? " roll" : ""
+            }${rolled[i + 1] ? " hit" : ""}${onToggle ? "" : " flat"}`}
+          >
+            <i className="pfig-od-win">
+              {moved ? (
+                <>
+                  <em className="out" key={`o${step.n}`}>{was[i]}</em>
+                  <em className="in" key={`i${step.n}`}>{d}</em>
+                </>
+              ) : (
+                <em>{d}</em>
+              )}
+            </i>
+            <u>{w}</u>
+            {/* the carry itself, flying into the neighbour on the left */}
+            {rolled[i] ? <span className="pfig-carry" key={`c${step.n}`} aria-hidden="true" /> : null}
+          </Box>
+        );
+      })}
+    </div>
+  );
+}
 
 export function BinaryFigure() {
   const box = useRef<HTMLElement>(null);
-  const [n, setN] = useState(2);
+  const [step, setStep] = useState<Step>({ n: 0, from: null, carried: false });
   const [run, setRun] = useState(false);
   const [awake, setAwake] = useState(true);
+  const { n } = step;
 
   useInView(box, { enter: () => setAwake(true), leave: () => setAwake(false) });
 
-  // The ticker only runs while the figure is on screen — a scrolled-past figure
-  // should not keep re-rendering.
-  useEffect(() => {
-    if (!run || !awake) return;
-    const t = setInterval(() => setN((v) => (v + 1) % 256), 450);
-    return () => clearInterval(t);
-  }, [run, awake]);
+  const bump = () => setStep((s) => (s.n >= MAX ? s : { n: s.n + 1, from: s.n, carried: true }));
+  const jump = (v: number) => setStep({ n: v, from: null, carried: false });
 
-  const bits = PLACES.map((p) => (n & p ? 1 : 0));
-  const on = PLACES.filter((p) => n & p);
+  // Once the boxes are full there is nowhere left for a carry to go, so counting
+  // has to end there. A timeout per step rather than an interval says that by
+  // itself: at 255 the effect simply schedules nothing. 650ms so a carry is
+  // something you watch happen rather than a flicker.
+  const counting = run && n < MAX;
+  useEffect(() => {
+    if (!counting || !awake) return;
+    const t = setTimeout(() => setStep((s) => ({ n: s.n + 1, from: s.n, carried: true })), 650);
+    return () => clearTimeout(t);
+  }, [counting, awake, n]);
+
+  const dec = digitsOf(DECIMAL, n);
+  const decTerms = DECIMAL.places.map((w, i) => (dec[i] ? `${dec[i]}×${w}` : null)).filter(Boolean);
+  const binTerms = BINARY.places.filter((w) => n & w);
+
+  // Trailing 1s are exactly the boxes the next +1 will knock over at once.
+  let cascade = 0;
+  for (let v = n; v & 1; v >>= 1) cascade += 1;
+
+  const hint =
+    n >= MAX
+      ? "আটটা ঘরই ভরে গেছে, আর জায়গা নাই। এই জন্যই কম্পিউটারের কাছে সবচেয়ে বড় মান 255 — সংখ্যাটা মনে রাখবেন, একটু পরেই আবার দেখা হবে।"
+      : cascade >= 3
+        ? `এইবার +১ চাপলে নিচের ${bn(cascade)}টা ঘর একসাথে উল্টে পড়বে। চোখ সরাবেন না।`
+        : dec[2] === 9
+          ? "উপরের ডানদিকের ঘরটা 9 পর্যন্ত এসে গেছে, আর জায়গা নাই। এবার +১ চেপে দেখুন কী হয়।"
+          : "";
 
   return (
     <figure className="mfig" ref={box}>
-      <Head n="Figure 1" title="Counting with only two digits" />
+      <Head n="চিত্র ১" title="গুনতে গেলে আমরা যা করি, কম্পিউটারও ঠিক তাই করে" />
       <div className="pfig-body">
-        <div className="pfig-bits">
-          {PLACES.map((p, i) => (
-            <button
-              type="button"
-              key={p}
-              className={`pfig-bit${bits[i] ? " on" : ""}`}
-              aria-pressed={bits[i] === 1}
-              aria-label={`the ${p} place`}
-              onClick={() => setN((v) => v ^ p)}
-            >
-              <i>{bits[i]}</i>
-              <u>{p}</u>
-            </button>
-          ))}
+        <div className="pfig-od-block">
+          <p className="pfig-label">
+            <b>{DECIMAL.label}</b> · {DECIMAL.note}
+          </p>
+          <Odometer counter={DECIMAL} step={step} />
+          <p className="pfig-add">
+            {decTerms.length ? decTerms.join("  +  ") : "0"} <b>= {n}</b>
+          </p>
         </div>
-        <p className="pfig-big">
-          {n}
-          <small>{on.length ? on.join(" + ") : "0"} = {n} — the way we write it</small>
+
+        {/* The whole concept, sitting where the animation happens. */}
+        <p className="pfig-rule">
+          ঘরের ডিজিট ফুরিয়ে গেলে সে আবার <b>0</b> হয়ে যায়, আর বাঁ পাশের ঘরটাকে বলে — <b>নাও, একটা তোমার</b>।
         </p>
-        <p className="pfig-mono">
-          the way a computer writes it: <b>{bits.join("")}</b>
-        </p>
+
+        <div className="pfig-od-block">
+          <p className="pfig-label">
+            <b>{BINARY.label}</b> · {BINARY.note}
+          </p>
+          <Odometer counter={BINARY} step={step} onToggle={(w) => setStep((s) => ({ n: s.n ^ w, from: s.n, carried: false }))} />
+          <p className="pfig-add">
+            {binTerms.length ? binTerms.join("  +  ") : "0"} <b>= {n}</b>
+          </p>
+        </div>
+
+        {hint ? <p className="pfig-hint">{hint}</p> : null}
       </div>
       <div className="mfig-controls">
-        <Btn on={run} onClick={() => setRun((r) => !r)}>
-          {run ? "Stop" : "Count up"}
+        <button type="button" className="mfig-btn go" onClick={bump} disabled={n >= MAX}>
+          +১
+        </button>
+        <Btn
+          on={counting}
+          onClick={() => {
+            if (counting) return setRun(false);
+            if (n >= MAX) jump(0);
+            setRun(true);
+          }}
+        >
+          {counting ? "থামান" : "নিজে নিজে গুনুক"}
         </Btn>
+        <button type="button" className="mfig-btn" onClick={() => { setRun(false); jump(0); }}>
+          আবার ০ থেকে
+        </button>
+        <span className="pfig-gap" />
         {BIN_PRESETS.map((p) => (
-          <Btn key={p} on={n === p && !run} onClick={() => { setRun(false); setN(p); }}>
+          <Btn key={p} on={n === p} onClick={() => { setRun(false); jump(p); }}>
             {p}
           </Btn>
         ))}
       </div>
       <figcaption>
-        Switch the boxes on and off, or press <strong>Count up</strong> and watch where it carries.
-        After 1 there is no next digit, so it has to move one box left — exactly what we do after 9.
-        Each box is worth the number under it, and{" "}
-        <strong>the lit boxes add up to the value</strong>. 240 = 128 + 64 + 32 + 16 = <strong>11110000</strong>.
+        <strong>+১</strong> বোতামটা চাপতে থাকুন। উপরের সারি আর নিচের সারি — দুইটাই কিন্তু একই সংখ্যা দেখাচ্ছে,
+        সবসময়। তফাত একটাই। উপরের এক একটা ঘরে দশটা ডিজিট ধরে, নিচের ঘরে ধরে মোটে দুইটা। তাই নিচের ঘর তাড়াতাড়ি ভরে
+        যায়, আর ঘন ঘন বাঁ পাশে খবর পাঠায়। নিয়ম কিন্তু হুবহু একই।
+        <br />
+        <br />
+        আমাদের হাতে দশটা আঙুল, তাই আমরা দশটা ডিজিট নিয়ে গুনি। কম্পিউটারের আঙুল নাই, আছে সুইচ — জ্বলছে, নয়তো
+        জ্বলছে না। ব্যস, দুইটা। <strong>9</strong> বা <strong>15</strong>-এ গিয়ে একবার +১ চাপুন, ব্যাপারটা
+        পরিষ্কার হয়ে যাবে।
+        <br />
+        <br />
+        আর প্রতিটা ঘরের নিচে যে সংখ্যাটা লেখা, ওটাই ঐ ঘরের দাম। যে ঘরে ডিজিট বসেছে তাদের দাম যোগ করলেই মোট
+        সংখ্যাটা — দুই সারিতেই একই কথা।
       </figcaption>
     </figure>
   );
 }
 
 // ---------------------------------------------------------------------------
-// 2 · Three numbers, every colour. Answers the article's "লাল সবুজ নীল মিশিয়ে
-//     যেকোনো রঙ" sentence by letting the reader do the mixing.
+// 6 · Three numbers, every colour. Opens the colour half of the article: until
+//     here a pixel was one brightness, and now the reader mixes the three lights
+//     that replace it.
 
 const MIXES = [
-  { label: "Yellow", c: [255, 214, 0] },
-  { label: "Orange", c: [255, 122, 26] },
-  { label: "Sky", c: [96, 165, 250] },
-  { label: "Purple", c: [147, 51, 234] },
-  { label: "White", c: [255, 255, 255] },
-  { label: "Black", c: [0, 0, 0] },
+  { label: "হলুদ", c: [255, 214, 0] },
+  { label: "কমলা", c: [255, 122, 26] },
+  { label: "আকাশি", c: [96, 165, 250] },
+  { label: "বেগুনি", c: [147, 51, 234] },
+  { label: "সাদা", c: [255, 255, 255] },
+  { label: "কালো", c: [0, 0, 0] },
 ];
 
 export function ColorMixerFigure() {
@@ -242,19 +387,19 @@ export function ColorMixerFigure() {
   const [r, g, b] = rgb;
   const set = (i: number, v: number) => setRgb((c) => c.map((old, j) => (j === i ? clamp255(v) : old)));
   const chans = [
-    { key: "Red", cls: "r", v: r },
-    { key: "Green", cls: "g", v: g },
-    { key: "Blue", cls: "b", v: b },
+    { key: "লাল", cls: "r", v: r },
+    { key: "সবুজ", cls: "g", v: g },
+    { key: "নীল", cls: "b", v: b },
   ];
 
   return (
     <figure className="mfig" ref={box}>
-      <Head n="Figure 2" title="Three numbers make any color" />
+      <Head n="চিত্র ৬" title="তিনটা সংখ্যা, আর তা দিয়েই যেকোনো রঙ" />
       <div className="pfig-body pfig-split">
         <div
           className="pfig-sw"
           style={{ background: `rgb(${r} ${g} ${b})` }}
-          aria-label={`color: red ${r}, green ${g}, blue ${b}`}
+          aria-label={`রঙ: লাল ${r}, সবুজ ${g}, নীল ${b}`}
         >
           <span>({r}, {g}, {b})</span>
         </div>
@@ -286,16 +431,17 @@ export function ColorMixerFigure() {
         ))}
       </div>
       <figcaption>
-        Drag the three sliders. Red and green wide open with blue at zero gives{" "}
-        <strong>yellow</strong> — no paint box involved, just three numbers changing. Each one runs
-        0 to 255, so 256 × 256 × 256 = <strong>over 16 million colors</strong> from three numbers.
+        তিনটা slider ধরে টানুন। লাল আর সবুজ পুরো খুলে দিয়ে নীলটা শূন্যে নামিয়ে আনুন —{" "}
+        <strong>হলুদ</strong>। রঙের বাক্স লাগল না, তুলি লাগল না, তিনটা সংখ্যা বদলাল কেবল। প্রত্যেকটা
+        সংখ্যা 0 থেকে 255 পর্যন্ত যায়। তার মানে 256 × 256 × 256 ={" "}
+        <strong>এক কোটি ৬৭ লাখের বেশি রঙ</strong>, ঐ তিনটা সংখ্যা থেকেই।
       </figcaption>
     </figure>
   );
 }
 
 // ---------------------------------------------------------------------------
-// 3 · The three grids as physical sheets. They start pulled apart in 3D, slide
+// 7 · The three grids as physical sheets. They start pulled apart in 3D, slide
 //     together, and the stack turns to face the reader — so "three grids make a
 //     colour image" is something you watch happen, not a sentence.
 //
@@ -328,30 +474,30 @@ const SCENE = sprite((x, y) => {
 const FLAG = sprite((x, y) => (Math.hypot(x - 5.4, y - 6) < 3.2 ? [244, 42, 65] : [0, 106, 78]));
 
 const PICTURES = [
-  { name: "Sun & sky", px: SCENE, start: 45 }, // start on the sun
-  { name: "Bangladesh flag", px: FLAG, start: 77 }, // …or the red circle
+  { name: "সূর্য আর আকাশ", px: SCENE, start: 45 }, // start on the sun
+  { name: "বাংলাদেশের পতাকা", px: FLAG, start: 77 }, // …or the red circle
 ];
 const CH = [
-  { i: 0, cls: "r", name: "Red", tint: (v: number) => `rgb(${v} 0 0)` },
-  { i: 1, cls: "g", name: "Green", tint: (v: number) => `rgb(0 ${v} 0)` },
-  { i: 2, cls: "b", name: "Blue", tint: (v: number) => `rgb(0 0 ${v})` },
+  { i: 0, cls: "r", name: "লাল", tint: (v: number) => `rgb(${v} 0 0)` },
+  { i: 1, cls: "g", name: "সবুজ", tint: (v: number) => `rgb(0 ${v} 0)` },
+  { i: 2, cls: "b", name: "নীল", tint: (v: number) => `rgb(0 0 ${v})` },
 ];
 // One slider, three stops: pulled apart (0) → stacked (50) → seen face-on (100).
 const STEPS = [
   {
     at: 0,
-    label: "1 · Three grids",
-    note: "Three separate grids, the same size. Each holds only how much of its own color goes in every cell.",
+    label: "১ · তিনটা grid",
+    note: "তিনটা আলাদা grid, মাপে একদম এক। প্রত্যেকটা শুধু এটুকুই জানে — কোন ঘরে তার নিজের রঙটা কতটুকু আছে।",
   },
   {
     at: 50,
-    label: "2 · Stack them",
-    note: "Laid on top of each other, the lights add up: red + green is yellow, all three at full is white.",
+    label: "২ · উপরে উপরে রাখুন",
+    note: "একটার উপর আরেকটা বসালে আলোগুলো যোগ হয়ে যায়। লাল আর সবুজ মিলে হলুদ, তিনটাই পুরো খোলা থাকলে সাদা।",
   },
   {
     at: 100,
-    label: "3 · Look from the front",
-    note: "From the front it is an ordinary color picture — but every pixel is still three numbers.",
+    label: "৩ · সামনে থেকে দেখুন",
+    note: "সামনে থেকে দেখলে নিতান্তই একটা সাধারণ রঙিন ছবি। অথচ প্রতিটা pixel এখনো তিনটা সংখ্যাই।",
   },
 ];
 /** Tipped-over pose of a sheet: the same numbers go into the CSS transform. */
@@ -391,7 +537,7 @@ export function ChannelStackFigure() {
 
   return (
     <figure className="mfig" ref={box}>
-      <Head n="Figure 3" title="A color image is three grids, stacked" />
+      <Head n="চিত্র ৭" title="রঙিন ছবি মানে তিনটা grid, একটার উপর আরেকটা" />
       <div className="pfig-body pfig-split wide">
         <div
           className={`pfig-stack${glide ? " glide" : ""}`}
@@ -429,8 +575,8 @@ export function ChannelStackFigure() {
 
         <div className="pfig-col">
           <p className="pfig-label">
-            Row <b>{Math.floor(i / STACK_COLS) + 1}</b>, column <b>{(i % STACK_COLS) + 1}</b> — one
-            pixel, one number from each grid:
+            Row <b>{bn(Math.floor(i / STACK_COLS) + 1)}</b>, column <b>{bn((i % STACK_COLS) + 1)}</b>-এর
+            pixel — প্রতিটা grid থেকে একটা করে সংখ্যা:
           </p>
           <div className="pfig-sum">
             {CH.map((c) => (
@@ -444,7 +590,7 @@ export function ChannelStackFigure() {
             <div className="pfig-term out">
               <em>=</em>
               <i style={{ background: `rgb(${p.join(" ")})` }} />
-              <span>Pixel</span>
+              <span>pixel</span>
               <b>({p.join(", ")})</b>
             </div>
           </div>
@@ -462,7 +608,7 @@ export function ChannelStackFigure() {
             min={0}
             max={100}
             value={step}
-            aria-label="stack the three grids"
+            aria-label="তিনটা grid উপরে উপরে রাখুন"
             onChange={(e) => go(Number(e.target.value), false)}
           />
         </div>
@@ -479,23 +625,23 @@ export function ChannelStackFigure() {
             on={use[c.i]}
             onClick={() => setUse((u) => u.map((s, j) => (j === c.i ? !s : s)))}
           >
-            {c.name} {use[c.i] ? "on" : "off"}
+            {c.name} {use[c.i] ? "চালু" : "বন্ধ"}
           </Btn>
         ))}
       </div>
       <figcaption>
-        Each sheet is <strong>a grayscale image on its own</strong>, tinted so you can tell them
-        apart. Press <strong>Stack them</strong> and they slide into one — where they overlap, their
-        light adds, and the picture appears. Point at any cell: the line pierces{" "}
-        <strong>the same position</strong> in all three grids. Switch a color off and its sheet
-        turns to zeros — turn off green and the yellow sun goes red.
+        প্রতিটা sheet আলাদা করে দেখলে <strong>একেকটা সাদাকালো ছবি</strong> — চেনার সুবিধার জন্য রঙ
+        মাখানো আছে, এই যা। <strong>উপরে উপরে রাখুন</strong> চাপুন, তিনটা মিলে এক হয়ে যাবে। যেখানে যেখানে
+        ওরা একে অপরের গায়ে পড়ে, সেখানে আলো যোগ হয়ে ছবিটা ফুটে ওঠে। যেকোনো ঘরে আঙুল রাখুন — শিকটা
+        তিনটা grid-এরই <strong>ঠিক একই জায়গায়</strong> গিয়ে বেঁধে। একটা রঙ বন্ধ করে দিন, ওর sheet-টা
+        শূন্য হয়ে যাবে — সবুজ বন্ধ করলে দেখবেন হলুদ সূর্যটা লাল হয়ে গেছে।
       </figcaption>
     </figure>
   );
 }
 
 // ---------------------------------------------------------------------------
-// 4 · The 3x3 from the article, editable. This is the load-bearing figure: the
+// 3 · The 3x3 from the article, editable. This is the load-bearing figure: the
 //     reader changes a number and the picture changes under their hand.
 
 const ORIGINAL = [10, 20, 15, 25, 240, 30, 12, 18, 22];
@@ -511,14 +657,14 @@ export function PixelLabFigure() {
 
   return (
     <figure className="mfig" ref={box}>
-      <Head n="Figure 4" title="Change a number, change the picture" />
+      <Head n="চিত্র ৩" title="একটা সংখ্যা বদলান, ছবিটাও বদলে যাবে" />
       <div className="pfig-body pfig-split">
         <div className="pfig-frame">
           <PixelGrid cols={3} values={px} numbers selected={sel} onPick={setSel} />
         </div>
         <div className="pfig-col">
           <p className="pfig-label">
-            Selected: <b>row {Math.floor(sel / 3) + 1}, column {(sel % 3) + 1}</b>
+            বেছে নেওয়া pixel: <b>row {bn(Math.floor(sel / 3) + 1)}, column {bn((sel % 3) + 1)}</b>
           </p>
           <p className="pfig-big">{px[sel]}</p>
           <div className="pfig-row">
@@ -545,25 +691,25 @@ export function PixelLabFigure() {
       </div>
       <div className="mfig-controls">
         <Btn on={px.every((v, i) => v === ORIGINAL[i])} onClick={() => setPx(ORIGINAL)}>
-          The image above
+          উপরের ছবিটা
         </Btn>
-        <Btn on={px.every((v) => v === 0)} onClick={() => all(0)}>All black</Btn>
-        <Btn on={px.every((v) => v === 255)} onClick={() => all(255)}>All white</Btn>
+        <Btn on={px.every((v) => v === 0)} onClick={() => all(0)}>সব কালো</Btn>
+        <Btn on={px.every((v) => v === 255)} onClick={() => all(255)}>সব সাদা</Btn>
         <Btn on={false} onClick={() => setPx(ORIGINAL.map((_, i) => (i % 2 ? 235 : 25)))}>
-          Checkerboard
+          দাবার ছক
         </Btn>
       </div>
       <figcaption>
-        These are the same nine numbers written above. Click any cell and drag the slider. Take the
-        240 in the middle down to 20 and <strong>the bright dot disappears</strong> — nothing was
-        “edited”, one number changed. To a computer, editing an image is arithmetic and nothing else.
+        উপরে যে নয়টা সংখ্যা লেখা আছে, এগুলো ঠিক সেই নয়টাই। যেকোনো ঘরে চাপ দিয়ে slider-টা টানুন।
+        মাঝখানের 240-টাকে নামিয়ে 20 করে দিন — <strong>উজ্জ্বল ফোঁটাটা উধাও</strong>। কেউ কোনো photo edit
+        করল না, একটা সংখ্যা বদলাল কেবল। কম্পিউটারের কাছে photo edit করা মানে অংক কষা, এর বেশি কিছু না।
       </figcaption>
     </figure>
   );
 }
 
 // ---------------------------------------------------------------------------
-// 5 · Draw something. The point is the reverse direction: a shape you made by
+// 4 · Draw something. The point is the reverse direction: a shape you made by
 //     hand is, the instant you finish, just a list of numbers.
 
 const PAINT_COLS = 14;
@@ -582,14 +728,14 @@ export function PaintFigure() {
 
   return (
     <figure className="mfig" ref={box}>
-      <Head n="Figure 5" title="Draw something — the machine only gets the list" />
+      <Head n="চিত্র ৪" title="আঁকুন যা খুশি — যন্ত্র পাবে শুধু list-টা" />
       <div className="pfig-body pfig-split wide">
         <div className="pfig-frame">
           <PixelGrid cols={PAINT_COLS} values={px} numbers={numbers} onPaint={paint} />
         </div>
         <div className="pfig-col">
           <p className="pfig-label">
-            Brush brightness: <b>{brush}</b>
+            Brush-এর brightness: <b>{brush}</b>
           </p>
           <input
             className="pfig-slider"
@@ -601,36 +747,36 @@ export function PaintFigure() {
             onChange={(e) => setBrush(Number(e.target.value))}
           />
           <div className="pfig-row">
-            <Btn on={brush === 235} onClick={() => setBrush(235)}>White</Btn>
-            <Btn on={brush === 128} onClick={() => setBrush(128)}>Gray</Btn>
+            <Btn on={brush === 235} onClick={() => setBrush(235)}>সাদা</Btn>
+            <Btn on={brush === 128} onClick={() => setBrush(128)}>ধূসর</Btn>
             <Btn on={brush === 18} onClick={() => setBrush(18)}>Eraser</Btn>
           </div>
           <p className="pfig-label">
-            What the machine receives — a list of <b>{PAINT_N}</b> numbers, <b>{lit}</b> of them lit:
+            যন্ত্র যা পাচ্ছে — <b>{bn(PAINT_N)}</b>টা সংখ্যার একটা list, যার <b>{bn(lit)}</b>টা জ্বলছে:
           </p>
           <p className="pfig-mono">[{px.slice(0, 28).join(", ")}, …]</p>
         </div>
       </div>
       <div className="mfig-controls">
         <Btn on={numbers} onClick={() => setNumbers((s) => !s)}>
-          {numbers ? "Hide numbers" : "Show numbers"}
+          {numbers ? "সংখ্যা লুকান" : "সংখ্যা দেখান"}
         </Btn>
-        <Btn on={false} onClick={() => setPx(BLANK)}>Clear</Btn>
-        <span className="mfig-read">14 × 14 = {PAINT_N}</span>
+        <Btn on={false} onClick={() => setPx(BLANK)}>মুছে ফেলুন</Btn>
+        <span className="mfig-read">{bn(PAINT_COLS)} × {bn(PAINT_COLS)} = {bn(PAINT_N)}</span>
       </div>
       <figcaption>
-        Press and drag to draw — a letter, a face, anything. To you that is a picture; to the machine
-        it is <strong>{PAINT_N} numbers</strong>, full stop. Machine learning means looking at that
-        list and saying what was drawn.
+        চেপে ধরে টানুন, এঁকে ফেলুন কিছু একটা — একটা অক্ষর, একটা মুখ, যা মন চায়। আপনার কাছে ওটা একটা ছবি।
+        যন্ত্রের কাছে <strong>{bn(PAINT_N)}টা সংখ্যা</strong>। ব্যস, আর কিছু না। Machine learning মানে ঐ list-টার
+        দিকে তাকিয়ে বলে দেওয়া — কী আঁকা হয়েছে।
       </figcaption>
     </figure>
   );
 }
 
 // ---------------------------------------------------------------------------
-// 6 · The closer. Same idea as figure 1 of an earlier draft, but placed last on
-//     purpose: once the reader knows what a grid of brightness values is, the
-//     "computer sees only this" view lands as a conclusion instead of a puzzle.
+// 5 · The bird. Closes the black-and-white half of the article: once the reader
+//     knows what a grid of brightness values is, the "computer sees only this"
+//     view lands as a conclusion instead of a puzzle.
 
 // ponytail: a bird built from a few shapes and sampled, not a decoded photo — a
 // real image would need a file + a decoder in the bundle to make this one point.
@@ -734,7 +880,7 @@ export function EyeVsMachineFigure() {
 
   return (
     <figure className="mfig" ref={box}>
-      <Head n="Figure 6" title={`You see a bird. It sees ${BIRD_PX.length.toLocaleString("en-US")} numbers.`} />
+      <Head n="চিত্র ৫" title={`আপনি দেখছেন একটা পাখি। সে দেখছে ${bn(BIRD_PX.length.toLocaleString("en-IN"))}টা সংখ্যা।`} />
       <div className="pfig-body">
         <div className={`pfig-frame fine${view === "eye" ? " seamless" : ""}`}>
           <PixelGrid
@@ -749,26 +895,334 @@ export function EyeVsMachineFigure() {
           />
         </div>
         <p className="pfig-label">
-          Point at any cell — row <b>{Math.floor(i / BIRD_COLS) + 1}</b>, column <b>{(i % BIRD_COLS) + 1}</b> holds
-          brightness <b>{v}</b>. 0 is pitch black, 255 is pure white.
+          যেকোনো ঘরে আঙুল রাখুন — row <b>{bn(Math.floor(i / BIRD_COLS) + 1)}</b>, column{" "}
+          <b>{bn((i % BIRD_COLS) + 1)}</b>-এর brightness <b>{v}</b>। 0 মানে ঘুটঘুটে কালো, 255 মানে ধবধবে সাদা।
         </p>
       </div>
       <div className="mfig-controls">
         <Btn on={view === "eye"} onClick={() => setView("eye")}>
-          What you see
+          আপনি যা দেখছেন
         </Btn>
         <Btn on={view === "both"} onClick={() => setView("both")}>
-          Both at once
+          দুইটাই একসাথে
         </Btn>
         <Btn on={view === "num"} onClick={() => setView("num")}>
-          What the computer gets
+          কম্পিউটার যা পায়
         </Btn>
       </div>
       <figcaption>
-        The picture and the list of numbers are <strong>the same thing</strong>, shown two ways.
-        Press <strong>What the computer gets</strong>: the bird is gone and {BIRD_COLS} × {BIRD_COLS} ={" "}
-        {BIRD_PX.length.toLocaleString("en-US")} numbers remain. Searching your photos for “bird” means finding the answer in
-        numbers like these — and a real photo hands it 36 million of them.
+        ছবিটা আর সংখ্যার list-টা <strong>একই জিনিস</strong> — শুধু দুইভাবে দেখানো।{" "}
+        <strong>কম্পিউটার যা পায়</strong> চাপুন: পাখিটা নাই হয়ে গেল, পড়ে রইল {bn(BIRD_COLS)} ×{" "}
+        {bn(BIRD_COLS)} = {bn(BIRD_PX.length.toLocaleString("en-IN"))}টা সংখ্যা। আপনার ফোনে “bird” লিখে
+        সার্চ দেওয়া মানে এরকম সংখ্যার ভেতর থেকেই উত্তরটা খুঁজে বের করা — আর সত্যিকারের একটা photo-তে
+        সংখ্যা থাকে এর চেয়ে হাজার গুণেরও বেশি। কত বেশি, সেটা একটু পরেই হিসাব করবো।
+      </figcaption>
+    </figure>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 2 · Why a grid at all. The article tells it as a phone call: get a pencil
+//     drawing onto a friend's page using nothing but words. Naming it fails,
+//     describing it fails, and a grid you have both ruled — read out one number
+//     per cell, in an order you both know — works without the word "bird" ever
+//     being said. The last step makes the grid finer, which is resolution, which
+//     is where "12 megapixel" comes from.
+//
+//     It sits last in the file only because it draws with the bird's shape
+//     helpers above; in the article it comes second.
+
+/** The drawing's side, in sheet units. Every grid size on offer divides it. */
+const SHEET = 48;
+const PAPER = 236;
+
+type Mark = { tone: number } & (
+  | { ellipse: [cx: number, cy: number, rx: number, ry: number, deg: number] }
+  | { poly: [number, number][] }
+  | { line: [x1: number, y1: number, x2: number, y2: number, w: number] }
+);
+
+// Your pencil bird, back to front. One list both draws the picture you see and
+// yields the numbers you read out, so the two can never disagree.
+const DRAWING: Mark[] = [
+  { line: [1, 39.5, 47, 35.5, 2.6], tone: 70 }, // branch
+  { line: [21, 30, 20.2, 37.6, 1], tone: 60 }, // legs, tucked under the body
+  { line: [25.5, 30, 26.2, 37.2, 1], tone: 60 },
+  { poly: [[13.5, 27], [3.5, 33.5], [6.5, 36.2], [16.5, 30.5]], tone: 72 }, // tail
+  { ellipse: [22.5, 25.5, 11.5, 7.6, -20], tone: 130 }, // body
+  { ellipse: [19.5, 24.8, 8.4, 4.2, -18], tone: 78 }, // wing
+  { ellipse: [32.8, 16.4, 5.8, 5.8, 0], tone: 130 }, // head
+  { ellipse: [34.8, 15.2, 1.3, 1.3, 0], tone: 18 }, // eye
+  { poly: [[38, 14.6], [43.4, 17.2], [37.8, 19.4]], tone: 50 }, // beak
+];
+
+const MARK_INSIDE = DRAWING.map((m) =>
+  "ellipse" in m ? ellipse(...m.ellipse) : "poly" in m ? polygon(m.poly) : stroke(...m.line),
+);
+const sketchTone = (x: number, y: number) => {
+  for (let k = DRAWING.length - 1; k >= 0; k--) if (MARK_INSIDE[k](x, y)) return DRAWING[k].tone;
+  return PAPER;
+};
+
+const GRID_SIZES = [6, 8, 12, 24, 48];
+/** The grid the story reads out loud: small enough to print a number per cell. */
+const READ_N = 8;
+
+// What each cell averages to, per grid size — the number you would say for it.
+// Samples sit at most half a unit apart, so even a coarse cell sees its edges.
+const CELL_TONES = Object.fromEntries(
+  GRID_SIZES.map((n) => {
+    const s = SHEET / n;
+    const k = Math.max(4, Math.ceil(2 * s));
+    const tones = Array.from({ length: n * n }, (_, i) => {
+      const c = i % n;
+      const r = Math.floor(i / n);
+      let sum = 0;
+      for (let sy = 0; sy < k; sy++)
+        for (let sx = 0; sx < k; sx++) sum += sketchTone((c + (sx + 0.5) / k) * s, (r + (sy + 0.5) / k) * s);
+      return clamp255(sum / (k * k));
+    });
+    return [n, tones];
+  }),
+) as Record<number, number[]>;
+
+function Drawing() {
+  return (
+    <g>
+      {DRAWING.map((m, k) => {
+        const tone = gray(m.tone);
+        if ("ellipse" in m) {
+          const [cx, cy, rx, ry, deg] = m.ellipse;
+          return (
+            <ellipse key={k} cx={cx} cy={cy} rx={rx} ry={ry} transform={`rotate(${deg} ${cx} ${cy})`} style={{ fill: tone }} />
+          );
+        }
+        if ("poly" in m) return <polygon key={k} points={m.poly.join(" ")} style={{ fill: tone }} />;
+        const [x1, y1, x2, y2, w] = m.line;
+        return <line key={k} x1={x1} y1={y1} x2={x2} y2={y2} strokeWidth={w} strokeLinecap="round" style={{ stroke: tone }} />;
+      })}
+    </g>
+  );
+}
+
+/** The ruled lines of an n × n grid over the sheet. */
+function Ruling({ n }: { n: number }) {
+  const s = SHEET / n;
+  let d = "";
+  for (let i = 1; i < n; i++) d += `M${i * s} 0V${SHEET}M0 ${i * s}H${SHEET}`;
+  return <path d={d} className={`pfig-ruling${n > 16 ? " fine" : ""}`} vectorEffect="non-scaling-stroke" />;
+}
+
+/** The friend's page: the first `upto` cells of an n × n grid, shaded as told. */
+function Shaded({ n, upto }: { n: number; upto: number }) {
+  const s = SHEET / n;
+  return (
+    <g shapeRendering="crispEdges">
+      {CELL_TONES[n].slice(0, upto).map((v, i) => (
+        <rect key={i} x={(i % n) * s} y={Math.floor(i / n) * s} width={s} height={s} style={{ fill: gray(v) }} />
+      ))}
+    </g>
+  );
+}
+
+/** Where "a small circle a bit right of the middle" could be — all of them fit. */
+const GUESSES: [number, number, number][] = [
+  [29, 22, 8],
+  [37.5, 11.5, 3.2],
+  [24.5, 13, 5.5],
+];
+
+const STORY = [
+  {
+    title: "“একটা পাখি আঁকো”",
+    note: "বন্ধু পাখি এঁকেছে ঠিকই, কিন্তু ওর মনের পাখি, আপনারটা না। “পাখি” শব্দটা শুনে ও নিজের মতো করে বুঝে নিয়েছে।",
+  },
+  {
+    title: "“মাঝখান থেকে একটু ডানে একটা ছোট গোল…”",
+    note: "একটু মানে কতটুকু? ছোট মানে কত ছোট? বন্ধুর কাছে এর সবগুলোই ঠিক উত্তর। মুখে বর্ণনা দিলে প্রতিটা কথাতেই guess করতে হয়।",
+  },
+  {
+    title: "দুইজনের পাতায় একই রকম ছক",
+    note: "৮টা row, ৮টা column, মোট ৬৪টা ঘর। প্রতিটা ঘরের জায়গা এখন দুই খাতাতেই fixed। বাকি শুধু বলা, কোন ঘর কতটা কালো।",
+  },
+  {
+    title: "প্রতিটা ঘরের জন্য একটা সংখ্যা",
+    note: "উপরের row-এর বাঁ দিক থেকে শুরু। ঘুটঘুটে কালো 0, একদম সাদা 255, মাঝের ধূসর মাঝামাঝি। আপনি সংখ্যা বলছেন, বন্ধু ঘর রং করছে।",
+  },
+  {
+    title: "ছকটা আরও ঘন করুন",
+    note: "ঘর যত ছোট, বন্ধুর ছবি তত আপনারটার কাছাকাছি। কিন্তু পড়তে হচ্ছে তত বেশি সংখ্যা। এই এক একটা ঘরের নামই pixel।",
+  },
+];
+const GRID_STEP = 2;
+const READ_STEP = 3;
+const FINE_STEP = 4;
+const READ_ALL = READ_N * READ_N;
+
+export function GridStoryFigure() {
+  const box = useRef<HTMLElement>(null);
+  const [step, setStep] = useState(0);
+  const [said, setSaid] = useState(0); // cells read out so far, in reading order
+  const [n, setN] = useState(READ_N);
+  const [awake, setAwake] = useState(true);
+  useInView(box, { enter: () => setAwake(true), leave: () => setAwake(false) });
+
+  // One number every 90ms while the figure is on screen. As in the other
+  // stepped figures, "still reading" is derived, so the last cell just stops it.
+  const reading = step === READ_STEP && said < READ_ALL;
+  useEffect(() => {
+    if (!reading || !awake) return;
+    const t = setTimeout(() => setSaid((k) => k + 1), 90);
+    return () => clearTimeout(t);
+  }, [reading, awake, said]);
+
+  const last = STORY.length - 1;
+  const go = (s: number) => {
+    const next = Math.max(0, Math.min(last, s));
+    if (next === READ_STEP) setSaid(0);
+    setStep(next);
+  };
+
+  const size = step === FINE_STEP ? n : READ_N;
+  const tones = CELL_TONES[READ_N];
+  const cell = SHEET / READ_N;
+  const done = step === READ_STEP && !reading;
+  // the row the last number came from, and everything said on it so far
+  const row = Math.floor(Math.max(0, said - 1) / READ_N);
+  const heard = tones.slice(row * READ_N, said);
+
+  return (
+    <figure className="mfig" ref={box}>
+      <Head n="চিত্র ২" title="ফোনে একটা ছবি পাঠান, শুধু মুখের কথায়" />
+      <div className="pfig-body">
+        <div className="pfig-sheets">
+          <div className="pfig-sheet">
+            <p className="pfig-label">আপনার খাতা</p>
+            <svg viewBox={`0 0 ${SHEET} ${SHEET}`} className="mfig-svg" role="img" aria-label="your pencil drawing of a bird on a branch">
+              <rect width={SHEET} height={SHEET} style={{ fill: gray(PAPER) }} />
+              <Drawing />
+              {step >= GRID_STEP && <Ruling n={size} />}
+              {/* each number sits on a chip of the very grey it stands for */}
+              {step === READ_STEP &&
+                tones.slice(0, said).map((v, i) => {
+                  const x = ((i % READ_N) + 0.5) * cell;
+                  const y = (Math.floor(i / READ_N) + 0.5) * cell;
+                  return (
+                    <g key={i}>
+                      <rect x={x - 2.4} y={y - 1.5} width={4.8} height={3} rx={0.7} className="pfig-sheet-chip" style={{ fill: gray(v) }} />
+                      <text x={x} y={y} className="pfig-sheet-num" style={{ fill: ink(v) }}>
+                        {v}
+                      </text>
+                    </g>
+                  );
+                })}
+              {reading && said > 0 && (
+                <rect
+                  x={((said - 1) % READ_N) * cell}
+                  y={Math.floor((said - 1) / READ_N) * cell}
+                  width={cell}
+                  height={cell}
+                  className="pfig-sheet-now"
+                  vectorEffect="non-scaling-stroke"
+                />
+              )}
+            </svg>
+          </div>
+
+          <div className="pfig-sheet">
+            <p className="pfig-label">বন্ধুর খাতা</p>
+            <svg
+              viewBox={`0 0 ${SHEET} ${SHEET}`}
+              className="mfig-svg"
+              role="img"
+              aria-label={
+                step < GRID_STEP
+                  ? "your friend's page: a guess at what you meant"
+                  : `your friend's page, a ${size} by ${size} grid, shaded from the numbers you read out`
+              }
+            >
+              <rect width={SHEET} height={SHEET} style={{ fill: gray(PAPER) }} />
+              {/* the bird everyone draws when told "a bird" */}
+              {step === 0 && <path d="M12 24Q18 15 24 24Q30 15 36 24" className="pfig-doodle" />}
+              {step === 1 && (
+                <g className="pfig-guess">
+                  {GUESSES.map(([x, y, r]) => (
+                    <g key={x}>
+                      <circle cx={x} cy={y} r={r} />
+                      <text x={x} y={y}>?</text>
+                    </g>
+                  ))}
+                </g>
+              )}
+              {step === READ_STEP && <Shaded n={READ_N} upto={said} />}
+              {step === FINE_STEP && <Shaded n={n} upto={n * n} />}
+              {step >= GRID_STEP && <Ruling n={size} />}
+            </svg>
+          </div>
+        </div>
+
+        <div className="pfig-split">
+          <ol className="gfig-steps">
+            {STORY.map((x, i) => (
+              <li key={x.title} className={i === step ? "on" : i < step ? "past" : ""}>
+                <button type="button" onClick={() => go(i)}>
+                  {x.title}
+                </button>
+              </li>
+            ))}
+          </ol>
+          <div className="pfig-col">
+            <p className={`gfig-say${step < GRID_STEP ? " bad" : done ? " good" : ""}`}>
+              {done
+                ? "৬৪টা সংখ্যা, ব্যস। “পাখি” শব্দটা একবারও বলতে হয়নি। তবে ছবিটা কেমন চৌকো চৌকো, পাখি বলে চেনা কঠিন। পরের ধাপে দেখুন কী করা যায়।"
+                : STORY[step].note}
+            </p>
+            {step === READ_STEP && (
+              <p className="pfig-mono">
+                row <b>{bn(row + 1)}</b>: {heard.join(", ")}
+                {reading ? " …" : ""}
+                <br />
+                বলা হলো <b>{bn(said)}</b> / {bn(READ_ALL)}টা সংখ্যা
+              </p>
+            )}
+            {step === FINE_STEP && (
+              <p className="pfig-big">
+                {n} × {n}
+                <small>মোট {bn(n * n)}টা সংখ্যা পড়তে হবে</small>
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+
+      <div className="mfig-controls">
+        <button type="button" className="mfig-btn" onClick={() => go(step - 1)} disabled={step === 0}>
+          ← আগেরটা
+        </button>
+        <button type="button" className="mfig-btn" onClick={() => go(step + 1)} disabled={step === last}>
+          পরেরটা →
+        </button>
+        {step === READ_STEP && (
+          <Btn on={reading} onClick={() => setSaid(0)}>
+            আবার পড়ুন
+          </Btn>
+        )}
+        {step === FINE_STEP &&
+          GRID_SIZES.map((k) => (
+            <Btn key={k} on={n === k} onClick={() => setN(k)}>
+              {k} × {k}
+            </Btn>
+          ))}
+        <span className="mfig-read">
+          ধাপ <b>{bn(step + 1)}</b> / {bn(STORY.length)}
+        </span>
+      </div>
+
+      <figcaption>
+        <strong>পরেরটা →</strong> চেপে গল্পটা এগোন। চার নম্বর ধাপে দেখবেন, আপনি একটা করে সংখ্যা বলছেন আর
+        বন্ধুর খাতায় একটা করে ঘর রং হচ্ছে। শেষ ধাপে ছকের মাপ বদলে দেখুন: <strong>৬ × ৬</strong>-এ পাখিটা চেনাই
+        যায় না, <strong>৪৮ × ৪৮</strong>-এ প্রায় আসলটার মতো। আপনার ফোনের camera ঠিক এই কাজটাই করে, শুধু তার
+        ছকটা ৪০০০ × ৩০০০।
       </figcaption>
     </figure>
   );

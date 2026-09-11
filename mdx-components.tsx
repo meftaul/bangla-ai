@@ -1,6 +1,7 @@
 import type { MDXComponents } from "mdx/types";
 import Slide from "@/components/slide";
 import Table from "@/components/article-table";
+import LessonLink from "@/components/lesson-link";
 import Quiz from "@/components/interactive/quiz";
 import Poll from "@/components/interactive/poll";
 import DragDrop from "@/components/interactive/drag-drop";
@@ -12,7 +13,7 @@ import { Chapter, Verdict, Evo } from "@/components/deck-blocks";
 // Registered globally so MDX articles can use these without importing.
 // Required by @next/mdx with the App Router.
 const components: MDXComponents = {
-  Slide, Chapter, Verdict, Evo, Table,
+  Slide, Chapter, Verdict, Evo, Table, LessonLink,
   Quiz, Poll, DragDrop, Terminal, ContextWindow, PasswordMeter,
 };
 
