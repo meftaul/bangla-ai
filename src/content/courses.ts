@@ -38,6 +38,6 @@ export const COURSES: Course[] = [
     slug: "math_for_ai",
     title: "Math for AI",
     description: "The maths under the hood, from first principles — starting with what an image actually is.",
-    items: ["math_for_ai/01_intro", "math_for_ai/01a_graph_paper"],
+    items: ["math_for_ai/01_intro", "math_for_ai/01a_graph_paper", "math_for_ai/01b_binary"],
   },
 ];

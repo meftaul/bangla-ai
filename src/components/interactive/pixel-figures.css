@@ -474,3 +474,33 @@
    seams; bleeding each cell's own colour a little past its edge hides them */
 .pfig-frame.seamless .pfig-cell { border-radius: 0; box-shadow: 0 0 0 0.75px var(--fill); }
 
+/* ---- more cells, clearer cat (figure 2ক) --------------------------------- */
+.pfig-cs-main { width: 100%; max-width: 17rem; margin-inline: auto; }
+.pfig-cs-main svg { border-radius: 6px; }
+@keyframes pfig-regrid { from { opacity: 0.35; } }
+.pfig-regrid { animation: pfig-regrid 0.45s ease-out both; }
+
+/* every size at once, coarsest first; each thumbnail is also a button */
+.pfig-cs-strip { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0.45rem; }
+.pfig-cs-strip button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.3rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--mdim);
+  font: inherit;
+  font-size: 0.66rem;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s, color 0.2s;
+}
+.pfig-cs-strip button:hover { background: rgba(255, 255, 255, 0.08); }
+.pfig-cs-strip button.on { border-color: var(--mv); background: rgba(251, 191, 36, 0.1); color: var(--mink); }
+.pfig-cs-strip svg { border-radius: 4px; }
+@media (prefers-reduced-motion: reduce) {
+  .pfig-regrid { animation: none; }
+}
+

@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 
-import { Btn, Head, bn, useInView } from "./figure-kit";
+import { Btn, Head, useInView } from "./figure-kit";
 import "./pixel-figures.css";
 import "./feature-figures.css";
 
@@ -11,8 +11,8 @@ import "./feature-figures.css";
 // numbers, and that list is all the machine ever gets.
 //
 // pixel-figures.tsx covers the first half; these share its shell and stylesheet.
-// Same rule as there: SVG/DOM rather than canvas, and Bangla copy in the same
-// register as the prose — Bangla sentences, technical words left in English.
+// Same rule as there: SVG/DOM rather than canvas, and English copy inside the
+// panels while the prose around them stays Bangla.
 
 // ---------------------------------------------------------------------------
 // 8 · Order matters. The article asks the reader outright what (78, 180) would
@@ -23,12 +23,12 @@ type Student = { id: string; name: string; v: [number, number, number, number] }
 
 /** height cm, weight kg, shoe size, age — the article's four features. */
 const STUDENTS: Student[] = [
-  { id: "nasib", name: "নাসিব", v: [180, 78, 43, 18] },
-  { id: "samin", name: "সামিন", v: [170, 60, 41, 17] },
-  { id: "shom", name: "শোম", v: [175, 75, 42, 19] },
+  { id: "nasib", name: "Nasib", v: [180, 78, 43, 18] },
+  { id: "samin", name: "Samin", v: [170, 60, 41, 17] },
+  { id: "shom", name: "Shom", v: [175, 75, 42, 19] },
 ];
 
-const S_FEATURES = ["উচ্চতা (সেমি)", "ওজন (কেজি)", "জুতার মাপ", "বয়স (বছর)"];
+const S_FEATURES = ["height (cm)", "weight (kg)", "shoe size", "age (years)"];
 
 const W = 420;
 const H = 262;
@@ -58,17 +58,17 @@ export function StudentVectorFigure() {
 
   return (
     <figure className="mfig" ref={box}>
-      <Head n="চিত্র ৮" title="ছাত্র মানে একটা সাজানো লিস্ট — আর সাজানোটাই হলো অর্থ" />
+      <Head n="Figure 8" title="A student is an ordered list — and the order is the meaning" />
       <div className="pfig-body pfig-split">
         <div className="mfig-plot">
-          <svg viewBox={`0 0 ${W} ${H}`} className="mfig-svg" role="img" aria-label="উচ্চতা আর ওজন ধরে ছাত্রদের বসানো হয়েছে">
+          <svg viewBox={`0 0 ${W} ${H}`} className="mfig-svg" role="img" aria-label="students placed by height and weight">
             <line x1={PAD.l} y1={H - PAD.b} x2={W - PAD.r} y2={H - PAD.b} className="mfig-axis" />
             <line x1={PAD.l} y1={PAD.t} x2={PAD.l} y2={H - PAD.b} className="mfig-axis" />
             <text x={W - PAD.r} y={H - PAD.b + 22} className="mfig-axlabel" textAnchor="end">
-              v₁ = উচ্চতা (সেমি) →
+              v₁ = height (cm) →
             </text>
             <text x={PAD.l - 8} y={PAD.t + 6} className="mfig-axlabel" textAnchor="end">
-              v₂ = ওজন (কেজি) ↑
+              v₂ = weight (kg) ↑
             </text>
 
             {STUDENTS.map((s) => {
@@ -97,9 +97,9 @@ export function StudentVectorFigure() {
           {/* Four features and the plot is over — the list is not. */}
           {dims === 4 && (
             <div className="mfig-veil">
-              <p>একজন ছাত্রের জন্য ৪টা সংখ্যা।</p>
+              <p>4 numbers for one student.</p>
               <p className="mfig-sub">
-                গ্রাফ পেপারের দিক ফুরিয়ে গেছে। লিস্টের ফুরায়নি।
+                The graph paper ran out of directions. The list did not.
               </p>
             </div>
           )}
@@ -107,7 +107,7 @@ export function StudentVectorFigure() {
 
         <div className="pfig-col">
           <p className="pfig-label">
-            <b>{who.name}</b>-কে ভেক্টর হিসেবে লিখলে:
+            <b>{who.name}</b>, written as a vector:
           </p>
           <div className="ffig-vec">
             {vec.map((n, i) => (
@@ -122,12 +122,12 @@ export function StudentVectorFigure() {
             ))}
           </div>
           <p className="pfig-label">
-            ডাইমেনশন: <b>{bn(vec.length)}</b> — প্রতিটা feature-এর জন্য একটা।
+            Dimension: <b>{vec.length}</b> — one for each feature.
           </p>
           <p className={swapped ? "ffig-say bad" : "ffig-say"}>
             {swapped
-              ? `এখন পড়া যাচ্ছে: উচ্চতা ${bn(who.v[1])} সেমি, ওজন ${bn(who.v[0])} কেজি।`
-              : `পড়া যাচ্ছে: উচ্চতা ${bn(who.v[0])} সেমি, ওজন ${bn(who.v[1])} কেজি।`}
+              ? `Now it reads: height ${who.v[1]} cm, weight ${who.v[0]} kg.`
+              : `It reads: height ${who.v[0]} cm, weight ${who.v[1]} kg.`}
           </p>
         </div>
       </div>
@@ -138,19 +138,18 @@ export function StudentVectorFigure() {
           </Btn>
         ))}
         <Btn on={swapped} onClick={() => setSwapped((s) => !s)}>
-          ক্রমটা উল্টে দিন
+          Swap the order
         </Btn>
         <Btn on={dims === 4} onClick={() => setDims((d) => (d === 2 ? 4 : 2))}>
-          + জুতার মাপ, বয়স
+          + shoe size, age
         </Btn>
       </div>
       <figcaption>
-        <strong>ক্রমটা উল্টে দিন</strong> চাপুন। ঐ একই দুইটা সংখ্যা এখন বলছে, মানুষটা{" "}
-        <strong>৭৮ সেমি লম্বা আর ওজন ১৮০ কেজি</strong> — ফাঁপা বৃত্তটা দেখাচ্ছে তার আসলে কোথায় থাকার কথা
-        ছিল। কিছু যোগ হয়নি, কিছু বাদ যায়নি। শুধু ক্রমটা বদলেছে, আর অর্থটাও তার সাথে সাথে বদলে গেছে।
-        এই জন্যই ভেক্টর হলো একটা <em>সাজানো</em> লিস্ট। আরও দুইটা feature যোগ করে দিন — ছবিটা ৩
-        ডাইমেনশনে গিয়েই মরে যায়, কিন্তু লিস্টটা দিব্যি চলতে থাকে। এভাবেই একটা আস্ত ছবি তিন কোটি ষাট
-        লাখ feature-এর একটামাত্র ভেক্টর হয়ে যেতে পারে।
+        Press <strong>Swap the order</strong>. The same two numbers now say this person is{" "}
+        <strong>78 cm tall and weighs 180 kg</strong> — the hollow circle shows where they should have been.
+        Nothing was added, nothing removed. Only the order changed, and the meaning changed with it. That is why a
+        vector is an <em>ordered</em> list. Add two more features — the picture gives up at 3 dimensions, but the
+        list carries on just fine. That is how a whole photo can become a single vector of 36 million features.
       </figcaption>
     </figure>
   );
@@ -161,14 +160,17 @@ export function StudentVectorFigure() {
 //     get made. Both columns of the article's table are measured live from text
 //     you can edit — type FREE a few times and the vector moves under your hand.
 
-const SPAM_MAIL = `Subject: CONGRATULATIONS!!! আপনি জিতে গেছেন
+// Both emails are written so the live measures land on the article's table:
+// spam (6, 14, 0.31, 1), normal (0, 1, 0.02, 0). Rewording either one moves
+// its capitals share, so re-check it against the table after any edit.
+const SPAM_MAIL = `Subject: CONGRATULATIONS!!! You Have WON
 
 DEAR LUCKY WINNER,
 
-আজকে আপনার EMAIL টা SELECT হয়েছে। এখনই আপনার free iPhone টা CLAIM
-করুন — ১০০% free, ডেলিভারি free, আর প্রথম ৫০ জনের জন্য একটা free
-গিফট কার্ড। দেরি করবেন না, এই free অফার আজ রাতেই শেষ। কোনো টাকা
-লাগবে না, পুরাটাই free.
+Your EMAIL has been SELECTED today. CLAIM your FREE iPHONE NOW,
+100% free, delivery free, and a free gift card for the first 50
+people. DO NOT WAIT, this free offer ends TONIGHT. You pay
+nothing, it is ALL FREE.
 
 CLAIM HERE: http://prize-claim.example/a
 MIRROR: http://prize-claim.example/b
@@ -185,21 +187,21 @@ TERMS: http://prize-claim.example/l
 SUPPORT: http://prize-claim.example/m
 MORE: http://prize-claim.example/n`;
 
-const NORMAL_MAIL = `Subject: কালকের ক্লাস
+const NORMAL_MAIL = `Subject: Tomorrow's class
 
-নাসিব,
+Nasib,
 
-কালকের ক্লাসটা room 204-এ হবে, সময় আগের মতোই। আমাদের পুরনো রুমের
-projector-টা এখনো নষ্ট, কেউ এসে ঠিক করে যায়নি। তাই মাসের শেষ পর্যন্ত
-উপরতলার বড় রুমটা ধার নিচ্ছি। এই সপ্তাহের practice sheet ক্লাস পেজে
-তুলে দেওয়া আছে, এখানে:
+Tomorrow's class will be in room 204, same time as before; the
+projector in our old room is still broken and nobody has come to
+fix it, so we are borrowing the big room upstairs until the end of
+the month, and this week's practice sheet is on the class page, here:
 http://university.example/sheet-3
 
-গত সপ্তাহের নোটগুলো নিয়ে এসো। আর সকালের আগে সুযোগ পেলে group-এর
-বাকিদেরও পড়াটার কথা একটু মনে করিয়ে দিও।
+Bring last week's notes, and if you get a chance before the
+morning, remind the rest of the group about the reading.
 
-ধন্যবাদ,
-সামিন`;
+Thanks,
+Samin`;
 
 type Mail = "spam" | "normal";
 
@@ -213,10 +215,10 @@ const capsShare = (t: string) => {
 };
 
 const ROWS = [
-  { label: "“free” কথাটা কতবার আছে", key: "free" },
-  { label: "কয়টা লিঙ্ক", key: "links" },
-  { label: "কতটুকু CAPITAL অক্ষরে (ইংরেজি হরফ ধরে)", key: "caps" },
-  { label: "রাত ৩টা থেকে ৫টার মধ্যে পাঠানো", key: "night" },
+  { label: "how many times “free” appears", key: "free" },
+  { label: "how many links", key: "links" },
+  { label: "share of letters in CAPITALS", key: "caps" },
+  { label: "sent between 3 and 5 am", key: "night" },
 ] as const;
 
 export function EmailVectorFigure() {
@@ -246,17 +248,17 @@ export function EmailVectorFigure() {
 
   return (
     <figure className="mfig" ref={box}>
-      <Head n="চিত্র ৯" title="ইমেইলের ভেতরে কোনো সংখ্যাই নাই। মেপে নিলেই আছে।" />
+      <Head n="Figure 9" title="An email has no numbers in it. Measure it, and it does." />
       <div className="pfig-body pfig-split wide">
         <div className="pfig-col">
           <p className="pfig-label">
-            {which === "spam" ? "স্প্যাম" : "সাধারণ"} মেইলটা — <b>এডিট করে দেখুন</b>, সংখ্যাগুলো নড়তে শুরু করবে:
+            The {which === "spam" ? "spam" : "normal"} email — <b>edit it</b> and watch the numbers move:
           </p>
           <textarea
             className="ffig-mail"
             value={text[which]}
             spellCheck={false}
-            aria-label={`${which === "spam" ? "স্প্যাম" : "সাধারণ"} মেইলের বডি`}
+            aria-label={`${which === "spam" ? "spam" : "normal"} email body`}
             onChange={(e) => setText((t) => ({ ...t, [which]: e.target.value }))}
           />
           <label className="ffig-switch">
@@ -265,7 +267,7 @@ export function EmailVectorFigure() {
               checked={night[which]}
               onChange={(e) => setNight((n) => ({ ...n, [which]: e.target.checked }))}
             />
-            রাত ৩টা থেকে ৫টার মধ্যে পাঠানো
+            sent between 3 and 5 am
           </label>
         </div>
 
@@ -273,9 +275,9 @@ export function EmailVectorFigure() {
           <table className="ffig-table">
             <thead>
               <tr>
-                <th>কী মাপছি</th>
-                <th className={which === "spam" ? "on" : ""}>স্প্যাম</th>
-                <th className={which === "normal" ? "on" : ""}>সাধারণ</th>
+                <th>What we measure</th>
+                <th className={which === "spam" ? "on" : ""}>Spam</th>
+                <th className={which === "normal" ? "on" : ""}>Normal</th>
               </tr>
             </thead>
             <tbody>
@@ -291,18 +293,18 @@ export function EmailVectorFigure() {
             </tbody>
           </table>
           <p className="pfig-mono">
-            স্প্যাম = <b>{vector("spam")}</b>
+            Spam = <b>{vector("spam")}</b>
             <br />
-            সাধারণ = <b>{vector("normal")}</b>
+            Normal = <b>{vector("normal")}</b>
           </p>
         </div>
       </div>
       <div className="mfig-controls">
         <Btn on={which === "spam"} onClick={() => setWhich("spam")}>
-          স্প্যাম মেইল
+          Spam email
         </Btn>
         <Btn on={which === "normal"} onClick={() => setWhich("normal")}>
-          সাধারণ মেইল
+          Normal email
         </Btn>
         <Btn
           on={false}
@@ -311,16 +313,15 @@ export function EmailVectorFigure() {
             setNight({ spam: true, normal: false });
           }}
         >
-          আবার আগের মতো
+          Reset
         </Btn>
-        <span className="mfig-read">৪টা feature → ৪ ডাইমেনশনের ভেক্টর</span>
+        <span className="mfig-read">4 features → a 4-dimensional vector</span>
       </div>
       <figcaption>
-        সাধারণ মেইলটায় <strong>free</strong> কথাটা কয়েকবার লিখে দিন, কিংবা একটা লিঙ্ক বসিয়ে দিন —
-        দেখবেন ওর ভেক্টরটা আস্তে আস্তে স্প্যামের দিকে সরে যাচ্ছে। এখন খেয়াল করুন, কী কিন্তু হয়নি। কেউ
-        যন্ত্রটাকে বলে দেয়নি “free” মানে কী, স্প্যাম জিনিসটাই বা কী। চারটা জিনিস শুধু{" "}
-        <strong>গোনা</strong> হয়েছে, আর একটা আস্ত চিঠি চারটা সংখ্যা হয়ে গেছে। পুরো কারসাজিটা এইটুকুই —
-        মাপা, বোঝা না।
+        Type <strong>free</strong> into the normal email a few times, or paste in a link — its vector starts
+        drifting towards spam. Now notice what did not happen. Nobody told the machine what “free” means, or what
+        spam is. Four things were just <strong>counted</strong>, and a whole letter became four numbers. That is the
+        whole trick — measuring, not understanding.
       </figcaption>
     </figure>
   );
@@ -345,43 +346,43 @@ const THINGS: Thing[] = [
   {
     id: "student",
     icon: "🧑‍🎓",
-    name: "একজন ছাত্র",
-    what: "নাসিব, উপরের ক্লাসরুম থেকে",
-    features: [["উচ্চতা", "180"], ["ওজন", "78"], ["জুতা", "43"], ["বয়স", "18"]],
-    ask: "কোন ছাত্ররা একে অপরের সবচেয়ে কাছাকাছি?",
+    name: "A student",
+    what: "Nasib, from the classroom above",
+    features: [["height", "180"], ["weight", "78"], ["shoe", "43"], ["age", "18"]],
+    ask: "Which students are most alike?",
   },
   {
     id: "photo",
     icon: "🖼️",
-    name: "একটা ছবি",
-    what: "৩০০০ × ৪০০০ pixel, রঙিন",
+    name: "A photo",
+    what: "3000 × 4000 pixels, in color",
     features: [["px 1", "10"], ["px 2", "20"], ["px 3", "15"], ["px 4", "25"]],
-    more: "…সব মিলিয়ে তিন কোটি ষাট লাখ feature",
-    ask: "এই ছবিতে কি কোনো পাখি আছে?",
+    more: "…36 million features in all",
+    ask: "Is there a bird in this photo?",
   },
   {
     id: "email",
     icon: "✉️",
-    name: "একটা ইমেইল",
-    what: "চিত্র ৯-এর সেই মেইলটা",
-    features: [["free", "6"], ["লিঙ্ক", "14"], ["caps", "0.31"], ["রাত ৩–৫", "1"]],
-    ask: "এটা কি স্প্যাম?",
+    name: "An email",
+    what: "the spam email from Figure 9",
+    features: [["free", "6"], ["links", "14"], ["caps", "0.31"], ["3–5 am", "1"]],
+    ask: "Is this spam?",
   },
   {
     id: "movie",
     icon: "🎬",
-    name: "একটা সিনেমা",
-    what: "Toy Story, ০ থেকে ৫-এ নম্বর দেওয়া",
-    features: [["ড্রামা", "2"], ["কমেডি", "5"]],
-    ask: "আর কার কার এই ছবিটা ভালো লাগবে?",
+    name: "A movie",
+    what: "Toy Story, scored from 0 to 5",
+    features: [["drama", "2"], ["comedy", "5"]],
+    ask: "Who else would enjoy this movie?",
   },
   {
     id: "patient",
     icon: "🩺",
-    name: "একজন রোগী",
-    what: "ডাক্তারের চেম্বারে একবার আসা",
-    features: [["বয়স", "42"], ["bp", "142"], ["সুগার", "180"], ["bmi", "27.4"]],
-    ask: "এই মানুষটার কি ঝুঁকি আছে?",
+    name: "A patient",
+    what: "one visit to the doctor",
+    features: [["age", "42"], ["bp", "142"], ["sugar", "180"], ["bmi", "27.4"]],
+    ask: "Is this person at risk?",
   },
 ];
 
@@ -394,7 +395,7 @@ export function RepresentationFigure() {
 
   return (
     <figure className="mfig" ref={box}>
-      <Head n="চিত্র ১০" title="মেশিন লার্নিং যেখানেই কাজে লাগুক, পথটা এই একটাই" />
+      <Head n="Figure 10" title="Wherever machine learning is used, the path is the same" />
       <div className="pfig-body">
         <div className="ffig-flow">
           <div className="ffig-card">
@@ -404,7 +405,7 @@ export function RepresentationFigure() {
           </div>
 
           <div className="ffig-arrow">
-            <span>রিপ্রেজেন্টেশন</span>
+            <span>representation</span>
           </div>
 
           <div className="ffig-card mid">
@@ -416,17 +417,17 @@ export function RepresentationFigure() {
                 </span>
               ))}
             </div>
-            <small>{t.more ?? "সংখ্যার একটা সাজানো লিস্ট"}</small>
+            <small>{t.more ?? "an ordered list of numbers"}</small>
           </div>
 
           <div className="ffig-arrow">
-            <span>অংক</span>
+            <span>arithmetic</span>
           </div>
 
           <div className="ffig-card">
             <span className="ffig-icon">?</span>
             <b>{t.ask}</b>
-            <small>এখন এটা সংখ্যার প্রশ্ন</small>
+            <small>now a question about numbers</small>
           </div>
         </div>
       </div>
@@ -438,11 +439,11 @@ export function RepresentationFigure() {
         ))}
       </div>
       <figcaption>
-        একজন রোগী, একটা ছবি, একটা ইমেইল, একটা সিনেমা — একটা একটা করে চেপে দেখুন। বাঁ পাশের বাক্সটা
-        প্রতিবার বদলায়, ডান পাশেরটাও প্রতিবার বদলায়। কিন্তু{" "}
-        <strong>মাঝের বাক্সটার চেহারা কখনো বদলায় না</strong> — সংখ্যার একটা সাজানো লিস্ট, ব্যস। ঐ প্রথম
-        তীরটার নামই <strong>রিপ্রেজেন্টেশন</strong>। দুনিয়া থেকে যন্ত্রের ভেতরে ঢোকার রাস্তা ঐ একটাই,
-        আর কোনো রাস্তা নাই। এই সিরিজের বাকি সবকিছু ঘটবে ঐ মাঝের বাক্সটার ভেতরে।
+        A patient, a photo, an email, a movie — press them one at a time. The box on the left changes every time,
+        and so does the one on the right. But <strong>the middle box never changes shape</strong> — an ordered list
+        of numbers, that is all. That first arrow is called <strong>representation</strong>. It is the only road
+        from the world into the machine; there is no other. Everything else in this series happens inside that
+        middle box.
       </figcaption>
     </figure>
   );
