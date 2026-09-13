@@ -43,6 +43,17 @@ export function useInView(
   }, [ref]);
 }
 
+const BN = "০১২৩৪৫৬৭৮৯";
+/**
+ * Bangla numerals for the Bangla sentences.
+ *
+ * The figures keep ASCII digits inside the data itself — a pixel value, a place
+ * value, a vector element — because those are the machine's numbers and they
+ * have to line up in a monospaced grid. Everything the reader is *told*, rather
+ * than shown, gets Bangla numerals through here.
+ */
+export const bn = (v: number | string) => String(v).replace(/\d/g, (d) => BN[Number(d)]);
+
 export function Btn({ on, onClick, children }: { on: boolean; onClick: () => void; children: ReactNode }) {
   return (
     <button type="button" className="mfig-btn" aria-pressed={on} onClick={onClick}>

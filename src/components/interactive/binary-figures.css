@@ -1,0 +1,330 @@
+/* Figures for "Math for AI 1.2 — বাইনারি".
+ *
+ * The panel shell (.mfig*) comes from matrix-figures.css, the layout helpers and
+ * readouts (.pfig-body, .pfig-split, .pfig-big) from pixel-figures.css, and the
+ * step list and verdict line (.gfig-steps, .gfig-say) from grid-figures.css.
+ * Only the bulbs, the lane, the codebook, the copies and the tree live here.
+ */
+
+/* ---- the window sill ------------------------------------------------------ */
+/* A night-time window: darker than the panel, so a lit bulb is the brightest
+   thing on screen, the way it would be from across the lane. */
+.bfig-window {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 0.7rem 0.7rem 0.6rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  background: linear-gradient(180deg, rgba(5, 8, 20, 0.85), rgba(14, 20, 42, 0.85));
+}
+
+/* Bulbs are sized off the row's own count (--k, set inline), so one bulb and
+   three bulbs both fit a phone without wrapping. */
+.bfig-row {
+  --gap: 0.9rem;
+  --w: min(3.4rem, calc((100% - (var(--k) - 1) * var(--gap)) / var(--k)));
+  display: flex;
+  justify-content: center;
+  gap: var(--gap);
+}
+
+.bfig-lamp {
+  flex: none;
+  width: var(--w);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+.bfig-lamp.flat { cursor: default; }
+.bfig-lamp:focus-visible { outline: 2px solid var(--macc); outline-offset: 3px; border-radius: 6px; }
+
+/* the glass, with a screw base hung under it */
+.bfig-lamp i {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 50% 50% 46% 46%;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.03) 60%);
+  transition: background 0.2s, box-shadow 0.25s, border-color 0.2s;
+}
+.bfig-lamp i::after {
+  content: "";
+  position: absolute;
+  left: 32%;
+  right: 32%;
+  bottom: -17%;
+  height: 17%;
+  border-radius: 0 0 3px 3px;
+  background: repeating-linear-gradient(180deg, #6b7590 0 2px, #4a5370 2px 4px);
+}
+.bfig-lamp:not(.flat):hover i { border-color: rgba(255, 255, 255, 0.5); }
+.bfig-lamp.on i {
+  border-color: var(--mv);
+  background: radial-gradient(circle at 35% 30%, #fff7d6, var(--mv) 55%, #d97706);
+  box-shadow: 0 0 16px 4px rgba(251, 191, 36, 0.5), 0 0 40px rgba(251, 191, 36, 0.22);
+}
+.bfig-lamp u {
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+  font-size: clamp(0.55rem, 2.4vw, 0.7rem);
+  text-decoration: none;
+  color: var(--mdim);
+}
+.bfig-lamp.on u { color: var(--mv); }
+
+/* ---- what your friend reads ------------------------------------------------ */
+.bfig-reads {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.55rem 0.7rem;
+  border-left: 2px solid var(--mv);
+  border-radius: 0 8px 8px 0;
+  background: rgba(251, 191, 36, 0.07);
+}
+.bfig-reads span {
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+  font-size: 0.68rem;
+  color: var(--mdim);
+}
+.bfig-reads b {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--mink);
+  animation: bfig-rise 0.35s ease-out both;
+}
+@keyframes bfig-rise {
+  from { opacity: 0; transform: translateY(4px); }
+}
+
+/* ---- the codebook ---------------------------------------------------------- */
+.bfig-code { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.2rem; }
+.bfig-code button,
+.bfig-code-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.55rem;
+  width: 100%;
+  padding: 0.3rem 0.45rem;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--mdim);
+  font: inherit;
+  font-size: 0.8rem;
+  text-align: left;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+.bfig-code button { cursor: pointer; }
+.bfig-code button:hover { background: rgba(255, 255, 255, 0.07); }
+.bfig-code button.on { border-color: var(--mv); background: rgba(251, 191, 36, 0.1); color: var(--mink); }
+.bfig-msg { min-width: 0; }
+.bfig-msg.dup { opacity: 0.4; }
+.bfig-msg.fresh { color: var(--mink); animation: bfig-rise 0.45s ease-out both; }
+.bfig-new {
+  font-style: normal;
+  font-size: 0.62rem;
+  padding: 0.05rem 0.4rem;
+  border-radius: 999px;
+  background: rgba(45, 212, 191, 0.15);
+  color: var(--mi);
+}
+
+/* ---- patterns in miniature ------------------------------------------------- */
+.bfig-mini {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 3px 5px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.04);
+}
+.bfig-mini i {
+  flex: none;
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.13);
+  transition: background 0.3s, box-shadow 0.3s;
+}
+.bfig-mini i.on { background: var(--mv); box-shadow: 0 0 5px rgba(251, 191, 36, 0.65); }
+
+/* The bulb that slides in front. It takes no room until it arrives, and wears
+   a teal ring so the eye can tell it from the bulbs that were already there. */
+.bfig-mini .bfig-slot {
+  width: 0;
+  margin-right: -3px;
+  opacity: 0;
+  transform: translateX(-10px);
+  box-shadow: 0 0 0 1.5px var(--mi);
+  transition: width 0.45s, margin 0.45s, opacity 0.45s, transform 0.45s, background 0.3s;
+}
+.bfig-mini .bfig-slot.in { width: 0.6rem; margin-right: 0; opacity: 1; transform: none; }
+.bfig-mini .bfig-slot.on { background: var(--mv); box-shadow: 0 0 0 1.5px var(--mi), 0 0 5px rgba(251, 191, 36, 0.65); }
+
+/* ---- two copies of a list (figures 17, 18) -------------------------------- */
+.bfig-dbl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.6rem; align-items: start; }
+.bfig-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-width: 0;
+  padding: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.03);
+  transition: opacity 0.5s, transform 0.5s, border-color 0.3s;
+}
+.bfig-copy.b { opacity: 0; transform: translateX(-24px); }
+.bfig-copy.b.in { opacity: 1; transform: none; }
+.bfig-copy.dim { border-color: rgba(255, 255, 255, 0.24); }
+.bfig-copy.lit { border-color: rgba(251, 191, 36, 0.5); }
+.bfig-stack { display: flex; flex-direction: column; align-items: flex-start; gap: 0.25rem; }
+@media (max-width: 36rem) {
+  .bfig-dbl:not(.keep) { grid-template-columns: 1fr; }
+}
+
+/* ---- the tally and the guess (figure 18) --------------------------------- */
+.bfig-tally {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.1rem;
+  font-size: 0.78rem;
+}
+.bfig-tally li {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--mdim);
+}
+.bfig-tally li b { color: var(--mink); font-weight: 600; }
+.bfig-tally li.big b { color: var(--mv); }
+.bfig-tally li.x {
+  justify-content: center;
+  padding: 0;
+  background: none;
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+  font-size: 0.66rem;
+  color: var(--mi);
+}
+
+.bfig-opts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.35rem; }
+.bfig-opt {
+  padding: 0.45rem 0.3rem;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--mink);
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+.bfig-opt:hover:not(:disabled) { background: rgba(255, 255, 255, 0.1); }
+.bfig-opt:disabled { cursor: default; }
+.bfig-opt.sel { border-color: var(--macc); background: rgba(129, 140, 248, 0.2); }
+.bfig-opt.right { border-color: var(--mi); background: var(--mi); color: #0b1020; }
+.bfig-opt.wrong { border-color: var(--mbad); color: var(--mbad); }
+
+/* a fourth temper for the shared verdict line: "not wrong — think again" */
+.gfig-say.warn { border-left-color: var(--mv); }
+
+/* ---- the lane (figure 14) ------------------------------------------------- */
+.bfig-lane { border-radius: 8px; }
+.bfig-lane.tap { cursor: pointer; }
+.bfig-sky { fill: #1b2748; transition: fill 0.8s; }
+.bfig-lane.dark .bfig-sky { fill: #070b18; }
+.bfig-moon,
+.bfig-star { fill: #e9edf7; }
+.bfig-far { fill: #141c36; }
+.bfig-ground { fill: #0d1326; }
+.bfig-laneline { stroke: rgba(255, 255, 255, 0.16); stroke-width: 1; stroke-dasharray: 6 5; }
+
+.bfig-bldg { fill: #2a3558; transition: fill 0.8s; }
+.bfig-bldg.edge { fill: #34416a; }
+.bfig-lane.dark .bfig-bldg { fill: #182039; }
+.bfig-lane.dark .bfig-bldg.edge { fill: #1f2946; }
+
+.bfig-win { fill: #0b1020; stroke: rgba(255, 255, 255, 0.08); stroke-width: 0.6; transition: fill 0.6s, stroke 0.4s; }
+.bfig-win.lit { fill: #fcd34d; }
+.bfig-win.face { stroke: var(--mi); stroke-width: 1.1; }
+.bfig-win.glow { fill: rgba(251, 191, 36, 0.3); }
+
+.bfig-post { stroke: #3a4670; stroke-width: 2; }
+.bfig-streetlamp { fill: #3a4670; transition: fill 0.5s; }
+.bfig-streetlamp.on { fill: #fde68a; }
+.bfig-cone { fill: rgba(253, 230, 138, 0); transition: fill 0.6s; }
+.bfig-cone.on { fill: rgba(253, 230, 138, 0.14); }
+
+.bfig-sight { stroke: rgba(45, 212, 191, 0.55); stroke-width: 1; stroke-dasharray: 3 3; transition: stroke 0.3s; }
+.bfig-sight.on { stroke: var(--mv); }
+.bfig-person { fill: #4b5680; }
+.bfig-who {
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+  font-size: 7px;
+  fill: var(--mdim);
+}
+.bfig-wire { stroke: #6b7590; stroke-width: 0.8; }
+.bfig-bulb { fill: #3a4468; stroke: #6b7590; stroke-width: 0.6; transition: fill 0.2s; }
+.bfig-bulb.on { fill: #fde68a; stroke: var(--mv); }
+.bfig-glow { fill: rgba(251, 191, 36, 0); transition: fill 0.25s; }
+.bfig-glow.on { fill: rgba(251, 191, 36, 0.35); }
+
+.bfig-fade { opacity: 0; transition: opacity 0.6s; }
+.bfig-fade.on { opacity: 1; }
+
+/* ---- the tree (figure 19) -------------------------------------------------- */
+/* pathLength=1 on every branch, so one dash the length of the line can be slid
+   off (hidden) and back on (drawn) whatever the line's real length. */
+.bfig-edge {
+  fill: none;
+  stroke: rgba(160, 185, 235, 0.4);
+  stroke-width: 1.1;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 0.7s ease;
+}
+.bfig-edge.on { stroke-dashoffset: 0; }
+.bfig-node {
+  fill: #1a2240;
+  stroke: rgba(255, 255, 255, 0.4);
+  stroke-width: 0.8;
+  opacity: 0;
+  transition: opacity 0.35s;
+}
+.bfig-node.in { opacity: 1; transition-delay: 0.55s; }
+.bfig-node.on { fill: var(--mv); stroke: var(--mv); }
+.bfig-root { fill: var(--mink); }
+.bfig-tlabel {
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+  font-size: 7px;
+  fill: var(--mdim);
+}
+.bfig-tlabel.on { fill: var(--mv); }
+.bfig-tpat circle { fill: rgba(255, 255, 255, 0.14); }
+.bfig-tpat circle.on { fill: var(--mv); }
+
+@media (prefers-reduced-motion: reduce) {
+  .bfig-reads b,
+  .bfig-msg.fresh { animation: none; }
+  .bfig-edge,
+  .bfig-node,
+  .bfig-copy,
+  .bfig-mini .bfig-slot { transition: none; }
+}

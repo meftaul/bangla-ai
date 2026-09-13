@@ -1,0 +1,217 @@
+/* Figures for "AI-এর গণিত ১·৫ — গ্রাফ পেপার".
+ *
+ * The panel shell (.mfig*) comes from matrix-figures.css and the layout helpers
+ * (.pfig-body, .pfig-split, .pfig-col, .pfig-label, .pfig-mono, .pfig-big) from
+ * pixel-figures.css — figure-kit.tsx and the tsx import both. Only the room, the
+ * robot and the sheet of paper live here. The step list and the verdict line
+ * (.gfig-steps, .gfig-say) are also used by pixel-figures' phone-call story.
+ *
+ * Two grounds on purpose: the apartment is dark like the rest of the panel, the
+ * graph paper is a real white sheet — the switch is the point of figure 13.
+ */
+
+.gfig-plot {
+  align-self: start;
+  padding: 0.4rem;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.03);
+}
+/* the sheet supplies its own ground, so the frame gets out of the way */
+.gfig-plot.paper { background: none; padding: 0; }
+
+/* ---- the apartment floor -------------------------------------------------- */
+.gfig-floor { fill: rgba(129, 140, 248, 0.05); }
+.gfig-tile { stroke: rgba(160, 185, 235, 0.16); stroke-width: 0.6; fill: none; }
+
+.gfig-you circle { fill: var(--mink); }
+.gfig-you text,
+.gfig-ball text,
+.gfig-bot text {
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+  font-size: 7px;
+  fill: var(--mdim);
+}
+.gfig-ball circle {
+  fill: var(--mv);
+  transition: r 0.2s;
+}
+.gfig-ball.got circle { fill: var(--mi); }
+.gfig-ball.got text { fill: var(--mi); }
+
+/* Linu. Translated by a style prop so the CSS transition does the in-between
+   frames: the tick rate only has to say which tile, not how to get there. */
+.gfig-bot {
+  transition: transform 0.11s linear;
+}
+.gfig-bot rect { fill: var(--macc); }
+.gfig-bot text { fill: var(--macc); }
+
+.gfig-trail { fill: rgba(129, 140, 248, 0.3); }
+.gfig-wall { stroke: var(--mbad); stroke-width: 2.5; }
+
+.gfig-nope line { stroke: var(--mbad); stroke-width: 1.2; stroke-dasharray: 4 3; }
+.gfig-nope text { fill: var(--mbad); font-size: 13px; font-weight: 700; }
+
+/* ---- the two legs of the walk -------------------------------------------- */
+.gfig-leg { stroke-width: 2; stroke-linecap: round; }
+.gfig-leg.x { stroke: var(--mi); }
+.gfig-leg.y { stroke: var(--mj); }
+.gfig-legtag {
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+  font-size: 7.5px;
+}
+.gfig-legtag.x { fill: var(--mi); }
+.gfig-legtag.y { fill: var(--mj); }
+.gfig-walker { fill: var(--mink); }
+
+/* click-to-place grids say so, and keep a phone from scrolling under the tap */
+.gfig-pick { cursor: crosshair; touch-action: manipulation; }
+.gfig-pick:focus-visible { outline: 2px solid var(--macc); outline-offset: 2px; }
+
+/* ---- the options for the robot ------------------------------------------- */
+.gfig-choices { display: flex; flex-direction: column; gap: 0.3rem; }
+.gfig-choice {
+  padding: 0.4rem 0.6rem;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--mink);
+  font: inherit;
+  font-size: 0.78rem;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+.gfig-choice:hover { background: rgba(255, 255, 255, 0.1); }
+.gfig-choice.on {
+  background: var(--macc);
+  border-color: var(--macc);
+  color: #0b1020;
+  font-weight: 600;
+}
+
+/* the verdict line — same shape as .ffig-say next door, in three tempers */
+.gfig-say {
+  margin: 0;
+  padding: 0.4rem 0.55rem;
+  border-left: 2px solid var(--macc);
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 0 6px 6px 0;
+  font-size: 0.78rem;
+}
+.gfig-say b { color: var(--mink); font-weight: 600; }
+.gfig-say.good { border-left-color: var(--mi); color: var(--mink); }
+.gfig-say.bad { border-left-color: var(--mbad); color: var(--mbad); }
+
+/* ---- the address readout -------------------------------------------------- */
+.gfig-addr { display: grid; gap: 0.3rem; }
+.gfig-addr-row {
+  display: grid;
+  grid-template-columns: 3.2rem 2.2rem 1.2rem minmax(0, 1fr);
+  align-items: baseline;
+  gap: 0.4rem;
+  font-size: 0.78rem;
+  color: var(--mdim);
+}
+.gfig-addr-row b {
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+  font-size: 1rem;
+  color: var(--mink);
+  text-align: right;
+}
+.gfig-addr-row u { text-decoration: none; text-align: center; }
+.gfig-addr-row i {
+  font-style: normal;
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+  color: var(--mv);
+}
+
+/* ---- graph paper ---------------------------------------------------------- */
+/* A real white sheet inside the dark panel: the ink on it has to flip too, so
+   every mark under .gfig-plot.paper is re-coloured rather than inherited. */
+.gfig-sheet { fill: #f4f6fb; }
+.gfig-plot.paper .gfig-floor { fill: none; }
+.gfig-plot.paper .gfig-tile { stroke: rgba(37, 99, 235, 0.18); }
+
+.gfig-in { opacity: 0; transition: opacity 0.5s ease; }
+.gfig-in.on { opacity: 1; }
+
+.gfig-pencil { fill: #0f1b2d; }
+.gfig-axis2 { stroke: #0f1b2d; stroke-width: 1.1; }
+.gfig-tipfill { fill: #0f1b2d; }
+.gfig-axname {
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+  font-size: 7.5px;
+  fill: #0f1b2d;
+}
+.gfig-origin,
+.gfig-num {
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+  font-size: 7px;
+  fill: #5a6b7d;
+}
+.gfig-tick { stroke: #0f1b2d; stroke-width: 1; }
+.gfig-mark { fill: #e11d48; }
+.gfig-marktag {
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+  font-size: 7px;
+  fill: #e11d48;
+}
+.gfig-mine { fill: #0d9488; }
+.gfig-minetag {
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+  font-size: 8px;
+  font-weight: 600;
+  fill: #0d9488;
+}
+.gfig-drop2 { stroke: #0d9488; stroke-width: 1; stroke-dasharray: 3 3; }
+
+/* ---- the step list -------------------------------------------------------- */
+.gfig-steps {
+  list-style: none;
+  counter-reset: gs;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.15rem;
+}
+.gfig-steps li { counter-increment: gs; }
+.gfig-steps button {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.25rem 0.4rem;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  color: var(--mdim);
+  font: inherit;
+  font-size: 0.76rem;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.gfig-steps button::before {
+  content: counter(gs);
+  flex: none;
+  width: 1.1rem;
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+  font-size: 0.66rem;
+  color: var(--macc);
+}
+.gfig-steps button:hover { background: rgba(255, 255, 255, 0.06); }
+.gfig-steps li.past button { color: rgba(233, 237, 247, 0.55); }
+.gfig-steps li.on button {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--mink);
+  font-weight: 600;
+}
+
+.mfig-btn[disabled] { opacity: 0.4; cursor: default; }
+.mfig-btn[disabled]:hover { background: rgba(255, 255, 255, 0.04); }
+
+/* On a phone the room is the thing worth the width; the readouts stack under. */
+@media (max-width: 36rem) {
+  .gfig-plot { max-width: 22rem; margin-inline: auto; width: 100%; }
+}

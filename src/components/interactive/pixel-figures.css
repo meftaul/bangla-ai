@@ -1,0 +1,506 @@
+/* Interactive figures for "AI-এর গণিত ১ — ছবি আসলে সংখ্যা".
+ *
+ * These reuse the dark panel shell (.mfig, .mfig-head, .mfig-controls, .mfig-btn,
+ * .mfig-read, figcaption) defined in matrix-figures.css — figure-kit.tsx already
+ * imports it — so only the pixel-specific pieces live here. Keep the palette vars
+ * (--mi, --mv, --macc, --mdim, --mink) in sync with that file.
+ */
+
+.pfig-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  padding: 0.9rem;
+}
+
+/* Two columns that collapse on a phone: grid on one side, controls on the other. */
+.pfig-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 1rem;
+  align-items: start;
+}
+.pfig-split.wide { grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); }
+@media (max-width: 36rem) {
+  .pfig-split, .pfig-split.wide { grid-template-columns: 1fr; }
+}
+
+.pfig-col { display: flex; flex-direction: column; gap: 0.55rem; min-width: 0; }
+
+.pfig-label {
+  margin: 0;
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+  color: var(--mdim);
+}
+.pfig-label b { color: var(--mink); font-weight: 600; }
+
+/* ---- the pixel grid ------------------------------------------------------ */
+/* container-type lets a cell size its digits off the grid's own width, so the
+   same component is readable at 3x3 and at 14x14 on any screen. */
+.pfig-grid {
+  container-type: inline-size;
+  display: grid;
+  grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+  gap: 2px;
+  width: 100%;
+}
+/* dragging to paint must not scroll the page under the finger — but only on a
+   paintable grid; the big display-only grids must still let a phone scroll */
+.pfig-grid.paint { touch-action: none; }
+.pfig-cell {
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 3px;
+  outline: 2px solid transparent;
+  outline-offset: -2px;
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+  font-size: clamp(6px, calc(100cqw / var(--cols) * 0.27), 20px);
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.12s, outline-color 0.12s;
+}
+.pfig-cell:hover { outline-color: rgba(255, 255, 255, 0.5); }
+.pfig-cell.sel { outline-color: var(--mv); }
+.pfig-cell.flat { cursor: default; }
+.pfig-cell.flat:hover { outline-color: rgba(255, 255, 255, 0.3); }
+
+.pfig-frame {
+  padding: 6px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+/* ---- readouts ------------------------------------------------------------ */
+.pfig-mono {
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+  font-size: 0.75rem;
+  color: var(--mdim);
+  word-break: break-word;
+}
+.pfig-mono b { color: var(--mink); font-weight: 600; }
+.pfig-big {
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+  font-size: 1.7rem;
+  font-weight: 600;
+  color: var(--mv);
+  line-height: 1.1;
+}
+.pfig-big small { display: block; font-size: 0.72rem; font-weight: 400; color: var(--mdim); }
+
+.pfig-slider { width: 100%; accent-color: var(--macc); cursor: pointer; }
+.pfig-slider.r { accent-color: #f87171; }
+.pfig-slider.g { accent-color: #4ade80; }
+.pfig-slider.b { accent-color: #60a5fa; }
+
+.pfig-row { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+.pfig-row .pfig-slider { flex: 1 1 8rem; }
+
+/* ---- the two counters (figure 1) ----------------------------------------- */
+/* Both rows are the same component — only the base and the place values differ,
+   which is the whole argument of the figure. Every box in both rows is sized off
+   eight-to-a-row, so the ones column of the ten-digit row sits directly above the
+   ones column of the two-digit one at every width. */
+
+.pfig-od-block { display: flex; flex-direction: column; gap: 0.4rem; }
+
+.pfig-od-row {
+  --gap: 0.3rem;
+  --w: min(3.1rem, calc((100% - 7 * var(--gap)) / 8));
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--gap);
+}
+
+.pfig-od {
+  position: relative;
+  flex: none;
+  width: var(--w);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.22rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+.pfig-od.flat { cursor: default; }
+
+/* The window a digit rolls through. Two digits live here during a step: the one
+   leaving slides up and out, the one arriving slides in from below. */
+.pfig-od-win {
+  position: relative;
+  display: grid;
+  overflow: hidden;
+  width: 100%;
+  aspect-ratio: 5 / 6;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.04);
+  transition: background 0.18s, border-color 0.18s, box-shadow 0.18s;
+}
+.pfig-od-win em {
+  grid-area: 1 / 1;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+  font-size: clamp(0.8rem, 4.2vw, 1.05rem);
+  font-style: normal;
+  font-weight: 600;
+  color: var(--mdim);
+}
+
+.pfig-od u {
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+  font-size: clamp(0.48rem, 2.1vw, 0.6rem);
+  text-decoration: none;
+  color: var(--mdim);
+  transition: color 0.18s;
+}
+
+/* A box holding anything at all is lit. In binary that means a switch is on; in
+   decimal it is the same rule, which is why leading zeros stay dim in both. */
+.pfig-od.on .pfig-od-win { background: var(--mi); border-color: var(--mi); }
+.pfig-od.on .pfig-od-win em { color: #0b1020; font-weight: 700; }
+.pfig-od.on u { color: var(--mi); }
+
+/* Out of digits — one more and it must roll. Ringed so the reader can see the
+   carry coming before it happens; in binary every lit box wears this, which is
+   exactly why binary carries so often. */
+.pfig-od.full .pfig-od-win {
+  border-color: var(--mv);
+  box-shadow: 0 0 0 2px var(--mv), 0 0 12px rgba(251, 191, 36, 0.45);
+}
+
+@keyframes pfig-roll-in {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+@keyframes pfig-roll-out {
+  from { transform: translateY(0); }
+  to { transform: translateY(-100%); }
+}
+.pfig-od-win em.in { animation: pfig-roll-in 0.22s cubic-bezier(0.4, 0, 0.2, 1) both; }
+.pfig-od-win em.out { animation: pfig-roll-out 0.22s cubic-bezier(0.4, 0, 0.2, 1) both; }
+
+/* The box that just emptied, and the carry leaving it: a spark that travels one
+   box to the left and lands on the neighbour, which bumps as it arrives. */
+@keyframes pfig-drain {
+  from { box-shadow: 0 0 0 2px var(--mv), 0 0 12px rgba(251, 191, 36, 0.45); }
+  to { box-shadow: 0 0 0 0 transparent; }
+}
+.pfig-od.roll .pfig-od-win { animation: pfig-drain 0.4s ease-out both; }
+
+.pfig-carry {
+  position: absolute;
+  left: calc(50% - 0.25rem);
+  top: 18%;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: var(--mv);
+  box-shadow: 0 0 10px var(--mv);
+  pointer-events: none;
+  animation: pfig-carry 0.48s ease-in both;
+}
+@keyframes pfig-carry {
+  0% { opacity: 0; transform: translate(0, 0) scale(0.4); }
+  22% { opacity: 1; transform: translate(-20%, -34%) scale(1); }
+  100% { opacity: 0; transform: translate(calc(-1 * (var(--w) + var(--gap))), 0) scale(0.5); }
+}
+
+@keyframes pfig-hit {
+  0%, 45% { transform: none; }
+  64% { transform: translateY(-16%) scale(1.09); }
+  100% { transform: none; }
+}
+.pfig-od.hit .pfig-od-win { animation: pfig-hit 0.55s ease-out both; }
+
+/* The rule itself, printed between the two rows because that is where it happens. */
+.pfig-rule {
+  margin: 0;
+  padding: 0.5rem 0.7rem;
+  border-left: 2px solid var(--mv);
+  border-radius: 0 8px 8px 0;
+  background: rgba(251, 191, 36, 0.08);
+  font-size: 0.8rem;
+  color: var(--mink);
+}
+.pfig-rule b { color: var(--mv); font-weight: 700; }
+
+/* What the lit boxes add up to — the same sentence in both number systems. */
+.pfig-add {
+  margin: 0;
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+  font-size: 0.74rem;
+  color: var(--mdim);
+  text-align: right;
+  word-break: break-word;
+}
+.pfig-add b { color: var(--mv); font-weight: 700; }
+
+.pfig-hint { margin: 0; font-size: 0.78rem; color: var(--mi); }
+
+.mfig-btn.go {
+  padding-inline: 1.1rem;
+  background: var(--mi);
+  border-color: var(--mi);
+  color: #0b1020;
+  font-weight: 700;
+}
+.mfig-btn.go:hover { background: var(--mi); filter: brightness(1.08); }
+.mfig-btn.go:disabled { opacity: 0.4; cursor: default; filter: none; }
+.pfig-gap { flex: 1 1 0.5rem; }
+
+@media (prefers-reduced-motion: reduce) {
+  .pfig-od-win em.in,
+  .pfig-carry,
+  .pfig-od.roll .pfig-od-win,
+  .pfig-od.hit .pfig-od-win { animation: none; }
+  .pfig-od-win em.out { display: none; }
+}
+
+/* ---- colour mixer -------------------------------------------------------- */
+.pfig-sw {
+  aspect-ratio: 16 / 9;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  display: grid;
+  place-items: center;
+}
+.pfig-sw span {
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+  background: rgba(11, 16, 32, 0.72);
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+  font-size: 0.75rem;
+  color: var(--mink);
+}
+
+/* ---- channel stack ------------------------------------------------------- */
+/* Everything is sized in cqw of the stage so the 3D pose scales with the figure.
+   A sheet is 54cqw square; tipped over (rotateX 60°, rotateZ −45° — keep in sync
+   with TIP_X / TIP_Z in the tsx) it becomes a diamond 76cqw wide and 38cqw tall.
+   Pulled apart the sheets sit 28cqw apart, so the whole stack fits a square.
+   --spread (1 apart → 0 stacked) and --tilt (1 tipped → 0 face-on) drive it. */
+.pfig-stack {
+  --dur: 0.12s;
+  --ease: cubic-bezier(0.65, 0, 0.35, 1);
+  container-type: inline-size;
+  position: relative;
+  aspect-ratio: 1;
+  /* the sheets screen-blend with each other, never with the page behind */
+  isolation: isolate;
+}
+.pfig-stack.glide { --dur: 0.8s; }
+
+.pfig-layer {
+  position: absolute;
+  left: calc(50% - 27cqw);
+  top: calc(50% - 27cqw);
+  width: 54cqw;
+  height: 54cqw;
+  mix-blend-mode: screen;
+  /* nudged right while tipped, to leave room for the labels on the left */
+  transform: translate(calc(8cqw * var(--tilt)), calc(var(--k) * 28cqw * var(--spread)));
+  transition: transform var(--dur) var(--ease);
+}
+.pfig-layer.r { --edge: rgba(248, 113, 113, 0.75); }
+.pfig-layer.g { --edge: rgba(74, 222, 128, 0.75); }
+.pfig-layer.b { --edge: rgba(96, 165, 250, 0.75); }
+.pfig-layer.off { --edge: rgba(255, 255, 255, 0.2); }
+.pfig-plane {
+  width: 100%;
+  height: 100%;
+  border-radius: 3px;
+  /* black is "nothing" under screen, so the gaps and an off sheet add no light */
+  background: #000;
+  box-shadow: 0 0 0 1px var(--edge);
+  transform: rotateX(calc(60deg * var(--tilt))) rotateZ(calc(-45deg * var(--tilt)));
+  transition: transform var(--dur) var(--ease);
+}
+.pfig-plane .pfig-grid { gap: 1px; }
+.pfig-plane .pfig-cell { border-radius: 1px; }
+
+.pfig-tag {
+  position: absolute;
+  left: 0;
+  top: calc(50% + var(--k) * 28cqw * var(--spread));
+  width: 17cqw;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  transform: translateY(-50%);
+  opacity: var(--spread);
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  line-height: 1.25;
+  pointer-events: none;
+  transition: top var(--dur) var(--ease), opacity var(--dur);
+}
+.pfig-tag b { font-size: 0.85rem; font-weight: 600; letter-spacing: 0; color: var(--mink); }
+.pfig-tag.r { color: #f87171; }
+.pfig-tag.g { color: #4ade80; }
+.pfig-tag.b { color: #60a5fa; }
+
+/* The pin through one pixel of every sheet. The outer box sits on the middle
+   sheet's cell; the line grows and shrinks with --spread. */
+.pfig-skewer {
+  position: absolute;
+  left: calc(50% + 8cqw * var(--tilt) + var(--sx) * 54cqw);
+  top: calc(50% + var(--sy) * 54cqw);
+  width: 0;
+  height: 0;
+  opacity: var(--spread);
+  pointer-events: none;
+  transition: left 0.12s, top 0.12s, opacity 0.2s;
+}
+.pfig-skewer i {
+  position: absolute;
+  left: -1px;
+  top: calc(-28cqw * var(--spread));
+  width: 2px;
+  height: calc(56cqw * var(--spread));
+  background: var(--mv);
+  transition: top var(--dur) var(--ease), height var(--dur) var(--ease);
+}
+.pfig-skewer::after,
+.pfig-skewer i::before,
+.pfig-skewer i::after {
+  content: "";
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  margin: -3.5px 0 0 -3.5px;
+  border: 1.5px solid #0b1020;
+  border-radius: 50%;
+  background: var(--mv);
+  box-sizing: border-box;
+}
+.pfig-skewer i::before { left: 1px; top: 0; }
+.pfig-skewer i::after { left: 1px; top: 100%; }
+
+/* The readout: red + green + blue = the pixel. */
+.pfig-sum { display: grid; gap: 0.3rem; }
+.pfig-term {
+  display: grid;
+  grid-template-columns: 0.8rem 1.8rem minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+  font-size: 0.78rem;
+  color: var(--mdim);
+  transition: opacity 0.15s;
+}
+.pfig-term em { font-style: normal; text-align: center; }
+.pfig-term i {
+  display: block;
+  height: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 5px;
+}
+.pfig-term b { color: var(--mink); font-weight: 600; }
+.pfig-term.r span { color: #f87171; }
+.pfig-term.g span { color: #4ade80; }
+.pfig-term.b span { color: #60a5fa; }
+.pfig-term.off { opacity: 0.4; }
+.pfig-term.out {
+  padding-top: 0.4rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--mink);
+}
+.pfig-term.out i { height: 2rem; }
+/* reserve two lines so the buttons below don't jump as the note changes */
+.pfig-note { margin: 0; min-height: 3.1em; font-size: 0.8rem; color: var(--mink); }
+
+/* ---- the phone-call story (figure 2) ------------------------------------- */
+/* Two real sheets of paper side by side — yours and your friend's. The paper
+   tone itself comes from PAPER in the tsx, since it is also a pixel value. */
+.pfig-sheets {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+.pfig-sheet { display: flex; flex-direction: column; gap: 0.35rem; min-width: 0; }
+.pfig-sheet svg { border-radius: 6px; }
+
+.pfig-ruling { fill: none; stroke: rgba(37, 99, 235, 0.5); stroke-width: 0.75px; }
+.pfig-ruling.fine { stroke: rgba(37, 99, 235, 0.22); stroke-width: 0.5px; }
+
+/* In sheet units, not px: a cell is 6 units wide at 8 × 8. The chip under each
+   number is filled with the cell's own average grey, so the digits read over
+   ink and paper alike — and the chip shows what the number means. */
+.pfig-sheet-num {
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+  font-size: 1.9px;
+  font-weight: 600;
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+.pfig-sheet-chip { stroke: rgba(15, 27, 45, 0.25); stroke-width: 0.15px; }
+.pfig-sheet-now { fill: none; stroke: var(--mv); stroke-width: 2px; }
+
+.pfig-doodle {
+  fill: none;
+  stroke: #0f1b2d;
+  stroke-width: 1.3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.pfig-guess circle { fill: none; stroke: #5a6b7d; stroke-width: 0.6; stroke-dasharray: 1.6 1.2; }
+.pfig-guess text {
+  fill: #e11d48;
+  font-size: 4px;
+  font-weight: 700;
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+
+/* ---- bird ---------------------------------------------------------------- */
+.pfig-frame.fine .pfig-grid { gap: 1px; }
+/* no 6px floor here: at 40 columns a floor makes three digits overflow the cell */
+.pfig-frame.fine .pfig-cell { border-radius: 1px; font-size: calc(100cqw / var(--cols) * 0.34); }
+/* "What you see" drops the grid lines so the sprite reads as a photo */
+.pfig-frame.seamless .pfig-grid { gap: 0; }
+/* cells land on fractional pixels, and their anti-aliased edges show as hairline
+   seams; bleeding each cell's own colour a little past its edge hides them */
+.pfig-frame.seamless .pfig-cell { border-radius: 0; box-shadow: 0 0 0 0.75px var(--fill); }
+
+/* ---- more cells, clearer cat (figure 2ক) --------------------------------- */
+.pfig-cs-main { width: 100%; max-width: 17rem; margin-inline: auto; }
+.pfig-cs-main svg { border-radius: 6px; }
+@keyframes pfig-regrid { from { opacity: 0.35; } }
+.pfig-regrid { animation: pfig-regrid 0.45s ease-out both; }
+
+/* every size at once, coarsest first; each thumbnail is also a button */
+.pfig-cs-strip { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0.45rem; }
+.pfig-cs-strip button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.3rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--mdim);
+  font: inherit;
+  font-size: 0.66rem;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s, color 0.2s;
+}
+.pfig-cs-strip button:hover { background: rgba(255, 255, 255, 0.08); }
+.pfig-cs-strip button.on { border-color: var(--mv); background: rgba(251, 191, 36, 0.1); color: var(--mink); }
+.pfig-cs-strip svg { border-radius: 4px; }
+@media (prefers-reduced-motion: reduce) {
+  .pfig-regrid { animation: none; }
+}
+
