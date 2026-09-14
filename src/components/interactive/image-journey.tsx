@@ -784,7 +784,7 @@ export function WrongOrder() {
         ))}
       </div>
       {over && <Rafi tone="bad">এ কী! তোর পাখি দেখি বাদুড়ের মতো ডাল থেকে ঝুলে আছে!</Rafi>}
-      <Task done={over}>আগে ভাবুন, তারপর একটা বেছে নিন — রাফি তখনই ভরা শুরু করবে।</Task>
+      <Task done={over}>আগে ভাবুন, তারপর একটা বেছে নিন — রাফি তখনই ভরা Start করবে।</Task>
     </>
   );
 }
