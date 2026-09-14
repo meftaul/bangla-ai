@@ -216,7 +216,7 @@ export function Journey({ title, children }: { title?: string; children: ReactNo
             onClick={() => go(0)}
             className="inline-flex h-12 shrink-0 cursor-pointer items-center gap-2 rounded-full border border-border px-6 text-base font-semibold text-foreground transition-colors hover:border-accent"
           >
-            <span aria-hidden="true">↺</span> আবার শুরু থেকে
+            <span aria-hidden="true">↺</span> আবার Start থেকে
           </button>
         )}
       </div>

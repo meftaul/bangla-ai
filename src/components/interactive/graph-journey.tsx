@@ -832,7 +832,7 @@ export function PredictSwap() {
         })}
       </div>
       {over && <Say tone="bad">ধাম! ডানে ১০ ঘর যেতেই দেয়াল। বাকি ২ ঘর যাব কোথায়?</Say>}
-      <Task done={over}>আগে ভাবুন, তারপর একটা বেছে নিন — Shiku তখনই হাঁটা শুরু করবে।</Task>
+      <Task done={over}>আগে ভাবুন, তারপর একটা বেছে নিন — Shiku তখনই হাঁটা Start করবে।</Task>
     </>
   );
 }

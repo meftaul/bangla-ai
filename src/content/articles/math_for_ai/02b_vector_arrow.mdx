@@ -1,0 +1,188 @@
+export const metadata = {
+  title: "Math for AI 2.2 — Arrow, যার কোনো ঠিকানা নাই",
+  description: "Shiku-কে একটা recipe পড়ে শোনাবেন, আর সে রেখে যাবে একটা arrow। Arrow-টা কাগজের যেখানেই সরান, vector একই থাকে। Vector-এর দ্বিতীয় চেহারা, নিজের হাতে দেখবেন।",
+  type: "article",
+};
+
+{/* Told as a Brilliant-style journey, like 2.1: one screen at a time, each
+    with a visual and one thing to do, and the Continue arrow stays locked
+    until it is done. The shell is components/journey/journey.tsx; the screens
+    live in components/interactive/arrow-journey.tsx, on the graph-paper sheet
+    in components/journey/plane.tsx. */}
+
+import { Journey, Step, Check } from "@/components/journey/journey";
+import {
+  RecipeWalk,
+  PointIt,
+  SlideArrow,
+  SortArrows,
+  SlideHome,
+  CityWalk,
+  PointOrMove,
+  Opposite,
+  ZeroArrow,
+  UnitSteps,
+  Finale,
+} from "@/components/interactive/arrow-journey";
+
+<Journey title="Vector-এর দুই চেহারা · ২.২">
+
+<Step>
+
+আগের lesson-এ vector-কে দেখলেন সংখ্যার list হিসেবে। সামিনের file, কুস্তির partnership, ফাহিমের খালি ঘর। তবে শেষে একটা confusion রেখে এসেছিলাম। File উল্টানোর সময় কাগজের dot-গুলো আয়নাতে হওয়া reflection এর মতো সরে গেল, আর তানভীর ছিটকে গেল কাগজের বাইরে, একটা নির্দিষ্ট দিকে। মনে হচ্ছিল সংখ্যাগুলোর একটা দিক আছে। আজকে সেই দিকটা নিয়েই কথা বলব।
+
+গ্রাফ পেপারের lesson-এর Shiku-কে মনে আছে? আপনার সেই বোকাসোকা robot, যে একবারে শুধু এক ঘর উপরে, নিচে, ডানে বা বাঁয়ে যেতে পারে। ওকে “যাও, গিয়ে বলটা নিয়ে আসো” বলে কোনো লাভ হয়নি। শেষমেশ বলতে হয়েছিল, “ডানে ১০ ঘর যাও, তারপর উপরে ১২ ঘর যাও।” মানে দুইটা সংখ্যা।
+
+এবার ব্যাপারটা উল্টো দিক থেকে দেখি। $v = (2, 3)$-কে list হিসেবে না পড়ে Shiku-র জন্য একটা step by step guide হিসেবে পড়ুন। Origin থেকে শুরু করো, x axis ধরে 2 ঘর যাও, তারপর y axis ধরে 3 ঘর যাও। Shiku-কে পড়ে শোনান, দেখেন কী হয়।
+
+<RecipeWalk />
+
+</Step>
+
+<Step>
+
+খেয়াল করেছেন, Shiku কিভাবে হাঁটল, আগে ডানে তারপর ওপরে। কিন্তু হাঁটা শেষে কাগজে রয়ে গেল একটা সোজা arrow, যেখান থেকে শুরু করেছিল সেখান থেকে যেখানে থামলো সে পর্যন্ত। এই arrow-টাই vector-এর দ্বিতীয় রূপ।
+
+একটু কেতাবি ভাষায় বললে:
+
+> একটা **vector** হলো এমন একটা জিনিস যার একটা **direction** আছে আর একটা **magnitude** আছে।
+
+Direction মানে arrow-টা কোন দিকে তাক করা। Magnitude মানে arrow-টা কত লম্বা, এটাকে length বা norm-ও বলে। Length কীভাবে মাপে সেটা সামনের lesson-এর কাজ, আপাতত “কত লম্বা” বুঝলেই চলবে। খেয়াল করলে দেখবেন, Shiku-কেও ঠিক এই দুইটা জিনিসই বলতে হয়েছিল। কোন দিকে, আর কত দূর।
+
+নিচে arrow-টার মাথা ধরে টেনে দুইটা star এর ওপর বসান। Direction আর length-এর দিকে নজর রাখবেন।
+
+<PointIt />
+
+</Step>
+
+<Step>
+
+(3, 1) আর (1, 3), length-এর bar দুইটা হুবহু সমান, অথচ তাদের দিক কিন্তু আলাদা। তাই vector-ও আলাদা। Order এখানেও matter করে।
+
+এবার definition-টা আরেকবার পড়েন, আর দেখেন কী *নাই*। Direction আছে, magnitude আছে। কিন্তু arrow-টা কাগজের কোথায় বসে আছে, সেই কথা কোথাও নাই। বেশিরভাগ মানুষ এখানে এসেই হোঁচট খায়, তাই lets slow down a bit। সোমের king − man + woman ধাঁধাটা কিন্তু কাজ করে ঠিক এই concept টার জোরে।
+
+নিচের arrow-টা ধরে কাগজের যেখানে খুশি বসিয়ে দেখুন। শুরু আর শেষের সংখ্যাগুলোর কী হয়? আর ওদের difference এর কি হয়?
+
+<SlideArrow />
+
+</Step>
+
+<Step>
+
+শুরু বদলায়, শেষ বদলায়, কিন্তু (end − start) সবসময় সেই (3, 1)। তাহলে একই দিকে তাক করা, একই length-এর দুইটা arrow আসলে **একই vector**, কাগজের যেখানেই আঁকেন না কেন। অর্থাৎ vector place dependent না।
+
+তাহলে একটা arrow দেখে বুঝবো কীভাবে যে এটা কোন vector? Arrow-টা কোথায় আছে, সেটা জিজ্ঞেস করে লাভ নাই। প্রশ্ন হলো, প্রত্যেক axis ধরে সে কতটা মুভ করল? শেষের point থেকে শুরুর point বিয়োগ করলেই answer পাওয়া যাবে।
+
+নিচের কাগজে চারটা arrow। Option-গুলো দেখার আগে মনে মনে একবার হিসাবটা করে নিন, তারপর pick করুন।
+
+<SortArrows />
+
+</Step>
+
+<Step>
+
+A, B আর C একই vector, তিন জায়গায় আঁকা। D আলাদা। আর খেয়াল করেছেন, D-তেও সেই একই দুইটা সংখ্যা, শুধু উল্টো order-এ? Order matter করে। সবসময়ই করে।
+
+তাহলে এত জায়গা থাকতে vector আঁকার standard জায়গা কোনটা? Origin। Origin থেকে শুরু হওয়া arrow-কে বলে **position vector**। সুবিধা হলো, তখন arrow-এর মাথা দেখেই component-গুলো পড়ে ফেলা যায়, কোনো বিয়োগ লাগে না। তবে এটা শুধু আঁকার সুবিধার জন্য, definition-এর অংশ না। চারটা arrow-কেই এবার origin-এ ফিরিয়ে আনুন।
+
+<SlideHome />
+
+</Step>
+
+<Step>
+
+Arrow-এর নির্দিষ্ট কোনো জায়গা নাই, শুনে মনে হতে পারে এটা একটা weakness। আসলে ঠিক উল্টো। এর মানে vector দিয়ে কোনো *object* না, একটা *relation* বোঝানো যায়। একটু পরেই পরিষ্কার হবে।
+
+ধরেন রাস্তায় কেউ বললো, “দুই গলি পূর্বে যান, তারপর এক গলি উত্তরে।” আপনি ধানমন্ডি ২৭-এর মোড়ে দাঁড়িয়ে থাকেন বা চায়ের দোকানের সামনে, instruction-টা সবখানেই খাটে। হতে পারে আপনি ভিন্ন ভিন্ন জায়গায় পৌঁছাবেন depending on your starting position. instruction টা সব জায়গার জন্যই valid. কিন্তু নিচের ম্যাপে কয়েকটা আলাদা জায়গা থেকে instruction-টা মেনে হেঁটে দেখুন।
+
+<CityWalk />
+
+</Step>
+
+<Step>
+
+তিনবার হাঁটলেন, তিনটা arrow, আর তিনটাই হুবহু একই দিকে, একই দূরত্বে। তার মানে instruction-টা একটা vector। আর “ধানমন্ডি ২৭-এর মোড়” হলো একটা জায়গা, মানে একটা **point**।
+
+Point উত্তর দেয় *কোথায়?* Vector উত্তর দেয় *কোন দিকে, কত দূর?* নিচের কথাগুলো কোনটা কোন দলে পড়ে, ভাগ করে ফেলুন।
+
+<PointOrMove />
+
+</Step>
+
+<Step>
+
+তবে সত্যি কথা বলি, আমরা এই দুইটাকে সারাক্ষণই গুলিয়ে ফেলি। নাসিবকে বলি “vector (180, 78)”, আমরা মুখে বলছি এটা একটা point, কিন্তু আসলে তা বুঝায় origin থেকে ওই point পর্যন্ত arrow-টা। এতে কোনো ক্ষতি নাই, সবাই তাই করে, কারণ প্রত্যেকটা point-এর জন্য origin থেকে ঠিক একটাই arrow আছে। কিন্তু difference টা মাথায় রাখবেন। দুইটা point বিয়োগ করলে হাতে যা আসে, সেটা কোনো জায়গা না, একটা *relation*। সোমের ধাঁধায় ঠিক এটাই লাগবে।
+
+এখন একটু পেছনে ফিরি। গ্রাফ পেপারের lesson-এর শেষ কথাটা মনে আছে? Negative মানে ছোট না, negative মানে উল্টো দিক। Arrow-এর বেলাতেও একই কথা। Shiku-কে দুইটা star এর কাছে পাঠান, আগে একটায়, তারপর আরেকটায়।
+
+<Opposite />
+
+</Step>
+
+<Step>
+
+(−2, 3) আর (2, −3), length একই, দিক ঠিক উল্টো। সবগুলো সংখ্যার sign একসাথে উল্টালে arrow ঘুরে যায় একদম পেছন দিকে। আর একটা সংখ্যা negative হলে ভয়ের কিছু নাই, arrow শুধু কাগজের অন্য একটা কোণার দিকে তাক করে।
+
+এবার একটা অদ্ভুত arrow দেখব। সব ঘরে শূন্য, $\mathbf{0} = (0, 0)$। এটাকে বলে **zero vector**। লেখা হয় মোটা অক্ষরে, আর ওর dimension ঠিক করে দেয় context: $(0, 0, 0)$ হতে পারে, 300টা শূন্যও হতে পারে। দেখতে কেমন? Arrow-টার মাথা ধরে টেনে origin-এ নিয়ে আসুন।
+
+<ZeroArrow />
+
+</Step>
+
+<Step>
+
+যে arrow-এর length-ই শূন্য, সে কোন দিকে মুখ করে থাকবে? তাই zero vector-এর direction বলে কিছু নাই। সে origin-এ বসে থাকে, কোথাও যায় না।
+
+শেষ একটা জিনিস, কারণ list আর arrow, এই দুই চেহারার মাঝের bridge টা আসলে এটাই। $v = (2, 3)$-এর সংখ্যাগুলো arrow-টার description না, arrow-টা বানানোর recipe। x axis ধরে 2 পা, y axis ধরে 3 পা। আর প্রত্যেকটা পা নিজেও একটা ছোট্ট arrow। নিচে এক পা এক পা করে এগিয়ে তারা পর্যন্ত একটা arrow বানান।
+
+<UnitSteps />
+
+ওই এক-পা বা এক unit arrow-গুলোর একটা নাম আছে, **basis**। x axis বরাবর এক পা X-basis, আর Y axis বরাবর এক পা হলো Y-basis। কয়টা করে কোন basis নেব আর সেগুলোকে কীভাবে জোড়া লাগাব, সেই recipe-টার নাম linear combination। অর্থাৎ basis হলো building blocks আর linear combination হলো blocks গুলোকে কীভাবে জোড়া লাগাব। দুইটা নিয়েই সামনের lesson-এ ভালোমতো কথা হবে। আপাতত শুধু ছবিটা মাথায় রাখুন: **সংখ্যাগুলো বলে দেয় প্রত্যেক axis ধরে কত দূর যেতে হবে।**
+
+</Step>
+
+<Step>
+
+## একটু ঝালিয়ে নিন
+
+<Check
+  question="একটা arrow (3, 7) থেকে শুরু হয়ে (8, 9)-এ গিয়ে থেমেছে। এটা কোন vector?"
+  options={["(8, 9)", "(5, 2)", "(11, 16)", "(−5, −2)"]}
+  answer={1}
+  hint="Arrow-টা কোথায় আছে, সেটা ভুলে যান। প্রত্যেক দিকে কতটা সরলো? শেষ থেকে শুরু বিয়োগ করুন।"
+>
+
+$(8 - 3, 9 - 7) = (5, 2)$। আর এই একই vector-এর arrow আঁকা যায় অসংখ্য জায়গায়: $(0, 0)$ থেকে $(5, 2)$, $(1, 1)$ থেকে $(6, 3)$, যেখান থেকে খুশি। বিপদ শুধু উল্টো করে বিয়োগ করলে। $(-5, -2)$ হলো ঠিক উল্টো দিকে তাক করা arrow।
+
+</Check>
+
+</Step>
+
+<Step>
+
+## শেষ! Arrow-টা এখন আপনার চেনা
+
+খেয়াল করেছেন, পুরো lesson-এ নতুন কোনো math ই লাগলো না? Shiku, একটা গ্রাফ পেপার, আর একটা subtraction operation: **End − Start**।
+
+<Finale />
+
+* Vector-এর দ্বিতীয় রূপ একটা **arrow**, যার একটা **direction** আছে আর একটা **magnitude**।
+* Arrow-এর কোনো নির্দিষ্ট জায়গা নাই। একই দিকে, একই length-এর সব arrow একই vector।
+* কোন vector, সেটা বের করতে হয় **End − Start** দিয়ে।
+* Origin থেকে আঁকলে সেটা **position vector**, মাথা থেকেই component পড়া যায়।
+* Point বলে *কোথায়*, vector বলে *কোন দিকে, কত দূর*। দুইটা point বিয়োগ করলে পাওয়া যায় ওদের মাঝের arrow।
+* Negative মানে উল্টো দিক। আর $\mathbf{0}$ কোথাও যায় না, ওর direction নাই।
+
+এবার সোমের ধাঁধায় ফেরার সময় হয়েছে। ধরেন প্রত্যেকটা শব্দ একটা point। তাহলে king থেকে man বিয়োগ করলে কী পাবেন? কোনো point না, একটা arrow, man থেকে king-এ যাওয়ার রাস্তা। আর arrow-এর তো কোনো ঠিকানা নাই, যেখান থেকে খুশি হাঁটা শুরু করা যায়…
+
+<LessonLink
+  href="/dashboard/articles/math_for_ai/02c_king_queen"
+  eyebrow="পরের পাঠ"
+  title="King − man + woman, চায়ের দোকানের ধাঁধা"
+>
+  সোমের ধাঁধাটা এবার নিজের হাতে মিটিয়ে ফেলবেন।
+</LessonLink>
+
+</Step>
+
+</Journey>

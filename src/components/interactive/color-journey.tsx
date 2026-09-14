@@ -352,7 +352,7 @@ export function ColorCall() {
       {!started && (
         <div className="mt-2 flex justify-center">
           <button type="button" onClick={start} className={primaryBtn}>
-            আগের নিয়মে সংখ্যা বলা শুরু করুন
+            আগের নিয়মে সংখ্যা বলা Start করুন
           </button>
         </div>
       )}

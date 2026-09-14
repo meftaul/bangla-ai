@@ -241,3 +241,67 @@ export const pill = (on: boolean) =>
   `cursor-pointer rounded-full border-2 px-3.5 py-1.5 font-mono text-sm font-semibold transition-colors ${
     on ? "border-cat-blue bg-cat-blue text-white" : "border-border hover:border-cat-blue/60"
   }`;
+
+/** A number the reader dials up and down; a vector entry, so ASCII digits and a real minus. */
+export function Stepper({
+  value,
+  onChange,
+  min,
+  max,
+  disabled = false,
+  label,
+}: {
+  value: number;
+  onChange: (v: number) => void;
+  min: number;
+  max: number;
+  disabled?: boolean;
+  label: string;
+}) {
+  const btn =
+    "grid size-8 cursor-pointer place-items-center rounded-full text-lg font-bold text-muted transition-colors hover:bg-foreground/10 hover:text-foreground disabled:cursor-default disabled:opacity-30 disabled:hover:bg-transparent";
+  return (
+    <span className="inline-flex items-center rounded-full border border-border bg-surface p-0.5 font-mono">
+      <button type="button" aria-label={`${label} এক কম`} className={btn} disabled={disabled || value <= min} onClick={() => onChange(value - 1)}>
+        −
+      </button>
+      <span className="w-9 text-center text-lg font-semibold tabular-nums">{value < 0 ? `−${-value}` : value}</span>
+      <button type="button" aria-label={`${label} এক বেশি`} className={btn} disabled={disabled || value >= max} onClick={() => onChange(value + 1)}>
+        +
+      </button>
+    </span>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// A laptop screen, for scenes where a program runs. Dark in both themes, so
+// its ink is fixed.
+
+export function Laptop({ file = "class.csv", children }: { file?: string; children: ReactNode }) {
+  return (
+    <div
+      className="w-full max-w-[15.5rem] shrink-0 overflow-hidden rounded-xl shadow-md ring-1 ring-black/20"
+      style={{ backgroundColor: "#0f172a", color: "#e2e8f0" }}
+    >
+      <div className="flex items-center gap-1.5 px-3 py-1.5" style={{ backgroundColor: "#1e293b" }}>
+        {["#f87171", "#fbbf24", "#34d399"].map((c) => (
+          <i key={c} className="size-2 rounded-full" style={{ backgroundColor: c }} />
+        ))}
+        <span className="ml-1.5 font-mono text-xs" style={{ color: "#94a3b8" }}>
+          {file}
+        </span>
+      </div>
+      <div className="px-2 py-2 text-[0.9rem] leading-relaxed">{children}</div>
+    </div>
+  );
+}
+
+/** A line the program prints, on a Laptop. */
+export function Out({ tone = "dim", children }: { tone?: "dim" | "ok" | "bad" | "plain"; children: ReactNode }) {
+  const color = { dim: "#94a3b8", ok: "#6ee7b7", bad: "#fca5a5", plain: "#e2e8f0" }[tone];
+  return (
+    <div className={`${FADE} px-2 font-mono text-[0.8rem] leading-relaxed`} style={{ color }}>
+      {children}
+    </div>
+  );
+}

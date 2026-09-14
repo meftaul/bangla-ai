@@ -46,6 +46,11 @@ export const COURSES: Course[] = [
       "math_for_ai/01f_representation",
       "math_for_ai/01a_graph_paper",
       "math_for_ai/01b_binary",
+      "math_for_ai/02a_vector_list",
+      "math_for_ai/02b_vector_arrow",
+      "math_for_ai/02c_king_queen",
+      "math_for_ai/02d_real_arrows",
+      "math_for_ai/02e_high_dimension",
     ],
   },
 ];
