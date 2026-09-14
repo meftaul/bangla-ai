@@ -87,6 +87,35 @@ export function usePlay(ms: number) {
   return { k, running, play };
 }
 
+/**
+ * Glide a few numbers to new values, eased, whenever they change, so a shape
+ * grows, shrinks and widens instead of jumping. `start` makes it rise from
+ * somewhere else on mount. Reduced motion jumps straight there.
+ */
+export function useTween(target: number[], ms: number, start?: number[]): number[] {
+  const key = target.join(" ");
+  const [now, setNow] = useState(start ?? target);
+  const at = useRef(start ?? target);
+  useEffect(() => {
+    const to = key.split(" ").map(Number);
+    const from = at.current;
+    const calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const t0 = performance.now();
+    let raf = 0;
+    const tick = (t: number) => {
+      const p = calm ? 1 : Math.min(1, (t - t0) / ms);
+      const e = 1 - (1 - p) ** 3;
+      const next = to.map((b, i) => from[i] + (b - from[i]) * e);
+      at.current = next;
+      setNow(next);
+      if (p < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [key, ms]);
+  return now;
+}
+
 // ---------------------------------------------------------------------------
 // Chrome.
 
