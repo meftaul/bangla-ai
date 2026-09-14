@@ -693,7 +693,10 @@ export function PredictFour() {
 }
 
 // ---------------------------------------------------------------------------
-// 8 · The arithmetic as a tree: each bulb forks every branch in two.
+// 8 · The arithmetic as a tree: each bulb forks every branch in two. Each new
+//     bulb sets off a tour that lights the branches one at a time, root to
+//     pattern, counting them; after that the reader can point at any row to
+//     light its branch.
 
 const TREE_K = 4;
 const TW = 320;
@@ -703,24 +706,47 @@ const SPAN = TH - TOP - 8;
 const LX = [16, 72, 128, 184, 238];
 const PAT_X = 256;
 const NODE_R = [0, 6.5, 5.5, 4.4, 3.4];
+/** Per segment of a lit branch, so the whole branch traces in well under a tour step. */
+const TRACE_MS = 90;
 /** Vertical position of node j on level L (level 0 is the start). */
 const nodeY = (level: number, j: number) => TOP + ((j + 0.5) * SPAN) / (1 << level);
 
 export function BranchTree() {
   const pass = useGate();
   const [shown, setShown] = useState(1);
+  const [pick, setPick] = useState<number | null>(null);
+  const tour = usePlay(520);
   const levels = Array.from({ length: shown }, (_, i) => i + 1);
+  const count = 1 << shown;
+  // the branch lit right now: the tour's while it runs, else the reader's
+  const lit = tour.running ? (tour.k >= 0 ? tour.k : null) : pick;
+  /** The node branch `lit` passes through on level L. */
+  const litAt = (L: number) => (lit ?? 0) >> (shown - L);
 
   const add = () => {
     const s = shown + 1;
     setShown(s);
+    setPick(null);
+    // start one step early, so the new branches finish drawing before the tour lights them
+    tour.play(1 << s, undefined, -1);
     if (s === TREE_K) pass("প্রতিটা বাল্ব প্রতিটা ডালকে দুই ভাগ করে — তাই প্রতিবার × ২।");
+  };
+
+  const choose = (j: number) => {
+    if (tour.running) tour.play(0);
+    setPick(j);
   };
 
   return (
     <>
-      <div className="mx-auto my-5 w-full max-w-md">
-        <svg viewBox={`0 0 ${TW} ${TH}`} role="img" aria-label={`a tree of choices for ${shown} bulbs: ${1 << shown} branches`} className="block h-auto w-full">
+      <div className="mx-auto mt-5 mb-2 w-full max-w-md">
+        <svg
+          viewBox={`0 0 ${TW} ${TH}`}
+          role="group"
+          aria-label={`a tree of choices for ${shown} bulbs: ${count} branches`}
+          onPointerLeave={(e) => e.pointerType === "mouse" && !tour.running && setPick(null)}
+          className="block h-auto w-full"
+        >
           {levels.map((L) => (
             <text key={L} x={LX[L]} y={12} textAnchor="middle" className={`${FADE} fill-muted text-[9px]`}>
               বাল্ব {bn(L)}
@@ -729,17 +755,32 @@ export function BranchTree() {
           <text x={PAT_X + 12} y={12} textAnchor="middle" className="fill-muted text-[9px]">
             pattern
           </text>
-          {levels.map((L) =>
-            Array.from({ length: 1 << L }, (_, j) => (
-              <Draw
-                key={`e${L}-${j}`}
-                d={`M${LX[L - 1]} ${nodeY(L - 1, j >> 1)}L${LX[L]} ${nodeY(L, j)}`}
-                strokeWidth={1.4}
-                ms={500}
-                className={j & 1 ? "stroke-[#f59e0b]" : "stroke-foreground/35"}
-              />
-            )),
-          )}
+          <g className={`transition-opacity duration-300 motion-reduce:transition-none ${lit === null ? "" : "opacity-30"}`}>
+            {levels.map((L) =>
+              Array.from({ length: 1 << L }, (_, j) => (
+                <Draw
+                  key={`e${L}-${j}`}
+                  d={`M${LX[L - 1]} ${nodeY(L - 1, j >> 1)}L${LX[L]} ${nodeY(L, j)}`}
+                  strokeWidth={1.4}
+                  ms={500}
+                  className={j & 1 ? "stroke-[#f59e0b]" : "stroke-foreground/35"}
+                />
+              )),
+            )}
+            {levels.map((L) =>
+              Array.from({ length: 1 << L }, (_, j) => (
+                <circle
+                  key={`n${L}-${j}`}
+                  cx={LX[L]}
+                  cy={nodeY(L, j)}
+                  r={NODE_R[L]}
+                  strokeWidth={1}
+                  style={{ transitionDelay: "350ms" }}
+                  className={`${POP} ${j & 1 ? "fill-[#fbbf24] stroke-[#f59e0b]" : "fill-surface stroke-foreground/40"}`}
+                />
+              )),
+            )}
+          </g>
           <text x={(LX[0] + LX[1]) / 2 - 2} y={(nodeY(0, 0) + nodeY(1, 0)) / 2 - 3} textAnchor="middle" className="fill-muted text-[9px]">
             off
           </text>
@@ -747,36 +788,96 @@ export function BranchTree() {
             on
           </text>
           <circle cx={LX[0]} cy={nodeY(0, 0)} r={3} className="fill-foreground/60" />
-          {levels.map((L) =>
-            Array.from({ length: 1 << L }, (_, j) => (
-              <circle
-                key={`n${L}-${j}`}
-                cx={LX[L]}
-                cy={nodeY(L, j)}
-                r={NODE_R[L]}
-                strokeWidth={1}
-                style={{ transitionDelay: "350ms" }}
-                className={`${POP} ${j & 1 ? "fill-[#fbbf24] stroke-[#f59e0b]" : "fill-surface stroke-foreground/40"}`}
+
+          {/* the lit branch, traced from the start to its pattern */}
+          {lit !== null && (
+            <g key={`${shown}-${lit}`}>
+              <rect
+                x={PAT_X - 5}
+                y={nodeY(shown, lit) - 5}
+                width={(shown - 1) * 7 + 10}
+                height={10}
+                rx={5}
+                className="fill-cat-amber/20"
               />
-            )),
+              {levels.map((L) => (
+                <Draw
+                  key={L}
+                  d={`M${LX[L - 1]} ${nodeY(L - 1, litAt(L) >> 1)}L${LX[L]} ${nodeY(L, litAt(L))}`}
+                  strokeWidth={3}
+                  ms={TRACE_MS}
+                  delay={(L - 1) * TRACE_MS}
+                  className={litAt(L) & 1 ? "stroke-[#f59e0b]" : "stroke-foreground/80"}
+                />
+              ))}
+              {levels.map((L) => (
+                <circle
+                  key={`n${L}`}
+                  cx={LX[L]}
+                  cy={nodeY(L, litAt(L))}
+                  r={NODE_R[L] + 1}
+                  strokeWidth={1.6}
+                  style={{ transitionDelay: `${L * TRACE_MS}ms`, transitionDuration: "150ms" }}
+                  className={`${FADE} ${litAt(L) & 1 ? "fill-[#fbbf24] stroke-[#b45309]" : "fill-surface stroke-foreground"}`}
+                />
+              ))}
+            </g>
           )}
+
           {/* each branch of the newest level, read back as the pattern it spells */}
           <g key={shown}>
-            {Array.from({ length: 1 << shown }, (_, j) =>
-              bitsOf(j, shown).map((b, k) => (
-                <circle
-                  key={`${j}-${k}`}
-                  cx={PAT_X + k * 7}
-                  cy={nodeY(shown, j)}
-                  r={2.6}
-                  strokeWidth={0.8}
-                  style={{ transitionDelay: "500ms" }}
-                  className={`${FADE} ${b ? "fill-[#fbbf24]" : "fill-foreground/10 stroke-foreground/30"}`}
-                />
-              )),
-            )}
+            {Array.from({ length: count }, (_, j) => (
+              <g key={j} className={`transition-opacity duration-300 motion-reduce:transition-none ${lit === null || lit === j ? "" : "opacity-30"}`}>
+                {bitsOf(j, shown).map((b, k) => (
+                  <circle
+                    key={k}
+                    cx={PAT_X + k * 7}
+                    cy={nodeY(shown, j)}
+                    r={2.6}
+                    strokeWidth={0.8}
+                    style={{ transitionDelay: "500ms" }}
+                    className={`${FADE} ${b ? "fill-[#fbbf24]" : "fill-foreground/10 stroke-foreground/30"}`}
+                  />
+                ))}
+              </g>
+            ))}
           </g>
+
+          {/* one full-width band per branch, so any row is easy to point at */}
+          {Array.from({ length: count }, (_, j) => (
+            <rect
+              key={`b${shown}-${j}`}
+              x={0}
+              y={TOP + (j * SPAN) / count}
+              width={TW}
+              height={SPAN / count}
+              tabIndex={0}
+              role="button"
+              aria-label={`ডাল ${bn(j + 1)}: ${spoken(j, shown)}`}
+              onPointerEnter={() => choose(j)}
+              onClick={() => choose(j)}
+              onFocus={() => choose(j)}
+              className="cursor-pointer fill-transparent outline-none focus-visible:fill-foreground/5"
+            />
+          ))}
         </svg>
+      </div>
+      <div className="mb-3 flex min-h-7 flex-wrap items-center justify-center gap-x-1.5 text-sm">
+        {lit === null ? (
+          <span className="text-muted">কোনো ডালে tap করুন, পুরো পথটা জ্বলে উঠবে</span>
+        ) : (
+          <>
+            <span className="text-muted">
+              ডাল {bn(lit + 1)}/{bn(count)}:
+            </span>
+            {bitsOf(lit, shown).map((b, i) => (
+              <span key={i} className="font-mono">
+                {i > 0 && <span className="text-muted">→ </span>}
+                <b className={b ? "text-[#d97706]" : ""}>{b ? "on" : "off"}</b>
+              </span>
+            ))}
+          </>
+        )}
       </div>
       <div className="text-center font-mono text-2xl font-bold">
         {Array.from({ length: shown }, () => "২").join(" × ")} = {bn(1 << shown)}
