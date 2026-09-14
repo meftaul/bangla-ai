@@ -42,6 +42,8 @@ export const COURSES: Course[] = [
       "math_for_ai/01_intro",
       "math_for_ai/01c_image_numbers",
       "math_for_ai/01d_color_image",
+      "math_for_ai/01e_vector",
+      "math_for_ai/01f_representation",
       "math_for_ai/01a_graph_paper",
       "math_for_ai/01b_binary",
     ],
