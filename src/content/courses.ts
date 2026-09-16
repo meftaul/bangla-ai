@@ -51,6 +51,10 @@ export const COURSES: Course[] = [
       "math_for_ai/02c_king_queen",
       "math_for_ai/02d_real_arrows",
       "math_for_ai/02e_high_dimension",
+      "math_for_ai/02f_hospital_dimension",
+      "math_for_ai/02g_three_surprises",
+      "math_for_ai/02h_model_vectors",
+      "math_for_ai/03a_treasure_add",
     ],
   },
 ];

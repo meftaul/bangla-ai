@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from "react";
 
 // Small shared pieces for Journey screens (image-journey.tsx, binary-journey.tsx):
 // the motion vocabulary, two playback hooks, and the bits of chrome every screen
@@ -114,6 +114,23 @@ export function useTween(target: number[], ms: number, start?: number[]): number
     return () => cancelAnimationFrame(raf);
   }, [key, ms]);
   return now;
+}
+
+// ---------------------------------------------------------------------------
+// Preview seeds. `npm run shot` renders a screen in a named state by handing
+// its useSeed() calls their starting values; anywhere else each one falls back
+// to its own initial value, so a screen behaves exactly as with useState.
+
+export type Seed = Record<string, unknown>;
+/** a file's named screen states for `npm run shot`: { Screen: { state: seed } } */
+export type Fixtures = Record<string, Record<string, Seed>>;
+const SeedCtx = createContext<Seed | null>(null);
+export const SeedProvider = SeedCtx.Provider;
+
+/** useState whose starting value a preview can set, by `key`. */
+export function useSeed<T>(key: string, initial: T) {
+  const seed = useContext(SeedCtx);
+  return useState<T>(seed && key in seed ? (seed[key] as T) : initial);
 }
 
 // ---------------------------------------------------------------------------
