@@ -1,0 +1,129 @@
+export const metadata = {
+  title: "Math for AI 2.6 — হাসপাতালের পাঁচ dimension",
+  description: "আম্মুর বাজারের list দিয়ে Σ চেনা, তারপর ডাক্তার আপার ওয়ার্ডে ফিরে পাঁচ dimension-এ দূরত্ব মাপা। ছবি আঁকা যায় না, কিন্তু হিসাব ঠিকই করা যায়।",
+  type: "article",
+};
+
+{/* Told as a Brilliant-style journey, like 2.1–2.5: one screen at a time,
+    each with a visual and one thing to do, and the Continue arrow stays
+    locked until it is done. The shell is components/journey/journey.tsx; the
+    screens live in components/interactive/dimension-journey.tsx, shared with
+    2.5 and 2.8. Paced for a reader of twelve: the need for Σ is felt before
+    Σ appears, the subscript is taught on its own first, and every idea is
+    something the reader does before it gets a name. */}
+
+import { Journey, Step, Check } from "@/components/journey/journey";
+import {
+  LongSum,
+  RollNumbers,
+  BazaarSigma,
+  ThreePatients,
+  WardFive,
+  SigmaUnfold,
+  NeverShrinks,
+} from "@/components/interactive/dimension-journey";
+
+<Journey title="Vector-এর দুই চেহারা · ২.৬">
+
+<Step>
+
+আগের lesson-এ দূরত্বের নিয়ম বানিয়েছিলাম: ঘরে ঘরে তফাত, বর্গ, যোগ, বর্গমূল। ঘর যত, term তত। কিন্তু ঘর অনেক হলে? লিখে দেখুন।
+
+<LongSum />
+
+</Step>
+
+<Step>
+
+তাই অঙ্কে ছোট করে লেখার একটা চিহ্ন আছে। তবে তার আগে একটা ছোট্ট কৌশল, আম্মুর বাজারের list দিয়ে।
+
+<RollNumbers />
+
+</Step>
+
+<Step>
+
+এবার সেই চিহ্ন, $\Sigma$। গ্রিক অক্ষর, নাম sigma, S for sum। এটা একটা ছোট্ট যোগের মেশিন। একবার চালিয়ে দেখুন।
+
+<BazaarSigma />
+
+</Step>
+
+<Step>
+
+এবার মেশিনটা হাসপাতালে নিয়ে যাই। ডাক্তার আপার ওয়ার্ডে তিনজন রোগী, $p$, $q$ আর $r$। আপাতত শুধু বয়স আর BP, যাতে কাগজে আঁকা যায়।
+
+<ThreePatients />
+
+</Step>
+
+<Step>
+
+ডাক্তার আপা খাতায় আরও তিনটা জিনিস লিখে রাখেন। পাঁচটা ঘর মানে পাঁচ dimension, ছবি আঁকা যাবে না। কিন্তু Σ মেশিনের তাতে কিছু যায় আসে না।
+
+<WardFive />
+
+</Step>
+
+<Step>
+
+এইমাত্র যা করলেন, সেটা এক লাইনে লেখা যায়।
+
+<SigmaUnfold />
+
+$$d = \sqrt{\sum_{i=1}^{n} (a_i - b_i)^2}$$
+
+এই এক লাইন যেকোনো $n$-এর জন্য খাটে। 2 হোক, বা আপনার ফোনের ছবির মতো 36,000,000।
+
+</Step>
+
+<Step>
+
+একটা চ্যালেঞ্জ! $q$ তো এমনিতেই $p$-এর সবচেয়ে কাছে। একটা নতুন ঘর জুড়ে কি ওকে আরও কাছে আনা যায়?
+
+<NeverShrinks />
+
+</Step>
+
+<Step>
+
+## একটু ঝালিয়ে নিন
+
+<Check
+  question="p আর q-এর distance মেপেছিলেন পাঁচ dimension-এ। এবার ধরেন প্রত্যেক রোগীর record-এ 500টা column। কী বদলাবে?"
+  options={[
+    "Formula-তে শুধু term বাড়বে, 5টার জায়গায় 500টা। নতুন কোনো বুদ্ধি লাগবে না",
+    "500 dimension-এর জন্য একদম নতুন একটা formula লাগবে",
+    "500 dimension-এ দূরত্ব বলে কিছু নাই, কারণ সেটা কল্পনাই করা যায় না",
+  ]}
+  answer={0}
+  hint="বারান্দার মশার বেলায় তৃতীয় দিকটা এসে কী যোগ করেছিল? একটা term। Σ-এর ওপরে শুধু n বদলায়।"
+>
+
+ঘরে ঘরে তফাত, বর্গ, যোগ, বর্গমূল। 5 হোক বা 500, শুধু Σ-এর ওপরের সংখ্যাটা বদলায়। কল্পনা করতে না পারলে হিসাবের কোনো ক্ষতি হয় না।
+
+</Check>
+
+</Step>
+
+<Step>
+
+## শেষ! পাঁচ dimension-এ দূরত্ব এখন আপনার হাতে
+
+* $\Sigma$ মানে: নিচের সংখ্যা থেকে শুরু, ওপরের সংখ্যায় থামা, প্রতিবার ডানের জিনিসটা যোগ।
+* যেকোনো dimension-এ দূরত্ব: $d = \sqrt{\sum_{i=1}^{n} (a_i - b_i)^2}$। **ছবি আঁকুন 2D-তে, হিসাব করুন n-D-তে।**
+* নতুন ঘর দূরত্ব কখনো কমায় না, কারণ বর্গ কখনো negative হয় না।
+
+তবে অনেক অনেক dimension-এ গেলে 2D-র ছবিটা আমাদের ধোঁকা দেয়। কীভাবে, সেটা আপনি নিজেই খুঁজে বের করবেন, লুডুর ছক্কা আর coin দিয়ে।
+
+<LessonLink
+  href="/dashboard/articles/math_for_ai/02g_three_surprises"
+  eyebrow="পরের পাঠ"
+  title="অনেক dimension-এর তিনটা চমক"
+>
+  ছক্কা, coin আর চিনির কিউব দিয়ে তিনটা অদ্ভুত কাণ্ড নিজেই খুঁজে বের করবেন।
+</LessonLink>
+
+</Step>
+
+</Journey>

@@ -179,7 +179,7 @@ export function Journey({ title, children }: { title?: string; children: ReactNo
             dir > 0 ? "starting:translate-x-10 starting:opacity-0" : "starting:-translate-x-10 starting:opacity-0"
           }`}
         >
-          {steps[at]}
+          <ClearedCtx.Provider value={cleared}>{steps[at]}</ClearedCtx.Provider>
         </div>
       </GateCtx.Provider>
 
@@ -220,6 +220,24 @@ export function Journey({ title, children }: { title?: string; children: ReactNo
           </button>
         )}
       </div>
+    </div>
+  );
+}
+
+/** Whether the screen on stage is done. True outside a Journey, so `Then` still shows in a plain article. */
+const ClearedCtx = createContext(true);
+
+/**
+ * The words that belong after the task: what the reader just found, told as
+ * story. Shown once the screen is cleared, so an explanation never gives away
+ * the answer before they have played; a screen they come back to shows it at once.
+ */
+export function Then({ children }: { children: ReactNode }) {
+  const cleared = useContext(ClearedCtx);
+  if (!cleared) return null;
+  return (
+    <div className="mt-6 border-t border-border pt-5 transition duration-500 motion-reduce:transition-none starting:translate-y-3 starting:opacity-0">
+      {children}
     </div>
   );
 }

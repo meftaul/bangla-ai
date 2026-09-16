@@ -1,0 +1,117 @@
+export const metadata = {
+  title: "Math for AI 2.8 — Model-এর ভেতরের vector",
+  description: "পুরানো রেডিওর knob, ঢাল ধরে পা ফেলা, আর চারপাশে লুকিয়ে থাকা vector। একটা model কীভাবে শেখে, আর paper-এর চিহ্নগুলো কীভাবে পড়তে হয়।",
+  type: "article",
+};
+
+{/* Told as a Brilliant-style journey, like 2.1–2.7: one screen at a time,
+    each with a visual and one thing to do, and the Continue arrow stays
+    locked until it is done. The shell is components/journey/journey.tsx; the
+    screens live in components/interactive/dimension-journey.tsx, shared with
+    2.5 and 2.6. The last of the eight "Vector-এর দুই চেহারা" journeys. One
+    radio knob comes before two, so the valley is felt before the bowl. */}
+
+import { Journey, Step, Check } from "@/components/journey/journey";
+import {
+  OneKnob,
+  KnobStep,
+  VectorLadder,
+  SayItCards,
+  PairUp,
+  Finale,
+} from "@/components/interactive/dimension-journey";
+
+<Journey title="Vector-এর দুই চেহারা · ২.৮">
+
+<Step>
+
+AI-এর একটা model আসলে অনেকগুলো knob-ওয়ালা একটা formula, পুরানো রেডিওর মতো। Learning মানে knob ঘুরিয়ে ঘুরিয়ে ভুল কমানো। শুরু করি একটা knob দিয়ে।
+
+<OneKnob />
+
+</Step>
+
+<Step>
+
+এবার দুইটা knob। Valley-টা এখন একটা বাটি। ওপর থেকে দেখলে গোল গোল দাগগুলো যেন ম্যাপের উচ্চতার দাগ, আর মাঝখানটা সবচেয়ে নিচু।
+
+<KnobStep />
+
+একশো কোটি knob হলেও কাজ একই: সব knob মিলে একটা vector, আর পরের পা-টাও একই সাইজের একটা vector। Paper-এ *“take a step in the direction of the negative gradient”* পড়লে বুঝবেন, মানে ঠিক এটাই।
+
+</Step>
+
+<Step>
+
+এরকম আরও কয়েকটা জায়গায় vector লুকিয়ে থাকে। কোনটা কত বড়, দেখে নিন।
+
+<VectorLadder />
+
+</Step>
+
+<Step>
+
+Paper পড়তে গেলে কিছু চিহ্ন বারবার আসবে। প্রত্যেকটা কার্ড উল্টানোর আগে মুখে বলে দেখুন।
+
+<SayItCards />
+
+</Step>
+
+<Step>
+
+$u, v \in \mathbb{R}^n$ কার্ডটায় একটু থামি। লেখক বলছেন, **দুইটার ঘর সমান**। কেন সেটা জরুরি, Σ মেশিনকে দিয়েই দেখুন।
+
+<PairUp />
+
+ফাহিমের খালি ঘরটার কথা মনে পড়ছে?
+
+</Step>
+
+<Step>
+
+## একটু ঝালিয়ে নিন
+
+<Check
+  question="একটা model-এ একশো কোটি knob। শেখার প্রত্যেক পা-এ কী বের করতে হয়?"
+  options={[
+    "একশো কোটি সংখ্যার একটা vector: প্রত্যেক knob কোন দিকে কতটা ঘুরবে",
+    "শুধু একটা সংখ্যা: সব knob একসাথে কতটা ঘুরবে",
+    "একশো কোটি dimension-এর একটা ছবি",
+  ]}
+  answer={0}
+  hint="দুই knob-এর বেলায় পরের পা ছিল দুইটা সংখ্যা, (Δ₁, Δ₂)। Knob যত, সংখ্যা তত।"
+>
+
+Knob-গুলো একটা vector, আর পরের পা-টাও একই সাইজের একটা vector। ছবি আঁকা যায় না, কিন্তু হিসাব একই।
+
+</Check>
+
+</Step>
+
+<Step>
+
+## শেষ! Vector-এর দুই চেহারাই এখন আপনার
+
+<Finale />
+
+* Vector মানে সংখ্যার একটা list, আবার একটা arrow। **list হিসেবে রাখুন, arrow হিসেবে ভাবুন।**
+* যেকোনো dimension-এ দূরত্ব: $d = \sqrt{\sum_{i=1}^{n} (a_i - b_i)^2}$।
+* অনেক dimension-এ তিনটা চমক: দূরত্ব গায়ে গায়ে, দিক আড়াআড়ি, সবাই খোসায়।
+* Model-এর সবগুলো knob মিলে একটা vector, আর শেখা মানে ঢাল ধরে পা ফেলা।
+* $u, v \in \mathbb{R}^n$ মানে দুইটার ঘর সমান, তাই তুলনা করা যায়।
+
+আটটা lesson জুড়ে একই জিনিসকে দুই চোখে দেখলেন। নিয়ম একটাই: **list হিসেবে রাখুন, arrow হিসেবে ভাবুন।**
+
+সামনের lesson-এ vector যোগ করবো, টেনে লম্বা করবো, আর $\lVert v \rVert$-কে এমন একটা সংখ্যা বানাবো যা নিজের হাতে হিসাব করা যায়। Golf ball-এর 84.9 km/h-এর হিসাবও তখন মিটবে।
+
+<LessonLink
+  href="/dashboard/articles/math_for_ai/03a_treasure_add"
+  eyebrow="পরের পাঠ"
+  title="যোগ-বিয়োগ, মেলার গুপ্তধন"
+>
+  স্কুলের বিজ্ঞান মেলায় গুপ্তধন খোঁজা, আর দুইটা clue card জোড়া লাগালে কী হয়।
+</LessonLink>
+
+</Step>
+
+</Journey>

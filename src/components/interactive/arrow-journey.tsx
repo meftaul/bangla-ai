@@ -45,7 +45,7 @@ const F1 = makeFrame(-1, 8, -1, 6, 34);
 const F2 = makeFrame(-5, 5, -4, 4, 30);
 
 /** Shiku's walk: along the first axis, then the second, one square at a time. */
-function route(s: XY, v: XY): XY[] {
+export function route(s: XY, v: XY): XY[] {
   const out: XY[] = [s];
   let [x, y] = s;
   for (let i = 0; i < Math.abs(v[0]); i++) out.push([(x += Math.sign(v[0])), y]);
@@ -54,7 +54,7 @@ function route(s: XY, v: XY): XY[] {
 }
 
 /** Play a walk one square per tick; `done` fires on the last square. */
-function useWalk(ms: number) {
+export function useWalk(ms: number) {
   const play = usePlay(ms);
   const [path, setPath] = useState<XY[]>([O]);
   const go = (p: XY[], done?: () => void) => {
@@ -69,7 +69,7 @@ function useWalk(ms: number) {
 }
 
 /** Shiku, from 1.5. Moved by a CSS transform, so the transition does the in-between. */
-function Shiku({ f, at }: { f: Frame; at: XY }) {
+export function Shiku({ f, at }: { f: Frame; at: XY }) {
   return (
     <g
       style={{ transform: `translate(${f.sx(at[0])}px, ${f.sy(at[1])}px)` }}
@@ -84,7 +84,7 @@ function Shiku({ f, at }: { f: Frame; at: XY }) {
   );
 }
 
-function Trail({ f, cells, faint = false }: { f: Frame; cells: XY[]; faint?: boolean }) {
+export function Trail({ f, cells, faint = false }: { f: Frame; cells: XY[]; faint?: boolean }) {
   if (cells.length < 2) return null;
   const d = cells.map((c, i) => `${i ? "L" : "M"}${f.sx(c[0])} ${f.sy(c[1])}`).join("");
   return (
