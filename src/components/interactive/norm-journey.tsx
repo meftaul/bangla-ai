@@ -1511,7 +1511,7 @@ export function HomeSchool() {
           </text>
         )}
         <Person who="nasib" x={k === 1 ? X6H_SCHOOL - 10 : X6H_HOME + 10} y={X6H_Y} ms={2000} facing={k === 2 ? -1 : 1} walking={k === 1 || k === 2} mood={k >= 3 ? "sad" : "smug"} />
-        {k >= 3 && <Bubble x={X6H_HOME + 10} y={X6H_Y - 66} side="right" lines={["যাওয়া আর ফেরা,", "রাস্তা তো একই লম্বা…"]} />}
+        {k >= 3 && <Bubble x={X6H_HOME + 10} y={X6H_Y - 66} side="right" lines={["যাওয়া আর আসা,", "রাস্তার length তো same ই…"]} />}
       </Stage>
     </StoryFrame>
   );

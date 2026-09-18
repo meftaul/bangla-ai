@@ -1,10 +1,11 @@
 "use client";
 
-import type { KeyboardEvent } from "react";
+import type { KeyboardEvent, ReactNode } from "react";
 
+import { Bubble, Person, Stage, StoryFrame } from "@/components/journey/cast";
 import { Task, useGate } from "@/components/journey/journey";
-import { Choice, FADE, Nope, POP, Ticks, pill, predictLook, primaryBtn, useSeed, type Fixtures } from "@/components/journey/kit";
-import { Arrow, Label, Plane, makeFrame, type Frame, type Tone, type XY } from "@/components/journey/plane";
+import { Choice, Draw, FADE, Nope, POP, Scene, Ticks, pill, predictLook, primaryBtn, useScene, useSeed, useTween, type Fixtures } from "@/components/journey/kit";
+import { Arrow, Dot, Label, Plane, makeFrame, type Frame, type Tone, type XY } from "@/components/journey/plane";
 import { bn } from "./figure-kit";
 import { DotBox, dot, num, tupN } from "./haat-journey";
 import { rng } from "./surprise-journey";
@@ -22,8 +23,12 @@ import { rng } from "./surprise-journey";
 // judges the five pushers from their numbers alone, sends the two useless ones
 // round the back, and the van comes out.
 //
-// The box is 4.1's DotBox. Tailwind only; the sheets are journey/plane. Ink on
-// the white sheet (the road, the van) is fixed.
+// The box is 4.1's DotBox. The setups that tell a scene get a story scene on
+// the stage (4a the কুলি arriving, 12a the dinner bet), and every <Then> gets
+// one or two watch-only figures (2½, 2¾, 3½, 4½, 5½, 5¾, 6½, 6¾); screen 1's
+// van is already 4.1's finale and the widget's own picture. Tailwind only; the
+// sheets are journey/plane. Ink on the white sheet (the road, the van) is
+// fixed.
 
 const O: XY = [0, 0];
 /** the road runs this way: 4 east for every 3 north */
@@ -292,7 +297,7 @@ export function PushRing() {
     const next = [...seen, i];
     setSeen(next);
     if (next.includes(MAX) && next.includes(MIN) && ZEROS.some((z) => next.includes(z)))
-      pass("সোজা কোণে 0, 90° পেরোলেই minus।");
+      pass("৯০ degree কোণে 0, 90° পেরোলেই minus।");
   };
   /** the ring spot nearest the tap, by compass bearing, so a tap anywhere in its slice counts */
   const pick = (p: XY) => {
@@ -488,7 +493,7 @@ export function CoinBox() {
   };
   const toss = () => {
     setHundred(true);
-    pass("মিল-অমিল সমান হলে 0, মানে সোজা কোণ।");
+    pass("মিল-অমিল সমান হলে 0, মানে ৯০ degree কোণ।");
   };
 
   return (
@@ -673,6 +678,696 @@ export function FixTheCrew() {
 }
 
 // ---------------------------------------------------------------------------
+// Shared bits for the story scenes and figures below.
+
+/** the ground line of a Stage */
+const PG = 150;
+/** the ink drawn on a Stage or a white sheet */
+const P_INK = "#0f1b2d";
+
+/** A story scene takes `story` (it marks the scene as setup words for the Journey) and ignores it. */
+type Story = { story?: boolean };
+
+/** Something that glides to (x, y) over `ms`, the way a Person does: draw it around (0, 0). */
+function P_Carry({ x, y, ms = 1200, children }: { x: number; y: number; ms?: number; children: ReactNode }) {
+  return (
+    <g style={{ transform: `translate(${x}px, ${y}px)`, transitionDuration: `${ms}ms` }} className="pointer-events-none transition-transform ease-in-out motion-reduce:transition-none">
+      {children}
+    </g>
+  );
+}
+
+/** The name under someone who isn't in the cast; it glides with them. */
+function P_Name({ x, y = PG, text, ms = 1200 }: { x: number; y?: number; text: string; ms?: number }) {
+  return (
+    <P_Carry x={x} y={y} ms={ms}>
+      <text y={11} textAnchor="middle" fontSize={8.5} fontWeight={700} fill={P_INK}>
+        {text}
+      </text>
+    </P_Carry>
+  );
+}
+
+/** The red mark of someone pushing, beside their feet at (x, y), pointing `facing`. */
+function P_Push({ x, y = PG, facing }: { x: number; y?: number; facing: 1 | -1 }) {
+  return <path d={`M${x + facing * 14} ${y - 38}h${facing * 9}m${-facing * 3} -3l${facing * 3} 3l${-facing * 3} 3`} fill="none" stroke="#dc2626" strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round" />;
+}
+
+/** A cycle van, the left end of its bed over (x, y) — 4.1's van, on the stage. */
+function P_Van({ x, y }: { x: number; y: number }) {
+  return (
+    <g className="pointer-events-none">
+      <rect x={x} y={y - 32} width={70} height={6} rx={1} fill="#92400e" />
+      <path d={`M${x} ${y - 32}v-7M${x + 70} ${y - 32}v-7M${x} ${y - 37}h70`} stroke="#78350f" strokeWidth={1.6} />
+      <circle cx={x + 16} cy={y - 11} r={11} fill="none" stroke={P_INK} strokeWidth={2.2} />
+      <circle cx={x + 54} cy={y - 11} r={11} fill="none" stroke={P_INK} strokeWidth={2.2} />
+      <path d={`M${x + 70} ${y - 28}L${x + 88} ${y - 30}L${x + 94} ${y - 9}M${x + 84} ${y - 30}l-2 -12h-5M${x + 90} ${y - 44}l4 -1`} fill="none" stroke={P_INK} strokeWidth={1.8} strokeLinecap="round" />
+      <circle cx={x + 94} cy={y - 9} r={9} fill="none" stroke={P_INK} strokeWidth={2.2} />
+    </g>
+  );
+}
+
+/** A tape roll with its end hanging loose, centred at (0, 0). */
+function P_Tape() {
+  return (
+    <g className="pointer-events-none">
+      <rect x={-7} y={-5} width={14} height={10} rx={2} fill="#fbbf24" stroke="#b45309" strokeWidth={1} />
+      <circle r={2.2} fill="#fff7ed" stroke="#b45309" strokeWidth={0.8} />
+      <path d="M-7 3q-6 4 -9 9" fill="none" stroke="#f59e0b" strokeWidth={1.6} strokeLinecap="round" />
+    </g>
+  );
+}
+
+/** A চাঁদা (half-circle protractor), flat side down, centred at (0, 0). */
+function P_Protractor() {
+  return (
+    <g className="pointer-events-none">
+      <path d="M-9 0A9 9 0 0 1 9 0Z" fill="#e0f2fe" stroke="#0369a1" strokeWidth={1} />
+      <path d="M-9 0H9" stroke="#0369a1" strokeWidth={0.8} />
+      {[-6, -3, 0, 3, 6].map((t) => {
+        const y = -Math.sqrt(81 - t * t);
+        return <line key={t} x1={t} y1={y} x2={t} y2={y + 2.2} stroke="#0369a1" strokeWidth={0.7} />;
+      })}
+      <circle r={1} fill="#0369a1" />
+    </g>
+  );
+}
+
+/** A caption that fades in afresh on every beat. */
+const say = (lines: readonly string[], k: number) => (
+  <span key={k} className={FADE}>
+    {lines[k]}
+  </span>
+);
+
+/** the little square that marks a right angle at the origin, between the road and `to` */
+function RightAngle({ f, to }: { f: Frame; to: XY }) {
+  const n = Math.hypot(...to);
+  const r: XY = [ROAD[0] / 5, ROAD[1] / 5];
+  const u: XY = [to[0] / n, to[1] / n];
+  const a = 1.1;
+  const p = (x: number, y: number) => `${f.sx(x)} ${f.sy(y)}`;
+  return (
+    <path
+      d={`M${p(a * r[0], a * r[1])}L${p(a * (r[0] + u[0]), a * (r[1] + u[1]))}L${p(a * u[0], a * u[1])}`}
+      fill="none"
+      stroke={P_INK}
+      strokeOpacity={0.55}
+      strokeWidth={1.3}
+      className="pointer-events-none"
+    />
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 2½ · A figure for screen 2's explanation, first paragraph: the same push
+//      from behind and from the front. The number is the same 25, only the
+//      sign flips — the box telling the road which team the push is on.
+
+const X2T_SAY = [
+  "পেছন থেকে ঠেললে (4, 3): box এ +25।",
+  "সামনে থেকে সেই একই ঠেলা (−4, −3): −25।",
+  "সংখ্যা একই, শুধু চিহ্ন উল্টা — এই দুইটা খবরই box একদম ঠিক দেয়।",
+];
+const X2T_ROWS = [
+  { head: "পেছন থেকে", tup: "(4, 3)", out: "+25", team: "রাস্তার দলে", ink: "text-cat-blue", edge: "border-cat-blue/40", chip: "bg-cat-blue/10 text-cat-blue" },
+  { head: "সামনে থেকে", tup: "(−4, −3)", out: "−25", team: "উল্টো দলে", ink: "text-cat-coral", edge: "border-cat-coral/40", chip: "bg-cat-coral/10 text-cat-coral" },
+];
+
+export function TeamSign() {
+  const s = useScene(3, [600, 2000, 2400]);
+  const k = s.k;
+  return (
+    <Scene scene={s} caption={say(X2T_SAY, k)}>
+      <div className="flex items-center justify-center gap-3">
+        <div className="w-[9.5rem] shrink-0">
+          <Plane f={FS} label="একই ঠেলা — পেছন থেকে (4, 3) আর সামনে থেকে (−4, −3)" className="my-0! max-w-none">
+            <Road f={FS} />
+            <Van f={FS} />
+            <Arrow f={FS} from={O} to={BEHIND} tone="blue" w={2.6} />
+            {k >= 1 && <Arrow f={FS} from={O} to={FRONT} tone="coral" w={2.6} draw />}
+          </Plane>
+        </div>
+        <div className="min-w-0 flex-1 space-y-2">
+          {X2T_ROWS.map((r, i) => (
+            <div key={r.head} className={`rounded-xl border-2 bg-surface px-2.5 py-1.5 ${r.edge} ${i === 0 ? "" : k >= 1 ? FADE : "hidden"}`}>
+              <div className="flex items-baseline justify-between gap-2">
+                <span className={`text-xs font-semibold ${r.ink}`}>{r.head}</span>
+                <span className="font-mono text-[0.7rem] text-muted">{r.tup}</span>
+                <span className={`font-mono text-lg font-bold ${r.ink}`}>{r.out}</span>
+              </div>
+              {k >= 2 && (
+                <div className={`mt-0.5 text-center text-xs font-semibold ${r.chip} ${POP} inline-block rounded-full px-2 py-0.5`}>
+                  {r.team}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    </Scene>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 2¾ · A figure for screen 2's explanation, the honest aside: the road's own
+//      arrow (4, 3) is 5 long, so every number out of the box is 5 times the
+//      real push. The tape measures it; the sum names it. Why 5 is 4.3's story.
+
+const F2F = makeFrame(-0.6, 4.8, -0.6, 3.9, 24);
+const X2F_SAY = [
+  "রাস্তার arrow (4, 3) নিজে কত লম্বা?",
+  "ফিতা দিয়ে মাপা যায়: ঠিক 5।",
+  "তাই box এর নম্বর আসল ঠেলার 5 গুণ: 25 = 5 × 5।",
+];
+
+export function FiveTimes() {
+  const s = useScene(3, [600, 1800, 2400]);
+  const k = s.k;
+  return (
+    <Scene scene={s} caption={say(X2F_SAY, k)}>
+      <div className="mx-auto w-fit">
+        <Plane f={F2F} label="রাস্তার arrow (4, 3), ফিতা দিয়ে মাপা — 5" className="my-0! max-w-none">
+          <Road f={F2F} />
+          <Van f={F2F} />
+          <Arrow f={F2F} from={O} to={BEHIND} tone="blue" w={2.6} />
+          {k >= 1 && (
+            <>
+              <Draw d={`M${F2F.sx(0.15)} ${F2F.sy(-0.2)}L${F2F.sx(4.15)} ${F2F.sy(2.8)}`} strokeWidth={6} className="stroke-cat-teal/30" />
+              <Label f={F2F} at={[2.4, 1.6]} dx={4} dy={4} anchor="start" className={`${FILL.teal} font-mono`}>
+                5
+              </Label>
+            </>
+          )}
+        </Plane>
+        {k >= 2 && (
+          <div className={`${POP} mt-2 text-center font-mono text-[0.95rem] font-bold`}>
+            25 <span className="font-sans font-medium text-muted">মানে</span> 5 × 5
+          </div>
+        )}
+      </div>
+    </Scene>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 3½ · A figure for screen 3's explanation: walk the ring with the same
+//      strength and the number follows the angle — 25, 24, 20, 15 down to 0 at
+//      the right angle, then minus. Every spot is one the widget's ring holds.
+
+const F3F = makeFrame(-5.6, 5.6, -4.6, 5.8, 13);
+const X3_SPOTS: { v: XY; n: string; tone: Tone; dx: number; dy: number; anchor: "start" | "middle" | "end"; at: number }[] = [
+  { v: [4, 3], n: "+25", tone: "blue", dx: -3, dy: -6, anchor: "end", at: 0 },
+  { v: [3, 4], n: "+24", tone: "blue", dx: 0, dy: -8, anchor: "middle", at: 1 },
+  { v: [5, 0], n: "+20", tone: "blue", dx: 4, dy: -7, anchor: "start", at: 1 },
+  { v: [0, 5], n: "+15", tone: "blue", dx: 0, dy: -8, anchor: "middle", at: 2 },
+  { v: [-3, 4], n: "0", tone: "violet", dx: 0, dy: -8, anchor: "middle", at: 3 },
+  { v: [-4, 3], n: "−7", tone: "coral", dx: -3, dy: -6, anchor: "end", at: 4 },
+];
+const X3_SAY = [
+  "রাস্তা বরাবর দাঁড়িয়ে ঠেললে নম্বর সবচেয়ে বড়: 25।",
+  "দিক রাস্তা থেকে সরতে থাকে, নম্বর ছোট হতে থাকে: 24, তারপর 20।",
+  "আরেকটু সরে 15।",
+  "ঠিক ৯০ degree কোণে নম্বর একদম 0 — ভ্যান শুধু পাশে চাপে।",
+  "আর 90° পেরোলেই নম্বর minus: −7।",
+];
+
+export function AngleFan() {
+  const s = useScene(5, [600, 2000, 2000, 2200, 2200]);
+  const k = s.k;
+  return (
+    <Scene scene={s} caption={say(X3_SAY, k)}>
+      <div className="mx-auto w-[9.5rem]">
+        <Plane f={F3F} label="ভ্যানের চারপাশে একই জোরে ছয়টা দিক, প্রতিটার নম্বর" className="my-0! max-w-none">
+          <Road f={F3F} />
+          <Van f={F3F} />
+          {X3_SPOTS.map((sp) =>
+            k >= sp.at ? (
+              <g key={sp.n}>
+                <Arrow f={F3F} from={O} to={sp.v} tone={sp.tone} w={sp.at === 0 ? 2.6 : 2.2} draw={sp.at > 0} />
+                <Label f={F3F} at={sp.v} dx={sp.dx} dy={sp.dy} anchor={sp.anchor} size={sp.at === 0 ? 11 : 10} className={`${FILL[sp.tone]} font-mono`}>
+                  {sp.n}
+                </Label>
+              </g>
+            ) : null,
+          )}
+          {k >= 3 && <RightAngle f={F3F} to={[-3, 4]} />}
+          <Label f={F3F} at={[4.2, 3.15]} dx={0} dy={12} anchor="middle" size={9} weight={500} className="fill-[#a16207]">
+            রাস্তা
+          </Label>
+        </Plane>
+      </div>
+    </Scene>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 4a · A story scene for screen 4's setup, no task: the কুলি runs in from the
+//      হাট, twice ফাহিম's strength, and plants himself at a bad slant. Only
+//      মামা, ফাহিম and চাচা are drawn — the paragraph is about him. No verdict.
+
+export function KoolyArrives({}: Story) {
+  const s = useScene(4, [600, 1800, 2200, 1600]);
+  const k = s.k;
+  return (
+    <StoryFrame scene={s}>
+      <Stage backdrop="evening" label="কুলি দৌড়ে এসে বাঁকা হয়ে দাঁড়ালেন; ভ্যান তবু কাদায়">
+        <ellipse cx={70} cy={32} rx={26} ry={8} fill="#94a3b8" opacity={0.45} />
+        <ellipse cx={238} cy={24} rx={20} ry={6} fill="#94a3b8" opacity={0.45} />
+        <rect y={PG - 3} width={320} height={12} fill="#d6c08f" />
+        <ellipse cx={156} cy={PG + 2} rx={62} ry={7} fill="#6b4f2a" />
+        <g transform="translate(0 4)">
+          <P_Van x={100} y={PG} />
+        </g>
+        <Person who="mama" x={30} y={PG} facing={1} mood={k >= 3 ? "shout" : "plain"} label />
+        <P_Push x={30} facing={1} />
+        <Person who="fahim" x={76} y={PG} facing={1} mood={k >= 3 ? "shout" : "plain"} label />
+        <P_Push x={76} facing={1} />
+        <Person who="karim" x={226} y={PG} facing={-1} mood={k >= 3 ? "shout" : "plain"} />
+        <P_Name x={226} text="চাচা" />
+        <P_Push x={226} facing={-1} />
+        <P_Carry x={k >= 1 ? 288 : 366} y={PG} ms={1500}>
+          <Person who="som" x={0} y={0} scale={1.15} facing={-1} walking={k === 1} arm={k >= 2 ? "point" : "down"} mood={k >= 3 ? "shout" : "plain"} />
+        </P_Carry>
+        <P_Name x={k >= 1 ? 288 : 366} text="কুলি" ms={1500} />
+        {k >= 2 && (
+          <g className={FADE}>
+            <path d="M276 116L248 102m9 -3l-8 3l4 8" fill="none" stroke="#dc2626" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" />
+            <rect x={252} y={76} width={62} height={13} rx={6.5} fill="white" stroke="#dc2626" strokeWidth={1} />
+            <text x={283} y={85.5} textAnchor="middle" fontSize={8} fontWeight={700} fill={P_INK}>
+              জোর দ্বিগুণ!
+            </text>
+          </g>
+        )}
+        {k >= 3 && <path d="M96 146q-5 -7 -11 -6M198 146q5 -7 11 -6" fill="none" stroke="#6b4f2a" strokeWidth={2} strokeLinecap="round" className={FADE} />}
+      </Stage>
+    </StoryFrame>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 4½ · A figure for screen 4's explanation: where a slanted push's strength
+//      goes. The dashed line is the part that doesn't push the road; the piece
+//      under it, on the road, is 6 — longer than ফাহিম's whole 5. That is how
+//      the box mixes direction with strength.
+
+const F4F = makeFrame(-0.6, 6.4, -0.6, 10.6, 13);
+const KULI_FOOT: XY = [4.8, 3.6];
+const X4_SAY = [
+  "ফাহিম (4, 3): রাস্তা বরাবর, জোর 5। কুলি (0, 10): 53° বাঁকা, জোর 10।",
+  "বাঁকা ঠেলার একটা অংশ রাস্তার দিকে যায় না — ওই ফাঁকা রেখাটা।",
+  "রাস্তার দিকে যে অংশ গেল: 6। ফাহিমের পুরো ঠেলাও 5 — তাই box এ 30 বনাম 25।",
+];
+
+export function RoadShadow() {
+  const s = useScene(3, [600, 2000, 2600]);
+  const k = s.k;
+  return (
+    <Scene scene={s} caption={say(X4_SAY, k)}>
+      <div className="flex items-center justify-center gap-3">
+        <div className="w-[6.5rem] shrink-0">
+          <Plane f={F4F} label="কুলির বাঁকা ঠেলা (0, 10) আর ফাহিমের সোজা ঠেলা (4, 3)" className="my-0! max-w-none">
+            <Road f={F4F} />
+            <Van f={F4F} />
+            <Arrow f={F4F} from={O} to={BEHIND} tone="blue" w={2.6} />
+            <Arrow f={F4F} from={O} to={KULI} tone="coral" w={2.6} />
+            <Label f={F4F} at={KULI} dx={0} dy={-7} anchor="middle" className={FILL.coral}>
+              কুলি
+            </Label>
+            <Label f={F4F} at={[0, 5]} dx={-3} dy={0} anchor="end" className={`${FILL.coral} font-mono`}>
+              10
+            </Label>
+            <Label f={F4F} at={BEHIND} dx={4} dy={12} anchor="start" className={FILL.blue}>
+              ফাহিম
+            </Label>
+            <Label f={F4F} at={[2, 1.5]} dx={3} dy={4} anchor="start" className={`${FILL.blue} font-mono`}>
+              5
+            </Label>
+            {k >= 1 && (
+              <>
+                <path d={`M${F4F.sx(KULI[0])} ${F4F.sy(KULI[1])}L${F4F.sx(KULI_FOOT[0])} ${F4F.sy(KULI_FOOT[1])}`} strokeDasharray="4 4" strokeWidth={1.3} className={`${FADE} stroke-[#0f1b2d]/40 fill-none`} />
+                <Dot f={F4F} at={KULI_FOOT} r={2.6} className="fill-[#0f1b2d]/60" />
+              </>
+            )}
+            {k >= 2 && (
+              <>
+                <Draw d={`M${F4F.sx(0.15)} ${F4F.sy(-0.2)}L${F4F.sx(KULI_FOOT[0] + 0.12)} ${F4F.sy(KULI_FOOT[1] - 0.09)}`} strokeWidth={5} className="stroke-cat-teal/40" />
+                <Label f={F4F} at={KULI_FOOT} dx={5} dy={11} anchor="start" className={`${FILL.teal} font-mono`}>
+                  6
+                </Label>
+              </>
+            )}
+          </Plane>
+        </div>
+        <div className="min-w-0 flex-1 space-y-2">
+          {k >= 2 && (
+            <>
+              <div className={`${FADE} flex items-center gap-1.5`}>
+                <span className="w-[5.5rem] shrink-0 text-[0.65rem] leading-tight text-muted">কুলির কাজের অংশ</span>
+                <span className="h-2.5 rounded-full bg-cat-teal/70" style={{ width: 66 }} />
+                <b className="font-mono text-sm text-cat-teal">6</b>
+              </div>
+              <div className={`${FADE} flex items-center gap-1.5`}>
+                <span className="w-[5.5rem] shrink-0 text-[0.65rem] leading-tight text-muted">ফাহিমের পুরো ঠেলা</span>
+                <span className="h-2.5 rounded-full bg-cat-blue/70" style={{ width: 55 }} />
+                <b className="font-mono text-sm text-cat-blue">5</b>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+    </Scene>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 5½ · A figure for screen 5's explanation: the box on ±1 lists is a tug of
+//      war. Each pair pulls its side — মিল right, অমিল left — and the knot sits
+//      where the pulls balance. Equal means 0 means 90°; the 100 tosses pull
+//      almost equally, so almost 90°.
+
+const X5_PAIRS = [0, 1, 2, 3].map((i) => BLUE[i] * RED[i]);
+const X5_INK = { pos: "#0d9488", neg: "#e11d48" };
+const X5_SAY = [
+  "নীল আর লাল coin-এর চার জোড়া: প্রতি জোড়া হয় মিল, নয় অমিল।",
+  "মিল হলে +1 — সেই জোড়া ডান দিকে টানে।",
+  "অমিল হলে −1 — ওরা বাঁ দিকে টানে।",
+  "দুই দিকের টান সমান, ফাঁস জায়গায়: box এ 0, কোণ ঠিক 90°।",
+  `এবার 100 জোড়া: মিল ${MATCH100}, অমিল ${100 - MATCH100}।`,
+  "টান প্রায় সমান, box এ 4 — তাই কোণ প্রায় 90°।",
+];
+
+export function CoinTug() {
+  const s = useScene(5, [600, 1600, 1400, 2600, 2200, 2400]);
+  const k = s.k;
+  const [knot] = useTween([k >= 4 ? (MATCH100 - (100 - MATCH100)) * 0.52 : 0], 800);
+  /** each pair's place: above the rope at rest, then the n-th of its side stacks down that side */
+  const x = (i: number) => {
+    if (k < 2) return 96 + i * 36;
+    const rank = X5_PAIRS.slice(0, i).filter((p) => (p > 0) === (X5_PAIRS[i] > 0)).length;
+    return X5_PAIRS[i] > 0 ? 226 + rank * 20 : 74 - rank * 20;
+  };
+  const y = (i: number) => (k < 2 ? 38 : 56 + (i % 2) * 20);
+  return (
+    <Scene scene={s} caption={say(X5_SAY, k)}>
+      <svg viewBox="0 0 300 132" aria-label="coin-এর জোড়া দুই দিকে টানে; টান সমান হলে ফাঁস মাঝে" className="mx-auto h-auto w-full max-w-[15rem]">
+        <line x1={22} x2={278} y1={84} y2={84} stroke={P_INK} strokeOpacity={0.25} strokeWidth={2} />
+        {[-52, -26, 0, 26, 52].map((t) => (
+          <line key={t} x1={150 + t} x2={150 + t} y1={80} y2={88} stroke={P_INK} strokeOpacity={0.3} strokeWidth={1} />
+        ))}
+        <text x={150} y={100} textAnchor="middle" fontSize={8} fill={P_INK} fillOpacity={0.55}>
+          0
+        </text>
+        <g>
+          <rect x={250} y={54} width={40} height={15} rx={7.5} fill="#0d9488" />
+          <text x={270} y={64.5} textAnchor="middle" fontSize={9} fontWeight={700} fill="white">
+            মিল
+          </text>
+          <rect x={10} y={54} width={40} height={15} rx={7.5} fill="#e11d48" />
+          <text x={30} y={64.5} textAnchor="middle" fontSize={9} fontWeight={700} fill="white">
+            অমিল
+          </text>
+        </g>
+        <circle cx={150 + knot} cy={84} r={5.5} fill="#7c3aed" />
+        {X5_PAIRS.map((p, i) => (
+          <g key={i} style={{ transform: `translate(${x(i)}px, ${y(i)}px)`, transitionDuration: "800ms" }} className="transition-transform ease-in-out motion-reduce:transition-none">
+            <circle r={8.5} fill={p > 0 ? X5_INK.pos : X5_INK.neg} opacity={k >= 4 ? 0.25 : 1} className="transition-opacity motion-reduce:transition-none" />
+            <text y={3} textAnchor="middle" fontSize={9} fontWeight={700} fill="white" className="font-mono" opacity={k >= 4 ? 0.25 : 1}>
+              {p > 0 ? "+1" : "−1"}
+            </text>
+          </g>
+        ))}
+        {k >= 4 && (
+          <g className={POP}>
+            <rect x={196} y={30} width={62} height={15} rx={7.5} fill="white" stroke="#0d9488" />
+            <text x={227} y={40.5} textAnchor="middle" fontSize={8.5} fontWeight={700} fill="#0d9488">
+              মিল {MATCH100}
+            </text>
+            <rect x={42} y={30} width={62} height={15} rx={7.5} fill="white" stroke="#e11d48" />
+            <text x={73} y={40.5} textAnchor="middle" fontSize={8.5} fontWeight={700} fill="#e11d48">
+              অমিল {100 - MATCH100}
+            </text>
+          </g>
+        )}
+        {k >= 3 && (
+          <g className={POP}>
+            <rect x={87} y={4} width={126} height={18} rx={9} fill="white" stroke="#7c3aed" />
+            <text x={150} y={16.5} textAnchor="middle" fontSize={9.5} fontWeight={700} fill={P_INK}>
+              {k >= 4 ? `${MATCH100} − ${100 - MATCH100} = ${MATCH100 - (100 - MATCH100)}, প্রায় 90°` : "মিল − অমিল = 0, কোণ ঠিক 90°"}
+            </text>
+          </g>
+        )}
+      </svg>
+    </Scene>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 5¾ · A figure for screen 5's review <Then>: perpendicularity needs no
+//      picture. The drawn pair shows its right angle; নাসিব's four-slot coins
+//      can't be drawn, but the box runs — and 0 means the right angle at any
+//      size. The name lands last.
+
+const F9F = makeFrame(-1.5, 3.6, -0.5, 3.5, 26);
+const X9_SAY = [
+  "আঁকা যায় এমন দুইটা arrow-এ কোণটা চোখেই পড়ে — ৯০ degree কোণ।",
+  "নাসিবের চার ঘরের coin arrow আঁকা যায় না। কিন্তু box চলে: +1 − 1 − 1 + 1 = 0।",
+  "একশো ঘরের arrow-ও আঁকা যায় না, কিন্তু box তো চলেই। উত্তর 0 মানেই ৯০ degree কোণ।",
+  "এই পরীক্ষার নাম: u ⊥ v — u perpendicular to v।",
+];
+const X9_PRODUCTS = ["+1", "−1", "−1", "+1"];
+
+export function AnySize() {
+  const s = useScene(4, [600, 2200, 2200, 2600]);
+  const k = s.k;
+  return (
+    <Scene scene={s} caption={say(X9_SAY, k)}>
+      <div className="flex items-center justify-center gap-3">
+        <div className="w-[7.5rem] shrink-0">
+          <Plane f={F9F} label="দুইটা arrow, কোণটা ৯০ degree কোণ" className={`my-0! max-w-none ${k >= 1 ? "opacity-40" : ""} transition-opacity motion-reduce:transition-none`}>
+            <Arrow f={F9F} from={O} to={[3, 1]} tone="blue" w={2.6} />
+            <Arrow f={F9F} from={O} to={[-1, 3]} tone="coral" w={2.6} />
+            <Label f={F9F} at={[3, 1]} dx={3} dy={4} anchor="start" className={`${FILL.blue} font-mono`}>
+              u
+            </Label>
+            <Label f={F9F} at={[-1, 3]} dx={0} dy={-6} anchor="middle" className={`${FILL.coral} font-mono`}>
+              v
+            </Label>
+          </Plane>
+        </div>
+        <div className="min-w-0 flex-1 space-y-1.5 text-center">
+          {k >= 1 && (
+            <div className={`${FADE} rounded-xl border-2 border-border bg-surface px-2 py-1.5`}>
+              <div className="font-mono text-[0.65rem] text-muted">(1, −1, 1, 1) · (1, 1, −1, 1)</div>
+              <div className="mt-0.5 flex justify-center gap-1 font-mono text-sm font-bold">
+                {X9_PRODUCTS.map((p, i) => (
+                  <span key={i} className={BLUE[i] * RED[i] > 0 ? "text-accent-text" : "text-danger"}>
+                    {p}
+                  </span>
+                ))}
+                <span className="text-foreground">= 0</span>
+              </div>
+            </div>
+          )}
+          {k >= 2 && (
+            <div className={`${FADE} rounded-xl border-2 border-border bg-surface px-2 py-1 text-xs`}>
+              যত ঘরই হোক — <b className="font-mono">box চলে</b>
+            </div>
+          )}
+          {k >= 3 && (
+            <div className={`${POP} rounded-xl border-2 border-cat-violet/40 bg-surface px-2 py-1.5`}>
+              <div className="font-mono text-sm font-bold text-cat-violet">u ⊥ v ⟺ u · v = 0</div>
+              <div className="text-[0.65rem] text-muted">perpendicular · orthogonal</div>
+            </div>
+          )}
+        </div>
+      </div>
+    </Scene>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 6½ · A figure for screen 6's explanation, first half: মামী stood at exactly
+//      90°, so all her sweat only squeezed the van sideways — the box said 0.
+//      রফিক leaned past 90°, to 98°, and was quietly pushing it back.
+
+const F6F = makeFrame(-6, 5.2, -1.2, 5.6, 17);
+const X6_SAY = [
+  "মামী ছিলেন ঠিক 90° কোণে: 4 × (−3) + 3 × 4 = 0।",
+  "ঘাম ঝরিয়েছেন ঠিকই, কিন্তু ভ্যানটাকে শুধু পাশে চেপেছেন।",
+  "রফিক 98°-এ: 90° পেরিয়ে গিয়ে একটু একটু পেছনে ঠেলছিল, −5।",
+];
+
+export function SidePress() {
+  const s = useScene(3, [600, 2000, 2600]);
+  const k = s.k;
+  return (
+    <Scene scene={s} caption={say(X6_SAY, k)}>
+      <div className="mx-auto w-[11.5rem]">
+        <Plane f={F6F} label="মামীর ঠেলা (−3, 4) আর রফিকের ঠেলা (−5, 5), রাস্তার সাথে" className="my-0! max-w-none">
+          <Road f={F6F} />
+          <Van f={F6F} />
+          <Arrow f={F6F} from={O} to={[-3, 4]} tone="violet" w={2.6} />
+          <Label f={F6F} at={[-3, 4]} dx={0} dy={-8} anchor="middle" className={FILL.violet}>
+            মামী
+          </Label>
+          <Label f={F6F} at={[-3, 4]} dx={0} dy={12} anchor="middle" className={`${FILL.violet} font-mono`}>
+            0
+          </Label>
+          {k >= 1 && (
+            <>
+              <RightAngle f={F6F} to={[-3, 4]} />
+              <g transform={`translate(${F6F.sx(0)} ${F6F.sy(0)}) rotate(${-ROAD_DEG})`} className={`${FADE} pointer-events-none`}>
+                <path d="M-17 -6q5 3 10 0M-17 6q5 -3 10 0" fill="none" stroke="#7c3aed" strokeWidth={1.6} strokeLinecap="round" />
+              </g>
+              <Label f={F6F} at={[-1.7, 2.6]} dx={0} dy={-4} anchor="middle" size={8.5} className={FILL.violet}>
+                পাশে চাপ
+              </Label>
+            </>
+          )}
+          {k >= 2 && (
+            <>
+              <Arrow f={F6F} from={O} to={[-5, 5]} tone="coral" w={2.6} draw />
+              <AngleArc f={F6F} to={[-5, 5]} />
+              <Label f={F6F} at={[-5, 5]} dx={-2} dy={-7} anchor="middle" className={FILL.coral}>
+                রফিক
+              </Label>
+              <Label f={F6F} at={[-5, 5]} dx={-2} dy={12} anchor="middle" className={`${FILL.coral} font-mono`}>
+                −5
+              </Label>
+              <Arrow f={F6F} from={[1.05, 0.79]} to={[0.25, 0.19]} tone="coral" w={1.8} faint draw />
+              <Label f={F6F} at={[1.05, 0.79]} dx={2} dy={-2} anchor="start" size={8} className={FILL.coral}>
+                একটু পেছনে
+              </Label>
+            </>
+          )}
+        </Plane>
+      </div>
+    </Scene>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 6¾ · A figure for screen 6's explanation, second half: add the five pushes
+//      tip-to-tail (৩.১) and the total arrow (3, 18) lands far off the road —
+//      yet its box with the road is the same 66 as the five numbers added one
+//      by one. First add then box, or first box then add: same answer.
+
+const F7F = makeFrame(-3.5, 11.5, -0.8, 18.4, 8.4);
+const X7_CHAIN: XY[] = (() => {
+  let x = 0;
+  let y = 0;
+  return [O, ...CREW.map((c) => ((x += c.v[0]), (y += c.v[1]), [x, y] as XY))];
+})();
+const X7_SAY = [
+  "পাঁচজনের ঠেলা একটার ঘাড়ে আরেকটা বসিয়ে যোগ করুন (৩.১)।",
+  "শেষে পৌঁছানো গেল (3, 18)-এ।",
+  "মোট arrow-টা রাস্তার সাথে box এ: 12 + 54 = 66।",
+  "আলাদা আলাদা নম্বরগুলোর যোগফলও 66 — আগে যোগ পরে box, উত্তর একই।",
+];
+
+export function SumThenBox() {
+  const s = useScene(4, [600, 2000, 2000, 2600]);
+  const k = s.k;
+  return (
+    <Scene scene={s} caption={say(X7_SAY, k)}>
+      <div className="flex items-center justify-center gap-3">
+        <div className="w-[7.5rem] shrink-0">
+          <Plane f={F7F} label="পাঁচটা ঠেলা একটার পর একটা যোগ করলে মোট arrow (3, 18)" className="my-0! max-w-none" grid={0}>
+            <Road f={F7F} />
+            <Van f={F7F} />
+            {CREW.map((c, i) =>
+              k >= (i < 2 ? 1 : 2) ? (
+                <Arrow key={c.name} f={F7F} from={X7_CHAIN[i]} to={X7_CHAIN[i + 1]} tone={c.tone} w={2.4} draw />
+              ) : null,
+            )}
+            {k >= 3 && (
+              <>
+                <Arrow f={F7F} from={O} to={X7_CHAIN[5]} tone="violet" w={3.4} draw />
+                <Label f={F7F} at={X7_CHAIN[5]} dx={2} dy={-5} anchor="start" className={`${FILL.violet} font-mono`}>
+                  (3, 18)
+                </Label>
+              </>
+            )}
+          </Plane>
+        </div>
+        <div className="min-w-0 flex-1 space-y-1.5">
+          {k >= 3 && (
+            <div className={`${FADE} rounded-xl border-2 border-cat-violet/40 bg-surface px-2 py-1.5 text-center`}>
+              <div className="text-[0.65rem] text-muted">মোট arrow দিয়ে</div>
+              <div className="font-mono text-xs font-bold">(4, 3) · (3, 18)</div>
+              <div className="font-mono text-xs">= 12 + 54 = 66</div>
+            </div>
+          )}
+          {k >= 4 && (
+            <div className={`${FADE} rounded-xl border-2 border-border bg-surface px-2 py-1.5 text-center`}>
+              <div className="text-[0.65rem] text-muted">আলাদা করে</div>
+              <div className="font-mono text-xs">25 + 30 + 16 + 0 − 5</div>
+              <div className="font-mono text-xs font-bold">= 66</div>
+            </div>
+          )}
+          {k >= 4 && (
+            <div className={`${POP} mx-auto w-fit rounded-full bg-accent/15 px-2.5 py-0.5 text-center text-xs font-semibold text-accent-text`}>
+              উত্তর একই
+            </div>
+          )}
+        </div>
+      </div>
+    </Scene>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 12a · A story scene for the finale's last paragraphs, no task: dinner, and
+//      মামী's needle — the sign tells the angle, but why? There's no
+//      protractor inside the box. মামা smiles: a tape and a protractor will do
+//      it, tomorrow noon on the roof. ফাহিম doesn't believe him. 4.3's bet.
+
+export function DinnerBet({}: Story) {
+  const s = useScene(4, [600, 2400, 2400, 2600]);
+  const k = s.k;
+  return (
+    <StoryFrame scene={s}>
+      <Stage backdrop="room" label="রাতের খাবারে মামী খোঁচা দিলেন; মামা ফিতা আর চাঁদার বাজি ধরলেন">
+        <path d="M160 0V18" stroke={P_INK} strokeWidth={1.2} />
+        <circle cx={160} cy={25} r={5} fill="#fde047" />
+        <circle cx={160} cy={25} r={9} fill="#fde047" opacity={0.25} />
+        <Person who="mami" x={116} y={PG} arm={k >= 1 && k < 3 ? "point" : "down"} mood={k >= 3 ? "happy" : "plain"} label />
+        <Person who="mama" x={164} y={PG} arm={k >= 3 ? "hold" : "down"} mood={k >= 3 ? "happy" : "plain"} label />
+        <Person who="fahim" x={212} y={PG} mood={k >= 3 ? "puzzled" : "plain"} label />
+        <rect x={88} y={PG - 30} width={144} height={4} rx={1} fill="#92400e" />
+        <rect x={94} y={PG - 26} width={3} height={26} fill="#78350f" />
+        <rect x={223} y={PG - 26} width={3} height={26} fill="#78350f" />
+        {[116, 164, 212].map((px) => (
+          <ellipse key={px} cx={px} cy={PG - 33} rx={8} ry={2.4} fill="white" stroke="#94a3b8" strokeWidth={0.7} />
+        ))}
+        {k >= 3 && (
+          <>
+            <g className={POP}>
+              <g transform="translate(190 120)">
+                <P_Protractor />
+              </g>
+            </g>
+            <P_Carry x={176} y={PG - 46} ms={700}>
+              <g className={POP}>
+                <P_Tape />
+              </g>
+            </P_Carry>
+          </>
+        )}
+        {k >= 1 && k < 3 && <Bubble x={116} y={PG - 66} side="right" lines={k === 1 ? ["০ এর বড় না ছোট তো কোণের information দেয়।", "কিন্তু কেন?"] : ["কোণের information আসবে কোথা থেকে?", "box এ তো কোনো চাঁদাই নাই!"]} />}
+        {k >= 3 && <Bubble x={164} y={PG - 66} side="left" lines={["ফিতা আর একটা চাঁদাই হবে।", "কাল দুপুরে ছাদে!"]} />}
+        {k >= 3 && (
+          <text x={212} y={PG - 78} textAnchor="middle" fontSize={24} fontWeight={800} fill={P_INK} className={POP}>
+            ?
+          </text>
+        )}
+      </Stage>
+    </StoryFrame>
+  );
+}
+
+// ---------------------------------------------------------------------------
 // States for `npm run shot` (keys are the useSeed names).
 
 export const fixtures: Fixtures = {
@@ -682,4 +1377,15 @@ export const fixtures: Fixtures = {
   StrongPush: { start: {}, ran: { guess: 0, ran: true } },
   CoinBox: { start: {}, summed: { k: 5 }, named: { k: 5, named: true }, hundred: { k: 5, named: true, hundred: true } },
   FixTheCrew: { start: {}, miss: { done: 3, miss: 1 }, judged: { done: 5 }, fixed: { done: 5, fixed: true } },
+  // the story scenes and figures: `k` is the beat, the bare state is the last one
+  TeamSign: { start: { k: 0 }, front: { k: 1 }, done: {} },
+  FiveTimes: { start: { k: 0 }, taped: { k: 1 }, done: {} },
+  AngleFan: { start: { k: 0 }, walk: { k: 2 }, zero: { k: 3 }, done: {} },
+  KoolyArrives: { start: { k: 0 }, run: { k: 1 }, slant: { k: 2 }, done: {} },
+  RoadShadow: { start: { k: 0 }, drop: { k: 1 }, done: {} },
+  CoinTug: { start: { k: 0 }, pull: { k: 2 }, zero: { k: 3 }, hundred: { k: 4 }, done: {} },
+  AnySize: { start: { k: 0 }, coins: { k: 1 }, done: {} },
+  SidePress: { start: { k: 0 }, squash: { k: 1 }, done: {} },
+  SumThenBox: { start: { k: 0 }, chain: { k: 2 }, total: { k: 3 }, done: {} },
+  DinnerBet: { start: { k: 0 }, ask: { k: 1 }, needle: { k: 2 }, done: {} },
 };

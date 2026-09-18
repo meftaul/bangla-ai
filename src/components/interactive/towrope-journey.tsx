@@ -157,7 +157,7 @@ export function SplitPull() {
           <div className="font-mono text-lg font-bold">{sg(w[0])}</div>
         </div>
         <div className="rounded-xl border-2 border-cat-amber/40 px-2 py-1.5">
-          <div className="text-xs text-muted">পাড়ের দিকে, সোজা কোণে</div>
+          <div className="text-xs text-muted">পাড়ের দিকে, ৯০ degree কোণে</div>
           <div className="font-mono text-lg font-bold">{sg(w[1])}</div>
         </div>
       </div>
@@ -192,7 +192,7 @@ export function FindFoot() {
     if (Math.abs(7 - 13 * x) < 0.15) {
       setLam(FOOT);
       setFound(true);
-      pass("ছায়ার মাথায় দাগটা সোজা কোণে, box এ  0।");
+      pass("ছায়ার মাথায় দাগটা ৯০ degree কোণে, box এ  0।");
       return;
     }
     setLam(x);
@@ -243,7 +243,7 @@ export function FindFoot() {
           {found ? "0" : fix(box, 2)}
         </b>
       </div>
-      <Task done={found}>নদীর ওপর বিন্দুটা সরিয়ে এমন জায়গা খুঁজুন, যেখানে দড়ির মাথা থেকে নামানো দাগ নদীর সাথে সোজা কোণ করে, মানে box এ  0।</Task>
+      <Task done={found}>নদীর ওপর বিন্দুটা সরিয়ে এমন জায়গা খুঁজুন, যেখানে দড়ির মাথা থেকে নামানো দাগ নদীর সাথে ৯০ degree কোণ করে, মানে box এ  0।</Task>
     </>
   );
 }
@@ -322,7 +322,7 @@ export function SidePull() {
     if (seen.includes(f)) return;
     const next = [...seen, f];
     setSeen(next);
-    if (next.includes(true) && next.includes(false)) pass("সোজা কোণের ভাগে নৌকা এগোয় না।");
+    if (next.includes(true) && next.includes(false)) pass("৯০ degree কোণের ভাগে নৌকা এগোয় না।");
   };
 
   return (
@@ -512,7 +512,7 @@ export function KeepShadows() {
           ছড়ানোর দিকে ছায়া
         </button>
         <button type="button" onClick={() => go(2)} className={`${pill(mode === 2)} font-sans`}>
-          সোজা কোণের দাগে ছায়া
+          ৯০ degree কোণের দাগে ছায়া
         </button>
       </div>
       <div className="mt-2 min-h-12 text-center text-[0.95rem]">
@@ -527,7 +527,7 @@ export function KeepShadows() {
       <Ticks
         items={[
           ["ছড়ানোর দিকে", seen.includes(1)],
-          ["সোজা কোণের দাগে", seen.includes(2)],
+          ["৯০ degree কোণের দাগে", seen.includes(2)],
         ]}
       />
       <Task done={both}>দুইটা দাগের ওপরই ছায়া ফেলে দেখুন, কোনটায় কম হারায়।</Task>
@@ -563,7 +563,7 @@ export function YourShadow() {
     if (i !== a.ans) return setMiss((miss ?? 0) + 1);
     setMiss(null);
     setDone(done + 1);
-    if (done + 1 === ASK.length) pass("(4, 2) ভাঙলো দুই সোজা কোণের ভাগে।");
+    if (done + 1 === ASK.length) pass("(4, 2) ভাঙলো দুই ৯০ degree কোণের ভাগে।");
   };
 
   return (
