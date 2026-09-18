@@ -80,7 +80,7 @@ export function RopeBet() {
 
   const seal = (i: number) => {
     setBet(i);
-    pass("বাজি সিল হলো। আগে দেখতে হবে একটা টান “নষ্ট” হয় কীভাবে, আর নষ্ট অংশটা যায় কোথায়।");
+    pass("বাজি সিল হলো, মিলিয়ে দেখবো শেষে।");
   };
 
   return (
@@ -139,7 +139,7 @@ export function SplitPull() {
     if (g < 0 || hit.includes(g)) return;
     const next = [...hit, g];
     setHit(next);
-    if (next.length === SPLIT_GOALS.length) pass("প্রতিটা টান দুই ভাগ: নদী ধরে সামনে, আর নদীর সোজা কোণে পাড়ের দিকে। সামনের ভাগটা নদীর ওপর টানের ছায়া।");
+    if (next.length === SPLIT_GOALS.length) pass("প্রতিটা টান দুই ভাগ: সামনে আর পাড়ে।");
   };
 
   return (
@@ -192,7 +192,7 @@ export function FindFoot() {
     if (Math.abs(7 - 13 * x) < 0.15) {
       setLam(FOOT);
       setFound(true);
-      pass("ছায়ার মাথা (1.08, 1.62)-এ, মানে নদীর arrow-এর 7/13 ভাগ। ঠিক এখানেই নামানো দাগটা নদীর সাথে সোজা কোণ করে, বাক্সে 0।");
+      pass("ছায়ার মাথায় দাগটা সোজা কোণে, box এ  0।");
       return;
     }
     setLam(x);
@@ -243,7 +243,7 @@ export function FindFoot() {
           {found ? "0" : fix(box, 2)}
         </b>
       </div>
-      <Task done={found}>নদীর ওপর বিন্দুটা সরিয়ে এমন জায়গা খুঁজুন, যেখানে দড়ির মাথা থেকে নামানো দাগ নদীর সাথে সোজা কোণ করে, মানে বাক্সে 0।</Task>
+      <Task done={found}>নদীর ওপর বিন্দুটা সরিয়ে এমন জায়গা খুঁজুন, যেখানে দড়ির মাথা থেকে নামানো দাগ নদীর সাথে সোজা কোণ করে, মানে box এ  0।</Task>
     </>
   );
 }
@@ -269,7 +269,7 @@ export function ShadowRecipe() {
 
   const step = () => {
     setK(k + 1);
-    if (k + 1 === RECIPE.length) pass("ছায়া = (w · v ÷ v · v) × v। আর বাকিটুকু নদীর সাথে বাক্সে সবসময় 0, মানে একদম সোজা কোণে।");
+    if (k + 1 === RECIPE.length) pass("ছায়ার formula: (w · v ÷ v · v) × v।");
   };
 
   return (
@@ -322,7 +322,7 @@ export function SidePull() {
     if (seen.includes(f)) return;
     const next = [...seen, f];
     setSeen(next);
-    if (next.includes(true) && next.includes(false)) pass("সোজা কোণের ভাগটা নৌকাকে সামনে এক পা-ও নেয় না, শুধু পাড়ে টানে। হাল দিয়ে মাঝি সেটাকেই ঠেকিয়ে রাখেন।");
+    if (next.includes(true) && next.includes(false)) pass("সোজা কোণের ভাগে নৌকা এগোয় না।");
   };
 
   return (
@@ -370,7 +370,7 @@ export function SidePull() {
           ["হাল ধরা", seen.includes(false)],
         ]}
       />
-      <Task done={both}>আগে guess দিন, তারপর হাল একবার ছেড়ে আর একবার ধরে দেখুন।</Task>
+      <Task done={both}>আগে guess করুন, তারপর হাল একবার ছেড়ে আর একবার ধরে দেখুন।</Task>
     </>
   );
 }
@@ -400,7 +400,7 @@ export function LongRope() {
     if (b < 0 || seen.includes(b)) return;
     const next = [...seen, b];
     setSeen(next);
-    if (next.length === 3) pass("দড়ি লম্বা হলে কোণ ছোট হয়, আর টানের বেশিরভাগটা সামনে যায়। 4 মিটারে সামনে যায় 6.6, 15 মিটারে 9.8। মাঝি চাচাই ঠিক।");
+    if (next.length === 3) pass("দড়ি লম্বা হলে টানের বেশিটা সামনে।");
   };
 
   return (
@@ -484,7 +484,7 @@ export function KeepShadows() {
     if (seen.includes(m)) return;
     const next = [...seen, m];
     setSeen(next);
-    if (next.includes(1) && next.includes(2)) pass("ঠিক দিকে ছায়া নিলে দুইটা সংখ্যার কাজ একটায় হয়, হারায় শুধু ছোট্ট বাকিটুকু। ভুল দিকে নিলে প্রায় সবটাই হারায়।");
+    if (next.includes(1) && next.includes(2)) pass("ঠিক দিকে ছায়া নিলে হারায় সামান্যই।");
   };
 
   return (
@@ -563,7 +563,7 @@ export function YourShadow() {
     if (i !== a.ans) return setMiss((miss ?? 0) + 1);
     setMiss(null);
     setDone(done + 1);
-    if (done + 1 === ASK.length) pass("(4, 2) = (3, 3) + (1, −1): একটা ভাগ (1, 1)-এর দিকে, আরেকটা তার সোজা কোণে।");
+    if (done + 1 === ASK.length) pass("(4, 2) ভাঙলো দুই সোজা কোণের ভাগে।");
   };
 
   return (
@@ -594,11 +594,11 @@ export function YourShadow() {
               </button>
             ))}
           </div>
-          {miss !== null && <Nope key={miss}>উঁহু। হিসাবটা ৪ নম্বর screen-এর মতোই: আগে দুইটা বাক্স, তারপর ভাগ, তারপর গুণ।</Nope>}
+          {miss !== null && <Nope key={miss}>উঁহু। হিসাবটা ৪ নম্বর screen-এর মতোই: আগে দুইটা box, তারপর ভাগ, তারপর গুণ।</Nope>}
         </>
       )}
       <Task done={all}>
-        (4, 2)-এর ছায়া (1, 1)-এর ওপর বের করুন, ধাপে ধাপে ({bn(done)}/{bn(ASK.length)})।
+        (4, 2)-এর ছায়া (1, 1)-এর ওপর বের করুন, step by step ({bn(done)}/{bn(ASK.length)})।
       </Task>
     </>
   );

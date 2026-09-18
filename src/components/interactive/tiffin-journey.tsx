@@ -159,7 +159,7 @@ export function NasibBet() {
 
   const seal = (i: number) => {
     setBet(i);
-    pass("বাজি ধরা হলো। ছয়টা কাজ একটা একটা করে চেষ্টা kore miliye dekha hobe");
+    pass("বাজি ধরা হলো, মিলিয়ে দেখবো শেষে।");
   };
 
   return (
@@ -491,7 +491,7 @@ export function BalanceCard() {
     setHeld(true);
     play(4, () => {
       setAveraged(true);
-      pass("Card-টা balance-এ থাকে (166.3, 58)-এ। উচ্চতাগুলোর average 166.3 আর ওজনগুলোর average 58, মানে দুই ঘরে আলাদা আলাদা average।");
+      pass("Balance বসে দুই ঘরের average-এ।");
     });
   };
 
@@ -752,21 +752,19 @@ export function NobodyAverage() {
 
 // ---------------------------------------------------------------------------
 // 3 · The same answer from the two old moves only: add all three cards (a
-//     giant, 499 cm tall), then predict and apply the stretch that brings the
+//     giant, 499 cm tall), then apply the stretch that brings the
 //     sum back down onto the balance point.
 
 const FW = makeFrame(0, 520, 0, 190, 0.56);
-const SHRINK = ["× 3", "− 3", "× ⅓, মানে তিন ভাগের এক ভাগ"];
 
 export function SumShrink() {
   const pass = useGate();
   const [stage, setStage] = useSeed("stage", 0);
-  const [guess, setGuess] = useSeed<number | null>("guess", null);
   const over = stage === 2;
 
   const next = () => {
     setStage(stage + 1);
-    if (stage + 1 === 2) pass("নতুন কোনো চাল লাগলো না। আগে সবাইকে যোগ, তারপর ⅓ দিয়ে stretch, ব্যস, average পেয়ে গেলেন।");
+    if (stage + 1 === 2) pass("সবাইকে যোগ, তারপর ⅓ দিয়ে stretch।");
   };
 
   return (
@@ -811,26 +809,14 @@ export function SumShrink() {
           ৪৯৯ cm লম্বা আর ১৭৪ kg ওজন? এta তো মানুষ না, তালগাছ!
         </Speech>
       )}
-      {stage >= 1 && (
-        <>
-          <div className="mt-4 text-sm font-medium text-muted">এই তালগাছটাকে average গড়নে নামাতে (499, 174)-কে কী করবেন?</div>
-          <div className="mt-2 grid gap-2">
-            {SHRINK.map((o, i) => (
-              <Choice key={o} n={i} look={predictLook(i, guess, over, 2)} disabled={guess !== null} onClick={() => setGuess(i)}>
-                {o}
-              </Choice>
-            ))}
-          </div>
-        </>
-      )}
-      {(stage === 0 || (stage === 1 && guess !== null)) && (
+      {!over && (
         <div className={`${FADE} mt-3 flex justify-center`}>
           <button type="button" onClick={next} className={`${primaryBtn} ${stage === 0 ? "bg-cat-teal" : "bg-cat-violet"}`}>
             {stage === 0 ? "১ · তিনজনের card যোগ করুন" : "২ · ⅓ দিয়ে stretch করুন"}
           </button>
         </div>
       )}
-      <Task done={over}>প্রথমে তিনজনের card যোগ করুন। তারপর একটা guess kore দ্বিতীয় ধাপটা চালান।</Task>
+      <Task done={over}>প্রথমে তিনজনের card যোগ করুন, তারপর দ্বিতীয় ধাপটা চালান।</Task>
     </>
   );
 }
@@ -1183,7 +1169,7 @@ export function ReviewBox() {
   };
   const dropTwins = () => {
     setTwin(true);
-    pass("প্রতিটা বাক্য গিয়ে বসে তার শব্দগুলোর average-এ। কৌশলটা সহজ, কাজও করে, কিন্তু কোন শব্দ আগে ছিল সেই order-টা হারিয়ে যায়।");
+    pass("বাক্য বসে তার শব্দগুলোর average-এ।");
   };
 
   return (
@@ -1200,7 +1186,7 @@ export function ReviewBox() {
           {!dropped ? (
             <div className="mt-3 flex justify-center">
               <button type="button" onClick={() => setDropped(true)} className={`${primaryBtn} bg-cat-violet`}>
-                বাক্সে ফেলুন
+                box এ  ফেলুন
               </button>
             </div>
           ) : (
@@ -1245,7 +1231,7 @@ export function ReviewBox() {
           {guess !== null && !twin && (
             <div className={`${FADE} mt-3 flex justify-center`}>
               <button type="button" onClick={dropTwins} className={`${primaryBtn} bg-cat-violet`}>
-                দুইটাই বাক্সে ফেলুন
+                দুইটাই box এ  ফেলুন
               </button>
             </div>
           )}
@@ -1271,7 +1257,7 @@ export function ReviewBox() {
         ))}
       </div>
       <Task done={twin}>
-        একটা একটা করে মন্তব্য বাক্সে ফেলুন, আর ঠিক দলে রাখুন ({bn(sorted)}/{bn(SLIPS.length)})। তারপর শেষ দুইটার পালা।
+        একটা একটা করে মন্তব্য box এ  ফেলুন, আর ঠিক দলে রাখুন ({bn(sorted)}/{bn(SLIPS.length)})। তারপর শেষ দুইটার পালা।
       </Task>
     </>
   );
@@ -1592,7 +1578,7 @@ export function ComboBox() {
   const change = (i: number, v: number) => {
     const next = n.map((x, j) => (j === i ? v : x));
     setN(next);
-    if (labelOf(next).every((t, s) => t === ORDER[s]) && !match) pass("২টা ডিম, ১টা রুটি আর ১টা কলা। প্রতিটা খাবারের card-কে কিছুটা করে stretch করে সব যোগ করলেই আপার label।");
+    if (labelOf(next).every((t, s) => t === ORDER[s]) && !match) pass("একটু করে stretch, তারপর সব যোগ।");
   };
 
   return (
@@ -1840,7 +1826,7 @@ export function NameParts() {
     }
     setMiss(null);
     setDone(done + 1);
-    if (done + 1 === ASK.length) pass("λ বলে কতটা নিতে হবে, আর v বলে কোন উপকরণ। প্রতিটা উপকরণ থেকে কিছুটা করে নিয়ে সব যোগ, পুরো লাইনটা বলতে এতটুকুই।");
+    if (done + 1 === ASK.length) pass("λ বলে কতটা, v বলে কোন উপকরণ।");
   };
 
   return (
@@ -2176,7 +2162,6 @@ const GOALS: XY[] = [
   [2, 3],
   [-1, 4],
 ];
-const E_GUESS = ["উল্টো e₁ একবার", "e₁ একবার", "e₁ চারবার"];
 const REMOTE: { btn: string; d: XY }[] = [
   { btn: "+e₁ পূর্বে", d: [1, 0] },
   { btn: "−e₁ পশ্চিমে", d: [-1, 0] },
@@ -2202,9 +2187,9 @@ export function TwoButtons() {
   const pass = useGate();
   const [at, setAt] = useSeed<XY>("at", [0, 0]);
   const [hits, setHits] = useSeed("hits", 0);
-  const [guess, setGuess] = useSeed<number | null>("guess", null);
+  const [reset, setReset] = useSeed("reset", false);
   const goal = GOALS[Math.min(hits, 1)];
-  const waiting = hits === 1 && guess === null;
+  const waiting = hits === 1 && !reset;
   const over = hits === 2;
 
   const press = (d: XY) => {
@@ -2213,10 +2198,10 @@ export function TwoButtons() {
     setAt(next);
     if (!same(next, goal)) return;
     setHits(hits + 1);
-    if (hits === 1) pass("(2, 3) মানে 2·e₁ + 3·e₂, আর (−1, 4) মানে −1·e₁ + 4·e₂। Vector-এর সংখ্যাগুলো আসলে একটা recipe, কোন button কতবার চাপতে হবে।");
+    if (hits === 1) pass("সংখ্যাগুলো বলে কোন button কতবার।");
   };
-  const pick = (i: number) => {
-    setGuess(i);
+  const again = () => {
+    setReset(true);
     setAt([0, 0]);
   };
 
@@ -2246,15 +2231,13 @@ export function TwoButtons() {
           ✓ (2, 3)-এ পৌঁছে গেলেন, {recipe(2, 3)} দিয়ে।{over && <> ✓ (−1, 4)-এও পৌঁছে গেলেন, {recipe(-1, 4)} দিয়ে।</>}
         </div>
       )}
-      {hits >= 1 && (
+      {waiting && (
         <div className={FADE}>
-          <div className="mt-3 text-sm font-medium text-muted">এবার তারাটা (−1, 4)-এ, আর Shiku আবার Gate থেকে শুরু করবে। Remote-এ হাত দেওয়ার আগে বলুন তো, e₁ button কীভাবে চাপবেন?</div>
-          <div className="mt-2 grid gap-2">
-            {E_GUESS.map((o, i) => (
-              <Choice key={o} n={i} look={predictLook(i, guess, over, 0)} disabled={guess !== null} onClick={() => pick(i)}>
-                {o}
-              </Choice>
-            ))}
+          <div className="mt-3 text-sm font-medium text-muted">এবার তারাটা (−1, 4)-এ, আর Shiku আবার Gate থেকে শুরু করবে।</div>
+          <div className="mt-2 flex justify-center">
+            <button type="button" onClick={again} className={primaryBtn}>
+              Shiku-কে Gate-এ ফেরান
+            </button>
           </div>
         </div>
       )}
@@ -2508,7 +2491,7 @@ export function TiltedField() {
     setFound(true);
     if (roaming && trip >= ROAM) {
       setBack(true);
-      pass("যেদিক দিয়েই ঘুরে আসুন, তারার ঘরে নামতে সেই a তিনবার আর b একবারই লাগলো। যে ঘরে যেই জোড়া, ঘুরে ফিরে সেটাই।");
+      pass("যে পথেই যান, recipe একটাই।");
     }
   };
 
@@ -2566,7 +2549,7 @@ export function TiltedField() {
         {!found
           ? "Remote চেপে Shiku-কে তারার কাছে নিয়ে যান।"
           : guess === null
-            ? "অন্য জোড়ায় তারায় আসা যাবে কিনা, একটা guess দিন।"
+            ? "অন্য জোড়ায় তারায় আসা যাবে কিনা, একটা guess করুন।"
             : "তারা থেকে কয়েক ঘর ঘুরে এসে আবার তারায় নামুন, অন্য কোনো জোড়া দিয়ে।"}
       </Task>
     </>
@@ -2963,7 +2946,7 @@ export function BendIt() {
   };
   const concede = () => {
     setGaveUp(true);
-    pass("যোগ আর stretch যতবারই করুন, সোজা দড়ি সোজাই থাকে। বাঁকাতে চাইলে এই দুইটার বাইরে অন্য কোনো চাল লাগবে।");
+    pass("যোগ আর stretch-এ দড়ি সোজাই থাকে।");
   };
 
   return (
@@ -3381,11 +3364,11 @@ export const fixtures: Fixtures = {
   RemoteSwap: { start: { k: 0 }, a: { k: 2 }, end: {} },
   PondRoad: { worry: { k: 2 }, end: {} },
   BalanceCard: { start: {}, shown: { shown: ["ফাহিম", "সামিন", "সোম"] }, pinned: { pin: [160, 62], shown: ["সামিন"] }, held: { pin: [160, 62], held: true }, averaged: { pin: [165, 58], held: true, averaged: true } },
-  SumShrink: { start: {}, summed: { stage: 1 }, over: { stage: 2, guess: 2 } },
+  SumShrink: { start: {}, summed: { stage: 1 }, over: { stage: 2 } },
   ReviewBox: { start: {}, dropped: { sorted: 1, dropped: true }, twins: { sorted: 4, guess: 0 }, over: { sorted: 4, guess: 0, twin: true } },
   ComboBox: { start: {}, near: { n: [1, 2, 1] }, match: { n: [2, 1, 1] } },
   NameParts: { start: {}, half: { done: 3 }, all: { done: 6 } },
-  TwoButtons: { start: {}, moving: { at: [2, 1] }, ask: { at: [2, 3], hits: 1 }, over: { at: [-1, 4], hits: 2, guess: 0 } },
+  TwoButtons: { start: {}, moving: { at: [2, 1] }, ask: { at: [2, 3], hits: 1 }, over: { at: [-1, 4], hits: 2, reset: true } },
   TiltedField: {
     start: {},
     found: { ka: 3, kb: 1, found: true, seen: SEEN7 },

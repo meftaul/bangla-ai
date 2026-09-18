@@ -193,7 +193,7 @@ export function LoudFilm() {
 
   const run = () => {
     setRan(true);
-    play(6, () => pass("Mr. Bean জিতলো ঠিকই, কিন্তু মাত্র 22 বনাম 20-এ। হাসির ছবির পাগল একজনের কাছে একটা drama প্রায় সমান নম্বর পেয়ে গেল!"));
+    play(6, () => pass("মাত্র 22 বনাম 20, প্রায় সমান!"));
   };
 
   return (
@@ -214,6 +214,13 @@ export function LoudFilm() {
           {ran && <RuleLines v={BEAN} k={Math.max(shown - 3, 0)} />}
         </FilmCard>
       </div>
+      {guess !== null && !ran && (
+        <div className={`${FADE} mt-3 flex justify-center`}>
+          <button type="button" onClick={run} className={primaryBtn}>
+            নিয়মটা চালান
+          </button>
+        </div>
+      )}
       <div className="mt-4 text-sm font-medium text-muted">বলুন তো, কোন ছবি বেশি নম্বর পাবে?</div>
       <div className="mt-2 grid gap-2">
         {LOUD_GUESS.map((o, i) => (
@@ -222,13 +229,6 @@ export function LoudFilm() {
           </Choice>
         ))}
       </div>
-      {guess !== null && !ran && (
-        <div className={`${FADE} mt-3 flex justify-center`}>
-          <button type="button" onClick={run} className={primaryBtn}>
-            নিয়মটা চালান
-          </button>
-        </div>
-      )}
       {over && guess !== null && (
         <div className={`${FADE} mt-3 text-center text-[0.95rem]`}>
           {guess === 1
@@ -327,7 +327,7 @@ export function BlackBox() {
       scene={s}
       caption={
         k < 1 ? (
-          "Club-এর নিয়মটা আপাতত একটা বন্ধ বাক্স।"
+          "Club-এর নিয়মটা আপাতত একটা black box।"
         ) : k < 2 ? (
           <span key="c1" className={FADE}>মামার পছন্দ আর ছবির card, দুইটাই ঢুকলো ভেতরে।</span>
         ) : k < 3 ? (
@@ -465,7 +465,7 @@ export function WhyLoud() {
     if (seen.includes(n)) return;
     const next = [...seen, n];
     setSeen(next);
-    if (next.includes(0.5) && next.includes(2)) pass("দিক একই, শুধু arrow দ্বিগুণ লম্বা, আর score-ও দ্বিগুণ হয়ে 40। তার মানে নম্বর বাড়াচ্ছে শুধু ছবির ধরন না, arrow-এর দৈর্ঘ্যও।");
+    if (next.includes(0.5) && next.includes(2)) pass("Arrow দ্বিগুণ লম্বা, score-ও দ্বিগুণ।");
   };
 
   return (
@@ -706,12 +706,10 @@ const SHRINK: XY[] = [
   [3, 4],
   [1.5, 2],
 ];
-const SHRINK_GUESS = ["1/3", "1/4", "1/5"];
 const LANDING = unit(SHRINK[0]);
 
 export function ShrinkToOne() {
   const pass = useGate();
-  const [guess, setGuess] = useSeed<number | null>("guess", null);
   const [stage, setStage] = useSeed("stage", 0);
   const [lam, setLam] = useSeed("lam", 1);
   const [hit, setHit] = useSeed<boolean[]>("hit", [false, false]);
@@ -728,7 +726,7 @@ export function ShrinkToOne() {
     if (Math.abs(L * n - 1) > 1e-6) return;
     const next = stage === 0 ? [true, false] : [true, true];
     setHit(next);
-    if (stage === 1) pass("দুইটা arrow-ই এসে থামলো ঠিক (0.6, 0.8)-এ। যার যার নিজের দৈর্ঘ্য দিয়ে ভাগ করলেই দৈর্ঘ্য হয়ে যায় 1, আর দিক থাকে আগের মতোই।");
+    if (stage === 1) pass("নিজের দৈর্ঘ্যে ভাগ করলে দৈর্ঘ্য 1।");
   };
   const nextArrow = () => {
     setStage(1);
@@ -752,96 +750,82 @@ export function ShrinkToOne() {
         <Arrow f={FS} from={O} to={tip} tone={on ? "teal" : "blue"} w={3} />
         {all && <circle cx={FS.sx(LANDING[0])} cy={FS.sy(LANDING[1])} r={5} className={`${POP} pointer-events-none fill-accent`} />}
       </Plane>
-      {stage === 0 && (
-        <>
-          <div className="text-sm font-medium text-muted">(3, 4)-এর দৈর্ঘ্য 5। কত দিয়ে গুণ করলে এটা ঠিক 1 লম্বা হবে?</div>
-          <div className="mt-2 grid grid-cols-3 gap-2">
-            {SHRINK_GUESS.map((o, i) => (
-              <Choice key={o} n={i} look={predictLook(i, guess, hit[0], 2)} disabled={guess !== null} onClick={() => setGuess(i)}>
-                <span className="font-mono">{o}</span>
-              </Choice>
-            ))}
-          </div>
-        </>
-      )}
-      {guess !== null && (
-        <div className={FADE}>
-          <div className="mt-3 text-center font-mono text-lg">
-            {sh(lam)} × {tupS(v)} = <b className={on ? "text-cat-teal" : "text-cat-blue"}>{tupS(tip)}</b>
-          </div>
-          <div className="text-center">
-            দৈর্ঘ্য{" "}
-            <b className={`font-mono text-lg ${on ? "text-accent-text" : ""}`}>{now.toFixed(2)}</b>
-          </div>
-          <label className="mx-auto mt-2 flex max-w-sm items-center gap-3">
-            <span className="shrink-0 font-serif text-lg italic text-muted">λ</span>
-            <input
-              type="range"
-              min={0}
-              max={1}
-              step={0.05}
-              value={lam}
-              disabled={on}
-              aria-label="λ, কত গুণ"
-              onChange={(e) => slide(Number(e.target.value))}
-              className="h-6 min-w-0 flex-1 cursor-pointer accent-[var(--cat-blue)] disabled:cursor-default"
-            />
-          </label>
-          <div className="mt-2 min-h-7 text-center text-[0.95rem]">
-            {stage === 0 && hit[0] ? (
-              <span className={FADE}>
-                {guess === 2 ? "ঠিক ধরেছেন, 1/5 মানে 0.2।" : "লাগলো 1/5, মানে 0.2। দৈর্ঘ্য 5 ছিল, তাই পাঁচ ভাগের এক ভাগ।"} এবার একই দিকে একটা খাটো arrow।
-              </span>
-            ) : all ? (
-              <span className={`${FADE} text-accent-text`}>দুইটা arrow শুরু করেছিল আলাদা দৈর্ঘ্য নিয়ে, অথচ থামলো একই বিন্দুতে!</span>
-            ) : stage === 1 ? (
-              <span className="text-muted">(1.5, 2)-এর দৈর্ঘ্য 2.5। এবার λ কত লাগবে বলে মনে হয়?</span>
-            ) : (
-              <span className="text-muted">কমলা দাগটা ঠিক 1 দূরে। Arrow-এর মাথাটা ওখানে নিয়ে আসুন।</span>
-            )}
-          </div>
-          {stage === 0 && hit[0] && (
-            <div className={`${FADE} mt-1 flex justify-center`}>
-              <button type="button" onClick={nextArrow} className={primaryBtn}>
-                পরের arrow
-              </button>
-            </div>
-          )}
-          {all && (
-            <table className={`${FADE} mx-auto mt-2 text-center font-mono tabular-nums`}>
-              <thead>
-                <tr className="font-sans text-xs text-muted">
-                  <th className="px-3 pb-1 font-normal">arrow</th>
-                  <th className="px-3 pb-1 font-normal">দৈর্ঘ্য</th>
-                  <th className="px-3 pb-1 font-normal">λ</th>
-                  <th className="px-3 pb-1 font-normal">কোথায় থামলো</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td className="px-3">(3, 4)</td>
-                  <td className="px-3">5</td>
-                  <td className="px-3">1/5</td>
-                  <td className="px-3 font-bold text-cat-teal">(0.6, 0.8)</td>
-                </tr>
-                <tr>
-                  <td className="px-3">(1.5, 2)</td>
-                  <td className="px-3">2.5</td>
-                  <td className="px-3">1/2.5</td>
-                  <td className="px-3 font-bold text-cat-teal">(0.6, 0.8)</td>
-                </tr>
-              </tbody>
-            </table>
+      <div className={FADE}>
+        <div className="mt-3 text-center font-mono text-lg">
+          {sh(lam)} × {tupS(v)} = <b className={on ? "text-cat-teal" : "text-cat-blue"}>{tupS(tip)}</b>
+        </div>
+        <div className="text-center">
+          দৈর্ঘ্য{" "}
+          <b className={`font-mono text-lg ${on ? "text-accent-text" : ""}`}>{now.toFixed(2)}</b>
+        </div>
+        <label className="mx-auto mt-2 flex max-w-sm items-center gap-3">
+          <span className="shrink-0 font-serif text-lg italic text-muted">λ</span>
+          <input
+            type="range"
+            min={0}
+            max={1}
+            step={0.05}
+            value={lam}
+            disabled={on}
+            aria-label="λ, কত গুণ"
+            onChange={(e) => slide(Number(e.target.value))}
+            className="h-6 min-w-0 flex-1 cursor-pointer accent-[var(--cat-blue)] disabled:cursor-default"
+          />
+        </label>
+        <div className="mt-2 min-h-7 text-center text-[0.95rem]">
+          {stage === 0 && hit[0] ? (
+            <span className={FADE}>
+              লাগলো 1/5, মানে 0.2। দৈর্ঘ্য 5 ছিল, তাই পাঁচ ভাগের এক ভাগ। এবার একই দিকে একটা খাটো arrow।
+            </span>
+          ) : all ? (
+            <span className={`${FADE} text-accent-text`}>দুইটা arrow শুরু করেছিল আলাদা দৈর্ঘ্য নিয়ে, অথচ থামলো একই বিন্দুতে!</span>
+          ) : stage === 1 ? (
+            <span className="text-muted">(1.5, 2)-এর দৈর্ঘ্য 2.5। এবার λ কত লাগবে বলে মনে হয়?</span>
+          ) : (
+            <span className="text-muted">(3, 4)-এর দৈর্ঘ্য 5। কমলা দাগটা ঠিক 1 দূরে, arrow-এর মাথাটা ওখানে নিয়ে আসুন।</span>
           )}
         </div>
-      )}
+        {stage === 0 && hit[0] && (
+          <div className={`${FADE} mt-1 flex justify-center`}>
+            <button type="button" onClick={nextArrow} className={primaryBtn}>
+              পরের arrow
+            </button>
+          </div>
+        )}
+        {all && (
+          <table className={`${FADE} mx-auto mt-2 text-center font-mono tabular-nums`}>
+            <thead>
+              <tr className="font-sans text-xs text-muted">
+                <th className="px-3 pb-1 font-normal">arrow</th>
+                <th className="px-3 pb-1 font-normal">দৈর্ঘ্য</th>
+                <th className="px-3 pb-1 font-normal">λ</th>
+                <th className="px-3 pb-1 font-normal">কোথায় থামলো</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="px-3">(3, 4)</td>
+                <td className="px-3">5</td>
+                <td className="px-3">1/5</td>
+                <td className="px-3 font-bold text-cat-teal">(0.6, 0.8)</td>
+              </tr>
+              <tr>
+                <td className="px-3">(1.5, 2)</td>
+                <td className="px-3">2.5</td>
+                <td className="px-3">1/2.5</td>
+                <td className="px-3 font-bold text-cat-teal">(0.6, 0.8)</td>
+              </tr>
+            </tbody>
+          </table>
+        )}
+      </div>
       <Ticks
         items={[
           ["(3, 4)-কে দৈর্ঘ্য 1", hit[0]],
           ["(1.5, 2)-কে দৈর্ঘ্য 1", hit[1]],
         ]}
       />
-      <Task done={all}>আগে একটা guess দিন। তারপর λ সরিয়ে দুইটা arrow-কেই ঠিক 1 লম্বা বানান।</Task>
+      <Task done={all}>λ সরিয়ে দুইটা arrow-কেই ঠিক 1 লম্বা বানান।</Task>
     </>
   );
 }
@@ -1014,18 +998,15 @@ export function TooSmallDoubt({}: Story) {
 }
 
 // ---------------------------------------------------------------------------
-// 4 · Is (0.6, 0.8) really 1 long? Predict (1.4 is the walker's, 0.8 the
-//     king's), then square, add, root by hand. The hat gets its name: v̂.
+// 4 · Is (0.6, 0.8) really 1 long? Square, add, root by hand. The hat gets its name: v̂.
 
 const HAT = [
   { k: "প্রথম ঘর", n: 0.6 },
   { k: "দ্বিতীয় ঘর", n: 0.8 },
 ];
-const HAT_GUESS = ["1.4", "1", "0.8"];
 
 export function HatCheck() {
   const pass = useGate();
-  const [guess, setGuess] = useSeed<number | null>("guess", null);
   const [squared, setSquared] = useSeed<number[]>("squared", []);
   const [added, setAdded] = useSeed("added", false);
   const [rooted, setRooted] = useSeed("rooted", false);
@@ -1035,7 +1016,7 @@ export function HatCheck() {
   };
   const root = () => {
     setRooted(true);
-    pass("0.36 + 0.64 = 1, আর 1-এর root-ও 1। ঘর দুইটা আলাদাভাবে 1-এর চেয়ে ছোট, কিন্তু দুইজন মিলে দৈর্ঘ্য ঠিক 1।");
+    pass("0.36 + 0.64 = 1, দৈর্ঘ্য ঠিক 1।");
   };
 
   return (
@@ -1044,83 +1025,68 @@ export function HatCheck() {
         <div className="text-xs font-semibold text-muted">(3, 4)-কে 5 দিয়ে ভাগ করে পাওয়া</div>
         <div className="font-mono text-xl font-bold">(0.6, 0.8)</div>
       </div>
-      <div className="mt-4 text-sm font-medium text-muted">ফিতা দিয়ে মাপলে (0.6, 0.8) কত লম্বা?</div>
-      <div className="mt-2 grid grid-cols-3 gap-2">
-        {HAT_GUESS.map((o, i) => (
-          <Choice key={o} n={i} look={predictLook(i, guess, rooted, 1)} disabled={guess !== null} onClick={() => setGuess(i)}>
-            <span className="font-mono">{o}</span>
-          </Choice>
-        ))}
-      </div>
-      {guess !== null && (
-        <div className={FADE}>
-          <div className="mt-4 text-center text-sm text-muted">আগের মতোই, প্রথমে প্রতিটা ঘরের বর্গ। ঘরগুলোতে tap করুন।</div>
-          <div className="mx-auto mt-2 grid max-w-xs grid-cols-2 gap-2">
-            {HAT.map((b, i) => {
-              const on = squared.includes(i);
-              return (
-                <button
-                  key={b.k}
-                  type="button"
-                  disabled={on}
-                  onClick={() => square(i)}
-                  className={`flex cursor-pointer flex-col items-center rounded-xl border-2 px-1 py-2.5 transition-colors duration-300 motion-reduce:transition-none disabled:cursor-default ${
-                    on ? "border-cat-teal/40 bg-cat-teal/5" : "border-border hover:border-cat-teal/60"
-                  }`}
-                >
-                  <span className="text-xs text-muted">{b.k}</span>
-                  <span className="font-mono text-2xl font-bold">{b.n}</span>
-                  {on ? (
-                    <span className={`${POP} inline-block font-mono text-sm`}>
-                      {b.n}² = <b className="text-cat-teal">{sh(b.n * b.n)}</b>
-                    </span>
-                  ) : (
-                    <span className="text-xs text-muted">বর্গ করুন</span>
-                  )}
-                </button>
-              );
-            })}
-          </div>
-          {squared.length === 2 && !added && (
-            <div className={`${FADE} mt-3 flex justify-center`}>
-              <button type="button" onClick={() => setAdded(true)} className={primaryBtn}>
-                বর্গগুলো যোগ করুন
+      <div className={FADE}>
+        <div className="mt-4 text-center text-sm text-muted">আগের মতোই, প্রথমে প্রতিটা ঘরের বর্গ। ঘরগুলোতে tap করুন।</div>
+        <div className="mx-auto mt-2 grid max-w-xs grid-cols-2 gap-2">
+          {HAT.map((b, i) => {
+            const on = squared.includes(i);
+            return (
+              <button
+                key={b.k}
+                type="button"
+                disabled={on}
+                onClick={() => square(i)}
+                className={`flex cursor-pointer flex-col items-center rounded-xl border-2 px-1 py-2.5 transition-colors duration-300 motion-reduce:transition-none disabled:cursor-default ${
+                  on ? "border-cat-teal/40 bg-cat-teal/5" : "border-border hover:border-cat-teal/60"
+                }`}
+              >
+                <span className="text-xs text-muted">{b.k}</span>
+                <span className="font-mono text-2xl font-bold">{b.n}</span>
+                {on ? (
+                  <span className={`${POP} inline-block font-mono text-sm`}>
+                    {b.n}² = <b className="text-cat-teal">{sh(b.n * b.n)}</b>
+                  </span>
+                ) : (
+                  <span className="text-xs text-muted">বর্গ করুন</span>
+                )}
               </button>
-            </div>
-          )}
-          {added && (
-            <div className={`${FADE} mt-3 text-center font-mono text-lg`}>
-              0.36 + 0.64 = <b className="text-cat-teal">1</b>
-            </div>
-          )}
-          {added && !rooted && (
-            <div className={`${FADE} mt-3 flex justify-center`}>
-              <button type="button" onClick={root} className={`${primaryBtn} bg-cat-violet`}>
-                Root নিন
-              </button>
-            </div>
-          )}
-          {rooted && (
-            <>
-              <div className={`${FADE} mt-2 text-center text-[0.95rem]`}>
-                √1 = <b className="font-mono">1</b>।{" "}
-                {guess === 1
-                  ? "আপনার guess একদম ঠিক!"
-                  : guess === 0
-                    ? "0.6 + 0.8 = 1.4 হতো সামিনের হাঁটার মাপে, মানে L1-এ। কিন্তু ফিতার মাপ শুরু হয় বর্গ দিয়ে।"
-                    : "0.8 তো শুধু বড় ঘরটা, মানে দাবার রাজার মাপ। ফিতা কিন্তু দুইটা ঘরই গোনে।"}
-              </div>
-              <div className={`${FADE} mx-auto mt-3 max-w-sm rounded-2xl bg-cat-teal/5 px-4 py-3 text-center`}>
-                <div className="font-mono text-xl">v̂ = v ÷ ‖v‖</div>
-                <div className="font-mono">
-                  (3, 4) ÷ 5 = <b className="text-cat-teal">(0.6, 0.8)</b>
-                </div>
-                <div className="mt-1 text-[0.95rem]">পড়তে হয় “v-hat”। মাথার ছোট্ট টুপিটা বলে দেয়, এই arrow-টা ঠিক 1 লম্বা।</div>
-              </div>
-            </>
-          )}
+            );
+          })}
         </div>
-      )}
+        {squared.length === 2 && !added && (
+          <div className={`${FADE} mt-3 flex justify-center`}>
+            <button type="button" onClick={() => setAdded(true)} className={primaryBtn}>
+              বর্গগুলো যোগ করুন
+            </button>
+          </div>
+        )}
+        {added && (
+          <div className={`${FADE} mt-3 text-center font-mono text-lg`}>
+            0.36 + 0.64 = <b className="text-cat-teal">1</b>
+          </div>
+        )}
+        {added && !rooted && (
+          <div className={`${FADE} mt-3 flex justify-center`}>
+            <button type="button" onClick={root} className={`${primaryBtn} bg-cat-violet`}>
+              Root নিন
+            </button>
+          </div>
+        )}
+        {rooted && (
+          <>
+            <div className={`${FADE} mt-2 text-center text-[0.95rem]`}>
+              √1 = <b className="font-mono">1</b>। Slider ফাঁকি দেয়নি।
+            </div>
+            <div className={`${FADE} mx-auto mt-3 max-w-sm rounded-2xl bg-cat-teal/5 px-4 py-3 text-center`}>
+              <div className="font-mono text-xl">v̂ = v ÷ ‖v‖</div>
+              <div className="font-mono">
+                (3, 4) ÷ 5 = <b className="text-cat-teal">(0.6, 0.8)</b>
+              </div>
+              <div className="mt-1 text-[0.95rem]">পড়তে হয় “v-hat”। মাথার ছোট্ট টুপিটা বলে দেয়, এই arrow-টা ঠিক 1 লম্বা।</div>
+            </div>
+          </>
+        )}
+      </div>
       <Ticks
         items={[
           ["বর্গ", squared.length === 2],
@@ -1128,7 +1094,7 @@ export function HatCheck() {
           ["root", rooted],
         ]}
       />
-      <Task done={rooted}>আগে একটা guess দিন, তারপর বর্গ, যোগ আর root করে মিলিয়ে নিন।</Task>
+      <Task done={rooted}>বর্গ, যোগ আর root করে মেপে দেখুন, (0.6, 0.8) কত লম্বা।</Task>
     </>
   );
 }
@@ -1490,7 +1456,7 @@ export function OnTheRing() {
   };
   const normalise = () => {
     setNormed(true);
-    pass("সব arrow গিয়ে বসলো 1 মাপের রিংয়ের ওপর। দৈর্ঘ্য মুছে গেল, রয়ে গেল শুধু কে কোন দিকে তাক করা।");
+    pass("দৈর্ঘ্য মুছে থাকলো শুধু দিক।");
   };
 
   return (
@@ -1858,7 +1824,7 @@ export function FairFight() {
 
   const run = () => {
     setRan(true);
-    pass("দৈর্ঘ্য সরিয়ে দিতেই Mr. Bean জিতলো 5.33 বনাম 3.71-এ। আর দ্বিগুণ নম্বর নিয়েও Titanic এক চুলও এগোতে পারলো না।");
+    pass("দৈর্ঘ্য সরাতেই Mr. Bean জিতলো।");
   };
 
   return (
@@ -1893,6 +1859,17 @@ export function FairFight() {
           </tbody>
         </table>
       </div>
+      {guess !== null && !ran && (
+        <div className={`${FADE} mt-3 flex flex-wrap justify-center gap-2`}>
+          <button type="button" onClick={() => setNormed(true)} disabled={normed} className={primaryBtn}>
+            ১ · সবাইকে 1 লম্বা করুন
+          </button>
+          <button type="button" onClick={run} disabled={!normed} className={`${primaryBtn} bg-cat-violet`}>
+            ২ · নিয়মটা চালান
+          </button>
+        </div>
+      )}
+      {normed && !ran && <div className={`${FADE} mt-2 text-center text-[0.95rem]`}>খেয়াল করেছেন? দুইটা Titanic-এর card এখন হুবহু এক।</div>}
       {ran && (
         <div className={`${FADE} mx-auto mt-3 max-w-sm space-y-1.5`}>
           {FIGHT.map((m, i) => (
@@ -1917,17 +1894,6 @@ export function FairFight() {
           </Choice>
         ))}
       </div>
-      {guess !== null && !ran && (
-        <div className={`${FADE} mt-3 flex flex-wrap justify-center gap-2`}>
-          <button type="button" onClick={() => setNormed(true)} disabled={normed} className={primaryBtn}>
-            ১ · সবাইকে 1 লম্বা করুন
-          </button>
-          <button type="button" onClick={run} disabled={!normed} className={`${primaryBtn} bg-cat-violet`}>
-            ২ · নিয়মটা চালান
-          </button>
-        </div>
-      )}
-      {normed && !ran && <div className={`${FADE} mt-2 text-center text-[0.95rem]`}>খেয়াল করেছেন? দুইটা Titanic-এর card এখন হুবহু এক।</div>}
       {ran && guess !== null && (
         <div className={`${FADE} mt-3 text-center text-[0.95rem]`}>
           {guess === 0 ? "আপনার guess ঠিক। এবার ব্যবধান আর মাত্র 2 না, প্রায় দেড় গুণ।" : "উঁহু, এবার আর হাড্ডাহাড্ডি না। Card-গুলো 1 লম্বা হওয়ার পর Titanic-এর বাড়তি জোর আর কোনো কাজে লাগলো না।"}
@@ -1939,7 +1905,7 @@ export function FairFight() {
           ["নিয়ম চালানো", ran],
         ]}
       />
-      <Task done={ran}>আগে একটা guess দিন। তারপর তিনটা ছবিকে 1 লম্বা করে নিয়মটা আবার চালান।</Task>
+      <Task done={ran}>আগে একটা guess করুন। তারপর তিনটা ছবিকে 1 লম্বা করে নিয়মটা আবার চালান।</Task>
     </>
   );
 }
@@ -2308,7 +2274,7 @@ export function BigSpender() {
   };
   const choose = (i: number) => {
     setGuess(i);
-    pass("দুইজনের card হুবহু এক হয়ে গেল, তাই আর বলার উপায় নাই। ঝোঁকটা রইলো, কিন্তু কে কত টাকা খরচ করে সেই খবরটা normalise-এর সময়ই মুছে গেছে।");
+    pass("Normalise খরচের খবরটা মুছে দিলো।");
   };
 
   return (
@@ -2694,7 +2660,7 @@ export function MamaGoesHome({}: Story) {
 
 // ---------------------------------------------------------------------------
 // 9b · A story scene for the last screen's teaser, no task: late afternoon at
-//      ডাক্তার আপার stall, “তোমার যমজ কে?”. She walks up, a card shows the
+//      ডাক্তার আপার stall, “তোমার twin কে?”. She walks up, a card shows the
 //      volunteer's slip, kg written as gram, and she finds every twin changed.
 //      Why is the next journey's question, so the scene stops there.
 
@@ -2712,11 +2678,11 @@ export function TwinMixup({}: Story) {
         <Stall x={S9B_STALL} y={S9_Y} w={100} color="#0f766e" />
         <rect x={S9B_STALL - 42} y={S9_Y - 82} width={84} height={16} rx={3} fill="#fef3c7" stroke="#92400e" strokeWidth={1} />
         <text x={S9B_STALL} y={S9_Y - 71} textAnchor="middle" fontSize={8.5} fontWeight={700} fill={S_INK}>
-          তোমার যমজ কে?
+          তোমার twin কে?
         </text>
         {k >= 2 && <CastCard x={S9B_STALL} y={S9_Y - 11} text="kg → gram" tone="coral" />}
         <Person who="apa" x={k >= 1 ? S9B_APA : -30} y={S9_Y} walking={k === 1} ms={1500} mood={k >= 3 ? "puzzled" : "plain"} arm={k >= 3 ? "point" : "down"} label={k >= 1} />
-        {k >= 3 && <Bubble x={S9B_APA} y={S9_Y - 66} lines={["সবার যমজ", "বদলে গেল!"]} />}
+        {k >= 3 && <Bubble x={S9B_APA} y={S9_Y - 66} lines={["সবার twin", "বদলে গেল!"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -2730,11 +2696,11 @@ export const fixtures: Fixtures = {
   WhyLoud: { start: {}, measured: { measured: ["t", "b"] }, doubled: { measured: ["t", "b"], lam: 2, seen: [1, 2, 0.5] } },
   ShrinkToOne: {
     start: {},
-    sliding: { guess: 1, lam: 0.5 },
-    first: { guess: 1, lam: 0.2, hit: [true, false] },
-    all: { guess: 2, stage: 1, lam: 0.4, hit: [true, true] },
+    sliding: { lam: 0.5 },
+    first: { lam: 0.2, hit: [true, false] },
+    all: { stage: 1, lam: 0.4, hit: [true, true] },
   },
-  HatCheck: { start: {}, squared: { guess: 0, squared: [0, 1] }, done: { guess: 0, squared: [0, 1], added: true, rooted: true } },
+  HatCheck: { start: {}, squared: { squared: [0, 1] }, done: { squared: [0, 1], added: true, rooted: true } },
   OnTheRing: { start: {}, marked: { marks: [0, 1, 8] }, normed: { marks: [0, 8], normed: true } },
   BigSpender: { start: {}, normed: { normed: true }, over: { normed: true, guess: 2 } },
   FairFight: { start: {}, normed: { guess: 1, normed: true }, ran: { guess: 1, normed: true, ran: true } },

@@ -142,7 +142,7 @@ export function TwoRecipes() {
 
   const seal = (i: number) => {
     setBet(i);
-    pass("বাজি সিল হলো। আগে জানতে হবে মামার চাঁদার মাপটা আসলে কী, আর সেটা শুরু হবে একটা লাঠির ছায়া দিয়ে।");
+    pass("বাজি সিল হলো। শুরু লাঠির ছায়া দিয়ে।");
   };
 
   return (
@@ -160,7 +160,7 @@ export function TwoRecipes() {
         </Plane>
         <div className="grid min-w-0 flex-1 gap-2 text-sm">
           <div className="rounded-xl border-2 border-cat-amber/40 bg-cat-amber/5 px-2.5 py-1.5">
-            <div className="font-semibold">ফাহিমের বাক্স</div>
+            <div className="font-semibold">ফাহিমের box</div>
             <div className="font-mono">2 × 2 + 3 × 1 = 7</div>
           </div>
           <div className="rounded-xl border-2 border-cat-violet/40 bg-cat-violet/5 px-2.5 py-1.5">
@@ -169,7 +169,7 @@ export function TwoRecipes() {
           </div>
         </div>
       </div>
-      <div className="mt-3 text-sm font-medium text-muted">মামা বলছেন তার হিসাব আর বাক্স সবসময় একই উত্তর দেবে। আপনার কী মনে হয়?</div>
+      <div className="mt-3 text-sm font-medium text-muted">মামা বলছেন তার হিসাব আর box সবসময় একই উত্তর দেবে। আপনার কী মনে হয়?</div>
       <div className="mt-2 grid gap-2">
         {RECIPE_BET.map((o, i) => (
           <Choice key={o} n={i} look={bet === i ? "picked" : bet !== null ? "dim" : "idle"} disabled={bet !== null} onClick={() => seal(i)}>
@@ -206,7 +206,7 @@ export function StickShadow() {
     setSeen(nextSeen);
     setBig(nextBig);
     if (ANGLES.every((a) => nextSeen.includes(a)) && nextBig)
-      pass("লাঠি দ্বিগুণ হলে ছায়াও দ্বিগুণ, কিন্তু ছায়া ÷ লাঠি সেই একই। এই ভাগফলটা শুধু কোণের ওপর নির্ভর করে।");
+      pass("ছায়া ÷ লাঠি শুধু কোণের ওপর নির্ভর করে।");
   };
   const tilt = (d: number) => {
     setDeg(d);
@@ -263,7 +263,7 @@ export function BackShadow() {
     if (!BACK.includes(d) || seen.includes(d)) return;
     const next = [...seen, d];
     setSeen(next);
-    if (BACK.every((a) => next.includes(a))) pass("90° পেরোলে ছায়া পড়ে পেছনে, তাই minus। আর ছায়া কখনো লাঠির চেয়ে লম্বা হয় না: সংখ্যাটা সবসময় −1 থেকে 1-এর মধ্যে।");
+    if (BACK.every((a) => next.includes(a))) pass("সংখ্যাটা সবসময় −1 থেকে 1-এর মধ্যে।");
   };
 
   return (
@@ -294,7 +294,7 @@ export function BackShadow() {
           <Rows rows={BACK.map((a) => [`${a}°`, fix(Math.cos(a * RAD), 2), seen.includes(a)])} />
         </div>
       )}
-      <Task done={all}>আগে guess দিন, তারপর লাঠিটা 120°, 150° আর 180° পর্যন্ত হেলিয়ে দেখুন।</Task>
+      <Task done={all}>আগে guess করুন, তারপর লাঠিটা 120°, 150° আর 180° পর্যন্ত হেলিয়ে দেখুন।</Task>
     </>
   );
 }
@@ -333,7 +333,7 @@ export function ArrowShadow() {
     if (q[1] === 0 || !TARGETS.includes(q[0]) || hit.includes(q[0])) return;
     const next = [...hit, q[0]];
     setHit(next);
-    if (TARGETS.every((t) => next.includes(t))) pass("ছায়া মানে w-এর যে অংশটা v-এর দিকে যায়। মাপে সেটা ‖w‖ × cos θ, আর 90° পেরোলে minus।");
+    if (TARGETS.every((t) => next.includes(t))) pass("w-এর ছায়ার মাপ ‖w‖ × cos θ।");
   };
 
   return (
@@ -426,12 +426,12 @@ export function TwoTests() {
 
   const step = () => {
     setK(k + 1);
-    if (k + 1 === 4 && round === 1) pass("দুইটা একদম আলাদা হিসাব, দুইবারই একই উত্তর: 6 আর 6, 7 আর 7। এক বার হলে কাকতালীয়, দুই বার হলে সন্দেহ জাগে।");
+    if (k + 1 === 4 && round === 1) pass("দুই হিসাব, দুইবারই একই উত্তর।");
   };
 
   return (
     <>
-      {round === 1 && <div className="text-center text-sm text-accent-text">✓ প্রথম জোড়া: বাক্স 6, মামা 6.0।</div>}
+      {round === 1 && <div className="text-center text-sm text-accent-text">✓ প্রথম জোড়া: box 6, মামা 6.0।</div>}
       <div key={round} className={`${FADE} flex items-center gap-3`}>
         <Plane f={t.f} ticks={1} label={`v ${tupN(t.v)}, w ${tupN(t.w)}`} className="max-w-[8.5rem] shrink-0">
           {k >= 3 && <Arc f={t.f} a={t.v} b={t.w} r={0.9} />}
@@ -474,7 +474,7 @@ export function TwoTests() {
           ["বাজির জোড়া", round === 1 && over],
         ]}
       />
-      <Task done={round === 1 && over}>মামার হিসাবটা এক মাপ এক মাপ করে চালান, তারপর বাক্সের উত্তরের সাথে মিলিয়ে দেখুন।</Task>
+      <Task done={round === 1 && over}>মামার হিসাবটা এক মাপ এক মাপ করে চালান, তারপর box এর উত্তরের সাথে মিলিয়ে দেখুন।</Task>
     </>
   );
 }
@@ -495,7 +495,7 @@ export function AxisShadow() {
     if (lit.includes(i)) return;
     const next = [...lit, i];
     setLit(next);
-    if (next.length === 2) pass("পূর্বের axis-এ ছায়া 2, উত্তরের axis-এ 3। Vector-এর সংখ্যাগুলো আসলে একেকটা axis-এর ওপর তার ছায়া।");
+    if (next.length === 2) pass("প্রতিটা সংখ্যা একেকটা axis-এ ছায়া।");
   };
 
   return (
@@ -561,7 +561,7 @@ export function NoCrossTalk() {
     if (open.includes(c)) return;
     const next = [...open, c];
     setOpen(next);
-    if (next.length === 4) pass("Axis দুইটা সোজা কোণে, তাই কোণাকুণি ঘরগুলোর ছায়া 0। আর প্রতিটা axis 1 লম্বা, তাই বাকিগুলোয় থাকে শুধু ঘরে ঘরে গুণ: 4 + 3 = 7।");
+    if (next.length === 4) pass("Axis সোজা কোণে, তাই থাকে ঘরে ঘরে গুণ।");
   };
 
   return (
@@ -643,7 +643,7 @@ export function YourPair() {
     if (i !== p.ans) return setMiss((miss ?? 0) + 1);
     setMiss(null);
     setDone(done + 1);
-    if (done + 1 === PAIRS.length) pass("তিনবারই মাপার আগেই উত্তর জানা ছিল। মামার ফিতা-চাঁদা আর ফাহিমের বাক্স আসলে একই সংখ্যার দুই রকম হিসাব।");
+    if (done + 1 === PAIRS.length) pass("চাঁদা-ফিতা আর box একই সংখ্যা দেয়।");
   };
 
   const q = PAIRS[shown];
@@ -671,7 +671,7 @@ export function YourPair() {
               </button>
             ))}
           </div>
-          {miss !== null && <Nope key={miss}>উঁহু। মামার মাপ লাগবে না, বাক্সটা চালান: ঘরে ঘরে গুণ, তারপর যোগ।</Nope>}
+          {miss !== null && <Nope key={miss}>উঁহু। মামার মাপ লাগবে না, boxটা চালান: ঘরে ঘরে গুণ, তারপর যোগ।</Nope>}
         </>
       ) : null}
       {prev && (

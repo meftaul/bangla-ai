@@ -243,7 +243,7 @@ export function MeasureDay() {
       if (done.includes(i)) return;
       const d = [...done, i];
       setDone(d);
-      if (d.length === KIDS.length) pass("তিনজনকেই মাপা শেষ। প্রত্যেকের জন্য দুইটা সংখ্যা।");
+      if (d.length === KIDS.length) pass("প্রত্যেকের জন্য দুইটা সংখ্যা।");
     });
   };
 
@@ -388,10 +388,7 @@ export function SwapTrap() {
     setGuess(i);
     show.play(1, () =>
       pass(
-        i === TRAP_RIGHT
-          ? "ঠিক ধরেছেন! একই দুইটা সংখ্যা, শুধু জায়গা বদলে একদম অন্য মানুষ।"
-          : "একই দুইটা সংখ্যা, শুধু জায়গা বদলে একদম অন্য মানুষ।",
-      ),
+        "জায়গা বদলালে একদম অন্য মানুষ।"),
     );
   };
 
@@ -465,7 +462,7 @@ export function SlotRule() {
     setMiss(0);
     if (p.length < 2) return;
     setFiled(s + 1);
-    if (s + 1 === SLIPS.length) pass("নিয়ম একটাই: আগে height, তারপর weight। তাহলে আর ভুল বোঝাবুঝি নাই।");
+    if (s + 1 === SLIPS.length) pass("নিয়ম: আগে height, তারপর weight।");
     else
       next.play(1, () => {
         setS(s + 1);
@@ -562,7 +559,7 @@ export function TwinTrouble() {
 
   const add = () => {
     setN(n + 1);
-    if (n + 1 === 4) pass("চার নম্বর সংখ্যায় এসে সোম আর তানভীর আলাদা হলো।");
+    if (n + 1 === 4) pass("চার নম্বর সংখ্যায় এসে আলাদা হলো।");
   };
 
   return (
@@ -626,7 +623,7 @@ export function YourVector() {
     setV(v.map((o, m) => (m === j ? x : o)));
     const mv = moved.map((o, m) => o || m === j);
     setMoved(mv);
-    if (mv.every(Boolean)) pass("এটাই আপনার vector। দুইটা সংখ্যায় আপনি।");
+    if (mv.every(Boolean)) pass("দুইটা সংখ্যায় আপনি: আপনার vector।");
   };
 
   return (
@@ -675,7 +672,7 @@ export function NameSlots() {
     if (i === ASK_SLOT[q]) {
       setQ(q + 1);
       setMiss(null);
-      if (q + 1 === ASK_SLOT.length) pass("নিচে ছোট করে লেখা সংখ্যাটা শুধু বলে দেয়, কত নম্বর ঘর।");
+      if (q + 1 === ASK_SLOT.length) pass("নিচের ছোট সংখ্যা বলে কত নম্বর ঘর।");
     } else {
       setMiss(i);
       setTries((t) => t + 1);
@@ -784,7 +781,7 @@ export function Unroll() {
         <div className="flex justify-center">
           <button
             type="button"
-            onClick={() => go.play(PENCIL.length, () => pass("৬৪টা ঘর, এক লাইনে। ছবিটাও একটা vector।"))}
+            onClick={() => go.play(PENCIL.length, () => pass("৬৪টা ঘর এক লাইনে, ছবিও vector।"))}
             className={primaryBtn}
           >
             ছকটা খুলে এক লাইনে সাজান

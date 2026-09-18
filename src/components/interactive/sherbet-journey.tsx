@@ -167,7 +167,7 @@ export function MoreGlasses() {
 
   const mix = () => {
     setMixed(true);
-    pass("একই card দুইবার যোগ মানে প্রতিটা ঘর 2 দিয়ে গুণ। লেবুও দ্বিগুণ, চিনিও দ্বিগুণ: (4, 8)।");
+    pass("দুইবার যোগ মানে প্রতিটা ঘর 2 গুণ।");
   };
 
   return (
@@ -180,6 +180,13 @@ export function MoreGlasses() {
         {mixed && <span className={FADE}>{"🥤".repeat(4)}</span>}
       </div>
       <div className="mt-1 text-center text-sm text-muted">লাইনে দাঁড়িয়ে {bn(8)} জন, আর card লেখা {bn(4)} গ্লাসের জন্য।</div>
+      {guess !== null && !mixed && (
+        <div className={`${FADE} mt-3 flex justify-center`}>
+          <button type="button" onClick={mix} className={`${primaryBtn} bg-cat-violet`}>
+            আরেক ব্যাচ মেশান
+          </button>
+        </div>
+      )}
       <div className="mt-4 text-sm font-medium text-muted">{bn(8)} গ্লাসের জন্য card-এ কী লিখবেন?</div>
       <div className="mt-2 grid gap-2">
         {GLASS_GUESS.map((o, i) => (
@@ -188,13 +195,6 @@ export function MoreGlasses() {
           </Choice>
         ))}
       </div>
-      {guess !== null && !mixed && (
-        <div className={`${FADE} mt-3 flex justify-center`}>
-          <button type="button" onClick={mix} className={`${primaryBtn} bg-cat-violet`}>
-            আরেক ব্যাচ মেশান
-          </button>
-        </div>
-      )}
       {mixed && (
         <div className={`${FADE} mx-auto mt-4 max-w-sm rounded-2xl bg-cat-teal/5 px-4 py-3 text-center`}>
           <div className="font-mono text-lg">
@@ -457,7 +457,7 @@ export function TasteLine() {
   };
   const spoil = () => {
     setNasib(true);
-    pass("যত গ্লাসই বানান, dot বসে একই সোজা লাইনে। শুধু চিনি বাড়ালে dot লাইন ছেড়ে যায়, আর শরবতটাই বদলে যায়।");
+    pass("যত গ্লাসই বানান, dot একই লাইনে।");
   };
 
   return (
@@ -785,7 +785,7 @@ export function StretchKnob() {
     if (seen.includes(n)) return;
     const next = [...seen, n];
     setSeen(next);
-    if (TARGETS.every((t) => next.includes(t))) pass("গুণ করে arrow লম্বা, খাটো, এমনকি উল্টোও করা যায়। কিন্তু লাইন থেকে একচুলও সরানো যায় না।");
+    if (TARGETS.every((t) => next.includes(t))) pass("গুণ করে arrow লাইন ছাড়ে না।");
   };
 
   return (
@@ -799,8 +799,10 @@ export function StretchKnob() {
         ))}
       </div>
       {guess !== null && (
-        <div className={FADE}>
-          <Plane f={FK} ticks={1} label={`(1, 2) times ${k} is ${tup(tip)}`} className="max-w-[15rem]">
+        // Paper beside the knob from sm up: stacked, the tall paper and the knob
+        // never fit one laptop screen together, and turning it blind teaches nothing.
+        <div className={`${FADE} sm:mt-3 sm:flex sm:flex-wrap sm:items-center sm:justify-center sm:gap-6`}>
+          <Plane f={FK} ticks={1} label={`(1, 2) times ${k} is ${tup(tip)}`} className="max-w-[15rem] sm:mx-0 sm:shrink-0">
             {all && <path d={`M${FK.sx(-2.5)} ${FK.sy(-5)}L${FK.sx(3.5)} ${FK.sy(7)}`} strokeWidth={1.4} strokeDasharray="6 5" className={`${FADE} pointer-events-none fill-none stroke-cat-teal/70`} />}
             {seen.map((s) => (
               <Dot key={s} f={FK} at={times(s, V)} r={3} className="fill-cat-violet/50" />
@@ -809,23 +811,25 @@ export function StretchKnob() {
             <Arrow f={FK} from={O} to={tip} tone={k < 0 ? "coral" : "blue"} w={3} />
             {k === 0 && <Dot f={FK} at={O} r={5} className="fill-cat-violet" />}
           </Plane>
-          <div className="text-center">
-            <div className="font-mono text-lg">
-              <span key={k} className={`${POP} inline-block font-bold`}>
-                {sg(k)}
-              </span>{" "}
-              × (1, 2) = <b className={k < 0 ? "text-cat-coral" : "text-cat-blue"}>{tup(tip)}</b>
+          <div className="min-w-0">
+            <div className="text-center">
+              <div className="font-mono text-lg">
+                <span key={k} className={`${POP} inline-block font-bold`}>
+                  {sg(k)}
+                </span>{" "}
+                × (1, 2) = <b className={k < 0 ? "text-cat-coral" : "text-cat-blue"}>{tup(tip)}</b>
+              </div>
+              <div key={k} className={`${FADE} text-[0.95rem]`}>
+                {what(k)}
+              </div>
             </div>
-            <div key={k} className={`${FADE} text-[0.95rem]`}>
-              {what(k)}
-            </div>
+            <Knob k={k} onTurn={turn} />
+            <Ticks items={TARGETS.map((t) => [`× ${sg(t)}`, seen.includes(t)])} />
           </div>
-          <Knob k={k} onTurn={turn} />
-          <Ticks items={TARGETS.map((t) => [`× ${sg(t)}`, seen.includes(t)])} />
         </div>
       )}
       <Task done={all}>
-        আগে guess দিন। তারপর knob ঘুরিয়ে পাঁচটা গুণই একবার করে করুন ({bn(hit)}/{bn(TARGETS.length)})।
+        আগে guess করুন। তারপর knob ঘুরিয়ে পাঁচটা গুণই একবার করে করুন ({bn(hit)}/{bn(TARGETS.length)})।
       </Task>
     </>
   );
@@ -1157,7 +1161,7 @@ export function FiveCases() {
     }
     setMiss(null);
     setSorted(sorted + 1);
-    if (sorted + 1 === CASES.length) pass("Minus থাকলে উল্টো। আর minus বাদ দিয়ে সংখ্যাটা 1-এর চেয়ে বড় হলে লম্বা, ছোট হলে খাটো।");
+    if (sorted + 1 === CASES.length) pass("Minus-এ উল্টো, 1-এর বেশিতে লম্বা।");
   };
 
   return (
@@ -1519,12 +1523,10 @@ const SV: XY = [2, 1];
 const SU: XY = [6, 4];
 const FLIP = times(-1, SV);
 const CARD5: XY = [4, 3];
-const LAND5 = ["(4, 3)", "(8, 5)", "(−4, −3)"];
 const STAGES = ["সামিনের arrow উল্টান", "গুপ্তধনের arrow-এর মাথায় জুড়ুন", "৩.১-এর card-এর সাথে মিলান"];
 
 export function FlipThenAdd() {
   const pass = useGate();
-  const [guess, setGuess] = useSeed<number | null>("guess", null);
   const [stage, setStage] = useSeed("stage", 0);
   const over = stage === STAGES.length;
   // Stage 2 lifts the flipped arrow off the origin and carries it to the
@@ -1541,7 +1543,7 @@ export function FlipThenAdd() {
 
   const next = () => {
     setStage(stage + 1);
-    if (stage + 1 === STAGES.length) pass("উল্টে দিয়ে যোগ করলেও সেই (4, 3)। বিয়োগ আলাদা কোনো চাল না: u − v = u + (−1)v।");
+    if (stage + 1 === STAGES.length) pass("বিয়োগ মানে উল্টে দিয়ে যোগ।");
   };
 
   return (
@@ -1585,14 +1587,6 @@ export function FlipThenAdd() {
           </>
         )}
       </Plane>
-      <div className="text-sm font-medium text-muted">গুপ্তধনের arrow (6, 4)-এর সাথে উল্টানো সামিনকে যোগ করলে কোথায় গিয়ে থামবেন?</div>
-      <div className="mt-2 grid gap-2">
-        {LAND5.map((o, i) => (
-          <Choice key={o} n={i} look={predictLook(i, guess, over, 0)} disabled={guess !== null} onClick={() => setGuess(i)}>
-            <span className="font-mono">{o}</span>
-          </Choice>
-        ))}
-      </div>
       {stage > 0 && (
         <div key={stage} className={`${FADE} mt-3 text-center text-[0.95rem]`}>
           {stage === 1 && <>সামিনের (2, 1) উল্টে হলো (−2, −1)। লম্বায় একই, শুধু মুখ ঘুরিয়ে দাঁড়িয়েছে।</>}
@@ -1609,14 +1603,14 @@ export function FlipThenAdd() {
           )}
         </div>
       )}
-      {guess !== null && !over && (
+      {!over && (
         <div className="mt-3 flex justify-center">
           <button type="button" onClick={next} className={`${primaryBtn} bg-cat-violet`}>
             {bn(stage + 1)} · {STAGES[stage]}
           </button>
         </div>
       )}
-      <Task done={over}>আগে guess দিন, তারপর তিন ধাপে হিসাবটা করে দেখুন।</Task>
+      <Task done={over}>তিন ধাপে হিসাবটা করে দেখুন, উল্টানো সামিনকে যোগ করলে কোথায় থামেন।</Task>
     </>
   );
 }
@@ -1848,7 +1842,7 @@ export function GramsClue() {
     if (m === 0 || tried.includes(m)) return;
     const next = [...tried, m];
     setTried(next);
-    if (next.length === 2) pass("পুরো card টানলে সব দূরত্ব একসাথে 1000 গুণ, যমজ সেই একই। শুধু এক ঘর টানলে map বেঁকে যায়, আর যমজই বদলে যায়।");
+    if (next.length === 2) pass("পুরো card টানলে twin একই থাকে।");
   };
 
   return (
@@ -1885,23 +1879,6 @@ export function GramsClue() {
           </div>
         ))}
       </div>
-      <div key={mode} className={`${FADE} mt-2 text-center text-[0.95rem]`}>
-        {mode === 0 ? (
-          <>kg-তে A-এর সবচেয়ে কাছে <b>C</b>। ও-ই A-এর যমজ।</>
-        ) : mode === 1 ? (
-          <>সব দূরত্ব 1000 গুণ বড় হলো, কিন্তু যমজ সেই <b>C</b>-ই।</>
-        ) : (
-          <>যমজ বদলে গেল! এখন A-এর সবচেয়ে কাছে <b>B</b>, অথচ মানুষ তিনজন একই।</>
-        )}
-      </div>
-      <div className="mt-4 text-sm font-medium text-muted">কোন বোতাম চাপলে A-এর যমজ বদলে যাবে বলে মনে হয়?</div>
-      <div className="mt-2 grid gap-2">
-        {GRAM_GUESS.map((o, i) => (
-          <Choice key={o} n={i} look={predictLook(i, guess, both, 1)} disabled={guess !== null} onClick={() => setGuess(i)}>
-            {o}
-          </Choice>
-        ))}
-      </div>
       {guess !== null && (
         <div className={`${FADE} mt-3 flex flex-wrap justify-center gap-2`}>
           {MODES.map((m, i) => (
@@ -1919,7 +1896,24 @@ export function GramsClue() {
           ))}
         </div>
       )}
-      <Task done={both}>আগে guess দিন, তারপর × 1000-এর দুইটা বোতামই চেপে দেখুন A-এর যমজ কে হয়।</Task>
+      <div key={mode} className={`${FADE} mt-2 text-center text-[0.95rem]`}>
+        {mode === 0 ? (
+          <>kg-তে A-এর সবচেয়ে কাছে <b>C</b>। ও-ই A-এর twin।</>
+        ) : mode === 1 ? (
+          <>সব দূরত্ব 1000 গুণ বড় হলো, কিন্তু twin সেই <b>C</b>-ই।</>
+        ) : (
+          <>সবচেয়ে কাছাকাছি যে সে বদলে গেল! এখন A-এর সবচেয়ে কাছে <b>B</b>, অথচ মানুষ তিনজন একই।</>
+        )}
+      </div>
+      <div className="mt-4 text-sm font-medium text-muted">কোন বোতাম চাপলে A-এর twin বদলে যাবে বলে মনে হয়?</div>
+      <div className="mt-2 grid gap-2">
+        {GRAM_GUESS.map((o, i) => (
+          <Choice key={o} n={i} look={predictLook(i, guess, both, 1)} disabled={guess !== null} onClick={() => setGuess(i)}>
+            {o}
+          </Choice>
+        ))}
+      </div>
+      <Task done={both}>আগে guess করুন, তারপর × 1000-এর দুইটা বোতামই চেপে দেখুন A-এর twin কে হয়।</Task>
     </>
   );
 }
@@ -2014,7 +2008,7 @@ export function MapSquash() {
         ) : k === 2 ? (
           "এবার শুধু ওজন × 1000। কাগজে আঁটাতে ছবিটা 1000 গুণ ছোট করে আঁকলে উচ্চতার ফারাক প্রায় মুছেই যায়।"
         ) : (
-          <span className={FADE}>এখন A-এর সবচেয়ে কাছে B। মানুষগুলো একই, অথচ যমজ বদলে গেল।</span>
+          <span className={FADE}>এখন A-এর সবচেয়ে কাছে B। মানুষগুলো একই, অথচ twin বদলে গেল।</span>
         )
       }
     >
@@ -2102,12 +2096,12 @@ export function KgOrGram() {
         <path d="M20 101H144" stroke="#e2e8f0" strokeWidth={1} />
         {k >= 1 && (
           <text x={30} y={112} fontSize={8.5} fontWeight={700} fill="#0f766e" className={FADE}>
-            kg-তে যমজ C
+            kg-তে twin C
           </text>
         )}
         {k >= 2 && (
           <text x={30} y={124} fontSize={8.5} fontWeight={700} fill="#be123c" className={FADE}>
-            gram-এ যমজ B
+            gram-এ twin B
           </text>
         )}
         {k >= 3 && (
@@ -2141,7 +2135,7 @@ export function SayIt() {
     if (open.includes(i)) return;
     const next = [...open, i];
     setOpen(next);
-    if (next.length === SAY.length) pass("λ হলো knob-এর সংখ্যা, আর λv মানে প্রতিটা ঘর সেই সংখ্যা দিয়ে গুণ। চিহ্নগুলো এখন আর অচেনা না।");
+    if (next.length === SAY.length) pass("λv মানে প্রতিটা ঘর λ দিয়ে গুণ।");
   };
 
   return (
@@ -2488,7 +2482,7 @@ export const fixtures: Fixtures = {
   TasteLine: { start: {}, all: { size: 3, seen: [2, 0, 1, 3] }, nasib: { size: 2, seen: [0, 1, 2, 3], nasib: true } },
   StretchKnob: { start: {}, playing: { guess: 0, k: -0.5, seen: [1, 3, 0.5, -0.5] }, all: { guess: 0, k: -2, seen: [1, 3, 0.5, 0, -0.5, -2] } },
   FiveCases: { start: {}, miss: { sorted: 3, miss: { n: 1, pick: 0 } }, three: { sorted: 3 }, all: { sorted: 5 } },
-  FlipThenAdd: { start: {}, added: { guess: 1, stage: 2 }, over: { guess: 1, stage: 3 } },
+  FlipThenAdd: { start: {}, added: { stage: 2 }, over: { stage: 3 } },
   GramsClue: { start: {}, weight: { guess: 3, mode: 2, tried: [2] }, both: { guess: 3, mode: 2, tried: [1, 2] } },
   SayIt: { start: {}, all: { open: [0, 1, 2, 3] } },
   // the story scenes play by themselves too; `k` picks a beat

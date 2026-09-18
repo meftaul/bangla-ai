@@ -305,7 +305,7 @@ export function TwoClues() {
   const go = () =>
     t.go(U1, V1, () => {
       setWalked(true);
-      pass("Card ১ হেঁটে Shiku যেখানে থামলো, card ২ শুরু হলো সেখান থেকেই। দুই হাঁটা জুড়ে শেষ ঠিকানা (4, 5)।");
+      pass("দ্বিতীয় হাঁটা শুরু প্রথমটার শেষে।");
     });
 
   return (
@@ -370,7 +370,7 @@ export function TwoClues() {
           </button>
         </div>
       )}
-      <Task done={walked}>আগে কাগজে tap করে একটা guess দিন, তারপর Shiku-কে হাঁটতে পাঠান।</Task>
+      <Task done={walked}>আগে কাগজে tap করে একটা guess করুন, তারপর Shiku-কে হাঁটতে পাঠান।</Task>
     </>
   );
 }
@@ -542,7 +542,7 @@ export function SlotAdd() {
       setLanded(sum);
       if (same(a, sum)) {
         setSolved(round + 1);
-        if (last) pass("প্রথম ঘরের সাথে প্রথম ঘর, দ্বিতীয়র সাথে দ্বিতীয়। Vector যোগ বলতে এতটুকুই।");
+        if (last) pass("ঘরে ঘরে যোগ, vector যোগ এতটুকুই।");
       } else setMiss((m) => ({ n: (m?.n ?? 0) + 1, a }));
     });
   };
@@ -916,7 +916,7 @@ export function SwapOrder() {
     t.go(V1, U1, () => {
       setWalked(true);
       replay.play(SHOW.length - 1, () =>
-        pass("কে আগে পড়লো তাতে কিছু যায় আসে না: u + v = v + u। ঘরে ঘরে দেখলে 3 + 1 আর 1 + 3 তো একই।"),
+        pass("u + v = v + u, আগে-পরে লাগে না।"),
       );
     });
 
@@ -960,6 +960,20 @@ export function SwapOrder() {
         <Prize f={FA} at={S1} found />
         <Shiku f={FA} at={walked ? S1 : t.here} />
       </Plane>
+      {guess !== null && !walked && (
+        <div className={`${FADE} mt-2 flex justify-center`}>
+          <button type="button" onClick={go} disabled={t.running} className={`${primaryBtn} bg-cat-violet`}>
+            সোমের order-এ হাঁটান
+          </button>
+        </div>
+      )}
+      {settled && (
+        <div className={`${FADE} mt-2 flex justify-center`}>
+          <button type="button" onClick={() => replay.play(SHOW.length - 1)} className={quietBtn}>
+            আরেকবার দেখুন ↺
+          </button>
+        </div>
+      )}
       <div className="min-h-12 text-center text-[0.95rem]">
         {walked ? (
           <span key={show} className={FADE}>
@@ -981,20 +995,6 @@ export function SwapOrder() {
               </Choice>
             ))}
           </div>
-        </div>
-      )}
-      {guess !== null && !walked && (
-        <div className={`${FADE} mt-3 flex justify-center`}>
-          <button type="button" onClick={go} disabled={t.running} className={`${primaryBtn} bg-cat-violet`}>
-            সোমের order-এ হাঁটান
-          </button>
-        </div>
-      )}
-      {settled && (
-        <div className={`${FADE} mt-3 flex justify-center`}>
-          <button type="button" onClick={() => replay.play(SHOW.length - 1)} className={quietBtn}>
-            আরেকবার দেখুন ↺
-          </button>
         </div>
       )}
       <Task done={settled}>আগে guess করুন, তারপর Shiku-কে সোমের order-এ হাঁটিয়ে দেখুন।</Task>
@@ -1283,7 +1283,7 @@ export function SnackLabel() {
     if (added.includes(i)) return;
     const next = [...added, i];
     setAdded(next);
-    if (next.length === FOODS.length) pass("তিন ঘরের ছবি আঁকা যায় না, তবু যোগের নিয়ম সেই একই। টিফিনের পুরো হিসাব (265, 10, 15)।");
+    if (next.length === FOODS.length) pass("তিন ঘরেও যোগের নিয়ম একই।");
   };
 
   return (
@@ -1314,7 +1314,7 @@ export function SnackLabel() {
       <div className="mx-auto mt-4 max-w-sm rounded-2xl border-2 border-foreground/70 px-4 py-3">
         <div className="flex items-baseline justify-between gap-2 border-b-4 border-foreground/70 pb-1">
           <span className="text-lg font-black">টিফিনের label</span>
-          <span className="text-sm text-muted">{added.length ? added.map((i) => FOODS[i].icon).join(" ") : "বাক্স এখনো খালি"}</span>
+          <span className="text-sm text-muted">{added.length ? added.map((i) => FOODS[i].icon).join(" ") : "box এখনো খালি"}</span>
         </div>
         {NUTRI.map((n, s) => (
           <div key={n} className="flex items-baseline justify-between gap-3 border-b border-border py-1.5 last:border-0">
@@ -1606,7 +1606,7 @@ export function WrongShape() {
     if (tried.includes(i)) return;
     const next = [...tried, i];
     setTried(next);
-    if (next.length === ABS.length) pass("যোগ করতে হলে দুইটা card-এ ঘর সমান থাকতে হবে, আর একই ঘরে একই জিনিস।");
+    if (next.length === ABS.length) pass("যোগে ঘর সমান, আর ঘরের মানে একই।");
   };
 
   return (
@@ -1913,7 +1913,7 @@ export function WayBack() {
     setPeek(t);
     if (!same(t, u)) return;
     setSolved(round + 1);
-    if (last) pass("প্রতিবার গুপ্তধনের ঘর থেকে সামিনের ঘর বাদ দিলেই card-টা বেরিয়ে আসে। মানে u − v হলো v থেকে u-তে যাওয়ার arrow।");
+    if (last) pass("u − v হলো v থেকে u-তে যাওয়ার arrow।");
   };
   const next = () => {
     setRound(round + 1);
@@ -2131,7 +2131,7 @@ export function CheckTrip() {
   const goHome = () =>
     walk("homeward", homeward, () => {
       setHome(true);
-      pass("যাওয়ার card (4, 3), ফেরার card (−4, −3)। u − v আর v − u এক না, একটা আরেকটার ঠিক উল্টো।");
+      pass("u − v আর v − u ঠিক উল্টো।");
     });
   const onWay = (name: typeof leg, p: XY[], done: boolean) => (done ? p : w.running && leg === name ? w.trail : []);
 
@@ -2182,6 +2182,13 @@ export function CheckTrip() {
 
       {!walked && (
         <>
+          {guess !== null && (
+            <div className={`${FADE} mb-3 flex justify-center`}>
+              <button type="button" onClick={goOut} disabled={w.running} className={`${primaryBtn} bg-cat-violet`}>
+                হাঁটিয়ে দেখুন
+              </button>
+            </div>
+          )}
           <div className="text-sm font-medium text-muted">Shiku যদি সামিনের জায়গা থেকে এই card ধরে হাঁটে, থামবে কোথায়?</div>
           <div className="mt-2 grid gap-2">
             {LAND.map((o, i) => (
@@ -2190,13 +2197,6 @@ export function CheckTrip() {
               </Choice>
             ))}
           </div>
-          {guess !== null && (
-            <div className={`${FADE} mt-3 flex justify-center`}>
-              <button type="button" onClick={goOut} disabled={w.running} className={`${primaryBtn} bg-cat-violet`}>
-                হাঁটিয়ে দেখুন
-              </button>
-            </div>
-          )}
         </>
       )}
 
@@ -2217,6 +2217,13 @@ export function CheckTrip() {
 
       {walked && !far && (
         <div style={{ transitionDelay: "1400ms" }} className={`${FADE} mt-4`}>
+          {back !== null && (
+            <div className={`${FADE} mb-3 flex justify-center`}>
+              <button type="button" onClick={goAstray} disabled={w.running} className={`${primaryBtn} bg-cat-violet`}>
+                একই card ধরে ফেরান
+              </button>
+            </div>
+          )}
           <div className="text-sm font-medium text-muted">এবার ফেরার পালা। গুপ্তধন থেকে একই card (4, 3) ধরে হাঁটলে Shiku কি সামিনের কাছে ফিরবে?</div>
           <div className="mt-2 grid gap-2">
             {HOME.map((o, i) => (
@@ -2225,13 +2232,6 @@ export function CheckTrip() {
               </Choice>
             ))}
           </div>
-          {back !== null && (
-            <div className={`${FADE} mt-3 flex justify-center`}>
-              <button type="button" onClick={goAstray} disabled={w.running} className={`${primaryBtn} bg-cat-violet`}>
-                একই card ধরে ফেরান
-              </button>
-            </div>
-          )}
         </div>
       )}
 
@@ -2498,7 +2498,7 @@ export function StallMoney() {
     if (picks[i] !== null) return;
     const next = picks.map((q, j) => (j === i ? p : q));
     setPicks(next);
-    if (next.every((q) => q !== null)) pass("বিয়োগ করতেই বেরিয়ে এলো কোন খাতে কত বদলালো: (−100, +150, −150)। এক লাইনে পুরো বছরের গল্প।");
+    if (next.every((q) => q !== null)) pass("বিয়োগ বলে কোন খাতে কত বদলালো।");
   };
 
   return (
@@ -2825,7 +2825,7 @@ export function SayIt() {
     if (open.includes(i)) return;
     const next = [...open, i];
     setOpen(next);
-    if (next.length === SAY.length) pass("যোগ মানে একটার পর আরেকটা হাঁটা, বিয়োগ মানে এখান থেকে ওখানে যাওয়ার পথ। চিহ্নগুলো এখন আর অচেনা না।");
+    if (next.length === SAY.length) pass("যোগ মানে পরপর হাঁটা, বিয়োগ মানে পথ।");
   };
 
   return (

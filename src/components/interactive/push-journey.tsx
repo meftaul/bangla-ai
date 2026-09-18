@@ -103,7 +103,7 @@ export function VanStuck() {
 
   const seal = (i: number) => {
     setBet(i);
-    pass("বাজি সিল হলো। কার ঠেলা কতটা কাজের, সেটা চোখে দেখে বলা কঠিন। মাপার একটা যন্ত্র লাগবে।");
+    pass("বাজি সিল হলো। মাপার যন্ত্র লাগবে।");
   };
 
   return (
@@ -164,7 +164,7 @@ export function StraightPush() {
   const runFront = () => {
     setSide(1);
     setFront(true);
-    pass("পেছন থেকে ঠেললে বাক্স দেয় +25, সামনে থেকে −25। চিহ্নটাই বলে দিচ্ছে ঠেলা পক্ষে না বিপক্ষে।");
+    pass("চিহ্ন বলে ঠেলা পক্ষে না বিপক্ষে।");
   };
 
   return (
@@ -185,7 +185,7 @@ export function StraightPush() {
           <DotBox a={ROAD} b={push} k={3} names={DIRS} />
           {!front && (
             <>
-              <div className="mt-3 text-sm font-medium text-muted">এবার ফাহিম সামনে গিয়ে উল্টো দিকে ঠেলবে, (−4, −3)। বাক্স কী দেবে?</div>
+              <div className="mt-3 text-sm font-medium text-muted">এবার ফাহিম সামনে গিয়ে উল্টো দিকে ঠেলবে, (−4, −3)। box কী দেবে?</div>
               <div className="mt-2 grid grid-cols-3 gap-2">
                 {FRONT_GUESS.map((o, i) => (
                   <Choice key={o} n={i} look={predictLook(i, guess, false, 2)} disabled={guess !== null} onClick={() => setGuess(i)}>
@@ -215,7 +215,7 @@ export function StraightPush() {
           ["সামনে থেকে", front],
         ]}
       />
-      <Task done={front}>ফাহিমকে আগে পেছন থেকে ঠেলতে দিন। তারপর guess করুন সামনে থেকে ঠেললে বাক্স কী দেবে।</Task>
+      <Task done={front}>ফাহিমকে আগে পেছন থেকে ঠেলতে দিন। তারপর guess করুন সামনে থেকে ঠেললে box কী দেবে।</Task>
     </>
   );
 }
@@ -292,7 +292,7 @@ export function PushRing() {
     const next = [...seen, i];
     setSeen(next);
     if (next.includes(MAX) && next.includes(MIN) && ZEROS.some((z) => next.includes(z)))
-      pass("রাস্তার দিকে তাক করলে সবচেয়ে বেশি, ঠিক সোজা কোণে 0, আর 90° পেরোলেই minus। চিহ্নটা কোণের কথাই বলছে।");
+      pass("সোজা কোণে 0, 90° পেরোলেই minus।");
   };
   /** the ring spot nearest the tap, by compass bearing, so a tap anywhere in its slice counts */
   const pick = (p: XY) => {
@@ -359,7 +359,7 @@ export function PushRing() {
           ["সবচেয়ে কম", found.min],
         ]}
       />
-      <Task done={done}>ফাহিমকে বৃত্তের বিভিন্ন জায়গায় দাঁড় করান। বাক্সের সবচেয়ে বড় নম্বর, একটা শূন্য আর সবচেয়ে ছোট নম্বর খুঁজে বের করুন।</Task>
+      <Task done={done}>ফাহিমকে বৃত্তের বিভিন্ন জায়গায় দাঁড় করান। box এর সবচেয়ে বড় নম্বর, একটা শূন্য আর সবচেয়ে ছোট নম্বর খুঁজে বের করুন।</Task>
     </>
   );
 }
@@ -384,7 +384,7 @@ export function StrongPush() {
 
   const run = () => {
     setRan(true);
-    pass("বাঁকা হয়েও কুলির 30, সোজা ফাহিমের 25। বাক্সের নম্বরে দিক আর জোর দুইটাই মিশে থাকে।");
+    pass("box এ  দিক আর জোর, দুইটাই মেশে।");
   };
 
   return (
@@ -419,6 +419,13 @@ export function StrongPush() {
           ))}
         </div>
       </div>
+      {guess !== null && !ran && (
+        <div className={`${FADE} mt-3 flex justify-center`}>
+          <button type="button" onClick={run} className={primaryBtn}>
+            দুইজনকেই box এ  দিন
+          </button>
+        </div>
+      )}
       <div className="mt-2 text-sm font-medium text-muted">ভ্যানের কাজে কার ঠেলা বেশি লাগবে?</div>
       <div className="mt-2 grid gap-2">
         {STRONG_GUESS.map((o, i) => (
@@ -427,14 +434,7 @@ export function StrongPush() {
           </Choice>
         ))}
       </div>
-      {guess !== null && !ran && (
-        <div className={`${FADE} mt-3 flex justify-center`}>
-          <button type="button" onClick={run} className={primaryBtn}>
-            দুইজনকেই বাক্সে দিন
-          </button>
-        </div>
-      )}
-      <Task done={ran}>আগে guess দিন কার ঠেলা বেশি কাজে লাগবে, তারপর দুইজনকেই রাস্তার সাথে বাক্সে দিন।</Task>
+      <Task done={ran}>আগে guess করুন কার ঠেলা বেশি কাজে লাগবে, তারপর দুইজনকেই রাস্তার সাথে box এ  দিন।</Task>
     </>
   );
 }
@@ -488,7 +488,7 @@ export function CoinBox() {
   };
   const toss = () => {
     setHundred(true);
-    pass("মিল হলে +1, অমিল হলে −1। মিল আর অমিল সমান সমান হলেই বাক্সে 0, মানে সোজা কোণ। ২.৭-এর 90° আসলে এই বাক্সেরই 0।");
+    pass("মিল-অমিল সমান হলে 0, মানে সোজা কোণ।");
   };
 
   return (
@@ -513,7 +513,7 @@ export function CoinBox() {
           </div>
           {summed && (
             <div className={`${FADE} mt-2 text-center text-[0.95rem]`}>
-              দুইটা মিল, দুইটা অমিল: বাক্সে <b className="font-mono">0</b>
+              দুইটা মিল, দুইটা অমিল: box এ  <b className="font-mono">0</b>
             </div>
           )}
           {!summed ? (
@@ -545,19 +545,19 @@ export function CoinBox() {
         </>
       ) : (
         <div className={FADE}>
-          <div className="mt-2 text-center text-sm text-accent-text">✓ চার ঘরে দুই মিল, দুই অমিল: বাক্সে 0, কোণ 90°।</div>
+          <div className="mt-2 text-center text-sm text-accent-text">✓ চার ঘরে দুই মিল, দুই অমিল: box এ  0, কোণ 90°।</div>
           <div className="mx-auto mt-3 grid w-fit grid-cols-10 gap-1" aria-label={`একশো জোড়ার ${bn(MATCH100)}টা মিল`}>
             {BLUE100.map((v, i) => (
               <span key={i} className={`size-4 rounded-sm ${v === RED100[i] ? "bg-accent/70" : "bg-danger/60"}`} />
             ))}
           </div>
           <div className="mt-3 text-center text-[0.95rem]">
-            মিল <b className="font-mono">{MATCH100}</b>, অমিল <b className="font-mono">{100 - MATCH100}</b>, বাক্সে{" "}
+            মিল <b className="font-mono">{MATCH100}</b>, অমিল <b className="font-mono">{100 - MATCH100}</b>, box এ {" "}
             <b className="font-mono">{num(dot(BLUE100, RED100))}</b>। সব মিললে হতো 100।
           </div>
         </div>
       )}
-      <Task done={hundred}>আগে চার জোড়া coin বাক্সে দিন, তারপর কোণটা বলুন, শেষে 100 বার toss করে দেখুন।</Task>
+      <Task done={hundred}>আগে চার জোড়া coin box এ  দিন, তারপর কোণটা বলুন, শেষে 100 বার toss করে দেখুন।</Task>
     </>
   );
 }
@@ -590,7 +590,7 @@ export function FixTheCrew() {
   };
   const fix = () => {
     setFixed(true);
-    pass("রফিক উল্টো ঠেলছিল, −5, আর মামী কোনো কাজেই আসছিলেন না, 0। দুইজনকে পেছনে পাঠাতেই মোট 121, ভ্যান উঠে গেল।");
+    pass("উল্টো ঠেলা minus, অকাজের ঠেলা 0।");
   };
 
   return (
@@ -609,7 +609,7 @@ export function FixTheCrew() {
         )}
         {miss !== null && !all && (
           <Nope key={miss}>
-            উঁহু। মনে মনে বাক্সটা চালান: 4 গুণ প্রথম সংখ্যা, 3 গুণ দ্বিতীয় সংখ্যা, তারপর যোগ। উত্তর plus, শূন্য না minus?
+            উঁহু। মনে মনে boxটা চালান: 4 গুণ প্রথম সংখ্যা, 3 গুণ দ্বিতীয় সংখ্যা, তারপর যোগ। উত্তর plus, শূন্য না minus?
           </Nope>
         )}
       </div>
@@ -666,7 +666,7 @@ export function FixTheCrew() {
         </div>
       )}
       <Task done={fixed}>
-        প্রতিজনের ঠেলা রাস্তার সাথে মনে মনে বাক্সে দিয়ে বিচার করুন ({bn(done)}/{bn(CREW.length)})। তারপর ভ্যানটাকে কাদা থেকে তুলুন।
+        প্রতিজনের ঠেলা রাস্তার সাথে মনে মনে box এ  দিয়ে বিচার করুন ({bn(done)}/{bn(CREW.length)})। তারপর ভ্যানটাকে কাদা থেকে তুলুন।
       </Task>
     </>
   );

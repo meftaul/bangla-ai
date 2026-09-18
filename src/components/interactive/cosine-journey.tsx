@@ -59,7 +59,7 @@ export function WhoFits() {
 
   const seal = (i: number) => {
     setBet(i);
-    pass("বাজি সিল হলো। মামার 5.34 আর মামীর 4.09 আসলে কী মাপছে, আগে সেটা খুলে দেখা যাক।");
+    pass("বাজি সিল হলো, মিলিয়ে দেখবো শেষে।");
   };
 
   return (
@@ -101,7 +101,7 @@ export function LoudPerson() {
   const measure = (i: number) => !measured.includes(i) && setMeasured([...measured, i]);
   const double = () => {
     setDoubled(true);
-    pass("রুচি একই, শুধু মামা সবকিছুতে দ্বিগুণ নম্বর দিলেন, আর score-ও দ্বিগুণ। দৈর্ঘ্য শুধু ছবির থাকে না, মানুষেরও থাকে।");
+    pass("দ্বিগুণ নম্বর দিলে score-ও দ্বিগুণ।");
   };
 
   return (
@@ -194,7 +194,7 @@ export function RunBackwards() {
   };
   const practise = () => {
     setTried(true);
-    pass("বাক্সের নম্বর থেকে দুইটা দৈর্ঘ্য ভাগ করে দিলে পড়ে থাকে শুধু cos θ, মানে শুধু কোণের খবর।");
+    pass("দুই দৈর্ঘ্য ভাগ করলে থাকে শুধু cos θ।");
   };
 
   return (
@@ -267,7 +267,7 @@ export function ScaleCard() {
     if (i < 0 || hit.includes(i)) return;
     const next = [...hit, i];
     setHit(next);
-    if (next.length === MARKS.length) pass("0.9 মানে 90% মিল না, মানে প্রায় 26° দূরে। 0.5 মানে 60°, 0 মানে সোজা কোণ, আর −1 মানে একদম উল্টা।");
+    if (next.length === MARKS.length) pass("0.9 মানে 90% মিল না, 26° কোণ।");
   };
 
   return (
@@ -325,7 +325,7 @@ export function LastDivide() {
 
   const step = () => {
     setK(k + 1);
-    if (k + 1 === 2) pass("3.71 ÷ 5.39 = 0.69, আর পুরো সূত্রেও 20 ÷ 5.39 ÷ 5.39 = 0.69। ৩.৬ সব ধাপ করেছিল, শুধু শেষ ভাগটা বাকি ছিল।");
+    if (k + 1 === 2) pass("Cosine মানে box ÷ দুই দৈর্ঘ্য।");
   };
 
   return (
@@ -333,7 +333,7 @@ export function LastDivide() {
       <div className="mx-auto mt-2 max-w-sm rounded-xl border border-border bg-surface px-3 py-2 text-center">
         <div className="text-sm text-muted">৩.৬-এর নিয়মে মামা আর Titanic</div>
         <div className="text-[0.95rem]">
-          Titanic-কে 1 লম্বা করে তারপর বাক্স: <b className="font-mono">3.71</b>
+          Titanic-কে 1 লম্বা করে তারপর box: <b className="font-mono">3.71</b>
         </div>
       </div>
       <div className="mx-auto mt-3 grid max-w-sm gap-2">
@@ -347,7 +347,7 @@ export function LastDivide() {
         )}
         {k >= 2 && (
           <div className={`${FADE} rounded-xl border-2 border-cat-amber/40 bg-cat-amber/5 px-3 py-2 text-center`}>
-            <div className="text-xs text-muted">পুরো সূত্র: বাক্স ÷ মামার দৈর্ঘ্য ÷ Titanic-এর দৈর্ঘ্য</div>
+            <div className="text-xs text-muted">পুরো সূত্র: box ÷ মামার দৈর্ঘ্য ÷ Titanic-এর দৈর্ঘ্য</div>
             <div className="font-mono text-lg">
               20 ÷ 5.39 ÷ 5.39 = <b>0.69</b>
             </div>
@@ -384,7 +384,7 @@ export function NanuCard() {
     if (i !== 1) return setMiss((miss ?? 0) + 1);
     setMiss(null);
     setGot(true);
-    pass("শূন্য arrow-এর কোনো দিক নাই, তাই কোনো কোণও নাই। নতুন মানুষ বা খালি document আলাদা করে সামলাতে হয়।");
+    pass("শূন্য arrow-এর কোনো কোণ নাই।");
   };
 
   return (
@@ -453,7 +453,7 @@ export function VerdictCos() {
   };
   const flip = () => {
     setMirror(true);
-    pass("দুইটাই 0.991, একদম সমান! আয়নায় উল্টালেই মামা আর Mr. Bean হয়ে যায় Titanic আর মামী, তাই কোণও একই।");
+    pass("আয়নায় উল্টালেও কোণ একই: 0.991।");
   };
   const pair = (a: XY) => (mirror ? swap(a) : a);
 
@@ -469,7 +469,7 @@ export function VerdictCos() {
         </Plane>
         <div className="grid min-w-0 flex-1 gap-1 text-xs">
           <div className="rounded-lg bg-surface px-2 py-1">
-            বাক্স: মামা · Bean = <b className="font-mono">22</b>, মামী · Titanic = <b className="font-mono">22</b>
+            box: মামা · Bean = <b className="font-mono">22</b>, মামী · Titanic = <b className="font-mono">22</b>
           </div>
           <div className="rounded-lg bg-surface px-2 py-1">
             দৈর্ঘ্য: মামা, Titanic <b className="font-mono">5.39</b>; মামী, Bean <b className="font-mono">4.12</b>
@@ -492,7 +492,7 @@ export function VerdictCos() {
               </button>
             ))}
           </div>
-          {miss !== null && <Nope key={miss}>উঁহু। বাক্সের নম্বরটাকে দুইজনের দৈর্ঘ্য দিয়েই ভাগ করতে হবে, একজনের দিয়ে না।</Nope>}
+          {miss !== null && <Nope key={miss}>উঁহু। box এর নম্বরটাকে দুইজনের দৈর্ঘ্য দিয়েই ভাগ করতে হবে, একজনের দিয়ে না।</Nope>}
         </>
       ) : (
         <div className={`${FADE} mt-3 text-center`}>

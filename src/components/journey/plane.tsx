@@ -42,6 +42,9 @@ export function makeFrame(x0: number, x1: number, y0: number, y1: number, u: num
 }
 export type Frame = ReturnType<typeof makeFrame>;
 
+/** The most of the screen's height one sheet may take (see Plane). */
+const PAPER_MAX_VH = 44;
+
 /** The nearest grid crossing that is still on the sheet. */
 export const snap = (p: XY, f: Frame): XY => [
   clamp(Math.round(p[0]), Math.ceil(f.x0), Math.floor(f.x1)),
@@ -128,6 +131,11 @@ export function Plane({
       onPointerUp={drag ? release : undefined}
       onPointerCancel={drag ? release : undefined}
       onKeyDown={onKey}
+      // Never taller than PAPER_MAX_VH of the screen: a tall frame at full width
+      // (many are 1.5–2× taller than wide) pushes the controls that drive it off
+      // a laptop's screen. Width, not height, so the viewBox is never letterboxed
+      // and `at` still maps the whole box onto the frame.
+      style={{ width: `min(100%, ${((f.W / f.H) * PAPER_MAX_VH).toFixed(2)}svh)` }}
     >
       {paper && (
         <rect
