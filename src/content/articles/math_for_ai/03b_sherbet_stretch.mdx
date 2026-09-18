@@ -1,0 +1,261 @@
+export const metadata = {
+  title: "Math for AI 3.2 — Stretch, শরবতের recipe",
+  description: "মেলার শরবতের stall-এ লাইন একবার লম্বা, একবার ছোট। Recipe card-কে একটা সংখ্যা দিয়ে গুণ করলে কী হয়, আর কখন গুণ করলেও জিনিসটাই বদলে যায়।",
+  type: "article",
+};
+
+{/* Told as a Brilliant-style journey, like 3.1: one screen at a time, each
+    with a visual and one thing to do, and the Continue arrow stays locked
+    until it is done. Each screen opens with a line or two of story; the
+    explanation sits in <Then> and shows only once the task is done. The
+    screens live in components/interactive/sherbet-journey.tsx. The second of
+    seven "Vector-এর অঙ্ক" journeys (Article 3); the plan is in
+    03_journey_specs.md. */}
+
+import { Journey, Step, Check, Then } from "@/components/journey/journey";
+import {
+  SherbetQueue,
+  RecipeOnPaper,
+  SaminTurns,
+  HealthBoard,
+  MoreGlasses,
+  TasteLine,
+  StretchKnob,
+  FiveCases,
+  FlipThenAdd,
+  GramsClue,
+  SayIt,
+  DoubleBatch,
+  ArrowTurns,
+  ShikuBackward,
+  LambdaEverySlot,
+  MapSquash,
+  OneInLine,
+  LemonStairs,
+  PerLemon,
+  TipOnRail,
+  ZeroShrink,
+  TwoQuestions,
+  ScaleToScalar,
+  SubtractAsAdd,
+  SixMinusTwo,
+  OneSlotOnly,
+  KgOrGram,
+  LambdaKnob,
+  HalfEachSlot,
+  TwoMoves,
+  NextPuzzle,
+} from "@/components/interactive/sherbet-journey";
+
+<Journey title="Vector-এর অঙ্ক · ৩.২">
+
+<Step>
+
+Treasure খোঁজা শেষ, মাঠে এখন কড়া রোদ। ফাহিমদের stall-এর এক পাশে লেবুর শরবত বিক্রি হচ্ছে, আর recipe-র কাগজটা সামিনের হাতে। সেখানে লেখা: ৪ গ্লাসের জন্য ২টা লেবু আর ৪ চামচ চিনি। Card-টাও কিন্তু একটা vector, (লেবু, চিনি)=(2,4)।
+
+কিন্তু লাইনে এখন দাঁড়িয়ে আছে ৮ জন।
+
+<SherbetQueue story />
+
+<MoreGlasses />
+
+<Then>
+
+খেয়াল করেছেন, দুই ব্যাচ বানানো মানে একই card দুইবার যোগ করা? আর আমরা জানি, যোগ হয় ঘরে ঘরে। তাই লেবুর ঘরটাও দ্বিগুণ হলো, চিনির ঘরটাও দ্বিগুণ হলো, কেউ পিছিয়ে থাকলো না। লম্বা করে $(2, 4) + (2, 4)$ না লিখে ছোট করে লেখা যায় $2 \cdot (2, 4) = (4, 8)$। পুরো vector-কে একটা সংখ্যা দিয়ে গুণ করতে হলে প্রতিটা ঘরকে ওই সংখ্যা দিয়ে গুণ করলেই হয়।
+
+<DoubleBatch />
+
+তবে লাইনে যদি মাত্র একজন দাঁড়ায়? তখন তো card “অর্ধেকবার” যোগ করা যায় না।
+
+<OneInLine />
+
+</Then>
+
+</Step>
+
+<Step>
+
+সামিন recipe-টা গ্রাফ পেপারে তুলে ফেললো। ডানে লেবুর সংখ্যা, ওপরে চিনি কয় চামচ লাগবে, আর ৪ গ্লাসের recipe হলো কাগজের ওপর একটা dot। গ্লাস কম-বেশি করলে dot-টা কোথায় কোথায় যায়, দেখুন তো।
+
+<RecipeOnPaper story />
+
+<TasteLine />
+
+<Then>
+
+Dot-গুলো কোথায় বসলো, একবার তাকান। ১ গ্লাস, ২ গ্লাস, ৪ গ্লাস, ৮ গ্লাস, সবাই একটা সোজা লাইনে, আর লাইনটা বেরিয়েছে ঠিক $(0, 0)$ থেকে। কারণ গ্লাস যতই হোক, প্রতিটা লেবুর সাথে যায় ২ চামচ চিনি। একজনের জন্য আধা লেবু আর ১ চামচ, মানে $\frac{1}{4} \cdot (2, 4) = (0.5, 1)$। গুণের সংখ্যাটা 1-এর চেয়ে ছোট হলেও নিয়ম একই।
+
+<LemonStairs />
+
+নাসিবের শরবতে লেবু আগের মতোই আছে, শুধু চিনি ডাবল করা হয়েছে। একটা ঘর একা বাড়ালে লেবু আর চিনির relation-টাই বদলে যায়, তাই dot লাইন থেকে ছিটকে পড়ে, আর শরবতের স্বাদও change হয়।
+
+<PerLemon />
+
+Arrow-এর ভাষায় বললে: **পুরো vector-কে গুণ করলে দিক বদলায় না, বদলায় শুধু কতদূর যাবে। কিন্তু একটা ঘরকে একা গুণ করলে দিকটাই ঘুরে যায়।** কথাটা মাথায় রাখুন, এই lesson-এর শেষেই আবার লাগবে।
+
+<ArrowTurns />
+
+</Then>
+
+</Step>
+
+<Step>
+
+শরবত একটু পাশে রাখি। খালি গ্রাফ পেপারে একটা arrow, $(1, 2)$, আর একটা knob যেটা দিয়ে arrow-টাকে যেকোনো সংখ্যা দিয়ে গুণ করা যায়। Minus সংখ্যা দিয়েও, এমনকি শূন্য দিয়েও।
+
+<StretchKnob />
+
+<Then>
+
+Knob যেখানেই ঘোরান, arrow-এর মাথা যে পথ বরাবর গেল, সেটা কিন্তু একই লাইনে, $(0, 0)$-এর এপারে আর ওপারে। গুণ করে arrow লম্বা করা যায়, খাটো করা যায়, উল্টেও দেওয়া যায়, কিন্তু লাইন থেকে সরানো যায় না। শরবতের dot-গুলোর সাথে মিল পাচ্ছেন?
+
+<TipOnRail />
+
+Minus-এর কাজটাও চেনা। minus মানে ছিল উল্টো দিকে হাঁটা, এখানেও তাই। $-2$ দিয়ে গুণ মানে উল্টো দিকে দ্বিগুণ।
+
+<ShikuBackward />
+
+আর 0 দিয়ে গুণ করলে arrow গুটিয়ে একটা বিন্দু, $(0, 0)$। কোথাও যায় না, তাই ওর কোনো দিকও নাই।
+
+<ZeroShrink />
+
+</Then>
+
+</Step>
+
+<Step>
+
+এবার knob ছাড়া মাথা খাটিয়ে করে দেখি। প্রতিটা card-এ একটা সংখ্যা। $(1, 2)$-কে ওই সংখ্যা দিয়ে গুণ করলে arrow-টার কী দশা হবে?
+
+<FiveCases />
+
+<Then>
+
+প্রতিটা সারির নিচের সবুজ লেখাগুলো দেখুন। পাঁচ রকমের অবস্থা, কিন্তু কোনটা ঘটবে সেটা বলে দিতে দুইটা প্রশ্নই যথেষ্ট। সংখ্যাটার আগে minus আছে কি? থাকলে arrow উল্টাবে। আর minus বাদ দিলে সংখ্যাটা 1-এর চেয়ে বড় না ছোট? বড় হলে লম্বা, ছোট হলে খাটো। ঠিক 0 হলে arrow-ই নাই।
+
+<TwoQuestions />
+
+এরকম একা একটা সংখ্যা, যেটা vector-কে শুধু টেনে লম্বা করে, খাটো করে বা উল্টে ফেলে, তার নাম **scalar**। নামটা এসেছে scale থেকে। Scale দিয়ে আমরা মাপি, আর scalar vector-এর সামনে বসে তার মাপটাই বদলে ফেলে। Paper-এ scalar-কে প্রায়ই লেখা হয় গ্রিক অক্ষর $\lambda$ দিয়ে, পড়তে হয় lambda।
+
+<ScaleToScalar />
+
+তাহলে নিয়মটা দাঁড়ায়:
+
+$$\lambda v = (\lambda v_1,\; \lambda v_2)$$
+
+ঘর দুইটা হোক বা দুই হাজার, প্রতিটা ঘর একই $\lambda$ দিয়ে গুণ হয়।
+
+<LambdaEverySlot />
+
+</Then>
+
+</Step>
+
+<Step>
+
+সামিন দাঁড়িয়ে ছিল $(2, 1)$-এ, আর treasure ছিল $(6, 4)$-এ। $(2, 1)$ থেকে কোন card ধরে হাঁটলে $(6, 4)$-এ পৌঁছানো যায়, সেটা $(6, 4)$ থেকে $(2, 1)$ বিয়োগ করে পেয়েছিলেন। এবার বিয়োগ না করে অন্য রাস্তা ধরি: সামিনের arrow উল্টে দিয়ে গুপ্তধনের arrow-এর সাথে যোগ করি।
+
+<SaminTurns story />
+
+<FlipThenAdd />
+
+<Then>
+
+Arrow উল্টানো মানে তো $-1$ দিয়ে গুণ, তারপর একদম সাধারণ যোগ। অথচ result হুবহু বিয়োগের মতো। তার মানে বিয়োগকে আলাদা করে মনে রাখার দরকারই নাই:
+
+$$u - v = u + (-1)v$$
+
+<SubtractAsAdd />
+
+শুনে অবাক হওয়ারও কিছু নাই। $6 - 2$ আর $6 + (-2)$ তো একই কথা।
+
+<SixMinusTwo />
+
+</Then>
+
+</Step>
+
+<Step>
+
+মেলার এক কোণে ডাক্তার আপার health stall বসেছে। Board-এ তিনজনের card দেখা যাচ্ছে (উচ্চতা cm, ওজন kg)। আর ওদের মাঝের দূরত্ব মেপে বের করা হচ্ছে, A-এর সবচেয়ে কাছাকাছি গড়নের কে।
+
+এক volunteer বললো, “kg-তে দশমিক আসে, gram-এ convert করে লিখি।” Gram মানে 1000 দিয়ে গুণ। একটু আগেই তো দেখলেন, গুণ করলে দিক বদলায় না।
+
+<HealthBoard story />
+
+<GramsClue />
+
+<Then>
+
+দুই button-ই 1000 দিয়ে গুণ করলো, অথচ ফল হলো উল্টা। difference কোথায়? প্রথমবার গুণ হয়েছে পুরো card, দুই ঘর একসাথে। তাতে সবার সাথে সবার distance ঠিক 1000 গুণ হলো, কে কাছে আর কে দূরে সেই order-টা বদলালো না। দ্বিতীয়বার গুণ হয়েছে শুধু ওজনের ঘর। শরবতে নাসিব যেমন শুধু চিনি ডাবল করেছিল, হুবহু সেই কাজ।
+
+<OneSlotOnly />
+
+ওজনের difference-টা ফুলেফেঁপে এত বড় হলো যে height-এর difference আর চোখেই পড়ে না।
+
+<MapSquash />
+
+তাই gram-এ লেখাটা আসলে vector stretch করা না। মানুষগুলো একই আছে, অথচ A-এর সাথে আগে যার বেশি মিল ছিল, সে-ই বদলে গেল। তাহলে ঠিক উত্তর কোনটা, kg না gram? প্রশ্নটার উত্তর দিতে আরও কয়েকটা জিনিস লাগবে। মেলার শেষে ডাক্তার আপার stall-এ আবার ফিরবো।
+
+<KgOrGram />
+
+</Then>
+
+</Step>
+
+<Step>
+
+এতক্ষণ হাতে-কলমে যা করলেন, academic বইগুলোতে সেগুলো এই symbol-গুলো দিয়ে লেখা থাকে। প্রত্যেকটা card উল্টানোর আগে মুখে বলে দেখুন।
+
+<SayIt />
+
+<Then>
+
+বইপত্রে $\lambda$ দেখলে মনে মনে knob-টা ধরুন, একটা সংখ্যা যেটা arrow-কে টেনে লম্বা করে, খাটো করে বা উল্টে ফেলে।
+
+<LambdaKnob />
+
+</Then>
+
+</Step>
+
+<Step>
+
+## একটু ঝালিয়ে নিন
+
+<Check
+  question="0.5 · (4, 6) = ?"
+  options={["(4.5, 6.5)", "(2, 3)", "(2, 6)"]}
+  answer={1}
+  hint="0.5 মানে অর্ধেক। প্রতিটা ঘরের অর্ধেক নিন, শুধু একটার না।"
+>
+
+প্রথম ঘরে $0.5 \times 4 = 2$, দ্বিতীয় ঘরে $0.5 \times 6 = 3$। অর্ধেক গ্লাসের শরবত, স্বাদ একই।
+
+<HalfEachSlot />
+
+</Check>
+
+<Then>
+
+শরবতের লাইন এতক্ষণে ফাঁকা। হাতে এখন দুইটা চাল: যোগ, আর একটা সংখ্যা দিয়ে stretch। বিয়োগ আলাদা কিছু না, ওটা এক প্রকার যোগ।
+
+<TwoMoves />
+
+ওদিকে class-এর poster-এ লিখতে হবে average-এ আমাদের class-এর student-দের গড়ন কেমন, আর snack table-এ আম্মুর টিফিন দিয়ে combo box বানানো হচ্ছে। দুইটা কাজেই নতুন কিছু লাগবে না, এই দুইটাকে জোড়া দিলেই হবে। কীভাবে, সেটা পরের journey-তে।
+
+<NextPuzzle />
+
+<LessonLink
+  href="/dashboard/articles/math_for_ai/03c_tiffin_recipe"
+  eyebrow="পরের পাঠ"
+  title="Recipe, টিফিন বক্সের অঙ্ক"
+>
+  যোগ আর stretch জোড়া দিয়ে class-এর average গড়ন, combo box, আর vector-এর সংখ্যাগুলোর আসল মানে।
+</LessonLink>
+
+</Then>
+
+</Step>
+
+</Journey>

@@ -2,6 +2,8 @@
 
 import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from "react";
 
+import { bn } from "@/components/interactive/figure-kit";
+
 // Small shared pieces for Journey screens (image-journey.tsx, binary-journey.tsx):
 // the motion vocabulary, two playback hooks, and the bits of chrome every screen
 // uses — speech bubbles, predict-then-watch choices, sub-goal ticks, buttons.
@@ -105,7 +107,8 @@ export function useTween(target: number[], ms: number, start?: number[]): number
     const tick = (t: number) => {
       const p = calm ? 1 : Math.min(1, (t - t0) / ms);
       const e = 1 - (1 - p) ** 3;
-      const next = to.map((b, i) => from[i] + (b - from[i]) * e);
+      // A number with no previous value (the list grew) starts where it is.
+      const next = to.map((b, i) => (from[i] === undefined ? b : from[i] + (b - from[i]) * e));
       at.current = next;
       setNow(next);
       if (p < 1) raf = requestAnimationFrame(tick);
@@ -114,6 +117,149 @@ export function useTween(target: number[], ms: number, start?: number[]): number
     return () => cancelAnimationFrame(raf);
   }, [key, ms]);
   return now;
+}
+
+// ---------------------------------------------------------------------------
+// Scenes: a figure that acts out what the words describe, in beats 1…steps.
+//
+// A scene never starts by itself. It waits on its first frame with two ways
+// in: "একবারে দেখুন" plays every beat on a timer (one per `ms`, or `ms[k]`
+// before beat k + 1), and "ধাপে ধাপে" lets the reader walk the beats with
+// আগের / পরের at their own pace (tapping it mid-play takes over from there).
+// Reduced motion opens on the last beat; a preview (`npm run shot`) does too,
+// unless its seed sets `k`.
+
+/**
+ * `k` = beats shown so far, 0…steps. `play()` runs it from the start,
+ * `step(±1)` moves one beat by hand. Put it in a <Scene> or a cast
+ * <StoryFrame>, which draw the controls.
+ */
+export function useScene(steps: number, ms: number | readonly number[]) {
+  const [k, setK] = useSeed("k", useContext(SeedCtx) ? steps : 0);
+  const [on, setOn] = useState(false);
+  const [stepping, setStepping] = useSeed("stepping", false);
+
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) setK(steps);
+  }, [steps, setK]);
+
+  const wait = typeof ms === "number" ? ms : (ms[k] ?? ms[ms.length - 1]);
+  useEffect(() => {
+    if (!on || k >= steps) return;
+    const t = setTimeout(() => setK(k + 1), wait);
+    return () => clearTimeout(t);
+  }, [on, k, steps, wait, setK]);
+
+  /** every beat from the start, on the timer */
+  const play = () => {
+    const calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    setStepping(false);
+    setK(calm ? steps : 0);
+    setOn(!calm);
+  };
+  /** one beat back or forward by hand; stops the timer */
+  const step = (d: 1 | -1) => {
+    setOn(false);
+    setStepping(true);
+    setK(Math.min(steps, Math.max(0, k + d)));
+  };
+  /** switch to walking it by hand: from where it is if it is part-way, else from beat 1 */
+  const byHand = () => {
+    setOn(false);
+    setStepping(true);
+    setK(k > 0 && k < steps ? k : 1);
+  };
+  return { k, steps, done: k >= steps, playing: on && k < steps, stepping, play, replay: play, step, byHand };
+}
+
+export type SceneState = ReturnType<typeof useScene>;
+
+const ctlBtn =
+  "cursor-pointer rounded-full px-3 py-1 text-sm font-semibold transition-colors duration-200 disabled:cursor-default disabled:opacity-35 motion-reduce:transition-none";
+const ctlMain = `${ctlBtn} bg-cat-blue text-white hover:bg-cat-blue/85`;
+const ctlQuiet = `${ctlBtn} border border-border text-foreground hover:border-cat-blue/60 hover:bg-cat-blue/5`;
+
+/**
+ * The two ways to watch a scene. Before and after a run: "একবারে দেখুন" (or
+ * "আবার দেখুন") and "ধাপে ধাপে". While stepping: আগের, where it is, পরের,
+ * and a way back to watching it all.
+ */
+export function SceneControls({ scene: { k, steps, done, playing, stepping, play, step, byHand } }: { scene: SceneState }) {
+  if (stepping)
+    return (
+      <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1">
+        <button type="button" onClick={() => step(-1)} disabled={k <= 0} className={ctlQuiet} aria-label="আগের ধাপ">
+          ← আগের
+        </button>
+        <span className="min-w-12 text-center text-sm text-muted tabular-nums" aria-live="polite">
+          {bn(k)} / {bn(steps)}
+        </span>
+        <button type="button" onClick={() => step(1)} disabled={done} className={ctlMain} aria-label="পরের ধাপ">
+          পরের →
+        </button>
+        <button type="button" onClick={play} className="cursor-pointer px-1.5 text-sm text-muted underline-offset-2 hover:text-foreground hover:underline">
+          একবারে দেখুন
+        </button>
+      </div>
+    );
+  return (
+    <div className="flex items-center justify-center gap-2">
+      {playing ? (
+        <span className="text-sm text-muted tabular-nums">
+          চলছে… {bn(k)} / {bn(steps)}
+        </span>
+      ) : (
+        <button type="button" onClick={play} className={ctlMain}>
+          {done ? "আবার দেখুন" : "একবারে দেখুন"}
+        </button>
+      )}
+      <button type="button" onClick={byHand} className={ctlQuiet}>
+        ধাপে ধাপে
+      </button>
+    </div>
+  );
+}
+
+/**
+ * How much a scene's drawing grows on a bigger screen. A figure is drawn for a
+ * phone (≤ ~260px tall); a tablet or laptop has more room, so the drawing is
+ * zoomed, never the caption or the controls. Each step needs the height as well
+ * as the width, because the Journey is one screen tall: a short laptop or a
+ * phone on its side stays at ×1 rather than push the words off the screen.
+ * Class strings stay literal so Tailwind sees them. Sizes are in rem with the
+ * same digit count (40/48/64/80rem = 640/768/1024/1280px): Tailwind sorts these
+ * variants as text, and when several steps match, the last one wins, so the
+ * text order must be the size order ("1024px" would sort before "640px").
+ */
+export const GROW =
+  "[@media(min-width:40rem)_and_(min-height:40rem)]:[zoom:1.2] [@media(min-width:48rem)_and_(min-height:47.5rem)]:[zoom:1.35] [@media(min-width:64rem)_and_(min-height:53.75rem)]:[zoom:1.5] [@media(min-width:80rem)_and_(min-height:62.5rem)]:[zoom:1.7]";
+/**
+ * The same idea for a step's widget, which is taller than a figure (up to
+ * ~460px on a phone) and must still fit one screen with its Task and Continue,
+ * so it grows less and needs more height for each step. A wrapper whose direct
+ * child says `data-nogrow` (the review Check: big text, nothing to see) stays ×1.
+ */
+export const GROW_WIDGET =
+  "[@media(min-width:40rem)_and_(min-height:48.75rem)]:[zoom:1.15] [@media(min-width:48rem)_and_(min-height:56.25rem)]:[zoom:1.3] [@media(min-width:64rem)_and_(min-height:65rem)]:[zoom:1.45] has-[>[data-nogrow]]:[zoom:1]!";
+/** The same steps as widths, for a frame that scales by width alone (a cast Stage is an SVG). */
+export const GROW_WIDE =
+  "max-w-[22rem] [@media(min-width:40rem)_and_(min-height:40rem)]:max-w-[26.4rem] [@media(min-width:48rem)_and_(min-height:47.5rem)]:max-w-[29.7rem] [@media(min-width:64rem)_and_(min-height:53.75rem)]:max-w-[33rem] [@media(min-width:80rem)_and_(min-height:62.5rem)]:max-w-[37.4rem]";
+
+/**
+ * The frame for a scene: the drawing, a caption under it (what to look at, or
+ * what this beat says), and the controls to watch it all or step through it.
+ * The drawing grows on bigger screens (GROW); the words and buttons don't.
+ */
+export function Scene({ scene, caption, children }: { scene: SceneState; caption?: ReactNode; children: ReactNode }) {
+  return (
+    <div className="my-4 rounded-2xl border border-border bg-foreground/[0.02] px-3 pt-3 pb-2.5">
+      <div className={GROW}>{children}</div>
+      {caption ? <div className="mx-auto mt-2 min-h-10 max-w-xs text-center text-sm leading-snug text-muted sm:max-w-md">{caption}</div> : null}
+      <div className="mt-2">
+        <SceneControls scene={scene} />
+      </div>
+    </div>
+  );
 }
 
 // ---------------------------------------------------------------------------
@@ -224,15 +370,18 @@ export function Choice({
   );
 }
 
-/** Small sub-goals of one screen, each ticked as it is met. */
+/**
+ * Small sub-goals of one screen, each ticked as it is met. Plain text with a
+ * tick, no border: they report progress and must not pass for buttons.
+ */
 export function Ticks({ items }: { items: [label: string, done: boolean][] }) {
   return (
-    <div className="mt-3 flex flex-wrap justify-center gap-2">
+    <div className="mt-3 flex flex-wrap justify-center gap-x-3.5 gap-y-1">
       {items.map(([label, done]) => (
         <span
           key={label}
-          className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm transition-colors duration-300 ${
-            done ? "win-pop border-accent/50 bg-accent/10 text-accent-text" : "border-border text-muted"
+          className={`inline-flex items-center gap-1.5 text-sm transition-colors duration-300 motion-reduce:transition-none ${
+            done ? "win-pop text-accent-text" : "text-muted"
           }`}
         >
           <span
