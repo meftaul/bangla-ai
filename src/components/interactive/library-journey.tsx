@@ -79,7 +79,7 @@ export function TwoMachines() {
 
   const seal = (i: number) => {
     setBet(i);
-    pass("বাজি সিল হলো। দুইটা machine একই বই, একই শব্দ দেখছে। তাহলে গরমিলটা কোথায়, নিজের হাতে চালিয়ে দেখি।");
+    pass("বাজি সিল হলো, মিলিয়ে দেখবো শেষে।");
   };
 
   return (
@@ -127,7 +127,7 @@ export function DotRanking() {
     if (ran.includes(id)) return;
     const next = [...ran, id];
     setRan(next);
-    if (next.length === BOOKS.length) pass("বাক্স বলছে নৌকা-ধানের বই মাছের চিঠির চেয়ে বেশি মানানসই, 3 বনাম 2। বইটা মাছ নিয়ে না, শুধু লম্বা।");
+    if (next.length === BOOKS.length) pass("box জেতায় লম্বা বইকে, মানানসইকে না।");
   };
 
   return (
@@ -138,7 +138,7 @@ export function DotRanking() {
       </div>
       <div className="mt-3 grid gap-2">
         {BOOKS.map((b) => (
-          <BookRow key={b.id} name={b.name} v={b.v} score={String(dot(QUERY, b.v))} on={ran.includes(b.id)} onClick={() => run(b.id)} label="বাক্সে দিন" />
+          <BookRow key={b.id} name={b.name} v={b.v} score={String(dot(QUERY, b.v))} on={ran.includes(b.id)} onClick={() => run(b.id)} label="box এ  দিন" />
         ))}
       </div>
       {all && (
@@ -146,7 +146,7 @@ export function DotRanking() {
           ক্রম: <b>মোটা বই</b> 20, <b className="text-cat-coral">নৌকা-ধান</b> 3, <b>চিঠি</b> 2
         </div>
       )}
-      <Task done={all}>প্রশ্নটা প্রতিটা বইয়ের সাথে বাক্সে দিন।</Task>
+      <Task done={all}>প্রশ্নটা প্রতিটা বইয়ের সাথে box এ  দিন।</Task>
     </>
   );
 }
@@ -164,7 +164,7 @@ export function CosRanking() {
     if (ran.includes(id)) return;
     const next = [...ran, id];
     setRan(next);
-    if (next.length === BOOKS.length) pass("দৈর্ঘ্য ভাগ করতেই দুইটা মাছের বই প্রায় নিখুঁত মিল, আর নৌকা-ধানের বই নেমে গেল সবার নিচে।");
+    if (next.length === BOOKS.length) pass("দৈর্ঘ্য ভাগ করতেই মাছের বই উপরে।");
   };
 
   return (
@@ -184,7 +184,7 @@ export function CosRanking() {
           </div>
         ))}
       </div>
-      <Task done={all}>প্রতিটা বইয়ের বাক্সের নম্বরকে দুইটা দৈর্ঘ্য দিয়ে ভাগ করুন।</Task>
+      <Task done={all}>প্রতিটা বইয়ের box এর নম্বরকে দুইটা দৈর্ঘ্য দিয়ে ভাগ করুন।</Task>
     </>
   );
 }
@@ -217,7 +217,7 @@ export function LoudForBoth() {
     if (seen.includes(r)) return;
     const next = [...seen, r];
     setSeen(next);
-    if (next.length === 2) pass("বাক্সে হইচই জেতে দুইজনের কাছেই, মামা আর মামী দুইজনের। যে ছবি সবার কাছে জেতে, সে মানানসই বলে জেতে না, লম্বা বলে জেতে।");
+    if (next.length === 2) pass("যে সবার কাছে জেতে, সে জেতে লম্বা বলে।");
   };
 
   return (
@@ -226,7 +226,7 @@ export function LoudForBoth() {
         নতুন ছবি <b>হইচই</b> <span className="font-mono">(5, 5)</span>: কান্নাও বেশি, হাসিও বেশি
       </div>
       <div className="mt-3 flex justify-center gap-2">
-        {["বাক্স", "cosine"].map((r, i) => (
+        {["box", "cosine"].map((r, i) => (
           <button key={r} type="button" onClick={() => pick(i as 0 | 1)} className={`${pill(rule === i)} font-sans`}>
             {r}
           </button>
@@ -260,7 +260,7 @@ export function LoudForBoth() {
       </div>
       <Ticks
         items={[
-          ["বাক্স দিয়ে", seen.includes(0)],
+          ["box দিয়ে", seen.includes(0)],
           ["cosine দিয়ে", seen.includes(1)],
         ]}
       />
@@ -282,7 +282,7 @@ const LENGTH_JOBS = [
   { t: "যে ছবি সবাই দেখে, সেটা সবাইকে একটু বেশি দেখানো", bin: 0 },
 ];
 const LENGTH_BINS = [
-  { name: "বাক্স", sub: "দৈর্ঘ্যও আসল খবর" },
+  { name: "box", sub: "দৈর্ঘ্যও আসল খবর" },
   { name: "cosine", sub: "শুধু দিক, দৈর্ঘ্য ঝামেলা" },
 ];
 
@@ -298,7 +298,7 @@ export function LengthIsNews() {
     if (b !== job.bin) return setMiss((miss ?? 0) + 1);
     setMiss(null);
     setDone(done + 1);
-    if (done + 1 === LENGTH_JOBS.length) pass("প্রশ্ন একটাই: দৈর্ঘ্য কি এখানে আসল খবর? গরুর দাম আর মোট ঠেলায় হ্যাঁ, তাই বাক্স। শুধু “কী ধরনের জিনিস” জানতে চাইলে না, তাই cosine।");
+    if (done + 1 === LENGTH_JOBS.length) pass("আসল প্রশ্ন: দৈর্ঘ্য কি এখানে খবর?");
   };
 
   return (
@@ -342,7 +342,7 @@ export function LengthIsNews() {
 
 const UNIT = BOOKS.map((b) => ({ ...b, u: b.v.map((x) => x / len(b.v)) }));
 const RULERS = [
-  { name: "শুধু বাক্স", score: (u: number[]) => dot(QUERY, u), low: false },
+  { name: "শুধু box", score: (u: number[]) => dot(QUERY, u), low: false },
   { name: "cosine", score: (u: number[]) => cosQ(u), low: false },
   { name: "দূরত্ব", score: (u: number[]) => len(u.map((x, i) => x - QUERY[i])), low: true },
 ];
@@ -356,7 +356,7 @@ export function OneRanking() {
     if (seen.includes(i)) return;
     const next = [...seen, i];
     setSeen(next);
-    if (next.length === RULERS.length) pass("একবার normalise, তারপর শুধু বাক্স। বাক্স, cosine আর দূরত্ব, তিনটা মাপ একই ক্রম দেয়।");
+    if (next.length === RULERS.length) pass("একবার normalise, তিন মাপ একই ক্রম।");
   };
 
   return (
@@ -429,7 +429,7 @@ export function WhoIsIt() {
 
   const run = () => {
     setRan(true);
-    if (round === 1) pass("“ওটা”-র প্রশ্নের সাথে প্রতিটা শব্দের চাবি বাক্সে দিলে যে সবচেয়ে বড় নম্বর পায়, “ওটা” তার দিকেই তাকায়। বাক্য বদলালে প্রশ্ন বদলায়, উত্তরও বদলায়।");
+    if (round === 1) pass("“ওটা” তাকায় সবচেয়ে বড় box এর দিকে।");
   };
 
   return (
@@ -462,7 +462,7 @@ export function WhoIsIt() {
       <div className="mt-3 flex justify-center">
         {!ran ? (
           <button type="button" onClick={run} className={`${pill(false)} font-sans`}>
-            প্রশ্নটা প্রতিটা চাবির সাথে বাক্সে দিন
+            প্রশ্নটা প্রতিটা চাবির সাথে box এ  দিন
           </button>
         ) : round === 0 ? (
           <button
@@ -488,7 +488,7 @@ export function WhoIsIt() {
           ["টাটকা ছিল", round === 1 && ran],
         ]}
       />
-      <Task done={round === 1 && ran}>“ওটা”-র প্রশ্ন প্রতিটা শব্দের সাথে বাক্সে দিন, তারপর বাক্যটা বদলে আবার দেখুন।</Task>
+      <Task done={round === 1 && ran}>“ওটা”-র প্রশ্ন প্রতিটা শব্দের সাথে box এ  দিন, তারপর বাক্যটা বদলে আবার দেখুন।</Task>
     </>
   );
 }
@@ -500,11 +500,11 @@ export function WhoIsIt() {
 const TOOL_JOBS = [
   { t: "Chatbot-কে প্রশ্ন করলে, কোন অনুচ্ছেদের মানে প্রশ্নের সবচেয়ে কাছে", bin: 1 },
   { t: "দালালের knob দিয়ে একটা ছাগলের দাম", bin: 0 },
-  { t: "ডাক্তার আপার যমজ খেলা, standardise করার পর কে কার সবচেয়ে কাছে দাঁড়িয়ে", bin: 2 },
+  { t: "ডাক্তার আপার twin খেলা, standardise করার পর কে কার সবচেয়ে কাছে দাঁড়িয়ে", bin: 2 },
   { t: "লম্বা-ছোট হাজারটা খবরের মধ্যে “বন্যা” নিয়ে খবর খোঁজা", bin: 1 },
   { t: "ফাহিমের final number, নম্বর আর weight মিলিয়ে", bin: 0 },
 ];
-const TOOLS = ["বাক্স", "cosine", "দূরত্ব"];
+const TOOLS = ["box", "cosine", "দূরত্ব"];
 
 export function PickTool() {
   const pass = useGate();
@@ -518,7 +518,7 @@ export function PickTool() {
     if (b !== job.bin) return setMiss((miss ?? 0) + 1);
     setMiss(null);
     setDone(done + 1);
-    if (done + 1 === TOOL_JOBS.length) pass("দৈর্ঘ্য খবর হলে বাক্স, শুধু দিক চাইলে cosine, আর “কে কোথায় দাঁড়িয়ে” জানতে চাইলে দূরত্ব।");
+    if (done + 1 === TOOL_JOBS.length) pass("দৈর্ঘ্যে box, দিকে cosine, জায়গায় দূরত্ব।");
   };
 
   return (

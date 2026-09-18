@@ -10,7 +10,7 @@ import { bn } from "./figure-kit";
 
 // Screens for "Math for AI 3.7 — গ্রামের ফাঁদ, ডাক্তার আপার stall", told as a Journey.
 //
-// ডাক্তার আপা's "তোমার যমজ কে?" matches A (172, 68) with the nearest of
+// ডাক্তার আপা's "তোমার twin কে?" matches A (172, 68) with the nearest of
 // B (190, 69) and C (173, 78). Two volunteers run the same program, one in kg
 // and one in grams, and both are right, yet their twins differ. Turning a unit
 // dial shows why: the formula prices 1 cm the same as 1 of whatever weight unit
@@ -308,17 +308,17 @@ const S1_OFF = 380;
 export function TwinStall({}: Story) {
   const s = useScene(5, [600, 1600, 2600, 1300, 1500]);
   const k = s.k;
-  const screen = (twin: string) => (k < 3 ? [] : k === 3 ? ["চলছে…"] : ["যমজ:", twin]);
+  const screen = (twin: string) => (k < 3 ? [] : k === 3 ? ["চলছে…"] : ["twin:", twin]);
 
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="evening" label="the last afternoon at ডাক্তার আপা's stall: A, B and C join the crowd, and the two laptops on the counter give two different twins">
         <Tree x={16} y={S1_Y} s={0.9} />
-        <Stall x={100} y={S1_Y} w={110} sign="তোমার যমজ কে?" color="#0d9488" />
+        <Stall x={100} y={S1_Y} w={110} sign="তোমার twin কে?" color="#0d9488" />
         <S_Laptop x={76} y={126} lines={screen("C")} />
         <S_Laptop x={124} y={126} lines={screen("B")} />
         <Person who="apa" x={178} y={S1_Y} facing={1} arm={k === 2 ? "wave" : "down"} mood={k >= 5 ? "puzzled" : "happy"} label />
-        {k === 2 && <Bubble x={178} y={S1_Y - 66} lines={["উচ্চতা আর ওজন দিন,", "যমজ খুঁজে দেবো!"]} />}
+        {k === 2 && <Bubble x={178} y={S1_Y - 66} lines={["উচ্চতা আর ওজন দিন,", "twin খুঁজে দেবো!"]} />}
         {k >= 5 && <Bubble x={178} y={S1_Y - 66} lines={["দুই laptop,", "দুই রকম কথা!"]} />}
         <S_Visitor who="A" x={k >= 1 ? S1_AT.A : S1_OFF} y={S1_Y} facing={-1} walking={k === 1} mood={k >= 4 ? "puzzled" : "plain"} />
         <S_Visitor who="B" x={k >= 1 ? S1_AT.B : S1_OFF + 36} y={S1_Y} tall={1.1} facing={-1} walking={k === 1} />
@@ -348,13 +348,13 @@ export function KgVsGram() {
     if (ran.includes(i)) return;
     const next = [...ran, i];
     setRan(next);
-    if (next.length === 2) pass("দুইটা program-এর হিসাবেই কোনো ভুল নাই। মানুষ তিনজন একই, অথচ যমজ দুই রকম। বদলেছে শুধু ওজন লেখার unit।");
+    if (next.length === 2) pass("বদলেছে শুধু ওজনের unit, আর twin।");
   };
 
   return (
     <>
       <Speech who="ডাক্তার আপা" initial="ডা" tint="teal">
-        দুইটা laptop-এ একই program, আর মানুষও সেই একই তিনজন। তাহলে যমজ দুই রকম আসে কীভাবে? নিশ্চয়ই কারো program-এ ভুল আছে।
+        দুইটা laptop-এ একই program, আর মানুষও সেই একই তিনজন। তাহলে twin দুই রকম আসে কীভাবে? নিশ্চয়ই কারো program-এ ভুল আছে।
       </Speech>
       <div className="mt-4 flex flex-wrap justify-center gap-3">
         {LAPTOPS.map((l, i) => {
@@ -374,7 +374,7 @@ export function KgVsGram() {
                   <>
                     <Out>A→B {big(dB)}</Out>
                     <Out>A→C {big(dC)}</Out>
-                    <Out tone="ok">A-এর যমজ: {dB < dC ? "B" : "C"}</Out>
+                    <Out tone="ok">A-এর twin: {dB < dC ? "B" : "C"}</Out>
                   </>
                 )}
               </Laptop>
@@ -398,8 +398,8 @@ export function KgVsGram() {
       {both && guess !== null && (
         <div className={`${FADE} mt-3 text-center text-[0.95rem]`}>
           {guess === 2
-            ? "ঠিক ধরেছেন। দুইটা হিসাবই নিখুঁত, তবু দুইটা laptop দুই রকম যমজ দেখাচ্ছে।"
-            : "হিসাবগুলো একবার মিলিয়ে দেখুন, কোথাও ভুল নাই। বর্গ, যোগ, root, সব ঠিকঠাক। তবুও যমজ আলাদা!"}
+            ? "ঠিক ধরেছেন। দুইটা হিসাবই নিখুঁত, তবু দুইটা laptop দুই রকম twin দেখাচ্ছে।"
+            : "হিসাবগুলো একবার মিলিয়ে দেখুন, কোথাও ভুল নাই। বর্গ, যোগ, root, সব ঠিকঠাক। তবুও twin আলাদা!"}
         </div>
       )}
       <Task done={both}>আগে বলুন কার ভুল বলে মনে হয়, তারপর দুইটা program-ই চালিয়ে দেখুন।</Task>
@@ -430,7 +430,7 @@ export function OneChange() {
   const k = s.k;
 
   return (
-    <Scene scene={s} caption={k < 4 ? X1_SAY[k] : <span className={FADE}>হিসাব দুই জায়গাতেই নিখুঁত। তবু যমজ দুই রকম।</span>}>
+    <Scene scene={s} caption={k < 4 ? X1_SAY[k] : <span className={FADE}>হিসাব দুই জায়গাতেই নিখুঁত। তবু twin দুই রকম।</span>}>
       <div className={`grid grid-cols-2 gap-2 transition-opacity duration-500 motion-reduce:transition-none ${k >= 1 ? "" : "opacity-0"}`}>
         {X1_SIDES.map((side, si) => {
           const hot = si === 1 && k >= 3;
@@ -458,7 +458,7 @@ export function OneChange() {
               <div className="mt-0.5 h-5 text-center text-sm">
                 {k >= 4 && (
                   <span className={FADE}>
-                    যমজ <b className={si === 0 ? "text-cat-teal" : "text-cat-coral"}>{side.twin}</b>
+                    Twin <b className={si === 0 ? "text-cat-teal" : "text-cat-coral"}>{side.twin}</b>
                   </span>
                 )}
               </div>
@@ -511,7 +511,7 @@ export function GramStretch() {
         ) : k === 2 ? (
           "এবার শুধু ওজনের ঘরটা 1000 দিয়ে গুণ, মানে kg থেকে gram। কাগজটা খাড়া দিকে টানা হচ্ছে।"
         ) : (
-          <span className={FADE}>C চলে গেল 10,000 দূরে, আর B মাত্র 1,000। মানুষ একই, অথচ যমজ এখন B।</span>
+          <span className={FADE}>C চলে গেল 10,000 দূরে, আর B মাত্র 1,000। মানুষ একই, অথচ twin এখন B।</span>
         )
       }
     >
@@ -570,8 +570,8 @@ export function GramStretch() {
 }
 
 // ---------------------------------------------------------------------------
-// 1¾ · A figure for screen 1's explanation, no task: the question the journey
-//      lives on, left open. A stands between B and C; সামিনের laptop draws a
+// 1¾ · A story scene for screen 1b's setup (it was screen 1's explanation),
+//      no task: the question the journey lives on, left open. A stands between B and C; সামিনের laptop draws a
 //      line on the ground from A to C, তানভীরের from A to B, and A is left
 //      asking which twin is real, and which laptop to believe.
 
@@ -582,7 +582,7 @@ const X1B_DESK = [
   { x: 276, name: "তানভীর", twin: "B", color: "#e11d48" },
 ];
 
-export function WhichTwin() {
+export function WhichTwin({}: Story) {
   const s = useScene(4, [600, 1500, 1600, 2000, 2400]);
   const k = s.k;
 
@@ -605,7 +605,7 @@ export function WhichTwin() {
         <S_Visitor who="C" x={X1B_AT.C} y={X1B_Y} wide={1.25} facing={-1} />
         {k >= 1 && <Draw d={`M${X1B_AT.A + 7} 166Q${(X1B_AT.A + X1B_AT.C) / 2} 181 ${X1B_AT.C - 7} 166`} ms={700} strokeWidth={2.4} className="stroke-[#0d9488]" />}
         {k >= 2 && <Draw d={`M${X1B_AT.A - 7} 166Q${(X1B_AT.A + X1B_AT.B) / 2} 181 ${X1B_AT.B + 7} 166`} ms={700} strokeWidth={2.4} className="stroke-[#e11d48]" />}
-        {k === 3 && <Bubble x={X1B_AT.A} y={X1B_Y - 66} tone="think" lines={["আমার আসল যমজ", "B, না C?"]} />}
+        {k === 3 && <Bubble x={X1B_AT.A} y={X1B_Y - 66} tone="think" lines={["আমার আসল twin", "B, না C?"]} />}
         {k >= 4 && <Bubble x={X1B_AT.A} y={X1B_Y - 66} tone="think" lines={["কোন laptop-এর কথা", "বিশ্বাস করবো?"]} />}
       </Stage>
     </StoryFrame>
@@ -689,12 +689,10 @@ export function WaysToWeigh({}: Story) {
 }
 
 // ---------------------------------------------------------------------------
-// 2 · The unit dial: মণ, kg, pound, gram. Predict the twin in pounds, then turn
-//     through all four. C, C, B, B: the formula prices 1 cm like 1 of the unit.
+// 2 · The unit dial: মণ, kg, pound, gram. Turn through all four. C, C, B, B: the formula prices 1 cm like 1 of the unit.
 
 export function UnitDial() {
   const pass = useGate();
-  const [guess, setGuess] = useSeed<number | null>("guess", null);
   const [u, setU] = useSeed("u", 1);
   const [seen, setSeen] = useSeed<number[]>("seen", [1]);
   const { k, name } = UNITS[u];
@@ -706,7 +704,7 @@ export function UnitDial() {
     if (seen.includes(i)) return;
     const next = [...seen, i];
     setSeen(next);
-    if (next.length === UNITS.length) pass("মণ আর kg-তে যমজ C, অথচ pound আর gram-এ B। Formula চুপচাপ ধরে নিয়েছে উচ্চতার 1 cm আর ওজনের 1 unit সমান দামি।");
+    if (next.length === UNITS.length) pass("Unit বদলালে twin বদলায়।");
   };
 
   return (
@@ -714,27 +712,17 @@ export function UnitDial() {
       <PersonCards u={u} />
       <TwinBars dB={dB} dC={dC} />
       <div key={u} className={`${FADE} mt-2 text-center text-[0.95rem]`}>
-        এই হিসাবে উচ্চতার 1 cm পার্থক্য আর ওজনের 1 {name} পার্থক্য, দুইটার দাম সমান। যমজ <b>{dB < dC ? "B" : "C"}</b>।
+        এই হিসাবে উচ্চতার 1 cm পার্থক্য আর ওজনের 1 {name} পার্থক্য, দুইটার দাম সমান। Twin <b>{dB < dC ? "B" : "C"}</b>।
       </div>
-      <div className="mt-4 text-sm font-medium text-muted">1 kg মানে প্রায় 2.2 pound। বলুন তো, ওজন pound-এ লিখলে A-এর যমজ কে হবে?</div>
-      <div className="mt-2 grid grid-cols-2 gap-2">
-        {["B", "C"].map((o, i) => (
-          <Choice key={o} n={i} look={predictLook(i, guess, seen.includes(2), 0)} disabled={guess !== null} onClick={() => setGuess(i)}>
-            {o}
-          </Choice>
+      <div className="mt-3 flex flex-wrap justify-center gap-2">
+        {UNITS.map((x, i) => (
+          <button key={x.name} type="button" aria-pressed={u === i} onClick={() => turn(i)} className={`${pill(u === i)} font-sans`}>
+            {x.name}
+          </button>
         ))}
       </div>
-      {guess !== null && (
-        <div className={`${FADE} mt-3 flex flex-wrap justify-center gap-2`}>
-          {UNITS.map((x, i) => (
-            <button key={x.name} type="button" aria-pressed={u === i} onClick={() => turn(i)} className={`${pill(u === i)} font-sans`}>
-              {x.name}
-            </button>
-          ))}
-        </div>
-      )}
       <Ticks items={UNITS.map((x, i) => [x.name, seen.includes(i)])} />
-      <Task done={seen.length === UNITS.length}>আগে একটা guess দিন, তারপর চারটা unit-এই ওজন লিখে দেখুন যমজ কে হয়।</Task>
+      <Task done={seen.length === UNITS.length}>চারটা unit-এই ওজন লিখে দেখুন, twin কে হয়।</Task>
     </>
   );
 }
@@ -959,7 +947,7 @@ export function TwoCrowds() {
     setMiss(null);
     const next = picks.map((p, i) => (i === ci ? v : p));
     setPicks(next);
-    if (next.every((p, i) => p === CROWDS[i].right)) pass("একই 10 kg, এক দলে অনেক বড় ব্যাপার, আরেক দলে সামান্য। পার্থক্যটা বড় না ছোট, সেটা বোঝা যায় দলটা সাধারণত কতটা ছড়ানো তা দেখে।");
+    if (next.every((p, i) => p === CROWDS[i].right)) pass("বড় না ছোট, বোঝা যায় দলের ছড়ানো দেখে।");
   };
 
   return (
@@ -1224,7 +1212,6 @@ const COLS = [
   { k: "ওজন", of: "ওজনের", unit: "kg" },
 ];
 const STAGES = ["Average বের করুন", "Average থেকে পার্থক্য", "পার্থক্যের বর্গ", "বর্গের average", "Root নিন"];
-const SPREAD_GUESS = ["প্রায় 2 cm", "প্রায় 10 cm", "প্রায় 30 cm"];
 
 function spreadOf(c: number) {
   const vals = FIVE.map((s) => s.v[c]);
@@ -1238,7 +1225,6 @@ const SPREADS = [spreadOf(0), spreadOf(1)];
 
 export function SpreadMachine() {
   const pass = useGate();
-  const [guess, setGuess] = useSeed<number | null>("guess", null);
   const [stages, setStages] = useSeed<number[]>("stages", [0, 0]);
   const col = stages[0] < 5 ? 0 : 1;
   const st = stages[col];
@@ -1248,7 +1234,7 @@ export function SpreadMachine() {
   const step = () => {
     const next = col === 0 ? [st + 1, 0] : [5, st + 1];
     setStages(next);
-    if (next[1] === 5) pass("স্বাভাবিক পার্থক্য উচ্চতায় 10 cm, আর ওজনে 12 kg। এই দুইটাই এখন আমাদের মাপকাঠি।");
+    if (next[1] === 5) pass("মাপকাঠি: উচ্চতায় 10 cm, ওজনে 12 kg।");
   };
 
   const cell = (c: number) => `px-2 py-0.5 ${c === col && !all ? "bg-cat-blue/10" : ""}`;
@@ -1297,56 +1283,43 @@ export function SpreadMachine() {
           </tbody>
         </table>
       </div>
-      {guess === null ? (
-        <>
-          <div className="mt-4 text-sm font-medium text-muted">এই পাঁচজনের উচ্চতায় “স্বাভাবিক পার্থক্য” মোটামুটি কত হবে বলে মনে হয়?</div>
-          <div className="mt-2 grid grid-cols-3 gap-2">
-            {SPREAD_GUESS.map((o, i) => (
-              <Choice key={o} n={i} look={predictLook(i, guess, stages[0] === 5, 1)} disabled={false} onClick={() => setGuess(i)}>
-                {o}
-              </Choice>
-            ))}
+      <div className={FADE}>
+        {!all && (
+          <div className="mt-3 min-h-16 space-y-0.5 text-center font-mono text-[0.95rem]">
+            <div className="font-sans text-sm text-muted">এখন মেশিনে: {COLS[col].of} column</div>
+            {st >= 1 && <div className={FADE}>Average = {sh(s.avg)}</div>}
+            {st >= 4 && (
+              <div className={`${FADE} text-sm`}>
+                বর্গের average = ({s.sq.map(sh).join(" + ")}) ÷ 5 = {sh(s.meanSq)}
+              </div>
+            )}
+            {st >= 5 && (
+              <div className={`${FADE} font-bold text-cat-teal`}>
+                √{sh(s.meanSq)} = {sh(s.root)} {COLS[col].unit}
+              </div>
+            )}
           </div>
-        </>
-      ) : (
-        <div className={FADE}>
-          {!all && (
-            <div className="mt-3 min-h-16 space-y-0.5 text-center font-mono text-[0.95rem]">
-              <div className="font-sans text-sm text-muted">এখন মেশিনে: {COLS[col].of} column</div>
-              {st >= 1 && <div className={FADE}>Average = {sh(s.avg)}</div>}
-              {st >= 4 && (
-                <div className={`${FADE} text-sm`}>
-                  বর্গের average = ({s.sq.map(sh).join(" + ")}) ÷ 5 = {sh(s.meanSq)}
-                </div>
-              )}
-              {st >= 5 && (
-                <div className={`${FADE} font-bold text-cat-teal`}>
-                  √{sh(s.meanSq)} = {sh(s.root)} {COLS[col].unit}
-                </div>
-              )}
-            </div>
-          )}
-          {stages[0] === 5 && (
-            <div className={`${FADE} mt-2 text-center text-[0.95rem]`}>
-              {guess === 1 ? "আপনার আন্দাজ একদম ঠিক, 10 cm।" : "উচ্চতায় স্বাভাবিক পার্থক্য 10 cm।"} {col === 1 && st === 0 && "এবার ওজনের column-টাও একই মেশিনে দিয়ে দেখুন।"}
-            </div>
-          )}
-          {!all && (
-            <div className="mt-3 flex justify-center">
-              <button type="button" onClick={step} className={primaryBtn}>
-                {bn(st + 1)} · {STAGES[st]}
-              </button>
-            </div>
-          )}
-        </div>
-      )}
+        )}
+        {stages[0] === 5 && (
+          <div className={`${FADE} mt-2 text-center text-[0.95rem]`}>
+            উচ্চতায় স্বাভাবিক পার্থক্য 10 cm। {col === 1 && st === 0 && "এবার ওজনের column-টাও একই মেশিনে দিয়ে দেখুন।"}
+          </div>
+        )}
+        {!all && (
+          <div className="mt-3 flex justify-center">
+            <button type="button" onClick={step} className={primaryBtn}>
+              {bn(st + 1)} · {STAGES[st]}
+            </button>
+          </div>
+        )}
+      </div>
       <Ticks
         items={[
           ["উচ্চতার মাপকাঠি", stages[0] === 5],
           ["ওজনের মাপকাঠি", all],
         ]}
       />
-      <Task done={all}>আগে একটা আন্দাজ দিন, তারপর উচ্চতা আর ওজন, দুইটা column-ই মেশিনে ধাপে ধাপে চালান।</Task>
+      <Task done={all}>উচ্চতা আর ওজন, দুইটা column-ই মেশিনে step by step চালান।</Task>
     </>
   );
 }
@@ -1647,7 +1620,7 @@ export function Yardstick() {
   };
   const measure = () => {
     setMeasured(true);
-    pass("B-এর উচ্চতার পার্থক্য প্রায় দুই মাপকাঠি, C-এর ওজনের পার্থক্য এক মাপকাঠিরও কম। তাই যমজ C, 0.84 বনাম 1.80।");
+    pass("মাপকাঠিতে মাপলে twin C।");
   };
 
   return (
@@ -1656,7 +1629,7 @@ export function Yardstick() {
         <span className="rounded-full bg-cat-teal/10 px-3 py-1 text-cat-teal">উচ্চতার মাপকাঠি 10 cm</span>
         <span className="rounded-full bg-cat-teal/10 px-3 py-1 text-cat-teal">ওজনের মাপকাঠি 12 kg</span>
       </div>
-      <div className="mt-4 text-sm font-medium text-muted">প্রতিটা পার্থক্য নিজের মাপকাঠিতে মাপলে A-এর যমজ কে হবে?</div>
+      <div className="mt-4 text-sm font-medium text-muted">প্রতিটা পার্থক্য নিজের মাপকাঠিতে মাপলে A-এর twin কে হবে?</div>
       <div className="mt-2 grid grid-cols-2 gap-2">
         {["B", "C"].map((o, i) => (
           <Choice key={o} n={i} look={predictLook(i, guess, measured, 1)} disabled={guess !== null} onClick={() => setGuess(i)}>
@@ -1721,10 +1694,10 @@ export function Yardstick() {
       )}
       {measured && guess !== null && (
         <div className={`${FADE} mt-3 text-center text-[0.95rem]`}>
-          {guess === 1 ? "ঠিক ধরেছেন, যমজ C।" : "উঁহু, এবার যমজ C। B-এর 18 cm শুনতে ছোট, কিন্তু উচ্চতার মাপকাঠিতে সেটা প্রায় দুই ধাপ।"} আর খেয়াল করেছেন, এই সংখ্যাগুলোর পাশে কোনো unit নাই?
+          {guess === 1 ? "ঠিক ধরেছেন, twin C।" : "উঁহু, এবার twin C। B-এর 18 cm শুনতে ছোট, কিন্তু উচ্চতার মাপকাঠিতে সেটা প্রায় দুই ধাপ।"} আর খেয়াল করেছেন, এই সংখ্যাগুলোর পাশে কোনো unit নাই?
         </div>
       )}
-      <Task done={measured}>আগে একটা guess দিন। তারপর চারটা পার্থক্যই মাপকাঠিতে মেপে দূরত্ব বের করুন।</Task>
+      <Task done={measured}>আগে একটা guess করুন। তারপর চারটা পার্থক্যই মাপকাঠিতে মেপে দূরত্ব বের করুন।</Task>
     </>
   );
 }
@@ -1753,7 +1726,7 @@ export function StickSteps() {
   const k = s.k;
 
   return (
-    <Scene scene={s} caption={k < 4 ? X5_SAY[k] : <span className={FADE}>B সত্যিই অনেকটা লম্বা, C তেমন ভারী না। তাই যমজ C।</span>}>
+    <Scene scene={s} caption={k < 4 ? X5_SAY[k] : <span className={FADE}>B সত্যিই অনেকটা লম্বা, C তেমন ভারী না। তাই twin C।</span>}>
       <svg viewBox="0 0 300 118" role="img" aria-label="B's 18 cm gap is nearly two 10 cm yardsticks, C's 10 kg gap is less than one 12 kg yardstick" className="mx-auto block h-auto w-full max-w-[17.5rem]">
         <rect x={2} y={2} width={296} height={114} rx={5} strokeWidth={0.8} className="fill-white stroke-[#cbd5e1]" />
         {X5_ROWS.map((r) => {
@@ -1828,11 +1801,8 @@ export function TanvirGrams({}: Story) {
 // 6 · The unit dial again, now with two readouts. Raw distances flip their
 //     twin; distances in yardsticks don't move at all, in any unit.
 
-const CANCEL_GUESS = ["একই থাকবে", "1000 গুণ বড় হবে", "যমজ আবার B হয়ে যাবে"];
-
 export function UnitsCancel() {
   const pass = useGate();
-  const [guess, setGuess] = useSeed<number | null>("guess", null);
   const [u, setU] = useSeed("u", 1);
   const [seen, setSeen] = useSeed<number[]>("seen", [1]);
   const { k, name } = UNITS[u];
@@ -1845,7 +1815,7 @@ export function UnitsCancel() {
     if (seen.includes(i)) return;
     const next = [...seen, i];
     setSeen(next);
-    if (next.length === UNITS.length) pass("Unit যা-ই হোক, মাপকাঠির দূরত্ব এক চুলও নড়লো না। gram ÷ gram করলে gram কেটে যায়, পড়ে থাকে শুধু একটা সংখ্যা।");
+    if (next.length === UNITS.length) pass("মাপকাঠিতে মাপলে unit কেটে যায়।");
   };
 
   return (
@@ -1855,14 +1825,14 @@ export function UnitsCancel() {
           <div className="text-center text-sm font-semibold">কাঁচা দূরত্ব</div>
           <TwinBars dB={rB} dC={rC} />
           <div key={u} className={`${FADE} mt-1 text-center text-sm`}>
-            যমজ <b>{rB < rC ? "B" : "C"}</b>
+            Twin <b>{rB < rC ? "B" : "C"}</b>
           </div>
         </div>
         <div className="rounded-2xl border-2 border-cat-teal/40 px-2 py-2.5">
           <div className="text-center text-sm font-semibold text-cat-teal">মাপকাঠিতে দূরত্ব</div>
           <TwinBars dB={yardD(B)} dC={yardD(C)} />
           <div className="mt-1 text-center text-sm">
-            যমজ <b>C</b>
+            Twin <b>C</b>
           </div>
         </div>
       </div>
@@ -1870,25 +1840,15 @@ export function UnitsCancel() {
         <div className="font-sans text-sm text-muted">ওজনের মাপকাঠিও এখন {name}-এ: {inUnit(12, u)} {name}</div>
         C-এর ওজনের পার্থক্য {inUnit(10, u)} ÷ {inUnit(12, u)} ≈ <b className="text-cat-teal">0.83</b>
       </div>
-      <div className="mt-4 text-sm font-medium text-muted">বলুন তো, ওজন gram-এ লিখলে মাপকাঠিতে মাপা দূরত্বটার কী হবে?</div>
-      <div className="mt-2 grid gap-2">
-        {CANCEL_GUESS.map((o, i) => (
-          <Choice key={o} n={i} look={predictLook(i, guess, seen.includes(3), 0)} disabled={guess !== null} onClick={() => setGuess(i)}>
-            {o}
-          </Choice>
+      <div className="mt-3 flex flex-wrap justify-center gap-2">
+        {UNITS.map((x, i) => (
+          <button key={x.name} type="button" aria-pressed={u === i} onClick={() => turn(i)} className={`${pill(u === i)} font-sans`}>
+            {x.name}
+          </button>
         ))}
       </div>
-      {guess !== null && (
-        <div className={`${FADE} mt-3 flex flex-wrap justify-center gap-2`}>
-          {UNITS.map((x, i) => (
-            <button key={x.name} type="button" aria-pressed={u === i} onClick={() => turn(i)} className={`${pill(u === i)} font-sans`}>
-              {x.name}
-            </button>
-          ))}
-        </div>
-      )}
       <Ticks items={UNITS.map((x, i) => [x.name, seen.includes(i)])} />
-      <Task done={all}>আগে একটা guess দিন, তারপর চারটা unit-ই ঘুরিয়ে দুই পাশের দূরত্ব মিলিয়ে দেখুন।</Task>
+      <Task done={all}>চারটা unit-ই ঘুরিয়ে দুই পাশের দূরত্ব মিলিয়ে দেখুন।</Task>
     </>
   );
 }
@@ -2004,7 +1964,7 @@ export function SameTwinNow() {
         <text x={280} y={X6_Y + 11} textAnchor="middle" fontSize={8.5} fontWeight={700} fill={S_INK}>
           তানভীর
         </text>
-        {k >= 4 && <Bubble x={280} y={X6_Y - 66} side="left" lines={["gram-এও এবার", "যমজ C!"]} />}
+        {k >= 4 && <Bubble x={280} y={X6_Y - 66} side="left" lines={["gram-এও এবার", "twin C!"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -2037,7 +1997,7 @@ export function ZScore() {
     }
     setMiss(null);
     setPlaced(placed + 1);
-    if (placed + 1 === ZKIDS.length) pass("আগে average বিয়োগ, তারপর মাপকাঠি দিয়ে ভাগ। নতুন সংখ্যাটা বলে দেয়, কে average থেকে কয় মাপকাঠি উপরে বা নিচে আছে।");
+    if (placed + 1 === ZKIDS.length) pass("Average বিয়োগ, তারপর মাপকাঠিতে ভাগ।");
   };
 
   return (
@@ -2282,7 +2242,7 @@ export function DataFrom({}: Story) {
     <StoryFrame scene={s}>
       <Stage backdrop="evening" label="A says his real twin is C; ডাক্তার আপা says wait, the yardstick came from these five; they leave and a different crowd stands there: what if the data were different?">
         <S_Visitor who="A" x={36} y={S8_Y} mood={k === 1 ? "happy" : k >= 6 ? "puzzled" : "plain"} />
-        {k === 1 && <Bubble x={36} y={S8_Y - 66} side="right" lines={["যাক! আমার আসল", "যমজ তাহলে C!"]} />}
+        {k === 1 && <Bubble x={36} y={S8_Y - 66} side="right" lines={["যাক! আমার আসল", "twin তাহলে C!"]} />}
         <Person who="apa" x={104} y={S8_Y} arm={k === 2 ? "wave" : k === 4 || k >= 6 ? "point" : "down"} mood={k >= 6 ? "puzzled" : "plain"} label />
         {k === 2 && <Bubble x={104} y={S8_Y - 66} lines={["একটু দাঁড়ান।"]} />}
         {k === 4 && <Bubble x={104} y={S8_Y - 66} lines={["মাপকাঠি এসেছে", "এই পাঁচজনের data থেকে"]} />}
@@ -2339,7 +2299,7 @@ export function NotTheTruth() {
     if (visited.includes(v)) return;
     const next = [...visited, v];
     setVisited(next);
-    if (next.includes(5.5) && next.includes(6) && !flip) pass("ওজনের মাপকাঠি 6 kg থেকে 5.5 kg-এ নামতেই যমজ C থেকে B হয়ে গেল। মানুষ তো একই আছে, বদলেছে শুধু দলটা কতটা ছড়ানো।");
+    if (next.includes(5.5) && next.includes(6) && !flip) pass("দল বদলালে মাপকাঠি, তাই twin-ও বদলায়।");
   };
 
   return (
@@ -2347,7 +2307,7 @@ export function NotTheTruth() {
       <Speech who="ডাক্তার আপা" initial="ডা" tint="teal">
         পাশের স্কুলের stall-এ কিন্তু সবার ওজন খুব কাছাকাছি। ওদের ওজনের মাপকাঠি মাত্র 5 kg।
       </Speech>
-      <div className="mt-4 text-sm font-medium text-muted">ওজনের মাপকাঠি 5 kg হলে A-এর যমজ কে হবে?</div>
+      <div className="mt-4 text-sm font-medium text-muted">ওজনের মাপকাঠি 5 kg হলে A-এর twin কে হবে?</div>
       <div className="mt-2 grid grid-cols-2 gap-2">
         {["B", "C"].map((o, i) => (
           <Choice key={o} n={i} look={predictLook(i, guess, sawB, 0)} disabled={guess !== null} onClick={() => setGuess(i)}>
@@ -2376,18 +2336,18 @@ export function NotTheTruth() {
             <b className="shrink-0 font-mono whitespace-nowrap">{sh(yw)} kg</b>
           </label>
           <div key={dB < dC ? "b" : "c"} className={`${FADE} mt-2 text-center text-[0.95rem]`}>
-            যমজ <b className="text-cat-teal">{dB < dC ? "B" : "C"}</b>
+            Twin <b className="text-cat-teal">{dB < dC ? "B" : "C"}</b>
             {flip ? "। বদলানোর জায়গাটা খুঁজে পেয়েছেন!" : sawB ? "। এবার ঠিক কোথায় গিয়ে বদলায়, সেটা খুঁজে বের করুন।" : ""}
           </div>
         </div>
       )}
       <Ticks
         items={[
-          ["যমজ B হলো", sawB],
+          ["Twin B হলো", sawB],
           ["বদলানোর জায়গা", flip],
         ]}
       />
-      <Task done={flip}>আগে একটা guess দিন। তারপর slider সরিয়ে খুঁজুন, মাপকাঠি ঠিক কোথায় পৌঁছালে যমজ বদলে যায়।</Task>
+      <Task done={flip}>আগে একটা guess করুন। তারপর slider সরিয়ে খুঁজুন, মাপকাঠি ঠিক কোথায় পৌঁছালে twin বদলে যায়।</Task>
     </>
   );
 }
@@ -2407,7 +2367,7 @@ const X8_SCHOOLS = [
 const X8_SAY = [
   "আমাদের স্কুলে ওজন অনেকটা ছড়ানো, মাপকাঠি 12 kg।",
   "আমাদের স্কুলে ওজন অনেকটা ছড়ানো, মাপকাঠি 12 kg।",
-  "C-এর 10 kg সেখানে এক ধাপও না। যমজ C।",
+  "C-এর 10 kg সেখানে এক ধাপও না। Twin C।",
   "পাশের স্কুলে সবার ওজন কাছাকাছি, মাপকাঠি মাত্র 5 kg।",
 ];
 
@@ -2416,7 +2376,7 @@ export function TwoSchools() {
   const k = s.k;
 
   return (
-    <Scene scene={s} caption={k < 4 ? X8_SAY[k] : <span className={FADE}>সেখানে একই 10 kg পুরো দুই ধাপ, সত্যিই অস্বাভাবিক। যমজ B। দুইটাই ঠিক।</span>}>
+    <Scene scene={s} caption={k < 4 ? X8_SAY[k] : <span className={FADE}>সেখানে একই 10 kg পুরো দুই ধাপ, সত্যিই অস্বাভাবিক। Twin B। দুইটাই ঠিক।</span>}>
       <div className="grid grid-cols-2 gap-2">
         {X8_SCHOOLS.map((sc) => {
           const shown = k >= sc.on;
@@ -2461,7 +2421,7 @@ export function TwoSchools() {
                   <span className={FADE}>
                     <span className="font-mono">{sc.sum}</span> ধাপ
                     <br />
-                    যমজ <b className="text-cat-teal">{sc.twin}</b>
+                    Twin <b className="text-cat-teal">{sc.twin}</b>
                   </span>
                 )}
               </div>
@@ -2494,7 +2454,7 @@ export function ApaWeight() {
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="fair" label="ডাক্তার আপা beside a balance with a step of height on one pan and a step of weight on the other; she adds a weight to the weight pan and the beam tips on purpose">
-        <Stall x={38} y={X8B_Y} w={60} sign="যমজ" color="#0d9488" />
+        <Stall x={38} y={X8B_Y} w={60} sign="twin" color="#0d9488" />
         <rect x={X8B_P.x - 14} y={X8B_Y - 4} width={28} height={4} rx={1} fill="#78350f" />
         <path d={`M${X8B_P.x} ${X8B_Y - 2}V${X8B_P.y}`} stroke="#78350f" strokeWidth={4} />
         <g style={{ transform: `rotate(${tilt}deg)`, transformOrigin: `${X8B_P.x}px ${X8B_P.y}px` }} className={swing}>
@@ -2576,13 +2536,13 @@ export function TrustAnswer() {
         {k >= 3 && (
           <>
             <text x={151} y={48} textAnchor="middle" fontSize={8} fontWeight={700} fill="#86efac" className={`${FADE} font-mono`}>
-              twin = C
+              Twin = C
             </text>
             <Draw d="M188 45H206M201 41.5L206 45L201 48.5" ms={400} strokeWidth={1.6} className="stroke-[#0f1b2d]" />
             <g className={POP}>
               <rect x={210} y={32} width={76} height={26} rx={4} fill="white" stroke="#0d9488" strokeWidth={1.6} />
               <text x={248} y={49} textAnchor="middle" fontSize={11} fontWeight={800} fill="#0d9488">
-                যমজ C
+                Twin C
               </text>
             </g>
           </>
@@ -2618,7 +2578,7 @@ export function OneWordTwoStalls({}: Story) {
     <StoryFrame scene={s}>
       <Stage backdrop="fair" label="মামা at the video stall with Titanic's card and ডাক্তার আপা at the twin stall with a yardstick; both get the word normalise, and between them a question: the same?">
         <Stall x={50} y={S9_Y} w={86} sign="ভিডিও" color="#7c3aed" />
-        <Stall x={270} y={S9_Y} w={86} sign="যমজ" color="#0d9488" />
+        <Stall x={270} y={S9_Y} w={86} sign="twin" color="#0d9488" />
         <Person who="mama" x={112} y={S9_Y} arm={k >= 1 ? "hold" : "down"} mood="happy" label />
         {k >= 1 && (
           <>
@@ -2657,7 +2617,7 @@ const SORT_CARDS = [
   { t: "কাজ শেষে প্রতিটা card-এর দৈর্ঘ্য 1", bin: 0 },
   { t: "কাজ শেষে প্রতিটা feature-এর মাপকাঠি 1", bin: 1 },
   { t: "সামিনের ক্রেতারা কে কোন জিনিসে ঝোঁকে, শুধু সেটুকু রাখা", bin: 0 },
-  { t: "যমজ খেলায় উচ্চতা আর ওজনকে সমান সুযোগ দেওয়া", bin: 1 },
+  { t: "Twin খুঁজতে উচ্চতা আর ওজনকে সমান সুযোগ দেওয়া", bin: 1 },
 ];
 const BINS = [
   { name: "একটা row, নিজের দৈর্ঘ্য দিয়ে ভাগ", from: "৩.৬" },
@@ -2692,7 +2652,7 @@ export function TwoNormalises() {
     }
     setMiss(null);
     setDone(done + 1);
-    if (done + 1 === SORT_CARDS.length) pass("একই “normalise” শব্দ, অথচ কাজ দুই রকম। Row-কে তার দৈর্ঘ্য দিয়ে ভাগ করলে থাকে শুধু দিক, আর column-কে তার মাপকাঠি দিয়ে ভাগ করলে মুছে যায় unit।");
+    if (done + 1 === SORT_CARDS.length) pass("Row-এ মোছে দৈর্ঘ্য, column-এ মোছে unit।");
   };
 
   return (
@@ -2703,7 +2663,7 @@ export function TwoNormalises() {
             {card.t}
           </div>
         ) : (
-          <div className={`${FADE} text-center text-[0.95rem] text-accent-text`}>ছয়টা card-ই ঠিক বাক্সে!</div>
+          <div className={`${FADE} text-center text-[0.95rem] text-accent-text`}>ছয়টা card-ই ঠিক box এ !</div>
         )}
         {miss !== null && !all && (
           <Nope key={miss}>উঁহু। একটু ভাবুন, এখানে ভাগ হচ্ছে কী? একজন মানুষ বা একটা ছবির পুরো card, নাকি সবার একটা feature?</Nope>
@@ -2726,7 +2686,7 @@ export function TwoNormalises() {
         ))}
       </div>
       <Task done={all}>
-        প্রতিটা card কোন বাক্সের কাজ, ঠিক করে tap করে পাঠিয়ে দিন ({bn(done)}/{bn(SORT_CARDS.length)})।
+        প্রতিটা card কোন box এর কাজ, ঠিক করে tap করে পাঠিয়ে দিন ({bn(done)}/{bn(SORT_CARDS.length)})।
       </Task>
     </>
   );
@@ -2777,7 +2737,7 @@ export function RowVsColumn() {
         </div>
         <div className={`rounded-xl border border-border px-1 py-1.5 transition-opacity duration-500 motion-reduce:transition-none ${k >= 3 ? "" : "opacity-40"}`}>
           <div className="text-center text-xs text-muted">
-            যমজ stall, ৩.৭{col && <span className={`${FADE} ml-1 font-mono text-cat-blue`}>−70 ÷12</span>}
+            Twin stall, ৩.৭{col && <span className={`${FADE} ml-1 font-mono text-cat-blue`}>−70 ÷12</span>}
           </div>
           <table className="mx-auto mt-0.5 text-center text-sm tabular-nums">
             <thead>
@@ -2842,7 +2802,7 @@ export function InchPound() {
   const cut = k >= 3;
 
   return (
-    <Scene scene={s} caption={k < 4 ? X9C_SAY[k] : <span className={FADE}>দূরত্বও আগের মতো, B 1.80 আর C 0.84। যমজ C-ই থাকলো।</span>}>
+    <Scene scene={s} caption={k < 4 ? X9C_SAY[k] : <span className={FADE}>দূরত্বও আগের মতো, B 1.80 আর C 0.84। Twin C-ই থাকলো।</span>}>
       <div className="mx-auto grid w-fit grid-cols-[1.2rem_auto_auto] items-center gap-x-3 gap-y-1">
         <span />
         <span className="text-center text-xs text-muted">উচ্চতা</span>
@@ -2926,7 +2886,7 @@ export function Finale() {
         <div className={`${FADE} mx-auto mt-4 max-w-md rounded-2xl bg-cat-violet/5 px-4 py-3 text-center text-[0.95rem]`}>
           <div className="font-mono">(2, 5) আর (5, 2), ঘরে ঘরে গুণ → (10, 10)</div>
           <div className="mt-1">
-            যায়, কিন্তু তাতে পাওয়া যায় আরেকটা list, যার তেমন কোনো মানেই নাই। কাজের গুণটা ফেরত দেয় <b>একটাই সংখ্যা</b>: দুইটা arrow কতটা একই দিকে। মনে আছে movie club-এর বন্ধ বাক্স?
+            যায়, কিন্তু তাতে পাওয়া যায় আরেকটা list, যার তেমন কোনো মানেই নাই। কাজের গুণটা ফেরত দেয় <b>একটাই সংখ্যা</b>: দুইটা arrow কতটা একই দিকে। মনে আছে movie club-এর black box?
           </div>
         </div>
       )}
@@ -3128,17 +3088,17 @@ export const fixtures: Fixtures = {
   DataFrom: { twin: { k: 1 }, wait: { k: 2 }, five: { k: 4 }, done: {} },
   OneWordTwoStalls: { mama: { k: 2 }, done: {} },
   KgVsGram: { start: {}, one: { guess: 0, ran: [0] }, both: { guess: 2, ran: [0, 1] } },
-  UnitDial: { start: {}, pound: { guess: 1, u: 2, seen: [1, 2] }, all: { guess: 0, u: 3, seen: [1, 2, 0, 3] } },
+  UnitDial: { start: {}, pound: { u: 2, seen: [1, 2] }, all: { u: 3, seen: [1, 2, 0, 3] } },
   TwoCrowds: { start: {}, miss: { picks: [null, null], miss: { c: 0, n: 1 } }, done: { picks: [0, 1] } },
   SpreadMachine: {
     start: {},
-    squares: { guess: 1, stages: [3, 0] },
-    height: { guess: 1, stages: [5, 0] },
-    weight: { guess: 0, stages: [5, 4] },
-    all: { guess: 1, stages: [5, 5] },
+    squares: { stages: [3, 0] },
+    height: { stages: [5, 0] },
+    weight: { stages: [5, 4] },
+    all: { stages: [5, 5] },
   },
   Yardstick: { start: {}, half: { guess: 0, conv: ["B0", "C1"] }, done: { guess: 0, conv: ["B0", "B1", "C0", "C1"], measured: true } },
-  UnitsCancel: { start: {}, gram: { guess: 0, u: 3, seen: [1, 3] }, pound: { guess: 0, u: 2, seen: [1, 3, 0, 2] } },
+  UnitsCancel: { start: {}, gram: { u: 3, seen: [1, 3] }, pound: { u: 2, seen: [1, 3, 0, 2] } },
   ZScore: { start: {}, miss: { placed: 1, miss: { z: 1, n: 1 } }, all: { placed: 3 } },
   NotTheTruth: { start: {}, twelve: { guess: 0 }, flip: { guess: 1, yw: 5.5, visited: [12, 6, 5.5] } },
   TwoNormalises: { start: {}, miss: { done: 2, miss: 1 }, all: { done: 6 } },

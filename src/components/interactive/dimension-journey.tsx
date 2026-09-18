@@ -172,7 +172,7 @@ export function TwoLines() {
     if (seen.includes(i)) return;
     const next = [...seen, i];
     setSeen(next);
-    if (next.length === PAIRS) pass("প্রত্যেক রোগী দুই দাগে দুইটা dot। জোড়া মেলাতে হচ্ছে একজন একজন করে।");
+    if (next.length === PAIRS) pass("প্রত্যেক রোগী দুই দাগে দুইটা dot।");
   };
 
   return (
@@ -287,7 +287,7 @@ export function PlotTogether() {
     if (i === ODD) {
       setFound(true);
       setPicked(null);
-      pass("আলাদা করে দেখলে দুইটাই স্বাভাবিক। একসাথে দেখলে উনি সবার থেকে অনেক দূরে।");
+      pass("আলাদা স্বাভাবিক, একসাথে অনেক দূরে।");
     } else setPicked((m) => ({ n: (m?.n ?? 0) + 1, i }));
   };
 
@@ -586,7 +586,7 @@ export function ShikuTape() {
     if (dist(t, ball) < 0.4) {
       setEnd(ball);
       setDone(round + 1);
-      if (round + 1 === BALLS.length) pass("Shiku হাঁটে 7, ফিতা বলে 5। Shiku হাঁটে 14, ফিতা বলে 10। সোজা পথ সবসময় ছোট।");
+      if (round + 1 === BALLS.length) pass("সোজা পথ সবসময় ছোট।");
     } else setEnd(t);
   };
   const again = () => {
@@ -742,7 +742,7 @@ export function TilePour() {
     settle.play(1, () => {
       const next = seen.includes(t) ? seen : [...seen, t];
       setSeen(next);
-      if (next.length >= 2) pass("যে triangle-ই নিন, দুই ছোট square-এর tile মিলে বাঁকা square-টা একদম ঠিক ঠিক ভরে যায়।");
+      if (next.length >= 2) pass("দুই ছোট square মিলে বাঁকা square।");
     });
   };
   const pick = (i: number) => {
@@ -805,14 +805,6 @@ export function TilePour() {
           {over && poured ? c * c : "?"}
         </CountLabel>
       </Plane>
-      <div className="text-sm font-medium text-muted">নীল আর লাল tile-গুলো দিয়ে বাঁকা square-টা ভরাট করলে কী হবে?</div>
-      <div className="mt-2 grid gap-2">
-        {TILE_GUESS.map((o, i) => (
-          <Choice key={o} n={i} look={predictLook(i, guess, seen.length > 0, TILE_RIGHT)} disabled={guess !== null} onClick={() => setGuess(i)}>
-            {o}
-          </Choice>
-        ))}
-      </div>
       <div className="mt-3 flex justify-center gap-2">
         {guess !== null && !poured && (
           <button type="button" onClick={pour} className={`${primaryBtn} ${FADE}`}>
@@ -845,6 +837,14 @@ export function TilePour() {
           ))}
         </div>
       )}
+      <div className="mt-3 text-sm font-medium text-muted">নীল আর লাল tile-গুলো দিয়ে বাঁকা square-টা ভরাট করলে কী হবে?</div>
+      <div className="mt-2 grid gap-2">
+        {TILE_GUESS.map((o, i) => (
+          <Choice key={o} n={i} look={predictLook(i, guess, seen.length > 0, TILE_RIGHT)} disabled={guess !== null} onClick={() => setGuess(i)}>
+            {o}
+          </Choice>
+        ))}
+      </div>
       <Ticks
         items={[
           ["প্রথম triangle", seen.includes(0)],
@@ -883,7 +883,7 @@ export function Rearrange() {
     if (seen.includes(key)) return;
     const next = [...seen, key];
     setSeen(next);
-    if (both(next) >= 2) pass("Frame একই, triangle সেই চারটাই, তাই ফাঁকা জায়গাও সমান। প্রত্যেকবার।");
+    if (both(next) >= 2) pass("ফাঁকা জায়গা প্রত্যেকবার সমান।");
   };
   const pairDone = seen.includes(`${a},${b},A`) && seen.includes(`${a},${b},B`);
   const pairs = both(seen);
@@ -1012,7 +1012,7 @@ export function RuleVsTape() {
     if (dd[0] === 0 || dd[1] === 0 || spots.includes(key)) return;
     const next = [...spots, key];
     setSpots(next);
-    if (next.length >= SPOTS && next.some(isLeft)) pass("যেখানেই নিন, নিয়ম আর ফিতা এক কথা বলে। বাঁয়ে গেলেও বর্গ করলে minus চলে যায়।");
+    if (next.length >= SPOTS && next.some(isLeft)) pass("বর্গ করলে minus চলে যায়।");
   };
   const put = (p: XY) => {
     const t = snap(p, FP);
@@ -1113,7 +1113,7 @@ export function GapNames() {
   const next = () => {
     const n = stage + 1;
     setStage(n);
-    if (n === 3) pass("a₁ − b₁ হলো ডানে-বাঁয়ে তফাত, a₂ − b₂ হলো ওপরে-নিচে তফাত। Formula শুধু ছবির দুইটা বাহুর নাম দিয়েছে।");
+    if (n === 3) pass("Formula শুধু দুই বাহুর নাম দিলো।");
   };
   const name = (x: number, y: number, text: string, cls: string, anchor: "middle" | "end" = "middle") => (
     <text x={x} y={y} textAnchor={anchor} fontSize={11} fontWeight={700} className={`pointer-events-none font-mono ${cls}`}>
@@ -1176,26 +1176,7 @@ export function GapNames() {
           a = ({GA.join(", ")})
         </Label>
       </Plane>
-      <div className="mx-auto grid min-h-24 max-w-md gap-1.5 text-center font-mono text-[1.02rem]">
-        {stage >= 1 && (
-          <div className={FADE}>
-            <span className="font-sans text-sm text-muted">ডানে-বাঁয়ে</span> a<sub>1</sub> − b<sub>1</sub> = {GA[0]} − {GB[0]} ={" "}
-            <b className="text-cat-blue">{d1}</b>
-          </div>
-        )}
-        {stage >= 2 && (
-          <div className={FADE}>
-            <span className="font-sans text-sm text-muted">ওপরে-নিচে</span> a<sub>2</sub> − b<sub>2</sub> = {GA[1]} − {GB[1]} ={" "}
-            <b className="text-cat-coral">{d2}</b>
-          </div>
-        )}
-        {stage >= 3 && (
-          <div className={`${FADE} rounded-xl bg-accent/10 px-3 py-2 font-semibold`}>
-            d = √(<span className="text-cat-blue">{d1}²</span> + <span className="text-cat-coral">{d2}²</span>) = √{d1 * d1 + d2 * d2} = {len}
-          </div>
-        )}
-      </div>
-      <div className="mt-3 flex justify-center">
+      <div className="my-3 flex justify-center">
         {stage === 0 && (
           <button type="button" onClick={next} className={primaryBtn}>
             ১ · ডানে-বাঁয়ে তফাত
@@ -1215,6 +1196,25 @@ export function GapNames() {
           <button type="button" onClick={() => setStage(0)} className={quietBtn}>
             ↺ আবার দেখুন
           </button>
+        )}
+      </div>
+      <div className="mx-auto grid min-h-24 max-w-md gap-1.5 text-center font-mono text-[1.02rem]">
+        {stage >= 1 && (
+          <div className={FADE}>
+            <span className="font-sans text-sm text-muted">ডানে-বাঁয়ে</span> a<sub>1</sub> − b<sub>1</sub> = {GA[0]} − {GB[0]} ={" "}
+            <b className="text-cat-blue">{d1}</b>
+          </div>
+        )}
+        {stage >= 2 && (
+          <div className={FADE}>
+            <span className="font-sans text-sm text-muted">ওপরে-নিচে</span> a<sub>2</sub> − b<sub>2</sub> = {GA[1]} − {GB[1]} ={" "}
+            <b className="text-cat-coral">{d2}</b>
+          </div>
+        )}
+        {stage >= 3 && (
+          <div className={`${FADE} rounded-xl bg-accent/10 px-3 py-2 font-semibold`}>
+            d = √(<span className="text-cat-blue">{d1}²</span> + <span className="text-cat-coral">{d2}²</span>) = √{d1 * d1 + d2 * d2} = {len}
+          </div>
         )}
       </div>
       <Ticks
@@ -1364,7 +1364,7 @@ export function RoomCorner() {
     setStage(n);
     setMs(1600);
     setLook(VIEWS[n]);
-    if (n === 3) pass("দুইবার Pythagoras, আর formula-য় তিনটা term। নতুন একটা দিক মানে নতুন একটা term।");
+    if (n === 3) pass("নতুন দিক মানে নতুন একটা term।");
   };
   const turn = (dYaw: number, dPitch: number, speed: number) => {
     setMs(speed);
@@ -1504,6 +1504,23 @@ export function RoomCorner() {
           <span>ছবিটা টেনে (বা arrow key দিয়ে) চারপাশে তাকিয়ে দেখুন</span>
         )}
       </div>
+      <div className="mb-3 flex justify-center">
+        {stage === 0 && (
+          <button type="button" onClick={next} className={primaryBtn}>
+            ১ · আগে মেঝের ওপর দিয়ে
+          </button>
+        )}
+        {stage === 1 && (
+          <button type="button" onClick={next} className={primaryBtn}>
+            ২ · এবার খাড়া ওপরে
+          </button>
+        )}
+        {stage === 2 && (
+          <button type="button" onClick={next} className={primaryBtn}>
+            ৩ · (√40)²-কে খুলে লিখুন
+          </button>
+        )}
+      </div>
       {stage === 2 && (
         <div className={`${FADE} mx-auto mb-2 max-w-md text-center text-sm text-muted`}>
           খাড়া triangle-টা ঠিক আপনার চোখ বরাবর পড়ে, তাই কোণা থেকে ওটাকে একটা দাগের মতো দেখায়। তাই বারান্দার মুখ থেকে কয়েক পা পিছিয়ে এসে দেখছি।
@@ -1530,23 +1547,6 @@ export function RoomCorner() {
               <span className="font-sans text-sm">মশা পর্যন্ত</span> = √({SX(6)} + <Term3 tone="text-cat-coral">2²</Term3> + <Term3 tone="text-cat-teal">3²</Term3>) = √49 = 7
             </div>
           </>
-        )}
-      </div>
-      <div className="mt-3 flex justify-center">
-        {stage === 0 && (
-          <button type="button" onClick={next} className={primaryBtn}>
-            ১ · আগে মেঝের ওপর দিয়ে
-          </button>
-        )}
-        {stage === 1 && (
-          <button type="button" onClick={next} className={primaryBtn}>
-            ২ · এবার খাড়া ওপরে
-          </button>
-        )}
-        {stage === 2 && (
-          <button type="button" onClick={next} className={primaryBtn}>
-            ৩ · (√40)²-কে খুলে লিখুন
-          </button>
         )}
       </div>
       <Ticks
@@ -1633,7 +1633,7 @@ export function GrowFormula() {
             type="button"
             onClick={() => {
               setMany(true);
-              pass("শুধু term বাড়ে। কিন্তু লিখে শেষ করা যায় না, ছোট করে লেখার একটা উপায় লাগবে।");
+              pass("Term বাড়ে, লেখা শেষ হয় না।");
             }}
             className={`${primaryBtn} ${FADE}`}
           >
@@ -1672,7 +1672,7 @@ export function LongSum() {
     setNi(i);
     if (!reached && LONG_NS[i] === LONG_MAX) {
       setReached(true);
-      pass("লেখা শেষই হয় না! এত লম্বা যোগ ছোট করে লেখার একটা উপায় দরকার।");
+      pass("লম্বা যোগ ছোট করে লেখা দরকার।");
     }
   };
 
@@ -1747,7 +1747,7 @@ export function RollNumbers() {
       const n = solved + 1;
       setSolved(n);
       setWrong([]);
-      if (n === ROLL_QS.length) pass("ছোট সংখ্যাটা শুধু বলে list-এর কত নম্বর জিনিস। x₃ মানে “3 নম্বরের দাম”।");
+      if (n === ROLL_QS.length) pass("x₃ মানে list-এর 3 নম্বর জিনিস।");
     } else setWrong((w) => (w.includes(i) ? w : [...w, i]));
   };
 
@@ -1888,7 +1888,7 @@ export function BazaarSigma() {
       const n = solved + 1;
       setSolved(n);
       setMiss(0);
-      if (n === ASKS.length) pass("নিচে কোথা থেকে শুরু, ওপরে কোথায় থামা, ডানে কী যোগ। Σ মানে এতটুকুই।");
+      if (n === ASKS.length) pass("Σ বলে কোথা থেকে, কোথায় থামা, কী যোগ।");
     } else setMiss(miss + 1);
   };
 
@@ -1996,7 +1996,7 @@ export function SigmaUnfold() {
   const step = () => {
     const nk = k + 1;
     setK(nk);
-    if (nk === 5) pass("এক লাইনের Σ আর পাঁচ term-এর লম্বা লাইন, একই জিনিস।");
+    if (nk === 5) pass("এক লাইনের Σ মানে পাঁচ term-এর যোগ।");
   };
 
   return (
@@ -2101,7 +2101,7 @@ export function ThreePatients() {
     if (won) return;
     if (who === "q") {
       setWon(true);
-      pass("চোখ বলছে q, formula-ও বলছে q।");
+      pass("চোখ আর formula, দুইটাই বলে q।");
     } else setMiss((m) => m + 1);
   };
   const [p, q, r] = [tpt(TP), tpt(TQ), tpt(TR)];
@@ -2223,7 +2223,7 @@ export function WardFive() {
     if (guess === null || done) return;
     const n = k + 1;
     setK(n);
-    if (n === COL5.length) pass("3.6 বনাম 45.2। পাঁচ dimension-এ geometry করে ফেললেন, কিছু না দেখেই!");
+    if (n === COL5.length) pass("পাঁচ dimension-এ দূরত্ব, না দেখেই।");
   };
   const calc = (b: number[], tone: string, name: string) => (
     <div className={tone}>
@@ -2367,7 +2367,7 @@ export function NeverShrinks() {
     if (tried.includes(x)) return;
     const next = [...tried, x];
     setTried(next);
-    if (!done && next.includes(SLEEP_P) && next.length >= 3) pass("সবচেয়ে ভালো মান দিলেও নতুন ঘর যোগ করে 0, কমায় না। বর্গ কখনো negative হয় না!");
+    if (!done && next.includes(SLEEP_P) && next.length >= 3) pass("বর্গ negative হয় না, দূরত্ব কমে না।");
   };
 
   return (
@@ -2467,7 +2467,7 @@ const VALLEY = Array.from({ length: 101 }, (_, i) => `${i ? "L" : "M"}${vx(i / 1
 function Radio({ k, h }: { k: number; h: number }) {
   const bars = Math.max(1, Math.ceil(Math.min(1, h / 20) * 8));
   return (
-    <div className="mx-auto flex w-40 shrink-0 flex-col items-center rounded-2xl border-2 border-[#8a6a48] bg-[#f3e6d3] px-3 py-3">
+    <div className="flex w-32 shrink-0 flex-col items-center rounded-2xl border-2 border-[#8a6a48] bg-[#f3e6d3] px-3 py-3">
       <div className="grid grid-cols-6 gap-1">
         {Array.from({ length: 18 }, (_, i) => (
           <span key={i} className="size-1.5 rounded-full bg-[#8a6a48]/50" />
@@ -2504,7 +2504,7 @@ export function OneKnob() {
   const move = (n: number) => {
     const c = clamp(Math.round(n * 100) / 100, 0, 10);
     setK(c);
-    if (!low && hiss(c) < OK_HISS) pass("ঢাল যেদিকে নিচে নেমেছে, knob সেদিকেই ঘোরাতে হয়। শেখার পুরো বুদ্ধিটা আসলে এটুকুই।");
+    if (!low && hiss(c) < OK_HISS) pass("ঢাল যেদিকে নামে, knob সেদিকে।");
   };
   const turn = (d: number) => {
     setTurned(true);
@@ -2517,49 +2517,54 @@ export function OneKnob() {
 
   return (
     <>
-      <div className="mt-5 flex flex-col items-center gap-4 sm:flex-row">
+      <svg viewBox="0 0 320 186" role="img" aria-label={`the hiss valley; knob at ${k.toFixed(1)}, hiss ${h.toFixed(1)}`} className="mx-auto mt-5 block h-auto w-full max-w-sm select-none">
+        <path d={`M${VX0} ${VY0}H${VX1}`} strokeWidth={1} className="stroke-foreground/30" />
+        <path d={VALLEY} strokeWidth={2.5} className="fill-none stroke-cat-blue/60" />
+        <text x={VX1} y={VY0 + 30} textAnchor="end" fontSize={10} fontWeight={600} className="fill-foreground">
+          knob →
+        </text>
+        <text x={VX0} y={14} fontSize={10} fontWeight={600} className="fill-foreground">
+          ↑ খসখস কতটা
+        </text>
+        <text x={vx(QUIET)} y={VY0 + 14} textAnchor="middle" fontSize={9} className="fill-cat-teal">
+          সবচেয়ে চুপ
+        </text>
+        {!low && (
+          <g className="pointer-events-none">
+            <path d={`M${bx} ${VY0 + 20}h${dir * arrowLen}`} strokeWidth={3} strokeLinecap="round" className="stroke-cat-coral" />
+            <path d={`M${bx + dir * (arrowLen + 6)} ${VY0 + 20}l${-dir * 8} -5v10z`} className="fill-cat-coral" />
+            <text x={bx + dir * (arrowLen / 2)} y={VY0 + 34} textAnchor="middle" fontSize={9} className="fill-cat-coral">
+              এদিকে গেলে কমবে
+            </text>
+          </g>
+        )}
+        <path d={`M${bx} ${by}V${VY0}`} strokeWidth={1} strokeDasharray="3 3" className="stroke-cat-violet/50" />
+        <circle cx={bx} cy={by - 7} r={7} className="fill-cat-violet" />
+      </svg>
+      {/* the radio sits beside its buttons, so a press shows the knob turn and the hiss bars drop */}
+      <div className="mt-3 flex items-center justify-center gap-4">
         <Radio k={shown} h={hiss(shown)} />
-        <svg viewBox="0 0 320 186" role="img" aria-label={`the hiss valley; knob at ${k.toFixed(1)}, hiss ${h.toFixed(1)}`} className="block h-auto w-full max-w-sm select-none">
-          <path d={`M${VX0} ${VY0}H${VX1}`} strokeWidth={1} className="stroke-foreground/30" />
-          <path d={VALLEY} strokeWidth={2.5} className="fill-none stroke-cat-blue/60" />
-          <text x={VX1} y={VY0 + 30} textAnchor="end" fontSize={10} fontWeight={600} className="fill-foreground">
-            knob →
-          </text>
-          <text x={VX0} y={14} fontSize={10} fontWeight={600} className="fill-foreground">
-            ↑ খসখস কতটা
-          </text>
-          <text x={vx(QUIET)} y={VY0 + 14} textAnchor="middle" fontSize={9} className="fill-cat-teal">
-            সবচেয়ে চুপ
-          </text>
-          {!low && (
-            <g className="pointer-events-none">
-              <path d={`M${bx} ${VY0 + 20}h${dir * arrowLen}`} strokeWidth={3} strokeLinecap="round" className="stroke-cat-coral" />
-              <path d={`M${bx + dir * (arrowLen + 6)} ${VY0 + 20}l${-dir * 8} -5v10z`} className="fill-cat-coral" />
-              <text x={bx + dir * (arrowLen / 2)} y={VY0 + 34} textAnchor="middle" fontSize={9} className="fill-cat-coral">
-                এদিকে গেলে কমবে
-              </text>
-            </g>
-          )}
-          <path d={`M${bx} ${by}V${VY0}`} strokeWidth={1} strokeDasharray="3 3" className="stroke-cat-violet/50" />
-          <circle cx={bx} cy={by - 7} r={7} className="fill-cat-violet" />
-        </svg>
-      </div>
-      <div className="mt-2 text-center font-mono text-[0.95rem]">
-        knob এখন {k.toFixed(1)}-এ, আর খসখস{" "}
-        <b key={h.toFixed(1)} className={`${POP} inline-block ${low ? "text-accent-text" : ""}`}>
-          {h.toFixed(1)}
-        </b>
-      </div>
-      <div className="mt-3 flex flex-wrap justify-center gap-2">
-        <button type="button" onClick={() => turn(-0.5)} disabled={k <= 0} className={`${quietBtn} px-4`}>
-          − বাঁয়ে ঘোরান
-        </button>
-        <button type="button" onClick={() => turn(0.5)} disabled={k >= 10} className={`${quietBtn} px-4`}>
-          ডানে ঘোরান +
-        </button>
-        <button type="button" onClick={walk} disabled={low} className={primaryBtn}>
-          লাল arrow ধরে এক পা
-        </button>
+        <div className="flex flex-col items-center gap-2">
+          <div className="text-center text-[0.95rem] leading-snug">
+            knob <span className="font-mono">{k.toFixed(1)}</span>
+            <br />
+            খসখস{" "}
+            <b key={h.toFixed(1)} className={`${POP} inline-block font-mono ${low ? "text-accent-text" : ""}`}>
+              {h.toFixed(1)}
+            </b>
+          </div>
+          <div className="flex gap-2">
+            <button type="button" aria-label="বাঁয়ে ঘোরান" onClick={() => turn(-0.5)} disabled={k <= 0} className={`${quietBtn} px-3`}>
+              − বাঁয়ে
+            </button>
+            <button type="button" aria-label="ডানে ঘোরান" onClick={() => turn(0.5)} disabled={k >= 10} className={`${quietBtn} px-3`}>
+              ডানে +
+            </button>
+          </div>
+          <button type="button" onClick={walk} disabled={low} className={primaryBtn}>
+            লাল arrow ধরে এক পা
+          </button>
+        </div>
       </div>
       <Ticks
         items={[
@@ -2656,8 +2661,9 @@ function Dial({
         <button type="button" aria-label={`${name} কমান`} disabled={v <= lo} onClick={() => onTurn(-0.5)} className={btn}>
           −
         </button>
-        <span className="w-24 text-center whitespace-nowrap">
-          <span className="text-muted">{name}</span> <span className="font-mono">{nice(v)}</span>
+        <span className="w-12 text-center leading-tight whitespace-nowrap">
+          <span className="block text-xs text-muted">{name}</span>
+          <span className="font-mono">{nice(v)}</span>
         </span>
         <button type="button" aria-label={`${name} বাড়ান`} disabled={v >= hi} onClick={() => onTurn(0.5)} className={btn}>
           +
@@ -2689,7 +2695,7 @@ export function KnobStep() {
     const byHand = by !== "arrow";
     if (byHand) setTurned(true);
     if ((turned || byHand) && loss(n) < GOOD)
-      pass("লাল arrow-এর প্রত্যেক পা-এ sharp আর deep, দুইটা knob-ই একসাথে ঘুরলো। তাই একেকটা পা বলতে লাগলো দুইটা সংখ্যা।");
+      pass("প্রতি পা-এ দুইটা knob একসাথে ঘোরে।");
   };
   const go = () => {
     if (!low) move(stepOf(w), "arrow");
@@ -2706,36 +2712,6 @@ export function KnobStep() {
 
   return (
     <>
-      <div className="mt-5 flex justify-center gap-6">
-        {([0, 1] as const).map((i) => (
-          <Dial
-            key={i}
-            name={KNOB_NAMES[i]}
-            v={w[i]}
-            shown={here[i]}
-            range={KNOB_RANGE[i]}
-            lit={moved === "arrow" || moved === i}
-            delta={w[i] - before[i]}
-            stamp={path.length}
-            onTurn={(d) => turn(i, d)}
-          />
-        ))}
-      </div>
-      <div className="mt-2 min-h-12 text-center text-[0.95rem] leading-snug">
-        {moved === "arrow" ? (
-          <span key={path.length} className={`${FADE} font-semibold text-cat-coral`}>
-            খেয়াল করুন, লাল arrow-এর এক পা-এ sharp আর deep দুইটাই একসাথে ঘুরলো!
-          </span>
-        ) : moved !== null ? (
-          <span key={path.length} className={`${FADE} text-muted`}>
-            হাতে ঘোরালে একবারে একটাই knob ঘোরে। এবার শুধু {KNOB_NAMES[moved]} ঘুরলো, আর {KNOB_NAMES[1 - moved]} যেখানে ছিল সেখানেই।
-          </span>
-        ) : (
-          <span className="text-muted">
-            গোল গোল দাগগুলো ম্যাপের উচ্চতার দাগের মতো। বাইরের দাগে গানটা সবচেয়ে বেখাপ্পা শোনায়, যত ভেতরে যাবেন ভুল তত কম, আর একদম মাঝখানটা সবচেয়ে নিচু।
-          </span>
-        )}
-      </div>
       <Plane f={FK} ticks={2} label={`two knobs at (${w[0].toFixed(1)}, ${w[1].toFixed(1)}); error ${L.toFixed(2)}`} className="max-w-[24rem]">
         {[8, 4.5, 2, 0.5].map((c, i) => (
           <ellipse
@@ -2763,29 +2739,65 @@ export function KnobStep() {
           ↑ deep
         </Label>
       </Plane>
-      <div className="mx-auto grid max-w-sm gap-1 rounded-2xl border border-border px-4 py-3 text-center">
-        <div>
-          sharp আছে <span className="font-mono">{nice(w[0])}</span>-এ, deep আছে <span className="font-mono">{nice(w[1])}</span>-এ
-        </div>
-        <div>
-          ভুল এখন{" "}
-          <b key={L.toFixed(2)} className={`${POP} inline-block font-mono ${low ? "text-accent-text" : ""}`}>
+      {/* the dials, the error and the step button sit together right under the map,
+          so a press shows both knobs turning and the dot moving at once */}
+      <div className="mt-1 flex items-start justify-center gap-3">
+        <Dial
+          name={KNOB_NAMES[0]}
+          v={w[0]}
+          shown={here[0]}
+          range={KNOB_RANGE[0]}
+          lit={moved === "arrow" || moved === 0}
+          delta={w[0] - before[0]}
+          stamp={path.length}
+          onTurn={(d) => turn(0, d)}
+        />
+        <div className="flex w-16 flex-col items-center pt-10 text-center">
+          <span className="text-xs text-muted">ভুল</span>
+          <b key={L.toFixed(2)} className={`${POP} inline-block font-mono text-lg ${low ? "text-accent-text" : ""}`}>
             {L.toFixed(2)}
           </b>
         </div>
+        <Dial
+          name={KNOB_NAMES[1]}
+          v={w[1]}
+          shown={here[1]}
+          range={KNOB_RANGE[1]}
+          lit={moved === "arrow" || moved === 1}
+          delta={w[1] - before[1]}
+          stamp={path.length}
+          onTurn={(d) => turn(1, d)}
+        />
+      </div>
+      <div className="mt-1 min-h-5 text-center text-sm text-cat-coral">
         {!low && (
-          <div className="text-sm text-cat-coral">
+          <>
             লাল arrow-এর পরের পা <span className="font-mono">({signed(next[0] - w[0])}, {signed(next[1] - w[1])})</span>। দুই ঘরে দুই knob-এর ঘোরা।
-          </div>
+          </>
         )}
       </div>
-      <div className="mt-3 flex justify-center gap-2">
+      <div className="mt-2 flex justify-center gap-2">
         <button type="button" onClick={go} disabled={low} className={primaryBtn}>
           লাল arrow ধরে এক পা
         </button>
         <button type="button" onClick={restart} disabled={path.length === 1} className={`${quietBtn} px-3`} aria-label="আবার শুরু">
           ↺
         </button>
+      </div>
+      <div className="mt-2 min-h-12 text-center text-[0.95rem] leading-snug">
+        {moved === "arrow" ? (
+          <span key={path.length} className={`${FADE} font-semibold text-cat-coral`}>
+            খেয়াল করুন, লাল arrow-এর এক পা-এ sharp আর deep দুইটাই একসাথে ঘুরলো!
+          </span>
+        ) : moved !== null ? (
+          <span key={path.length} className={`${FADE} text-muted`}>
+            হাতে ঘোরালে একবারে একটাই knob ঘোরে। এবার শুধু {KNOB_NAMES[moved]} ঘুরলো, আর {KNOB_NAMES[1 - moved]} যেখানে ছিল সেখানেই।
+          </span>
+        ) : (
+          <span className="text-muted">
+            গোল গোল দাগগুলো ম্যাপের উচ্চতার দাগের মতো। বাইরের দাগে গানটা সবচেয়ে বেখাপ্পা শোনায়, যত ভেতরে যাবেন ভুল তত কম, আর একদম মাঝখানটা সবচেয়ে নিচু।
+          </span>
+        )}
       </div>
       <Ticks
         items={[
@@ -2855,7 +2867,7 @@ export function GradientFeel() {
   const choose = (i: number) => {
     if (way !== null) return;
     setWay(i);
-    pass("চড়াইয়ের arrow উল্টে দিলেই সবচেয়ে খাড়া নামার পথ। আগের screen-এর লাল arrow ঠিক এদিকটাই দেখাচ্ছিল।");
+    pass("চড়াইয়ের arrow উল্টালেই নামার পথ।");
   };
 
   return (
@@ -2921,40 +2933,43 @@ export function GradientFeel() {
         </Label>
       </Plane>
 
-      <div className="mt-3 flex flex-col items-center gap-4 sm:flex-row sm:items-center sm:justify-center">
-        <div className="grid shrink-0 grid-cols-3 grid-rows-3 gap-1" role="group" aria-label="কোন দিকে এক পা ফেলবেন">
-          {COMPASS.map((_, i) => (
-            <button
-              key={i}
-              type="button"
-              aria-label={`${DIR_NAME[i]} এক পা`}
-              aria-pressed={last === i}
-              onClick={() => probe(i)}
-              className={`${DIR_CELL[i]} grid size-10 cursor-pointer place-items-center rounded-xl border-2 transition-colors ${
-                last === i ? "border-cat-violet bg-cat-violet/10" : tried.includes(i) ? "border-border bg-foreground/[0.04]" : "border-border hover:border-cat-violet/60"
-              }`}
-            >
-              <svg viewBox="-10 -10 20 20" aria-hidden="true" className="size-5">
-                <path d="M-6 0H5M1 -4L5 0L1 4" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round" transform={`rotate(${-45 * i})`} className="fill-none stroke-current" />
-              </svg>
-            </button>
-          ))}
-          <span className="col-start-2 row-start-2 grid place-items-center text-xs text-muted">এক পা</span>
+      {/* once the climb is found the compass is done; the next question takes its place under the map */}
+      {!found && (
+        <div className="mt-3 flex flex-col items-center gap-4 sm:flex-row sm:items-center sm:justify-center">
+          <div className="grid shrink-0 grid-cols-3 grid-rows-3 gap-1" role="group" aria-label="কোন দিকে এক পা ফেলবেন">
+            {COMPASS.map((_, i) => (
+              <button
+                key={i}
+                type="button"
+                aria-label={`${DIR_NAME[i]} এক পা`}
+                aria-pressed={last === i}
+                onClick={() => probe(i)}
+                className={`${DIR_CELL[i]} grid size-10 cursor-pointer place-items-center rounded-xl border-2 transition-colors ${
+                  last === i ? "border-cat-violet bg-cat-violet/10" : tried.includes(i) ? "border-border bg-foreground/[0.04]" : "border-border hover:border-cat-violet/60"
+                }`}
+              >
+                <svg viewBox="-10 -10 20 20" aria-hidden="true" className="size-5">
+                  <path d="M-6 0H5M1 -4L5 0L1 4" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round" transform={`rotate(${-45 * i})`} className="fill-none stroke-current" />
+                </svg>
+              </button>
+            ))}
+            <span className="col-start-2 row-start-2 grid place-items-center text-xs text-muted">এক পা</span>
+          </div>
+          <div className="min-h-16 max-w-xs text-center text-[0.95rem] leading-snug sm:text-left">
+            {last === null ? (
+              <span className="text-muted">বিন্দু থেকে কোন দিকে এক পা ফেলে দেখবেন, পাশের বোতাম থেকে বেছে নিন।</span>
+            ) : RISE[last] > 0 ? (
+              <span key={last} className={FADE}>
+                {DIR_NAME[last]} এক পা ফেলতেই ভুল বেড়ে গেল <b className="font-mono text-cat-coral">{one(RISE[last])}</b>। এটা চড়াই।
+              </span>
+            ) : (
+              <span key={last} className={FADE}>
+                {DIR_NAME[last]} এক পা ফেলতেই ভুল কমে গেল <b className="font-mono text-cat-teal">{one(RISE[last])}</b>। এটা ঢাল বেয়ে নামা।
+              </span>
+            )}
+          </div>
         </div>
-        <div className="min-h-16 max-w-xs text-center text-[0.95rem] leading-snug sm:text-left">
-          {last === null ? (
-            <span className="text-muted">বিন্দু থেকে কোন দিকে এক পা ফেলে দেখবেন, পাশের বোতাম থেকে বেছে নিন।</span>
-          ) : RISE[last] > 0 ? (
-            <span key={last} className={FADE}>
-              {DIR_NAME[last]} এক পা ফেলতেই ভুল বেড়ে গেল <b className="font-mono text-cat-coral">{one(RISE[last])}</b>। এটা চড়াই।
-            </span>
-          ) : (
-            <span key={last} className={FADE}>
-              {DIR_NAME[last]} এক পা ফেলতেই ভুল কমে গেল <b className="font-mono text-cat-teal">{one(RISE[last])}</b>। এটা ঢাল বেয়ে নামা।
-            </span>
-          )}
-        </div>
-      </div>
+      )}
 
       {enough && !found && (
         <div className={`${FADE} mt-4 text-center`}>
@@ -3074,7 +3089,7 @@ export function VectorLadder() {
     if (from.includes(i)) return;
     const next = [...from, i];
     setPlaced(next);
-    if (next.length === RUNGS.length) pass("পাঁচ ঘরের একটা row থেকে হাজার কোটি ঘরের weights, সবই vector। আর প্রত্যেক knob-এর জন্য gradient-এ ঠিক একটা করে ঘর।");
+    if (next.length === RUNGS.length) pass("Weights আর gradient, দুইটাই vector।");
   };
   const tap = (i: number) => {
     if (placed.includes(i) || pair.running) return;
@@ -3235,7 +3250,7 @@ export function SayItCards() {
     if (open.includes(i)) return;
     const next = [...open, i];
     setOpen(next);
-    if (next.length === CARDS.length) pass("সাতটা চিহ্ন, আর প্রত্যেকটার পেছনে একটা সোজা বাক্য। বইয়ের ওই লাইনগুলো দেখে এখন আর ভয় লাগার কথা না।");
+    if (next.length === CARDS.length) pass("প্রতিটা চিহ্নের পেছনে একটা সোজা বাক্য।");
   };
 
   return (
@@ -3310,7 +3325,7 @@ export function PairUp() {
     run.play(end, () => {
       const next = seen.includes(i) ? seen : [...seen, i];
       setSeen(next);
-      if (next.length === PAIRINGS.length) pass("ঘর সমান হলে প্রত্যেক ঘর তার জোড়া পায়। না হলে কোথাও না কোথাও একজন একা পড়ে যায়, আর তফাত বের করার উপায়ই থাকে না।");
+      if (next.length === PAIRINGS.length) pass("ঘর সমান না হলে তফাত মাপা যায় না।");
     });
   };
 

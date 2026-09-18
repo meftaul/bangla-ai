@@ -127,7 +127,7 @@ export function RecipeWalk() {
       const key = recipe.join(",");
       const next = runs.includes(key) ? runs : [...runs, key];
       setRuns(next);
-      if (next.includes("2,3") && next.some((k) => k !== "2,3")) pass("দুইটা সংখ্যা, একটা হাঁটা, আর শেষে একটা arrow। Arrow-টাই vector।");
+      if (next.includes("2,3") && next.some((k) => k !== "2,3")) pass("দুইটা সংখ্যা মানে একটা arrow।");
     });
   };
 
@@ -260,7 +260,7 @@ export function PointIt() {
     if (i < 0 || hit.includes(i)) return;
     const next = Array.from(new Set([...hit, i]));
     setHit(next);
-    if (next.length === STARS.length) pass("Length হুবহু সমান, অথচ direction আলাদা। তাই vector-ও আলাদা।");
+    if (next.length === STARS.length) pass("দিক আলাদা হলে vector-ও আলাদা।");
   };
 
   return (
@@ -326,7 +326,7 @@ export function SlideArrow() {
     if (key === "0,0" || spots.includes(key)) return;
     const next = [...spots, key];
     setSpots(next);
-    if (next.length === PLACES_GOAL) pass("যেখানেই রাখুন, Start - End সেই (3, 1)।");
+    if (next.length === PLACES_GOAL) pass("যেখানেই রাখুন, vector সেই (3, 1)।");
   };
 
   const down = (p: XY) => {
@@ -429,7 +429,7 @@ export function SortArrows() {
     setMiss(null);
     const rest = ABCD.findIndex((_, i) => !next.includes(i));
     if (rest >= 0) setOpen(rest);
-    else pass("A, B আর C একই vector, তিন জায়গায় আঁকা। D আলাদা।");
+    else pass("একই vector, তিন জায়গায় আঁকা।");
   };
 
   return (
@@ -514,7 +514,7 @@ export function SlideHome() {
   const toggle = () => {
     const h = !home;
     setHome(h);
-    if (h) settle.play(1, () => pass("A, B আর C মিলে একটাই arrow হয়ে গেল, মাথা ঠিক (3, 1)-এ।"));
+    if (h) settle.play(1, () => pass("সরিয়ে বসালে তিনটাই একটা arrow।"));
   };
 
   return (
@@ -585,7 +585,7 @@ export function CityWalk() {
       if (walked.includes(i)) return;
       const next = [...walked, i];
       setWalked(next);
-      if (next.length === 3) pass("তিনটা আলাদা শুরু, অথচ তিনটা arrow হুবহু একই দিকে, একই দূরত্বে।");
+      if (next.length === 3) pass("শুরু আলাদা, অথচ arrow একই।");
     });
   };
 
@@ -696,7 +696,7 @@ export function PointOrMove() {
     }
     setMiss(0);
     setK(k + 1);
-    if (k + 1 === SAYINGS.length) pass("Point বলে “কোথায়”। Vector বলে “কোন দিকে, কত দূর”।");
+    if (k + 1 === SAYINGS.length) pass("Point মানে জায়গা, vector মানে হাঁটা।");
   };
 
   return (
@@ -768,7 +768,7 @@ export function Opposite() {
       const want = OPP[stage];
       if (same(recipe, want)) {
         setStage(stage + 1);
-        if (stage + 1 === OPP.length) pass("Length একই, দিক ঠিক উল্টো। Minus মানে ছোট না, উল্টো।");
+        if (stage + 1 === OPP.length) pass("Minus মানে ছোট না, উল্টো।");
       } else {
         const off = minus(want, recipe);
         setNote((m) => ({
@@ -831,7 +831,7 @@ export function ZeroArrow() {
     setTip(t);
     if (same(t, O) && !zeroed) {
       setZeroed(true);
-      pass("Length শূন্য। আর direction? কোনো দিকেই তাক করা না।");
+      pass("Zero vector-এর কোনো দিক নাই।");
     }
   };
 
@@ -881,7 +881,7 @@ export function UnitSteps() {
     const nextEnd = plus(end, d);
     if (nextEnd[0] < F2.x0 || nextEnd[0] > F2.x1 || nextEnd[1] < F2.y0 || nextEnd[1] > F2.y1) return;
     setSteps([...steps, d]);
-    if (same(nextEnd, UNIT_GOAL)) pass("প্রথম axis ধরে 3 পা, দ্বিতীয় axis ধরে −2 পা। সংখ্যাগুলো আসলে এই recipe-টাই।");
+    if (same(nextEnd, UNIT_GOAL)) pass("সংখ্যাগুলো বলে কোন axis-এ কত পা।");
   };
 
   return (

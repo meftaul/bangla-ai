@@ -18,9 +18,9 @@ import { GROW_WIDE, POP, SceneControls, type SceneState } from "./kit";
 // feet, about 62 units tall on a 320 × 180 stage.
 
 // ---------------------------------------------------------------------------
-// The cast.
+// The cast. মামী (ফাহিমের মামার স্ত্রী) came in with Article 4's হাট.
 
-export type Who = "fahim" | "samin" | "som" | "nasib" | "ammu" | "apa" | "mama" | "rina" | "karim";
+export type Who = "fahim" | "samin" | "som" | "nasib" | "ammu" | "apa" | "mama" | "rina" | "karim" | "mami";
 
 type Look = { name: string; shirt: string; pants: string; skin: string; hair: string };
 export const CAST: Record<Who, Look> = {
@@ -33,6 +33,7 @@ export const CAST: Record<Who, Look> = {
   mama: { name: "মামা", shirt: "#65a30d", pants: "#44403c", skin: "#c68e5f", hair: "#3f3f46" },
   rina: { name: "রিনা", shirt: "#db2777", pants: "#334155", skin: "#e8b88f", hair: "#1c1917" },
   karim: { name: "করিম", shirt: "#0891b2", pants: "#292524", skin: "#c68e5f", hair: "#1c1917" },
+  mami: { name: "মামী", shirt: "#9d174d", pants: "#9d174d", skin: "#d8a47a", hair: "#1c1917" },
 };
 
 const INK = "#0f1b2d";
@@ -108,7 +109,7 @@ export function Person({
   const calm = useCalm();
   const move = walking && !calm;
   const run = `${x},${y}`;
-  const dress = who === "ammu";
+  const dress = who === "ammu" || who === "mami";
   const coat = who === "apa";
   const eyeY = -51;
   const mouth =
@@ -158,8 +159,8 @@ export function Person({
           {/* head */}
           <circle cy={-51} r={9} fill={c.skin} />
           {/* hair, and each one's mark */}
-          {who === "ammu" ? (
-            <path d="M-11 -48q0 -15 11 -15t11 15q-1 -9 -11 -10t-11 10Z" fill="#a78bfa" />
+          {who === "ammu" || who === "mami" ? (
+            <path d="M-11 -48q0 -15 11 -15t11 15q-1 -9 -11 -10t-11 10Z" fill={who === "mami" ? "#f9a8d4" : "#a78bfa"} />
           ) : who === "rina" ? (
             <path d="M-9.5 -52q0 -10 9.5 -10t9.5 10q-5 -5 -9.5 -5t-9.5 5ZM-9.5 -52q-3 8 1 12M9.5 -52q3 8 -1 12" fill={c.hair} stroke={c.hair} strokeWidth={2} />
           ) : who === "samin" ? (

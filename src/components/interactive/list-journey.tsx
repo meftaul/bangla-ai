@@ -339,7 +339,7 @@ export function PartnerMap() {
     if (seen.includes(i)) return;
     const next = [...seen, i];
     setSeen(next);
-    if (next.length === 3) pass("কাগজে যার dot সবচেয়ে কাছে, মাপেও সে-ই সবচেয়ে কাছাকাছি।");
+    if (next.length === 3) pass("কাগজে যে কাছে, মাপেও সে কাছে।");
   };
 
   return (
@@ -401,10 +401,7 @@ export function FlipAll() {
     setFlipped(true);
     show.play(2, () =>
       pass(
-        i === FLIP_RIGHT
-          ? "ঠিক ধরেছেন! পুরো ছবিটা আয়নায় উল্টেছে, কিন্তু কে কার কাছে, সেটা একচুলও বদলায়নি।"
-          : "পুরো ছবিটা আয়নায় উল্টেছে, কিন্তু কে কার কাছে, সেটা একচুলও বদলায়নি।",
-      ),
+        "আয়নায় উল্টালেও কে কার কাছে, একই।"),
     );
   };
 
@@ -492,7 +489,7 @@ export function OneSlip() {
 
   const fix = () => {
     setFixed(true);
-    settle.play(1, () => pass("মাত্র একটা row-এর order উল্টো, আর উত্তরটা চুপচাপ ভুল। Program টু শব্দও করেনি।"));
+    settle.play(1, () => pass("Order উল্টালে উত্তর চুপচাপ ভুল।"));
   };
 
   return (
@@ -614,7 +611,7 @@ export function MissingAge() {
     if (tried.includes(f)) return;
     const next = [...tried, f];
     setTried(next);
-    if (next.length === FILLS.length) pass("একই খালি ঘর, অথচ কী বসালেন তার ওপর partner বদলে গেল।");
+    if (next.length === FILLS.length) pass("কী বসালেন, তাতেই partner বদলায়।");
   };
 
   const ranked =
@@ -798,7 +795,7 @@ export function SafeOrBug() {
     }
     setMiss(0);
     setK(k + 1);
-    if (k + 1 === EDITS.length) pass("সবচেয়ে বিপজ্জনক দলটা চিৎকার করে না। চুপ করে থাকে।");
+    if (k + 1 === EDITS.length) pass("বিপজ্জনক ভুল চিৎকার করে না।");
   };
 
   return (
@@ -1011,7 +1008,7 @@ export function SameVector() {
     if (seen.includes(f)) return;
     const next = [...seen, f];
     setSeen(next);
-    if (next.length === FORMS.length) pass("সংখ্যা একই, মানেও একই। শুধু সাজগোজ আলাদা।");
+    if (next.length === FORMS.length) pass("সংখ্যা একই, শুধু সাজগোজ আলাদা।");
   };
 
   return (
@@ -1119,7 +1116,7 @@ export function IndexTrap() {
     if (won) return;
     if (i === AGE_RIGHT) {
       setWon(true);
-      pass("অঙ্কে v₃, code-এ v[2]। একই ঘর, দুই রকম নম্বর।");
+      pass("অঙ্কে v₃, code-এ v[2]: একই ঘর।");
     } else if (!wrong.includes(i)) setWrong([...wrong, i]);
   };
   const lastWrong = wrong[wrong.length - 1];
@@ -1270,7 +1267,7 @@ export function ReadAloud() {
     if (won) return;
     if (i === DIM_RIGHT) {
       setWon(true);
-      pass("f হলো তিনটা সাধারণ সংখ্যার একটা list।");
+      pass("f হলো তিনটা সংখ্যার একটা list।");
     } else if (!wrong.includes(i)) setWrong([...wrong, i]);
   };
 

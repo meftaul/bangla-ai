@@ -75,7 +75,7 @@ export function WindReport() {
     if (tried.includes(r)) return;
     const next = [...tried, r];
     setTried(next);
-    if (next.length === REPORTS.length) pass("জোর আর দিক, দুইটা মিলেই বাতাস। একটা direction আর একটা magnitude, মানে একটা vector।");
+    if (next.length === REPORTS.length) pass("জোর আর দিক মিলে একটা vector।");
   };
 
   let waves = "";
@@ -201,7 +201,7 @@ export function BusVelocity() {
     if (got.includes(k)) return;
     const next = [...got, k];
     setGot(next);
-    if (next.length === 2) pass("Speed একটা সাধারণ সংখ্যা। Velocity-তে লাগে সংখ্যা আর দিক, দুইটাই।");
+    if (next.length === 2) pass("Speed শুধু সংখ্যা, velocity-তে দিকও।");
   };
 
   return (
@@ -349,7 +349,7 @@ export function TablePush() {
     if (!k || got.includes(k)) return;
     const next = [...got, k];
     setGot(next);
-    if (next.length === 2) pass("দুইজনেই জোরে ঠেলছে, তবু মোট ঠেলা শূন্য হতে পারে। শুধু জোর দিয়ে কিছু বোঝা যায় না, দিকটাও লাগে।");
+    if (next.length === 2) pass("জোর যতই হোক, দিক ছাড়া চলে না।");
   };
 
   return (
@@ -493,10 +493,7 @@ export function GolfThrow() {
     setGuess(i);
     show.play(1, () =>
       pass(
-        i === GOLF_RIGHT
-          ? "ঠিক ধরেছেন! গাড়ির চেয়েও জোরে, ছোড়ার চেয়েও জোরে, আর এমন দিকে যেদিকে কেউই যাচ্ছিল না।"
-          : "বল গেল কোণাকুনি, গাড়ির চেয়েও জোরে, ছোড়ার চেয়েও জোরে।",
-      ),
+        "বল গেল কোণাকুনি, সবার চেয়ে জোরে।"),
     );
   };
 
@@ -582,7 +579,7 @@ export function SameArrow() {
     if (seen.includes(i)) return;
     const next = [...seen, i];
     setSeen(next);
-    if (next.length === LENSES.length) pass("চশমা বদলায়, arrow বদলায় না, অঙ্কও বদলায় না।");
+    if (next.length === LENSES.length) pass("চশমা বদলায়, arrow বদলায় না।");
   };
 
   return (
@@ -676,7 +673,7 @@ export function PhoneTrap() {
     setOff(next);
     if (col !== "phone" && !off.includes(col)) setMiss((m) => ({ n: (m?.n ?? 0) + 1, col }));
     else setMiss(null);
-    if (col === "phone" && next.includes("phone")) pass("ফোন নম্বর কোনো পরিমাণ না। ওর “দূরত্ব” মাপলে হিসাব ঠিকই চলে, কিন্তু মানে দাঁড়ায় না।");
+    if (col === "phone" && next.includes("phone")) pass("ফোন নম্বরের “দূরত্ব”-এর মানে নাই।");
   };
 
   return (

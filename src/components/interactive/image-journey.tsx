@@ -332,7 +332,7 @@ export function CallFriend() {
     if (call !== "ringing") return;
     const t = setTimeout(() => {
       setCall("on");
-      pass("লাইন পেয়ে গেছেন। এবার ছবিটা রাফির খাতায় পৌঁছাতে হবে — শুধু কথা দিয়ে।");
+      pass("লাইন পেলেন, এবার পাঠাতে হবে কথায়।");
     }, 1800);
     return () => clearTimeout(t);
   }, [call, pass]);
@@ -395,7 +395,7 @@ export function JustWords() {
     setN((k) => k + 1);
     const t = tried.includes(id) ? tried : [...tried, id];
     setTried(t);
-    if (t.length === SAY.length) pass("দুইবারই রাফিকে guess করতে হলো। মুখের বর্ণনায় কাজ হচ্ছে না।");
+    if (t.length === SAY.length) pass("মুখের বর্ণনায় কাজ হচ্ছে না।");
   };
   const reply = SAY.find((s) => s.id === pick);
 
@@ -511,7 +511,7 @@ export function RuleGrid() {
             type="button"
             onClick={() => {
               setRuled(true);
-              pass("দুই খাতায় এখন ৬৪টা করে ঘর — প্রতিটা ঘর দুই খাতায় ঠিক একই জায়গায়।");
+              pass("দুই খাতায় ৬৪টা ঘর, একই জায়গায়।");
             }}
             className={primaryBtn}
           >
@@ -543,7 +543,7 @@ export function DarkDial() {
       grey: hit.grey || Math.abs(x - TARGET) <= CLOSE,
     };
     setHit(next);
-    if (next.black && next.white && next.grey) pass("0 মানে ঘুটঘুটে কালো, 255 মানে একদম সাদা, মাঝখানে সব ধূসর।");
+    if (next.black && next.white && next.grey) pass("0 কালো, 255 সাদা, মাঝে সব ধূসর।");
   };
   const count = [hit.black, hit.white, hit.grey].filter(Boolean).length;
 
@@ -612,10 +612,7 @@ export function MixedCell() {
     const t = setTimeout(() => {
       setOver(true);
       pass(
-        guess === MIX_RIGHT
-          ? `ঠিক ধরেছেন! পাখির অংশ আর কাগজের অংশ মিলে ধূসর — ${v}।`
-          : `আসলে মাঝামাঝি! পাখির অংশ আর কাগজের অংশ মিলে ধূসর — ${v}।`,
-      );
+        `আধা পাখি, আধা কাগজ: ধূসর ${v}।`);
     }, 2200);
     return () => clearTimeout(t);
   }, [guess, pass, v]);
@@ -684,7 +681,7 @@ export function ReadOut() {
   const said = read.k;
   const done = said === ALL;
 
-  const finish = () => pass("৬৪টা সংখ্যা — আর “পাখি” শব্দটা একবারও বলতে হয়নি।");
+  const finish = () => pass("৬৪টা সংখ্যা, “পাখি” বলতে হলো না।");
   const say = (end: number) => read.play(end, end === ALL ? finish : undefined, said);
 
   const row = rowOf(Math.max(0, said - 1));
@@ -755,10 +752,7 @@ export function WrongOrder() {
     setGuess(i);
     fill.play(ALL, () =>
       pass(
-        i === ORDER_RIGHT
-          ? "ঠিক ধরেছেন! সংখ্যা একই, শুধু কোনটা কোন ঘরে বসলো সেটা বদলেছে — তাতেই ছবি উল্টে গেল।"
-          : "আসলে পাখি উল্টে গেল! সংখ্যা একই, শুধু কোনটা কোন ঘরে বসলো সেটা বদলেছে।",
-      ),
+        "সংখ্যা একই, ঘর বদলালেই ছবি উল্টো।"),
     );
   };
 
@@ -804,7 +798,7 @@ export function PixelHunt() {
   const tap = (i: number) => {
     setAt(i);
     if (!seen.includes(i)) setSeen([...seen, i]);
-    if (i === DARKEST) pass(`পেয়েছেন! Value ${TONES[i]} — সবচেয়ে কালো pixel, তাই সবচেয়ে ছোট সংখ্যা।`);
+    if (i === DARKEST) pass("সবচেয়ে কালো pixel, সবচেয়ে ছোট সংখ্যা।");
   };
 
   return (
@@ -850,7 +844,7 @@ export function FinerGrid() {
     setN(k);
     if (k === FINEST) {
       setFinest(true);
-      pass("যত ছোট ঘর, ছবি তত পরিষ্কার — কিন্তু বলতে হয় তত বেশি সংখ্যা।");
+      pass("ঘর যত ছোট, ছবি তত পরিষ্কার।");
     }
   };
 
@@ -915,7 +909,7 @@ export function GuessPicture() {
     if (won) return;
     if (i === PICTURE_RIGHT) {
       setWon(true);
-      pass("মাঝের 240 প্রায় সাদা, চারপাশের সব প্রায় কালো — অন্ধকারে একটা উজ্জ্বল point।");
+      pass("অন্ধকারে একটা উজ্জ্বল point: 240।");
     } else setWrong((w) => (w.includes(i) ? w : [...w, i]));
   };
 
@@ -977,7 +971,7 @@ export function EditPicture() {
   const set = (v: number) => {
     const next = px.map((old, j) => (j === sel ? v : old));
     setPx(next);
-    if (next[4] < 60 && next[0] > 200) pass("কেউ photo edit করেনি — শুধু দুইটা সংখ্যা বদলেছে।");
+    if (next[4] < 60 && next[0] > 200) pass("কেউ edit করেনি, দুইটা সংখ্যা বদলেছে।");
   };
 
   return (
@@ -1040,7 +1034,7 @@ export function YouDraw() {
     if (px[i] === v) return;
     // functional update: a fast drag can land two cells before the next render
     setPx((p) => p.map((old, j) => (j === i ? v : old)));
-    if (!erase && lit + 1 >= P_GOAL) pass("আপনার কাছে এটা একটা ছবি। কম্পিউটারের কাছে ১৪৪টা সংখ্যার একটা list।");
+    if (!erase && lit + 1 >= P_GOAL) pass("ছবিটা আসলে ১৪৪টা সংখ্যার list।");
   };
 
   return (
@@ -1135,7 +1129,7 @@ export function BirdNumbers() {
 
   const show = (n: boolean) => {
     setNum(n);
-    if (n) pass(`পাখিটা উধাও! বাকি থাকলো ${bn("1,600")}টা সংখ্যা।`);
+    if (n) pass(`পাখি উধাও, রইলো ${bn("1,600")}টা সংখ্যা।`);
   };
 
   return (
