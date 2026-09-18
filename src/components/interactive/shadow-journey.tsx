@@ -561,7 +561,7 @@ export function NoCrossTalk() {
     if (open.includes(c)) return;
     const next = [...open, c];
     setOpen(next);
-    if (next.length === 4) pass("Axis সোজা কোণে, তাই থাকে ঘরে ঘরে গুণ।");
+    if (next.length === 4) pass("Axis ৯০ degree কোণে, তাই থাকে ঘরে ঘরে গুণ।");
   };
 
   return (
@@ -596,7 +596,7 @@ export function NoCrossTalk() {
                   </div>
                   {on ? (
                     <div className={FADE}>
-                      <div className="text-[0.7rem] leading-tight">{same ? "নিজের ওপর পুরো ছায়া, 1" : "সোজা কোণ, ছায়া 0"}</div>
+                      <div className="text-[0.7rem] leading-tight">{same ? "নিজের ওপর পুরো ছায়া, 1" : "৯০ degree কোণ, ছায়া 0"}</div>
                       <div className={`font-mono text-lg font-bold ${same ? "" : "line-through"}`}>{same ? x * y : 0}</div>
                     </div>
                   ) : (

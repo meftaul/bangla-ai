@@ -167,10 +167,10 @@ export function MamaAtClub({}: Story) {
           <S_Film key={c} x={S1_STALL - 26 + i * 26} y={S1_Y - 24} w={20} h={20} color={c} />
         ))}
         <Person who="nasib" x={S1_NASIB} y={S1_Y} facing={-1} mood="happy" arm={k === 1 ? "wave" : k >= 2 ? "hold" : "down"} label />
-        {k === 1 && <Bubble x={S1_NASIB} y={S1_Y - 66} side="left" lines={["পছন্দ বলুন,", "ছবি বেছে দেবো!"]} />}
+        {k === 1 && <Bubble x={S1_NASIB} y={S1_Y - 66} side="left" lines={["পছন্দ বলুন,", "মুভি বেছে দেবো!"]} />}
         {k >= 2 && <CastCard x={S1_NASIB - 6} y={S1_Y - 76} text="(drama, comedy)" tone="blue" />}
         <Person who="mama" x={k >= 3 ? S1_MAMA : -30} y={S1_Y} walking={k === 3} ms={1500} mood={k >= 4 ? "happy" : "plain"} label={k >= 3} />
-        {k >= 4 && <Bubble x={S1_MAMA} y={S1_Y - 66} lines={["আমার চাই শুধু", "হাসির ছবি!"]} />}
+        {k >= 4 && <Bubble x={S1_MAMA} y={S1_Y - 66} lines={["আমার ", "comedy movie লাগবে!"]} />}
       </Stage>
     </StoryFrame>
   );
