@@ -1,1044 +1,393 @@
 "use client";
 
-import { useEffect, useState, type KeyboardEvent, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
 import { Task, useGate } from "@/components/journey/journey";
 import {
   Choice,
-  Draw,
   FADE,
   Nope,
   POP,
   Speech,
-  Ticks,
-  pill,
   predictLook,
   primaryBtn,
   quietBtn,
   useCountUp,
   usePlay,
+  useSeed,
+  type Fixtures,
 } from "@/components/journey/kit";
 import { bn } from "./figure-kit";
 
 // Screens for "Math for AI 1.2 — বাইনারি", told as a Journey.
 //
-// The old side lesson's story (binary-figures.tsx), one beat per screen, and
-// then carried on to where the main lesson promises it goes: load-shedding at
-// ten, Samin's window across the lane, no phone balance. A dimmer can't be read
-// from across the lane; on/off always can. Bulbs double the messages (the
-// reader finds every pattern, builds the doubling, predicts four bulbs, grows
-// the tree). Then the patterns become numbers: every bulb gets a price tag, a
-// pattern means the sum of its switched-on bulbs, and the reader picks the tags
-// and watches each pattern land on the number it makes. Only doubling (1, 2, 4,
-// 8…) wastes no pattern and skips no number. Eight bulbs top out at 255.
+// The route is twenty questions. Shom's party trick names any number from 0 to
+// 31 in five yes/no questions, because each question throws away half of what
+// is left: 32 → 16 → 8 → 4 → 2 → 1. So one more question handles twice as many
+// numbers (eight questions, 256). Then the turn: from the answers alone the
+// number comes back, because every "yes" means "skip the lower half", and the
+// lower half holds 16, then 8, 4, 2, 1 numbers. Those skips are the place
+// values; write yes as 1 and no as 0 and the answer row is the number in
+// binary. A wire can give exactly one such answer (current or none — half a
+// current reads as nothing), so a computer keeps numbers as rows of answers,
+// and eight of them are the 0–255 of a pixel's brightness.
 //
-// The window is night in both themes, so the bulbs, glass and lane use fixed
-// colours; everything around them uses the site's theme tokens. Tailwind only.
-// SVG/DOM rather than canvas, so the Bangla labels shape.
+// Tailwind only; SVG/DOM so the Bangla labels shape.
 
-/** Bulb values for k bulbs, leftmost (biggest) first. */
-const placesOf = (k: number) => Array.from({ length: k }, (_, j) => 1 << (k - 1 - j));
-const bitsOf = (n: number, k: number) => placesOf(k).map((w) => (n & w) !== 0);
-const binary = (n: number, k: number) => bitsOf(n, k).map((b) => (b ? "1" : "0")).join("");
-const spoken = (n: number, k: number) => bitsOf(n, k).map((b) => (b ? "on" : "off")).join(", ");
-
-// The codebook. Index = the pattern read as a binary number, so the two-bulb
-// code is exactly the first four rows of the three-bulb one (the doubling
-// lesson, in data form) and its first two rows are the one-bulb code.
-const MESSAGES = [
-  "আব্বু বাসায় নেই",
-  "আব্বু বাসায় আছে",
-  "আব্বু মুদির দোকানে গেছেন",
-  "আম্মুও বাসায় নেই",
-  "কাল বিকেলে মাঠে খেলা আছে",
-  "বল্টু ব্যাট আনবে",
-  "বল্টু ব্যাট না আনলে তুই আনিস",
-  "বলটা না হয় আমিই আনবো",
-];
-
-function Samin(props: { tone?: "plain" | "good" | "bad"; children: ReactNode }) {
-  return <Speech who="সামিন" initial="স" tint="teal" {...props} />;
-}
-
-/** Enter / Space on a focused SVG shape, like a button. */
-const pressKey = (fn: () => void) => (e: KeyboardEvent) => {
-  if (e.key === "Enter" || e.key === " ") {
-    e.preventDefault();
-    fn();
-  }
+const N = 32;
+const Q = 5;
+/** How many numbers question i (0-based) skips on a "yes", out of `total`. */
+const halfAt = (i: number, total = N) => total >> (i + 1);
+/** Where a row of answers has narrowed 0…total−1 down to. */
+const windowOf = (answers: number[], total = N) => {
+  const lo = answers.reduce((a, b, i) => a + b * halfAt(i, total), 0);
+  return { lo, hi: lo + (total >> answers.length) - 1 };
 };
+const binary = (n: number, k: number) => n.toString(2).padStart(k, "0");
+const placesOf = (k: number) => Array.from({ length: k }, (_, j) => 1 << (k - 1 - j));
+
+function Shom(props: { tone?: "plain" | "good" | "bad"; children: ReactNode }) {
+  return <Speech who="সোম" initial="সো" tint="teal" {...props} />;
+}
 
 // ---------------------------------------------------------------------------
-// Bulbs. They always sit in a night window, so their colours are fixed.
+// The numbers 0–31 as a strip. The live window stays coloured; while a question
+// is open, its "yes" half is tinted so the reader can see what yes would keep.
 
-const GLASS = "M20 4a14 14 0 0 0-8.2 25.4c1.6 1.2 2.7 3 2.7 5V37h11v-2.6c0-2 1.1-3.8 2.7-5A14 14 0 0 0 20 4z";
+const CW = 10;
 
-function Bulb({ on, className = "" }: { on: boolean; className?: string }) {
+function Strip({ lo, hi, split = false, mark }: { lo: number; hi: number; split?: boolean; mark?: number | null }) {
+  const mid = lo + (hi - lo + 1) / 2;
   return (
-    <svg
-      viewBox="0 0 40 52"
-      aria-hidden="true"
-      className={`block h-auto transition-[filter] duration-300 motion-reduce:transition-none ${
-        on ? "drop-shadow-[0_0_10px_rgba(251,191,36,0.85)]" : ""
-      } ${className}`}
-    >
-      <path
-        d={GLASS}
-        strokeWidth={1.5}
-        className={`transition-[fill,stroke] duration-300 ${on ? "fill-[#fcd34d] stroke-[#f59e0b]" : "fill-white/5 stroke-white/40"}`}
-      />
-      <path
-        d="M16.5 27l1.8-5.5 1.7 4 1.7-4 1.8 5.5"
-        strokeWidth={1.1}
-        strokeLinejoin="round"
-        className={`fill-none ${on ? "stroke-[#b45309]" : "stroke-white/25"}`}
-      />
-      <path d="M15 40.5h10M15.5 44.5h9M17.5 48.5h5" strokeWidth={2.2} strokeLinecap="round" className="fill-none stroke-white/45" />
-    </svg>
-  );
-}
-
-/** A night window: the frame every bulb row sits in. */
-function Pane({ label, children, className = "" }: { label?: string; children: ReactNode; className?: string }) {
-  return (
-    <div className="min-w-0">
-      {label ? <div className="mb-1.5 text-center text-sm font-medium text-muted">{label}</div> : null}
-      <div className={`relative overflow-hidden rounded-2xl bg-[#0b1226] px-3 py-4 ring-4 ring-[#334155] ${className}`}>{children}</div>
+    <div className="mx-auto my-4 w-full max-w-md">
+      <svg viewBox={`0 0 ${N * CW} 58`} role="img" aria-label={`${lo} থেকে ${hi}`} className="block h-auto w-full">
+        {Array.from({ length: N }, (_, i) => {
+          const live = i >= lo && i <= hi;
+          const yes = split && i >= mid && live;
+          return (
+            <rect
+              key={i}
+              x={i * CW + 1}
+              y={20}
+              width={CW - 2}
+              height={16}
+              rx={2}
+              className={`transition-[fill] duration-500 motion-reduce:transition-none ${
+                !live ? "fill-foreground/10" : yes ? "fill-cat-violet" : "fill-cat-teal"
+              }`}
+            />
+          );
+        })}
+        {mark != null && (
+          <path d={`M${mark * CW + CW / 2} 16l-4-7h8z`} className="fill-foreground transition-transform duration-500" />
+        )}
+        {lo === hi ? (
+          <text x={Math.min(Math.max(lo * CW + CW / 2, 10), N * CW - 10)} y={52} textAnchor="middle" className="fill-foreground text-[11px] font-bold">
+            {bn(lo)}
+          </text>
+        ) : (
+          <>
+            <text x={lo * CW + 1} y={52} textAnchor="start" className="fill-muted text-[11px]">
+              {bn(lo)}
+            </text>
+            <text x={(hi + 1) * CW - 1} y={52} textAnchor="end" className="fill-muted text-[11px]">
+              {bn(hi)}
+            </text>
+          </>
+        )}
+      </svg>
     </div>
   );
 }
 
 /**
- * A row of bulbs, leftmost biggest. With `onToggle` each is a switch. `under`
- * writes something below a bulb (its value, its digit).
+ * A row of answer boxes. `digits` writes 1/0 instead of হ্যাঁ/না; `worth`
+ * puts a label above a box; `cur` rings the box being worked on.
  */
-function Bulbs({
-  n,
-  k,
-  onToggle,
-  under,
-  size = "w-12 sm:w-14",
+function Answers({
+  items,
+  digits = false,
+  worth,
+  cur,
 }: {
-  n: number;
-  k: number;
-  onToggle?: (w: number) => void;
-  under?: (w: number, on: boolean) => ReactNode;
-  size?: string;
+  items: (number | undefined)[];
+  digits?: boolean;
+  worth?: (i: number) => string | undefined;
+  cur?: number;
 }) {
   return (
-    <div className="flex items-end justify-center gap-1 sm:gap-2" role={onToggle ? "group" : "img"} aria-label={spoken(n, k)}>
-      {placesOf(k).map((w, j) => {
-        const on = (n & w) !== 0;
-        const body = (
-          <>
-            <Bulb on={on} className={size} />
-            {under ? <span className="mt-1 block text-center font-mono text-sm text-white/80">{under(w, on)}</span> : null}
-          </>
-        );
-        return onToggle ? (
-          <button
-            key={w}
-            type="button"
-            aria-pressed={on}
-            aria-label={`বাঁ থেকে ${bn(j + 1)} নম্বর বাল্ব`}
-            onClick={() => onToggle(w)}
-            className="cursor-pointer rounded-xl p-1 transition-transform hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#fbbf24]"
+    <div className="flex justify-center gap-1.5" role="list" aria-label="উত্তরের সারি">
+      {items.map((a, i) => (
+        <div key={i} role="listitem" className="flex w-13 flex-col items-center gap-1">
+          <span className="h-4 font-mono text-xs text-muted">{worth?.(i) ?? ""}</span>
+          <span
+            className={`grid h-11 w-full place-items-center rounded-lg border-2 font-bold transition-colors duration-300 ${
+              a === undefined
+                ? "border-dashed border-border text-muted"
+                : a
+                  ? "border-cat-violet bg-cat-violet/15 text-cat-violet"
+                  : "border-cat-teal/60 bg-cat-teal/10 text-cat-teal"
+            } ${cur === i ? "ring-2 ring-foreground/60 ring-offset-2 ring-offset-surface" : ""} ${digits ? "font-mono text-xl" : ""}`}
           >
-            {body}
-          </button>
-        ) : (
-          <div key={w} className="p-1">
-            {body}
-          </div>
-        );
-      })}
-    </div>
-  );
-}
-
-/** A pattern in miniature, on the page. `lead` is an extra bulb slid in front. */
-function Dots({ n, k, lead, small = false }: { n: number; k: number; lead?: "off" | "on"; small?: boolean }) {
-  return (
-    <span className={`inline-flex shrink-0 items-center ${small ? "gap-0.5" : "gap-1"}`} role="img" aria-label={`${lead ? `${lead}, ` : ""}${spoken(n, k)}`}>
-      {lead ? <Dot on={lead === "on"} lead small={small} /> : null}
-      {bitsOf(n, k).map((b, j) => (
-        <Dot key={j} on={b} small={small} />
+            {a === undefined ? "" : digits ? String(a) : a ? "হ্যাঁ" : "না"}
+          </span>
+        </div>
       ))}
-    </span>
-  );
-}
-
-function Dot({ on, lead = false, small = false }: { on: boolean; lead?: boolean; small?: boolean }) {
-  return (
-    <i
-      className={`inline-block ${small ? "size-2.5" : "size-3.5"} rounded-full transition-colors duration-300 ${
-        on ? "bg-[#fbbf24] shadow-[0_0_6px_rgba(251,191,36,0.9)]" : "border border-foreground/30 bg-foreground/5"
-      } ${lead ? `${POP} ring-2 ring-cat-violet ring-offset-1 ring-offset-surface` : ""}`}
-    />
-  );
-}
-
-// Across the lane. Samin sees your window small and far away, with the shop
-// light below spilling into it — which is exactly what makes a dimmer useless.
-
-function Halo({ level, className = "" }: { level: number; className?: string }) {
-  return (
-    <div
-      aria-hidden="true"
-      style={{ opacity: level }}
-      className={`pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_45%,rgba(252,211,77,0.95),transparent_62%)] transition-opacity duration-700 motion-reduce:transition-none ${className}`}
-    />
-  );
-}
-
-function ShopLight() {
-  return (
-    <div
-      aria-hidden="true"
-      className="pointer-events-none absolute inset-x-0 bottom-0 h-3/4 animate-pulse bg-linear-to-t from-[#fb923c]/45 to-transparent"
-    />
-  );
-}
-
-/** Your window and what Samin makes of it, side by side. `level` is 0 (off) to 1 (full). */
-function TwoWindows({ level }: { level: number }) {
-  return (
-    <div className="mx-auto my-5 grid w-full max-w-md grid-cols-2 gap-4">
-      <Pane label="আপনার জানালা" className="grid aspect-[4/3] place-items-center">
-        <Halo level={level * 0.85} />
-        <div className="relative transition-opacity duration-700" style={{ opacity: level ? 0.35 + 0.65 * level : 1 }}>
-          <Bulb on={level > 0} className="w-12" />
-        </div>
-      </Pane>
-      <Pane label="সামিনের চোখে" className="grid aspect-[4/3] place-items-center">
-        <Halo level={level * 0.6} className="blur-sm" />
-        <ShopLight />
-        <div
-          className="relative size-4 rounded-full bg-[#fde68a] blur-[2px] transition-opacity duration-700"
-          style={{ opacity: level ? 0.25 + 0.6 * level : 0 }}
-        />
-        <span className="absolute bottom-1.5 left-0 w-full text-center text-[0.7rem] text-white/60">নিচে দোকানের আলো</span>
-      </Pane>
     </div>
   );
 }
 
 // ---------------------------------------------------------------------------
-// 1 · Ten at night. The lane goes dark; find Samin's window across it.
+// 1 · Shom's trick, played on the reader: pick a secret number, answer five
+//     questions honestly, watch the strip halve down to it.
 
-const LW = 320;
-const LH = 200;
-const GROUND = 176;
-type Bldg = { x: number; y: number; w: number; tank: number };
-const YOURS: Bldg = { x: 14, y: 58, w: 108, tank: 26 };
-const THEIRS: Bldg = { x: 198, y: 66, w: 108, tank: 272 };
-const WW = 30;
-const WH = 22;
-const winsOf = (b: Bldg) => [0, 1, 2].flatMap((r) => [0, 1].map((c) => ({ x: b.x + 14 + c * 50, y: b.y + 16 + r * 32, r, c })));
-const MY_WIN = { x: YOURS.x + 64, y: YOURS.y + 16 };
-const HIS_WIN = { x: THEIRS.x + 14, y: THEIRS.y + 16 };
-const STARS: [number, number][] = [
-  [30, 18], [62, 32], [100, 14], [138, 28], [176, 12], [212, 34], [240, 16], [304, 24], [118, 46], [192, 50],
-];
-
-/** Someone standing at a window, as a silhouette. */
-function Person({ x, y }: { x: number; y: number }) {
-  return (
-    <g className={POP}>
-      <circle cx={x} cy={y + 9} r={3.2} className="fill-[#94a3b8]" />
-      <path d={`M${x - 6} ${y + WH}Q${x} ${y + 10} ${x + 6} ${y + WH}Z`} className="fill-[#94a3b8]" />
-    </g>
-  );
-}
-
-export function LoadShedding() {
+export function FiveQuestions() {
   const pass = useGate();
-  const [dark, setDark] = useState(false);
-  const [found, setFound] = useState(false);
+  const [secret, setSecret] = useSeed<number | null>("secret", null);
+  const [answers, setAnswers] = useSeed<number[]>("answers", []);
   const [miss, setMiss] = useState(0);
+  const { lo, hi } = windowOf(answers);
+  const done = answers.length === Q;
+  const mid = lo + halfAt(answers.length);
 
-  useEffect(() => {
-    const t = setTimeout(() => setDark(true), 1600);
-    return () => clearTimeout(t);
-  }, []);
-
-  const tap = (his: boolean) => {
-    if (!dark || found) return;
-    if (his) {
-      setFound(true);
-      pass("ওই তো সামিন! ফোনে balance নাই, কিন্তু জানালা দিয়ে দুইজন দুইজনকে দেখতে পাচ্ছেন।");
-    } else setMiss((m) => m + 1);
-  };
-
-  return (
-    <>
-      <div className="mx-auto my-5 w-full max-w-md overflow-hidden rounded-2xl ring-1 ring-foreground/15">
-        <svg viewBox={`0 0 ${LW} ${LH}`} role="group" aria-label="a lane at night between your building and Samin's" className="block h-auto w-full select-none">
-          <rect width={LW} height={LH} className={`transition-[fill] duration-1000 ${dark ? "fill-[#050914]" : "fill-[#1e3a5f]"}`} />
-          {dark &&
-            STARS.map(([x, y], i) => (
-              <circle key={i} cx={x} cy={y} r={0.9} style={{ transitionDelay: `${800 + i * 60}ms` }} className={`fill-white/80 ${FADE}`} />
-            ))}
-          <rect x={0} y={GROUND} width={LW} height={LH - GROUND} className="fill-[#1f2937]" />
-          {/* the street light */}
-          <polygon
-            points={`155,94 165,94 188,${GROUND} 132,${GROUND}`}
-            className={`fill-[#fde68a]/15 transition-opacity duration-500 ${dark ? "opacity-0" : "opacity-100"}`}
-          />
-          <line x1={160} y1={GROUND} x2={160} y2={92} strokeWidth={2} className="stroke-[#475569]" />
-          <circle cx={160} cy={91} r={3.5} className={`transition-[fill] duration-500 ${dark ? "fill-[#334155]" : "fill-[#fde68a]"}`} />
-
-          {[YOURS, THEIRS].map((b, bi) => (
-            <g key={bi}>
-              <rect x={b.tank} y={b.y - 19} width={18} height={14} rx={2} className="fill-[#334155]" />
-              <rect x={b.x - 4} y={b.y - 5} width={b.w + 8} height={6} className="fill-[#475569]" />
-              <rect x={b.x} y={b.y} width={b.w} height={GROUND - b.y} className="fill-[#334155]" />
-              {winsOf(b).map((w, wi) => {
-                const mine = bi === 0 && w.r === 0 && w.c === 1;
-                const his = bi === 1 && w.r === 0 && w.c === 0;
-                return (
-                  <rect
-                    key={wi}
-                    x={w.x}
-                    y={w.y}
-                    width={WW}
-                    height={WH}
-                    rx={1.5}
-                    role={mine ? undefined : "button"}
-                    tabIndex={mine || !dark || found ? -1 : 0}
-                    aria-label={mine ? undefined : `${bi === 0 ? "আপনার বিল্ডিং" : "ওপারের বিল্ডিং"}, ${bn(w.r + 1)} তলার জানালা`}
-                    onClick={mine ? undefined : () => tap(his)}
-                    onKeyDown={mine ? undefined : pressKey(() => tap(his))}
-                    strokeWidth={mine && dark ? 1.5 : 0}
-                    style={{ transitionDelay: dark ? `${(bi * 6 + wi) * 70}ms` : "0ms" }}
-                    className={`transition-[fill] duration-300 focus-visible:outline-none ${
-                      dark ? "fill-[#0f172a]" : "fill-[#fcd34d]"
-                    } ${mine ? "stroke-cat-teal" : dark && !found ? "cursor-pointer hover:fill-[#1e293b]" : ""}`}
-                  />
-                );
-              })}
-            </g>
-          ))}
-
-          {dark && (
-            <text x={MY_WIN.x + WW / 2} y={MY_WIN.y - 4} textAnchor="middle" className={`${FADE} fill-[#5eead4] text-[9px] font-semibold delay-700`}>
-              আপনি
-            </text>
-          )}
-          {found && (
-            <g>
-              <Draw
-                d={`M${MY_WIN.x + WW} ${MY_WIN.y + 11}L${HIS_WIN.x} ${HIS_WIN.y + 11}`}
-                strokeWidth={1}
-                ms={700}
-                className="stroke-white/40 [stroke-dasharray:3_3]"
-              />
-              <Person x={MY_WIN.x + 9} y={MY_WIN.y} />
-              <Person x={HIS_WIN.x + 21} y={HIS_WIN.y} />
-              <text x={HIS_WIN.x + WW / 2} y={HIS_WIN.y - 4} textAnchor="middle" className={`${POP} fill-[#5eead4] text-[9px] font-semibold`}>
-                সামিন
-              </text>
-            </g>
-          )}
-          <text x={10} y={16} className="fill-white/70 text-[10px] font-semibold">
-            রাত ১০টা
-          </text>
-          {dark && (
-            <text x={LW - 10} y={16} textAnchor="end" className={`${POP} fill-[#fca5a5] text-[10px] font-bold`}>
-              লোডশেডিং!
-            </text>
-          )}
-        </svg>
-      </div>
-      <Task done={found}>
-        {dark ? "আপনার জানালার (সবুজ দাগ দেওয়া) ঠিক মুখোমুখি জানালাটায় tap করুন — ওটাই সামিনের।" : "একটু অপেক্ষা করুন…"}
-      </Task>
-      {miss > 0 && !found && <Nope key={miss}>উঁহু। আপনার জানালার ঠিক মুখোমুখি, গলির ওপারে।</Nope>}
-    </>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// 2 · The dimmer. "A bit" and "a bit more" don't survive the lane.
-
-const DIM = [
-  { id: 5, level: 0.45, say: "৫টা — dimmer একটু ঘোরান", reply: "৫টা নাকি ৬টা? নিচের দোকানের আলোয় ঠিক বুঝলাম না।" },
-  { id: 6, level: 0.62, say: "৬টা — আরেকটু ঘোরান", reply: "এটা কি আগেরটার চেয়ে বেশি? আমার চোখে তো একই রকম।" },
-];
-
-export function DimmerFails() {
-  const pass = useGate();
-  const [sent, setSent] = useState<number[]>([]);
-  const [cur, setCur] = useState<number | null>(null);
-  const [n, setN] = useState(0);
-  const d = DIM.find((x) => x.id === cur);
-
-  const send = (id: number) => {
-    setCur(id);
-    setN((k) => k + 1);
-    const t = sent.includes(id) ? sent : [...sent, id];
-    setSent(t);
-    if (t.length === DIM.length) pass("“একটু” আর “আরেকটু”-র তফাত গলির ওপার থেকে বোঝা যায় না। Dimmer বাদ।");
-  };
-
-  return (
-    <>
-      <TwoWindows level={d?.level ?? 0} />
-      <div className="text-sm font-medium text-muted">সামিনকে বোঝান:</div>
-      <div className="mt-2 flex flex-col gap-2">
-        {DIM.map((x) => (
-          <button
-            key={x.id}
-            type="button"
-            onClick={() => send(x.id)}
-            className={`flex w-full cursor-pointer items-center gap-3 rounded-xl border-2 px-4 py-2.5 text-left transition-colors duration-200 ${
-              x.id === cur ? "border-cat-teal bg-cat-teal/10" : "border-border hover:border-cat-teal/60"
-            }`}
-          >
-            <span>{x.say}</span>
-            {sent.includes(x.id) && <span className="ml-auto text-danger">✕</span>}
-          </button>
-        ))}
-      </div>
-      {d && (
-        <Samin key={n} tone="bad">
-          {d.reply}
-        </Samin>
-      )}
-      <Task done={sent.length === DIM.length}>
-        দুইটাই পাঠিয়ে দেখুন ({bn(sent.length)}/{bn(DIM.length)})
-      </Task>
-    </>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// 3 · On or off, though, Samin never gets wrong — even through the shop light.
-
-const FLIPS = 4;
-
-export function OnOffSure() {
-  const pass = useGate();
-  const [on, setOn] = useState(false);
-  const [flips, setFlips] = useState(0);
-
-  const flip = () => {
-    setOn(!on);
-    const f = flips + 1;
-    setFlips(f);
-    if (f === FLIPS) pass("Switched on নাকি switched off — এটা সামিন কখনো ভুল দেখবে না। ঝামেলা একটাই: একটা বাল্বে মাত্র দুইটা কথা।");
-  };
-
-  return (
-    <>
-      <TwoWindows level={on ? 1 : 0} />
-      <div className="flex justify-center">
-        <button type="button" onClick={flip} className={primaryBtn} aria-pressed={on}>
-          {on ? "Switch off করুন" : "Switch on করুন"}
-        </button>
-      </div>
-      <div className="mx-auto mt-4 grid max-w-xs gap-1.5">
-        {[0, 1].map((v) => (
-          <div
-            key={v}
-            className={`flex items-center gap-3 rounded-lg border px-3 py-1.5 transition-colors duration-300 ${
-              (on ? 1 : 0) === v ? "border-[#f59e0b] bg-[#fbbf24]/10" : "border-border"
-            }`}
-          >
-            <Dots n={v} k={1} />
-            <span>{MESSAGES[v]}</span>
-          </div>
-        ))}
-      </div>
-      {flips > 0 && (
-        <Samin key={flips} tone="good">
-          {on ? "Switched on! মানে আব্বু বাসায় আছে।" : "Switched off — মানে আব্বু বাসায় নেই।"}
-        </Samin>
-      )}
-      <Task done={flips >= FLIPS}>
-        বাল্বটা কয়েকবার switch on-off করুন ({bn(Math.min(flips, FLIPS))}/{bn(FLIPS)})
-      </Task>
-    </>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// 4, 5 · Find every pattern two (then three) bulbs can make. The codebook
-//        fills in as each one turns up; "all off" counts from the start.
-
-export function FindPatterns({ bulbs }: { bulbs: 2 | 3 }) {
-  const pass = useGate();
-  const total = 1 << bulbs;
-  const [n, setN] = useState(0);
-  const [found, setFound] = useState<number[]>([0]);
-  const [touched, setTouched] = useState(false);
-
-  const toggle = (w: number) => {
-    const v = n ^ w;
-    setN(v);
-    setTouched(true);
-    if (!found.includes(v)) {
-      const f = [...found, v];
-      setFound(f);
-      if (f.length === total)
-        pass(bulbs === 2 ? "৪টা pattern, ৪টা মেসেজ — এক বাল্বের দ্বিগুণ।" : "৮টা pattern! আবার দ্বিগুণ।");
+  const answer = (a: number) => {
+    if (secret === null || done) return;
+    const truth = secret >= mid ? 1 : 0;
+    if (a !== truth) {
+      setMiss((m) => m + 1);
+      return;
     }
+    const next = [...answers, a];
+    setAnswers(next);
+    if (next.length === Q) pass("৩২টা সংখ্যা, মাত্র ৫টা প্রশ্ন। প্রতিটা উত্তর বাকি সংখ্যাগুলোর অর্ধেক বাদ দিয়ে দিলো: ৩২ → ১৬ → ৮ → ৪ → ২ → ১।");
   };
 
-  return (
-    <>
-      <div className="mx-auto my-5 max-w-xs">
-        <Pane label="আপনার জানালা · বাল্বে tap করুন">
-          <Bulbs n={n} k={bulbs} onToggle={toggle} />
-        </Pane>
-      </div>
-      {touched && (
-        <Samin key={n} tone="good">
-          বুঝছি — {MESSAGES[n]}।
-        </Samin>
-      )}
-      <div className="mt-4 text-sm font-medium text-muted">
-        দুইজনের লিস্ট · {bn(found.length)}/{bn(total)}টা pattern পাওয়া গেছে
-      </div>
-      <ol className="mt-2 grid gap-1.5">
-        {Array.from({ length: total }, (_, v) => {
-          const got = found.includes(v);
-          return (
-            <li
-              key={v}
-              className={`flex items-center gap-3 rounded-lg border px-3 py-1.5 text-[0.95rem] transition-colors duration-300 ${
-                !got ? "border-dashed border-border text-muted" : v === n ? "border-[#f59e0b] bg-[#fbbf24]/10" : "border-border"
-              }`}
-            >
-              {got ? (
-                <>
-                  <Dots n={v} k={bulbs} />
-                  <span key="m" className={FADE}>
-                    {MESSAGES[v]}
-                  </span>
-                  {bulbs === 3 && v >= 4 ? (
-                    <span className="ml-auto shrink-0 rounded-full bg-cat-violet/15 px-2 text-xs font-semibold text-cat-violet">নতুন</span>
-                  ) : v === 0 ? (
-                    <span className="ml-auto shrink-0 text-xs text-muted">সব off-ও একটা pattern</span>
-                  ) : null}
-                </>
-              ) : (
-                <span>? এখনো পাওয়া যায়নি</span>
-              )}
-            </li>
-          );
-        })}
-      </ol>
-      <Task done={found.length === total}>
-        বাল্বগুলো on-off করে সবগুলো আলাদা pattern খুঁজে বের করুন ({bn(found.length)}/{bn(total)})
-      </Task>
-    </>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// 6 · Why it doubles, acted out in three presses: copy the list, OFF in front
-//     of one copy, ON in front of the other.
-
-const DBL_BTN = ["লিস্টটার একটা কপি করুন", "প্রথম কপির সামনে একটা switched off বাল্ব বসান", "দ্বিতীয় কপির সামনে একটা switched on বাল্ব বসান"];
-
-export function Doubling() {
-  const pass = useGate();
-  const [step, setStep] = useState(0);
-
-  const next = () => {
-    const s = step + 1;
-    setStep(s);
-    if (s === 3) pass("পুরনো ৪টা + নতুন ৪টা = ৮। প্রতিটা নতুন বাল্ব ঠিক এই কাজটাই করে।");
-  };
-
-  const copy = (half: 0 | 1) => {
-    const lead = half === 0 ? (step >= 2 ? "off" : undefined) : step >= 3 ? "on" : undefined;
-    const fresh = half === 1 && step >= 3;
+  if (secret === null) {
     return (
-      <div
-        className={`rounded-xl border-2 p-3 transition-colors duration-500 ${
-          half === 1 ? `${FADE} starting:translate-x-6 transition-[opacity,translate,border-color]` : ""
-        } ${fresh ? "border-cat-violet/50 bg-cat-violet/5" : "border-border"}`}
-      >
-        <div className="mb-2 text-sm font-medium text-muted">
-          {half === 0 ? (step >= 1 ? "কপি ১" : "আগের লিস্ট") : "কপি ২"}
-          {lead ? (lead === "off" ? " · সামনে off" : " · সামনে on") : ""}
-        </div>
-        <ol className="grid gap-1.5">
-          {[0, 1, 2, 3].map((v) => (
-            <li key={v} className="flex items-center gap-2.5 text-[0.93rem]">
-              <Dots n={v} k={2} lead={lead} />
-              <span key={String(fresh)} className={`${FADE} ${half === 1 && !fresh ? "text-muted line-through" : ""}`}>
-                {MESSAGES[fresh ? 4 + v : v]}
-              </span>
-            </li>
+      <>
+        <div className="mt-4 text-center text-sm font-medium text-muted">মনে মনে একটা সংখ্যা বেছে নিন (সোম দেখছে না)</div>
+        <div className="mx-auto mt-3 grid max-w-md grid-cols-8 gap-1.5">
+          {Array.from({ length: N }, (_, i) => (
+            <button
+              key={i}
+              type="button"
+              onClick={() => setSecret(i)}
+              className="cursor-pointer rounded-lg border border-border py-1.5 font-mono text-sm transition-colors hover:border-cat-violet hover:bg-cat-violet/10"
+            >
+              {bn(i)}
+            </button>
           ))}
-        </ol>
-      </div>
+        </div>
+        <Task done={false}>০ থেকে ৩১-এর মধ্যে যেকোনো একটা সংখ্যায় tap করুন।</Task>
+      </>
     );
-  };
+  }
 
   return (
     <>
-      <div className="my-5 grid gap-3 sm:grid-cols-2">
-        {copy(0)}
-        {step >= 1 && copy(1)}
-      </div>
-      {step === 1 || step === 2 ? (
-        <div className="rounded-xl bg-cat-amber/10 px-3.5 py-2.5 text-[0.95rem] leading-snug transition duration-300 starting:opacity-0">
-          একই pattern-এর তো দুইটা মানে হতে পারে না! কপি দুইটাকে আলাদা করতে হবে।
-        </div>
-      ) : null}
-      {step === 3 && (
-        <div className={`${POP} text-center font-mono text-3xl font-bold`}>
-          ৪ + ৪ = ৮
-        </div>
-      )}
-      {step < 3 && (
-        <div className="mt-4 flex justify-center">
-          <button type="button" onClick={next} className={primaryBtn}>
-            {DBL_BTN[step]}
+      <div className="mt-3 flex items-center justify-center gap-3 text-sm text-muted">
+        <span>
+          আপনার গোপন সংখ্যা: <b className="font-mono text-base text-foreground">{bn(secret)}</b>
+        </span>
+        {answers.length === 0 && (
+          <button type="button" onClick={() => setSecret(null)} className={quietBtn}>
+            বদলান
           </button>
-        </div>
+        )}
+      </div>
+      <Strip lo={lo} hi={hi} split={!done} mark={secret} />
+      <div className="text-center text-sm text-muted">
+        বাকি আছে <b className="text-foreground">{bn(hi - lo + 1)}</b>টা সংখ্যা · প্রশ্ন হয়েছে {bn(answers.length)}টা
+      </div>
+      {done ? (
+        <Shom tone="good">তোর সংখ্যা {bn(lo)}! ঠিক বললাম না?</Shom>
+      ) : (
+        <>
+          <Shom key={answers.length}>
+            প্রশ্ন {bn(answers.length + 1)}: তোর সংখ্যাটা কি <b>{bn(mid)}</b> বা তার বেশি?
+          </Shom>
+          <div className="mt-3 flex justify-center gap-2">
+            <button type="button" onClick={() => answer(1)} className={primaryBtn}>
+              হ্যাঁ
+            </button>
+            <button type="button" onClick={() => answer(0)} className={primaryBtn}>
+              না
+            </button>
+          </div>
+          {miss > 0 && <Nope key={miss}>উঁহু, আপনার সংখ্যা {bn(secret)}। সত্যি উত্তর না দিলে ম্যাজিক কাজ করবে না!</Nope>}
+        </>
       )}
-      <Task done={step === 3}>তিনটা ধাপে লিস্টটাকে দ্বিগুণ করুন ({bn(step)}/{bn(3)})</Task>
+      <div className="mt-4">
+        <Answers items={Array.from({ length: Q }, (_, i) => answers[i])} />
+      </div>
+      <Task done={done}>সোমের পাঁচটা প্রশ্নের সত্যি উত্তর দিন ({bn(answers.length)}/{bn(Q)})</Task>
     </>
   );
 }
 
 // ---------------------------------------------------------------------------
-// 7 · Four bulbs: guess from the tally, then watch it built from three.
+// 2 · A thousand people. Guess the number of questions, then watch 1000 halve.
 
-const FOUR_OPTIONS = [9, 10, 12, 16];
-const FOUR_RIGHT = 3;
+const HOW_OPTIONS = [10, 32, 100, 500];
+const HOW_RIGHT = 0;
+const LADDER = [1000, 500, 250, 125, 63, 32, 16, 8, 4, 2, 1];
 
-export function PredictFour() {
+export function HowMany() {
   const pass = useGate();
-  const [guess, setGuess] = useState<number | null>(null);
-  const build = usePlay(1100);
-  const phase = build.k; // 1 the eight · 2 copied · 3 fronted · 4 counted
-  const over = guess !== null && phase === 4;
+  const [guess, setGuess] = useSeed<number | null>("guess", null);
+  const [done, setDone] = useSeed("done", false);
+  const run = usePlay(280);
+  const k = done ? LADDER.length - 1 : run.k;
+  const over = guess !== null && k === LADDER.length - 1;
 
   const choose = (i: number) => {
     if (guess !== null) return;
     setGuess(i);
-    build.play(4, () =>
-      pass(
-        i === FOUR_RIGHT
-          ? "ঠিক ধরেছেন — ১৬! সামনে off-ওয়ালা ৮টা আর সামনে on-ওয়ালা ৮টা।"
-          : "বাল্বগুলো বলছে ১৬। সামনে off-ওয়ালা ৮টা আর সামনে on-ওয়ালা ৮টা।",
-      ),
-    );
+    run.play(LADDER.length - 1, () => {
+      setDone(true);
+      pass("মাত্র ১০টা প্রশ্ন! প্রশ্ন একটা বাড়লেই সংখ্যার পাল্লা দ্বিগুণ হয়ে যায়।");
+    });
   };
-
-  const tally: [string, string][] = [
-    ["১টা বাল্ব", "২"],
-    ["২টা বাল্ব", "৪"],
-    ["৩টা বাল্ব", "৮"],
-    ["৪টা বাল্ব", over ? "১৬" : "?"],
-  ];
 
   return (
     <>
-      <div className="my-5 flex flex-wrap items-center justify-center gap-x-1.5 gap-y-2">
-        {tally.map(([who, count], i) => (
-          <span key={who} className="inline-flex items-center gap-1.5">
-            {i > 0 && <span className="text-sm text-muted">{i === 3 && !over ? "× ?" : "× ২"} →</span>}
-            <span
-              className={`inline-flex flex-col items-center rounded-xl border-2 px-3 py-1.5 ${
-                i === 3 ? (over ? "win-pop border-accent bg-accent/10" : "border-dashed border-foreground/40") : "border-border"
-              }`}
-            >
-              <b className="font-mono text-xl">{count}</b>
-              <span className="text-xs text-muted">{who}</span>
-            </span>
-          </span>
-        ))}
-      </div>
-
-      {phase > 0 && (
-        <div className="mb-4 grid grid-cols-2 gap-3">
-          {[0, 1].map((half) =>
-            phase >= half + 1 ? (
-              <div key={half} className={`rounded-xl border-2 border-border p-3 ${FADE}`}>
-                <div className="mb-2 text-sm font-medium text-muted">
-                  {phase >= 3 ? (half ? "সামনে on" : "সামনে off") : half ? "কপি" : "৩ বাল্বের ৮টা"}
-                </div>
-                <div className="grid gap-1.5">
-                  {Array.from({ length: 8 }, (_, v) => (
-                    <Dots key={v} n={v} k={3} lead={phase >= 3 ? (half ? "on" : "off") : undefined} />
-                  ))}
-                </div>
-              </div>
-            ) : (
-              <div key={half} />
-            ),
-          )}
-        </div>
-      )}
-      {over && <div className={`${POP} mb-3 text-center font-mono text-2xl font-bold`}>৮ + ৮ = ১৬</div>}
-
-      <div className="text-sm font-medium text-muted">৪টা বাল্বে কয়টা মেসেজ?</div>
+      <div className="text-sm font-medium text-muted">১০০০ জনের মধ্যে একজনকে খুঁজতে কয়টা হ্যাঁ/না প্রশ্ন লাগবে?</div>
       <div className="mt-2 grid grid-cols-2 gap-2">
-        {FOUR_OPTIONS.map((o, i) => (
-          <Choice key={o} n={i} look={predictLook(i, guess, over, FOUR_RIGHT)} disabled={guess !== null} onClick={() => choose(i)}>
+        {HOW_OPTIONS.map((o, i) => (
+          <Choice key={o} n={i} look={predictLook(i, guess, over, HOW_RIGHT)} disabled={guess !== null} onClick={() => choose(i)}>
             <span className="font-mono text-lg">{bn(o)}টা</span>
           </Choice>
         ))}
       </div>
-      <Task done={over}>আগে guess করুন — তারপর ৩ বাল্ব থেকে ৪ বাল্ব বানিয়ে মিলিয়ে দেখা হবে।</Task>
-    </>
-  );
-}
 
-// ---------------------------------------------------------------------------
-// 8 · The arithmetic as a tree: each bulb forks every branch in two. Each new
-//     bulb sets off a tour that lights the branches one at a time, root to
-//     pattern, counting them; after that the reader can point at any row to
-//     light its branch.
-
-const TREE_K = 4;
-const TW = 320;
-const TH = 236;
-const TOP = 26;
-const SPAN = TH - TOP - 8;
-const LX = [16, 72, 128, 184, 238];
-const PAT_X = 256;
-const NODE_R = [0, 6.5, 5.5, 4.4, 3.4];
-/** Per segment of a lit branch, so the whole branch traces in well under a tour step. */
-const TRACE_MS = 90;
-/** Vertical position of node j on level L (level 0 is the start). */
-const nodeY = (level: number, j: number) => TOP + ((j + 0.5) * SPAN) / (1 << level);
-
-export function BranchTree() {
-  const pass = useGate();
-  const [shown, setShown] = useState(1);
-  const [pick, setPick] = useState<number | null>(null);
-  const tour = usePlay(520);
-  const levels = Array.from({ length: shown }, (_, i) => i + 1);
-  const count = 1 << shown;
-  // the branch lit right now: the tour's while it runs, else the reader's
-  const lit = tour.running ? (tour.k >= 0 ? tour.k : null) : pick;
-  /** The node branch `lit` passes through on level L. */
-  const litAt = (L: number) => (lit ?? 0) >> (shown - L);
-
-  const add = () => {
-    const s = shown + 1;
-    setShown(s);
-    setPick(null);
-    // start one step early, so the new branches finish drawing before the tour lights them
-    tour.play(1 << s, undefined, -1);
-    if (s === TREE_K) pass("প্রতিটা বাল্ব প্রতিটা ডালকে দুই ভাগ করে — তাই প্রতিবার × ২।");
-  };
-
-  const choose = (j: number) => {
-    if (tour.running) tour.play(0);
-    setPick(j);
-  };
-
-  return (
-    <>
-      <div className="mx-auto mt-5 mb-2 w-full max-w-md">
-        <svg
-          viewBox={`0 0 ${TW} ${TH}`}
-          role="group"
-          aria-label={`a tree of choices for ${shown} bulbs: ${count} branches`}
-          onPointerLeave={(e) => e.pointerType === "mouse" && !tour.running && setPick(null)}
-          className="block h-auto w-full"
-        >
-          {levels.map((L) => (
-            <text key={L} x={LX[L]} y={12} textAnchor="middle" className={`${FADE} fill-muted text-[9px]`}>
-              বাল্ব {bn(L)}
-            </text>
-          ))}
-          <text x={PAT_X + 12} y={12} textAnchor="middle" className="fill-muted text-[9px]">
-            pattern
-          </text>
-          <g className={`transition-opacity duration-300 motion-reduce:transition-none ${lit === null ? "" : "opacity-30"}`}>
-            {levels.map((L) =>
-              Array.from({ length: 1 << L }, (_, j) => (
-                <Draw
-                  key={`e${L}-${j}`}
-                  d={`M${LX[L - 1]} ${nodeY(L - 1, j >> 1)}L${LX[L]} ${nodeY(L, j)}`}
-                  strokeWidth={1.4}
-                  ms={500}
-                  className={j & 1 ? "stroke-[#f59e0b]" : "stroke-foreground/35"}
-                />
-              )),
-            )}
-            {levels.map((L) =>
-              Array.from({ length: 1 << L }, (_, j) => (
-                <circle
-                  key={`n${L}-${j}`}
-                  cx={LX[L]}
-                  cy={nodeY(L, j)}
-                  r={NODE_R[L]}
-                  strokeWidth={1}
-                  style={{ transitionDelay: "350ms" }}
-                  className={`${POP} ${j & 1 ? "fill-[#fbbf24] stroke-[#f59e0b]" : "fill-surface stroke-foreground/40"}`}
-                />
-              )),
-            )}
-          </g>
-          <text x={(LX[0] + LX[1]) / 2 - 2} y={(nodeY(0, 0) + nodeY(1, 0)) / 2 - 3} textAnchor="middle" className="fill-muted text-[9px]">
-            off
-          </text>
-          <text x={(LX[0] + LX[1]) / 2 - 2} y={(nodeY(0, 0) + nodeY(1, 1)) / 2 + 11} textAnchor="middle" className="fill-[#d97706] text-[9px]">
-            on
-          </text>
-          <circle cx={LX[0]} cy={nodeY(0, 0)} r={3} className="fill-foreground/60" />
-
-          {/* the lit branch, traced from the start to its pattern */}
-          {lit !== null && (
-            <g key={`${shown}-${lit}`}>
-              <rect
-                x={PAT_X - 5}
-                y={nodeY(shown, lit) - 5}
-                width={(shown - 1) * 7 + 10}
-                height={10}
-                rx={5}
-                className="fill-cat-amber/20"
-              />
-              {levels.map((L) => (
-                <Draw
-                  key={L}
-                  d={`M${LX[L - 1]} ${nodeY(L - 1, litAt(L) >> 1)}L${LX[L]} ${nodeY(L, litAt(L))}`}
-                  strokeWidth={3}
-                  ms={TRACE_MS}
-                  delay={(L - 1) * TRACE_MS}
-                  className={litAt(L) & 1 ? "stroke-[#f59e0b]" : "stroke-foreground/80"}
-                />
-              ))}
-              {levels.map((L) => (
-                <circle
-                  key={`n${L}`}
-                  cx={LX[L]}
-                  cy={nodeY(L, litAt(L))}
-                  r={NODE_R[L] + 1}
-                  strokeWidth={1.6}
-                  style={{ transitionDelay: `${L * TRACE_MS}ms`, transitionDuration: "150ms" }}
-                  className={`${FADE} ${litAt(L) & 1 ? "fill-[#fbbf24] stroke-[#b45309]" : "fill-surface stroke-foreground"}`}
-                />
-              ))}
-            </g>
-          )}
-
-          {/* each branch of the newest level, read back as the pattern it spells */}
-          <g key={shown}>
-            {Array.from({ length: count }, (_, j) => (
-              <g key={j} className={`transition-opacity duration-300 motion-reduce:transition-none ${lit === null || lit === j ? "" : "opacity-30"}`}>
-                {bitsOf(j, shown).map((b, k) => (
-                  <circle
-                    key={k}
-                    cx={PAT_X + k * 7}
-                    cy={nodeY(shown, j)}
-                    r={2.6}
-                    strokeWidth={0.8}
-                    style={{ transitionDelay: "500ms" }}
-                    className={`${FADE} ${b ? "fill-[#fbbf24]" : "fill-foreground/10 stroke-foreground/30"}`}
-                  />
-                ))}
-              </g>
-            ))}
-          </g>
-
-          {/* one full-width band per branch, so any row is easy to point at */}
-          {Array.from({ length: count }, (_, j) => (
-            <rect
-              key={`b${shown}-${j}`}
-              x={0}
-              y={TOP + (j * SPAN) / count}
-              width={TW}
-              height={SPAN / count}
-              tabIndex={0}
-              role="button"
-              aria-label={`ডাল ${bn(j + 1)}: ${spoken(j, shown)}`}
-              onPointerEnter={() => choose(j)}
-              onClick={() => choose(j)}
-              onFocus={() => choose(j)}
-              className="cursor-pointer fill-transparent outline-none focus-visible:fill-foreground/5"
-            />
-          ))}
-        </svg>
-      </div>
-      <div className="mb-3 flex min-h-7 flex-wrap items-center justify-center gap-x-1.5 text-sm">
-        {lit === null ? (
-          <span className="text-muted">কোনো ডালে tap করুন, পুরো পথটা জ্বলে উঠবে</span>
-        ) : (
-          <>
-            <span className="text-muted">
-              ডাল {bn(lit + 1)}/{bn(count)}:
-            </span>
-            {bitsOf(lit, shown).map((b, i) => (
-              <span key={i} className="font-mono">
-                {i > 0 && <span className="text-muted">→ </span>}
-                <b className={b ? "text-[#d97706]" : ""}>{b ? "on" : "off"}</b>
-              </span>
-            ))}
-          </>
-        )}
-      </div>
-      <div className="text-center font-mono text-2xl font-bold">
-        {Array.from({ length: shown }, () => "২").join(" × ")} = {bn(1 << shown)}
-      </div>
-      <div className="mt-3 flex justify-center">
-        <button type="button" onClick={add} disabled={shown >= TREE_K} className={primaryBtn}>
-          + আরেকটা বাল্ব
-        </button>
-      </div>
-      <Task done={shown >= TREE_K}>
-        চারটা বাল্ব পর্যন্ত যোগ করে দেখুন ({bn(shown)}/{bn(TREE_K)})
-      </Task>
-    </>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// 9, 10 · Price tags. Every bulb gets a value, and a pattern means the sum of
-//         its switched-on bulbs. The reader picks the newest (leftmost) bulb's
-//         value and watches every pattern drop onto the number it adds up to.
-//         A wrong value either lands two patterns on one number (a pattern
-//         wasted) or leaves a number no pattern can say. Only doubling does
-//         neither — which is the whole reason the values go 1, 2, 4, 8.
-
-const TAG = {
-  2: { options: [1, 2, 3], right: 2 },
-  3: { options: [3, 4, 5, 6], right: 4 },
-};
-
-export function PriceTag({ bulbs }: { bulbs: 2 | 3 }) {
-  const pass = useGate();
-  const { options, right } = TAG[bulbs];
-  const [pick, setPick] = useState<number | null>(null);
-  const [solved, setSolved] = useState(false);
-  const total = 1 << bulbs;
-  // the bulbs to its right are already worth what they turn out to be (1, 2)
-  const lead = 1 << (bulbs - 1);
-  const worth = (w: number) => (w === lead ? (pick ?? 0) : w);
-
-  const sumOf = (p: number) => placesOf(bulbs).reduce((a, w) => a + (p & w ? worth(w) : 0), 0);
-  const max = placesOf(bulbs).reduce((a, w) => a + worth(w), 0);
-  const slots = Array.from({ length: max + 1 }, (_, s) =>
-    Array.from({ length: total }, (_, p) => p).filter((p) => sumOf(p) === s),
-  );
-  const twice = slots.findIndex((ps) => ps.length > 1);
-  const hole = slots.findIndex((ps) => ps.length === 0);
-
-  const choose = (v: number) => {
-    setPick(v);
-    if (v === right) {
-      setSolved(true);
-      pass(bulbs === 2 ? "২! চারটা pattern, চারটা আলাদা সংখ্যা: ০ থেকে ৩।" : "৪! আটটা pattern, আটটা আলাদা সংখ্যা: ০ থেকে ৭।");
-    }
-  };
-
-  return (
-    <>
-      <div className="mx-auto my-5 max-w-xs">
-        <Pane label="প্রতিটা বাল্বের গায়ে একটা দাম">
-          <Bulbs
-            n={0}
-            k={bulbs}
-            under={(w) =>
-              w === lead ? (
-                <span className="rounded-full bg-cat-violet px-2 font-bold text-white">{pick === null ? "?" : bn(pick)}</span>
-              ) : (
-                bn(w)
-              )
-            }
-          />
-        </Pane>
-      </div>
-
-      <div className="text-center text-sm font-medium text-muted">বাঁয়ের বাল্বটার দাম কত হবে?</div>
-      <div className="mt-2 flex flex-wrap justify-center gap-2">
-        {options.map((v) => (
-          <button key={v} type="button" aria-pressed={v === pick} onClick={() => choose(v)} className={pill(v === pick)}>
-            দাম {bn(v)}
-          </button>
-        ))}
-      </div>
-
-      {pick === null ? (
-        <div className="mt-5 text-center text-[0.95rem] text-muted">
-           এমন একটা দাম বেছে নাও যেন নিচের দুইটা শর্তই মেলে
-        </div>
-      ) : (
-        <>
-          <div className="mt-5 text-sm font-medium text-muted">প্রতিটা pattern কোন সংখ্যা বোঝাচ্ছে:</div>
-          {/* keyed by the pick, so every new value drops the patterns in again */}
-          <div key={pick} className="mt-2 flex flex-wrap justify-center gap-1.5">
-            {slots.map((ps, s) => (
-              <div
-                key={s}
-                className={`flex w-14 flex-col items-center gap-1 rounded-xl border-2 px-1 pt-1.5 pb-1 ${
-                  ps.length > 1
-                    ? "border-danger/60 bg-danger/5"
-                    : ps.length === 0
-                      ? "border-dashed border-danger/40"
-                      : "border-accent/40 bg-accent/5"
+      {guess !== null && (
+        <div className="mt-5 flex flex-wrap items-center justify-center gap-x-1 gap-y-2">
+          {LADDER.slice(0, k + 1).map((c, i) => (
+            <span key={i} className={`inline-flex items-center gap-1 ${POP}`}>
+              {i > 0 && <span className="text-xs text-muted">→</span>}
+              <span
+                className={`rounded-lg border-2 px-2 py-0.5 font-mono text-base ${
+                  c === 1 ? "border-accent bg-accent/10 font-bold text-accent-text" : "border-border"
                 }`}
               >
-                <div className="flex min-h-12 flex-col items-center justify-end gap-1">
-                  {ps.map((p) => (
-                    <span key={p} className={`block ${POP}`} style={{ transitionDelay: `${p * 140}ms` }}>
-                      <Dots n={p} k={bulbs} small />
-                    </span>
-                  ))}
-                  {ps.length === 0 && <span className="text-xs text-danger/80">ফাঁকা</span>}
-                </div>
-                <b className="font-mono text-lg">{bn(s)}</b>
-              </div>
-            ))}
-          </div>
-          {twice >= 0 ? (
-            <Nope key={`twice-${pick}`}>{bn(twice)} বলার দুইটা উপায় হয়ে গেল — একটা pattern নষ্ট!</Nope>
-          ) : hole >= 0 ? (
-            <Nope key={`hole-${pick}`}>{bn(hole)} বলার কোনো উপায়ই নাই!</Nope>
-          ) : (
-            <div className={`${FADE} mt-2 text-center text-[0.95rem] font-medium text-accent-text`}>
-              প্রতিটা সংখ্যা ঠিক একবার করে। কোনো pattern নষ্ট নাই, মাঝে কোনো ফাঁকাও নাই।
-            </div>
-          )}
-        </>
+                {bn(c)}
+              </span>
+            </span>
+          ))}
+        </div>
       )}
-      <Ticks
-        items={[
-          ["কোনো সংখ্যা দুইবার না", pick !== null && twice < 0],
-          ["মাঝে কোনো ফাঁকা নাই", pick !== null && hole < 0],
-        ]}
-      />
-      <Task done={solved}>বাঁয়ের বাল্বের এমন একটা দাম খুঁজুন, যাতে দুইটা শর্তই মেলে।</Task>
+      {guess !== null && <div className="mt-2 text-center text-sm text-muted">প্রশ্ন হলো {bn(k)}টা</div>}
+
+      {over && (
+        <div className={`${FADE} mx-auto mt-4 grid max-w-xs grid-cols-2 gap-x-6 gap-y-1 text-[0.95rem]`}>
+          {[
+            [1, 2],
+            [2, 4],
+            [3, 8],
+            [5, 32],
+            [8, 256],
+            [10, 1024],
+          ].map(([q, c]) => (
+            <div key={q} className="contents">
+              <span className="text-right text-muted">{bn(q)}টা প্রশ্নে</span>
+              <b className="font-mono">{bn(c)}টা সংখ্যা</b>
+            </div>
+          ))}
+        </div>
+      )}
+      <Task done={over}>আগে guess করুন, তারপর ১০০০ অর্ধেক হতে হতে কোথায় থামে দেখুন।</Task>
     </>
   );
 }
 
 // ---------------------------------------------------------------------------
-// 11 · Make numbers: switch bulbs until their values add up to the target.
+// 3 · Only the answers. Replay Shom's questions one answer at a time; each
+//     "yes" skips the lower half and banks how many numbers it skipped.
 
-const TARGETS = [5, 6, 3];
+const SHOM_ROW = [1, 0, 1, 1, 0];
 
-export function MakeNumber() {
+export function RowToNumber() {
   const pass = useGate();
-  const [n, setN] = useState(0);
-  const [k, setK] = useState(0);
-  const target: number | undefined = TARGETS[k];
-  const lit = placesOf(3).filter((w) => n & w);
+  const [step, setStep] = useSeed("step", 0);
+  const applied = SHOM_ROW.slice(0, step);
+  const { lo, hi } = windowOf(applied);
+  const total = applied.reduce((a, b, i) => a + b * halfAt(i), 0);
+  const done = step === Q;
+
+  const next = () => {
+    const s = step + 1;
+    setStep(s);
+    if (s === Q) pass("প্রতিটা হ্যাঁ ঠিক ততগুলো সংখ্যা জমা করলো, যতগুলো সে পেছনে ফেলে এলো: ১৬ + ৪ + ২ = ২২।");
+  };
+
+  return (
+    <>
+      <div className="mt-2">
+        <Answers items={SHOM_ROW} cur={done ? undefined : step} worth={(i) => (i < step ? (SHOM_ROW[i] ? `+${bn(halfAt(i))}` : "+০") : undefined)} />
+      </div>
+      <Strip lo={lo} hi={hi} split={!done} />
+
+      <div className="mx-auto grid max-w-md grid-cols-[auto_1fr_auto_auto] items-center gap-x-3 gap-y-1.5 text-[0.93rem]">
+        <span className="text-xs text-muted">প্রশ্ন</span>
+        <span className="text-xs text-muted">সোম জিজ্ঞেস করেছিল</span>
+        <span className="text-xs text-muted">উত্তর</span>
+        <span className="text-right text-xs text-muted">জমা</span>
+        {applied.map((a, i) => {
+          const w = windowOf(SHOM_ROW.slice(0, i));
+          return (
+            <div key={i} className={`contents ${FADE}`}>
+              <span className="font-mono">{bn(i + 1)}</span>
+              <span>
+                {bn(w.lo + halfAt(i))} বা বেশি? <span className="text-xs text-muted">(বাঁয়ে {bn(halfAt(i))}টা)</span>
+              </span>
+              <b className={a ? "text-cat-violet" : "text-cat-teal"}>{a ? "হ্যাঁ" : "না"}</b>
+              <span className="text-right font-mono">{a ? `+${bn(halfAt(i))}` : "+০"}</span>
+            </div>
+          );
+        })}
+      </div>
+
+      <div className="mt-4 text-center font-mono text-2xl">
+        জমা: <b key={total} className={done ? "win-pop text-accent-text" : ""}>{bn(total)}</b>
+      </div>
+      {!done && (
+        <div className="mt-3 flex justify-center">
+          <button type="button" onClick={next} className={primaryBtn}>
+            উত্তর {bn(step + 1)} খাটান
+          </button>
+        </div>
+      )}
+      <Task done={done}>সোমের উত্তরগুলো একটা একটা করে খাটিয়ে সংখ্যাটা বের করুন ({bn(step)}/{bn(Q)})</Task>
+    </>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 4 · The other way round: build a number's answer row yourself.
+
+const BUILD = [13, 25, 31];
+
+export function BuildRow() {
+  const pass = useGate();
+  const [n, setN] = useSeed("n", 0);
+  const [k, setK] = useSeed("k", 0);
+  const target: number | undefined = BUILD[k];
+  const places = placesOf(Q);
+  const lit = places.filter((w) => n & w);
 
   const toggle = (w: number) => {
     const v = n ^ w;
     setN(v);
     if (target !== undefined && v === target) {
       setK(k + 1);
-      if (k + 1 === TARGETS.length) pass("যেকোনো সংখ্যা মানে কয়েকটা বাল্বের দাম যোগ করা — কোনটা on থাকবে, কোনটা off।");
+      if (k + 1 === BUILD.length) pass("যেকোনো সংখ্যা মানে ১৬, ৮, ৪, ২, ১-এর কয়েকটার যোগফল, আর প্রতিটা সংখ্যার জন্য উপায় ঠিক একটাই।");
     }
   };
 
   return (
     <>
       <div className="flex flex-wrap items-center justify-center gap-2">
-        {TARGETS.map((t, i) => (
+        {BUILD.map((t, i) => (
           <span
             key={t}
             className={`rounded-full border-2 px-3.5 py-1 font-mono text-lg font-semibold transition-colors duration-300 ${
@@ -1050,22 +399,37 @@ export function MakeNumber() {
           </span>
         ))}
       </div>
-      <div className="mx-auto my-5 max-w-xs">
-        <Pane label="আপনার জানালা">
-          <Bulbs n={n} k={3} onToggle={toggle} under={(w) => bn(w)} />
-        </Pane>
+      <div className="my-5 flex justify-center gap-1.5">
+        {places.map((w) => {
+          const on = (n & w) !== 0;
+          return (
+            <button
+              key={w}
+              type="button"
+              aria-pressed={on}
+              aria-label={`${w}-এর ঘর`}
+              onClick={() => toggle(w)}
+              className="flex w-13 cursor-pointer flex-col items-center gap-1"
+            >
+              <span className="font-mono text-xs text-muted">{bn(w)}</span>
+              <span
+                className={`grid h-12 w-full place-items-center rounded-lg border-2 font-mono text-2xl font-bold transition-colors duration-200 ${
+                  on ? "border-cat-violet bg-cat-violet/15 text-cat-violet" : "border-cat-teal/60 bg-cat-teal/10 text-cat-teal"
+                }`}
+              >
+                {on ? 1 : 0}
+              </span>
+            </button>
+          );
+        })}
       </div>
-      <div className="text-center">
-        <div className="text-sm text-muted">0 আর 1 দিয়ে লিখলে</div>
-        <div className="font-mono text-3xl font-bold tracking-[0.35em]">{binary(n, 3)}</div>
-        <div className="mt-1 font-mono text-xl text-muted">
-          {lit.length ? lit.map((w) => bn(w)).join(" + ") : "০"} = <b className="text-foreground">{bn(n)}</b>
-        </div>
+      <div className="text-center font-mono text-xl text-muted">
+        {lit.length ? lit.map((w) => bn(w)).join(" + ") : "০"} = <b className="text-foreground">{bn(n)}</b>
       </div>
-      <Task done={k >= TARGETS.length}>
+      <Task done={k >= BUILD.length}>
         {target !== undefined ? (
           <>
-            বাল্ব on-off করে <b className="font-mono">{bn(target)}</b> বানান।
+            ঘরগুলোতে tap করে 1 আর 0 বসিয়ে <b className="font-mono">{bn(target)}</b> বানান।
           </>
         ) : (
           "তিনটাই বানিয়ে ফেলেছেন!"
@@ -1076,73 +440,174 @@ export function MakeNumber() {
 }
 
 // ---------------------------------------------------------------------------
-// 12 · Samin's reply, four bulbs — the value of the fourth is left for the
-//      reader to work out. The question itself is a Check in the MDX.
+// 5 · One wire, one answer. Full current reads 1, none reads 0, and anything
+//     in between flickers — the machine can't trust it.
 
-export function SaminSignal() {
-  return (
-    <div className="mx-auto my-5 max-w-xs">
-      <Pane label="সামিনের জানালা">
-        <Bulbs n={0b1011} k={4} size="w-10 sm:w-12" under={(w) => (w === 8 ? "?" : bn(w))} />
-      </Pane>
-    </div>
-  );
-}
+type Zone = "low" | "mid" | "high";
+const zoneOf = (v: number): Zone => (v <= 20 ? "low" : v >= 80 ? "high" : "mid");
 
-// ---------------------------------------------------------------------------
-// 13 · Eight bulbs, worth 128 down to 1. Light them all: 255.
-
-export function EightBulbs() {
+export function OneWire() {
   const pass = useGate();
-  const [n, setN] = useState(0);
-  const lit = placesOf(8).filter((w) => n & w);
+  const [v, setV] = useSeed("v", 0);
+  const [seen, setSeen] = useSeed<Zone[]>("seen", ["low"]);
+  const [flick, setFlick] = useState(0);
+  const zone = zoneOf(v);
 
-  const toggle = (w: number) => {
-    const v = n ^ w;
-    setN(v);
-    if (v === 255) pass("সবগুলো switched on হলে 255। এর বেশি এই আটটা বাল্ব দিয়ে বলাই যায় না।");
+  useEffect(() => {
+    if (zone !== "mid") return;
+    const t = setInterval(() => setFlick((f) => f + 1), 380);
+    return () => clearInterval(t);
+  }, [zone]);
+
+  const change = (x: number) => {
+    setV(x);
+    const z = zoneOf(x);
+    if (!seen.includes(z)) {
+      const s = [...seen, z];
+      setSeen(s);
+      if (s.length === 3) pass("একটা তার ঠিক একটা প্রশ্নের উত্তর দিতে পারে: কারেন্ট আছে, নাকি নাই। মাঝামাঝি কারেন্ট মেশিন ভরসা করে পড়তেই পারে না।");
+    }
   };
+
+  const read = zone === "low" ? "0" : zone === "high" ? "1" : flick % 2 ? "1" : "0";
 
   return (
     <>
-      <div className="mx-auto my-5 max-w-lg">
-        <Pane label="আটটা বাল্ব">
-          <Bulbs n={n} k={8} onToggle={toggle} size="w-7 sm:w-10" under={(w) => <span className="text-[0.65rem] sm:text-xs">{w}</span>} />
-        </Pane>
-      </div>
-      <div className="text-center">
-        <div className="font-mono text-lg tracking-widest text-muted">{binary(n, 8)}</div>
-        <div className="mt-1 font-mono text-sm break-words text-muted">{lit.length ? lit.join(" + ") : "0"}</div>
-        <div key={n === 255 ? "full" : "not"} className={`font-mono text-4xl font-bold ${n === 255 ? "win-pop text-accent-text" : ""}`}>
-          {n}
+      <div className="mx-auto my-5 flex max-w-sm items-center gap-3">
+        <div className="relative h-3 flex-1 overflow-hidden rounded-full bg-foreground/15">
+          <div
+            className="absolute inset-0 bg-cat-amber shadow-[0_0_12px_var(--color-cat-amber)]"
+            style={{ opacity: v / 100 }}
+          />
+        </div>
+        <div
+          className={`grid size-16 place-items-center rounded-xl border-2 font-mono text-3xl font-bold ${
+            zone === "mid" ? "border-danger/60 bg-danger/5 text-danger" : "border-accent/50 bg-accent/5 text-accent-text"
+          }`}
+        >
+          {read}
         </div>
       </div>
-      <div className="mt-3 flex justify-center">
-        <button type="button" onClick={() => setN(0)} className={quietBtn}>
-          ↺ সব off
-        </button>
+      <div className="text-center text-sm text-muted">
+        {zone === "mid" ? "মেশিন একবার পড়ছে 1, একবার 0 — কোনটা ঠিক, জানে না।" : `মেশিন নিশ্চিত হয়ে পড়ছে ${read}।`}
       </div>
-      <Task done={n === 255}>আটটা বাল্বই switch on করুন — কত হয়?</Task>
+      <div className="mx-auto mt-4 w-full max-w-sm">
+        <input
+          type="range"
+          min={0}
+          max={100}
+          value={v}
+          aria-label="তারে কতটা কারেন্ট"
+          onChange={(e) => change(Number(e.target.value))}
+          className="block w-full cursor-pointer accent-accent"
+        />
+        <div className="mt-0.5 flex justify-between text-xs text-muted">
+          <span>কারেন্ট নাই</span>
+          <span>পুরো কারেন্ট</span>
+        </div>
+      </div>
+      <Task done={seen.length === 3}>
+        কারেন্ট একবার পুরো দিন, আর একবার মাঝামাঝি রেখে দেখুন ({bn(seen.length)}/৩)
+      </Task>
     </>
   );
 }
 
 // ---------------------------------------------------------------------------
-// 14 · Last picture: eight bulbs counting from 0 all the way to 255.
+// 6 · Eight wires, 128 down to 1, and the grey they stand for.
+
+function Wires({ n, onToggle }: { n: number; onToggle?: (w: number) => void }) {
+  return (
+    <div className="mx-auto grid max-w-md grid-cols-8 gap-1">
+      {placesOf(8).map((w) => {
+        const on = (n & w) !== 0;
+        const box = (
+          <>
+            <span className="font-mono text-[0.65rem] text-muted sm:text-xs">{w}</span>
+            <span
+              className={`grid h-10 w-full place-items-center rounded-md border-2 font-mono text-lg font-bold transition-colors duration-200 ${
+                on ? "border-cat-violet bg-cat-violet/15 text-cat-violet" : "border-cat-teal/60 bg-cat-teal/10 text-cat-teal"
+              }`}
+            >
+              {on ? 1 : 0}
+            </span>
+          </>
+        );
+        return onToggle ? (
+          <button key={w} type="button" aria-pressed={on} aria-label={`${w}-এর তার`} onClick={() => onToggle(w)} className="flex cursor-pointer flex-col items-center gap-1">
+            {box}
+          </button>
+        ) : (
+          <div key={w} className="flex flex-col items-center gap-1">
+            {box}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function Swatch({ n }: { n: number }) {
+  return (
+    <div
+      aria-hidden="true"
+      className="mx-auto size-20 rounded-xl ring-1 ring-foreground/20 transition-colors duration-200 motion-reduce:transition-none"
+      style={{ backgroundColor: `rgb(${n}, ${n}, ${n})` }}
+    />
+  );
+}
+
+export function EightWires() {
+  const pass = useGate();
+  const [n, setN] = useSeed("n", 0);
+
+  const toggle = (w: number) => {
+    const v = n ^ w;
+    setN(v);
+    if (v === 255) pass("আটটা উত্তরে ২৫৬টা আলাদা ধাপ: 0 মানে ঘুটঘুটে কালো, 255 মানে একদম সাদা।");
+  };
+
+  return (
+    <>
+      <div className="my-5">
+        <Wires n={n} onToggle={toggle} />
+      </div>
+      <div className="flex items-center justify-center gap-5">
+        <Swatch n={n} />
+        <div>
+          <div className="font-mono text-sm tracking-widest text-muted">{binary(n, 8)}</div>
+          <div key={n === 255 ? "full" : "not"} className={`font-mono text-4xl font-bold ${n === 255 ? "win-pop text-accent-text" : ""}`}>
+            {n}
+          </div>
+        </div>
+      </div>
+      <div className="mt-3 flex justify-center">
+        <button type="button" onClick={() => setN(0)} className={quietBtn}>
+          ↺ সব 0
+        </button>
+      </div>
+      <Task done={n === 255}>ঘরটাকে একদম সাদা বানান — আটটা উত্তর কী হতে হবে?</Task>
+    </>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 7 · Last picture: eight answers counting 0 to 255, black to white.
 
 function FinaleReel({ onReplay }: { onReplay: () => void }) {
   const n = useCountUp(255, 28);
   return (
     <>
-      <div className="mx-auto my-5 max-w-lg">
-        <Pane>
-          <Bulbs n={n} k={8} size="w-7 sm:w-10" under={(w, on) => <span className={on ? "text-[#fcd34d]" : ""}>{on ? 1 : 0}</span>} />
-        </Pane>
+      <div className="my-5">
+        <Wires n={n} />
       </div>
-      <div className="text-center font-mono text-4xl font-bold tabular-nums">{n}</div>
+      <div className="flex items-center justify-center gap-5">
+        <Swatch n={n} />
+        <div className="font-mono text-4xl font-bold tabular-nums">{n}</div>
+      </div>
       {n === 255 && (
-        <div className={`${FADE} mt-2 text-center`}>
-          <div className="text-muted">২৫৬টা pattern — 0 থেকে 255</div>
+        <div className={`${FADE} mt-3 text-center`}>
+          <div className="text-muted">২৫৬টা উত্তরের সারি — 0 থেকে 255</div>
           <button
             type="button"
             onClick={onReplay}
@@ -1157,6 +622,24 @@ function FinaleReel({ onReplay }: { onReplay: () => void }) {
 }
 
 export function Finale() {
-  const [run, setRun] = useState(0);
-  return <FinaleReel key={run} onReplay={() => setRun((r) => r + 1)} />;
+  const [run, setRun] = useSeed("run", 0);
+  return <FinaleReel key={run} onReplay={() => setRun(run + 1)} />;
 }
+
+// ---------------------------------------------------------------------------
+// States for `npm run shot` (keys = useSeed names).
+
+export const fixtures: Fixtures = {
+  FiveQuestions: {
+    start: {},
+    picked: { secret: 22 },
+    two: { secret: 22, answers: [1, 0] },
+    done: { secret: 22, answers: [1, 0, 1, 1, 0] },
+  },
+  HowMany: { start: {}, done: { guess: 0, done: true } },
+  RowToNumber: { start: {}, three: { step: 3 }, done: { step: 5 } },
+  BuildRow: { start: {}, mid: { n: 13, k: 1 }, done: { n: 31, k: 3 } },
+  OneWire: { start: {}, mid: { v: 50, seen: ["low", "mid"] }, done: { v: 100, seen: ["low", "mid", "high"] } },
+  EightWires: { start: {}, grey: { n: 150 }, full: { n: 255 } },
+  Finale: { start: {} },
+};

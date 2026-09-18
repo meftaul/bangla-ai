@@ -1,20 +1,24 @@
 export const metadata = {
   title: "Math for AI 2.8 — Model-এর ভেতরের vector",
-  description: "পুরানো রেডিওর knob, ঢাল ধরে পা ফেলা, আর চারপাশে লুকিয়ে থাকা vector। একটা model কীভাবে শেখে, আর paper-এর চিহ্নগুলো কীভাবে পড়তে হয়।",
+  description: "নানুর পুরানো রেডিওর একটা knob, ঢাল ধরে পা ফেলা, আর চারপাশে লুকিয়ে থাকা vector। একটা model কীভাবে শেখে, আর paper-এর চিহ্নগুলো আসলে কী বলে।",
   type: "article",
 };
 
 {/* Told as a Brilliant-style journey, like 2.1–2.7: one screen at a time,
     each with a visual and one thing to do, and the Continue arrow stays
-    locked until it is done. The shell is components/journey/journey.tsx; the
-    screens live in components/interactive/dimension-journey.tsx, shared with
-    2.5 and 2.6. The last of the eight "Vector-এর দুই চেহারা" journeys. One
-    radio knob comes before two, so the valley is felt before the bowl. */}
+    locked until it is done. Each screen opens with a line or two of story;
+    the explanation sits in <Then> and shows only once the task is done, so it
+    never gives away what the reader is about to find. The shell is
+    components/journey/journey.tsx; the screens live in
+    components/interactive/dimension-journey.tsx, shared with 2.5 and 2.6. The
+    last of the eight "Vector-এর দুই চেহারা" journeys. One radio knob comes
+    before two, so the valley is felt before the bowl. */}
 
-import { Journey, Step, Check } from "@/components/journey/journey";
+import { Journey, Step, Check, Then } from "@/components/journey/journey";
 import {
   OneKnob,
   KnobStep,
+  GradientFeel,
   VectorLadder,
   SayItCards,
   PairUp,
@@ -25,25 +29,78 @@ import {
 
 <Step>
 
-AI-এর একটা model আসলে অনেকগুলো knob-ওয়ালা একটা formula, পুরানো রেডিওর মতো। Learning মানে knob ঘুরিয়ে ঘুরিয়ে ভুল কমানো। শুরু করি একটা knob দিয়ে।
+নানুর ঘরের আলমারির মাথায় একটা পুরানো রেডিও পড়ে আছে, ওপরে একটাই knob। ঘোরালে বেশির ভাগ জায়গায় শুধু খসখস শব্দ হয়, অনেকক্ষণ knob ঘুরানোর পর একটা জায়গায় যেয়ে গানটা পরিষ্কার শোনা যায়। পুরোটা সময় কান খাড়া করে শুনতে হয়, একটু একটু করে ঘুরিয়ে।
+
+Knob কোথায় থাকলে কতটুকু খসখস আওয়াজ হয়, নীল দাগটা সেই হিসাব করে। বলুন তো, এখান থেকে knob কোন দিকে ঘোরাবেন?
 
 <OneKnob />
 
+<Then>
+
+হাতে ঘুরিয়ে যখন খুঁজছিলেন, তখন কিন্তু একটা কাজই বারবার করছিলেন: একটু ঘুরিয়ে দেখা noise বাড়লো না কমলো, আর কমলে ওই দিকেই আরেকটু এগিয়ে দেখা যে আরও কমে কিনা। লাল arrow-টা ওই কথাটাই আগেভাগে বলে দিচ্ছিল। সবচেয়ে ঢালু জায়গাটায় noise সবচেয়ে কম, খেয়াল করেছেন। তারমানে ওটার বামে থাকলে ডানে ঘুরিয়ে ওখানে আসতে হবে, আবার ডানে থাকলে বামে ঘুরিয়ে ওখানে আসতে হবে।
+
+AI-এর একটা model-এর ভেতরেও এমন একগাদা knob থাকবে। খসখসে আওয়াজটাকে AI model-এর ভুলের equivalent ধরা যায়, আর সবচেয়ে ঢালু জায়গায় পৌঁছানোর জন্য step by step সেই ভুল কমানোর কাজটাকেই বলে **learning**, মানে শেখা। শুধু knob-এর সংখ্যাটা একটু বেশি। নানুর রেডিওতে একটা, ChatGPT-র মতো model-এ হাজার কোটি।
+
+</Then>
+
 </Step>
 
 <Step>
 
-এবার দুইটা knob। Valley-টা এখন একটা বাটি। ওপর থেকে দেখলে গোল গোল দাগগুলো যেন ম্যাপের উচ্চতার দাগ, আর মাঝখানটা সবচেয়ে নিচু।
+রেডিওর নিচের তাকে নানুর একটা পুরানো amplifier-ও আছে। ওটায় knob দুইটা, একটা knob sound-কে আরও sharp বানাতে, আরেকটা knob sound-টাকে আরও deep বানাতে, মানে sound-এ একটা গাম্ভীর্য আনতে। কানে শুনে শুনে দুইটা ঠিক করতে বেশ বেগ পেতে হয়, একটা সুন্দর মতো বসালেই আরেকটা বেঠিক হয়ে যায়।
+
+আগে নিজের হাতে একটা knob ঘুরিয়ে দেখুন, তারপর লাল arrow-টাকে দিয়ে কাজ করান।
 
 <KnobStep />
 
-একশো কোটি knob হলেও কাজ একই: সব knob মিলে একটা vector, আর পরের পা-টাও একই সাইজের একটা vector। Paper-এ *“take a step in the direction of the negative gradient”* পড়লে বুঝবেন, মানে ঠিক এটাই।
+<Then>
+
+খেয়াল করুন, লাল arrow-কে দিয়ে কাজ করালে দুইটা knob-ই একসাথে ঘুরছে। তারমানে এখানে error কমানোর জন্য এক একটা step নিতে হলে দুইটা knob-এরই ঘোরা প্রয়োজন।
+
+তাহলে দাঁড়ালো এই: দুইটা knob-এর এখনকার অবস্থা মিলে দুই ঘরের বা দুই dimension-এর একটা vector। তারমানে এখানে error কমানোর জন্য আমরা যে প্রত্যেকটা step নিচ্ছি, সেটাকে দুইটা সংখ্যা দিয়ে express করা যায়। তারমানে প্রত্যেকটা step এখানে 2 dimensional একটা vector।
+
+</Then>
 
 </Step>
 
 <Step>
 
-এরকম আরও কয়েকটা জায়গায় vector লুকিয়ে থাকে। কোনটা কত বড়, দেখে নিন।
+<Check
+  question="Knob একশো কোটি হলে প্রত্যেকটা step কত dimensional vector হতো?"
+  options={[
+    "1 dimensional, step তো একটাই",
+    "2 dimensional, amplifier-এর মতোই",
+    "একশো কোটি dimensional",
+  ]}
+  answer={2}
+  hint="Amplifier-এ knob ছিল দুইটা, আর লাল arrow-এর প্রত্যেক পা লিখতে লেগেছিল দুইটা সংখ্যা।"
+>
+
+প্রত্যেকটা knob-কে তো জানতে হবে সে কোন দিকে কতটা ঘুরবে, তাই step-এ প্রত্যেক knob-এর জন্য একটা করে ঘর লাগে। দুই knob-এ দুই ঘর, একশো কোটি knob-এ একশো কোটি ঘর। যারা 2 বেছেছিলেন, তারা একা নন। Amplifier-টা চোখের সামনে থাকায় ওটাই মাথায় আসে, কিন্তু knob-এর সংখ্যা বদলালে step-এর ঘরও বদলে যায়।
+
+</Check>
+
+</Step>
+
+<Step>
+
+Amplifier-এর ম্যাপে আবার ফেরা যাক, তবে এবার খেলাটা উল্টো। বেগুনি বিন্দু থেকে চারপাশে এক পা এক পা ফেলে দেখুন তো, কোন দিকে গেলে ভুল সবচেয়ে তাড়াতাড়ি বাড়ে?
+
+<GradientFeel />
+
+<Then>
+
+এই যে error কমানোর জন্য আমরা একটা করে step নিচ্ছি আর তাকে vector-এ express করছি, এই vector-টার একটা নাম আছে, **gradient**। Academic কোনো বই-এ *“take a step in the direction of the negative gradient”* লেখা দেখলে তাই আর ঘাবড়ানোর কিছু নাই। positive gradient মানে ওপরের দিকে ওঠা, তারমানে এখানে নিচের দিকে নামতে বলেছে। কারণ আমরা তো জানিই negative আসলে direction বোঝায়।
+
+</Then>
+
+</Step>
+
+<Step>
+
+Knob-গুলো একসাথে যে একটা vector হয়ে বসে আছে, সেটা তো দেখলেন। কিন্তু একটা model-এর ভেতরে-বাইরে vector লুকিয়ে আছে আরও অনেক জায়গায়, আর একেকটার ঘরের সংখ্যা একেক রকম।
+
+প্রত্যেকটা কার্ডে tap করার আগে নিজে একটা আন্দাজ করে নিন, কোনটা কত বড় হতে পারে। মানে কত বেশি dimension-ওয়ালা vector হতে পারে।
 
 <VectorLadder />
 
@@ -51,19 +108,37 @@ AI-এর একটা model আসলে অনেকগুলো knob-ওয�
 
 <Step>
 
-Paper পড়তে গেলে কিছু চিহ্ন বারবার আসবে। প্রত্যেকটা কার্ড উল্টানোর আগে মুখে বলে দেখুন।
+এতক্ষণ যা যা হাতে-কলমে করলেন, বই-এ সেগুলো লেখা থাকে বিভিন্ন symbol দিয়ে। দেখতে কঠিন, কিন্তু পড়তে জানলে আর কিছুই না।
+
+কার্ডগুলো উল্টিয়ে দেখে নিন কোনটার কী মানে।
 
 <SayItCards />
+
+<Then>
+
+Symbolগুলোর ভেতরে আসলে দুইটা জিনিস। $\mathbb{R}$ মানে যেকোনো সংখ্যা যেটা real life-এ exist করে। এজন্য এগুলোর নাম Real numbers। এর ভেতর fraction, negative number এগুলোও পড়ে। আর মাথার ওপরের ছোট সংখ্যাটা বলে দেয় dimension কয়টা। তাই **$\mathbb{R}^n$ মানে n ঘরের সংখ্যার একটা list**, তারমানে ওর dimension হলো $n$।
+
+এটুকু জানা থাকলে $x \in \mathbb{R}^{784}$ দেখে আর থমকে যেতে হয় না। ওটা হলো 784টা সংখ্যার একটা list।
+
+</Then>
 
 </Step>
 
 <Step>
 
-$u, v \in \mathbb{R}^n$ কার্ডটায় একটু থামি। লেখক বলছেন, **দুইটার ঘর সমান**। কেন সেটা জরুরি, Σ মেশিনকে দিয়েই দেখুন।
+$u, v \in \mathbb{R}^n$ কার্ডটায় একটু থামি। দুইটা letter, কিন্তু $n$ একটাই। এই একটা line কিন্তু একটা শর্ত বোঝাচ্ছে।
+
+শর্তটা না মানলে কী হয়, Σ মেশিনকে দিয়েই দেখে নিন।
 
 <PairUp />
 
-ফাহিমের খালি ঘরটার কথা মনে পড়ছে?
+<Then>
+
+প্রথম বারে মেশিন কোথাও আটকালো না, ঘর ধরে ধরে শেষ পর্যন্ত চলে গেল। কিন্তু নাসিবের কাছে সংখ্যা দুইটা আর রোগীর কাছে তিনটা, তাই তৃতীয় ঘরে গিয়ে মেশিনের কাছে partnership করার মতো কিছুই রইলো না। দূরত্ব বেশি না কম, প্রশ্নটাই তখন অর্থহীন।
+
+তাই paper-এ $u, v \in \mathbb{R}^n$ দেখলে মনে মনে পড়ে নেবেন: **দুইটার dimension সমান, তাই এদের নিয়ে হিসাব করা যাবে।** আলাদা করে আর লেখা লাগলো না, ওই একটামাত্র $n$-এর ভেতরেই বলে দেন।
+
+</Then>
 
 </Step>
 
@@ -72,17 +147,17 @@ $u, v \in \mathbb{R}^n$ কার্ডটায় একটু থামি।
 ## একটু ঝালিয়ে নিন
 
 <Check
-  question="একটা model-এ একশো কোটি knob। শেখার প্রত্যেক পা-এ কী বের করতে হয়?"
+  question="একটা model-এ একশো কোটি knob। Learning-এর প্রত্যেক step-এ কী বের করতে হয়?"
   options={[
     "একশো কোটি সংখ্যার একটা vector: প্রত্যেক knob কোন দিকে কতটা ঘুরবে",
     "শুধু একটা সংখ্যা: সব knob একসাথে কতটা ঘুরবে",
     "একশো কোটি dimension-এর একটা ছবি",
   ]}
   answer={0}
-  hint="দুই knob-এর বেলায় পরের পা ছিল দুইটা সংখ্যা, (Δ₁, Δ₂)। Knob যত, সংখ্যা তত।"
+  hint="দুই knob-এর বেলায় step লেগেছিল দুইটা সংখ্যা, (Δ₁, Δ₂)। Knob যত, সংখ্যা তত।"
 >
 
-Knob-গুলো একটা vector, আর পরের পা-টাও একই সাইজের একটা vector। ছবি আঁকা যায় না, কিন্তু হিসাব একই।
+প্রত্যেকটা knob-এর নিজের একটা ঘর লাগে, তাই একশো কোটি knob মানে একশো কোটি ঘরের একটা gradient। যারা একটা সংখ্যা বেছেছিলেন, ভেবে দেখুন, amplifier-এর দুইটা knob-কেই যদি একই দিকে সমান ঘোরাতে হতো, তাহলে তো ওরা noise-ই দিয়ে যেত সবসময়। আর ছবি? ছবি এখানে আঁকা যায় না, কিন্তু হিসাবটা দুই knob-এর বেলায় যা ছিল, এখানেও ঠিক তাই।
 
 </Check>
 
@@ -90,19 +165,19 @@ Knob-গুলো একটা vector, আর পরের পা-টাও এ�
 
 <Step>
 
-## শেষ! Vector-এর দুই চেহারাই এখন আপনার
+## শেষ! Vector-এর দুই রূপই এখন আপনার
 
 <Finale />
 
-* Vector মানে সংখ্যার একটা list, আবার একটা arrow। **list হিসেবে রাখুন, arrow হিসেবে ভাবুন।**
-* যেকোনো dimension-এ দূরত্ব: $d = \sqrt{\sum_{i=1}^{n} (a_i - b_i)^2}$।
-* অনেক dimension-এ তিনটা চমক: দূরত্ব গায়ে গায়ে, দিক আড়াআড়ি, সবাই খোসায়।
-* Model-এর সবগুলো knob মিলে একটা vector, আর শেখা মানে ঢাল ধরে পা ফেলা।
-* $u, v \in \mathbb{R}^n$ মানে দুইটার ঘর সমান, তাই তুলনা করা যায়।
+* Vector মানে সংখ্যার একটা list, আবার একটা arrow। **List হিসেবে রাখুন, arrow হিসেবে imagine করুন।**
+* যেকোনো dimension-এ দূরত্ব বের হয় একই formula-য়: $d = \sqrt{\sum_{i=1}^{n} (a_i - b_i)^2}$।
+* অনেক dimension-এ সবচেয়ে কাছের আর দূরের মাঝে তেমন significant পার্থক্য থাকে না।
+* Model-এর সবগুলো knob মিলে একটা vector, আর learning মানে ঢাল ধরে এক পা এক পা নামা।
+* $u, v \in \mathbb{R}^n$ মানে দুইটার ঘর সংখ্যা সমান, তাই তুলনা করা যায়।
 
-আটটা lesson জুড়ে একই জিনিসকে দুই চোখে দেখলেন। নিয়ম একটাই: **list হিসেবে রাখুন, arrow হিসেবে ভাবুন।**
+আটটা lesson জুড়ে একই জিনিসকে দুইটা রূপে দেখলেন। নিয়ম কিন্তু একটাই: **list হিসেবে রাখুন, arrow হিসেবে imagine করুন।**
 
-সামনের lesson-এ vector যোগ করবো, টেনে লম্বা করবো, আর $\lVert v \rVert$-কে এমন একটা সংখ্যা বানাবো যা নিজের হাতে হিসাব করা যায়। Golf ball-এর 84.9 km/h-এর হিসাবও তখন মিটবে।
+সামনের lesson-এ vector operations নিয়ে কাজ শুরু হবে। যোগ করবো, টেনে লম্বা করবো, আর $\lVert v \rVert$-কে এমন একটা সংখ্যা বানাবো যা নিজের হাতে হিসাব করে ফেলা যায়।
 
 <LessonLink
   href="/dashboard/articles/math_for_ai/03a_treasure_add"

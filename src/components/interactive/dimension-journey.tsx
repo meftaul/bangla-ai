@@ -12,12 +12,14 @@ import {
   Speech,
   Stepper,
   Ticks,
+  type Fixtures,
   pill,
   predictLook,
   primaryBtn,
   quietBtn,
   useCountUp,
   usePlay,
+  useSeed,
   useTween,
 } from "@/components/journey/kit";
 import { Arrow, Dot, Label, Plane, clamp, dist, makeFrame, minus, plus, same, sg, snap, type Frame, type XY } from "@/components/journey/plane";
@@ -512,7 +514,7 @@ export function PlotTogether() {
 // A tailor's measuring tape, laid straight between two points on the sheet,
 // with a tick and a number at every whole square.
 
-function Tape({ f, from, to }: { f: Frame; from: XY; to: XY }) {
+export function Tape({ f, from, to }: { f: Frame; from: XY; to: XY }) {
   const x1 = f.sx(from[0]);
   const y1 = f.sy(from[1]);
   const x2 = f.sx(to[0]);
@@ -2502,7 +2504,7 @@ export function OneKnob() {
   const move = (n: number) => {
     const c = clamp(Math.round(n * 100) / 100, 0, 10);
     setK(c);
-    if (!low && hiss(c) < OK_HISS) pass("ঢাল যেদিকে নিচে নামে, knob সেদিকে ঘোরাও। Learning-এর মূল বুদ্ধি এটাই।");
+    if (!low && hiss(c) < OK_HISS) pass("ঢাল যেদিকে নিচে নেমেছে, knob সেদিকেই ঘোরাতে হয়। শেখার পুরো বুদ্ধিটা আসলে এটুকুই।");
   };
   const turn = (d: number) => {
     setTurned(true);
@@ -2524,7 +2526,7 @@ export function OneKnob() {
             knob →
           </text>
           <text x={VX0} y={14} fontSize={10} fontWeight={600} className="fill-foreground">
-            ↑ খসখস (ভুল)
+            ↑ খসখস কতটা
           </text>
           <text x={vx(QUIET)} y={VY0 + 14} textAnchor="middle" fontSize={9} className="fill-cat-teal">
             সবচেয়ে চুপ
@@ -2534,7 +2536,7 @@ export function OneKnob() {
               <path d={`M${bx} ${VY0 + 20}h${dir * arrowLen}`} strokeWidth={3} strokeLinecap="round" className="stroke-cat-coral" />
               <path d={`M${bx + dir * (arrowLen + 6)} ${VY0 + 20}l${-dir * 8} -5v10z`} className="fill-cat-coral" />
               <text x={bx + dir * (arrowLen / 2)} y={VY0 + 34} textAnchor="middle" fontSize={9} className="fill-cat-coral">
-                নিচের দিক
+                এদিকে গেলে কমবে
               </text>
             </g>
           )}
@@ -2543,7 +2545,7 @@ export function OneKnob() {
         </svg>
       </div>
       <div className="mt-2 text-center font-mono text-[0.95rem]">
-        knob = {k.toFixed(1)} · খসখস:{" "}
+        knob এখন {k.toFixed(1)}-এ, আর খসখস{" "}
         <b key={h.toFixed(1)} className={`${POP} inline-block ${low ? "text-accent-text" : ""}`}>
           {h.toFixed(1)}
         </b>
@@ -2561,12 +2563,14 @@ export function OneKnob() {
       </div>
       <Ticks
         items={[
-          ["হাতে ঘুরিয়েছেন", turned],
-          ["arrow ধরে হেঁটেছেন", walked],
-          ["সবচেয়ে কম খসখস", low],
+          ["নিজের হাতে ঘুরিয়েছেন", turned],
+          ["arrow ধরে পা ফেলেছেন", walked],
+          ["খসখস সবচেয়ে কম", low],
         ]}
       />
-      <Task done={low}>Knob ঘুরিয়ে খসখস সবচেয়ে কম করুন। হাতে ঘুরিয়েও দেখুন, লাল arrow ধরে পা ফেলেও দেখুন।</Task>
+      <Task done={low}>
+        Knob ঘুরিয়ে খসখসটা যতটা পারা যায় কমিয়ে আনুন। একবার নিজের হাতে ঘুরিয়ে দেখুন, একবার লাল arrow ধরে পা ফেলে।
+      </Task>
     </>
   );
 }
@@ -2591,30 +2595,64 @@ const KNOB_RANGE: [number, number][] = [
 ];
 const signed = (x: number) => (x > 0 ? `+${nice(x)}` : nice(x));
 
-function Dial({ name, v, shown, range, onTurn }: { name: string; v: number; shown: number; range: [number, number]; onTurn: (d: number) => void }) {
+function Dial({
+  name,
+  v,
+  shown,
+  range,
+  lit,
+  delta,
+  stamp,
+  onTurn,
+}: {
+  name: string;
+  v: number;
+  shown: number;
+  range: [number, number];
+  /** this knob moved on the last press */
+  lit: boolean;
+  /** how far it moved, shown above it while lit */
+  delta: number;
+  /** changes on every move, so the highlight replays */
+  stamp: number;
+  onTurn: (d: number) => void;
+}) {
   const [lo, hi] = range;
   const deg = -135 + ((shown - lo) / (hi - lo)) * 270;
   const btn =
     "grid size-8 cursor-pointer place-items-center rounded-full text-lg font-bold text-muted transition-colors hover:bg-foreground/10 hover:text-foreground disabled:cursor-default disabled:opacity-30";
   return (
     <div className="flex flex-col items-center">
-      <svg viewBox="-30 -30 60 60" aria-hidden="true" className="size-16">
-        {Array.from({ length: 11 }, (_, i) => {
-          const t = ((-135 + i * 27) * Math.PI) / 180;
-          return (
-            <path
-              key={i}
-              d={`M${r1(25 * Math.sin(t))} ${r1(-25 * Math.cos(t))}L${r1(28 * Math.sin(t))} ${r1(-28 * Math.cos(t))}`}
-              strokeWidth={1.2}
-              className="stroke-foreground/30"
-            />
-          );
-        })}
-        <circle r={21} strokeWidth={2} className="fill-surface stroke-foreground/25" />
-        <path d="M0 -6V-17" strokeWidth={3.5} strokeLinecap="round" transform={`rotate(${deg})`} className="stroke-cat-violet" />
-        <circle r={3} className="fill-foreground/40" />
-      </svg>
-      <div className="flex items-center gap-0.5 text-sm">
+      <div className="h-6">
+        {lit && (
+          <span key={stamp} className={`${POP} inline-block rounded-full bg-cat-coral px-2 font-mono text-sm font-bold text-white`}>
+            {signed(delta)}
+          </span>
+        )}
+      </div>
+      <div
+        className={`rounded-full p-1 transition-[box-shadow,background-color] duration-300 motion-reduce:transition-none ${
+          lit ? "bg-cat-coral/10 ring-4 ring-cat-coral/60" : "ring-0 ring-transparent"
+        }`}
+      >
+        <svg viewBox="-30 -30 60 60" aria-hidden="true" className="size-16">
+          {Array.from({ length: 11 }, (_, i) => {
+            const t = ((-135 + i * 27) * Math.PI) / 180;
+            return (
+              <path
+                key={i}
+                d={`M${r1(25 * Math.sin(t))} ${r1(-25 * Math.cos(t))}L${r1(28 * Math.sin(t))} ${r1(-28 * Math.cos(t))}`}
+                strokeWidth={1.2}
+                className="stroke-foreground/30"
+              />
+            );
+          })}
+          <circle r={21} strokeWidth={2} className="fill-surface stroke-foreground/25" />
+          <path d="M0 -6V-17" strokeWidth={3.5} strokeLinecap="round" transform={`rotate(${deg})`} className="stroke-cat-violet" />
+          <circle r={3} className="fill-foreground/40" />
+        </svg>
+      </div>
+      <div className="mt-1 flex items-center gap-0.5 text-sm">
         <button type="button" aria-label={`${name} কমান`} disabled={v <= lo} onClick={() => onTurn(-0.5)} className={btn}>
           −
         </button>
@@ -2629,36 +2667,74 @@ function Dial({ name, v, shown, range, onTurn }: { name: string; v: number; show
   );
 }
 
+const KNOB_NAMES = ["sharp", "deep"];
+
 export function KnobStep() {
   const pass = useGate();
-  const [path, setPath] = useState<XY[]>([START]);
-  const [turned, setTurned] = useState(false);
+  const [path, setPath] = useSeed<XY[]>("path", [START]);
+  const [turned, setTurned] = useSeed("turned", false);
+  /** what moved on the last press: the red arrow (both knobs), or one knob by hand */
+  const [moved, setMoved] = useSeed<"arrow" | 0 | 1 | null>("moved", null);
   const w = path[path.length - 1];
+  const before = path.length > 1 ? path[path.length - 2] : w;
   const [tx, ty] = useTween(w, 500);
   const here: XY = [tx, ty];
   const next = stepOf(w);
   const L = loss(w);
   const low = L < GOOD;
 
-  const move = (n: XY, byHand: boolean) => {
+  const move = (n: XY, by: "arrow" | 0 | 1) => {
     setPath([...path, n]);
+    setMoved(by);
+    const byHand = by !== "arrow";
     if (byHand) setTurned(true);
-    if ((turned || byHand) && loss(n) < GOOD) pass("প্রতি পা-এ দুইটা knob একসাথে ঘুরলো। সব knob মিলে একটা vector, আর পরের পা-টাও একটা vector।");
+    if ((turned || byHand) && loss(n) < GOOD)
+      pass("লাল arrow-এর প্রত্যেক পা-এ sharp আর deep, দুইটা knob-ই একসাথে ঘুরলো। তাই একেকটা পা বলতে লাগলো দুইটা সংখ্যা।");
   };
   const go = () => {
-    if (!low) move(stepOf(w), false);
+    if (!low) move(stepOf(w), "arrow");
   };
-  const turn = (i: number, d: number) => {
+  const turn = (i: 0 | 1, d: number) => {
     const n: XY = [w[0], w[1]];
     n[i] = clamp(Math.round((n[i] + d) * 10) / 10, KNOB_RANGE[i][0], KNOB_RANGE[i][1]);
-    if (!same(n, w)) move(n, true);
+    if (!same(n, w)) move(n, i);
+  };
+  const restart = () => {
+    setPath([START]);
+    setMoved(null);
   };
 
   return (
     <>
       <div className="mt-5 flex justify-center gap-6">
-        <Dial name="knob ১" v={w[0]} shown={here[0]} range={KNOB_RANGE[0]} onTurn={(d) => turn(0, d)} />
-        <Dial name="knob ২" v={w[1]} shown={here[1]} range={KNOB_RANGE[1]} onTurn={(d) => turn(1, d)} />
+        {([0, 1] as const).map((i) => (
+          <Dial
+            key={i}
+            name={KNOB_NAMES[i]}
+            v={w[i]}
+            shown={here[i]}
+            range={KNOB_RANGE[i]}
+            lit={moved === "arrow" || moved === i}
+            delta={w[i] - before[i]}
+            stamp={path.length}
+            onTurn={(d) => turn(i, d)}
+          />
+        ))}
+      </div>
+      <div className="mt-2 min-h-12 text-center text-[0.95rem] leading-snug">
+        {moved === "arrow" ? (
+          <span key={path.length} className={`${FADE} font-semibold text-cat-coral`}>
+            খেয়াল করুন, লাল arrow-এর এক পা-এ sharp আর deep দুইটাই একসাথে ঘুরলো!
+          </span>
+        ) : moved !== null ? (
+          <span key={path.length} className={`${FADE} text-muted`}>
+            হাতে ঘোরালে একবারে একটাই knob ঘোরে। এবার শুধু {KNOB_NAMES[moved]} ঘুরলো, আর {KNOB_NAMES[1 - moved]} যেখানে ছিল সেখানেই।
+          </span>
+        ) : (
+          <span className="text-muted">
+            গোল গোল দাগগুলো ম্যাপের উচ্চতার দাগের মতো। বাইরের দাগে গানটা সবচেয়ে বেখাপ্পা শোনায়, যত ভেতরে যাবেন ভুল তত কম, আর একদম মাঝখানটা সবচেয়ে নিচু।
+          </span>
+        )}
       </div>
       <Plane f={FK} ticks={2} label={`two knobs at (${w[0].toFixed(1)}, ${w[1].toFixed(1)}); error ${L.toFixed(2)}`} className="max-w-[24rem]">
         {[8, 4.5, 2, 0.5].map((c, i) => (
@@ -2681,25 +2757,25 @@ export function KnobStep() {
         {!low && <Arrow f={FK} from={w} to={next} tone="coral" w={2.6} />}
         <circle cx={FK.sx(here[0])} cy={FK.sy(here[1])} r={6} className="fill-cat-violet" />
         <Label f={FK} at={[FK.x1, 0]} dx={-4} dy={-6} anchor="end" size={9}>
-          knob ১ →
+          sharp →
         </Label>
         <Label f={FK} at={[0, FK.y1]} dx={5} dy={10} anchor="start" size={9}>
-          ↑ knob ২
+          ↑ deep
         </Label>
       </Plane>
       <div className="mx-auto grid max-w-sm gap-1 rounded-2xl border border-border px-4 py-3 text-center">
-        <div className="font-mono">
-          knob-গুলো = ({nice(w[0])}, {nice(w[1])})
+        <div>
+          sharp আছে <span className="font-mono">{nice(w[0])}</span>-এ, deep আছে <span className="font-mono">{nice(w[1])}</span>-এ
         </div>
         <div>
-          ভুল:{" "}
+          ভুল এখন{" "}
           <b key={L.toFixed(2)} className={`${POP} inline-block font-mono ${low ? "text-accent-text" : ""}`}>
             {L.toFixed(2)}
           </b>
         </div>
         {!low && (
-          <div className="font-mono text-sm text-cat-coral">
-            পরের পা = ({signed(next[0] - w[0])}, {signed(next[1] - w[1])})
+          <div className="text-sm text-cat-coral">
+            লাল arrow-এর পরের পা <span className="font-mono">({signed(next[0] - w[0])}, {signed(next[1] - w[1])})</span>। দুই ঘরে দুই knob-এর ঘোরা।
           </div>
         )}
       </div>
@@ -2707,18 +2783,233 @@ export function KnobStep() {
         <button type="button" onClick={go} disabled={low} className={primaryBtn}>
           লাল arrow ধরে এক পা
         </button>
-        <button type="button" onClick={() => setPath([START])} disabled={path.length === 1} className={`${quietBtn} px-3`} aria-label="আবার শুরু">
+        <button type="button" onClick={restart} disabled={path.length === 1} className={`${quietBtn} px-3`} aria-label="আবার শুরু">
           ↺
         </button>
       </div>
       <Ticks
         items={[
-          ["একটা knob হাতে ঘুরান", turned],
-          ["arrow ধরে নিচে নামুন", low],
+          ["একটা knob নিজের হাতে ঘুরিয়েছেন", turned],
+          ["arrow ধরে ভুল কমিয়েছেন", low],
         ]}
       />
       <Task done={turned && low}>
-        আগে একটা knob নিজের হাতে ঘুরিয়ে দেখুন ভুল কমে কিনা। তারপর লাল arrow ধরে পা ফেলুন, যতক্ষণ না ভুল {nice(GOOD)}-এর নিচে নামে।
+        আগে sharp বা deep, যেকোনো একটা knob নিজের হাতে ঘুরিয়ে দেখুন ভুলটা কমে কিনা। তারপর লাল arrow ধরে পা ফেলতে থাকুন, যতক্ষণ না ভুল {nice(GOOD)}-এর নিচে নামে।
+      </Task>
+    </>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 14¼ · What a gradient is. Same amplifier map, one spot on it. The reader
+//      takes one trial step in a few of eight directions and sees the error
+//      rise or fall, then points at the steepest climb. Only then: which way
+//      lowers the error? Straight against it. That climb is the gradient, and
+//      the red arrow of the last screen was its opposite.
+
+const GW: XY = [1, 3];
+/** eight directions, counterclockwise from "right" */
+const COMPASS: XY[] = Array.from({ length: 8 }, (_, i): XY => [Math.cos((i * Math.PI) / 4), Math.sin((i * Math.PI) / 4)]);
+const RISE = COMPASS.map(([dx, dy]) => loss([GW[0] + dx, GW[1] + dy]) - loss(GW));
+const UP = RISE.indexOf(Math.max(...RISE));
+const GRAD: XY = [GW[0] - MIN[0], 2 * (GW[1] - MIN[1])];
+const DIR_NAME = ["ডানে", "ডানে-ওপরে", "ওপরে", "বাঁয়ে-ওপরে", "বাঁয়ে", "বাঁয়ে-নিচে", "নিচে", "ডানে-নিচে"];
+const DIR_CELL = [
+  "col-start-3 row-start-2",
+  "col-start-3 row-start-1",
+  "col-start-2 row-start-1",
+  "col-start-1 row-start-1",
+  "col-start-1 row-start-2",
+  "col-start-1 row-start-3",
+  "col-start-2 row-start-3",
+  "col-start-3 row-start-3",
+];
+const WAYS = ["চড়াইয়ের arrow ধরেই", "চড়াইয়ের ঠিক উল্টো দিকে", "আড়াআড়ি, পাশের দিকে"];
+const WAY_RIGHT = 1;
+const TIPS_NEEDED = 4;
+const one = (x: number) => (Math.round(Math.abs(x) * 10) / 10).toString();
+
+export function GradientFeel() {
+  const pass = useGate();
+  const [tried, setTried] = useSeed<number[]>("tried", []);
+  const [last, setLast] = useSeed<number | null>("last", null);
+  const [found, setFound] = useSeed("found", false);
+  const [way, setWay] = useSeed<number | null>("way", null);
+  const [miss, setMiss] = useState<{ i: number; n: number } | null>(null);
+  const enough = tried.length >= TIPS_NEEDED;
+  const tip = (i: number, len = 1): XY => [GW[0] + COMPASS[i][0] * len, GW[1] + COMPASS[i][1] * len];
+  const up: XY = [GW[0] + GRAD[0] * 0.45, GW[1] + GRAD[1] * 0.45];
+  const down: XY = [GW[0] - GRAD[0] * 0.45, GW[1] - GRAD[1] * 0.45];
+
+  const probe = (i: number) => {
+    setLast(i);
+    if (!tried.includes(i)) setTried([...tried, i]);
+  };
+  const point = (i: number) => {
+    if (!enough || found) return;
+    if (i === UP) {
+      setFound(true);
+      setMiss(null);
+    } else setMiss({ i, n: (miss?.n ?? 0) + 1 });
+  };
+  const choose = (i: number) => {
+    if (way !== null) return;
+    setWay(i);
+    pass("চড়াইয়ের arrow উল্টে দিলেই সবচেয়ে খাড়া নামার পথ। আগের screen-এর লাল arrow ঠিক এদিকটাই দেখাচ্ছিল।");
+  };
+
+  return (
+    <>
+      <div className="mt-5 text-center text-[0.95rem] leading-snug text-muted">
+        ডানে গেলে sharp বাড়ে, ওপরে গেলে deep। বেগুনি বিন্দুতে ভুল এখন {one(loss(GW))}।
+      </div>
+      <Plane f={FK} ticks={2} label={`the amplifier map; standing at (${GW[0]}, ${GW[1]}), ${tried.length} directions tried`} className="max-w-[24rem]">
+        {[8, 4.5, 3, 0.5].map((c, i) => (
+          <ellipse
+            key={c}
+            cx={FK.sx(MIN[0])}
+            cy={FK.sy(MIN[1])}
+            rx={Math.sqrt(2 * c) * FK.u}
+            ry={Math.sqrt(c) * FK.u}
+            strokeWidth={1}
+            className={`pointer-events-none ${i === 3 ? "fill-cat-teal/20 stroke-cat-teal" : "fill-none stroke-cat-blue/35"}`}
+          />
+        ))}
+        <Label f={FK} at={MIN} dy={4} size={8.5} className="fill-cat-teal">
+          ভুল সবচেয়ে কম
+        </Label>
+        {tried.map((i) => {
+          const [x, y] = tip(i);
+          const [lx2, ly2] = tip(i, 1.6);
+          const rise = RISE[i] > 0;
+          const pickable = enough && !found;
+          const anchor = COMPASS[i][0] > 0.3 ? "start" : COMPASS[i][0] < -0.3 ? "end" : "middle";
+          return (
+            <g key={i}>
+              <path
+                d={`M${FK.sx(GW[0])} ${FK.sy(GW[1])}L${FK.sx(x)} ${FK.sy(y)}`}
+                strokeWidth={last === i ? 3 : 2}
+                strokeLinecap="round"
+                className={`pointer-events-none ${rise ? "stroke-cat-coral" : "stroke-cat-teal"}`}
+              />
+              <Label f={FK} at={[lx2, ly2]} dy={3} anchor={anchor} size={9} className={rise ? "fill-cat-coral" : "fill-cat-teal"}>
+                {rise ? "+" : "−"}
+                {one(RISE[i])}
+              </Label>
+              <circle
+                cx={FK.sx(x)}
+                cy={FK.sy(y)}
+                r={pickable ? 7 : 4}
+                role={pickable ? "button" : undefined}
+                tabIndex={pickable ? 0 : undefined}
+                aria-label={pickable ? `${DIR_NAME[i]}-এর পা-টা বেছে নিন` : undefined}
+                onClick={() => point(i)}
+                onKeyDown={pickable ? press(() => point(i)) : undefined}
+                className={`${rise ? "fill-cat-coral" : "fill-cat-teal"} ${pickable ? "animate-pulse cursor-pointer" : "pointer-events-none"} motion-reduce:animate-none`}
+              />
+            </g>
+          );
+        })}
+        {found && <Arrow key="up" f={FK} from={GW} to={up} tone="violet" w={3.2} draw />}
+        {way !== null && <Arrow key="down" f={FK} from={GW} to={down} tone="teal" w={3.2} draw />}
+        <circle cx={FK.sx(GW[0])} cy={FK.sy(GW[1])} r={6} className="pointer-events-none fill-cat-violet" />
+        <Label f={FK} at={[FK.x1, 0]} dx={-4} dy={-6} anchor="end" size={9}>
+          sharp →
+        </Label>
+        <Label f={FK} at={[FK.x0, FK.y1]} dx={5} dy={10} anchor="start" size={9}>
+          ↑ deep
+        </Label>
+      </Plane>
+
+      <div className="mt-3 flex flex-col items-center gap-4 sm:flex-row sm:items-center sm:justify-center">
+        <div className="grid shrink-0 grid-cols-3 grid-rows-3 gap-1" role="group" aria-label="কোন দিকে এক পা ফেলবেন">
+          {COMPASS.map((_, i) => (
+            <button
+              key={i}
+              type="button"
+              aria-label={`${DIR_NAME[i]} এক পা`}
+              aria-pressed={last === i}
+              onClick={() => probe(i)}
+              className={`${DIR_CELL[i]} grid size-10 cursor-pointer place-items-center rounded-xl border-2 transition-colors ${
+                last === i ? "border-cat-violet bg-cat-violet/10" : tried.includes(i) ? "border-border bg-foreground/[0.04]" : "border-border hover:border-cat-violet/60"
+              }`}
+            >
+              <svg viewBox="-10 -10 20 20" aria-hidden="true" className="size-5">
+                <path d="M-6 0H5M1 -4L5 0L1 4" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round" transform={`rotate(${-45 * i})`} className="fill-none stroke-current" />
+              </svg>
+            </button>
+          ))}
+          <span className="col-start-2 row-start-2 grid place-items-center text-xs text-muted">এক পা</span>
+        </div>
+        <div className="min-h-16 max-w-xs text-center text-[0.95rem] leading-snug sm:text-left">
+          {last === null ? (
+            <span className="text-muted">বিন্দু থেকে কোন দিকে এক পা ফেলে দেখবেন, পাশের বোতাম থেকে বেছে নিন।</span>
+          ) : RISE[last] > 0 ? (
+            <span key={last} className={FADE}>
+              {DIR_NAME[last]} এক পা ফেলতেই ভুল বেড়ে গেল <b className="font-mono text-cat-coral">{one(RISE[last])}</b>। এটা চড়াই।
+            </span>
+          ) : (
+            <span key={last} className={FADE}>
+              {DIR_NAME[last]} এক পা ফেলতেই ভুল কমে গেল <b className="font-mono text-cat-teal">{one(RISE[last])}</b>। এটা ঢাল বেয়ে নামা।
+            </span>
+          )}
+        </div>
+      </div>
+
+      {enough && !found && (
+        <div className={`${FADE} mt-4 text-center`}>
+          <div className="font-semibold">এবার বলুন তো, কোন দিকে পা ফেললে ভুল সবচেয়ে বেশি বাড়ে? ম্যাপে ওই পা-টার মাথার বিন্দুতে tap করুন।</div>
+          {miss && (
+            <Nope key={miss.n}>
+              {RISE[miss.i] <= 0
+                ? `উঁহু, ${DIR_NAME[miss.i]} গেলে তো ভুল উল্টো কমে যায়।`
+                : tried.includes(UP)
+                  ? `${DIR_NAME[miss.i]} গেলে ভুল বাড়ে ${one(RISE[miss.i])}, কিন্তু এর চেয়েও খাড়া একটা দিক আপনি দেখে ফেলেছেন। সংখ্যাগুলো মিলিয়ে দেখুন তো।`
+                  : `${DIR_NAME[miss.i]} গেলে ভুল বাড়ে ${one(RISE[miss.i])}। কিন্তু সব দিক কি দেখা হয়েছে? আরেকটু খুঁজে দেখুন।`}
+            </Nope>
+          )}
+        </div>
+      )}
+
+      {found && (
+        <div className={`${FADE} mt-4`}>
+          <div className="text-center text-[0.95rem] leading-snug">
+            ঠিক ধরেছেন, এদিকের চড়াইটাই সবচেয়ে খাড়া। হিসাব কষে এই দিকটা arrow হিসেবে লিখলে দাঁড়ায়{" "}
+            <b className="font-mono text-cat-violet">
+              ({nice(GRAD[0])}, {nice(GRAD[1])})
+            </b>
+            , মানে sharp কমানো আর deep বাড়ানো।
+          </div>
+          <div className="mt-3 font-semibold">ভুল কমাতে চাইলে এখান থেকে কোন দিকে পা ফেলবেন?</div>
+          <div className="mt-2 grid gap-2">
+            {WAYS.map((o, i) => (
+              <Choice key={o} n={i} look={predictLook(i, way, way !== null, WAY_RIGHT)} disabled={way !== null} onClick={() => choose(i)}>
+                {o}
+              </Choice>
+            ))}
+          </div>
+          {way !== null && (
+            <div className={`${FADE} mt-2 text-center text-[0.95rem] leading-snug`}>
+              {way === WAY_RIGHT ? "একদম! " : way === 0 ? "উঁহু, চড়াই ধরে গেলে তো ভুল আরও বাড়বে। " : "উঁহু, পাশের দিকে গেলে ভুল প্রায় বদলায়ই না। "}
+              সবচেয়ে খাড়া নামা হলো চড়াইয়ের ঠিক উল্টো দিকটা,{" "}
+              <b className="font-mono text-cat-teal">
+                ({nice(-GRAD[0])}, {nice(-GRAD[1])})
+              </b>
+              ।
+            </div>
+          )}
+        </div>
+      )}
+
+      <Ticks
+        items={[
+          [`${bn(TIPS_NEEDED)}টা দিকে পা ফেলেছেন`, enough],
+          ["সবচেয়ে খাড়া চড়াই", found],
+          ["নামার পথ", way !== null],
+        ]}
+      />
+      <Task done={way !== null}>
+        চারপাশে অন্তত {bn(TIPS_NEEDED)}টা দিকে এক পা করে ফেলে দেখুন ভুল কতটা বাড়ে বা কমে। তারপর সবচেয়ে খাড়া চড়াইটা খুঁজে বের করুন।
       </Task>
     </>
   );
@@ -2727,16 +3018,19 @@ export function KnobStep() {
 // ---------------------------------------------------------------------------
 // 14½ · Where vectors hide. Tap a card and its vector drops onto a ruler of
 //      sizes, from a handful of numbers to ten thousand crore. The gradient
-//      lands exactly on the weights: one number per knob.
+//      card asks first: how big, next to the weights? A row of knobs each gets
+//      its own "which way, how far", so it lands exactly on the weights.
 
 const RUNGS: { name: string; what: string; size: string; lo: number; hi: number; band: string; ink: string }[] = [
-  { name: "Dataset-এর একটা row", what: "একজন রোগী, একটা বাসা", size: "5 – 100", lo: 5, hi: 100, band: "fill-cat-blue/30", ink: "fill-cat-blue" },
-  { name: "Classifier-এর output", what: "প্রত্যেক সম্ভাব্য উত্তরের একটা score", size: "10 – 1,000", lo: 10, hi: 1000, band: "fill-cat-amber/35", ink: "fill-cat-amber" },
-  { name: "একটা embedding", what: "একটা শব্দের শেখা meaning", size: "300 – 12,288", lo: 300, hi: 12288, band: "fill-cat-teal/30", ink: "fill-cat-teal" },
-  { name: "একটা ছবি", what: "প্রত্যেক pixel-এর রং", size: "784 – 3.6 কোটি", lo: 784, hi: 3.6e7, band: "fill-cat-coral/30", ink: "fill-cat-coral" },
-  { name: "Model-এর weights", what: "সবগুলো knob, একটা list-এ", size: "হাজার – 10,000 কোটি", lo: 1e3, hi: 1e11, band: "fill-cat-violet/30", ink: "fill-cat-violet" },
-  { name: "একটা gradient", what: "প্রত্যেক knob কোন দিকে ঘোরাতে হবে", size: "weights-এর সমান", lo: 1e3, hi: 1e11, band: "fill-cat-violet/30", ink: "fill-cat-violet" },
+  { name: "Dataset-এর একটা row", what: "একজন রোগীর সব কলাম, বা একটা বাসার সব তথ্য।", size: "5 থেকে 100টা সংখ্যা", lo: 5, hi: 100, band: "fill-cat-blue/30", ink: "fill-cat-blue" },
+  { name: "Classifier-এর output", what: "প্রত্যেকটা সম্ভাব্য উত্তরের জন্য একটা করে score।", size: "10 থেকে 1,000টা সংখ্যা", lo: 10, hi: 1000, band: "fill-cat-amber/35", ink: "fill-cat-amber" },
+  { name: "একটা embedding", what: "একটা শব্দের মানে, model যেভাবে শিখে নিয়েছে।", size: "300 থেকে 12,288টা সংখ্যা", lo: 300, hi: 12288, band: "fill-cat-teal/30", ink: "fill-cat-teal" },
+  { name: "একটা ছবি", what: "প্রত্যেকটা pixel-এর রং, পরপর সাজানো।", size: "784 থেকে 3.6 কোটি সংখ্যা", lo: 784, hi: 3.6e7, band: "fill-cat-coral/30", ink: "fill-cat-coral" },
+  { name: "Model-এর weights", what: "Model-এর সবগুলো knob, একটা list-এ।", size: "হাজার থেকে 10,000 কোটি সংখ্যা", lo: 1e3, hi: 1e11, band: "fill-cat-violet/30", ink: "fill-cat-violet" },
+  { name: "একটা gradient", what: "কোন knob কোন দিকে কতটা ঘুরবে।", size: "weights-এর ঠিক যতগুলো, ততগুলো", lo: 1e3, hi: 1e11, band: "fill-cat-violet/30", ink: "fill-cat-violet" },
 ];
+const WEIGHTS_CARD = 4;
+const GRAD_CARD = 5;
 const LX0 = 14;
 const LX1 = 306;
 const DECADES = 11;
@@ -2751,17 +3045,47 @@ const RULER: [number, string][] = [
   [8, "10 কোটি"],
   [10, "1000 কোটি"],
 ];
+const SIZE_GUESS = ["একটাই সংখ্যা, সব knob মিলিয়ে", "weights-এর অর্ধেক", "weights-এর যতগুলো ঘর, ঠিক ততগুলো"];
+const SIZE_RIGHT = 2;
+const DEMO_W = [0.4, -1.2, 2, 0.7, -0.3, 1.5];
+const DEMO_G = ["+0.3", "−1.1", "+0.8", "−0.2", "+1.6", "−0.5"];
+
+/** A little knob drawn at a setting, for the pairing row. */
+function MiniKnob({ v }: { v: number }) {
+  return (
+    <svg viewBox="-12 -12 24 24" aria-hidden="true" className="size-8">
+      <circle r={10} strokeWidth={1.5} className="fill-surface stroke-foreground/30" />
+      <path d="M0 -3V-8" strokeWidth={2.5} strokeLinecap="round" transform={`rotate(${v * 50})`} className="stroke-cat-violet" />
+    </svg>
+  );
+}
 
 export function VectorLadder() {
   const pass = useGate();
-  const [placed, setPlaced] = useState<number[]>([]);
+  const [placed, setPlaced] = useSeed<number[]>("placed", []);
+  const [asking, setAsking] = useSeed("asking", false);
+  const [guess, setGuess] = useSeed<number | null>("guess", null);
+  const [early, setEarly] = useState(0);
+  const pair = usePlay(420);
+  const paired = guess !== null && pair.k === DEMO_W.length;
   const axisY = LTOP + RUNGS.length * LANE;
 
-  const place = (i: number) => {
-    if (placed.includes(i)) return;
-    const next = [...placed, i];
+  const place = (i: number, from = placed) => {
+    if (from.includes(i)) return;
+    const next = [...from, i];
     setPlaced(next);
-    if (next.length === RUNGS.length) pass("পাঁচটা সংখ্যার row থেকে দশ হাজার কোটি knob, সবই vector। নিয়ম সবখানে একই।");
+    if (next.length === RUNGS.length) pass("পাঁচ ঘরের একটা row থেকে হাজার কোটি ঘরের weights, সবই vector। আর প্রত্যেক knob-এর জন্য gradient-এ ঠিক একটা করে ঘর।");
+  };
+  const tap = (i: number) => {
+    if (placed.includes(i) || pair.running) return;
+    if (i !== GRAD_CARD) return place(i);
+    if (!placed.includes(WEIGHTS_CARD)) return setEarly((n) => n + 1);
+    setAsking(true);
+  };
+  const answer = (g: number) => {
+    if (guess !== null) return;
+    setGuess(g);
+    pair.play(DEMO_W.length, () => place(GRAD_CARD, placed));
   };
 
   return (
@@ -2803,25 +3127,81 @@ export function VectorLadder() {
               key={i}
               type="button"
               aria-pressed={on}
-              onClick={() => place(i)}
+              onClick={() => tap(i)}
               className={`rounded-xl border-2 px-3 py-2 text-left transition-colors ${
-                on ? "cursor-default border-border bg-foreground/[0.03]" : "cursor-pointer border-dashed border-border hover:border-cat-blue/60"
+                on
+                  ? "cursor-default border-border bg-foreground/[0.03]"
+                  : i === GRAD_CARD && asking
+                    ? "cursor-default border-cat-violet/60 bg-cat-violet/5"
+                    : "cursor-pointer border-dashed border-border hover:border-cat-blue/60"
               }`}
             >
               <div className="text-[0.95rem] font-semibold">{r.name}</div>
               {on ? (
                 <div className={`${FADE} text-sm leading-snug`}>
-                  {r.what} · <span className="font-mono">{r.size}</span>
+                  {r.what} <span className="font-semibold">{r.size}।</span>
                 </div>
               ) : (
-                <div className="text-xs text-muted">কত বড়? tap করুন</div>
+                <div className="text-xs text-muted">
+                  {i === GRAD_CARD && asking ? "নিচে আগে একটা আন্দাজ দিন" : "কত বড় হতে পারে? মনে মনে আন্দাজ করে tap করুন"}
+                </div>
               )}
             </button>
           );
         })}
       </div>
+      {early > 0 && !placed.includes(WEIGHTS_CARD) && (
+        <Nope key={early}>Gradient-এর মাপ weights-এর সাথে জড়ানো। আগে Model-এর weights-এর কার্ডটা খুলে নিন।</Nope>
+      )}
+
+      {asking && (
+        <div className={`${FADE} mt-5 rounded-2xl border border-cat-violet/40 px-4 py-4`}>
+          <div className="font-semibold">Amplifier-এ knob ছিল দুইটা, লাল arrow-এর পা-ও ছিল দুই সংখ্যার। তাহলে weights-এ যত ঘর, gradient-এ কয়টা?</div>
+          <div className="mt-3 grid gap-2">
+            {SIZE_GUESS.map((o, i) => (
+              <Choice key={o} n={i} look={predictLook(i, guess, paired, SIZE_RIGHT)} disabled={guess !== null} onClick={() => answer(i)}>
+                {o}
+              </Choice>
+            ))}
+          </div>
+          {guess !== null && (
+            <div className="mt-4 overflow-x-auto pb-1">
+              <div className="mx-auto grid w-max grid-cols-[auto_repeat(6,2.75rem)] items-center gap-x-1 gap-y-1 text-center">
+                <span className="pr-2 text-right text-sm font-semibold text-cat-violet">weights</span>
+                {DEMO_W.map((v, i) => (
+                  <span key={i} className="grid place-items-center">
+                    <MiniKnob v={v} />
+                  </span>
+                ))}
+                <span />
+                {DEMO_W.map((_, i) => (
+                  <span key={i} className="h-5 text-muted">
+                    {i < pair.k && <span className={`${POP} inline-block`}>↓</span>}
+                  </span>
+                ))}
+                <span className="pr-2 text-right text-sm font-semibold text-cat-coral">gradient</span>
+                {DEMO_G.map((g, i) => (
+                  <span key={i} className="h-7">
+                    {i < pair.k && <span className={`${POP} inline-block rounded-md bg-cat-coral/15 px-1 font-mono text-sm text-cat-coral`}>{g}</span>}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+          <div className="mt-2 min-h-12 text-center text-[0.95rem] leading-snug">
+            {guess !== null && !paired && <span className="text-muted">প্রত্যেকটা knob-কে জিজ্ঞেস করা হচ্ছে, “তুমি কোন দিকে কতটা ঘুরবে?”</span>}
+            {paired && (
+              <span className={FADE}>
+                {guess === SIZE_RIGHT ? "ঠিক ধরেছেন! " : "উঁহু, দেখলেন তো? "}
+                প্রত্যেক knob নিজের একটা উত্তর পেল, কেউ বাদ গেল না, কেউ দুইটা পেল না। তাই হাজার কোটি knob হলে gradient-এও হাজার কোটি ঘর।
+              </span>
+            )}
+          </div>
+        </div>
+      )}
+
       <Task done={placed.length === RUNGS.length}>
-        ছয়টা কার্ডই tap করে দেখুন কোন vector কত বড় ({bn(placed.length)}/{bn(RUNGS.length)})।
+        ছয়টা কার্ডই tap করে মিলিয়ে নিন, কোন vector কত বড় ({bn(placed.length)}/{bn(RUNGS.length)})।
       </Task>
     </>
   );
@@ -2831,8 +3211,8 @@ export function VectorLadder() {
 // 15 · Say it out loud. Each card: a line of notation; tapped, its reading.
 
 const CARDS: { see: ReactNode; say: string }[] = [
-  { see: <>v ∈ ℝ⁴</>, say: "“v হলো চারটা সাধারণ সংখ্যার একটা list”" },
-  { see: <>v₂</>, say: "“v-এর দ্বিতীয় component”" },
+  { see: <>v ∈ ℝ⁴</>, say: "“v হলো চারটা real number-এর একটা list”, মানে ৪ dimension-এর vector" },
+  { see: <>v₂</>, say: "“v-এর দ্বিতীয় component”, মানে list-এর দুই নম্বর ঘরের সংখ্যাটা" },
   { see: <>x ∈ ℝ⁷⁸⁴</>, say: "“x হলো 784টা সংখ্যার list”, মানে একটা 28 × 28 ছবি" },
   {
     see: (
@@ -2840,11 +3220,11 @@ const CARDS: { see: ReactNode; say: string }[] = [
         <b className="font-black">0</b> ∈ ℝ³
       </>
     ),
-    say: "“তিন dimension-এর zero vector: (0, 0, 0)”",
+    say: "“তিন dimension-এর zero vector”, মানে (0, 0, 0)",
   },
-  { see: <>λ ∈ ℝ</>, say: "“lambda একটা সাধারণ সংখ্যা”, মানে একটা scalar" },
-  { see: <>u, v ∈ ℝⁿ</>, say: "“u আর v দুইটাই nটা সংখ্যার list”, তাই ওদের তুলনা করা যায়" },
-  { see: <>‖v‖</>, say: "“v-এর length”। কীভাবে মাপে, সামনের lesson-এ" },
+  { see: <>λ ∈ ℝ</>, say: "“lambda একটাই real number”, কোনো list না। এমন একলা সংখ্যাকে বলে scalar" },
+  { see: <>u, v ∈ ℝⁿ</>, say: "“u আর v, দুইটাই nটা সংখ্যার list”। ঘর সমান, তাই পাশাপাশি হিসাব করা চলে" },
+  { see: <>‖v‖</>, say: "“v-এর length”। কীভাবে মাপতে হয়, সেটা সামনের lesson-এ দেখবো" },
 ];
 
 export function SayItCards() {
@@ -2855,7 +3235,7 @@ export function SayItCards() {
     if (open.includes(i)) return;
     const next = [...open, i];
     setOpen(next);
-    if (next.length === CARDS.length) pass("সাতটা চিহ্ন, সাতটা বাক্য। Paper পড়া এখন আর অতটা ভয়ের না।");
+    if (next.length === CARDS.length) pass("সাতটা চিহ্ন, আর প্রত্যেকটার পেছনে একটা সোজা বাক্য। বইয়ের ওই লাইনগুলো দেখে এখন আর ভয় লাগার কথা না।");
   };
 
   return (
@@ -2877,14 +3257,14 @@ export function SayItCards() {
               {on ? (
                 <span className={`${FADE} mt-1 text-[0.92rem] leading-snug`}>{c.say}</span>
               ) : (
-                <span className="mt-1 text-xs text-muted">মুখে বলুন, তারপর tap</span>
+                <span className="mt-1 text-xs text-muted">কী বলতে চাইছে? আগে আন্দাজ করুন, তারপর tap</span>
               )}
             </button>
           );
         })}
       </div>
       <Task done={open.length === CARDS.length}>
-        সাতটা কার্ডই উল্টে মিলিয়ে নিন ({bn(open.length)}/{bn(CARDS.length)})
+        সাতটা কার্ডই উল্টে দেখুন, আপনার আন্দাজের সাথে মিললো কিনা ({bn(open.length)}/{bn(CARDS.length)})।
       </Task>
     </>
   );
@@ -2930,7 +3310,7 @@ export function PairUp() {
     run.play(end, () => {
       const next = seen.includes(i) ? seen : [...seen, i];
       setSeen(next);
-      if (next.length === PAIRINGS.length) pass("ঘর সমান হলে প্রত্যেক ঘরের জোড়া মেলে। না হলে তফাত বের করারই উপায় নাই।");
+      if (next.length === PAIRINGS.length) pass("ঘর সমান হলে প্রত্যেক ঘর তার জোড়া পায়। না হলে কোথাও না কোথাও একজন একা পড়ে যায়, আর তফাত বের করার উপায়ই থাকে না।");
     });
   };
 
@@ -2964,7 +3344,7 @@ export function PairUp() {
         ))}
       </div>
       {pr === null ? (
-        <div className="mt-4 text-center text-[0.95rem] text-muted">একটা জোড়া বেছে নিন, Σ মেশিন ঘর ঘর মিলিয়ে দেখবে।</div>
+        <div className="mt-4 text-center text-[0.95rem] text-muted">একটা জোড়া বেছে দিন। Σ মেশিন প্রথম ঘরের সাথে প্রথম ঘর, দ্বিতীয়র সাথে দ্বিতীয়, এভাবে মিলিয়ে যাবে।</div>
       ) : (
         <div key={pi} className={FADE}>
           <div className="mt-4 text-center font-serif text-lg">
@@ -3006,11 +3386,11 @@ export function PairUp() {
       )}
       <div className="mt-2 min-h-12 text-center text-[0.95rem]">
         {pr && fits && run.k === cols && (
-          <div className={`${FADE} font-semibold text-accent-text`}>সব ঘরের জোড়া মিললো। দূরত্ব ≈ {Math.sqrt(sum).toFixed(1)}</div>
+          <div className={`${FADE} font-semibold text-accent-text`}>প্রত্যেক ঘর তার জোড়া পেয়ে গেল, আর দূরত্ব দাঁড়ালো প্রায় {Math.sqrt(sum).toFixed(1)}।</div>
         )}
         {pr && stuck && (
           <div className={`${FADE} text-danger`}>
-            (a{sub(both + 1)} − b{sub(both + 1)})? {la < lb ? pr.a.whose : pr.b.whose} {ORDINAL[both]} ঘরই নাই। Σ মেশিন এখানেই আটকে গেল।
+            (a{sub(both + 1)} − b{sub(both + 1)})? {la < lb ? pr.a.whose : pr.b.whose} তো {ORDINAL[both]} ঘরই নাই। Σ মেশিন এখানেই আটকে গেল।
           </div>
         )}
       </div>
@@ -3020,7 +3400,7 @@ export function PairUp() {
           ["নাসিব আর রোগী", seen.includes(1)],
         ]}
       />
-      <Task done={seen.length === PAIRINGS.length}>দুইটা জোড়াই Σ মেশিনে চালিয়ে দেখুন।</Task>
+      <Task done={seen.length === PAIRINGS.length}>দুইটা জোড়াই একবার করে Σ মেশিনে চালিয়ে দেখুন।</Task>
     </>
   );
 }
@@ -3063,7 +3443,7 @@ function FinaleReel({ onReplay }: { onReplay: () => void }) {
         {last && (
           <div className={FADE}>
             <div className="text-xl font-bold">ছবি আঁকুন 2D-তে, হিসাব করুন n-D-তে</div>
-            <div className="text-muted">কয়টা ঘর, formula সেটা টেরই পায় না</div>
+            <div className="text-muted">ঘর দুইটা হোক বা সাড়ে তিন কোটি, formula-টা টেরই পায় না।</div>
             <button
               type="button"
               onClick={onReplay}
@@ -3082,3 +3462,21 @@ export function Finale() {
   const [run, setRun] = useState(0);
   return <FinaleReel key={run} onReplay={() => setRun((r) => r + 1)} />;
 }
+
+// states for `npm run shot`
+export const fixtures: Fixtures = {
+  KnobStep: {
+    arrow: { path: [START, stepOf(START)], turned: false, moved: "arrow" },
+    hand: { path: [START, [-2.5, 4.2]], turned: true, moved: 0 },
+  },
+  GradientFeel: {
+    start: {},
+    tried: { tried: [0, 2, 4, 6], last: 6 },
+    found: { tried: [0, 2, 3, 4, 6, 7], last: 3, found: true },
+    way: { tried: [0, 2, 3, 4, 6, 7], last: 3, found: true, way: 1 },
+  },
+  VectorLadder: {
+    asking: { placed: [0, 1, 4], asking: true },
+    guessed: { placed: [0, 1, 4], asking: true, guess: 2 },
+  },
+};

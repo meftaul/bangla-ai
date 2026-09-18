@@ -573,7 +573,7 @@ type Fill = "empty" | "zero" | "avg";
 const FILLS: { id: Fill; label: string }[] = [
   { id: "empty", label: "খালি রাখুন" },
   { id: "zero", label: "0 বসান" },
-  { id: "avg", label: `গড় বয়স ${AVG} বসান` },
+  { id: "avg", label: `বয়সের average ${AVG} বসান` },
 ];
 
 /** A vector written out, each number in its own box, its meaning underneath. */
@@ -720,9 +720,9 @@ export function MissingAge() {
       {last === "zero" && (
         <SaminSays tone="bad">0 বছর?! Program তো ভাবছে ফাহিম সদ্য জন্মানো বাচ্চা। তাই ক্লাসের সবচেয়ে ছোট আরিফকে ধরিয়ে দিলো।</SaminSays>
       )}
-      {last === "avg" && <SaminSays tone="good">গড় বসালাম, {AVG}। বয়সটা অন্তত ক্লাসের আর দশজনের মতো হলো। আর partner এখন… আমি!</SaminSays>}
+      {last === "avg" && <SaminSays tone="good">Average বসালাম, {AVG}। বয়সটা অন্তত ক্লাসের আর দশজনের মতো হলো। আর partner এখন… আমি!</SaminSays>}
       <Task done={tried.length === FILLS.length}>
-        ফাহিমের ঘরে তিনটাই বসিয়ে দেখুন: খালি, 0, আর গড় ({bn(tried.length)}/{bn(FILLS.length)})
+        ফাহিমের ঘরে তিনটাই বসিয়ে দেখুন: খালি, 0, আর average ({bn(tried.length)}/{bn(FILLS.length)})
       </Task>
     </>
   );

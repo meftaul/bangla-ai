@@ -32,7 +32,7 @@ import { bn } from "./figure-kit";
 // Tailwind only. Dice, coins and tiles are drawn objects with fixed ink.
 
 /** mulberry32: the same "random" rolls on every visit */
-function rng(seed: number) {
+export function rng(seed: number) {
   let a = seed >>> 0;
   return () => {
     a = (a + 0x6d2b79f5) >>> 0;
