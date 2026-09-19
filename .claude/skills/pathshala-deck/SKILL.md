@@ -38,6 +38,13 @@ What makes a deck engaging here, in order of impact:
 - **Close with an opinion `Poll` + full-bleed statement slides** for the takeaway.
 - ≤5 bullets per slide, one idea each, optional `.sub` detail line under a `strong` lead.
 - Reveal bullets as **fragments**, in step with a `Terminal` animation beside them.
+- **Explain after the activity, not before.** The "why" behind a `Quiz` goes on the
+  slide after it, or in a `<Verdict fragment>` the presenter reveals once answers are
+  in. Never put it above the question, where it gives the answer away.
+- **Bangla decks speak in the author's voice** (`bangla-story-article` skill): slide
+  text, Terminal lines and activity options read as spoken Bangla with English terms,
+  in full sentences rather than formula shorthand (`শেষ ঠিকানা = দুই হাঁটা জোড়া` is
+  what to avoid).
 
 ## 3 · Theming — write a delta, not a stylesheet
 
