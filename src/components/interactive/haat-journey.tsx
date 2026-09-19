@@ -607,7 +607,7 @@ export function SelfDot() {
     if (i !== 1) return setMiss({ r: 2, n: (miss?.n ?? 0) + 1 });
     setMiss(null);
     setGot(true);
-    pass("v · v = ‖v‖², root নিলেই দৈর্ঘ্য।");
+    pass("v · v = ‖v‖², root নিলেই length।");
   };
 
   return (
@@ -649,7 +649,7 @@ export function SelfDot() {
         </>
       ) : (
         <div className={FADE}>
-          <div className="mt-2 text-center text-sm text-accent-text">✓ 25 = 5 × 5, মানে box দিয়েছে দৈর্ঘ্যের বর্গ।</div>
+          <div className="mt-2 text-center text-sm text-accent-text">✓ 25 = 5 × 5, মানে box দিয়েছে length এর  বর্গ।</div>
           <div className="mt-2 text-center text-[0.95rem]">এবার মেলার ছাদের সেই 3-ঘরের clue। এটা কাগজে আঁকা যায় না, ফিতাও ধরা যায় না।</div>
           <Lists
             rows={[
@@ -682,7 +682,7 @@ export function SelfDot() {
       )}
       {miss && (
         <Nope key={`${miss.r}-${miss.n}`}>
-          {miss.r === 1 ? "উঁহু। 5-কে কী দিয়ে গুণ করলে 25 হয়? আর box এর ভেতরে 3 × 3 আর 4 × 4-এর দিকে তাকান।" : "উঁহু। 49 হলো বর্গ, দৈর্ঘ্য না। কোন সংখ্যাকে নিজের সাথে গুণ করলে 49 হয়?"}
+          {miss.r === 1 ? "উঁহু। 5-কে কী দিয়ে গুণ করলে 25 হয়? আর box এর ভেতরে 3 × 3 আর 4 × 4-এর দিকে তাকান।" : "উঁহু। 49 হলো বর্গ, length না। কোন সংখ্যাকে নিজের সাথে গুণ করলে 49 হয়?"}
         </Nope>
       )}
       <Ticks
@@ -1699,7 +1699,7 @@ export function ShikuYard({}: Story) {
   const tip = S11_P([3, 4]);
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="field" label="উঠানে Shiku চকে ঘর কেটে arrow (3, 4) এঁকেছে; মামী বলেন দৈর্ঘ্য মাপতে ফিতা লাগে, ফাহিম একই arrow box এর দুই দিকে দেয়">
+      <Stage backdrop="field" label="উঠানে Shiku চকে ঘর কেটে arrow (3, 4) এঁকেছে; মামী বলেন length মাপতে ফিতা লাগে, ফাহিম একই arrow box এর দুই দিকে দেয়">
         <Tree x={26} y={G} s={0.9} />
         <g stroke="white" strokeOpacity={0.75} strokeWidth={0.8}>
           {[0, 1, 2, 3, 4, 5].map((x) => (
@@ -1719,7 +1719,7 @@ export function ShikuYard({}: Story) {
         {k >= 2 && <CastCard x={282} y={G - 50} text="(3, 4)" tone="blue" />}
         <Person who="fahim" x={k >= 1 ? 62 : -30} y={G} walking={k === 1} ms={1400} mood={k >= 4 ? "happy" : "plain"} arm={k >= 4 ? "hold" : "down"} label={k >= 1} />
         <Person who="mami" x={k >= 1 ? 116 : -70} y={G} walking={k === 1} ms={1400} arm={k === 3 ? "point" : "down"} label={k >= 1} />
-        {k === 3 && <Bubble x={116} y={G - 66} lines={["দৈর্ঘ্য মাপতে লাগে ফিতা।", "box এখানে কী করবে?"]} />}
+        {k === 3 && <Bubble x={116} y={G - 66} lines={["length মাপতে লাগে ফিতা।", "box এখানে কী করবে?"]} />}
         {k >= 4 && <CastCard x={76} y={G - 76} text="(3, 4) · (3, 4)" tone="amber" />}
       </Stage>
     </StoryFrame>
@@ -1736,7 +1736,7 @@ const X11_SAY = [
   "একই arrow, box এর দুই দিকে: (3, 4) · (3, 4)।",
   "প্রথম ঘর নিজের সাথে গুণ: 3 × 3, মানে 3-এর বর্গ, 9 টা ঘর।",
   "দ্বিতীয় ঘরও: 4 × 4, 16 টা ঘর।",
-  "যোগ 25, দৈর্ঘ্যের বর্গ। ৩.৪-এর মতো শেষে root: √25 = 5।",
+  "যোগ 25, length এর  বর্গ। ৩.৪-এর মতো শেষে root: √25 = 5।",
 ];
 
 function X11_Square({ x, y, n, fill }: { x: number; y: number; n: number; fill: string }) {

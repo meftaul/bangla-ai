@@ -401,7 +401,7 @@ export function FlipAll() {
     setFlipped(true);
     show.play(2, () =>
       pass(
-        "আয়নায় উল্টালেও কে কার কাছে, একই।"),
+        "আয়নায় উল্টালেও কে কার কাছাকাছি, একই।"),
     );
   };
 

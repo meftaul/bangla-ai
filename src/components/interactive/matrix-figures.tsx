@@ -279,7 +279,7 @@ const PRESETS: Preset[] = [
     key: "rot",
     label: "rotation ৯০°",
     M: [0, -1, 1, 0],
-    note: "ঘোরে, দৈর্ঘ্য একই থাকে",
+    note: "ঘোরে, length একই থাকে",
     // Rotation must travel along the arc, not lerp through a squashed middle.
     path: (e, from) => mul(rot((e * Math.PI) / 2), from),
   },

@@ -14,7 +14,7 @@ export const metadata = {
     the plan is in 04_journey_specs.md. */}
 
 import { Journey, Step, Check, Then } from "@/components/journey/journey";
-import { VanStuck, StraightPush, PushRing, StrongPush, CoinBox, FixTheCrew, TeamSign, FiveTimes, AngleFan, KoolyArrives, RoadShadow, CoinTug, AnySize, SidePress, SumThenBox, DinnerBet } from "@/components/interactive/push-journey";
+import { VanStuck, StraightPush, PushRing, StrongPush, CoinBox, FixTheCrew, TeamSign, FiveTimes, AngleFan, KoolyArrives, RoadShadow, CoinTug, AnySize, SidePress, SumThenBox, DinnerBet, VanSinks, PushToBox, PlusSide, TitanicStrength, CoinMemory, EightyNeeded, VanOut } from "@/components/interactive/push-journey";
 
 <Journey title="Dot product · ৪.২">
 
@@ -46,6 +46,8 @@ import { VanStuck, StraightPush, PushRing, StrongPush, CoinBox, FixTheCrew, Team
 
 মামা লাফ দিয়ে নামলেন। “সবাই ঠেলো! যে যেদিক থেকে পারো ঠেলো!” ফাহিম, মামা, ভ্যানওয়ালা চাচা, মামী আর পাশের বাড়ির রফিক, পাঁচজন পাঁচ দিক থেকে ঠেলছে। অথচ ভ্যান নড়ে না।
 
+<VanSinks story />
+
 ভ্যানটা শুধু রাস্তা ধরেই আগাতে পারে। রাস্তাটা গেছে উত্তর-পূর্ব দিকে।  প্রত্যেকের ঠেলাও একেকটা arrow হিসাবে দেখান হয়েছে (পূর্ব, উত্তর)।
 
 <VanStuck />
@@ -57,6 +59,8 @@ import { VanStuck, StraightPush, PushRing, StrongPush, CoinBox, FixTheCrew, Team
 ছবিতে মামী আর রফিককে একবার দেখুন। দুইজনই মোটামুটি পাশ থেকে ঠেলছে। কার ঠেলা কতটা কাজের, চোখে দেখে বলা মুশকিল।
 
 তবে আমাদের হাতে একটা মেশিন আছে, হাটের সেই box। রাস্তার arrow আর কারো ঠেলার arrow, দুইটাই তো list। box এ  দিলে বের হবে একটা সংখ্যা। সেই সংখ্যা দিয়ে ঠেলা মাপা যায় কিনা, সেটা আগে সবচেয়ে সোজা ঘটনাটা দিয়ে পরীক্ষা করি।
+
+<PushToBox />
 
 </Then>
 
@@ -122,6 +126,8 @@ $$u \cdot v > 0 \;\; (90^\circ \text{-এর কম}), \qquad u \cdot v = 0 \;\;
 
 খেয়াল করুন, plus মানে “একদম একই দিকে” না। রাস্তা থেকে 53° সরে দাঁড়িয়েও নম্বর plus, 15। Plus মানে শুধু “মোটামুটি একই দিকে”, 90°-এর ভেতরে যেকোনো জায়গা।
 
+<PlusSide />
+
 </Then>
 
 </Step>
@@ -141,6 +147,8 @@ $$u \cdot v > 0 \;\; (90^\circ \text{-এর কম}), \qquad u \cdot v = 0 \;\;
 <RoadShadow />
 
 ভ্যান ঠেলার বেলায় এটাই ঠিক হিসাব। কাদা থেকে ওঠাতে জোরটাও তো কাজে লাগে। কিন্তু movie club-এর কথা মনে করুন। ৩.৬-এ Titanic-এর সব score ছিল বড় বড়, আর শুধু সেই জোরেই সে মামার জন্য প্রায় জিতে যাচ্ছিল। ছবি বাছতে জোর আমরা চাই না, চাই শুধু “কতটা একই দিকে”। box থেকে জোরটা কীভাবে ছেঁটে ফেলা যায়, সেটা সামনের কয়েকটা journey-র কাজ। আপাতত কথাটা পকেটে রাখুন।
+
+<TitanicStrength />
 
 </Then>
 
@@ -172,6 +180,8 @@ $$u \cdot v > 0 \;\; (90^\circ \text{-এর কম}), \qquad u \cdot v = 0 \;\;
 
 চাচা একটু দম নিচ্ছেন। সেই ফাঁকে ফাহিমের মনে পড়লো নাসিবের coin-এর কথা। ২.৭-এ নাসিব দুইটা coin বারবার ছুঁড়ে দুইটা arrow বানিয়েছিল, head হলে +1 আর tail হলে −1। চার বার ছুঁড়লে arrow-এ চারটা ঘর, যা কাগজে আঁকাই যায় না।
 
+<CoinMemory story />
+
 box কি তবু কোণটা বলতে পারবে?
 
 <CoinBox />
@@ -197,7 +207,7 @@ Coin-এর arrow তো আঁকাই যায় না। তাহলে 
   options={[
     "box চালিয়ে, উত্তর 0 হলে ৯০ degree কোণে।",
     "আঁকতে না পারলে বোঝার উপায় নাই।",
-    "দুইটার দৈর্ঘ্য মিলিয়ে।",
+    "দুইটার length মিলিয়ে।",
   ]}
   answer={0}
   hint="Coin-এর বেলায় ছবি ছাড়াই কোণটা কে বলে দিলো? মিল আর অমিল সমান হলে box এ  কত আসে?"
@@ -221,6 +231,8 @@ $\perp$ চিহ্নটা পড়তে হয় “perpendicular to”�
 <Step>
 
 চাচার দম ফিরেছে, আকাশে মেঘ ডাকছে। এবার আসল বিচার। পাঁচজনের ঠেলা আরেকবার আসছে, এবার শুধু সংখ্যায়। প্রত্যেকের ঠেলা রাস্তার $(4, 3)$-এর সাথে মনে মনে box এ  দিন, তারপর বলুন কে পক্ষে, কে কোনো কাজে আসছে না, আর কে বিপক্ষে। চাচা বলছেন, কাদা থেকে উঠতে সবার ঠেলা মিলে অন্তত 80 লাগবে।
+
+<EightyNeeded story />
 
 এবার আপনার পালা।
 
@@ -264,6 +276,8 @@ $(3 \times 4) + (-2 \times 1) + (5 \times -2) = 12 - 2 - 10 = 0$। box এ  0 �
 ## শেষ! ভ্যান কাদা থেকে উঠলো
 
 মামা বলেছিলেন, ঠেলা তো ঠেলাই। পাঁচজনের দুইজনের বেলায় কথাটা টিকলো না। মামীর ঠেলা কোনো কাজেই আসেনি, আর রফিকের ঠেলা উল্টো ক্ষতি করছিল। তৃতীয়টায় বাজি ধরে থাকলে আপনার বাজিই টিকলো।
+
+<VanOut story />
 
 <Table
   head={["box এর চিহ্ন", "কোণ", "মানে"]}
