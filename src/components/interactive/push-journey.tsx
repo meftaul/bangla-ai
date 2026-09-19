@@ -2,7 +2,7 @@
 
 import type { KeyboardEvent, ReactNode } from "react";
 
-import { Bubble, Person, Stage, StoryFrame } from "@/components/journey/cast";
+import { Bubble, Card, Person, Stage, StoryFrame } from "@/components/journey/cast";
 import { Task, useGate } from "@/components/journey/journey";
 import { Choice, Draw, FADE, Nope, POP, Scene, Ticks, pill, predictLook, primaryBtn, useScene, useSeed, useTween, type Fixtures } from "@/components/journey/kit";
 import { Arrow, Dot, Label, Plane, makeFrame, type Frame, type Tone, type XY } from "@/components/journey/plane";
@@ -24,9 +24,10 @@ import { rng } from "./surprise-journey";
 // round the back, and the van comes out.
 //
 // The box is 4.1's DotBox. The setups that tell a scene get a story scene on
-// the stage (4a the কুলি arriving, 12a the dinner bet), and every <Then> gets
-// one or two watch-only figures (2½, 2¾, 3½, 4½, 5½, 5¾, 6½, 6¾); screen 1's
-// van is already 4.1's finale and the widget's own picture. Tailwind only; the
+// the stage (1a the van sinking, 4a the কুলি arriving, 5a নাসিবের coins
+// remembered, 6a চাচা's 80, 12½ the van coming out, 12a the dinner bet), and
+// every <Then> gets one or two watch-only figures (1½, 2½, 2¾, 3½, 3¾, 4½,
+// 4¾, 5½, 5¾, 6½, 6¾). Tailwind only; the
 // sheets are journey/plane. Ink on the white sheet (the road, the van) is
 // fixed.
 
@@ -795,7 +796,7 @@ const X2T_ROWS = [
 ];
 
 export function TeamSign() {
-  const s = useScene(3, [600, 2000, 2400]);
+  const s = useScene(2, [600, 2000]);
   const k = s.k;
   return (
     <Scene scene={s} caption={say(X2T_SAY, k)}>
@@ -842,11 +843,11 @@ const X2F_SAY = [
 ];
 
 export function FiveTimes() {
-  const s = useScene(3, [600, 1800, 2400]);
+  const s = useScene(2, [600, 1800]);
   const k = s.k;
   return (
     <Scene scene={s} caption={say(X2F_SAY, k)}>
-      <div className="mx-auto w-fit">
+      <div className="mx-auto w-full max-w-[10rem]">
         <Plane f={F2F} label="রাস্তার arrow (4, 3), ফিতা দিয়ে মাপা — 5" className="my-0! max-w-none">
           <Road f={F2F} />
           <Van f={F2F} />
@@ -893,7 +894,7 @@ const X3_SAY = [
 ];
 
 export function AngleFan() {
-  const s = useScene(5, [600, 2000, 2000, 2200, 2200]);
+  const s = useScene(4, [600, 2000, 2000, 2200]);
   const k = s.k;
   return (
     <Scene scene={s} caption={say(X3_SAY, k)}>
@@ -980,7 +981,7 @@ const X4_SAY = [
 ];
 
 export function RoadShadow() {
-  const s = useScene(3, [600, 2000, 2600]);
+  const s = useScene(2, [600, 2000]);
   const k = s.k;
   return (
     <Scene scene={s} caption={say(X4_SAY, k)}>
@@ -1060,22 +1061,24 @@ const X5_SAY = [
 export function CoinTug() {
   const s = useScene(5, [600, 1600, 1400, 2600, 2200, 2400]);
   const k = s.k;
-  const [knot] = useTween([k >= 4 ? (MATCH100 - (100 - MATCH100)) * 0.52 : 0], 800);
+  const [knot] = useTween([k === 1 ? 26 : k >= 4 ? (MATCH100 - (100 - MATCH100)) * 0.52 : 0], 800);
+  /** a pair has left the rest row: the মিল ones at beat 1, the অমিল ones at beat 2 */
+  const gone = (i: number) => k >= (X5_PAIRS[i] > 0 ? 1 : 2);
   /** each pair's place: above the rope at rest, then the n-th of its side stacks down that side */
   const x = (i: number) => {
-    if (k < 2) return 96 + i * 36;
+    if (!gone(i)) return 96 + i * 36;
     const rank = X5_PAIRS.slice(0, i).filter((p) => (p > 0) === (X5_PAIRS[i] > 0)).length;
     return X5_PAIRS[i] > 0 ? 226 + rank * 20 : 74 - rank * 20;
   };
-  const y = (i: number) => (k < 2 ? 38 : 56 + (i % 2) * 20);
+  const y = (i: number) => (!gone(i) ? 38 : 56 + (i % 2) * 20);
   return (
     <Scene scene={s} caption={say(X5_SAY, k)}>
-      <svg viewBox="0 0 300 132" aria-label="coin-এর জোড়া দুই দিকে টানে; টান সমান হলে ফাঁস মাঝে" className="mx-auto h-auto w-full max-w-[15rem]">
-        <line x1={22} x2={278} y1={84} y2={84} stroke={P_INK} strokeOpacity={0.25} strokeWidth={2} />
+      <svg viewBox="0 0 300 132" aria-label="coin-এর জোড়া দুই দিকে টানে; টান সমান হলে ফাঁস মাঝে" className="mx-auto h-auto w-full max-w-[15rem] text-foreground">
+        <line x1={22} x2={278} y1={84} y2={84} stroke="currentColor" strokeOpacity={0.3} strokeWidth={2} />
         {[-52, -26, 0, 26, 52].map((t) => (
-          <line key={t} x1={150 + t} x2={150 + t} y1={80} y2={88} stroke={P_INK} strokeOpacity={0.3} strokeWidth={1} />
+          <line key={t} x1={150 + t} x2={150 + t} y1={80} y2={88} stroke="currentColor" strokeOpacity={0.35} strokeWidth={1} />
         ))}
-        <text x={150} y={100} textAnchor="middle" fontSize={8} fill={P_INK} fillOpacity={0.55}>
+        <text x={150} y={100} textAnchor="middle" fontSize={8} fill="currentColor" fillOpacity={0.6}>
           0
         </text>
         <g>
@@ -1113,7 +1116,7 @@ export function CoinTug() {
           <g className={POP}>
             <rect x={87} y={4} width={126} height={18} rx={9} fill="white" stroke="#7c3aed" />
             <text x={150} y={16.5} textAnchor="middle" fontSize={9.5} fontWeight={700} fill={P_INK}>
-              {k >= 4 ? `${MATCH100} − ${100 - MATCH100} = ${MATCH100 - (100 - MATCH100)}, প্রায় 90°` : "মিল − অমিল = 0, কোণ ঠিক 90°"}
+              {k >= 5 ? `${MATCH100} − ${100 - MATCH100} = ${MATCH100 - (100 - MATCH100)}, প্রায় 90°` : k === 4 ? "মিল − অমিল = ?" : "মিল − অমিল = 0, কোণ ঠিক 90°"}
             </text>
           </g>
         )}
@@ -1138,7 +1141,7 @@ const X9_SAY = [
 const X9_PRODUCTS = ["+1", "−1", "−1", "+1"];
 
 export function AnySize() {
-  const s = useScene(4, [600, 2200, 2200, 2600]);
+  const s = useScene(3, [600, 2200, 2200]);
   const k = s.k;
   return (
     <Scene scene={s} caption={say(X9_SAY, k)}>
@@ -1199,7 +1202,7 @@ const X6_SAY = [
 ];
 
 export function SidePress() {
-  const s = useScene(3, [600, 2000, 2600]);
+  const s = useScene(2, [600, 2000]);
   const k = s.k;
   return (
     <Scene scene={s} caption={say(X6_SAY, k)}>
@@ -1267,7 +1270,7 @@ const X7_SAY = [
 ];
 
 export function SumThenBox() {
-  const s = useScene(4, [600, 2000, 2000, 2600]);
+  const s = useScene(3, [600, 2000, 2000]);
   const k = s.k;
   return (
     <Scene scene={s} caption={say(X7_SAY, k)}>
@@ -1277,11 +1280,11 @@ export function SumThenBox() {
             <Road f={F7F} />
             <Van f={F7F} />
             {CREW.map((c, i) =>
-              k >= (i < 2 ? 1 : 2) ? (
-                <Arrow key={c.name} f={F7F} from={X7_CHAIN[i]} to={X7_CHAIN[i + 1]} tone={c.tone} w={2.4} draw />
+              i < 2 || k >= 1 ? (
+                <Arrow key={c.name} f={F7F} from={X7_CHAIN[i]} to={X7_CHAIN[i + 1]} tone={c.tone} w={2.4} draw={i >= 2} />
               ) : null,
             )}
-            {k >= 3 && (
+            {k >= 2 && (
               <>
                 <Arrow f={F7F} from={O} to={X7_CHAIN[5]} tone="violet" w={3.4} draw />
                 <Label f={F7F} at={X7_CHAIN[5]} dx={2} dy={-5} anchor="start" className={`${FILL.violet} font-mono`}>
@@ -1292,21 +1295,21 @@ export function SumThenBox() {
           </Plane>
         </div>
         <div className="min-w-0 flex-1 space-y-1.5">
-          {k >= 3 && (
+          {k >= 2 && (
             <div className={`${FADE} rounded-xl border-2 border-cat-violet/40 bg-surface px-2 py-1.5 text-center`}>
               <div className="text-[0.65rem] text-muted">মোট arrow দিয়ে</div>
               <div className="font-mono text-xs font-bold">(4, 3) · (3, 18)</div>
               <div className="font-mono text-xs">= 12 + 54 = 66</div>
             </div>
           )}
-          {k >= 4 && (
+          {k >= 3 && (
             <div className={`${FADE} rounded-xl border-2 border-border bg-surface px-2 py-1.5 text-center`}>
               <div className="text-[0.65rem] text-muted">আলাদা করে</div>
               <div className="font-mono text-xs">25 + 30 + 16 + 0 − 5</div>
               <div className="font-mono text-xs font-bold">= 66</div>
             </div>
           )}
-          {k >= 4 && (
+          {k >= 3 && (
             <div className={`${POP} mx-auto w-fit rounded-full bg-accent/15 px-2.5 py-0.5 text-center text-xs font-semibold text-accent-text`}>
               উত্তর একই
             </div>
@@ -1368,6 +1371,535 @@ export function DinnerBet({}: Story) {
 }
 
 // ---------------------------------------------------------------------------
+// Shared bits for the new stage scenes below: the evening sky's clouds, the
+// mud patch, and the storm cloud that gathers as the van sinks.
+
+/** the two light clouds of an evening stage */
+function P_Clouds() {
+  return (
+    <g className="pointer-events-none">
+      <ellipse cx={70} cy={32} rx={26} ry={8} fill="#94a3b8" opacity={0.45} />
+      <ellipse cx={238} cy={24} rx={20} ry={6} fill="#94a3b8" opacity={0.45} />
+    </g>
+  );
+}
+
+/** the muddy road, with the patch of mud centred at `cx` */
+function P_Mud({ cx }: { cx: number }) {
+  return (
+    <g className="pointer-events-none">
+      <rect y={PG - 3} width={320} height={12} fill="#d6c08f" />
+      <ellipse cx={cx} cy={PG + 2} rx={64} ry={7} fill="#6b4f2a" />
+    </g>
+  );
+}
+
+/** mud closing over the van's three wheels, the left end of its bed at x */
+function P_Sunk({ x }: { x: number }) {
+  return (
+    <g className={`${FADE} pointer-events-none`}>
+      {[16, 54, 94].map((dx) => (
+        <ellipse key={dx} cx={x + dx} cy={PG + 3} rx={12} ry={4.5} fill="#5b4122" />
+      ))}
+    </g>
+  );
+}
+
+/** a dark storm cloud, with a lightning bolt when `bolt` */
+function P_Storm({ bolt = false }: { bolt?: boolean }) {
+  return (
+    <g className={`${FADE} pointer-events-none`}>
+      <ellipse cx={150} cy={30} rx={40} ry={11} fill="#475569" opacity={0.8} />
+      <ellipse cx={128} cy={34} rx={22} ry={8} fill="#334155" opacity={0.8} />
+      {bolt && <path d="M150 40l-7 14h7l-5 14" fill="none" stroke="#fde047" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round" className={FADE} />}
+    </g>
+  );
+}
+
+/** the little strain marks by the wheels when a push doesn't move the van */
+function P_Strain({ x }: { x: number }) {
+  return <path d={`M${x - 4} ${PG - 4}q-5 -7 -11 -6M${x + 98} ${PG - 4}q5 -7 11 -6`} fill="none" stroke="#6b4f2a" strokeWidth={2} strokeLinecap="round" className={FADE} />;
+}
+
+// ---------------------------------------------------------------------------
+// 1a · A story scene for screen 1's setup, no task: the van leaves the হাট
+//      with everyone on it, sinks in the mud halfway, মামা jumps down and
+//      shouts, and five people push from all round. The van doesn't move.
+//      Nobody's push is judged here; that is the whole journey's bet.
+
+/** riders on the van's bed, by their offset from its left end */
+const S1_RIDE: { who: "mama" | "fahim" | "mami" | "samin"; dx: number }[] = [
+  { who: "mama", dx: 12 },
+  { who: "fahim", dx: 28 },
+  { who: "mami", dx: 44 },
+  { who: "samin", dx: 60 },
+];
+
+export function VanSinks({}: Story) {
+  const s = useScene(4, [600, 1800, 1400, 2800]);
+  const k = s.k;
+  const vx = k >= 1 ? 110 : -4;
+  const vy = PG + (k >= 2 ? 5 : 0);
+  const ms = 1600;
+  /** where each rider is: on the bed until they get down (মামা at beat 3, the rest at 4) */
+  const at = (who: string, down: XY, dx: number): { x: number; y: number; scale: number } =>
+    k >= (who === "mama" ? 3 : 4) ? { x: down[0], y: down[1], scale: 1 } : { x: vx + dx, y: vy - 32, scale: 0.55 };
+  const down: Record<string, XY> = { mama: [36, PG], fahim: [80, PG], mami: [146, PG + 6], samin: [184, PG + 6] };
+  const chacha = k >= 4 ? { x: 226, y: PG, scale: 1 } : { x: vx + 80, y: vy - 40, scale: 0.55 };
+  const push = k >= 4;
+  const side = S1_RIDE.filter((r) => r.who === "mami" || r.who === "samin").map((r) => {
+    const p = at(r.who, down[r.who], r.dx);
+    return <Person key={r.who} who={r.who} x={p.x} y={p.y} scale={p.scale} ms={900} facing={r.who === "samin" && push ? -1 : 1} mood={push ? "shout" : "plain"} />;
+  });
+  return (
+    <StoryFrame scene={s}>
+      <Stage backdrop="evening" label="হাট থেকে ফেরার ভ্যান কাদায় বসে গেল; মামা নেমে সবাইকে ঠেলতে বললেন, পাঁচজন ঠেলছে, ভ্যান নড়ে না">
+        <P_Clouds />
+        {k >= 2 && <P_Storm />}
+        <P_Mud cx={160} />
+        {/* মামী and রফিক ride behind the bed's rail, then push from the near side, in front of it */}
+        {!push && side}
+        <P_Carry x={vx} y={vy} ms={ms}>
+          <P_Van x={0} y={0} />
+        </P_Carry>
+        {k >= 2 && <P_Sunk x={vx} />}
+        {push && side}
+        {S1_RIDE.filter((r) => r.who === "mama" || r.who === "fahim").map((r) => {
+          const p = at(r.who, down[r.who], r.dx);
+          const off = k >= (r.who === "mama" ? 3 : 4);
+          return <Person key={r.who} who={r.who} x={p.x} y={p.y} scale={p.scale} ms={off ? 900 : ms} mood={k >= 3 && r.who === "mama" ? "shout" : push ? "shout" : "plain"} arm={k === 3 && r.who === "mama" ? "wave" : "down"} label={off} />;
+        })}
+        <Person who="karim" x={chacha.x} y={chacha.y} scale={chacha.scale} ms={900} facing={push ? -1 : 1} mood={push ? "shout" : "plain"} />
+        {push && (
+          <>
+            <P_Name x={226} text="চাচা" />
+            <P_Name x={146} y={PG + 6} text="মামী" />
+            <P_Name x={184} y={PG + 6} text="রফিক" />
+            <P_Push x={36} facing={1} />
+            <P_Push x={80} facing={1} />
+            <P_Push x={226} facing={-1} />
+            <P_Strain x={vx} />
+          </>
+        )}
+        {k === 3 && <Bubble x={36} y={PG - 66} side="right" lines={["সবাই ঠেলো! যে যেদিক", "থেকে পারো ঠেলো!"]} />}
+      </Stage>
+    </StoryFrame>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 1½ · A figure for screen 1's explanation, no task: মামী and রফিক both push
+//      "from the side", and by eye nobody can say whose push is worth what.
+//      But the road's arrow and a push's arrow are both lists, and the box
+//      turns two lists into one number. Which number stays a "?" — screen 2
+//      tries it on the simplest case first.
+
+const FB = makeFrame(-6, 5, -1, 6, 14);
+const X1_MAMI = CREW[3];
+const X1_RAFIQ = CREW[4];
+const X1_SAY = [
+  "মামী আর রফিক, দুইজনই মোটামুটি পাশ থেকে ঠেলছে।",
+  "কার ঠেলা কতটা কাজের? চোখে দেখে বলা মুশকিল।",
+  "রাস্তার arrow আর কারো ঠেলার arrow, দুইটাই তো list।",
+  "box এ দিলে বের হবে একটা সংখ্যা। সেটা দিয়ে কি ঠেলা মাপা যায়?",
+];
+
+export function PushToBox() {
+  const s = useScene(3, [600, 2200, 2200]);
+  const k = s.k;
+  return (
+    <Scene scene={s} caption={say(X1_SAY, k)}>
+      <div className="flex items-center justify-center gap-3">
+        <div className="w-[9rem] shrink-0">
+          <Plane f={FB} label="কাদার রাস্তায় ভ্যান; মামী আর রফিকের ঠেলা পাশ থেকে" className="my-0! max-w-none">
+            <Road f={FB} />
+            <Van f={FB} />
+            {CREW.slice(0, 3).map((c) => (
+              <Arrow key={c.name} f={FB} from={O} to={c.v} tone={c.tone} w={1.8} faint />
+            ))}
+            {[X1_MAMI, X1_RAFIQ].map((c) => (
+              <g key={c.name}>
+                <Arrow f={FB} from={O} to={c.v} tone={c.tone} w={2.6} />
+                <Label f={FB} at={c.v} dx={0} dy={-8} anchor="middle" className={FILL[c.tone]}>
+                  {c.name}
+                </Label>
+                {k >= 1 && (
+                  <Label f={FB} at={c.v} dx={c === X1_RAFIQ ? -12 : 12} dy={8} anchor="middle" size={14} weight={800} className={`${POP} fill-[#0f1b2d]`}>
+                    ?
+                  </Label>
+                )}
+              </g>
+            ))}
+          </Plane>
+        </div>
+        <div className="min-w-0 flex-1 space-y-1.5 text-center">
+          {k === 2 && (
+            <>
+              <div className={`${FADE} rounded-xl border-2 border-[#a16207]/40 bg-surface px-2 py-1`}>
+                <div className="text-[0.65rem] text-muted">রাস্তা</div>
+                <div className="font-mono text-sm font-bold">{tupN(ROAD)}</div>
+              </div>
+              <div className={`${FADE} rounded-xl border-2 border-cat-coral/40 bg-surface px-2 py-1`}>
+                <div className="text-[0.65rem] text-cat-coral">{X1_RAFIQ.name}</div>
+                <div className="font-mono text-sm font-bold">{tupN(X1_RAFIQ.v)}</div>
+              </div>
+            </>
+          )}
+          {k >= 3 && (
+            <div className={`${POP} rounded-2xl border-2 border-cat-amber/40 bg-cat-amber/5 px-2 py-2`}>
+              <div className="text-[0.65rem] text-muted">box</div>
+              <div className="font-mono text-xs">
+                {tupN(ROAD)} · {tupN(X1_RAFIQ.v)}
+              </div>
+              <div className="mt-1 font-mono text-xl font-bold">= ?</div>
+              <div className="text-[0.65rem] text-muted">একটা সংখ্যা</div>
+            </div>
+          )}
+        </div>
+      </div>
+    </Scene>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 3¾ · A figure for screen 3's explanation, the last paragraph: plus doesn't
+//      mean "exactly the same way". The push swings 53° off the road and the
+//      number only shrinks, 25 to 15, still plus; then the whole side within
+//      90° of the road lights up — anywhere in it, plus.
+
+/** the part of the sheet within 90° of the road (where the box says plus), as a path */
+function plusSide(f: Frame) {
+  const c: XY[] = [
+    [f.x0, f.y0],
+    [f.x1, f.y0],
+    [f.x1, f.y1],
+    [f.x0, f.y1],
+  ];
+  const g = (p: XY) => dot(ROAD, p);
+  const out: XY[] = [];
+  c.forEach((p, i) => {
+    const q = c[(i + 1) % 4];
+    if (g(p) >= 0) out.push(p);
+    if (g(p) >= 0 !== g(q) >= 0) {
+      const t = g(p) / (g(p) - g(q));
+      out.push([p[0] + t * (q[0] - p[0]), p[1] + t * (q[1] - p[1])]);
+    }
+  });
+  return out.map((p, i) => `${i ? "L" : "M"}${f.sx(p[0])} ${f.sy(p[1])}`).join("") + "Z";
+}
+
+const X3P_SAY = [
+  "রাস্তা বরাবর ঠেললে নম্বর +25।",
+  "এবার রাস্তা থেকে 53° সরে দাঁড়ালাম। নম্বর কমলো, তবু plus: 15।",
+  "Plus মানে শুধু “মোটামুটি একই দিকে”। 90°-এর ভেতরে যেকোনো জায়গা, পুরোটাই plus।",
+];
+
+export function PlusSide() {
+  const s = useScene(2, [600, 2600]);
+  const k = s.k;
+  const [th] = useTween([k >= 1 ? 90 : ROAD_DEG], 1400);
+  const r = (th * Math.PI) / 180;
+  const v: XY = [5 * Math.cos(r), 5 * Math.sin(r)];
+  const n = Math.round(dot(ROAD, v));
+  const off = Math.round(th - ROAD_DEG);
+  return (
+    <Scene scene={s} caption={say(X3P_SAY, k)}>
+      <div className="flex items-center justify-center gap-3">
+        <div className="w-[9rem] shrink-0">
+          <Plane f={F3F} label="একই জোরের ঠেলা রাস্তা থেকে 53° সরে গেল; রাস্তার 90°-এর ভেতরের পুরো দিকটা plus" className="my-0! max-w-none">
+            {k >= 2 && (
+              <>
+                <path d={plusSide(F3F)} className={`${FADE} fill-cat-teal/15`} />
+                <path
+                  d={`M${F3F.sx(-3.3)} ${F3F.sy(4.4)}L${F3F.sx(3.3)} ${F3F.sy(-4.4)}`}
+                  strokeWidth={1.3}
+                  strokeDasharray="4 4"
+                  className={`${FADE} fill-none stroke-[#0f1b2d]/45`}
+                />
+                <Label f={F3F} at={[3.4, -3.3]} dx={0} dy={0} anchor="middle" size={10} weight={700} className={`${FADE} fill-[#0f766e]`}>
+                  plus
+                </Label>
+              </>
+            )}
+            <Road f={F3F} />
+            <Van f={F3F} />
+            {k >= 1 && <Arrow f={F3F} from={O} to={ROAD} tone="blue" w={1.8} faint />}
+            <Arrow f={F3F} from={O} to={v} tone="blue" w={2.6} />
+            {k >= 1 && off > 50 && <AngleArc f={F3F} to={[0, 5]} />}
+          </Plane>
+        </div>
+        <div className="w-[5.5rem] shrink-0 text-center">
+          <div className="text-[0.65rem] text-muted">box এ</div>
+          <div className="font-mono text-2xl font-bold text-cat-blue tabular-nums">{signed(n)}</div>
+          <div className="text-[0.65rem] text-muted">
+            রাস্তা থেকে <span className="font-mono">{off}°</span>
+          </div>
+        </div>
+      </div>
+    </Scene>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 4¾ · A figure for screen 4's explanation, the movie-club callback (৩.৬):
+//      মামা (2, 5) loves comedy, Mr. Bean (1, 4) leans his way, Titanic (5, 2)
+//      looks elsewhere but is long. The box still gives 22 against 20: Titanic
+//      nearly won on strength alone. How to trim the strength off is left open.
+
+const FT = makeFrame(-0.4, 5.8, -0.4, 5.8, 17);
+const X4T_FILMS: { name: string; v: XY; tone: Tone; n: number; dx: number; dy: number; anchor: "start" | "middle" | "end" }[] = [
+  { name: "মামা", v: [2, 5], tone: "teal", n: 0, dx: 4, dy: 4, anchor: "start" },
+  { name: "Mr. Bean", v: [1, 4], tone: "blue", n: 22, dx: -3, dy: 0, anchor: "end" },
+  { name: "Titanic", v: [5, 2], tone: "coral", n: 20, dx: 0, dy: -7, anchor: "end" },
+];
+const X4T_SAY = [
+  "৩.৬-এর movie club। মামার পছন্দ (2, 5), পাশেই Mr. Bean (1, 4)।",
+  "Titanic (5, 2) তাকিয়ে আছে অন্য দিকে, কিন্তু দুইটা score-ই বড় বড়।",
+  "তবু box এ Mr. Bean 22, Titanic 20। প্রায় জিতে যাচ্ছিল, শুধু জোরের জোরে।",
+  "ছবি বাছতে চাই শুধু “কতটা একই দিকে”। জোরটা ছেঁটে ফেলবো কীভাবে? সেটা সামনের journey-র কাজ।",
+];
+
+export function TitanicStrength() {
+  const s = useScene(3, [600, 2000, 2400, 2600]);
+  const k = s.k;
+  return (
+    <Scene scene={s} caption={say(X4T_SAY, k)}>
+      <div className="flex items-center justify-center gap-3">
+        <div className="w-[8rem] shrink-0">
+          <Plane f={FT} label="মামার পছন্দ (2, 5), Mr. Bean (1, 4), Titanic (5, 2); ঘর দুইটা drama আর comedy" className="my-0! max-w-none">
+            <Label f={FT} at={[5.6, 0]} dx={0} dy={11} anchor="end" size={8} weight={500} className="fill-[#0f1b2d]/60">
+              drama
+            </Label>
+            <Label f={FT} at={[0, 5.6]} dx={4} dy={2} anchor="start" size={8} weight={500} className="fill-[#0f1b2d]/60">
+              comedy
+            </Label>
+            {X4T_FILMS.map((m, i) =>
+              i < 2 || k >= 1 ? (
+                <g key={m.name}>
+                  <Arrow f={FT} from={O} to={m.v} tone={m.tone} w={2.6} draw={i === 2} />
+                  <Label f={FT} at={m.v} dx={m.dx} dy={m.dy} anchor={m.anchor} size={9} className={FILL[m.tone]}>
+                    {m.name}
+                  </Label>
+                </g>
+              ) : null,
+            )}
+            {k >= 3 && (
+              <Label f={FT} at={[3.4, 1.36]} dx={2} dy={14} anchor="middle" size={13} weight={800} className={`${POP} fill-[#0f1b2d]`}>
+                ?
+              </Label>
+            )}
+          </Plane>
+        </div>
+        <div className="min-w-0 flex-1 space-y-2">
+          {k >= 2 &&
+            X4T_FILMS.slice(1).map((m) => (
+              <div key={m.name} className={`${FADE} ${k >= 3 && m.n === 20 ? "" : k >= 3 ? "opacity-50" : ""} transition-opacity motion-reduce:transition-none`}>
+                <div className={`text-[0.65rem] font-semibold ${TEXT[m.tone]}`}>{m.name}</div>
+                <div className="flex items-center gap-1.5">
+                  <span className={`h-2.5 rounded-full ${m.tone === "blue" ? "bg-cat-blue/70" : "bg-cat-coral/70"}`} style={{ width: m.n * 3.4 }} />
+                  <b className="font-mono text-sm">{m.n}</b>
+                </div>
+              </div>
+            ))}
+        </div>
+      </div>
+    </Scene>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 5a · A story scene for screen 5's setup, no task: চাচা catches his breath,
+//      and ফাহিম remembers নাসিব tossing two coins (2.7) — head +1, tail −1,
+//      four tosses, two four-slot arrows. He can't draw them. Whether the box
+//      can still find the angle is the screen's question; nothing answers it.
+
+export function CoinMemory({}: Story) {
+  const s = useScene(3, [600, 2000, 2000]);
+  const k = s.k;
+  return (
+    <StoryFrame scene={s}>
+      <Stage backdrop="evening" label="চাচা দম নিচ্ছেন; ফাহিমের মনে পড়লো নাসিবের দুইটা coin, চার ঘরের দুইটা arrow, যা কাগজে আঁকা যায় না">
+        <P_Clouds />
+        <P_Mud cx={60} />
+        <g transform="translate(0 5)">
+          <P_Van x={8} y={PG} />
+        </g>
+        <P_Sunk x={8} />
+        <Person who="karim" x={128} y={PG} facing={-1} mood="sad" />
+        <P_Name x={128} text="চাচা" />
+        <g fill="#38bdf8" className="pointer-events-none">
+          <path d="M116 86q-2 4 0 5q2 -1 0 -5Z" />
+          <path d="M141 90q-2 4 0 5q2 -1 0 -5Z" />
+        </g>
+        <Person who="fahim" x={176} y={PG} mood={k >= 3 ? "puzzled" : "plain"} arm={k >= 3 ? "hold" : "down"} label />
+        {k >= 1 && (
+          <g className={FADE}>
+            <circle cx={192} cy={92} r={2.2} fill="white" stroke={P_INK} strokeOpacity={0.35} />
+            <circle cx={200} cy={84} r={3} fill="white" stroke={P_INK} strokeOpacity={0.35} />
+            <rect x={206} y={40} width={108} height={112} rx={14} fill="white" fillOpacity={0.6} stroke={P_INK} strokeOpacity={0.35} strokeDasharray="3 2" />
+            <Person who="nasib" x={236} y={144} scale={0.75} arm="wave" mood="happy" />
+            <text x={236} y={152} textAnchor="middle" fontSize={7.5} fontWeight={700} fill={P_INK}>
+              নাসিব
+            </text>
+          </g>
+        )}
+        {k === 1 && (
+          <g className={POP}>
+            <circle cx={268} cy={76} r={8} fill="#2563eb" />
+            <text x={268} y={79} textAnchor="middle" fontSize={7.5} fontWeight={700} fill="white" fontFamily="ui-monospace, monospace">
+              +1
+            </text>
+            <circle cx={292} cy={100} r={8} fill="#e11d48" />
+            <text x={292} y={103} textAnchor="middle" fontSize={7.5} fontWeight={700} fill="white" fontFamily="ui-monospace, monospace">
+              −1
+            </text>
+          </g>
+        )}
+        {k >= 2 && (
+          <>
+            <Card x={260} y={58} text={`(${BLUE.map(num).join(", ")})`} tone="blue" />
+            <Card x={260} y={80} text={`(${RED.map(num).join(", ")})`} tone="coral" />
+          </>
+        )}
+        {k >= 3 && (
+          <>
+            <g className={POP}>
+              <rect x={181} y={94} width={22} height={18} rx={1.5} fill="white" stroke={P_INK} strokeOpacity={0.5} />
+              <path d="M184 106h16M188 97v13" stroke={P_INK} strokeOpacity={0.4} strokeWidth={0.8} />
+              <text x={195} y={105} textAnchor="middle" fontSize={10} fontWeight={800} fill="#dc2626">
+                ?
+              </text>
+            </g>
+            <Bubble x={170} y={PG - 66} side="left" tone="think" lines={["চার ঘরের arrow", "আঁকবো কীভাবে?"]} />
+          </>
+        )}
+      </Stage>
+    </StoryFrame>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 6a · A story scene for screen 6's setup, no task: চাচা has his breath back,
+//      the sky rumbles, and he sets the bar — all the pushes together need at
+//      least 80. The road's (4, 3) goes up, and a "?" over each of the five:
+//      judging them is the reader's job. No verdict here.
+
+const S6_CREW: { who: "mama" | "fahim" | "mami" | "samin" | "karim"; name: string; x: number; y: number; facing: 1 | -1 }[] = [
+  { who: "mami", name: "মামী", x: 146, y: PG + 6, facing: 1 },
+  { who: "samin", name: "রফিক", x: 184, y: PG + 6, facing: -1 },
+  { who: "mama", name: "মামা", x: 36, y: PG, facing: 1 },
+  { who: "fahim", name: "ফাহিম", x: 80, y: PG, facing: 1 },
+  { who: "karim", name: "চাচা", x: 236, y: PG, facing: -1 },
+];
+
+export function EightyNeeded({}: Story) {
+  const s = useScene(3, [600, 1600, 2600]);
+  const k = s.k;
+  const person = (c: (typeof S6_CREW)[number]) => (
+    <g key={c.who}>
+      <Person
+        who={c.who}
+        x={c.x}
+        y={c.y}
+        facing={c.facing}
+        mood={c.who === "karim" && k === 0 ? "sad" : k === 1 ? "puzzled" : "plain"}
+        arm={c.who === "karim" && k === 2 ? "wave" : "down"}
+      />
+      <P_Name x={c.x} y={c.y} text={c.name} />
+      {k >= 3 && (
+        <text x={c.x} y={c.y - 72} textAnchor="middle" fontSize={15} fontWeight={800} fill={P_INK} className={POP}>
+          ?
+        </text>
+      )}
+    </g>
+  );
+  return (
+    <StoryFrame scene={s}>
+      <Stage backdrop="evening" label="আকাশে মেঘ ডাকছে; চাচা বলছেন সবার ঠেলা মিলে অন্তত 80 লাগবে; রাস্তা (4, 3), পাঁচজনের মাথায় প্রশ্ন">
+        <P_Clouds />
+        {k >= 1 && <P_Storm bolt={k < 3} />}
+        <P_Mud cx={160} />
+        <g transform="translate(0 5)">
+          <P_Van x={110} y={PG} />
+        </g>
+        <P_Sunk x={110} />
+        {S6_CREW.map(person)}
+        {k === 2 && <Bubble x={236} y={PG - 66} side="left" lines={["সবার ঠেলা মিলে", "অন্তত 80 লাগবে!"]} />}
+        {k >= 3 && (
+          <>
+            <text x={143} y={59.5} textAnchor="end" fontSize={9} fontWeight={700} fill="#a16207" className={FADE}>
+              রাস্তা
+            </text>
+            <Card x={170} y={56} text="(4, 3)" tone="amber" />
+          </>
+        )}
+      </Stage>
+    </StoryFrame>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 12½ · A story scene for the finale's first paragraph: মামী pushing at the
+//       side (0) and রফিক from the front (−5), as the numbers said. Both go
+//       round the back, everyone pushes, and the van comes out of the mud.
+
+const S12_BEFORE: Record<string, number> = { mama: 30, fahim: 70, karim: 110, mami: 196, samin: 280 };
+const S12_BEHIND: Record<string, number> = { mama: 20, fahim: 48, karim: 76, mami: 104, samin: 130 };
+const S12_WHO: ("mama" | "fahim" | "karim" | "mami" | "samin")[] = ["mama", "fahim", "karim", "mami", "samin"];
+
+export function VanOut({}: Story) {
+  const s = useScene(3, [600, 2000, 1800]);
+  const k = s.k;
+  const vx = k >= 2 ? 216 : 150;
+  const x = (w: string) => (k === 0 ? S12_BEFORE[w] : S12_BEHIND[w] + (k >= 2 ? 58 : 0));
+  const y = (w: string) => (k === 0 && w === "mami" ? PG + 6 : PG);
+  const guy = (w: (typeof S12_WHO)[number]) => (
+    <Person
+      key={w}
+      who={w}
+      x={x(w)}
+      y={y(w)}
+      facing={k === 0 && w === "samin" ? -1 : 1}
+      walking={(k === 1 && (w === "mami" || w === "samin")) || k === 2}
+      ms={1600}
+      mood={k >= 3 ? "happy" : k >= 1 ? "shout" : "plain"}
+      arm={k >= 3 && (w === "mama" || w === "fahim") ? "wave" : "down"}
+    />
+  );
+  return (
+    <StoryFrame scene={s}>
+      <Stage backdrop="evening" label="মামী আর রফিক পেছনে গিয়ে সবার সাথে ঠেললেন; ভ্যান কাদা থেকে উঠে গেল">
+        <P_Clouds />
+        <P_Mud cx={176} />
+        <P_Carry x={vx} y={PG + (k >= 2 ? 0 : 5)} ms={1600}>
+          <P_Van x={0} y={0} />
+        </P_Carry>
+        {k < 2 && <P_Sunk x={150} />}
+        {S12_WHO.map(guy)}
+        {k === 0 && (
+          <>
+            {["mama", "fahim", "karim"].map((w) => (
+              <P_Push key={w} x={S12_BEFORE[w]} facing={1} />
+            ))}
+            <P_Push x={280} facing={-1} />
+            <g className={POP}>
+              <rect x={186} y={80} width={20} height={14} rx={7} fill="white" stroke="#7c3aed" strokeWidth={1.2} />
+              <text x={196} y={90} textAnchor="middle" fontSize={9} fontWeight={700} fill="#7c3aed" fontFamily="ui-monospace, monospace">
+                0
+              </text>
+            </g>
+            <Card x={280} y={74} text="−5" tone="coral" />
+          </>
+        )}
+        {k === 1 && <P_Push x={S12_BEHIND.samin} facing={1} />}
+        {k === 2 && <path d={`M${vx - 8} ${PG - 6}q-7 -6 -14 -4M${vx - 6} ${PG - 16}q-8 -4 -14 0`} fill="none" stroke="#6b4f2a" strokeWidth={1.6} strokeLinecap="round" className={FADE} />}
+        {k === 0 && S12_WHO.map((w) => <P_Name key={w} x={x(w)} y={y(w)} text={w === "samin" ? "রফিক" : w === "karim" ? "চাচা" : w === "mami" ? "মামী" : w === "mama" ? "মামা" : "ফাহিম"} ms={1600} />)}
+      </Stage>
+    </StoryFrame>
+  );
+}
+
+// ---------------------------------------------------------------------------
 // States for `npm run shot` (keys are the useSeed names).
 
 export const fixtures: Fixtures = {
@@ -1386,6 +1918,13 @@ export const fixtures: Fixtures = {
   CoinTug: { start: { k: 0 }, pull: { k: 2 }, zero: { k: 3 }, hundred: { k: 4 }, done: {} },
   AnySize: { start: { k: 0 }, coins: { k: 1 }, done: {} },
   SidePress: { start: { k: 0 }, squash: { k: 1 }, done: {} },
-  SumThenBox: { start: { k: 0 }, chain: { k: 2 }, total: { k: 3 }, done: {} },
+  SumThenBox: { start: { k: 0 }, chain: { k: 1 }, total: { k: 2 }, done: {} },
   DinnerBet: { start: { k: 0 }, ask: { k: 1 }, needle: { k: 2 }, done: {} },
+  VanSinks: { start: { k: 0 }, sunk: { k: 2 }, shout: { k: 3 }, done: {} },
+  PushToBox: { start: { k: 0 }, lists: { k: 2 }, done: {} },
+  PlusSide: { start: { k: 0 }, swung: { k: 1 }, done: {} },
+  TitanicStrength: { start: { k: 0 }, scores: { k: 2 }, done: {} },
+  CoinMemory: { start: { k: 0 }, coins: { k: 1 }, cards: { k: 2 }, done: {} },
+  EightyNeeded: { start: { k: 0 }, storm: { k: 1 }, need: { k: 2 }, done: {} },
+  VanOut: { start: { k: 0 }, round: { k: 1 }, out: { k: 2 }, done: {} },
 };

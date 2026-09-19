@@ -1198,7 +1198,7 @@ const X4_RULES = [
   { rule: "ঘুরপথ ছোট না", on: "(3, 0)", via: "হয়ে", cells: ["7 ≥ 5", "7 ≥ 7", "7 ≥ 4"] },
 ];
 const X4_SAY = [
-  "দৈর্ঘ্যের তিনটা নিয়ম, তিনটা ফিতা। Card (3, 4) দিয়ে পরীক্ষা করি।",
+  "length এর  তিনটা নিয়ম, তিনটা ফিতা। Card (3, 4) দিয়ে পরীক্ষা করি।",
   "কারো মাপই negative না।",
   "Card-টা 2 গুণ stretch করে (6, 8) বানালে তিনটা মাপই ঠিক 2 গুণ।",
 ];
@@ -2691,14 +2691,14 @@ export function GentWalks() {
 //       the tape, L2, √(9 + 16) = 5.
 
 const X10_ROWS = [
-  { f: "3 + (−4) = −1", tag: "দৈর্ঘ্য negative?", tone: "text-danger" },
+  { f: "3 + (−4) = −1", tag: "length negative?", tone: "text-danger" },
   { f: "|3| + |−4| = 7", tag: "L1, সামিনের হাঁটা", tone: "text-cat-coral" },
   { f: "√(9 + 16) = 5", tag: "‖v‖, মানে L2", tone: "text-cat-teal" },
 ];
 const X10_SAY = [
   "সোমের কথামতো card (3, −4)-এর ঘরগুলো সোজা যোগ করি।",
-  "দৈর্ঘ্য দাঁড়ালো −1!",
-  "দৈর্ঘ্য তো negative হয় না। এই যোগটা দৈর্ঘ্য না।",
+  "length দাঁড়ালো −1!",
+  "length তো negative হয় না। এই যোগটা length না।",
   "Minus ফেলে দিয়ে যোগ করলে 7। এটা সামিনের হাঁটা, L1।",
 ];
 
@@ -2811,7 +2811,7 @@ const X11B_SAY = [
   "দর্শক comedy বেশি ভালোবাসেন: (2, 5)।",
   "Club-এর হিসাবে comedy ছবিটা পেলো 22।",
   "আর drama পেলো 20, প্রায় সমান!",
-  "Drama-র arrow বেশি লম্বা। দৈর্ঘ্যের জোরেই এত নম্বর।",
+  "Drama-র arrow বেশি লম্বা। length এর  জোরেই এত নম্বর।",
 ];
 
 export function LongerWins() {
@@ -2819,7 +2819,7 @@ export function LongerWins() {
   const k = s.k;
   const f = X11B_F;
   return (
-    <Scene scene={s} caption={s.done ? <span className={FADE}>দৈর্ঘ্যটা সরিয়ে দিয়ে শুধু দিকটা রাখা যায় কি?</span> : X11B_SAY[k]}>
+    <Scene scene={s} caption={s.done ? <span className={FADE}>lengthটা সরিয়ে দিয়ে শুধু দিকটা রাখা যায় কি?</span> : X11B_SAY[k]}>
       <div className="flex items-center justify-center gap-3">
         <div className="w-[8.5rem] shrink-0">
           <Plane f={f} ticks={1} label="the visitor (2, 5) loves comedy; the comedy (1, 4) scores 22 and the drama (5, 2) scores 20, almost level, because the drama's arrow is longer" className="my-0! max-w-none">
@@ -2845,7 +2845,7 @@ export function LongerWins() {
           </div>
           <span />
           <span className={`text-xs text-muted ${k >= 2 ? FADE : "invisible"}`}>score</span>
-          <span className={`text-xs text-muted ${k >= 4 ? FADE : "invisible"}`}>দৈর্ঘ্য</span>
+          <span className={`text-xs text-muted ${k >= 4 ? FADE : "invisible"}`}>length</span>
           {X11B_FILMS.map((m) => (
             <div key={m.name} className="contents">
               <span className={`flex items-center gap-1.5 whitespace-nowrap ${k >= m.show ? FADE : "invisible"}`}>

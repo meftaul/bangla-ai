@@ -705,7 +705,7 @@ export function ArrowTurns() {
         k <= 1 ? (
           `সামিনের ${bn(4)} গ্লাসের recipe, এবার arrow হিসেবে আঁকা।`
         ) : k === 2 ? (
-          "পুরো card ¼ গুণ: arrow খাটো হলো, কিন্তু মুখ সেই একই দিকে।"
+          "পুরো card ¼ গুণ: arrowছোট হলো, কিন্তু মুখ সেই একই দিকে।"
         ) : k === 3 ? (
           "পুরো card 2 গুণ: লম্বা হলো, দিক তবুও একই। মাথাটা শুধু লাইন ধরে সরে।"
         ) : (
@@ -762,11 +762,11 @@ const what = (k: number) =>
     : k === 1
       ? "যেমন ছিল, তেমনই।"
       : k > 0
-        ? "একই দিকে, কিন্তু খাটো।"
+        ? "একই দিকে, কিন্তুছোট।"
         : k === 0
           ? "Arrow গুটিয়ে একটা বিন্দু হয়ে গেল!"
           : k > -1
-            ? "উল্টো দিকে, খাটো।"
+            ? "উল্টো দিকে,ছোট।"
             : k === -1
               ? "উল্টো দিকে, লম্বায় একই।"
               : "উল্টো দিকে, আরও লম্বা।";
@@ -947,7 +947,7 @@ export function TipOnRail() {
         ) : k === 2 ? (
           "× 3: একই দিকে, লম্বা।"
         ) : k === 3 ? (
-          "× 0.5: একই দিকে, খাটো।"
+          "× 0.5: একই দিকে,ছোট।"
         ) : k === 4 ? (
           "× −2: (0, 0) পার হয়ে উল্টো দিকে।"
         ) : (
@@ -1139,7 +1139,7 @@ const KINDS = [
   { say: "লম্বা হবে", rule: "সংখ্যাটা 1-এর চেয়ে বড়" },
   { say: "খাটো হবে", rule: "0 আর 1-এর মাঝে" },
   { say: "গুটিয়ে বিন্দু হবে", rule: "ঠিক 0" },
-  { say: "উল্টে খাটো হবে", rule: "0 আর −1-এর মাঝে" },
+  { say: "উল্টেছোট হবে", rule: "0 আর −1-এর মাঝে" },
   { say: "উল্টে লম্বা হবে", rule: "−1-এর চেয়েও ছোট" },
 ];
 const kindOf = (k: number) => (k > 1 ? 0 : k > 0 ? 1 : k === 0 ? 2 : k > -1 ? 3 : 4);
@@ -1244,7 +1244,7 @@ export function FiveCases() {
 // 4¼ · A figure for screen 4's explanation, no task: the two questions that
 //      sort all five outcomes. The numbers lie on a line; question one
 //      (minus?) splits it at 0 into উল্টো and একই দিক, question two (bigger
-//      than 1, minus aside?) splits each half at ±1 into লম্বা and খাটো, each
+//      than 1, minus aside?) splits each half at ±1 into লম্বা andছোট, each
 //      band with a small (1, 2) arrow showing what it does. Last, 0 alone: a dot.
 
 const SC_NX = (v: number) => 24 + (v + 3.5) * 36;
@@ -1284,7 +1284,7 @@ export function TwoQuestions() {
         ) : k === 1 ? (
           "প্রথম প্রশ্ন: minus আছে? থাকলে arrow উল্টাবে।"
         ) : k === 2 ? (
-          "দ্বিতীয় প্রশ্ন: minus বাদে 1-এর চেয়ে বড়? বড় হলে লম্বা, ছোট হলে খাটো।"
+          "দ্বিতীয় প্রশ্ন: minus বাদে 1-এর চেয়ে বড়? বড় হলে লম্বা, ছোট হলেছোট।"
         ) : (
           <span className={FADE}>আর ঠিক 0 হলে arrow-ই নাই, শুধু একটা বিন্দু।</span>
         )
@@ -2122,7 +2122,7 @@ export function KgOrGram() {
 
 const SAY: { see: string; say: string }[] = [
   { see: "λ", say: "“lambda, একটা সাধারণ সংখ্যা”" },
-  { see: "λv", say: "“v-কে lambda গুণ টেনে লম্বা বা খাটো করা”" },
+  { see: "λv", say: "“v-কে lambda গুণ টেনে লম্বা বাছোট করা”" },
   { see: "−v", say: "“v, কিন্তু উল্টো দিকে মুখ করে”" },
   { see: "u − v = u + (−1)v", say: "“v উল্টে দিয়ে u-এর সাথে যোগ”" },
 ];
@@ -2193,7 +2193,7 @@ export function LambdaKnob() {
         ) : k === 1 ? (
           "λ = 2: arrow টেনে লম্বা।"
         ) : k === 2 ? (
-          "λ = 0.5: খাটো।"
+          "λ = 0.5:ছোট।"
         ) : (
           <span className={FADE}>λ = −1: উল্টে গেল। λ বলতে এতটুকুই, একটা সংখ্যা।</span>
         )
