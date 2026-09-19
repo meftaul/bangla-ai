@@ -16,7 +16,7 @@ import { bn } from "./figure-kit";
 // the box ("ঘরে ঘরে গুণ করে যোগ") can do all five of the day's jobs; মামী says
 // it's a film trick fit only for shop bills. The reader seals their own bet,
 // then the jobs come one by one: the grocery bill (the recipe, one number
-// out), the দোকানি reading the lists the other way round and a list with no
+// out), the দোকানদার  reading the lists the other way round and a list with no
 // partner (order doesn't matter, lengths must match), ফাহিম's report card
 // (weights), the দালাল's cow price with a negative knob (a linear model), the
 // two sacks the box cannot pour together (it only ever returns one number),
@@ -226,7 +226,7 @@ export function GroceryBill() {
 }
 
 // ---------------------------------------------------------------------------
-// 3 · Two tiny rounds at the counter. The দোকানি reads the price list first:
+// 3 · Two tiny rounds at the counter. The দোকানদার  reads the price list first:
 //     the same 444 (order doesn't matter). Then a customer brings four items
 //     against a three-price card: পেঁয়াজ has no partner and the box jams.
 //     Round 1 folds to a line when round 2 opens, so the widget stays short.
@@ -277,7 +277,7 @@ export function NoPartner() {
           <Lists
             rows={[
               ["ফর্দ: চাল, তেল, ডিম, পেঁয়াজ", QTY4],
-              ["দোকানির দামের card", PRICE],
+              ["দোকানদার র দামের card", PRICE],
             ]}
           />
           {!jammed ? (
@@ -706,7 +706,7 @@ const NEW_JOBS = [
   { t: "সকালে কেনা (চাল, ডাল) = (3, 1), বিকেলে আরও (2, 1)। সারাদিনে মোট কী কী কেনা হলো?", yes: false, why: "উত্তরটা একটা list, (5, 2)। এটা পুরানো যোগের কাজ।" },
   { t: "ফাহিম মারলো 3টা চার, 2টা ছক্কা আর 10টা single। মোট কত রান?", yes: true, why: "(3, 2, 10) · (4, 6, 1) = 12 + 12 + 10 = 34 রান।" },
   { t: "Class-এর সবার (উচ্চতা, ওজন) card দ্বিগুণ করে দেখা।", yes: false, why: "এটা stretch, উত্তর আবার একটা card। box দেয় একটা সংখ্যা।" },
-  { t: "ফর্দে (চাল, ডাল, তেল), কিন্তু দোকানির card-এ দাম আছে শুধু (চাল, ডাল)-এর।", yes: false, why: "তেলের জোড়া নাই। দুই list-এ ঘর সমান না হলে box চলে না।" },
+  { t: "ফর্দে (চাল, ডাল, তেল), কিন্তু দোকানদার র card-এ দাম আছে শুধু (চাল, ডাল)-এর।", yes: false, why: "তেলের জোড়া নাই। দুই list-এ ঘর সমান না হলে box চলে না।" },
 ];
 const JOB_BINS = ["box এর কাজ", "box এর কাজ না"];
 
@@ -772,7 +772,7 @@ export function BoxOrNot() {
 // a figure acts out the <Then> paragraph right before it. Props the cast
 // doesn't have (a signpost, a van, sacks, cows, a calculator, jilapi) are
 // drawn here in fixed ink, like the rest of a Stage. People who aren't in the
-// cast (the দোকানি, the দালাল, a খদ্দের, চাচা, রফিক) borrow the closest
+// cast (the দোকানদার , the দালাল, a খদ্দের, চাচা, রফিক) borrow the closest
 // look and get their own name drawn under their feet.
 
 const H_INK = "#0f1b2d";
@@ -979,19 +979,19 @@ export function BoxSteps() {
 // 2a · A story scene for screen 2's setup, no task: the মুদি দোকান. মামী walks
 //      up with ফাহিম and holds out the ফর্দ (2, 1, 12); the price card
 //      (60, 180, 12) sits on the counter; the calculator lies untouched while
-//      the দোকানি says he'll do it in his head. The bill itself is not said.
+//      the দোকানদার  says he'll do it in his head. The bill itself is not said.
 
 const S2_STALL = 235;
 const S2_SHOP = 296;
 
-/** The মুদি দোকান with its দোকানি on the right, for 2a and 4a. */
+/** The মুদি দোকান with its দোকানদার  on the right, for 2a and 4a. */
 function S2_Shop({ talk, prices }: { talk: boolean; prices: boolean }) {
   return (
     <>
       <Stall x={S2_STALL} y={G} w={96} color="#16a34a" />
       <H_Calc x={S2_STALL + 18} y={G - 24} />
       <Person who="karim" x={S2_SHOP} y={G} facing={-1} mood={talk ? "smug" : "plain"} arm={talk ? "wave" : "down"} />
-      <H_Name x={S2_SHOP} text="দোকানি" />
+      <H_Name x={S2_SHOP} text="দোকানদার " />
       {prices && <CastCard x={S2_STALL} y={G - 11} text="(60, 180, 12)" tone="blue" />}
     </>
   );
@@ -1002,7 +1002,7 @@ export function MudiStall({}: Story) {
   const k = s.k;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="fair" label="মুদি দোকানে মামী ফর্দ (2, 1, 12) দেন, দোকানের দাম (60, 180, 12), দোকানি ক্যালকুলেটর ছাড়াই মুখে হিসাব করেন">
+      <Stage backdrop="fair" label="মুদি দোকানে মামী ফর্দ (2, 1, 12) দেন, দোকানের দাম (60, 180, 12), দোকানদার  ক্যালকুলেটর ছাড়াই মুখে হিসাব করেন">
         <S2_Shop talk={k >= 4} prices={k >= 3} />
         <Person who="fahim" x={k >= 1 ? 80 : -30} y={G} walking={k === 1} ms={1400} label={k >= 1} />
         <Person who="mami" x={k >= 1 ? 138 : -70} y={G} walking={k === 1} ms={1400} arm={k >= 2 ? "hold" : "down"} label={k >= 1} />
@@ -1152,7 +1152,7 @@ export function DotName() {
 }
 
 // ---------------------------------------------------------------------------
-// 4a · A story scene for screen 4's setup, no task: the দোকানি's joke (read it
+// 4a · A story scene for screen 4's setup, no task: the দোকানদার 's joke (read it
 //      backwards and the bill drops), মামী laughing, and a খদ্দের stepping up
 //      with a four-item ফর্দ against the three-price card. Nothing is run.
 
@@ -1161,7 +1161,7 @@ export function UltoJoke({}: Story) {
   const k = s.k;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="fair" label="দোকানি মজা করে বলেন উল্টো হিসাবে বিল কমে, মামী হাসেন, এক খদ্দের চার জিনিসের ফর্দ (2, 1, 12, 3) দেখান">
+      <Stage backdrop="fair" label="দোকানদার  মজা করে বলেন উল্টো হিসাবে বিল কমে, মামী হাসেন, এক খদ্দের চার জিনিসের ফর্দ (2, 1, 12, 3) দেখান">
         <S2_Shop talk={k === 1} prices />
         <Person who="fahim" x={60} y={G} mood={k >= 2 ? "happy" : "plain"} label />
         <Person who="mami" x={110} y={G} mood={k >= 2 ? "happy" : "plain"} arm={k === 2 ? "wave" : "down"} label />
