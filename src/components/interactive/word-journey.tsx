@@ -186,7 +186,7 @@ export function ListGuess() {
   const choose = (i: number) => {
     if (guess !== null) return;
     setGuess(i);
-    sub.play(KING_L.length, () => pass("List-এর চোখে উত্তর আসলেই এটুকু, আরও কয়েকটা সংখ্যা। Queen কোথাও লেখা নাই।"));
+    sub.play(KING_L.length, () => pass("List-এর চোখে queen কোথাও নাই।"));
   };
 
   return (
@@ -226,7 +226,7 @@ export function WordMap() {
     if (seen.includes(wd.w)) return;
     const next = [...seen, wd.w];
     setSeen(next);
-    if (next.length === 4) pass("কাছাকাছি মানের শব্দ, কাছাকাছি জায়গায়। কেউ বসিয়ে দেয়নি।");
+    if (next.length === 4) pass("কাছাকাছি মানে, কাছাকাছি জায়গা।");
   };
 
   return (
@@ -273,7 +273,7 @@ export function KingMinusMan() {
     }
     setDrawn([first, wd]);
     setFirst(null);
-    if (first === MAN && wd === KING) pass("king − man: man থেকে king-এর দিকে তাক করা একটা arrow।");
+    if (first === MAN && wd === KING) pass("king − man: man থেকে king-এর arrow।");
     else setMiss((m) => m + 1);
   };
 
@@ -346,7 +346,7 @@ export function CarryArrow() {
     const wd = BASES.find((b) => dist(b.at, p) < 0.01);
     if (!wd || landed.includes(wd.w)) return;
     setLanded([...landed, wd.w]);
-    if (wd === WOMAN) pass("woman + (king − man) ≈ queen। সোমের ধাঁধা মিটলো, নিজের হাতে।");
+    if (wd === WOMAN) pass("woman + (king − man) পড়ে queen-এ।");
   };
 
   const put = (wd: Word) => {
@@ -437,7 +437,7 @@ export function ParallelArrows() {
   const bundle = () => {
     const b = !bundled;
     setBundled(b);
-    if (b) settle.play(1, () => pass("চারটা সম্পর্ক, প্রায় একটাই arrow। “রাজকীয়” জিনিসটা একটা direction।"));
+    if (b) settle.play(1, () => pass("“রাজকীয়” জিনিসটা একটা direction।"));
   };
 
   return (
@@ -522,7 +522,7 @@ export function CapitalMap() {
     if (wd.w === "France" || went.includes(wd.w)) return;
     const next = [...went, wd.w];
     setWent(next);
-    if (next.length === 2) pass("দেশ বদলায়, direction একই থাকে: “অমুক দেশের রাজধানী”।");
+    if (next.length === 2) pass("“রাজধানী”-ও একটা direction।");
   };
 
   return (
@@ -580,7 +580,7 @@ export function TwoEyes() {
     setView(v);
     if (seen.includes(v)) return;
     setSeen([...seen, v]);
-    pass("সংখ্যা একই, হিসাবও একই। শুধু দেখার চোখ আলাদা।");
+    pass("সংখ্যা একই, শুধু দেখার চোখ আলাদা।");
   };
   const rows: [string, XY, string][] = [
     ["king", KING.at, ""],
@@ -727,7 +727,7 @@ export function FindPair() {
     if (w && !found.includes(w)) {
       const f = [...found, w];
       setFound(f);
-      if (f.length === RELS.length) pass("দুইটা direction-ই আপনি নিজে খুঁজে বের করলেন।");
+      if (f.length === RELS.length) pass("দুইটা direction নিজেই খুঁজে পেলেন।");
     }
   };
 

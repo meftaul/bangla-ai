@@ -167,10 +167,10 @@ export function MamaAtClub({}: Story) {
           <S_Film key={c} x={S1_STALL - 26 + i * 26} y={S1_Y - 24} w={20} h={20} color={c} />
         ))}
         <Person who="nasib" x={S1_NASIB} y={S1_Y} facing={-1} mood="happy" arm={k === 1 ? "wave" : k >= 2 ? "hold" : "down"} label />
-        {k === 1 && <Bubble x={S1_NASIB} y={S1_Y - 66} side="left" lines={["পছন্দ বলুন,", "ছবি বেছে দেবো!"]} />}
+        {k === 1 && <Bubble x={S1_NASIB} y={S1_Y - 66} side="left" lines={["পছন্দ বলুন,", "মুভি বেছে দেবো!"]} />}
         {k >= 2 && <CastCard x={S1_NASIB - 6} y={S1_Y - 76} text="(drama, comedy)" tone="blue" />}
         <Person who="mama" x={k >= 3 ? S1_MAMA : -30} y={S1_Y} walking={k === 3} ms={1500} mood={k >= 4 ? "happy" : "plain"} label={k >= 3} />
-        {k >= 4 && <Bubble x={S1_MAMA} y={S1_Y - 66} lines={["আমার চাই শুধু", "হাসির ছবি!"]} />}
+        {k >= 4 && <Bubble x={S1_MAMA} y={S1_Y - 66} lines={["আমার ", "comedy movie লাগবে!"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -181,7 +181,7 @@ export function MamaAtClub({}: Story) {
 //     (1, 4): predict the winner, then run the club's rule line by line.
 //     20 vs 22, almost a tie.
 
-const LOUD_GUESS = ["Mr. Bean, অনেক বেশি নম্বরে", "Mr. Bean, তবে অল্পের জন্য", "Titanic"];
+const LOUD_GUESS = ["Mr. Bean, অনেক বেশি ব্যবধানে", "Mr. Bean, তবে অল্প ব্যবধানে", "Titanic"];
 
 export function LoudFilm() {
   const pass = useGate();
@@ -193,13 +193,13 @@ export function LoudFilm() {
 
   const run = () => {
     setRan(true);
-    play(6, () => pass("Mr. Bean জিতলো ঠিকই, কিন্তু মাত্র 22 বনাম 20-এ। হাসির ছবির পাগল একজনের কাছে একটা drama প্রায় সমান নম্বর পেয়ে গেল!"));
+    play(6, () => pass("মাত্র 22 বনাম 20, প্রায় সমান!"));
   };
 
   return (
     <>
       <Speech who="ফাহিমের মামা" initial="মা">
-        আমি হাসির ছবি ছাড়া দেখিই না। একটা ভালো ছবি দাও তো।
+        আমি Comedy মুভি  ছাড়া দেখিই না। একটা ভালো Comedy মুভি দাও তো।
       </Speech>
       <div className="mx-auto mt-4 max-w-xs rounded-xl border-2 border-cat-blue/40 bg-surface px-3 py-2 text-center">
         <div className="text-xs font-semibold text-muted">মামার পছন্দ (drama, comedy)</div>
@@ -214,6 +214,13 @@ export function LoudFilm() {
           {ran && <RuleLines v={BEAN} k={Math.max(shown - 3, 0)} />}
         </FilmCard>
       </div>
+      {guess !== null && !ran && (
+        <div className={`${FADE} mt-3 flex justify-center`}>
+          <button type="button" onClick={run} className={primaryBtn}>
+            Run the rule
+          </button>
+        </div>
+      )}
       <div className="mt-4 text-sm font-medium text-muted">বলুন তো, কোন ছবি বেশি নম্বর পাবে?</div>
       <div className="mt-2 grid gap-2">
         {LOUD_GUESS.map((o, i) => (
@@ -222,20 +229,13 @@ export function LoudFilm() {
           </Choice>
         ))}
       </div>
-      {guess !== null && !ran && (
-        <div className={`${FADE} mt-3 flex justify-center`}>
-          <button type="button" onClick={run} className={primaryBtn}>
-            নিয়মটা চালান
-          </button>
-        </div>
-      )}
       {over && guess !== null && (
         <div className={`${FADE} mt-3 text-center text-[0.95rem]`}>
           {guess === 1
-            ? "আপনার guess ঠিক। কিন্তু comedy-পাগল মামার জন্য একটা drama কি এত কাছে আসার কথা ছিল?"
+            ? "আপনার guess ঠিক। কিন্তু comedy-পাগল মামার জন্য একটা drama-র কি এত কাছাকাছি হওয়ার কথা ছিল?"
             : guess === 0
-              ? "উঁহু, ব্যবধান মাত্র 2। Titanic তো প্রায় ধরেই ফেলেছিল!"
-              : "অল্পের জন্য বেঁচে গেল Mr. Bean, 22 বনাম 20। তবে আপনার সন্দেহটা কিন্তু একেবারে ভুল না।"}
+              ? "উঁহু, ব্যবধান মাত্র 2। Titanic তো প্রায় ধরেই ফেলেছিল! 22 হল 20 এর মাত্র 1.5 গুণ।"
+              : "অল্পের জন্য বেঁচে গেল Mr. Bean, 22 vs 20। তবে আপনার সন্দেহটা অমূলক না"}
         </div>
       )}
       <Task done={over}>আগে বলুন কে জিতবে, তারপর club-এর নিয়মটা চালিয়ে দেখুন।</Task>
@@ -276,7 +276,7 @@ export function OddTie() {
         k < 2 ? (
           "মামার card (2, 5)। সবচেয়ে বড় নম্বরটা comedy-র ঘরে।"
         ) : k < 3 ? (
-          <span key="c2" className={FADE}>হাসির ঘরে Mr. Bean পেয়েছে 4, আর Titanic মাত্র 2।</span>
+          <span key="c2" className={FADE}>Comedy-র ঘরে Mr. Bean পেয়েছে 4, আর Titanic মাত্র 2।</span>
         ) : (
           <span key="c3" className={FADE}>অথচ club-এর নম্বরে দুইজন প্রায় গায়ে গায়ে, 22 আর 20।</span>
         )
@@ -292,7 +292,7 @@ export function OddTie() {
         </div>
         <div className="grid grid-cols-[4.4rem_1fr_1fr] items-center gap-x-2 gap-y-1.5">
           <span />
-          <span className="text-center text-xs text-muted">হাসির ঘর</span>
+          <span className="text-center text-xs text-muted">Comedy-র ঘর</span>
           <span className="text-center text-xs text-muted">club-এর নম্বর</span>
           {X1_ROWS.map((r) => (
             <div key={r.name} className="contents">
@@ -327,13 +327,13 @@ export function BlackBox() {
       scene={s}
       caption={
         k < 1 ? (
-          "Club-এর নিয়মটা আপাতত একটা বন্ধ বাক্স।"
+          "Club-এর নিয়মটা আপাতত একটা black box।"
         ) : k < 2 ? (
           <span key="c1" className={FADE}>মামার পছন্দ আর ছবির card, দুইটাই ঢুকলো ভেতরে।</span>
         ) : k < 3 ? (
           <span key="c2" className={FADE}>বের হলো একটা নম্বর, 22। কী করে সেটা জানি, ঘরে ঘরে গুণ করে যোগ।</span>
         ) : (
-          <span key="c3" className={FADE}>কিন্তু এটা কেন কাজ করে? সেটা পরের article-এর পুরো গল্প।</span>
+          <span key="c3" className={FADE}>কিন্তু এটা কেন কাজ করে? সেই গল্পটা পরের কোনো journey-তে আসবে।</span>
         )
       }
     >
@@ -423,7 +423,7 @@ export function SongTips() {
                 <div style={{ left: `${(score(BEAN) / SC_TOP) * 100}%` }} className={`${FADE} absolute -inset-y-1 w-0 border-l-2 border-dashed border-cat-teal`} />
               )}
               {r.key === "t2" && k < 4 && (
-                <span className={`${POP} absolute top-1/2 left-1 -translate-y-1/2 rounded-full bg-surface px-2 text-xs font-semibold text-cat-coral`}>+ নতুন গান</span>
+                <span className={`${POP} absolute top-1/2 left-1 -translate-y-1/2 rounded-full bg-surface px-2 text-xs font-semibold text-cat-coral`}>+ নতুন score</span>
               )}
             </div>
             <div className="w-9 shrink-0 font-mono text-sm font-bold tabular-nums">
@@ -465,7 +465,7 @@ export function WhyLoud() {
     if (seen.includes(n)) return;
     const next = [...seen, n];
     setSeen(next);
-    if (next.includes(0.5) && next.includes(2)) pass("দিক একই, শুধু arrow দ্বিগুণ লম্বা, আর score-ও দ্বিগুণ হয়ে 40। তার মানে নম্বর বাড়াচ্ছে শুধু ছবির ধরন না, arrow-এর দৈর্ঘ্যও।");
+    if (next.includes(0.5) && next.includes(2)) pass("Arrow দ্বিগুণ লম্বা, score-ও দ্বিগুণ।");
   };
 
   return (
@@ -504,7 +504,7 @@ export function WhyLoud() {
           <div className="mt-3 grid grid-cols-2 gap-2 text-center">
             <div>
               <div className="text-xs text-muted">Titanic</div>
-              <div className="font-mono text-sm">দৈর্ঘ্য {sh(len(tip))}</div>
+              <div className="font-mono text-sm">length {sh(len(tip))}</div>
               <div className="font-mono text-lg">
                 score{" "}
                 <b key={lam} className={`${POP} inline-block ${score(tip) > score(BEAN) ? "text-cat-coral" : ""}`}>
@@ -514,7 +514,7 @@ export function WhyLoud() {
             </div>
             <div>
               <div className="text-xs text-muted">Mr. Bean</div>
-              <div className="font-mono text-sm">দৈর্ঘ্য 4.12</div>
+              <div className="font-mono text-sm">length 4.12</div>
               <div className="font-mono text-lg">
                 score <b>{score(BEAN)}</b>
               </div>
@@ -552,13 +552,13 @@ export function LongNotNear() {
       scene={s}
       caption={
         k < 2 ? (
-          "ড্যাশ দাগটা মামার রুচির দিক, comedy-র দিকে হেলানো।"
+          "ড্যাশ দাগটা মামা যেমন পছন্দ করে তার দিক, comedy-র দিকে হেলানো।"
         ) : k < 3 ? (
-          <span key="c2" className={FADE}>Mr. Bean তাক করা প্রায় মামার দিকেই, তবে arrow-টা খাটো।</span>
+          <span key="c2" className={FADE}>Mr. Bean তাক করা মামা যেদিকে প্রায় সেদিকেই, তবে arrow-টা shorter।</span>
         ) : k < 4 ? (
-          <span key="c3" className={FADE}>Titanic তাক করা অনেক দূরে, কিন্তু arrow-টা লম্বা।</span>
+          <span key="c3" className={FADE}>Titanic তাক করা অন্য দিকে, কিন্তু arrow-টা লম্বা।</span>
         ) : (
-          <span key="c4" className={FADE}>দিকে পিছিয়ে থেকেও Titanic পেল 20। জোরটা এসেছে দৈর্ঘ্য থেকে।</span>
+          <span key="c4" className={FADE}>দিকে পিছিয়ে থেকেও Titanic পেল 20। জোরটা এসেছে length থেকে।</span>
         )
       }
     >
@@ -586,7 +586,7 @@ export function LongNotNear() {
               <div className={FADE}>
                 <div className="font-semibold text-cat-teal">Mr. Bean</div>
                 <div className="leading-tight">
-                  দিকে কাছে, দৈর্ঘ্য <span className="font-mono">4.12</span>
+                  মোটামুটি কাছাকাছি দিকে, length <span className="font-mono">4.12</span>
                 </div>
               </div>
             )}
@@ -596,7 +596,7 @@ export function LongNotNear() {
               <div className={FADE}>
                 <div className="font-semibold text-cat-coral">Titanic</div>
                 <div className="leading-tight">
-                  দিকে দূরে, দৈর্ঘ্য <b className={`font-mono transition-colors duration-500 motion-reduce:transition-none ${k >= 4 ? "text-cat-coral" : ""}`}>5.39</b>
+                  দিকে দূরে, length <b className={`font-mono transition-colors duration-500 motion-reduce:transition-none ${k >= 4 ? "text-cat-coral" : ""}`}>5.39</b>
                 </div>
               </div>
             )}
@@ -706,12 +706,10 @@ const SHRINK: XY[] = [
   [3, 4],
   [1.5, 2],
 ];
-const SHRINK_GUESS = ["1/3", "1/4", "1/5"];
 const LANDING = unit(SHRINK[0]);
 
 export function ShrinkToOne() {
   const pass = useGate();
-  const [guess, setGuess] = useSeed<number | null>("guess", null);
   const [stage, setStage] = useSeed("stage", 0);
   const [lam, setLam] = useSeed("lam", 1);
   const [hit, setHit] = useSeed<boolean[]>("hit", [false, false]);
@@ -728,7 +726,7 @@ export function ShrinkToOne() {
     if (Math.abs(L * n - 1) > 1e-6) return;
     const next = stage === 0 ? [true, false] : [true, true];
     setHit(next);
-    if (stage === 1) pass("দুইটা arrow-ই এসে থামলো ঠিক (0.6, 0.8)-এ। যার যার নিজের দৈর্ঘ্য দিয়ে ভাগ করলেই দৈর্ঘ্য হয়ে যায় 1, আর দিক থাকে আগের মতোই।");
+    if (stage === 1) pass("নিজের lengthে ভাগ করলে length 1।");
   };
   const nextArrow = () => {
     setStage(1);
@@ -745,103 +743,89 @@ export function ShrinkToOne() {
           className="pointer-events-none fill-none stroke-[#d97706]"
         />
         <Label f={FS} at={[1, 0]} dx={4} dy={-8} anchor="start" size={9} className="fill-[#b45309]">
-          দৈর্ঘ্য 1
+          length 1
         </Label>
         {stage === 1 && <Arrow f={FS} from={O} to={SHRINK[0]} tone="ink" w={1.5} dashed faint />}
         <Arrow f={FS} from={O} to={v} tone="ink" w={2} dashed faint />
         <Arrow f={FS} from={O} to={tip} tone={on ? "teal" : "blue"} w={3} />
         {all && <circle cx={FS.sx(LANDING[0])} cy={FS.sy(LANDING[1])} r={5} className={`${POP} pointer-events-none fill-accent`} />}
       </Plane>
-      {stage === 0 && (
-        <>
-          <div className="text-sm font-medium text-muted">(3, 4)-এর দৈর্ঘ্য 5। কত দিয়ে গুণ করলে এটা ঠিক 1 লম্বা হবে?</div>
-          <div className="mt-2 grid grid-cols-3 gap-2">
-            {SHRINK_GUESS.map((o, i) => (
-              <Choice key={o} n={i} look={predictLook(i, guess, hit[0], 2)} disabled={guess !== null} onClick={() => setGuess(i)}>
-                <span className="font-mono">{o}</span>
-              </Choice>
-            ))}
-          </div>
-        </>
-      )}
-      {guess !== null && (
-        <div className={FADE}>
-          <div className="mt-3 text-center font-mono text-lg">
-            {sh(lam)} × {tupS(v)} = <b className={on ? "text-cat-teal" : "text-cat-blue"}>{tupS(tip)}</b>
-          </div>
-          <div className="text-center">
-            দৈর্ঘ্য{" "}
-            <b className={`font-mono text-lg ${on ? "text-accent-text" : ""}`}>{now.toFixed(2)}</b>
-          </div>
-          <label className="mx-auto mt-2 flex max-w-sm items-center gap-3">
-            <span className="shrink-0 font-serif text-lg italic text-muted">λ</span>
-            <input
-              type="range"
-              min={0}
-              max={1}
-              step={0.05}
-              value={lam}
-              disabled={on}
-              aria-label="λ, কত গুণ"
-              onChange={(e) => slide(Number(e.target.value))}
-              className="h-6 min-w-0 flex-1 cursor-pointer accent-[var(--cat-blue)] disabled:cursor-default"
-            />
-          </label>
-          <div className="mt-2 min-h-7 text-center text-[0.95rem]">
-            {stage === 0 && hit[0] ? (
-              <span className={FADE}>
-                {guess === 2 ? "ঠিক ধরেছেন, 1/5 মানে 0.2।" : "লাগলো 1/5, মানে 0.2। দৈর্ঘ্য 5 ছিল, তাই পাঁচ ভাগের এক ভাগ।"} এবার একই দিকে একটা খাটো arrow।
-              </span>
-            ) : all ? (
-              <span className={`${FADE} text-accent-text`}>দুইটা arrow শুরু করেছিল আলাদা দৈর্ঘ্য নিয়ে, অথচ থামলো একই বিন্দুতে!</span>
-            ) : stage === 1 ? (
-              <span className="text-muted">(1.5, 2)-এর দৈর্ঘ্য 2.5। এবার λ কত লাগবে বলে মনে হয়?</span>
-            ) : (
-              <span className="text-muted">কমলা দাগটা ঠিক 1 দূরে। Arrow-এর মাথাটা ওখানে নিয়ে আসুন।</span>
-            )}
-          </div>
-          {stage === 0 && hit[0] && (
-            <div className={`${FADE} mt-1 flex justify-center`}>
-              <button type="button" onClick={nextArrow} className={primaryBtn}>
-                পরের arrow
-              </button>
-            </div>
-          )}
-          {all && (
-            <table className={`${FADE} mx-auto mt-2 text-center font-mono tabular-nums`}>
-              <thead>
-                <tr className="font-sans text-xs text-muted">
-                  <th className="px-3 pb-1 font-normal">arrow</th>
-                  <th className="px-3 pb-1 font-normal">দৈর্ঘ্য</th>
-                  <th className="px-3 pb-1 font-normal">λ</th>
-                  <th className="px-3 pb-1 font-normal">কোথায় থামলো</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td className="px-3">(3, 4)</td>
-                  <td className="px-3">5</td>
-                  <td className="px-3">1/5</td>
-                  <td className="px-3 font-bold text-cat-teal">(0.6, 0.8)</td>
-                </tr>
-                <tr>
-                  <td className="px-3">(1.5, 2)</td>
-                  <td className="px-3">2.5</td>
-                  <td className="px-3">1/2.5</td>
-                  <td className="px-3 font-bold text-cat-teal">(0.6, 0.8)</td>
-                </tr>
-              </tbody>
-            </table>
+      <div className={FADE}>
+        <div className="mt-3 text-center font-mono text-lg">
+          {sh(lam)} × {tupS(v)} = <b className={on ? "text-cat-teal" : "text-cat-blue"}>{tupS(tip)}</b>
+        </div>
+        <div className="text-center">
+          length{" "}
+          <b className={`font-mono text-lg ${on ? "text-accent-text" : ""}`}>{now.toFixed(2)}</b>
+        </div>
+        <label className="mx-auto mt-2 flex max-w-sm items-center gap-3">
+          <span className="shrink-0 font-serif text-lg italic text-muted">λ</span>
+          <input
+            type="range"
+            min={0}
+            max={1}
+            step={0.05}
+            value={lam}
+            disabled={on}
+            aria-label="λ, কত গুণ"
+            onChange={(e) => slide(Number(e.target.value))}
+            className="h-6 min-w-0 flex-1 cursor-pointer accent-[var(--cat-blue)] disabled:cursor-default"
+          />
+        </label>
+        <div className="mt-2 min-h-7 text-center text-[0.95rem]">
+          {stage === 0 && hit[0] ? (
+            <span className={FADE}>
+              লাগলো 1/5, মানে 0.2। length 5 ছিল, তাই পাঁচ ভাগের এক ভাগ। এবার একই দিকে একটাছোট arrow।
+            </span>
+          ) : all ? (
+            <span className={`${FADE} text-accent-text`}>দুইটা arrow শুরু করেছিল আলাদা length নিয়ে, অথচ থামলো একই বিন্দুতে!</span>
+          ) : stage === 1 ? (
+            <span className="text-muted">(1.5, 2)-এর length 2.5। এবার λ কত লাগবে বলে মনে হয়?</span>
+          ) : (
+            <span className="text-muted">(3, 4)-এর length 5। কমলা দাগটা ঠিক 1 দূরে, arrow-এর মাথাটা ওখানে নিয়ে আসুন।</span>
           )}
         </div>
-      )}
+        {stage === 0 && hit[0] && (
+          <div className={`${FADE} mt-1 flex justify-center`}>
+            <button type="button" onClick={nextArrow} className={primaryBtn}>
+              পরের arrow
+            </button>
+          </div>
+        )}
+        {all && (
+          <table className={`${FADE} mx-auto mt-2 text-center font-mono tabular-nums`}>
+            <thead>
+              <tr className="font-sans text-xs text-muted">
+                <th className="px-3 pb-1 font-normal">arrow</th>
+                <th className="px-3 pb-1 font-normal">length</th>
+                <th className="px-3 pb-1 font-normal">λ</th>
+                <th className="px-3 pb-1 font-normal">কোথায় থামলো</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="px-3">(3, 4)</td>
+                <td className="px-3">5</td>
+                <td className="px-3">1/5</td>
+                <td className="px-3 font-bold text-cat-teal">(0.6, 0.8)</td>
+              </tr>
+              <tr>
+                <td className="px-3">(1.5, 2)</td>
+                <td className="px-3">2.5</td>
+                <td className="px-3">1/2.5</td>
+                <td className="px-3 font-bold text-cat-teal">(0.6, 0.8)</td>
+              </tr>
+            </tbody>
+          </table>
+        )}
+      </div>
       <Ticks
         items={[
-          ["(3, 4)-কে দৈর্ঘ্য 1", hit[0]],
-          ["(1.5, 2)-কে দৈর্ঘ্য 1", hit[1]],
+          ["(3, 4)-কে length 1", hit[0]],
+          ["(1.5, 2)-কে length 1", hit[1]],
         ]}
       />
-      <Task done={all}>আগে একটা guess দিন। তারপর λ সরিয়ে দুইটা arrow-কেই ঠিক 1 লম্বা বানান।</Task>
+      <Task done={all}>λ বাড়িয়ে কমিয়ে দুইটা arrow-এর length ঠিক 1 বানান।</Task>
     </>
   );
 }
@@ -870,9 +854,9 @@ export function OwnLength() {
         k < 1 ? (
           "(3, 4) 5 লম্বা, (1.5, 2) 2.5 লম্বা। কমলা দাগটা 1-এ।"
         ) : k < 2 ? (
-          <span key="c1" className={FADE}>বড়টাকে ভাগ করলাম তার নিজের দৈর্ঘ্য 5 দিয়ে। থামলো ঠিক 1-এ।</span>
+          <span key="c1" className={FADE}>বড়টাকে ভাগ করলাম তার নিজের length 5 দিয়ে। থামলো ঠিক 1-এ।</span>
         ) : k < 3 ? (
-          <span key="c2" className={FADE}>খাটোটাকে তার নিজের 2.5 দিয়ে। সেও এসে থামলো 1-এ।</span>
+          <span key="c2" className={FADE}>ছোটটাকে তার নিজের 2.5 দিয়ে। সেও এসে থামলো 1-এ।</span>
         ) : (
           <span key="c3" className={FADE}>বেশি লম্বা হলে বেশি ভাগ, কম লম্বা হলে কম। দুইজনই এখন 1।</span>
         )
@@ -943,7 +927,7 @@ export function SameLine() {
         ) : k < 4 ? (
           <span key="c3" className={FADE}>λ দিয়ে গুণ করলে arrow লাইন ধরেই ছোট হয়, লাইন ছাড়ে না।</span>
         ) : (
-          <span key="c4" className={FADE}>দৈর্ঘ্যের পার্থক্য মুছতেই দুইজন হুবহু এক। এই কাজের নাম normalise।</span>
+          <span key="c4" className={FADE}>length এর  পার্থক্য ঘুচতেই দুইজন হুবহু এক। এই কাজের নাম normalise।</span>
         )
       }
     >
@@ -1006,26 +990,23 @@ export function TooSmallDoubt({}: Story) {
             <CastCard x={0} y={0} text="(0.6, 0.8)" />
           </S_Carry>
         )}
-        {k === 3 && <Bubble x={S4_TO} y={S4_Y - 90} tone="think" lines={["এত ছোট দুইটা সংখ্যা,", "দৈর্ঘ্য সত্যিই 1?"]} />}
-        {k >= 4 && <Bubble x={S4_TO} y={S4_Y - 90} tone="think" lines={["নাকি slider-টা", "ফাঁকি দিলো?"]} />}
+        {k === 3 && <Bubble x={S4_TO} y={S4_Y - 90} tone="think" lines={["এত ছোট দুইটা সংখ্যা,", "length সত্যিই 1?"]} />}
+        {k >= 4 && <Bubble x={S4_TO} y={S4_Y - 90} tone="think" lines={["Slider টা ভুলভাল দেখাচ্ছে না তো"]} />}
       </Stage>
     </StoryFrame>
   );
 }
 
 // ---------------------------------------------------------------------------
-// 4 · Is (0.6, 0.8) really 1 long? Predict (1.4 is the walker's, 0.8 the
-//     king's), then square, add, root by hand. The hat gets its name: v̂.
+// 4 · Is (0.6, 0.8) really 1 long? Square, add, root by hand. The hat gets its name: v̂.
 
 const HAT = [
   { k: "প্রথম ঘর", n: 0.6 },
   { k: "দ্বিতীয় ঘর", n: 0.8 },
 ];
-const HAT_GUESS = ["1.4", "1", "0.8"];
 
 export function HatCheck() {
   const pass = useGate();
-  const [guess, setGuess] = useSeed<number | null>("guess", null);
   const [squared, setSquared] = useSeed<number[]>("squared", []);
   const [added, setAdded] = useSeed("added", false);
   const [rooted, setRooted] = useSeed("rooted", false);
@@ -1035,7 +1016,7 @@ export function HatCheck() {
   };
   const root = () => {
     setRooted(true);
-    pass("0.36 + 0.64 = 1, আর 1-এর root-ও 1। ঘর দুইটা আলাদাভাবে 1-এর চেয়ে ছোট, কিন্তু দুইজন মিলে দৈর্ঘ্য ঠিক 1।");
+    pass("0.36 + 0.64 = 1, length ঠিক 1।");
   };
 
   return (
@@ -1044,83 +1025,68 @@ export function HatCheck() {
         <div className="text-xs font-semibold text-muted">(3, 4)-কে 5 দিয়ে ভাগ করে পাওয়া</div>
         <div className="font-mono text-xl font-bold">(0.6, 0.8)</div>
       </div>
-      <div className="mt-4 text-sm font-medium text-muted">ফিতা দিয়ে মাপলে (0.6, 0.8) কত লম্বা?</div>
-      <div className="mt-2 grid grid-cols-3 gap-2">
-        {HAT_GUESS.map((o, i) => (
-          <Choice key={o} n={i} look={predictLook(i, guess, rooted, 1)} disabled={guess !== null} onClick={() => setGuess(i)}>
-            <span className="font-mono">{o}</span>
-          </Choice>
-        ))}
-      </div>
-      {guess !== null && (
-        <div className={FADE}>
-          <div className="mt-4 text-center text-sm text-muted">আগের মতোই, প্রথমে প্রতিটা ঘরের বর্গ। ঘরগুলোতে tap করুন।</div>
-          <div className="mx-auto mt-2 grid max-w-xs grid-cols-2 gap-2">
-            {HAT.map((b, i) => {
-              const on = squared.includes(i);
-              return (
-                <button
-                  key={b.k}
-                  type="button"
-                  disabled={on}
-                  onClick={() => square(i)}
-                  className={`flex cursor-pointer flex-col items-center rounded-xl border-2 px-1 py-2.5 transition-colors duration-300 motion-reduce:transition-none disabled:cursor-default ${
-                    on ? "border-cat-teal/40 bg-cat-teal/5" : "border-border hover:border-cat-teal/60"
-                  }`}
-                >
-                  <span className="text-xs text-muted">{b.k}</span>
-                  <span className="font-mono text-2xl font-bold">{b.n}</span>
-                  {on ? (
-                    <span className={`${POP} inline-block font-mono text-sm`}>
-                      {b.n}² = <b className="text-cat-teal">{sh(b.n * b.n)}</b>
-                    </span>
-                  ) : (
-                    <span className="text-xs text-muted">বর্গ করুন</span>
-                  )}
-                </button>
-              );
-            })}
-          </div>
-          {squared.length === 2 && !added && (
-            <div className={`${FADE} mt-3 flex justify-center`}>
-              <button type="button" onClick={() => setAdded(true)} className={primaryBtn}>
-                বর্গগুলো যোগ করুন
+      <div className={FADE}>
+        <div className="mt-4 text-center text-sm text-muted">আগের মতোই, প্রথমে প্রতিটা ঘরের বর্গ। ঘরগুলোতে tap করুন।</div>
+        <div className="mx-auto mt-2 grid max-w-xs grid-cols-2 gap-2">
+          {HAT.map((b, i) => {
+            const on = squared.includes(i);
+            return (
+              <button
+                key={b.k}
+                type="button"
+                disabled={on}
+                onClick={() => square(i)}
+                className={`flex cursor-pointer flex-col items-center rounded-xl border-2 px-1 py-2.5 transition-colors duration-300 motion-reduce:transition-none disabled:cursor-default ${
+                  on ? "border-cat-teal/40 bg-cat-teal/5" : "border-border hover:border-cat-teal/60"
+                }`}
+              >
+                <span className="text-xs text-muted">{b.k}</span>
+                <span className="font-mono text-2xl font-bold">{b.n}</span>
+                {on ? (
+                  <span className={`${POP} inline-block font-mono text-sm`}>
+                    {b.n}² = <b className="text-cat-teal">{sh(b.n * b.n)}</b>
+                  </span>
+                ) : (
+                  <span className="text-xs text-muted">বর্গ করুন</span>
+                )}
               </button>
-            </div>
-          )}
-          {added && (
-            <div className={`${FADE} mt-3 text-center font-mono text-lg`}>
-              0.36 + 0.64 = <b className="text-cat-teal">1</b>
-            </div>
-          )}
-          {added && !rooted && (
-            <div className={`${FADE} mt-3 flex justify-center`}>
-              <button type="button" onClick={root} className={`${primaryBtn} bg-cat-violet`}>
-                Root নিন
-              </button>
-            </div>
-          )}
-          {rooted && (
-            <>
-              <div className={`${FADE} mt-2 text-center text-[0.95rem]`}>
-                √1 = <b className="font-mono">1</b>।{" "}
-                {guess === 1
-                  ? "আপনার guess একদম ঠিক!"
-                  : guess === 0
-                    ? "0.6 + 0.8 = 1.4 হতো সামিনের হাঁটার মাপে, মানে L1-এ। কিন্তু ফিতার মাপ শুরু হয় বর্গ দিয়ে।"
-                    : "0.8 তো শুধু বড় ঘরটা, মানে দাবার রাজার মাপ। ফিতা কিন্তু দুইটা ঘরই গোনে।"}
-              </div>
-              <div className={`${FADE} mx-auto mt-3 max-w-sm rounded-2xl bg-cat-teal/5 px-4 py-3 text-center`}>
-                <div className="font-mono text-xl">v̂ = v ÷ ‖v‖</div>
-                <div className="font-mono">
-                  (3, 4) ÷ 5 = <b className="text-cat-teal">(0.6, 0.8)</b>
-                </div>
-                <div className="mt-1 text-[0.95rem]">পড়তে হয় “v-hat”। মাথার ছোট্ট টুপিটা বলে দেয়, এই arrow-টা ঠিক 1 লম্বা।</div>
-              </div>
-            </>
-          )}
+            );
+          })}
         </div>
-      )}
+        {squared.length === 2 && !added && (
+          <div className={`${FADE} mt-3 flex justify-center`}>
+            <button type="button" onClick={() => setAdded(true)} className={primaryBtn}>
+              বর্গগুলো যোগ করুন
+            </button>
+          </div>
+        )}
+        {added && (
+          <div className={`${FADE} mt-3 text-center font-mono text-lg`}>
+            0.36 + 0.64 = <b className="text-cat-teal">1</b>
+          </div>
+        )}
+        {added && !rooted && (
+          <div className={`${FADE} mt-3 flex justify-center`}>
+            <button type="button" onClick={root} className={`${primaryBtn} bg-cat-violet`}>
+              Root নিন
+            </button>
+          </div>
+        )}
+        {rooted && (
+          <>
+            <div className={`${FADE} mt-2 text-center text-[0.95rem]`}>
+              √1 = <b className="font-mono">1</b>। Slider ফাঁকি দেয়নি।
+            </div>
+            <div className={`${FADE} mx-auto mt-3 max-w-sm rounded-2xl bg-cat-teal/5 px-4 py-3 text-center`}>
+              <div className="font-mono text-xl">v̂ = v ÷ ‖v‖</div>
+              <div className="font-mono">
+                (3, 4) ÷ 5 = <b className="text-cat-teal">(0.6, 0.8)</b>
+              </div>
+              <div className="mt-1 text-[0.95rem]">পড়তে হয় “v-hat”। মাথার ছোট্ট টুপিটা বলে দেয়, এই arrow-টার length ১</div>
+            </div>
+          </>
+        )}
+      </div>
       <Ticks
         items={[
           ["বর্গ", squared.length === 2],
@@ -1128,7 +1094,7 @@ export function HatCheck() {
           ["root", rooted],
         ]}
       />
-      <Task done={rooted}>আগে একটা guess দিন, তারপর বর্গ, যোগ আর root করে মিলিয়ে নিন।</Task>
+      <Task done={rooted}>বর্গ, যোগ আর root করে মেপে দেখুন, (0.6, 0.8) কত লম্বা।</Task>
     </>
   );
 }
@@ -1157,7 +1123,7 @@ export function TwoTapes() {
         ) : k < 3 ? (
           <span key="c2" className={FADE}>বর্গ করলে আরও ছোট হয়, 0.36 আর 0.64।</span>
         ) : k < 4 ? (
-          <span key="c3" className={FADE}>কিন্তু যোগ করলে ঠিক 1। দর্জির ফিতায় arrow-টা 1 লম্বা।</span>
+          <span key="c3" className={FADE}>কিন্তু যোগ করলে ঠিক 1। দর্জির ফিতায় arrow-টার length 1 </span>
         ) : (
           <span key="c4" className={FADE}>1.4 আসে সামিনের মতো হেঁটে মাপলে: আগে পূর্বে, তারপর উত্তরে।</span>
         )
@@ -1249,9 +1215,9 @@ export function HatOn() {
         k < 2 ? (
           "ধরি v মানে card (3, 4)।"
         ) : k < 3 ? (
-          <span key="c2" className={FADE}>দর্জির ফিতায় তার দৈর্ঘ্য 5। এটাকে লেখা হয় ‖v‖।</span>
+          <span key="c2" className={FADE}>দর্জির ফিতায় তার length 5। এটাকে লেখা হয় ‖v‖।</span>
         ) : k < 4 ? (
-          <span key="c3" className={FADE}>নিজের দৈর্ঘ্য দিয়ে ভাগ, আর পেলাম (0.6, 0.8)।</span>
+          <span key="c3" className={FADE}>নিজের length দিয়ে ভাগ, আর পেলাম (0.6, 0.8)।</span>
         ) : (
           <span key="c4" className={FADE}>এখন ঠিক 1 লম্বা, তাই মাথায় টুপি। এর নাম unit vector।</span>
         )
@@ -1314,7 +1280,7 @@ export function DivideIsStretch() {
         ) : k < 3 ? (
           <span key="c2" className={FADE}>1/5 দিয়ে গুণ করলেও হুবহু তাই। একই কথা।</span>
         ) : k < 4 ? (
-          <span key="c3" className={FADE}>মানে এটা শরবতের সেই পুরানো λ-knob।</span>
+          <span key="c3" className={FADE}>মানে এটা আমাদের শিখে আসা সেই পুরানো λ-knob।</span>
         ) : (
           <span key="c4" className={FADE}>শুধু knob-টা ঘোরানো হলো মেপে মেপে, ঠিক 1/5-এ।</span>
         )
@@ -1436,7 +1402,7 @@ export function ClubSack({}: Story) {
         })}
         <S5_Sack x={S5_SACK} y={S5_Y} />
         <Person who="nasib" x={S5_NASIB} y={S5_Y} mood={k >= 4 ? "puzzled" : "happy"} arm={k === 1 ? "wave" : k >= 2 ? "point" : "down"} label />
-        {k === 1 && <Bubble x={S5_NASIB} y={S5_Y - 66} lines={["ঝুলিতে ছবি আছে", "আরও অনেক!"]} />}
+        {k === 1 && <Bubble x={S5_NASIB} y={S5_Y - 66} lines={["Collection এ ছবি আছে", "আরও অনেক!"]} />}
         {k >= 4 && <Bubble x={S5_NASIB} y={S5_Y - 66} lines={["নিয়মটা খাটাতে হবে", "সবগুলোর ওপরেই!"]} />}
       </Stage>
     </StoryFrame>
@@ -1490,7 +1456,7 @@ export function OnTheRing() {
   };
   const normalise = () => {
     setNormed(true);
-    pass("সব arrow গিয়ে বসলো 1 মাপের রিংয়ের ওপর। দৈর্ঘ্য মুছে গেল, রয়ে গেল শুধু কে কোন দিকে তাক করা।");
+    pass("length মুছে থাকলো শুধু দিক।");
   };
 
   return (
@@ -1534,22 +1500,22 @@ export function OnTheRing() {
       <div className="min-h-7 text-center text-[0.95rem]">
         {!normed ? (
           <span className="text-muted">
-            সব arrow-কে 1 লম্বা বানালে কোনগুলো একটুও নড়বে না? সেগুলোর মাথায় tap করুন ({bn(marks.length)}টা বাছাই)।
+            সব arrow-এর length 1 বানালে কোনগুলো একটুও নড়বে না? সেগুলোর মাথায় tap করুন ({bn(marks.length)}টা বাছাই)।
           </span>
         ) : right ? (
           <span className={`${FADE} text-accent-text`}>ঠিক ধরেছেন! নড়েনি শুধু e₁ আর e₂, কারণ ওরা আগে থেকেই 1 লম্বা।</span>
         ) : (
-          <span className={FADE}>নড়েনি শুধু e₁ আর e₂, মানে পূর্বে এক পা আর উত্তরে এক পা। বাকি সবাই ছোট বা বড় হয়ে রিংয়ে এসে বসেছে।</span>
+          <span className={FADE}>নড়েনি শুধু e₁ আর e₂, মানে পূর্বে এক step আর উত্তরে এক step। বাকি সবাই ছোট বা বড় হয়ে রিংয়ে এসে বসেছে।</span>
         )}
       </div>
       {!normed && (
         <div className="mt-2 flex justify-center">
           <button type="button" onClick={normalise} className={primaryBtn}>
-            সবাইকে 1 লম্বা বানান
+            সবার length 1 বানান
           </button>
         </div>
       )}
-      <Task done={normed}>যেগুলো নড়বে না বলে মনে হয়, সেগুলোতে tap করুন। তারপর সবাইকে 1 লম্বা বানিয়ে মিলিয়ে দেখুন।</Task>
+      <Task done={normed}>যেগুলো নড়বে না বলে মনে হয়, সেগুলোতে tap করুন। তারপর সবার length 1 বানিয়ে মিলিয়ে দেখুন।</Task>
     </>
   );
 }
@@ -1701,7 +1667,7 @@ export function StillAndMerged() {
         ) : k < 5 ? (
           <span key="c4" className={FADE}>এবার (1, 1) আর (3, 3), দুইজন একই দিকে তাক করা।</span>
         ) : (
-          <span key="c5" className={FADE}>দৈর্ঘ্য মুছতেই দুইজন এসে পড়লো রিংয়ের একই বিন্দুতে।</span>
+          <span key="c5" className={FADE}>length মুছতেই দুইজন এসে পড়লো রিংয়ের একই বিন্দুতে।</span>
         )
       }
     >
@@ -1763,7 +1729,7 @@ export function ZeroQuestion() {
         ) : k < 4 ? (
           <span key="c3" className={FADE}>…শেষে শুধু একটা বিন্দু, (0, 0)। Arrow-এর মাথাটাও নাই।</span>
         ) : (
-          <span key="c4" className={FADE}>একে 1 লম্বা বানাতে হলে ভাগ করবেন কী দিয়ে? নিজেই ভেবে দেখুন।</span>
+          <span key="c4" className={FADE}>এর length 1 বানাতে হলে ভাগ করবেন কী দিয়ে? নিজেই ভেবে দেখুন।</span>
         )
       }
     >
@@ -1829,7 +1795,7 @@ export function ThreeFilms({}: Story) {
         <Person who="mama" x={S6_MAMA} y={S6_Y} label />
         <Person who="nasib" x={S6_NASIB} y={S6_Y} mood="happy" arm={k === 1 ? "wave" : k >= 5 ? "point" : "down"} label />
         {k === 1 && <Bubble x={S6_NASIB} y={S6_Y - 66} lines={["এবার আসল পরীক্ষা!"]} />}
-        {k >= 5 && <Bubble x={S6_NASIB} y={S6_Y - 66} lines={["তিনজনকেই 1 লম্বা", "বানিয়ে দেখি!"]} />}
+        {k >= 5 && <Bubble x={S6_NASIB} y={S6_Y - 66} lines={["তিনজনেরই length 1", "বানিয়ে দেখি!"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1858,7 +1824,7 @@ export function FairFight() {
 
   const run = () => {
     setRan(true);
-    pass("দৈর্ঘ্য সরিয়ে দিতেই Mr. Bean জিতলো 5.33 বনাম 3.71-এ। আর দ্বিগুণ নম্বর নিয়েও Titanic এক চুলও এগোতে পারলো না।");
+    pass("length সরাতেই Mr. Bean জিতলো।");
   };
 
   return (
@@ -1893,6 +1859,17 @@ export function FairFight() {
           </tbody>
         </table>
       </div>
+      {guess !== null && !ran && (
+        <div className={`${FADE} mt-3 flex flex-wrap justify-center gap-2`}>
+          <button type="button" onClick={() => setNormed(true)} disabled={normed} className={primaryBtn}>
+            ১ · সবার length 1 করুন
+          </button>
+          <button type="button" onClick={run} disabled={!normed} className={`${primaryBtn} bg-cat-violet`}>
+            ২ · Run the rule
+          </button>
+        </div>
+      )}
+      {normed && !ran && <div className={`${FADE} mt-2 text-center text-[0.95rem]`}>খেয়াল করেছেন? দুইটা Titanic-এর card এখন হুবহু এক।</div>}
       {ran && (
         <div className={`${FADE} mx-auto mt-3 max-w-sm space-y-1.5`}>
           {FIGHT.map((m, i) => (
@@ -1909,7 +1886,7 @@ export function FairFight() {
           </div>
         </div>
       )}
-      <div className="mt-4 text-sm font-medium text-muted">তিনটা ছবিকেই 1 লম্বা করে মামার পছন্দের সাথে নিয়মটা আবার চালালে কী হবে?</div>
+      <div className="mt-4 text-sm font-medium text-muted">তিনটা ছবিরই length 1 করে মামার পছন্দের সাথে নিয়মটা আবার চালালে কী হবে?</div>
       <div className="mt-2 grid gap-2">
         {FIGHT_GUESS.map((o, i) => (
           <Choice key={o} n={i} look={predictLook(i, guess, ran, 0)} disabled={guess !== null} onClick={() => setGuess(i)}>
@@ -1917,29 +1894,18 @@ export function FairFight() {
           </Choice>
         ))}
       </div>
-      {guess !== null && !ran && (
-        <div className={`${FADE} mt-3 flex flex-wrap justify-center gap-2`}>
-          <button type="button" onClick={() => setNormed(true)} disabled={normed} className={primaryBtn}>
-            ১ · সবাইকে 1 লম্বা করুন
-          </button>
-          <button type="button" onClick={run} disabled={!normed} className={`${primaryBtn} bg-cat-violet`}>
-            ২ · নিয়মটা চালান
-          </button>
-        </div>
-      )}
-      {normed && !ran && <div className={`${FADE} mt-2 text-center text-[0.95rem]`}>খেয়াল করেছেন? দুইটা Titanic-এর card এখন হুবহু এক।</div>}
       {ran && guess !== null && (
         <div className={`${FADE} mt-3 text-center text-[0.95rem]`}>
-          {guess === 0 ? "আপনার guess ঠিক। এবার ব্যবধান আর মাত্র 2 না, প্রায় দেড় গুণ।" : "উঁহু, এবার আর হাড্ডাহাড্ডি না। Card-গুলো 1 লম্বা হওয়ার পর Titanic-এর বাড়তি জোর আর কোনো কাজে লাগলো না।"}
+          {guess === 0 ? "আপনার guess ঠিক। এবার ব্যবধান আর মাত্র 2 না, প্রায় দেড় গুণ।" : "উঁহু, এবার আর হাড্ডাহাড্ডি না। Card-গুলো 1 unit লম্বা হওয়ার পর Titanic-এর বাড়তি জোর আর কোনো কাজে লাগলো না।"}
         </div>
       )}
       <Ticks
         items={[
-          ["1 লম্বা করা", normed],
-          ["নিয়ম চালানো", ran],
+          ["length 1 করা", normed],
+          ["Run the rule", ran],
         ]}
       />
-      <Task done={ran}>আগে একটা guess দিন। তারপর তিনটা ছবিকে 1 লম্বা করে নিয়মটা আবার চালান।</Task>
+      <Task done={ran}>আগে একটা guess করুন। তারপর তিনটা ছবির length 1 করে, run the rule again।</Task>
     </>
   );
 }
@@ -1971,7 +1937,7 @@ export function ClearWin() {
         ) : k < 4 ? (
           <span key="c3" className={FADE}>এবার 5.33 বনাম 3.71। ব্যবধান এখন স্পষ্ট।</span>
         ) : (
-          <span key="c4" className={FADE}>মামা হাসির ছবি নিয়েই বাড়ি গেলেন।</span>
+          <span key="c4" className={FADE}>মামা Comedy মুভি  নিয়েই বাড়ি গেলেন।</span>
         )
       }
     >
@@ -1979,7 +1945,7 @@ export function ClearWin() {
         <div className="mb-2 text-center text-xs text-muted">
           মাপার নিয়ম:{" "}
           <b key={k >= 2 ? "n" : "o"} className={`${FADE} ${k >= 2 ? "text-cat-violet" : "text-foreground"}`}>
-            {k >= 2 ? "আগে 1 লম্বা করে, তারপর গুণ-যোগ" : "সরাসরি গুণ-যোগ"}
+            {k >= 2 ? "আগে length 1 করে, তারপর গুণ-যোগ" : "সরাসরি গুণ-যোগ"}
           </b>
         </div>
         <div className="space-y-1.5">
@@ -2029,7 +1995,7 @@ export function TwinCards() {
         k < 2 ? (
           "Titanic আর দ্বিগুণ Titanic, নম্বর 20 আর 40।"
         ) : k < 3 ? (
-          <span key="c2" className={FADE}>যার যার নিজের দৈর্ঘ্য দিয়ে ভাগ। দ্বিগুণ লম্বা, তাই ভাগও দ্বিগুণ।</span>
+          <span key="c2" className={FADE}>যার যার নিজের length দিয়ে ভাগ। দ্বিগুণ লম্বা, তাই ভাগও দ্বিগুণ।</span>
         ) : k < 4 ? (
           <span key="c3" className={FADE}>দুইজনের card-ই দাঁড়ালো (0.93, 0.37)।</span>
         ) : (
@@ -2101,7 +2067,7 @@ export function TasteCompass() {
       scene={s}
       caption={
         k < 2 ? (
-          "নীল কাঁটাটা মামার রুচির দিক। সব ছবি এখন 1 লম্বা, তাই সবাই এই রিংয়ে।"
+          "নীল কাঁটাটা মামার পছন্দের দিক । সব ছবি এখন 1 unit লম্বা , তাই সবাই এই রিংয়ে।"
         ) : k < 3 ? (
           <span className={FADE}>Titanic আর দ্বিগুণ Titanic পড়লো একই কাঁটায়। বাড়তি জোরটা আর নাই।</span>
         ) : k < 4 ? (
@@ -2174,7 +2140,7 @@ export function CosineName() {
       scene={s}
       caption={
         k < 2 ? (
-          "বড় বড় system, সবখানেই এই কৌশল।"
+          "বড় বড় system, সবখানেই এই technique।"
         ) : k < 3 ? (
           <span key="c2" className={FADE}>এবার মামার পছন্দের arrow, এখনো 5.39 লম্বা।</span>
         ) : k < 4 ? (
@@ -2215,7 +2181,7 @@ export function CosineName() {
             {k >= 4 && (
               <div className={POP}>
                 <div className="inline-block rounded-lg bg-cat-violet/10 px-2 py-0.5 font-bold text-cat-violet">cosine similarity</div>
-                <div className="mt-0.5 text-xs text-muted">পরের article-এর গল্প</div>
+                <div className="mt-0.5 text-xs text-muted">সেই গল্পটা পরের কোনো journey-তে আসবে</div>
               </div>
             )}
           </div>
@@ -2308,7 +2274,7 @@ export function BigSpender() {
   };
   const choose = (i: number) => {
     setGuess(i);
-    pass("দুইজনের card হুবহু এক হয়ে গেল, তাই আর বলার উপায় নাই। ঝোঁকটা রইলো, কিন্তু কে কত টাকা খরচ করে সেই খবরটা normalise-এর সময়ই মুছে গেছে।");
+    pass("Normalise খরচের খবরটা মুছে দিলো।");
   };
 
   return (
@@ -2396,7 +2362,7 @@ export function TenTimesGone() {
         ) : k < 4 ? (
           <span key="c3" className={FADE}>Normalise করতেই দুইজনই হুবহু (0.89, 0.45)।</span>
         ) : (
-          <span key="c4" className={FADE}>ঝোঁকটা রইলো। কিন্তু দশ গুণের খবরটা আর কোথাও জমা নাই।</span>
+          <span key="c4" className={FADE}>একই দিকে সেটা বোঝা যাচ্ছে। কিন্তু দশ গুণের খবরটা আর কোথাও জমা নাই।</span>
         )
       }
     >
@@ -2404,7 +2370,7 @@ export function TenTimesGone() {
         <div className="grid grid-cols-[6rem_1.5rem_1fr] gap-2 text-xs text-muted">
           <span />
           <span />
-          <span>দৈর্ঘ্য</span>
+          <span>length</span>
         </div>
         {SPEND.map(({ who, v }) => (
           <div key={who} className="grid grid-cols-[6rem_1.5rem_1fr] items-center gap-2">
@@ -2467,11 +2433,11 @@ export function NoiseOrNews() {
       scene={s}
       caption={
         k < 2 ? (
-          "মামার ছবি বাছাইয়ে Titanic-এর বাড়তি জোরটা ঝামেলা।"
+          "মামার ছবি বাছাইয়ে Titanic-এর বাড়তি loudness-টা ঝামেলা ।"
         ) : k < 3 ? (
           <span key="c2" className={FADE}>তাই মুছে ফেলাই ঠিক কাজ। দুই Titanic এক হয়ে গেল।</span>
         ) : k < 4 ? (
-          <span key="c3" className={FADE}>সামিনের প্রশ্নে কিন্তু দৈর্ঘ্যটাই আসল খবর।</span>
+          <span key="c3" className={FADE}>সামিনের প্রশ্নে কিন্তু lengthটাই আসল information।</span>
         ) : (
           <span key="c4" className={FADE}>সবচেয়ে বড় ক্রেতা আপা। এখানে normalise করলে উত্তরটাই মুছে যেত।</span>
         )
@@ -2481,7 +2447,7 @@ export function NoiseOrNews() {
         <X7N_Panel
           title="মামার ছবি বাছাই"
           on={k < 3}
-          tag={k >= 2 ? <span className={`${FADE} text-cat-teal`}>মুছে ফেলাই ঠিক</span> : k >= 1 ? <span className={`${FADE} text-cat-coral`}>জোরটা ঝামেলা</span> : null}
+          tag={k >= 2 ? <span className={`${FADE} text-cat-teal`}>মুছে ফেলাই ঠিক</span> : k >= 1 ? <span className={`${FADE} text-cat-coral`}>loudness-টা ঝামেলা </span> : null}
         >
           <Plane f={FL} grid={0} label="the two Titanics, (5, 2) and (10, 4), shrink onto the unit ring and become one" className="my-1! max-w-none">
             <path d={`M${FL.sx(1)} ${FL.sy(0)}A${RL} ${RL} 0 0 0 ${FL.sx(0)} ${FL.sy(1)}`} strokeWidth={1.4} strokeDasharray="3 3" className="fill-none stroke-[#d97706]" />
@@ -2492,7 +2458,7 @@ export function NoiseOrNews() {
         <X7N_Panel
           title="সবচেয়ে বড় ক্রেতা কে?"
           on={k >= 3}
-          tag={k >= 4 ? <span className={`${FADE} font-semibold text-cat-blue`}>হাত দেবেন না</span> : k >= 3 ? <span className={`${FADE} text-cat-blue`}>দৈর্ঘ্যটাই খবর</span> : null}
+          tag={k >= 4 ? <span className={`${FADE} font-semibold text-cat-blue`}>হাত দেবেন না</span> : k >= 3 ? <span className={`${FADE} text-cat-blue`}>lengthটাই খবর</span> : null}
         >
           <Plane f={X7N_FR} grid={0} label="করিম (20, 10) and ডাক্তার আপা (200, 100) on one line; her arrow is ten times longer, and that length is the answer" className="my-1! max-w-none">
             {k >= 3 && <Arrow f={X7N_FR} from={O} to={SPEND[1].v} tone="blue" w={k >= 4 ? 3.6 : 2.4} draw />}
@@ -2548,7 +2514,7 @@ export function HatFlow() {
         ) : k < 5 ? (
           <span className={FADE}>Card-টা 13 লম্বা। এবার দুইটা ঘরকেই সেই একই 13 দিয়ে ভাগ।</span>
         ) : (
-          <span className={FADE}>পেলাম (0.38, 0.92)। দিক একই রইলো, আর দৈর্ঘ্য এখন 1।</span>
+          <span className={FADE}>পেলাম (0.38, 0.92)। দিক একই রইলো, আর length এখন 1।</span>
         )
       }
     >
@@ -2620,7 +2586,7 @@ export function WrongHats() {
         k < 2 ? (
           "13 দিয়ে ভাগ করলে arrow-এর মাথা ঠিক রিংয়ের ওপর।"
         ) : k < 3 ? (
-          <span key="c2" className={FADE}>17 দিয়ে ভাগ করলে থামে রিংয়ের ভেতরে, দৈর্ঘ্য মাত্র 0.76।</span>
+          <span key="c2" className={FADE}>17 দিয়ে ভাগ করলে থামে রিংয়ের ভেতরে, length মাত্র 0.76।</span>
         ) : (
           <span key="c3" className={FADE}>আর (1, 1) বেরিয়ে যায় রিংয়ের বাইরে, √2 লম্বা।</span>
         )
@@ -2640,7 +2606,7 @@ export function WrongHats() {
                 <div className={FADE}>
                   <div className={`font-mono text-sm font-bold ${INK[h.tone].text}`}>{h.card}</div>
                   <div className="text-xs text-muted">
-                    {h.note}, দৈর্ঘ্য <span className="font-mono">{h.L}</span>
+                    {h.note}, length <span className="font-mono">{h.L}</span>
                   </div>
                 </div>
               )}
@@ -2686,7 +2652,7 @@ export function MamaGoesHome({}: Story) {
         <S_Carry x={mx} y={S9_Y - 31} ms={2400}>
           <S_Film x={19 * mf} w={12} h={15} color="#0d9488" />
         </S_Carry>
-        {k === 1 && <Bubble x={S9_MAMA} y={S9_Y - 66} lines={["যাই, হাসির ছবিটা", "বাড়ি গিয়ে দেখি!"]} />}
+        {k === 1 && <Bubble x={S9_MAMA} y={S9_Y - 66} lines={["যাই, Comedy মুভি টা", "বাড়ি গিয়ে দেখি!"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -2694,7 +2660,7 @@ export function MamaGoesHome({}: Story) {
 
 // ---------------------------------------------------------------------------
 // 9b · A story scene for the last screen's teaser, no task: late afternoon at
-//      ডাক্তার আপার stall, “তোমার যমজ কে?”. She walks up, a card shows the
+//      ডাক্তার আপার stall, “তোমার twin কে?”. She walks up, a card shows the
 //      volunteer's slip, kg written as gram, and she finds every twin changed.
 //      Why is the next journey's question, so the scene stops there.
 
@@ -2712,11 +2678,11 @@ export function TwinMixup({}: Story) {
         <Stall x={S9B_STALL} y={S9_Y} w={100} color="#0f766e" />
         <rect x={S9B_STALL - 42} y={S9_Y - 82} width={84} height={16} rx={3} fill="#fef3c7" stroke="#92400e" strokeWidth={1} />
         <text x={S9B_STALL} y={S9_Y - 71} textAnchor="middle" fontSize={8.5} fontWeight={700} fill={S_INK}>
-          তোমার যমজ কে?
+          তোমার twin কে?
         </text>
         {k >= 2 && <CastCard x={S9B_STALL} y={S9_Y - 11} text="kg → gram" tone="coral" />}
         <Person who="apa" x={k >= 1 ? S9B_APA : -30} y={S9_Y} walking={k === 1} ms={1500} mood={k >= 3 ? "puzzled" : "plain"} arm={k >= 3 ? "point" : "down"} label={k >= 1} />
-        {k >= 3 && <Bubble x={S9B_APA} y={S9_Y - 66} lines={["সবার যমজ", "বদলে গেল!"]} />}
+        {k >= 3 && <Bubble x={S9B_APA} y={S9_Y - 66} lines={["সবার twin", "বদলে গেল!"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -2730,11 +2696,11 @@ export const fixtures: Fixtures = {
   WhyLoud: { start: {}, measured: { measured: ["t", "b"] }, doubled: { measured: ["t", "b"], lam: 2, seen: [1, 2, 0.5] } },
   ShrinkToOne: {
     start: {},
-    sliding: { guess: 1, lam: 0.5 },
-    first: { guess: 1, lam: 0.2, hit: [true, false] },
-    all: { guess: 2, stage: 1, lam: 0.4, hit: [true, true] },
+    sliding: { lam: 0.5 },
+    first: { lam: 0.2, hit: [true, false] },
+    all: { stage: 1, lam: 0.4, hit: [true, true] },
   },
-  HatCheck: { start: {}, squared: { guess: 0, squared: [0, 1] }, done: { guess: 0, squared: [0, 1], added: true, rooted: true } },
+  HatCheck: { start: {}, squared: { squared: [0, 1] }, done: { squared: [0, 1], added: true, rooted: true } },
   OnTheRing: { start: {}, marked: { marks: [0, 1, 8] }, normed: { marks: [0, 8], normed: true } },
   BigSpender: { start: {}, normed: { normed: true }, over: { normed: true, guess: 2 } },
   FairFight: { start: {}, normed: { guess: 1, normed: true }, ran: { guess: 1, normed: true, ran: true } },

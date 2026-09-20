@@ -10,7 +10,7 @@ import { bn } from "./figure-kit";
 
 // Screens for "Math for AI 3.7 — গ্রামের ফাঁদ, ডাক্তার আপার stall", told as a Journey.
 //
-// ডাক্তার আপা's "তোমার যমজ কে?" matches A (172, 68) with the nearest of
+// ডাক্তার আপা's "তোমার twin কে?" matches A (172, 68) with the nearest of
 // B (190, 69) and C (173, 78). Two volunteers run the same program, one in kg
 // and one in grams, and both are right, yet their twins differ. Turning a unit
 // dial shows why: the formula prices 1 cm the same as 1 of whatever weight unit
@@ -308,17 +308,17 @@ const S1_OFF = 380;
 export function TwinStall({}: Story) {
   const s = useScene(5, [600, 1600, 2600, 1300, 1500]);
   const k = s.k;
-  const screen = (twin: string) => (k < 3 ? [] : k === 3 ? ["চলছে…"] : ["যমজ:", twin]);
+  const screen = (twin: string) => (k < 3 ? [] : k === 3 ? ["চলছে…"] : ["twin:", twin]);
 
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="evening" label="the last afternoon at ডাক্তার আপা's stall: A, B and C join the crowd, and the two laptops on the counter give two different twins">
         <Tree x={16} y={S1_Y} s={0.9} />
-        <Stall x={100} y={S1_Y} w={110} sign="তোমার যমজ কে?" color="#0d9488" />
+        <Stall x={100} y={S1_Y} w={110} sign="তোমার twin কে?" color="#0d9488" />
         <S_Laptop x={76} y={126} lines={screen("C")} />
         <S_Laptop x={124} y={126} lines={screen("B")} />
         <Person who="apa" x={178} y={S1_Y} facing={1} arm={k === 2 ? "wave" : "down"} mood={k >= 5 ? "puzzled" : "happy"} label />
-        {k === 2 && <Bubble x={178} y={S1_Y - 66} lines={["উচ্চতা আর ওজন দিন,", "যমজ খুঁজে দেবো!"]} />}
+        {k === 2 && <Bubble x={178} y={S1_Y - 66} lines={["উচ্চতা আর ওজন দিন,", "twin খুঁজে দেবো!"]} />}
         {k >= 5 && <Bubble x={178} y={S1_Y - 66} lines={["দুই laptop,", "দুই রকম কথা!"]} />}
         <S_Visitor who="A" x={k >= 1 ? S1_AT.A : S1_OFF} y={S1_Y} facing={-1} walking={k === 1} mood={k >= 4 ? "puzzled" : "plain"} />
         <S_Visitor who="B" x={k >= 1 ? S1_AT.B : S1_OFF + 36} y={S1_Y} tall={1.1} facing={-1} walking={k === 1} />
@@ -348,13 +348,13 @@ export function KgVsGram() {
     if (ran.includes(i)) return;
     const next = [...ran, i];
     setRan(next);
-    if (next.length === 2) pass("দুইটা program-এর হিসাবেই কোনো ভুল নাই। মানুষ তিনজন একই, অথচ যমজ দুই রকম। বদলেছে শুধু ওজন লেখার unit।");
+    if (next.length === 2) pass("বদলেছে শুধু ওজনের unit, আর twin।");
   };
 
   return (
     <>
       <Speech who="ডাক্তার আপা" initial="ডা" tint="teal">
-        দুইটা laptop-এ একই program, আর মানুষও সেই একই তিনজন। তাহলে যমজ দুই রকম আসে কীভাবে? নিশ্চয়ই কারো program-এ ভুল আছে।
+        দুইটা laptop-এ একই program, আর মানুষও সেই একই তিনজন। তাহলে twin দুই রকম আসে কীভাবে? নিশ্চয়ই কারো program-এ ভুল আছে।
       </Speech>
       <div className="mt-4 flex flex-wrap justify-center gap-3">
         {LAPTOPS.map((l, i) => {
@@ -374,7 +374,7 @@ export function KgVsGram() {
                   <>
                     <Out>A→B {big(dB)}</Out>
                     <Out>A→C {big(dC)}</Out>
-                    <Out tone="ok">A-এর যমজ: {dB < dC ? "B" : "C"}</Out>
+                    <Out tone="ok">A-এর twin: {dB < dC ? "B" : "C"}</Out>
                   </>
                 )}
               </Laptop>
@@ -398,8 +398,8 @@ export function KgVsGram() {
       {both && guess !== null && (
         <div className={`${FADE} mt-3 text-center text-[0.95rem]`}>
           {guess === 2
-            ? "ঠিক ধরেছেন। দুইটা হিসাবই নিখুঁত, তবু দুইটা laptop দুই রকম যমজ দেখাচ্ছে।"
-            : "হিসাবগুলো একবার মিলিয়ে দেখুন, কোথাও ভুল নাই। বর্গ, যোগ, root, সব ঠিকঠাক। তবুও যমজ আলাদা!"}
+            ? "ঠিক ধরেছেন। দুইটা হিসাবই নিখুঁত, তবু দুইটা laptop দুই রকম twin দেখাচ্ছে।"
+            : "হিসাবগুলো একবার মিলিয়ে দেখুন, কোথাও ভুল নাই। বর্গ, যোগ, root, সব ঠিকঠাক। তবুও twin আলাদা!"}
         </div>
       )}
       <Task done={both}>আগে বলুন কার ভুল বলে মনে হয়, তারপর দুইটা program-ই চালিয়ে দেখুন।</Task>
@@ -430,7 +430,7 @@ export function OneChange() {
   const k = s.k;
 
   return (
-    <Scene scene={s} caption={k < 4 ? X1_SAY[k] : <span className={FADE}>হিসাব দুই জায়গাতেই নিখুঁত। তবু যমজ দুই রকম।</span>}>
+    <Scene scene={s} caption={k < 4 ? X1_SAY[k] : <span className={FADE}>হিসাব দুই জায়গাতেই নিখুঁত। তবু twin দুই রকম।</span>}>
       <div className={`grid grid-cols-2 gap-2 transition-opacity duration-500 motion-reduce:transition-none ${k >= 1 ? "" : "opacity-0"}`}>
         {X1_SIDES.map((side, si) => {
           const hot = si === 1 && k >= 3;
@@ -458,7 +458,7 @@ export function OneChange() {
               <div className="mt-0.5 h-5 text-center text-sm">
                 {k >= 4 && (
                   <span className={FADE}>
-                    যমজ <b className={si === 0 ? "text-cat-teal" : "text-cat-coral"}>{side.twin}</b>
+                    Twin <b className={si === 0 ? "text-cat-teal" : "text-cat-coral"}>{side.twin}</b>
                   </span>
                 )}
               </div>
@@ -511,7 +511,7 @@ export function GramStretch() {
         ) : k === 2 ? (
           "এবার শুধু ওজনের ঘরটা 1000 দিয়ে গুণ, মানে kg থেকে gram। কাগজটা খাড়া দিকে টানা হচ্ছে।"
         ) : (
-          <span className={FADE}>C চলে গেল 10,000 দূরে, আর B মাত্র 1,000। মানুষ একই, অথচ যমজ এখন B।</span>
+          <span className={FADE}>C চলে গেল 10,000 দূরে, আর B মাত্র 1,000। মানুষ একই, অথচ twin এখন B।</span>
         )
       }
     >
@@ -570,8 +570,8 @@ export function GramStretch() {
 }
 
 // ---------------------------------------------------------------------------
-// 1¾ · A figure for screen 1's explanation, no task: the question the journey
-//      lives on, left open. A stands between B and C; সামিনের laptop draws a
+// 1¾ · A story scene for screen 1b's setup (it was screen 1's explanation),
+//      no task: the question the journey lives on, left open. A stands between B and C; সামিনের laptop draws a
 //      line on the ground from A to C, তানভীরের from A to B, and A is left
 //      asking which twin is real, and which laptop to believe.
 
@@ -582,7 +582,7 @@ const X1B_DESK = [
   { x: 276, name: "তানভীর", twin: "B", color: "#e11d48" },
 ];
 
-export function WhichTwin() {
+export function WhichTwin({}: Story) {
   const s = useScene(4, [600, 1500, 1600, 2000, 2400]);
   const k = s.k;
 
@@ -605,7 +605,7 @@ export function WhichTwin() {
         <S_Visitor who="C" x={X1B_AT.C} y={X1B_Y} wide={1.25} facing={-1} />
         {k >= 1 && <Draw d={`M${X1B_AT.A + 7} 166Q${(X1B_AT.A + X1B_AT.C) / 2} 181 ${X1B_AT.C - 7} 166`} ms={700} strokeWidth={2.4} className="stroke-[#0d9488]" />}
         {k >= 2 && <Draw d={`M${X1B_AT.A - 7} 166Q${(X1B_AT.A + X1B_AT.B) / 2} 181 ${X1B_AT.B + 7} 166`} ms={700} strokeWidth={2.4} className="stroke-[#e11d48]" />}
-        {k === 3 && <Bubble x={X1B_AT.A} y={X1B_Y - 66} tone="think" lines={["আমার আসল যমজ", "B, না C?"]} />}
+        {k === 3 && <Bubble x={X1B_AT.A} y={X1B_Y - 66} tone="think" lines={["আমার আসল twin", "B, না C?"]} />}
         {k >= 4 && <Bubble x={X1B_AT.A} y={X1B_Y - 66} tone="think" lines={["কোন laptop-এর কথা", "বিশ্বাস করবো?"]} />}
       </Stage>
     </StoryFrame>
@@ -689,12 +689,10 @@ export function WaysToWeigh({}: Story) {
 }
 
 // ---------------------------------------------------------------------------
-// 2 · The unit dial: মণ, kg, pound, gram. Predict the twin in pounds, then turn
-//     through all four. C, C, B, B: the formula prices 1 cm like 1 of the unit.
+// 2 · The unit dial: মণ, kg, pound, gram. Turn through all four. C, C, B, B: the formula prices 1 cm like 1 of the unit.
 
 export function UnitDial() {
   const pass = useGate();
-  const [guess, setGuess] = useSeed<number | null>("guess", null);
   const [u, setU] = useSeed("u", 1);
   const [seen, setSeen] = useSeed<number[]>("seen", [1]);
   const { k, name } = UNITS[u];
@@ -706,7 +704,7 @@ export function UnitDial() {
     if (seen.includes(i)) return;
     const next = [...seen, i];
     setSeen(next);
-    if (next.length === UNITS.length) pass("মণ আর kg-তে যমজ C, অথচ pound আর gram-এ B। Formula চুপচাপ ধরে নিয়েছে উচ্চতার 1 cm আর ওজনের 1 unit সমান দামি।");
+    if (next.length === UNITS.length) pass("Unit বদলালে twin বদলায়।");
   };
 
   return (
@@ -714,27 +712,17 @@ export function UnitDial() {
       <PersonCards u={u} />
       <TwinBars dB={dB} dC={dC} />
       <div key={u} className={`${FADE} mt-2 text-center text-[0.95rem]`}>
-        এই হিসাবে উচ্চতার 1 cm পার্থক্য আর ওজনের 1 {name} পার্থক্য, দুইটার দাম সমান। যমজ <b>{dB < dC ? "B" : "C"}</b>।
+        এই হিসাবে উচ্চতার 1 cm পার্থক্য আর ওজনের 1 {name} পার্থক্য, দুইটার দাম সমান। Twin <b>{dB < dC ? "B" : "C"}</b>।
       </div>
-      <div className="mt-4 text-sm font-medium text-muted">1 kg মানে প্রায় 2.2 pound। বলুন তো, ওজন pound-এ লিখলে A-এর যমজ কে হবে?</div>
-      <div className="mt-2 grid grid-cols-2 gap-2">
-        {["B", "C"].map((o, i) => (
-          <Choice key={o} n={i} look={predictLook(i, guess, seen.includes(2), 0)} disabled={guess !== null} onClick={() => setGuess(i)}>
-            {o}
-          </Choice>
+      <div className="mt-3 flex flex-wrap justify-center gap-2">
+        {UNITS.map((x, i) => (
+          <button key={x.name} type="button" aria-pressed={u === i} onClick={() => turn(i)} className={`${pill(u === i)} font-sans`}>
+            {x.name}
+          </button>
         ))}
       </div>
-      {guess !== null && (
-        <div className={`${FADE} mt-3 flex flex-wrap justify-center gap-2`}>
-          {UNITS.map((x, i) => (
-            <button key={x.name} type="button" aria-pressed={u === i} onClick={() => turn(i)} className={`${pill(u === i)} font-sans`}>
-              {x.name}
-            </button>
-          ))}
-        </div>
-      )}
       <Ticks items={UNITS.map((x, i) => [x.name, seen.includes(i)])} />
-      <Task done={seen.length === UNITS.length}>আগে একটা guess দিন, তারপর চারটা unit-এই ওজন লিখে দেখুন যমজ কে হয়।</Task>
+      <Task done={seen.length === UNITS.length}>চারটা unit-এই ওজন লিখে দেখুন, twin কে হয়।</Task>
     </>
   );
 }
@@ -837,11 +825,11 @@ export function MarsMiss() {
     "পরিকল্পনা ছিল মঙ্গলের ওপর দিয়ে নিরাপদ উচ্চতায় যাওয়া।",
     "পরিকল্পনা ছিল মঙ্গলের ওপর দিয়ে নিরাপদ উচ্চতায় যাওয়া।",
     "কিন্তু এক দল লিখলো pound-এ, আরেক দল পড়লো metric ধরে। পথ নেমে এলো অনেক নিচে।",
-    "যানটা চললো সেই নিচু পথে, মঙ্গলের বাতাসের একদম ভেতর দিয়ে।",
+    "Spaceship-টা চললো সেই নিচু পথে, মঙ্গলের বাতাসের একদম ভেতর দিয়ে।",
   ];
 
   return (
-    <Scene scene={s} caption={k < 4 ? say[k] : <span className={FADE}>সংখ্যাগুলো ঠিকই ছিল, শুধু unit মেলেনি। যানটার আর কোনো খোঁজ পাওয়া যায়নি।</span>}>
+    <Scene scene={s} caption={k < 4 ? say[k] : <span className={FADE}>সংখ্যাগুলো ঠিকই ছিল, শুধু unit মেলেনি। Spaceship-টার আর কোনো খোঁজ পাওয়া যায়নি।</span>}>
       <svg viewBox="0 0 300 146" role="img" aria-label="Mars Climate Orbiter: the planned path passes high over Mars, the real one dips into its air and the craft is lost" className="mx-auto block h-auto w-full max-w-[16rem]">
         <rect x={0} y={0} width={300} height={146} rx={10} strokeWidth={1} className="fill-[#0f1b2d] stroke-[#334155]" />
         {MM_STARS.map(([x, y]) => (
@@ -959,7 +947,7 @@ export function TwoCrowds() {
     setMiss(null);
     const next = picks.map((p, i) => (i === ci ? v : p));
     setPicks(next);
-    if (next.every((p, i) => p === CROWDS[i].right)) pass("একই 10 kg, এক দলে অনেক বড় ব্যাপার, আরেক দলে সামান্য। পার্থক্যটা বড় না ছোট, সেটা বোঝা যায় দলটা সাধারণত কতটা ছড়ানো তা দেখে।");
+    if (next.every((p, i) => p === CROWDS[i].right)) pass("বড় না ছোট, বোঝা যায় group-টা কতটা spread out তা দেখে।");
   };
 
   return (
@@ -1100,7 +1088,7 @@ export function DataStick() {
   const k = s.k;
 
   return (
-    <Scene scene={s} caption={k < 4 ? X3B_SAY[k] : <span className={FADE}>তা থেকেই দলের নিজের মাপকাঠি। ছড়ানো দলে লম্বা, কাছাকাছি দলে খাটো।</span>}>
+    <Scene scene={s} caption={k < 4 ? X3B_SAY[k] : <span className={FADE}>তা থেকেই দলের নিজের scale। ছড়ানো দলে লম্বা, কাছাকাছি দলে ছোট।</span>}>
       <svg viewBox="0 0 300 136" role="img" aria-label="a market's 1 kg weight is set aside; each crowd's gaps from its average fold into its own yardstick, short for class seven and long for the whole school" className="mx-auto block h-auto w-full max-w-[17.5rem]">
         <rect x={2} y={2} width={296} height={132} rx={5} strokeWidth={0.8} className="fill-white stroke-[#cbd5e1]" />
         {k >= 1 && (
@@ -1139,12 +1127,81 @@ export function DataStick() {
               <g className={POP}>
                 <rect x={x3X(r.avg)} y={r.y + 6} width={r.sd * 2.95} height={7} rx={1.5} fill="#fef3c7" stroke="#0d9488" strokeWidth={1.3} />
                 <text x={x3X(r.avg) + r.sd * 2.95 + 5} y={r.y + 13} fontSize={9.5} fontWeight={700} fill="#0d9488">
-                  মাপকাঠি
+                  scale 
                 </text>
               </g>
             )}
           </g>
         ))}
+      </svg>
+    </Scene>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 3¾ · A figure for screen 3's explanation (the classroom side quest): another
+//      class's five heights all sit within 158–162 cm, so the group's normal
+//      difference is 2–3 cm and a 170 cm newcomer lands far outside it; the
+//      same five's weights spread about 10 kg — each feature's scale comes
+//      from its own data.
+
+const x3cH = (cm: number) => 22 + (cm - 156) * 14.2; // 156…174 cm across the sheet
+const x3cW = (kg: number) => 22 + (kg - 30) * 9.15; // 30…58 kg
+const X3C_HEIGHTS = [160, 162, 161, 159, 158];
+const X3C_NEW = 170;
+const X3C_WEIGHTS = [39, 42, 45, 47, 49];
+const X3C_SAY = [
+  "মেলার সেই দল না — আরেকটা class, আরেক দল।",
+  "পাঁচজনের height: সবাই 158 থেকে 162-এর মধ্যে।",
+  "মাঝখানে 160, মানে সবারই 2–3 cm এদিক-সেদিক।",
+  "এবার নতুন কেউ 170 cm নিয়ে এলে? দলের normal range-এর বেশ দূরে।",
+];
+
+export function NewStudent() {
+  const s = useScene(4, [600, 1600, 2200, 2400, 2400]);
+  const k = s.k;
+
+  return (
+    <Scene scene={s} caption={k < 4 ? X3C_SAY[k] : <span className={FADE}>আর weight-এ ছড়ানো প্রায় 10 kg। প্রতিটা feature-এর scale তার নিজের data-ই ঠিক করবে।</span>}>
+      <svg viewBox="0 0 300 150" role="img" aria-label="another class's five heights sit within 158 to 162 cm, so a 170 cm newcomer lands far outside the 2 to 3 cm normal difference; the same five's weights spread about 10 kg" className="mx-auto block h-auto w-full max-w-[17.5rem]">
+        <rect x={2} y={2} width={296} height={146} rx={5} strokeWidth={0.8} className="fill-white stroke-[#cbd5e1]" />
+        <text x={14} y={26} fontSize={9.5} className={INK_SOFT}>
+          আরেক class-এর height (cm)
+        </text>
+        <path d="M12 52H288" strokeWidth={1} className="stroke-[#0f1b2d]/35" />
+        {k >= 1 && X3C_HEIGHTS.map((h, j) => <circle key={h} cx={x3cH(h)} cy={52} r={3} className={`${POP} fill-cat-blue`} style={{ transitionDelay: `${j * 50}ms` }} />)}
+        {k >= 2 && (
+          <g className={POP}>
+            <rect x={x3cH(158)} y={42} width={x3cH(162) - x3cH(158)} height={20} rx={2} fill="#fef3c7" stroke="#0d9488" strokeWidth={1.3} />
+            <text x={(x3cH(158) + x3cH(162)) / 2} y={72} textAnchor="middle" fontSize={9.5} fontWeight={700} fill="#0d9488" className="font-mono">
+              2–3 cm
+            </text>
+          </g>
+        )}
+        {k >= 3 && (
+          <>
+            <path d={`M${x3cH(163)} 52H${x3cH(169)}`} strokeDasharray="4 3" strokeWidth={1.2} className={`${FADE} fill-none stroke-[#e11d48]`} />
+            <circle cx={x3cH(X3C_NEW)} cy={52} r={3.6} className={`${POP} fill-[#e11d48]`} />
+            <text x={x3cH(X3C_NEW)} y={38} textAnchor="middle" fontSize={9.5} fontWeight={700} className={`${POP} fill-[#e11d48] font-mono`}>
+              170 cm
+            </text>
+          </>
+        )}
+        <text x={14} y={100} fontSize={9.5} className={INK_SOFT}>
+          একই পাঁচজনের weight (kg)
+        </text>
+        <path d="M12 126H288" strokeWidth={1} className="stroke-[#0f1b2d]/35" />
+        {k >= 4 && (
+          <>
+            {X3C_WEIGHTS.map((w, j) => (
+              <circle key={w} cx={x3cW(w)} cy={126} r={3} className={`${POP} fill-cat-blue`} style={{ transitionDelay: `${j * 50}ms` }} />
+            ))}
+            <rect x={x3cW(39)} y={116} width={x3cW(49) - x3cW(39)} height={20} rx={2} fill="#fef3c7" stroke="#0d9488" strokeWidth={1.3} />
+            <text x={x3cW(49) + 6} y={130} fontSize={9.5} fontWeight={700} fill="#0d9488" className={`${POP} font-mono`}>
+              ≈ 10 kg
+            </text>
+          </>
+        )}
       </svg>
     </Scene>
   );
@@ -1224,7 +1281,6 @@ const COLS = [
   { k: "ওজন", of: "ওজনের", unit: "kg" },
 ];
 const STAGES = ["Average বের করুন", "Average থেকে পার্থক্য", "পার্থক্যের বর্গ", "বর্গের average", "Root নিন"];
-const SPREAD_GUESS = ["প্রায় 2 cm", "প্রায় 10 cm", "প্রায় 30 cm"];
 
 function spreadOf(c: number) {
   const vals = FIVE.map((s) => s.v[c]);
@@ -1238,7 +1294,6 @@ const SPREADS = [spreadOf(0), spreadOf(1)];
 
 export function SpreadMachine() {
   const pass = useGate();
-  const [guess, setGuess] = useSeed<number | null>("guess", null);
   const [stages, setStages] = useSeed<number[]>("stages", [0, 0]);
   const col = stages[0] < 5 ? 0 : 1;
   const st = stages[col];
@@ -1248,7 +1303,7 @@ export function SpreadMachine() {
   const step = () => {
     const next = col === 0 ? [st + 1, 0] : [5, st + 1];
     setStages(next);
-    if (next[1] === 5) pass("স্বাভাবিক পার্থক্য উচ্চতায় 10 cm, আর ওজনে 12 kg। এই দুইটাই এখন আমাদের মাপকাঠি।");
+    if (next[1] === 5) pass("scale : উচ্চতায় 10 cm, ওজনে 12 kg।");
   };
 
   const cell = (c: number) => `px-2 py-0.5 ${c === col && !all ? "bg-cat-blue/10" : ""}`;
@@ -1283,7 +1338,7 @@ export function SpreadMachine() {
               </tr>
             ))}
             <tr className="border-t border-border font-sans text-xs">
-              <td className="px-2 pt-1 text-muted">মাপকাঠি</td>
+              <td className="px-2 pt-1 text-muted">scale </td>
               {COLS.map((c, i) => (
                 <td key={c.k} className="px-2 pt-1 font-mono text-sm font-bold text-cat-teal">
                   {stages[i] === 5 && (
@@ -1297,56 +1352,43 @@ export function SpreadMachine() {
           </tbody>
         </table>
       </div>
-      {guess === null ? (
-        <>
-          <div className="mt-4 text-sm font-medium text-muted">এই পাঁচজনের উচ্চতায় “স্বাভাবিক পার্থক্য” মোটামুটি কত হবে বলে মনে হয়?</div>
-          <div className="mt-2 grid grid-cols-3 gap-2">
-            {SPREAD_GUESS.map((o, i) => (
-              <Choice key={o} n={i} look={predictLook(i, guess, stages[0] === 5, 1)} disabled={false} onClick={() => setGuess(i)}>
-                {o}
-              </Choice>
-            ))}
+      <div className={FADE}>
+        {!all && (
+          <div className="mt-3 min-h-16 space-y-0.5 text-center font-mono text-[0.95rem]">
+            <div className="font-sans text-sm text-muted">এখন মেশিনে: {COLS[col].of} column</div>
+            {st >= 1 && <div className={FADE}>Average = {sh(s.avg)}</div>}
+            {st >= 4 && (
+              <div className={`${FADE} text-sm`}>
+                বর্গের average = ({s.sq.map(sh).join(" + ")}) ÷ 5 = {sh(s.meanSq)}
+              </div>
+            )}
+            {st >= 5 && (
+              <div className={`${FADE} font-bold text-cat-teal`}>
+                √{sh(s.meanSq)} = {sh(s.root)} {COLS[col].unit}
+              </div>
+            )}
           </div>
-        </>
-      ) : (
-        <div className={FADE}>
-          {!all && (
-            <div className="mt-3 min-h-16 space-y-0.5 text-center font-mono text-[0.95rem]">
-              <div className="font-sans text-sm text-muted">এখন মেশিনে: {COLS[col].of} column</div>
-              {st >= 1 && <div className={FADE}>Average = {sh(s.avg)}</div>}
-              {st >= 4 && (
-                <div className={`${FADE} text-sm`}>
-                  বর্গের average = ({s.sq.map(sh).join(" + ")}) ÷ 5 = {sh(s.meanSq)}
-                </div>
-              )}
-              {st >= 5 && (
-                <div className={`${FADE} font-bold text-cat-teal`}>
-                  √{sh(s.meanSq)} = {sh(s.root)} {COLS[col].unit}
-                </div>
-              )}
-            </div>
-          )}
-          {stages[0] === 5 && (
-            <div className={`${FADE} mt-2 text-center text-[0.95rem]`}>
-              {guess === 1 ? "আপনার আন্দাজ একদম ঠিক, 10 cm।" : "উচ্চতায় স্বাভাবিক পার্থক্য 10 cm।"} {col === 1 && st === 0 && "এবার ওজনের column-টাও একই মেশিনে দিয়ে দেখুন।"}
-            </div>
-          )}
-          {!all && (
-            <div className="mt-3 flex justify-center">
-              <button type="button" onClick={step} className={primaryBtn}>
-                {bn(st + 1)} · {STAGES[st]}
-              </button>
-            </div>
-          )}
-        </div>
-      )}
+        )}
+        {stages[0] === 5 && (
+          <div className={`${FADE} mt-2 text-center text-[0.95rem]`}>
+            উচ্চতায় স্বাভাবিক পার্থক্য 10 cm। {col === 1 && st === 0 && "এবার ওজনের column-টাও একই মেশিনে দিয়ে দেখুন।"}
+          </div>
+        )}
+        {!all && (
+          <div className="mt-3 flex justify-center">
+            <button type="button" onClick={step} className={primaryBtn}>
+              {bn(st + 1)} · {STAGES[st]}
+            </button>
+          </div>
+        )}
+      </div>
       <Ticks
         items={[
-          ["উচ্চতার মাপকাঠি", stages[0] === 5],
-          ["ওজনের মাপকাঠি", all],
+          ["উচ্চতার scale ", stages[0] === 5],
+          ["ওজনের scale ", all],
         ]}
       />
-      <Task done={all}>আগে একটা আন্দাজ দিন, তারপর উচ্চতা আর ওজন, দুইটা column-ই মেশিনে ধাপে ধাপে চালান।</Task>
+      <Task done={all}>উচ্চতা আর ওজন, দুইটা column-ই মেশিনে step by step চালান।</Task>
     </>
   );
 }
@@ -1459,8 +1501,8 @@ const X4_TOP = Math.sqrt(50000);
 const X4_SAY = [
   "Average থেকে পাঁচজনের পার্থক্য, একটা column।",
   "Average থেকে পাঁচজনের পার্থক্য, একটা column।",
-  "বর্গ, যোগ, root: এ তো এই column-এর দৈর্ঘ্য, ‖v‖।",
-  "যোগের জায়গায় average নিলে পাই মাপকাঠি, 10।",
+  "বর্গ, যোগ, root: এ তো এই column-এর length, ‖v‖।",
+  "যোগের জায়গায় average নিলে পাই scale , 10।",
 ];
 
 export function LengthVsSpread() {
@@ -1469,12 +1511,12 @@ export function LengthVsSpread() {
   const many = k >= 4;
   const [lw, sw] = useTween([k >= 2 ? Math.sqrt(many ? 50000 : 500) : 0, k >= 3 ? 10 : 0], 1300);
   const rows = [
-    { name: "দৈর্ঘ্য ‖v‖", on: k >= 2, f: many ? "√50,000 ≈ 224" : "√500 ≈ 22.4", w: lw, bar: "bg-cat-violet" },
-    { name: "মাপকাঠি", on: k >= 3, f: many ? "√(50,000 ÷ 500) = 10" : "√(500 ÷ 5) = 10", w: sw, bar: "bg-cat-teal" },
+    { name: "length ‖v‖", on: k >= 2, f: many ? "√50,000 ≈ 224" : "√500 ≈ 22.4", w: lw, bar: "bg-cat-violet" },
+    { name: "scale ", on: k >= 3, f: many ? "√(50,000 ÷ 500) = 10" : "√(500 ÷ 5) = 10", w: sw, bar: "bg-cat-teal" },
   ];
 
   return (
-    <Scene scene={s} caption={k < 4 ? X4_SAY[k] : <span className={FADE}>পাঁচশো জন হলে দৈর্ঘ্য ফুলে ওঠে 224-এ, অথচ মাপকাঠি সেই 10-ই।</span>}>
+    <Scene scene={s} caption={k < 4 ? X4_SAY[k] : <span className={FADE}>পাঁচশো জন হলে length ফুলেফেঁপে হয়ে ওঠে 224, অথচ scale  সেই 10-ই।</span>}>
       <div className="mx-auto flex max-w-sm items-center gap-4">
         <div className={`shrink-0 text-center transition-opacity duration-500 motion-reduce:transition-none ${k >= 1 ? "" : "opacity-0"}`}>
           <div className="rounded-md border-x-2 border-foreground/50 px-2 font-mono text-sm leading-5">
@@ -1529,7 +1571,7 @@ export function TwoSticks() {
           X4B_SAY[k]
         ) : (
           <span className={FADE}>
-            এই মাপকাঠির একটা বিখ্যাত নাম আছে: <b className="text-foreground">standard deviation</b>।
+            এই scale র একটা বিখ্যাত নাম আছে: <b className="text-foreground">standard deviation</b>।
           </span>
         )
       }
@@ -1591,12 +1633,12 @@ export function BackToABC({}: Story) {
       <Stage backdrop="evening" label="two yardsticks, 10 cm and 12 kg; A, B and C walk back with their cards, and ডাক্তার আপা asks how many yardsticks each gap is">
         {k >= 1 && (
           <>
-            <S_Stick x={184} y={20} w={72} label="উচ্চতার মাপকাঠি 10 cm" color="#1d4ed8" />
-            <S_Stick x={184} y={36} w={86} label="ওজনের মাপকাঠি 12 kg" />
+            <S_Stick x={184} y={20} w={72} label="উচ্চতার scale  10 cm" color="#1d4ed8" />
+            <S_Stick x={184} y={36} w={86} label="ওজনের scale  12 kg" />
           </>
         )}
         <Person who="apa" x={S5_AT.apa} y={S5_Y} arm={k === 1 ? "wave" : k >= 4 ? "point" : "down"} mood={k >= 4 ? "puzzled" : "happy"} label />
-        {k >= 4 && <Bubble x={S5_AT.apa} y={S5_Y - 66} side="right" lines={["পার্থক্যটা কয়টা", "মাপকাঠির সমান?"]} />}
+        {k >= 4 && <Bubble x={S5_AT.apa} y={S5_Y - 66} side="right" lines={["পার্থক্যটা কয়টা", "scale র সমান?"]} />}
         <S_Visitor who="A" x={k >= 2 ? S5_AT.A : 360} y={S5_Y} facing={-1} walking={k === 2} hold={k >= 3} />
         <S_Visitor who="B" x={k >= 2 ? S5_AT.B : 400} y={S5_Y} tall={1.1} facing={-1} walking={k === 2} hold={k >= 3} />
         <S_Visitor who="C" x={k >= 2 ? S5_AT.C : 440} y={S5_Y} wide={1.25} facing={-1} walking={k === 2} hold={k >= 3} />
@@ -1647,16 +1689,25 @@ export function Yardstick() {
   };
   const measure = () => {
     setMeasured(true);
-    pass("B-এর উচ্চতার পার্থক্য প্রায় দুই মাপকাঠি, C-এর ওজনের পার্থক্য এক মাপকাঠিরও কম। তাই যমজ C, 0.84 বনাম 1.80।");
+    pass("scale এ মাপলে twin C।");
   };
 
   return (
     <>
-      <div className="mx-auto mt-4 flex max-w-sm justify-center gap-2 text-sm">
-        <span className="rounded-full bg-cat-teal/10 px-3 py-1 text-cat-teal">উচ্চতার মাপকাঠি 10 cm</span>
-        <span className="rounded-full bg-cat-teal/10 px-3 py-1 text-cat-teal">ওজনের মাপকাঠি 12 kg</span>
+      <div className="mx-auto mt-4 grid max-w-sm grid-cols-3 gap-2">
+        {PEOPLE.map(({ n, v: [h, w] }) => (
+          <div key={n} className="rounded-xl border border-border px-2 py-1.5 text-center">
+            <span className="text-sm font-semibold">{n}</span>
+            <span className="mt-0.5 block font-mono text-xs leading-tight text-muted">{h} cm</span>
+            <span className="block font-mono text-xs leading-tight text-muted">{w} kg</span>
+          </div>
+        ))}
       </div>
-      <div className="mt-4 text-sm font-medium text-muted">প্রতিটা পার্থক্য নিজের মাপকাঠিতে মাপলে A-এর যমজ কে হবে?</div>
+      <div className="mx-auto mt-2 flex max-w-sm justify-center gap-2 text-sm">
+        <span className="rounded-full bg-cat-teal/10 px-3 py-1 text-cat-teal">উচ্চতার scale  10 cm</span>
+        <span className="rounded-full bg-cat-teal/10 px-3 py-1 text-cat-teal">ওজনের scale  12 kg</span>
+      </div>
+      <div className="mt-4 text-sm font-medium text-muted">প্রতিটা পার্থক্য নিজের scale এ মাপলে A-এর twin কে হবে?</div>
       <div className="mt-2 grid grid-cols-2 gap-2">
         {["B", "C"].map((o, i) => (
           <Choice key={o} n={i} look={predictLook(i, guess, measured, 1)} disabled={guess !== null} onClick={() => setGuess(i)}>
@@ -1696,7 +1747,7 @@ export function Yardstick() {
                             <YardBar x={gap / YARD[i]} />
                           </span>
                         ) : (
-                          <span className="block text-xs text-cat-blue">মাপকাঠিতে মাপুন</span>
+                          <span className="block text-xs text-cat-blue">scale এ মাপুন</span>
                         )}
                       </button>
                     );
@@ -1721,10 +1772,10 @@ export function Yardstick() {
       )}
       {measured && guess !== null && (
         <div className={`${FADE} mt-3 text-center text-[0.95rem]`}>
-          {guess === 1 ? "ঠিক ধরেছেন, যমজ C।" : "উঁহু, এবার যমজ C। B-এর 18 cm শুনতে ছোট, কিন্তু উচ্চতার মাপকাঠিতে সেটা প্রায় দুই ধাপ।"} আর খেয়াল করেছেন, এই সংখ্যাগুলোর পাশে কোনো unit নাই?
+          {guess === 1 ? "ঠিক ধরেছেন, twin C।" : "উঁহু, এবার twin C। B-এর 18 cm শুনতে ছোট, কিন্তু উচ্চতার scale এ সেটা প্রায় দুই ধাপ।"} আর খেয়াল করেছেন, এই সংখ্যাগুলোর পাশে কোনো unit নাই?
         </div>
       )}
-      <Task done={measured}>আগে একটা guess দিন। তারপর চারটা পার্থক্যই মাপকাঠিতে মেপে দূরত্ব বের করুন।</Task>
+      <Task done={measured}>আগে একটা guess করুন। তারপর চারটা পার্থক্যই scale এ মেপে দূরত্ব বের করুন।</Task>
     </>
   );
 }
@@ -1744,8 +1795,8 @@ const X5_ROWS = [
 const X5_SAY = [
   "18 cm শুনতে তেমন কিছু না, আর 10 kg শুনতে বড়।",
   "18 cm শুনতে তেমন কিছু না, আর 10 kg শুনতে বড়।",
-  "উচ্চতার মাপকাঠি 10 cm। B-এর 18 cm প্রায় দুই ধাপ।",
-  "ওজনের মাপকাঠি 12 kg। C-এর 10 kg এক ধাপও না।",
+  "উচ্চতার scale  10 cm। B-এর 18 cm প্রায় দুই ধাপ।",
+  "ওজনের scale  12 kg। C-এর 10 kg এক ধাপও না।",
 ];
 
 export function StickSteps() {
@@ -1753,7 +1804,7 @@ export function StickSteps() {
   const k = s.k;
 
   return (
-    <Scene scene={s} caption={k < 4 ? X5_SAY[k] : <span className={FADE}>B সত্যিই অনেকটা লম্বা, C তেমন ভারী না। তাই যমজ C।</span>}>
+    <Scene scene={s} caption={k < 4 ? X5_SAY[k] : <span className={FADE}>B সত্যিই অনেকটা লম্বা, C তেমন ভারী না। তাই twin C।</span>}>
       <svg viewBox="0 0 300 118" role="img" aria-label="B's 18 cm gap is nearly two 10 cm yardsticks, C's 10 kg gap is less than one 12 kg yardstick" className="mx-auto block h-auto w-full max-w-[17.5rem]">
         <rect x={2} y={2} width={296} height={114} rx={5} strokeWidth={0.8} className="fill-white stroke-[#cbd5e1]" />
         {X5_ROWS.map((r) => {
@@ -1818,77 +1869,84 @@ export function TanvirGrams({}: Story) {
         </g>
         {k >= 3 && <Bubble x={S6_AT} y={S6_Y - 66} lines={["আমি gram-এই", "লিখবো!"]} />}
         {k >= 4 && <S_Dial x={264} y={64} r={22} at={k >= 5 ? 3 : 1} />}
-        {k >= 5 && <S_Stick x={222} y={128} w={80} label="মাপকাঠি" anchor="above" />}
+        {k >= 5 && <S_Stick x={222} y={128} w={80} label="scale " anchor="above" />}
       </Stage>
     </StoryFrame>
   );
 }
 
 // ---------------------------------------------------------------------------
-// 6 · The unit dial again, now with two readouts. Raw distances flip their
-//     twin; distances in yardsticks don't move at all, in any unit.
-
-const CANCEL_GUESS = ["একই থাকবে", "1000 গুণ বড় হবে", "যমজ আবার B হয়ে যাবে"];
+// 6 · The unit dial again, now with three readouts. Raw distances flip their
+//     twin; the gap and the scale roll into the new unit's numbers while
+//     their bars hold the same 10:12 shape; distances in yardsticks don't
+//     move at all, in any unit.
 
 export function UnitsCancel() {
   const pass = useGate();
-  const [guess, setGuess] = useSeed<number | null>("guess", null);
   const [u, setU] = useSeed("u", 1);
   const [seen, setSeen] = useSeed<number[]>("seen", [1]);
   const { k, name } = UNITS[u];
   const rB = rawD(B, k);
   const rC = rawD(C, k);
   const all = seen.length === UNITS.length;
+  // the gap and the scale glide into the new unit's numbers when it's turned
+  const [gapN, scaleN] = useTween([10 * k, 12 * k], 700);
+  const fmtU = (n: number) => (n >= 1000 ? Math.round(n).toLocaleString("en-US") : n.toFixed(UNITS[u].dec));
 
   const turn = (i: number) => {
     setU(i);
     if (seen.includes(i)) return;
     const next = [...seen, i];
     setSeen(next);
-    if (next.length === UNITS.length) pass("Unit যা-ই হোক, মাপকাঠির দূরত্ব এক চুলও নড়লো না। gram ÷ gram করলে gram কেটে যায়, পড়ে থাকে শুধু একটা সংখ্যা।");
+    if (next.length === UNITS.length) pass("scale এ মাপলে unit কেটে যায়।");
   };
 
   return (
     <>
       <div className="mt-4 grid grid-cols-2 gap-2">
         <div className="rounded-2xl border border-border px-2 py-2.5">
-          <div className="text-center text-sm font-semibold">কাঁচা দূরত্ব</div>
+          <div className="text-center text-sm font-semibold">Distance</div>
           <TwinBars dB={rB} dC={rC} />
           <div key={u} className={`${FADE} mt-1 text-center text-sm`}>
-            যমজ <b>{rB < rC ? "B" : "C"}</b>
+            Twin <b>{rB < rC ? "B" : "C"}</b>
           </div>
         </div>
         <div className="rounded-2xl border-2 border-cat-teal/40 px-2 py-2.5">
-          <div className="text-center text-sm font-semibold text-cat-teal">মাপকাঠিতে দূরত্ব</div>
+          <div className="text-center text-sm font-semibold text-cat-teal">scale এ দূরত্ব</div>
           <TwinBars dB={yardD(B)} dC={yardD(C)} />
           <div className="mt-1 text-center text-sm">
-            যমজ <b>C</b>
+            Twin <b>C</b>
           </div>
         </div>
       </div>
-      <div key={`y${u}`} className={`${FADE} mt-3 text-center font-mono text-[0.95rem]`}>
-        <div className="font-sans text-sm text-muted">ওজনের মাপকাঠিও এখন {name}-এ: {inUnit(12, u)} {name}</div>
-        C-এর ওজনের পার্থক্য {inUnit(10, u)} ÷ {inUnit(12, u)} ≈ <b className="text-cat-teal">0.83</b>
+      <div className="mt-3 rounded-2xl border border-border px-3 py-2">
+        <div className="grid grid-cols-[auto_1fr_auto] items-center gap-x-2 gap-y-2">
+          {/* the bars hold this 10:12 shape in every unit — only the numbers roll */}
+          <span className="text-xs text-muted">C-এর পার্থক্য</span>
+          <span className="relative block h-2.5 overflow-hidden rounded-full bg-foreground/5">
+            <span className="absolute inset-y-0 left-0 w-[83%] rounded-full bg-cat-blue" />
+          </span>
+          <span className="w-24 text-right text-xs">
+            <span className="font-mono">{fmtU(gapN)}</span> <span className="text-muted">{name}</span>
+          </span>
+          <span className="text-xs text-muted">ওজনের scale</span>
+          <span className="relative block h-2.5 overflow-hidden rounded-full bg-foreground/5">
+            <span className="absolute inset-y-0 left-0 w-full rounded-full bg-cat-teal" />
+          </span>
+          <span className="w-24 text-right text-xs">
+            <span className="font-mono">{fmtU(scaleN)}</span> <span className="text-muted">{name}</span>
+          </span>
+        </div>
       </div>
-      <div className="mt-4 text-sm font-medium text-muted">বলুন তো, ওজন gram-এ লিখলে মাপকাঠিতে মাপা দূরত্বটার কী হবে?</div>
-      <div className="mt-2 grid gap-2">
-        {CANCEL_GUESS.map((o, i) => (
-          <Choice key={o} n={i} look={predictLook(i, guess, seen.includes(3), 0)} disabled={guess !== null} onClick={() => setGuess(i)}>
-            {o}
-          </Choice>
+      <div className="mt-3 flex flex-wrap justify-center gap-2">
+        {UNITS.map((x, i) => (
+          <button key={x.name} type="button" aria-pressed={u === i} onClick={() => turn(i)} className={`${pill(u === i)} font-sans`}>
+            {x.name}
+          </button>
         ))}
       </div>
-      {guess !== null && (
-        <div className={`${FADE} mt-3 flex flex-wrap justify-center gap-2`}>
-          {UNITS.map((x, i) => (
-            <button key={x.name} type="button" aria-pressed={u === i} onClick={() => turn(i)} className={`${pill(u === i)} font-sans`}>
-              {x.name}
-            </button>
-          ))}
-        </div>
-      )}
       <Ticks items={UNITS.map((x, i) => [x.name, seen.includes(i)])} />
-      <Task done={all}>আগে একটা guess দিন, তারপর চারটা unit-ই ঘুরিয়ে দুই পাশের দূরত্ব মিলিয়ে দেখুন।</Task>
+      <Task done={all}>চারটা unit-ই ঘুরিয়ে দুই পাশের দূরত্ব মিলিয়ে দেখুন।</Task>
     </>
   );
 }
@@ -1949,7 +2007,7 @@ export function EveryUnit() {
       <div className="mt-3 flex items-center justify-center gap-3">
         <div className="grid gap-5 text-right text-xs text-muted">
           <span>C-এর পার্থক্য</span>
-          <span>মাপকাঠি</span>
+          <span>scale </span>
         </div>
         <div key={i} className={`${FADE} grid justify-items-center`}>
           <div className="whitespace-nowrap">
@@ -2004,7 +2062,7 @@ export function SameTwinNow() {
         <text x={280} y={X6_Y + 11} textAnchor="middle" fontSize={8.5} fontWeight={700} fill={S_INK}>
           তানভীর
         </text>
-        {k >= 4 && <Bubble x={280} y={X6_Y - 66} side="left" lines={["gram-এও এবার", "যমজ C!"]} />}
+        {k >= 4 && <Bubble x={280} y={X6_Y - 66} side="left" lines={["gram-এও এবার", "twin C!"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -2037,7 +2095,7 @@ export function ZScore() {
     }
     setMiss(null);
     setPlaced(placed + 1);
-    if (placed + 1 === ZKIDS.length) pass("আগে average বিয়োগ, তারপর মাপকাঠি দিয়ে ভাগ। নতুন সংখ্যাটা বলে দেয়, কে average থেকে কয় মাপকাঠি উপরে বা নিচে আছে।");
+    if (placed + 1 === ZKIDS.length) pass("Average বিয়োগ, তারপর scale এ ভাগ।");
   };
 
   return (
@@ -2068,7 +2126,7 @@ export function ZScore() {
               key={z}
               type="button"
               disabled={all}
-              aria-label={`${sh(z)} মাপকাঠি`}
+              aria-label={`${sh(z)} scale `}
               onClick={() => tap(z)}
               className={`h-9 cursor-pointer rounded-md border font-mono text-[0.6rem] transition-colors motion-reduce:transition-none disabled:cursor-default ${
                 miss?.z === z ? "border-danger/50 bg-danger/5 text-danger" : z === 0 ? "border-cat-violet/50 text-cat-violet" : "border-border hover:border-cat-blue/60"
@@ -2078,13 +2136,13 @@ export function ZScore() {
             </button>
           ))}
         </div>
-        <div className="mt-1 text-right text-xs text-muted">Average থেকে কয় মাপকাঠি</div>
+        <div className="mt-1 text-right text-xs text-muted">Average থেকে কয় scale </div>
       </div>
       <div className="mt-3 min-h-14 text-center text-[0.95rem]">
         {!all ? (
           <>
             <div>
-              <b>{kid.n}</b>, উচ্চতা <span className="font-mono">{kid.h}</span> cm। এদিকে average 170 cm, আর মাপকাঠি 10 cm। নিচের ruler-এ {kid.n} কোথায় গিয়ে বসবে?
+              <b>{kid.n}</b>, উচ্চতা <span className="font-mono">{kid.h}</span> cm। এদিকে average 170 cm, আর scale  10 cm। নিচের ruler-এ {kid.n} কোথায় গিয়ে বসবে?
             </div>
             {miss && (
               <Nope key={miss.n}>
@@ -2132,7 +2190,7 @@ export function ZRelabel() {
   const sx = scZx(155);
 
   return (
-    <Scene scene={s} caption={k < 3 ? SC_ZSAY[k] : <span className={FADE}>তারপর 10 দিয়ে ভাগ। প্রতিটা ঘর এখন এক মাপকাঠি, আর সামিন −1.5।</span>}>
+    <Scene scene={s} caption={k < 3 ? SC_ZSAY[k] : <span className={FADE}>তারপর 10 দিয়ে ভাগ। প্রতিটা ঘর এখন এক scale , আর সামিন −1.5।</span>}>
       <svg viewBox="0 0 280 100" role="img" aria-label="The cm ruler and a second ruler under it, relabelled: minus 170, then divided by 10; সামিন at 155 becomes −1.5" className="mx-auto block h-auto w-full max-w-[17rem]">
         <rect x={4} y={4} width={272} height={92} rx={3} strokeWidth={0.8} className="fill-white stroke-[#cbd5e1]" />
         {[
@@ -2216,8 +2274,8 @@ const X7_COLS = [
 const X7_SAY = [
   "X মানে সেই পাঁচজনের table, দুইটা column।",
   "X মানে সেই পাঁচজনের table, দুইটা column।",
-  "ভেতরে প্রথমে উচ্চতার column: average 170 বিয়োগ, তারপর মাপকাঠি 10 দিয়ে ভাগ।",
-  "তারপর ওজনের column: নিজের average 70, নিজের মাপকাঠি 12।",
+  "ভেতরে প্রথমে উচ্চতার column: average 170 বিয়োগ, তারপর scale  10 দিয়ে ভাগ।",
+  "তারপর ওজনের column: নিজের average 70, নিজের scale  12।",
 ];
 
 export function OneLine() {
@@ -2225,7 +2283,7 @@ export function OneLine() {
   const k = s.k;
 
   return (
-    <Scene scene={s} caption={k < 4 ? X7_SAY[k] : <span className={FADE}>দুইটা column এখন একই ভাষায় কথা বলে: average থেকে কয় ধাপ।</span>}>
+    <Scene scene={s} caption={k < 4 ? X7_SAY[k] : <span className={FADE}>দুইটা column এখন একই ভাষায় কথা বলে: average থেকে কয় step।</span>}>
       <div className="mx-auto w-fit rounded-lg px-2.5 py-1 font-mono text-xs" style={{ backgroundColor: "#0f172a", color: "#86efac" }}>
         StandardScaler().fit_transform(X)
       </div>
@@ -2282,10 +2340,10 @@ export function DataFrom({}: Story) {
     <StoryFrame scene={s}>
       <Stage backdrop="evening" label="A says his real twin is C; ডাক্তার আপা says wait, the yardstick came from these five; they leave and a different crowd stands there: what if the data were different?">
         <S_Visitor who="A" x={36} y={S8_Y} mood={k === 1 ? "happy" : k >= 6 ? "puzzled" : "plain"} />
-        {k === 1 && <Bubble x={36} y={S8_Y - 66} side="right" lines={["যাক! আমার আসল", "যমজ তাহলে C!"]} />}
+        {k === 1 && <Bubble x={36} y={S8_Y - 66} side="right" lines={["যাক! আমার আসল", "twin তাহলে C!"]} />}
         <Person who="apa" x={104} y={S8_Y} arm={k === 2 ? "wave" : k === 4 || k >= 6 ? "point" : "down"} mood={k >= 6 ? "puzzled" : "plain"} label />
         {k === 2 && <Bubble x={104} y={S8_Y - 66} lines={["একটু দাঁড়ান।"]} />}
-        {k === 4 && <Bubble x={104} y={S8_Y - 66} lines={["মাপকাঠি এসেছে", "এই পাঁচজনের data থেকে"]} />}
+        {k === 4 && <Bubble x={104} y={S8_Y - 66} lines={["scale  এসেছে", "এই পাঁচজনের data থেকে"]} />}
         {k >= 6 && <Bubble x={104} y={S8_Y - 66} tone="think" lines={["Data অন্য রকম হলে?"]} />}
         {S8_KIDS.map((c, i) => (
           <Person
@@ -2339,15 +2397,15 @@ export function NotTheTruth() {
     if (visited.includes(v)) return;
     const next = [...visited, v];
     setVisited(next);
-    if (next.includes(5.5) && next.includes(6) && !flip) pass("ওজনের মাপকাঠি 6 kg থেকে 5.5 kg-এ নামতেই যমজ C থেকে B হয়ে গেল। মানুষ তো একই আছে, বদলেছে শুধু দলটা কতটা ছড়ানো।");
+    if (next.includes(5.5) && next.includes(6) && !flip) pass("দল বদলালে scale , তাই twin-ও বদলায়।");
   };
 
   return (
     <>
       <Speech who="ডাক্তার আপা" initial="ডা" tint="teal">
-        পাশের স্কুলের stall-এ কিন্তু সবার ওজন খুব কাছাকাছি। ওদের ওজনের মাপকাঠি মাত্র 5 kg।
+        পাশের স্কুলের stall-এ কিন্তু সবার ওজন খুব কাছাকাছি। ওদের ওজনের scale  মাত্র 5 kg।
       </Speech>
-      <div className="mt-4 text-sm font-medium text-muted">ওজনের মাপকাঠি 5 kg হলে A-এর যমজ কে হবে?</div>
+      <div className="mt-4 text-sm font-medium text-muted">ওজনের scale  5 kg হলে A-এর twin কে হবে?</div>
       <div className="mt-2 grid grid-cols-2 gap-2">
         {["B", "C"].map((o, i) => (
           <Choice key={o} n={i} look={predictLook(i, guess, sawB, 0)} disabled={guess !== null} onClick={() => setGuess(i)}>
@@ -2362,32 +2420,32 @@ export function NotTheTruth() {
             C-এর ওজনের পার্থক্য 10 ÷ {sh(yw)} ≈ {sh(10 / yw)}
           </div>
           <label className="mx-auto mt-3 flex max-w-sm items-center gap-3">
-            <span className="shrink-0 text-sm text-muted">ওজনের মাপকাঠি</span>
+            <span className="shrink-0 text-sm text-muted">ওজনের scale </span>
             <input
               type="range"
               min={3}
               max={20}
               step={0.5}
               value={yw}
-              aria-label="ওজনের মাপকাঠি, kg"
+              aria-label="ওজনের scale , kg"
               onChange={(e) => slide(Number(e.target.value))}
               className="h-6 min-w-0 flex-1 cursor-pointer accent-[var(--cat-blue)]"
             />
             <b className="shrink-0 font-mono whitespace-nowrap">{sh(yw)} kg</b>
           </label>
           <div key={dB < dC ? "b" : "c"} className={`${FADE} mt-2 text-center text-[0.95rem]`}>
-            যমজ <b className="text-cat-teal">{dB < dC ? "B" : "C"}</b>
+            Twin <b className="text-cat-teal">{dB < dC ? "B" : "C"}</b>
             {flip ? "। বদলানোর জায়গাটা খুঁজে পেয়েছেন!" : sawB ? "। এবার ঠিক কোথায় গিয়ে বদলায়, সেটা খুঁজে বের করুন।" : ""}
           </div>
         </div>
       )}
       <Ticks
         items={[
-          ["যমজ B হলো", sawB],
+          ["Twin B হলো", sawB],
           ["বদলানোর জায়গা", flip],
         ]}
       />
-      <Task done={flip}>আগে একটা guess দিন। তারপর slider সরিয়ে খুঁজুন, মাপকাঠি ঠিক কোথায় পৌঁছালে যমজ বদলে যায়।</Task>
+      <Task done={flip}>আগে একটা guess করুন। তারপর slider সরিয়ে খুঁজুন, scale  ঠিক কোথায় পৌঁছালে twin বদলে যায়।</Task>
     </>
   );
 }
@@ -2405,10 +2463,10 @@ const X8_SCHOOLS = [
   { name: "পাশের স্কুল", w: [63, 66, 70, 74, 77], sd: 5, n: 2, sum: "10 ÷ 5 = 2", twin: "B", on: 3 },
 ];
 const X8_SAY = [
-  "আমাদের স্কুলে ওজন অনেকটা ছড়ানো, মাপকাঠি 12 kg।",
-  "আমাদের স্কুলে ওজন অনেকটা ছড়ানো, মাপকাঠি 12 kg।",
-  "C-এর 10 kg সেখানে এক ধাপও না। যমজ C।",
-  "পাশের স্কুলে সবার ওজন কাছাকাছি, মাপকাঠি মাত্র 5 kg।",
+  "আমাদের স্কুলে ওজন অনেকটা ছড়ানো, scale  12 kg।",
+  "আমাদের স্কুলে ওজন অনেকটা ছড়ানো, scale  12 kg।",
+  "C-এর 10 kg সেখানে এক ধাপও না। Twin C।",
+  "পাশের স্কুলে সবার ওজন কাছাকাছি, scale  মাত্র 5 kg।",
 ];
 
 export function TwoSchools() {
@@ -2416,7 +2474,7 @@ export function TwoSchools() {
   const k = s.k;
 
   return (
-    <Scene scene={s} caption={k < 4 ? X8_SAY[k] : <span className={FADE}>সেখানে একই 10 kg পুরো দুই ধাপ, সত্যিই অস্বাভাবিক। যমজ B। দুইটাই ঠিক।</span>}>
+    <Scene scene={s} caption={k < 4 ? X8_SAY[k] : <span className={FADE}>সেখানে একই 10 kg পুরো দুই ধাপ, সত্যিই অস্বাভাবিক। Twin B। দুইটাই ঠিক।</span>}>
       <div className="grid grid-cols-2 gap-2">
         {X8_SCHOOLS.map((sc) => {
           const shown = k >= sc.on;
@@ -2424,7 +2482,7 @@ export function TwoSchools() {
           return (
             <div key={sc.name} className={`rounded-xl border border-border px-1.5 py-1.5 text-center transition-opacity duration-500 motion-reduce:transition-none ${shown ? "" : "opacity-0"}`}>
               <div className="text-xs text-muted">
-                {sc.name}, মাপকাঠি <span className="font-mono">{sc.sd} kg</span>
+                {sc.name}, scale  <span className="font-mono">{sc.sd} kg</span>
               </div>
               <svg viewBox="0 0 150 62" aria-hidden="true" className="mt-1 block h-auto w-full">
                 <rect x={1} y={1} width={148} height={60} rx={4} strokeWidth={0.8} className="fill-white stroke-[#cbd5e1]" />
@@ -2461,7 +2519,7 @@ export function TwoSchools() {
                   <span className={FADE}>
                     <span className="font-mono">{sc.sum}</span> ধাপ
                     <br />
-                    যমজ <b className="text-cat-teal">{sc.twin}</b>
+                    Twin <b className="text-cat-teal">{sc.twin}</b>
                   </span>
                 )}
               </div>
@@ -2494,7 +2552,7 @@ export function ApaWeight() {
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="fair" label="ডাক্তার আপা beside a balance with a step of height on one pan and a step of weight on the other; she adds a weight to the weight pan and the beam tips on purpose">
-        <Stall x={38} y={X8B_Y} w={60} sign="যমজ" color="#0d9488" />
+        <Stall x={38} y={X8B_Y} w={60} sign="twin" color="#0d9488" />
         <rect x={X8B_P.x - 14} y={X8B_Y - 4} width={28} height={4} rx={1} fill="#78350f" />
         <path d={`M${X8B_P.x} ${X8B_Y - 2}V${X8B_P.y}`} stroke="#78350f" strokeWidth={4} />
         <g style={{ transform: `rotate(${tilt}deg)`, transformOrigin: `${X8B_P.x}px ${X8B_P.y}px` }} className={swing}>
@@ -2540,7 +2598,7 @@ export function ApaWeight() {
 const X8C_SAY = [
   "Machine-এর উত্তর বিশ্বাস করবো কোন ভরসায়? Machine-এ ঢোকে data…",
   "Machine-এর উত্তর বিশ্বাস করবো কোন ভরসায়? Machine-এ ঢোকে data…",
-  "…আর সাথে ঢোকে আমাদের বেছে নেওয়া মাপকাঠি।",
+  "…আর সাথে ঢোকে আমাদের বেছে নেওয়া scale ।",
   "উত্তরটা এই দুইটা মিলে, শুধু data-র না।",
 ];
 
@@ -2549,7 +2607,7 @@ export function TrustAnswer() {
   const k = s.k;
 
   return (
-    <Scene scene={s} caption={k < 4 ? X8C_SAY[k] : <span className={FADE}>তাই বিশ্বাস করার আগে দেখুন, উত্তরটা কোন মাপকাঠিতে মাপা।</span>}>
+    <Scene scene={s} caption={k < 4 ? X8C_SAY[k] : <span className={FADE}>তাই বিশ্বাস করার আগে দেখুন, উত্তরটা কোন scale এ মাপা।</span>}>
       <svg viewBox="0 0 300 110" role="img" aria-label="the data and a chosen yardstick go into the machine; out comes twin C, labelled with the 12 kg yardstick it was measured with" className="mx-auto block h-auto w-full max-w-[17.5rem]">
         <rect x={2} y={2} width={296} height={106} rx={5} strokeWidth={0.8} className="fill-white stroke-[#cbd5e1]" />
         <g className={`transition-opacity duration-500 motion-reduce:transition-none ${k >= 1 ? "" : "opacity-0"}`}>
@@ -2564,7 +2622,7 @@ export function TrustAnswer() {
         {k >= 1 && <Draw d="M80 35H114M109 31.5L114 35L109 38.5" ms={500} strokeWidth={1.6} className="stroke-[#0f1b2d]" />}
         {k >= 2 && (
           <>
-            <S_Stick x={20} y={88} w={56} label="মাপকাঠি 12 kg" anchor="above" />
+            <S_Stick x={20} y={88} w={56} label="scale  12 kg" anchor="above" />
             <Draw d="M78 88Q100 88 114 76M108.5 76.5L114 76L112.5 81.5" ms={500} strokeWidth={1.6} className="stroke-[#0d9488]" />
           </>
         )}
@@ -2576,13 +2634,13 @@ export function TrustAnswer() {
         {k >= 3 && (
           <>
             <text x={151} y={48} textAnchor="middle" fontSize={8} fontWeight={700} fill="#86efac" className={`${FADE} font-mono`}>
-              twin = C
+              Twin = C
             </text>
             <Draw d="M188 45H206M201 41.5L206 45L201 48.5" ms={400} strokeWidth={1.6} className="stroke-[#0f1b2d]" />
             <g className={POP}>
               <rect x={210} y={32} width={76} height={26} rx={4} fill="white" stroke="#0d9488" strokeWidth={1.6} />
               <text x={248} y={49} textAnchor="middle" fontSize={11} fontWeight={800} fill="#0d9488">
-                যমজ C
+                Twin C
               </text>
             </g>
           </>
@@ -2592,7 +2650,7 @@ export function TrustAnswer() {
             <path d="M248 58V68" stroke="#0d9488" strokeWidth={1.2} strokeDasharray="2 2" />
             <rect x={204} y={68} width={88} height={18} rx={9} fill="#0d9488" />
             <text x={248} y={80.5} textAnchor="middle" fontSize={8.5} fontWeight={700} fill="white">
-              12 kg মাপকাঠিতে
+              12 kg scale তে
             </text>
           </g>
         )}
@@ -2618,7 +2676,7 @@ export function OneWordTwoStalls({}: Story) {
     <StoryFrame scene={s}>
       <Stage backdrop="fair" label="মামা at the video stall with Titanic's card and ডাক্তার আপা at the twin stall with a yardstick; both get the word normalise, and between them a question: the same?">
         <Stall x={50} y={S9_Y} w={86} sign="ভিডিও" color="#7c3aed" />
-        <Stall x={270} y={S9_Y} w={86} sign="যমজ" color="#0d9488" />
+        <Stall x={270} y={S9_Y} w={86} sign="twin" color="#0d9488" />
         <Person who="mama" x={112} y={S9_Y} arm={k >= 1 ? "hold" : "down"} mood="happy" label />
         {k >= 1 && (
           <>
@@ -2630,7 +2688,7 @@ export function OneWordTwoStalls({}: Story) {
         )}
         {k >= 2 && <S_Tag x={112} y={48} text="normalise" />}
         <Person who="apa" x={208} y={S9_Y} facing={-1} arm={k >= 3 ? "hold" : "down"} mood="happy" label />
-        {k >= 3 && <S_Stick x={186} y={S9_Y - 73} w={44} label="মাপকাঠি" anchor="above" />}
+        {k >= 3 && <S_Stick x={186} y={S9_Y - 73} w={44} label="scale " anchor="above" />}
         {k >= 4 && <S_Tag x={208} y={48} text="normalise" />}
         {k >= 5 && (
           <g className={POP}>
@@ -2652,16 +2710,16 @@ export function OneWordTwoStalls({}: Story) {
 //     by its own length) or a COLUMN bin (3.7: divide by its yardstick).
 
 const SORT_CARDS = [
-  { t: "মামার জন্য ছবি বাছতে Titanic-এর বাড়তি জোর মুছে ফেলা", bin: 0 },
+  { t: "মামার জন্য ছবি বাছতে Titanic-এর extra loudness মুছে ফেলা", bin: 0 },
   { t: "ওজন gram-এ না kg-তে, সেই ঝামেলা মুছে ফেলা", bin: 1 },
-  { t: "কাজ শেষে প্রতিটা card-এর দৈর্ঘ্য 1", bin: 0 },
-  { t: "কাজ শেষে প্রতিটা feature-এর মাপকাঠি 1", bin: 1 },
-  { t: "সামিনের ক্রেতারা কে কোন জিনিসে ঝোঁকে, শুধু সেটুকু রাখা", bin: 0 },
-  { t: "যমজ খেলায় উচ্চতা আর ওজনকে সমান সুযোগ দেওয়া", bin: 1 },
+  { t: "কাজ শেষে প্রতিটা card-এর length 1", bin: 0 },
+  { t: "কাজ শেষে প্রতিটা feature-এর scale  1", bin: 1 },
+  { t: "সামিনের ক্রেতাদের কার কোণ জিনিসে ঝোঁক বেশি, সেটা রাখা", bin: 0 },
+  { t: "Twin খুঁজতে উচ্চতা আর ওজনকে সমান সুযোগ দেওয়া", bin: 1 },
 ];
 const BINS = [
-  { name: "একটা row, নিজের দৈর্ঘ্য দিয়ে ভাগ", from: "৩.৬" },
-  { name: "একটা column, তার মাপকাঠি দিয়ে ভাগ", from: "৩.৭" },
+  { name: "একটা row, নিজের length দিয়ে ভাগ", from: "৩.৬" },
+  { name: "একটা column, তার scale  দিয়ে ভাগ", from: "৩.৭" },
 ];
 
 /** a 3 × 2 table glyph with one row or one column lit */
@@ -2692,7 +2750,7 @@ export function TwoNormalises() {
     }
     setMiss(null);
     setDone(done + 1);
-    if (done + 1 === SORT_CARDS.length) pass("একই “normalise” শব্দ, অথচ কাজ দুই রকম। Row-কে তার দৈর্ঘ্য দিয়ে ভাগ করলে থাকে শুধু দিক, আর column-কে তার মাপকাঠি দিয়ে ভাগ করলে মুছে যায় unit।");
+    if (done + 1 === SORT_CARDS.length) pass("Row-এ মোছে length, column-এ মোছে unit।");
   };
 
   return (
@@ -2703,7 +2761,7 @@ export function TwoNormalises() {
             {card.t}
           </div>
         ) : (
-          <div className={`${FADE} text-center text-[0.95rem] text-accent-text`}>ছয়টা card-ই ঠিক বাক্সে!</div>
+          <div className={`${FADE} text-center text-[0.95rem] text-accent-text`}>ছয়টা card-ই ঠিক box এ !</div>
         )}
         {miss !== null && !all && (
           <Nope key={miss}>উঁহু। একটু ভাবুন, এখানে ভাগ হচ্ছে কী? একজন মানুষ বা একটা ছবির পুরো card, নাকি সবার একটা feature?</Nope>
@@ -2726,7 +2784,7 @@ export function TwoNormalises() {
         ))}
       </div>
       <Task done={all}>
-        প্রতিটা card কোন বাক্সের কাজ, ঠিক করে tap করে পাঠিয়ে দিন ({bn(done)}/{bn(SORT_CARDS.length)})।
+        প্রতিটা card কোন box এর কাজ, ঠিক করে tap করে পাঠিয়ে দিন ({bn(done)}/{bn(SORT_CARDS.length)})।
       </Task>
     </>
   );
@@ -2743,10 +2801,10 @@ const X9_FILMS = [
   { n: "Mr. Bean", v: [1, 4], hat: "" },
 ];
 const X9_SAY = [
-  "Movie club-এ ভাগ হয়েছিল একটা row, Titanic-এর পুরো card, তার নিজের দৈর্ঘ্য দিয়ে।",
-  "Movie club-এ ভাগ হয়েছিল একটা row, Titanic-এর পুরো card, তার নিজের দৈর্ঘ্য দিয়ে।",
+  "Movie club-এ ভাগ হয়েছিল একটা row, Titanic-এর পুরো card, তার নিজের length দিয়ে।",
+  "Movie club-এ ভাগ হয়েছিল একটা row, Titanic-এর পুরো card, তার নিজের length দিয়ে।",
   "মুছে গেল জোর, রইলো শুধু দিক।",
-  "আজ ভাগ হলো একটা column, সবার ওজন, ওজনের মাপকাঠি দিয়ে।",
+  "আজ ভাগ হলো একটা column, সবার ওজন, ওজনের scale  দিয়ে।",
 ];
 const X9_LIT = "transition-colors duration-500 motion-reduce:transition-none";
 
@@ -2777,7 +2835,7 @@ export function RowVsColumn() {
         </div>
         <div className={`rounded-xl border border-border px-1 py-1.5 transition-opacity duration-500 motion-reduce:transition-none ${k >= 3 ? "" : "opacity-40"}`}>
           <div className="text-center text-xs text-muted">
-            যমজ stall, ৩.৭{col && <span className={`${FADE} ml-1 font-mono text-cat-blue`}>−70 ÷12</span>}
+            Twin stall, ৩.৭{col && <span className={`${FADE} ml-1 font-mono text-cat-blue`}>−70 ÷12</span>}
           </div>
           <table className="mx-auto mt-0.5 text-center text-sm tabular-nums">
             <thead>
@@ -2830,8 +2888,8 @@ const X9C_ROWS = [
   },
 ];
 const X9C_SAY = [
-  "B-এর পার্থক্য inch আর pound-এ, নিচে একই unit-এ মাপকাঠি।",
-  "B-এর পার্থক্য inch আর pound-এ, নিচে একই unit-এ মাপকাঠি।",
+  "B-এর পার্থক্য inch আর pound-এ, নিচে একই unit-এ scale ।",
+  "B-এর পার্থক্য inch আর pound-এ, নিচে একই unit-এ scale ।",
   "C-এরও তাই।",
   "inch ÷ inch, pound ÷ pound। unit কেটে যায়, থাকে আগের সেই কয় ধাপ।",
 ];
@@ -2842,7 +2900,7 @@ export function InchPound() {
   const cut = k >= 3;
 
   return (
-    <Scene scene={s} caption={k < 4 ? X9C_SAY[k] : <span className={FADE}>দূরত্বও আগের মতো, B 1.80 আর C 0.84। যমজ C-ই থাকলো।</span>}>
+    <Scene scene={s} caption={k < 4 ? X9C_SAY[k] : <span className={FADE}>দূরত্বও আগের মতো, B 1.80 আর C 0.84। Twin C-ই থাকলো।</span>}>
       <div className="mx-auto grid w-fit grid-cols-[1.2rem_auto_auto] items-center gap-x-3 gap-y-1">
         <span />
         <span className="text-center text-xs text-muted">উচ্চতা</span>
@@ -2879,12 +2937,12 @@ export function InchPound() {
 
 const BAG = [
   { stall: "গুপ্তধন", n: "৩.১", say: "যোগ মানে ঘরে ঘরে যোগ। বিয়োগ মানে এক জায়গা থেকে আরেক জায়গায় যাওয়ার arrow।" },
-  { stall: "শরবত", n: "৩.২", say: "λ দিয়ে গুণ করলে arrow লম্বা, খাটো বা উল্টো হয়, কিন্তু নিজের লাইন ছাড়ে না।" },
+  { stall: "শরবত", n: "৩.২", say: "λ দিয়ে গুণ করলে arrow লম্বা,ছোট বা উল্টো হয়, কিন্তু নিজের লাইন ছাড়ে না।" },
   { stall: "টিফিন", n: "৩.৩", say: "কিছুটা এটা, কিছুটা ওটা, এটাই linear combination। average-ও আসলে একটা recipe।" },
-  { stall: "ফিতা", n: "৩.৪", say: "‖v‖ মানে দৈর্ঘ্য, মানে বর্গ, যোগ, root। আর দুইজনের দূরত্ব মানে ‖a − b‖।" },
-  { stall: "কাক আর রাজা", n: "৩.৫", say: "দৈর্ঘ্য মাপার তিনটা ফিতা: কাক L2, পথিক L1, আর রাজা L∞।" },
-  { stall: "movie club", n: "৩.৬", say: "Row-কে নিজের দৈর্ঘ্য দিয়ে ভাগ করলে থাকে শুধু দিক, v̂।" },
-  { stall: "মাপকাঠি", n: "৩.৭", say: "Column-কে তার মাপকাঠি দিয়ে ভাগ করলে unit কেটে যায়, z-score।" },
+  { stall: "ফিতা", n: "৩.৪", say: "‖v‖ মানে length, মানে বর্গ, যোগ, root। আর দুইজনের দূরত্ব মানে ‖a − b‖।" },
+  { stall: "কাক আর রাজা", n: "৩.৫", say: "length মাপার তিনটা ফিতা: কাক L2, পথিক L1, আর রাজা L∞।" },
+  { stall: "movie club", n: "৩.৬", say: "Row-কে নিজের length দিয়ে ভাগ করলে থাকে শুধু দিক, v̂।" },
+  { stall: "scale ", n: "৩.৭", say: "Column-কে তার scale  দিয়ে ভাগ করলে unit কেটে যায়, z-score।" },
 ];
 
 export function Finale() {
@@ -2926,7 +2984,7 @@ export function Finale() {
         <div className={`${FADE} mx-auto mt-4 max-w-md rounded-2xl bg-cat-violet/5 px-4 py-3 text-center text-[0.95rem]`}>
           <div className="font-mono">(2, 5) আর (5, 2), ঘরে ঘরে গুণ → (10, 10)</div>
           <div className="mt-1">
-            যায়, কিন্তু তাতে পাওয়া যায় আরেকটা list, যার তেমন কোনো মানেই নাই। কাজের গুণটা ফেরত দেয় <b>একটাই সংখ্যা</b>: দুইটা arrow কতটা একই দিকে। মনে আছে movie club-এর বন্ধ বাক্স?
+            যায়, কিন্তু তাতে পাওয়া যায় আরেকটা list, যার তেমন কোনো মানেই নাই। কাজের গুণটা ফেরত দেয় <b>একটাই সংখ্যা</b>: দুইটা arrow কতটা একই দিকে। মনে আছে movie club-এর black box?
           </div>
         </div>
       )}
@@ -2937,14 +2995,14 @@ export function Finale() {
 // ---------------------------------------------------------------------------
 // 10¼ · A figure for screen 10's explanation, no task: two moves and one
 //       measure, and everything else built from them. যোগ, stretch and
-//       দৈর্ঘ্য on top; then বিয়োগ, average, দূরত্ব and normalise each appear
+//       length on top; then বিয়োগ, average, দূরত্ব and normalise each appear
 //       below with lines to what it is made of.
 
 type X10Node = { x: number; y: number; w: number; text: string };
 const X10_BASE: Record<"add" | "stretch" | "len", X10Node> = {
   add: { x: 58, y: 24, w: 40, text: "যোগ" },
   stretch: { x: 150, y: 24, w: 54, text: "stretch" },
-  len: { x: 242, y: 24, w: 48, text: "দৈর্ঘ্য" },
+  len: { x: 242, y: 24, w: 48, text: "length" },
 };
 const X10_MADE: { node: X10Node; from: string[]; color: string; line: string }[] = [
   { node: { x: 40, y: 98, w: 46, text: "বিয়োগ" }, from: ["M58 34L40 88", "M150 34L40 88"], color: "#e11d48", line: "stroke-[#e11d48]" },
@@ -2953,11 +3011,11 @@ const X10_MADE: { node: X10Node; from: string[]; color: string; line: string }[]
   { node: { x: 262, y: 98, w: 62, text: "normalise" }, from: ["M242 34L262 88", "M150 34L262 88"], color: "#7c3aed", line: "stroke-[#7c3aed]" },
 ];
 const X10_SAY = [
-  "দুইটা চাল, যোগ আর stretch। আর একটা মাপ, দৈর্ঘ্য।",
-  "দুইটা চাল, যোগ আর stretch। আর একটা মাপ, দৈর্ঘ্য।",
+  "দুইটা চাল, যোগ আর stretch। আর একটা মাপ, length।",
+  "দুইটা চাল, যোগ আর stretch। আর একটা মাপ, length।",
   "বিয়োগ হলো উল্টে দিয়ে যোগ।",
   "Average হলো যোগ করে stretch।",
-  "দূরত্ব হলো বিয়োগের দৈর্ঘ্য।",
+  "দূরত্ব হলো বিয়োগের length।",
 ];
 
 function X10Chip({ n, color, base = false }: { n: X10Node; color: string; base?: boolean }) {
@@ -2976,7 +3034,7 @@ export function ThreeTools() {
   const k = s.k;
 
   return (
-    <Scene scene={s} caption={k < 5 ? X10_SAY[k] : <span className={FADE}>আর দুই রকম normalise হলো দৈর্ঘ্য বা মাপকাঠি দিয়ে ভাগ। বাকি সব এই তিনটা থেকেই।</span>}>
+    <Scene scene={s} caption={k < 5 ? X10_SAY[k] : <span className={FADE}>আর দুই রকম normalise হলো length বা scale  দিয়ে ভাগ। বাকি সব এই তিনটা থেকেই।</span>}>
       <svg viewBox="0 0 300 126" role="img" aria-label="add, stretch and length on top; subtraction, average, distance and normalise built from them below" className="mx-auto block h-auto w-full max-w-[17.5rem]">
         <rect x={2} y={2} width={296} height={122} rx={5} strokeWidth={0.8} className="fill-white stroke-[#cbd5e1]" />
         {X10_MADE.map((m, i) =>
@@ -3017,7 +3075,7 @@ export function HiddenChoice() {
   const grid = Array.from({ length: 6 }, (_, i) => `M${x10bX(i)} ${x10bY(0)}V${x10bY(5)}M${x10bX(0)} ${x10bY(i)}H${x10bX(5)}`).join("");
 
   return (
-    <Scene scene={s} caption={k < 5 ? X10B_SAY[k] : <span className={FADE}>Arrow বদলায়নি, বদলেছে বাছাই। সংখ্যাটা সেই বাছাইটাই ফেরত বলছে।</span>}>
+    <Scene scene={s} caption={k < 5 ? X10B_SAY[k] : <span className={FADE}>Arrow বদলায়নি, বদলেছে choice। সংখ্যাটা সেই choice এর basis এ উত্তর পালটাচ্ছে।</span>}>
       <div className="mx-auto flex max-w-xs items-center justify-center gap-4">
         <svg viewBox="0 0 110 110" role="img" aria-label="the arrow (3, 4) measured three ways: 5 by the crow, 7 by the walker, 4 by the king" className="block h-auto w-28 shrink-0">
           <rect x={1} y={1} width={108} height={108} rx={4} strokeWidth={0.8} className="fill-white stroke-[#cbd5e1]" />
@@ -3128,17 +3186,17 @@ export const fixtures: Fixtures = {
   DataFrom: { twin: { k: 1 }, wait: { k: 2 }, five: { k: 4 }, done: {} },
   OneWordTwoStalls: { mama: { k: 2 }, done: {} },
   KgVsGram: { start: {}, one: { guess: 0, ran: [0] }, both: { guess: 2, ran: [0, 1] } },
-  UnitDial: { start: {}, pound: { guess: 1, u: 2, seen: [1, 2] }, all: { guess: 0, u: 3, seen: [1, 2, 0, 3] } },
+  UnitDial: { start: {}, pound: { u: 2, seen: [1, 2] }, all: { u: 3, seen: [1, 2, 0, 3] } },
   TwoCrowds: { start: {}, miss: { picks: [null, null], miss: { c: 0, n: 1 } }, done: { picks: [0, 1] } },
   SpreadMachine: {
     start: {},
-    squares: { guess: 1, stages: [3, 0] },
-    height: { guess: 1, stages: [5, 0] },
-    weight: { guess: 0, stages: [5, 4] },
-    all: { guess: 1, stages: [5, 5] },
+    squares: { stages: [3, 0] },
+    height: { stages: [5, 0] },
+    weight: { stages: [5, 4] },
+    all: { stages: [5, 5] },
   },
   Yardstick: { start: {}, half: { guess: 0, conv: ["B0", "C1"] }, done: { guess: 0, conv: ["B0", "B1", "C0", "C1"], measured: true } },
-  UnitsCancel: { start: {}, gram: { guess: 0, u: 3, seen: [1, 3] }, pound: { guess: 0, u: 2, seen: [1, 3, 0, 2] } },
+  UnitsCancel: { start: {}, gram: { u: 3, seen: [1, 3] }, pound: { u: 2, seen: [1, 3, 0, 2] } },
   ZScore: { start: {}, miss: { placed: 1, miss: { z: 1, n: 1 } }, all: { placed: 3 } },
   NotTheTruth: { start: {}, twelve: { guess: 0 }, flip: { guess: 1, yw: 5.5, visited: [12, 6, 5.5] } },
   TwoNormalises: { start: {}, miss: { done: 2, miss: 1 }, all: { done: 6 } },
@@ -3148,6 +3206,7 @@ export const fixtures: Fixtures = {
   EqualPrice: { mid: { k: 2 }, done: {} },
   TenKgSpan: { mid: { k: 2 }, done: {} },
   DataStick: { mid: { k: 3 }, done: {} },
+  NewStudent: { mid: { k: 3 }, done: {} },
   LengthVsSpread: { mid: { k: 3 }, done: {} },
   TwoSticks: { mid: { k: 2 }, done: {} },
   StickSteps: { mid: { k: 2 }, done: {} },

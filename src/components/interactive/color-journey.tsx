@@ -322,7 +322,7 @@ export function ColorCall() {
   const started = read.running || k > 0;
   const done = k === ALL;
 
-  const start = () => read.play(ALL, () => pass("সংখ্যাগুলো ঠিকঠাক পৌঁছেছে, কিন্তু রঙ পৌঁছায়নি।"));
+  const start = () => read.play(ALL, () => pass("সংখ্যা পৌঁছালো, রঙ পৌঁছালো না।"));
 
   return (
     <>
@@ -378,7 +378,7 @@ export function SameNumber() {
     const s = [...seen, p];
     setSeen(s);
     if (!both && s.includes("flesh") && s.includes("rind"))
-      pass("একটা সংখ্যা শুধু বলে কতটা আলো। কোন রঙের আলো, সেটা বলে না।");
+      pass("একটা সংখ্যা বলে কতটা আলো, কোন রঙ না।");
   };
   const c = at === null ? null : MELON[at];
 
@@ -457,7 +457,7 @@ export function WaterDrop() {
     if (!p || seen.includes(p)) return;
     const s = [...seen, p];
     setSeen(s);
-    if (s.length === PARTS.length) pass("প্রতিটা ঘর আসলে তিনটা ছোট্ট lamp। কোনটা কতটা জ্বলছে, তাতেই ঘরের রঙ।");
+    if (s.length === PARTS.length) pass("প্রতিটা ঘর আসলে তিনটা ছোট্ট lamp।");
   };
   const fromPointer = (e: ReactPointerEvent<SVGSVGElement>) => {
     const r = e.currentTarget.getBoundingClientRect();
@@ -564,7 +564,7 @@ export function EightColors() {
     if (found.includes(v)) return;
     const f = [...found, v];
     setFound(f);
-    if (f.length === EIGHT.length) pass("৮টা রঙ! তিনটা lamp, প্রতিটা on বা off: ২ × ২ × ২ = ৮।");
+    if (f.length === EIGHT.length) pass("তিনটা lamp on-off করে ৮টা রঙ।");
   };
 
   return (
@@ -660,7 +660,7 @@ export function MatchColor() {
     setTouched(true);
     if (target && next.every((x, m) => Math.abs(x - target.c[m]) <= CLOSE)) {
       setK(k + 1);
-      if (k + 1 === TARGETS.length) pass("শুধু তিনটা সংখ্যা বদলে আমের রঙ, বেগুনের রঙ। কোনো রঙের বাক্স লাগলো না।");
+      if (k + 1 === TARGETS.length) pass("তিনটা সংখ্যা বদলালেই নতুন রঙ।");
     }
   };
   // the slider furthest from the target, as a nudge
@@ -746,7 +746,7 @@ export function WhichSheet() {
     if (ch === ASK[q]) {
       setQ(q + 1);
       setMiss(0);
-      if (q + 1 === ASK.length) pass("তিনটা পাতাই আলাদা আলাদা সাদাকালো ছবি। প্রতিটা শুধু একটা রঙের হিসাব রাখে।");
+      if (q + 1 === ASK.length) pass("প্রতিটা পাতা এক রঙের সাদাকালো ছবি।");
     } else setMiss((m) => m + 1);
   };
 
@@ -804,7 +804,7 @@ export function StackSheets() {
 
   const pick = (i: number) => {
     setAt(i);
-    pass("তিনটা সাদাকালো পাতা, একটার ওপর আরেকটা। তাতেই রঙিন ছবি।");
+    pass("তিনটা সাদাকালো পাতা মিলে রঙিন ছবি।");
   };
 
   return (
@@ -862,10 +862,7 @@ export function PullSheet() {
     setUse([false, true, true]);
     show.play(1, () =>
       pass(
-        i === PULL_RIGHT
-          ? "ঠিক ধরেছেন! কাগজে থাকলো শুধু সবুজ আর নীল আলো, মিলে ফিরোজা।"
-          : "কাগজে থাকলো শুধু সবুজ আর নীল আলো, মিলে ফিরোজা।",
-      ),
+        "লাল সরালে থাকে সবুজ আর নীল: ফিরোজা।"),
     );
   };
 
@@ -972,7 +969,7 @@ export function GuessColor() {
     if (i === round.right) {
       setR(r + 1);
       setWrong([]);
-      if (r + 1 === ROUNDS.length) pass("শুধু তিনটা সংখ্যা দেখেই রঙ চিনে ফেলছেন!");
+      if (r + 1 === ROUNDS.length) pass("তিনটা সংখ্যা দেখেই রঙ চিনলেন।");
     } else setWrong((w) => [...w, i]);
   };
 
@@ -1051,7 +1048,7 @@ export function GreyHunt() {
     if (tapped.includes(i)) return;
     const t = [...tapped, i];
     setTapped(t);
-    if (t.filter((j) => isGrey(HUNT[j])).length === GREYS) pass("ধূসর মানে লাল, সবুজ, নীল তিনটা সংখ্যাই সমান।");
+    if (t.filter((j) => isGrey(HUNT[j])).length === GREYS) pass("তিনটা সংখ্যা সমান মানে ধূসর।");
   };
 
   return (

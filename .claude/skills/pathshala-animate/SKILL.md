@@ -14,7 +14,7 @@ places in every step of a journey:
 | **Explanation figure** | inside `<Then>` (and a `<Check>`'s children), right after the paragraph it shows | shows the paragraph: the pattern, the why, a formula built up, a callback, a real-world example | `Scene` (kit) or `StoryFrame` |
 
 Both are **watch-only**, driven by the reader: each waits on its first frame with two
-buttons, **একবারে দেখুন** (every beat on a timer) and **ধাপে ধাপে** (আগের / পরের, one beat per
+buttons, **একবারে দেখুন** (every beat on a timer) and **step by step** (আগের / পরের, one beat per
 tap). Nothing else in the figure is a control. Both are **relevant**: they use the same characters, cards and numbers as the
 words, with nothing decorative. Read the `pathshala-journey` skill for the voice (§2–3) and
 the build rules (§7). This page is only about the animation.
@@ -35,8 +35,15 @@ appears, a claim or objection is made, a problem arrives. Skip setups that are o
 instruction ("knob ছাড়া মাথা খাটিয়ে…"), notation talk, or a review question. A closing
 `## শেষ!` step gets one if it describes a moment ("মামা ছবি নিয়ে বাড়ি গেলেন").
 
-**Explanation figures.** Aim for every `<Then>` to have at least one, and a long `<Then>`
-with several ideas to have 2–3. Good sources, straight from the words:
+**Explanation figures.** Aim for every `<Then>` to have at least one, and **never more than
+2**: a `<Then>` is budgeted at one phone screen (pathshala-journey §3.1). If the words
+would earn a third, that `<Then>` holds two ideas and should be split with a follow-up
+`<Check>` step. Give each half its own figure. A figure for a side story or a table
+(`MarsMiss`, `PandaGibbon`, `ColorSixteen`, `DataBasis`) goes inside that `<SideQuest>`,
+right after its paragraph. The sheet renders it like anywhere else. A watch-only figure
+that *poses* a question can move into a step's setup as a `story` scene (3.7's
+`WhichTwin`; give the component the `({}: Story)` signature). Good sources, straight from
+the words:
 - **the thing the paragraph points at** ("খেয়াল করেছেন…", "Table-টা দেখুন…"): the pattern the reader just produced, replayed calmly as a summary. It is *not* the widget again.
 - **the everyday why**, acted out: walking, pouring, stacking, sliding, tiles.
 - **the formula, built**: term by term, numbers flowing slot by slot, the bold name landing last (`NormBuild`, `HatOn`).
@@ -65,7 +72,7 @@ const k = s.k;                                   // beats shown so far: 0 … st
 <Scene scene={s} caption={<span key={k} className={FADE}>{SAY[k]}</span>}> … </Scene>
 ```
 
-- **The reader starts it.** It never plays on its own. `Scene` and `StoryFrame` draw the controls (`SceneControls`): **একবারে দেখুন** plays every beat on the timer, then becomes **আবার দেখুন**. **ধাপে ধাপে** switches to **← আগের · ২ / ৫ · পরের →**, and tapping it mid-play takes over from that beat. Never add your own play or replay button.
+- **The reader starts it.** It never plays on its own. `Scene` and `StoryFrame` draw the controls (`SceneControls`): **একবারে দেখুন** plays every beat on the timer, then becomes **আবার দেখুন**. **step by step** switches to **← আগের · ২ / ৫ · পরের →**, and tapping it mid-play takes over from that beat. Never add your own play or replay button.
 - **Every beat must stand alone.** The reader can stop on any beat for as long as they like, and step *backwards*. So draw each beat purely from `k`: whatever exists at beat k is mounted, and whatever doesn't is not. Give each beat its own caption (`SAY[k]`), including beat 0, the resting first frame, which should already show the setting. Don't rely on timers inside a beat, or on something that only makes sense mid-glide.
 - **Walking stops on arrival.** Cast `Person`/`Robot` legs swing only while they glide to a new spot (for `ms`), then stop, even if the beat stays. A local walker of your own should use cast's `Loop` (`<Loop on run={`${x},${y}`} ms type values dur />`), not `repeatCount="indefinite"`. Hovering (a drone, rotors) may loop forever.
 - **Settled when still.** Reduced motion opens on the last beat, and so does a `shot` preview, unless a fixture seeds `k`. Seed `stepping: true` as well to shoot the step controls.

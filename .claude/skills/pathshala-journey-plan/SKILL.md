@@ -48,7 +48,9 @@ Nothing on the ledger may end up unassigned (§7).
 ## 2 · Decide how many journeys
 
 One journey = **one story, one setting, one "aha", 8–11 screens.** Cut where the story
-would have to change, not where the source's headings change.
+would have to change, not where the source's headings change. Count widget screens here.
+The follow-up `<Check>` steps from §5 come on top, but if the total passes ~16 steps the
+journey is carrying two stories, so cut it in two.
 
 - Count the source's distinct "aha"s, not its sections. `03` has 8 top sections but 5
   real aha's early on; it became 7 journeys because add and stretch each deserved their
@@ -123,6 +125,12 @@ Use the skeleton in `pathshala-journey` §0: seal a prediction on screen 1, let 
 fail early, give each middle screen one piece of the answer, put one unaided
 `এবার আপনার পালা` screen late, then `<Check>`, then the finale that closes the loop.
 
+Mark the screens that open with a guess with `[predict]`: **2–3 per journey, the sealed
+bet on screen 1 included**, and only where the obvious answer is wrong (a pattern flips,
+a result that shocks). Every other screen goes straight to doing. If more than three
+screens look like they want a guess, keep the first surprise of each idea and drop the
+ones that repeat it in a bigger case (`pathshala-journey` §0).
+
 Write each screen as one line: **what it asks → what the reader does → the eureka**, with
 the eureka written as the spoken `pass` note, because that sentence is the screen's whole
 reason to exist. Add `[copy: X]` when an existing screen already has the interaction.
@@ -136,6 +144,22 @@ reason to exist. Add `[copy: X]` when an existing screen already has the interac
 
 Add a `Then:` line wherever the explanation has a job beyond the eureka — the name, the
 formula, a callback, an ML sighting, an open question.
+
+**Budget each `Then:` at one phone screen** (pathshala-journey §3.1: 1–2 short paragraphs,
+≤ ~100 words, ≤ 2 figures). If a `Then:` line lists two ideas, the second gets its own
+task. Write it as a `+ Check:` line (a question the reader can answer from what they just
+did, whose answer is that second idea), followed by its own `Then:`. Anything the idea
+doesn't need, such as a news story, a reference table, a look-ahead or a code gotcha,
+goes on a `Side quest:` line instead.
+
+```
+4. SpreadMachine — how far from the average, usually? → reader steps the machine
+   → pass: "…"
+   Then: why square first (−15 and +15 would cancel)
+   + Check: "বর্গ করে যোগ, তারপর root। এই হিসাবটা আগে কোথায় করেছি?" → Then: it's the
+     length ‖v‖ of the gaps' column; name: standard deviation
+   Side quest: —
+```
 
 Don't design the visuals here. One line per screen is the right resolution; the build
 skill decides the SVG.
@@ -175,7 +199,9 @@ the user can see nothing quietly vanished:
 > - notation table → a `SayIt` screen per journey; the full table in the 3.7 `Finale`
 > - FAQ → each confusion becomes a `Check` or a pass note where it arises
 
-Allowed destinations: a journey screen · a `<Check>` · a pass note · a `<Then>` callback ·
+Allowed destinations: a journey screen · a `<Check>` (including a follow-up check) · a
+pass note · a `<Then>` callback · a `<SideQuest>` card (stories, reference tables,
+look-aheads; the notation table goes in one at the end of the last journey) ·
 main-article prose · the last journey's finale · **explicitly deferred to a later
 article** (say which). "Dropped" is a fine answer as long as it's written down.
 
@@ -226,7 +252,9 @@ Story:    <who, where, what's at stake>
 
 1. <ScreenName> — <question> → <what the reader does> → pass: "<the eureka, spoken>"
    [copy: <existing screen>]
-   Then: <the name, the formula, a callback, an open question>
+   Then: <the name, the formula, a callback, an open question>   (one screen)
+   + Check: <follow-up question> → Then: <the second idea>        (only if needed)
+   Side quest: <story / table / look-ahead>                        (only if any)
 2. …
 n. <ScreenName> — এবার আপনার পালা: the reader answers the Question unaided
 n+1. Check — <the drill> → LessonLink → <n>.2

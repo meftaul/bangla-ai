@@ -98,7 +98,7 @@ export function FinalistsArrive() {
         <Person who="samin" x={x("samin", 3)} y={FA_Y} facing={-1} walking={k === 3} mood={k >= 4 ? "puzzled" : "plain"} label={k >= 4} />
         {k >= 4 && <CastCard x={FA_AT.samin} y={FA_Y - 76} text="?" tone="blue" w={24} />}
         <Person who="nasib" x={x("nasib", 4)} y={FA_Y} facing={-1} walking={k === 4} mood="smug" arm={k >= 5 ? "point" : "down"} label={k >= 5} />
-        {k >= 5 && <Bubble x={FA_AT.nasib} y={FA_Y - 66} side="left" lines={["আমার দৈর্ঘ্য", "negative!"]} />}
+        {k >= 5 && <Bubble x={FA_AT.nasib} y={FA_Y - 66} side="left" lines={["আমার length", "negative!"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -115,7 +115,7 @@ const FINALISTS: { name: string; what: string; note: string; said?: boolean }[] 
   { name: "ফাহিম", what: "(3, 4)", note: "card-টা হাতেই আছে" },
   { name: "সোম", what: "(2, 3, 6)", note: "card ছাদের, তাই ঘর তিনটা" },
   { name: "সামিন", what: "(1, 2) → (7, 10)", note: "card হারানো, শুধু শুরু আর শেষটা মনে আছে" },
-  { name: "নাসিব", what: "“আমার দৈর্ঘ্য negative”", note: "বলছে নিয়মটাই খাটে না", said: true },
+  { name: "নাসিব", what: "“আমার length negative”", note: "বলছে নিয়মটাই খাটে না", said: true },
 ];
 const WHO = ["ফাহিম", "সোম", "সামিন", "নাসিব ঠিক, এই নিয়মে বিচার হয় না"];
 
@@ -125,7 +125,7 @@ export function PrizeRow() {
 
   const seal = (i: number) => {
     setBet(i);
-    pass("বাজি ধরা হলো। চারজনের card চার ধাঁচের, তাই একটা একটা করে মাপতে হবে। শেষে মিলিয়ে দেখবো।");
+    pass("বাজি ধরা হলো, মিলিয়ে দেখবো শেষে।");
   };
 
   return (
@@ -284,26 +284,24 @@ export function FahimsTreasure() {
 }
 
 // ---------------------------------------------------------------------------
-// 2 · The prize card (3, 4). Guess how far, then pull 2.5's tape from the gate
+// 2 · The prize card (3, 4). Pull 2.5's tape from the gate
 //     to the X: 5. Only now does the arrow get its name tag, ‖v‖.
 
 const FA = makeFrame(0, 6, 0, 5, 38);
 const V1: XY = [3, 4];
-const TAPE_GUESS = ["7", "5", "4"];
 
 export function TapeRecall() {
   const pass = useGate();
-  const [guess, setGuess] = useSeed<number | null>("guess", null);
   const [end, setEnd] = useSeed<XY>("end", O);
   const done = same(end, V1);
-  const pulling = guess !== null && !done;
+  const pulling = !done;
 
   const pull = (p: XY) => {
     if (!pulling) return;
     const t: XY = [clamp(p[0], FA.x0, FA.x1), clamp(p[1], FA.y0, FA.y1)];
     if (dist(t, V1) < 0.4) {
       setEnd(V1);
-      pass("ফিতা বললো 5, Shiku-র ball মাপার সময় যেমন এসেছিল। Arrow-টা কতটা লম্বা, সেটাকে লেখা হয় ‖v‖, আর হিসাবটা √(3² + 4²) = 5।");
+      pass("Arrow-এর length ‖v‖: √(3² + 4²) = 5।");
     } else setEnd(t);
   };
 
@@ -327,39 +325,25 @@ export function TapeRecall() {
           </Label>
         )}
       </Plane>
-      {guess === null ? (
-        <>
-          <div className="text-sm font-medium text-muted">Gate থেকে treasure সোজাসুজি কত ঘর দূরে?</div>
-          <div className="mt-2 grid grid-cols-3 gap-2">
-            {TAPE_GUESS.map((o, i) => (
-              <Choice key={o} n={i} look={predictLook(i, guess, done, 1)} disabled={guess !== null} onClick={() => setGuess(i)}>
-                <span className="font-mono">{o}</span>
-              </Choice>
-            ))}
-          </div>
-        </>
-      ) : (
-        <div className="min-h-7 text-center text-[0.95rem]">
-          {done ? (
-            <span className={FADE}>
-              ফিতা বলছে <b className="font-mono">5</b>। আপনি ধরেছিলেন <b className="font-mono">{TAPE_GUESS[guess]}</b>
-              {guess === 1 ? ", একদম ঠিক!" : guess === 0 ? "। Shiku-র মতো ঘর গুনে গুনে হাঁটলে 7 হতো, কিন্তু ফিতা তো যায় কোণাকুনি।" : "। কোণাকুনি পথ কিন্তু 4-এর চেয়ে লম্বা, কারণ উত্তরে 4 ঘর তো যেতেই হয়, সাথে পূর্বেও 3 ঘর।"}
-            </span>
-          ) : same(end, O) ? (
-            <span className="text-muted">আপনার guess {TAPE_GUESS[guess]}। এবার Gate-এর কোণা থেকে ফিতাটা টেনে ✕ পর্যন্ত নিয়ে যান।</span>
-          ) : (
-            <span>
-              ফিতা এখন <b className="font-mono">{dist(O, end).toFixed(1)}</b> ঘর লম্বা।
-            </span>
-          )}
-        </div>
-      )}
+      <div className="min-h-7 text-center text-[0.95rem]">
+        {done ? (
+          <span className={FADE}>
+            ফিতা বলছে <b className="font-mono">5</b>। Shiku-র মতো ঘর গুনে গুনে হাঁটলে 7 হতো, কিন্তু ফিতা তো যায় কোণাকুনি।
+          </span>
+        ) : same(end, O) ? (
+          <span className="text-muted">Gate-এর কোণা থেকে ফিতাটা টেনে ✕ পর্যন্ত নিয়ে যান।</span>
+        ) : (
+          <span>
+            ফিতা এখন <b className="font-mono">{dist(O, end).toFixed(1)}</b> ঘর লম্বা।
+          </span>
+        )}
+      </div>
       {done && (
         <div className={`${FADE} mx-auto mt-3 max-w-sm rounded-2xl bg-cat-teal/5 px-3 py-3 text-center font-mono`}>
           ‖v‖ = √(3² + 4²) = √(16 + 9) = √25 = <b className="text-cat-teal">5</b>
         </div>
       )}
-      <Task done={done}>আগে একটা guess দিন, তারপর ফিতা দিয়ে মেপে মিলিয়ে নিন।</Task>
+      <Task done={done}>ফিতা দিয়ে মেপে দেখুন, Gate থেকে treasure সোজাসুজি কত ঘর দূরে।</Task>
     </>
   );
 }
@@ -527,7 +511,7 @@ export function BoxClue() {
   const turn = (n: number) => {
     if (done) return;
     setRoot(n);
-    if (n === BOX_LEN) pass("ঘর যতগুলোই থাকুক, কাজ সেই তিনটাই: প্রতিটা ঘরের বর্গ, সব যোগ, তারপর root। তাই drone সোজাসুজি উড়েছিল 7 ঘর।");
+    if (n === BOX_LEN) pass("যত ঘরই থাকুক, নিয়ম সেই একই।");
   };
 
   return (
@@ -745,7 +729,7 @@ const X3P_SAY = [
   "28 × 28 pixel-এর একটা ছোট ছবি। কালি থাকলে 1, না থাকলে 0।",
   "সারি ধরে পড়লে ছবিটা একটা card, 784 ঘরের।",
   `প্রতিটা ঘরের বর্গ, সব যোগ। 0² তো 0, 1² হলো 1, তাই যোগফল ${X3P_SUM}।`,
-  `শেষে root: ${Math.sqrt(X3P_SUM)}। Arrow-টা আঁকা যায় না, কিন্তু দৈর্ঘ্য ঠিকই বের হলো।`,
+  `শেষে root: ${Math.sqrt(X3P_SUM)}। Arrow-টা আঁকা যায় না, কিন্তু length ঠিকই বের হলো।`,
 ];
 
 export function PixelLength() {
@@ -838,21 +822,19 @@ export function LostCard() {
 
 // ---------------------------------------------------------------------------
 // 4 · সামিন at (1, 2), the prize at (7, 10). Build her card first (end − start,
-//     from 3.1), guess its length, then lay the tape: 10. Distance is the
+//     from 3.1), then lay the tape: 10. Distance is the
 //     length of a difference.
 
 const FT = makeFrame(0, 8, 0, 11, 26);
 const T_FROM: XY = [1, 2];
 const T_TO: XY = [7, 10];
 const T_TRIP = minus(T_TO, T_FROM);
-const TRIP_GUESS = ["14", "10", "12"];
 
 export function TripLength() {
   const pass = useGate();
   const [card, setCard] = useSeed<XY>("card", [0, 0]);
   const [built, setBuilt] = useSeed("built", false);
   const [miss, setMiss] = useState<{ n: number; a: XY } | null>(null);
-  const [guess, setGuess] = useSeed<number | null>("guess", null);
   const [measured, setMeasured] = useSeed("measured", false);
 
   const check = () => {
@@ -863,7 +845,7 @@ export function TripLength() {
   };
   const measure = () => {
     setMeasured(true);
-    pass("দূরত্ব মাপা দুই ধাপের কাজ। আগে বিয়োগ করে যাওয়ার card, তারপর সেই card কতটা লম্বা: ‖(7, 10) − (1, 2)‖ = 10।");
+    pass("দূরত্ব মানে বিয়োগের card কত লম্বা।");
   };
 
   return (
@@ -901,15 +883,7 @@ export function TripLength() {
           <div className="text-center font-mono text-lg">
             {tup(T_TO)} − {tup(T_FROM)} = <b className="text-cat-teal">{tup(T_TRIP)}</b>
           </div>
-          <div className="mt-3 text-sm font-medium text-muted">এই card ধরে সামিন সোজাসুজি কত ঘর যাবে?</div>
-          <div className="mt-2 grid grid-cols-3 gap-2">
-            {TRIP_GUESS.map((o, i) => (
-              <Choice key={o} n={i} look={predictLook(i, guess, measured, 1)} disabled={guess !== null} onClick={() => setGuess(i)}>
-                <span className="font-mono">{o}</span>
-              </Choice>
-            ))}
-          </div>
-          {guess !== null && !measured && (
+          {!measured && (
             <div className={`${FADE} mt-3 flex justify-center`}>
               <button type="button" onClick={measure} className={`${primaryBtn} bg-cat-amber`}>
                 ফিতা দিয়ে মাপুন
@@ -926,7 +900,7 @@ export function TripLength() {
       <Ticks
         items={[
           ["সামিনের card", built],
-          ["card-এর দৈর্ঘ্য", measured],
+          ["card-এর length", measured],
         ]}
       />
       <Task done={measured}>আগে সামিনের card বানান, তারপর সেই card কতটা লম্বা, মেপে দেখুন।</Task>
@@ -987,7 +961,7 @@ export function TwoJobs() {
           <div className="h-5">
             {k >= 2 && (
               <span className={FADE}>
-                <span className="text-muted">দৈর্ঘ্য: </span>
+                <span className="text-muted">length: </span>
                 <b className="font-mono text-cat-teal">‖(6, 8)‖ = 10</b>
               </span>
             )}
@@ -1016,8 +990,8 @@ const X4_SIDE: XY = [-0.24, 0.18];
 const X4Q_SAY = [
   "সামিন শুরু করেছিল b-তে, থেমেছিল a-তে।",
   "সামিন শুরু করেছিল b-তে, থেমেছিল a-তে।",
-  "a − b: b থেকে a-তে যাওয়ার card, দৈর্ঘ্য 10।",
-  "b − a: উল্টো দিকের, অন্য একটা card। দুইটার দৈর্ঘ্য কি এক? নিজেই ভেবে দেখুন।",
+  "a − b: b থেকে a-তে যাওয়ার card, length 10।",
+  "b − a: উল্টো দিকের, অন্য একটা card। দুইটার length কি এক? নিজেই ভেবে দেখুন।",
 ];
 
 export function BothWaysQuestion() {
@@ -1050,7 +1024,7 @@ export function BothWaysQuestion() {
               <div className={FADE}>
                 <b className="font-mono text-cat-blue">a − b = (6, 8)</b>
                 <div className="text-muted">
-                  দৈর্ঘ্য <span className="font-mono">10</span>
+                  length <span className="font-mono">10</span>
                 </div>
               </div>
             )}
@@ -1060,7 +1034,7 @@ export function BothWaysQuestion() {
               <div className={FADE}>
                 <b className="font-mono text-cat-coral">b − a = {tup([-6, -8])}</b>
                 <div className="text-muted">
-                  দৈর্ঘ্য <b className="font-mono text-cat-amber">?</b>
+                  length <b className="font-mono text-cat-amber">?</b>
                 </div>
               </div>
             )}
@@ -1088,7 +1062,7 @@ export function NasibClaims() {
         <Gate x={36} y={NC_Y} />
         <Person who="fahim" x={112} y={NC_Y} mood={k >= 4 ? "puzzled" : "plain"} label />
         <Person who="nasib" x={k >= 1 ? 214 : 370} y={NC_Y} ms={1400} facing={-1} walking={k === 1} mood="smug" arm={k >= 2 ? "point" : "down"} label />
-        {k === 2 && <Bubble x={214} y={NC_Y - 66} lines={["Gate থেকে বের হবে,", "তবু দৈর্ঘ্য 0!"]} />}
+        {k === 2 && <Bubble x={214} y={NC_Y - 66} lines={["Gate থেকে বের হবে,", "তবু length 0!"]} />}
         {k === 3 && <Bubble x={214} y={NC_Y - 66} lines={["negative-ও", "বানিয়ে দেখাবো!"]} />}
         {k >= 4 && <Bubble x={214} y={NC_Y - 66} side="left" lines={["তাহলে বিচারটাই", "অর্থহীন!"]} />}
       </Stage>
@@ -1126,14 +1100,14 @@ export function NoZero() {
     setTried(next);
     const np = next.map(fromKey);
     if (!done && next.length >= 6 && next.includes("0,0") && np.some((q) => q[0] < 0 || q[1] < 0))
-      pass("যেখানেই নিয়ে যান, বর্গ কখনো negative হয় না, তাই দৈর্ঘ্যও হয় না। আর দৈর্ঘ্য 0 হয় শুধু Gate-এ দাঁড়িয়ে থাকলে।");
+      pass("length কখনো negative হয় না।");
   };
 
   return (
     <>
       <div className="mx-auto mt-4 grid max-w-sm grid-cols-2 gap-2 text-center text-sm">
-        <div className="rounded-xl border-2 border-dashed border-cat-amber/60 px-2 py-2">Gate ছাড়া অন্য কোথাও এমন একটা arrow, যার দৈর্ঘ্য 0</div>
-        <div className="rounded-xl border-2 border-dashed border-cat-amber/60 px-2 py-2">এমন একটা arrow, যার দৈর্ঘ্য 0-এর চেয়েও কম</div>
+        <div className="rounded-xl border-2 border-dashed border-cat-amber/60 px-2 py-2">Gate ছাড়া অন্য কোথাও এমন একটা arrow, যার length 0</div>
+        <div className="rounded-xl border-2 border-dashed border-cat-amber/60 px-2 py-2">এমন একটা arrow, যার length 0-এর চেয়েও কম</div>
       </div>
       <Plane f={FZ} ticks={1} label={`an arrow from the gate to ${tup(tip)}, length ${f2(L)}`} drag={{ down: put, move: put }} onKey={nudger((d) => put(plus(tip, d)))} className="max-w-[17rem]">
         <Arrow f={FZ} from={O} to={tip} tone="teal" w={3} />
@@ -1144,7 +1118,7 @@ export function NoZero() {
           {sq(tip[0])} + {sq(tip[1])} = {tip[0] * tip[0]} + {tip[1] * tip[1]} = {tip[0] * tip[0] + tip[1] * tip[1]}
         </div>
         <div className="text-lg">
-          দৈর্ঘ্য ={" "}
+          length ={" "}
           <b key={keyOf(tip)} className={`${POP} inline-block ${same(tip, O) ? "text-cat-amber" : "text-cat-teal"}`}>
             {f2(L)}
           </b>
@@ -1152,10 +1126,10 @@ export function NoZero() {
       </div>
       <div className="mt-2 min-h-7 text-center text-[0.95rem]">
         {same(tip, O) ? (
-          <span className={FADE}>দৈর্ঘ্য 0 ঠিকই, কিন্তু এটা তো Gate নিজেই। Arrow তো কোথাও যায়ইনি।</span>
+          <span className={FADE}>length 0 ঠিকই, কিন্তু এটা তো Gate নিজেই। Arrow তো কোথাও যায়ইনি।</span>
         ) : least !== null ? (
           <span className="text-muted">
-            Gate ছাড়া এখন পর্যন্ত পাওয়া সবচেয়ে ছোট দৈর্ঘ্য: <b className="font-mono">{f2(least)}</b>
+            Gate ছাড়া এখন পর্যন্ত পাওয়া সবচেয়ে ছোট length: <b className="font-mono">{f2(least)}</b>
           </span>
         ) : null}
       </div>
@@ -1280,7 +1254,7 @@ export function OnlyZero() {
             ))}
           </div>
           <div key={`l${k}`} className={`${FADE} mt-2`}>
-            দৈর্ঘ্য{" "}
+            length{" "}
             <span className="font-mono">
               = √{sum} = <b className="text-cat-teal">{Number.isInteger(Math.sqrt(sum)) ? Math.sqrt(sum) : f2(Math.sqrt(sum))}</b>
             </span>
@@ -1326,7 +1300,7 @@ export function NasibFlips() {
           label
         />
         {k === 1 && <Bubble x={NF_GATE + 34} y={NF_Y - 74} side="right" lines={["আমার card", "উল্টো দিকের!"]} />}
-        {k >= 3 && <Bubble x={62} y={NF_Y - 74} side="right" lines={["উল্টো দিকে হাঁটলে", "দৈর্ঘ্যও minus, তাই না?"]} />}
+        {k >= 3 && <Bubble x={62} y={NF_Y - 74} side="right" lines={["উল্টো দিকে হাঁটলে", "lengthও minus, তাই না?"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1356,12 +1330,12 @@ export function StretchTape() {
     if (seen.includes(n)) return;
     const next = [...seen, n];
     setSeen(next);
-    if (!all && S_TARGETS.every((t) => next.includes(t))) pass("λ দিয়ে stretch করলে দৈর্ঘ্যও ঠিক ততগুণ হয়, শুধু minus চিহ্নটা বাদ দিয়ে। উল্টে দিলে দিক বদলায়, দৈর্ঘ্য বদলায় না।");
+    if (!all && S_TARGETS.every((t) => next.includes(t))) pass("λ গুণ করলে lengthও λ গুণ, minus বাদে।");
   };
 
   return (
     <>
-      <div className="mt-4 text-sm font-medium text-muted">(1, 2)-এর দৈর্ঘ্য 2.24। এবার λ = −2 দিয়ে গুণ করলে নতুন arrow-টা কতটা লম্বা হবে?</div>
+      <div className="mt-4 text-sm font-medium text-muted">(1, 2)-এর length 2.24। এবার λ = −2 দিয়ে গুণ করলে নতুন arrow-টা কতটা লম্বা হবে?</div>
       <div className="mt-2 grid gap-2">
         {S_GUESS.map((o, i) => (
           <Choice key={o} n={i} look={predictLook(i, guess, all, 1)} disabled={guess !== null} onClick={() => setGuess(i)}>
@@ -1383,7 +1357,7 @@ export function StretchTape() {
             × (1, 2) = <b className={k < 0 ? "text-cat-coral" : "text-cat-blue"}>{tup(tip)}</b>
           </div>
           <div className="text-center">
-            দৈর্ঘ্য <b className="font-mono text-lg text-cat-teal">{f2(len(tip))}</b>
+            length <b className="font-mono text-lg text-cat-teal">{f2(len(tip))}</b>
           </div>
           <label className="mx-auto mt-3 flex max-w-sm items-center gap-3">
             <span className="shrink-0 font-serif text-lg italic text-muted">λ</span>
@@ -1404,7 +1378,7 @@ export function StretchTape() {
                 <tr className="font-sans text-xs text-muted">
                   <th className="px-3 pb-1 font-normal">λ</th>
                   <th className="px-3 pb-1 font-normal">arrow</th>
-                  <th className="px-3 pb-1 font-normal">দৈর্ঘ্য</th>
+                  <th className="px-3 pb-1 font-normal">length</th>
                   {all && <th className="px-3 pb-1 font-normal">2.24-এর কত গুণ</th>}
                 </tr>
               </thead>
@@ -1426,7 +1400,7 @@ export function StretchTape() {
         </div>
       )}
       <Task done={all}>
-        আগে একটা guess দিন। তারপর λ বদলে তিনটা মানই একবার করে দেখুন ({bn(hit)}/{bn(S_TARGETS.length)})।
+        আগে একটা guess করুন। তারপর λ বদলে তিনটা মানই একবার করে দেখুন ({bn(hit)}/{bn(S_TARGETS.length)})।
       </Task>
     </>
   );
@@ -1442,8 +1416,8 @@ const X6 = makeFrame(-2.5, 2.5, -4.5, 4.5, 12, 10);
 const X6_ROWS = [1, 2, -2];
 const X6_L = [1, 1, 2, -2, -2];
 const X6_SAY = [
-  "(1, 2), দৈর্ঘ্য 2.24।",
-  "(1, 2), দৈর্ঘ্য 2.24।",
+  "(1, 2), length 2.24।",
+  "(1, 2), length 2.24।",
   "λ = 2: সামনের দিকে, দ্বিগুণ লম্বা।",
   "λ = −2: এবার পেছনের দিকে।",
   "দুইবারই 4.47, মানে 2.24-এর দ্বিগুণ। দিক উল্টো, মাপ একই।",
@@ -1469,7 +1443,7 @@ export function TwiceBothWays() {
             <tr className="font-sans text-xs text-muted">
               <th className="px-1.5 pb-1 font-normal">λ</th>
               <th className="px-1.5 pb-1 font-normal">arrow</th>
-              <th className="px-1.5 pb-1 text-left font-normal">দৈর্ঘ্য</th>
+              <th className="px-1.5 pb-1 text-left font-normal">length</th>
             </tr>
           </thead>
           <tbody>
@@ -1537,7 +1511,7 @@ export function HomeSchool() {
           </text>
         )}
         <Person who="nasib" x={k === 1 ? X6H_SCHOOL - 10 : X6H_HOME + 10} y={X6H_Y} ms={2000} facing={k === 2 ? -1 : 1} walking={k === 1 || k === 2} mood={k >= 3 ? "sad" : "smug"} />
-        {k >= 3 && <Bubble x={X6H_HOME + 10} y={X6H_Y - 66} side="right" lines={["যাওয়া আর ফেরা,", "রাস্তা তো একই লম্বা…"]} />}
+        {k >= 3 && <Bubble x={X6H_HOME + 10} y={X6H_Y - 66} side="right" lines={["যাওয়া আর আসা,", "রাস্তার length তো same ই…"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1703,7 +1677,7 @@ export function Detour() {
     setDeg(a);
     if (a === DU_DEG) {
       setLined(true);
-      pass("ঘুরপথ কখনো সোজা পথের চেয়ে ছোট হয় না। সমান হয় শুধু তখন, যখন দুইটা card একই দিকে যায়।");
+      pass("ঘুরপথ কখনো সোজা পথের চেয়ে ছোট না।");
     }
   };
   const onKey = (e: KeyboardEvent<SVGSVGElement>) => {
@@ -1934,8 +1908,8 @@ const X7 = makeFrame(-0.5, 4.5, -0.5, 5.5, 20, 10);
 const X7_U: XY = [3, 1];
 const X7_UV: XY = [4, 5];
 const X7_SAY = [
-  "ফাহিমের প্রথম card u = (3, 1), দৈর্ঘ্য 3.16।",
-  "ফাহিমের প্রথম card u = (3, 1), দৈর্ঘ্য 3.16।",
+  "ফাহিমের প্রথম card u = (3, 1), length 3.16।",
+  "ফাহিমের প্রথম card u = (3, 1), length 3.16।",
   "তারপর v = (1, 4), আরও 4.12। হাঁটা হলো মোট 7.29।",
   "সোজা পথ u + v মাত্র 6.40। তিনটা arrow মিলে একটা triangle।",
   "এক বাহু কখনো বাকি দুইটার যোগফলের চেয়ে লম্বা হয় না।",
@@ -2082,7 +2056,7 @@ const MEASURED: { name: string; calc: string; out: string; said?: boolean }[] = 
   { name: "ফাহিম", calc: "‖(3, 4)‖ = √(9 + 16)", out: "5" },
   { name: "সোম", calc: "‖(2, 3, 6)‖ = √(4 + 9 + 36)", out: "7" },
   { name: "সামিন", calc: "‖(6, 8)‖ = √(36 + 64)", out: "10" },
-  { name: "নাসিব", calc: "দৈর্ঘ্য কখনো negative হয় না", out: "দাবি খারিজ", said: true },
+  { name: "নাসিব", calc: "length কখনো negative হয় না", out: "দাবি খারিজ", said: true },
 ];
 const WINNER = 2;
 
@@ -2101,7 +2075,7 @@ export function PrizeGiven() {
   const choose = (i: number) => {
     if (i === WINNER) {
       setPick(i);
-      pass("সামিনের card (6, 8), দৈর্ঘ্য 10। ফাহিমের 5, সোমের 7, আর নাসিবের দাবিটা খাটেই না। পুরস্কার সামিনের।");
+      pass("পুরস্কার সামিনের: length 10।");
     } else setMiss({ n: (miss?.n ?? 0) + 1, i });
   };
 
@@ -2169,7 +2143,7 @@ const X8_SAY = [
   "একই ফিতা, প্রথমে দুই ঘরের card: 5।",
   "তিন ঘরের card-এও খাটলো: 7।",
   "হারানো card আগে বিয়োগ করে বানানো, তারপর মাপ: 10।",
-  "নাসিবের দাবি ফিতা মানে না। দৈর্ঘ্য কখনো negative হয় না।",
+  "নাসিবের দাবি ফিতা মানে না। length কখনো negative হয় না।",
   "সংখ্যা হয়ে গেলেই সাজানো যায়। সবার ওপরে সামিন।",
 ];
 
@@ -2415,7 +2389,7 @@ export function TeaStalls() {
       if (moved < 0.01) {
         setSettled(true);
         setDone(true);
-        pass("সবাইকে কাছের flag-এ ভাগ করুন, তারপর প্রতিটা flag-কে তার দলের average-এ সরান। পালা করে এই দুইটা চালালে flag একসময় নিজে থেকেই থেমে যায়।");
+        pass("কাছের flag-এ ভাগ, তারপর average-এ সরান।");
       }
     });
   };
@@ -2752,7 +2726,7 @@ export function ColorSixteen() {
 
 const SAY: { see: string; say: string }[] = [
   { see: "|−3|", say: "“3, minus চিহ্ন ছাড়া”। এক দাগ মানে ভেতরে একটা সাধারণ সংখ্যা।" },
-  { see: "‖v‖", say: "“v-এর দৈর্ঘ্য”। দুই দাগ মানে ভেতরে একটা vector।" },
+  { see: "‖v‖", say: "“v-এর length”। দুই দাগ মানে ভেতরে একটা vector।" },
   { see: "‖a − b‖", say: "“a আর b-এর দূরত্ব”, মানে b থেকে a-তে যাওয়ার card-টা কতটা লম্বা।" },
   { see: "‖v‖²", say: "“root নেওয়ার আগের সংখ্যা”, মানে শুধু বর্গগুলোর যোগফল।" },
 ];
@@ -2765,7 +2739,7 @@ export function SayIt() {
     if (open.includes(i)) return;
     const next = [...open, i];
     setOpen(next);
-    if (next.length === SAY.length) pass("দুই দাগের ভেতরে একটা vector থাকলে তার মানে দৈর্ঘ্য। আর দুইটা vector-এর বিয়োগ থাকলে, তাদের দূরত্ব।");
+    if (next.length === SAY.length) pass("এক vector হলে length, বিয়োগ হলে দূরত্ব।");
   };
 
   return (
@@ -2873,8 +2847,8 @@ const X11 = makeFrame(-0.5, 7.5, -4.5, 3.5, 14, 10);
 const X11_END: XY = [3, -4];
 const x11Pts = (ps: XY[]) => ps.map(([x, y]) => `${X11.sx(x)},${X11.sy(y)}`).join(" ");
 const X11_SAY = [
-  "সরাসরি যোগ করলে 3 + (−4) = −1। দৈর্ঘ্য negative? সেটা তো অসম্ভব।",
-  "সরাসরি যোগ করলে 3 + (−4) = −1। দৈর্ঘ্য negative? সেটা তো অসম্ভব।",
+  "সরাসরি যোগ করলে 3 + (−4) = −1। length negative? সেটা তো অসম্ভব।",
+  "সরাসরি যোগ করলে 3 + (−4) = −1। length negative? সেটা তো অসম্ভব।",
   "বর্গ করলে minus ছেঁকে বাদ পড়ে: 9 + 16 = 25। তবে 25 হলো tile-এর সংখ্যা।",
   "Root নিলে আবার ঘরের মাপে ফেরা: ফিতায় ঠিক 5।",
 ];
@@ -3087,9 +3061,9 @@ export const fixtures: Fixtures = {
   FahimObjects: { rule: { k: 1 }, walked: { k: 2 }, done: {} },
   TeaCommittee: { crowd: { k: 2 }, done: {} },
   PrizeRow: { start: {}, sealed: { bet: 0 } },
-  TapeRecall: { start: {}, pulling: { guess: 0, end: [2, 2.5] }, done: { guess: 0, end: [3, 4] } },
+  TapeRecall: { start: {}, pulling: { end: [2, 2.5] }, done: { end: [3, 4] } },
   BoxClue: { start: {}, squared: { squared: [0, 1, 2] }, hunting: { squared: [0, 1, 2], added: true, root: 8 }, done: { squared: [0, 1, 2], added: true, root: 7 } },
-  TripLength: { start: {}, built: { card: [6, 8], built: true }, measured: { card: [6, 8], built: true, guess: 1, measured: true } },
+  TripLength: { start: {}, built: { card: [6, 8], built: true }, measured: { card: [6, 8], built: true, measured: true } },
   TeaStalls: {
     start: {},
     placed: { flags: [[2, 2], [4, 6]] },

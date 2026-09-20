@@ -376,7 +376,7 @@ export function FindMiddle({ paper = false }: { paper?: boolean }) {
   const tap = (c: Cell) => {
     if (near(c, ORIGIN)) {
       setFound(true);
-      pass(paper ? "একদম মাঝখানে! ঠিক যেখানে আপনি room-এ দাঁড়িয়ে ছিলেন।" : "এই তো আপনি — room-এর একদম মাঝখানে।");
+      pass("আপনি room-এর একদম মাঝখানে।");
     } else setMiss((m) => ({ at: c, n: (m?.n ?? 0) + 1 }));
   };
 
@@ -427,7 +427,7 @@ export function MeetShiku() {
   const tap = (c: Cell) => {
     if (near(c, BALL, 2)) {
       setFound(true);
-      pass("পেয়েছেন! Ball-টা room-এর একদম top-right কোণায় — আপনার থেকে অনেক দূরে।");
+      pass("Ball-টা room-এর top-right কোণায়।");
     } else setMiss((m) => m + 1);
   };
 
@@ -479,8 +479,8 @@ export function DrivePad() {
     setMoves(n);
     setMsg(null);
     setTrail((t) => (t.some((c) => same(c, next)) ? t : [...t, next]));
-    if (same(next, BALL)) pass("বাহ! আপনি নিজেই Shiku-কে ball পর্যন্ত নিয়ে গেলেন।");
-    else if (n === DRIVE_GOAL) pass("বুঝে গেছেন — প্রতি চাপে ঠিক এক ঘর, আর শুধু চারটা দিকে।");
+    if (same(next, BALL)) pass("Shiku-কে নিজেই ball পর্যন্ত নিলেন।");
+    else if (n === DRIVE_GOAL) pass("প্রতি চাপে এক ঘর, শুধু চারটা দিকে।");
   };
 
   const reset = () => {
@@ -596,7 +596,7 @@ export function VagueOrders() {
     setN((k) => k + 1);
     const t = tried.includes(id) ? tried : [...tried, id];
     setTried(t);
-    if (t.length === VAGUE.length) pass("দুটোই ফেল! Shiku-কে বলতে হবে — কোন দিকে, আর কত ঘর।");
+    if (t.length === VAGUE.length) pass("বলতে হবে কোন দিকে, আর কত ঘর।");
   };
   const reply = VAGUE.find((v) => v.id === pick);
 
@@ -702,7 +702,7 @@ export function BuildOrder() {
       if (walled) setOut({ kind: "wall", side: walled });
       else if (same(end, BALL)) {
         setOut({ kind: "ball" });
-        pass("Shiku ball পেয়ে গেছে! ডানে ১০ ঘর, তারপর উপরে ১২ ঘর।");
+        pass("ডানে ১০ ঘর, তারপর উপরে ১২ ঘর।");
       } else setOut({ kind: "short", rest: [BALL[0] - end[0], BALL[1] - end[1]] });
     });
   };
@@ -779,10 +779,7 @@ export function PredictSwap() {
     w.start(SWAPPED.cells, () => {
       setOver(true);
       pass(
-        i === WALL_GUESS
-          ? "ঠিক ধরেছেন! সংখ্যা দুইটা একই, শুধু জায়গা বদলাতেই সব গড়বড়।"
-          : "আসলে দেয়ালে ধাক্কা খেল! সংখ্যা একই, কিন্তু কোনটা কোন দিকের — সেটা বদলে গেছে।",
-      );
+        "সংখ্যা একই, জায়গা বদলালেই গড়বড়।");
     });
   };
 
@@ -876,7 +873,7 @@ export function TwoRoutes() {
     w.start(r.cells, () => {
       const next = done.includes(id) ? done : [...done, id];
       setDone(next);
-      if (next.length === ROUTES.length) pass("রাস্তা আলাদা, কিন্তু Shiku দুইবারই একই জায়গায় পৌঁছাল।");
+      if (next.length === ROUTES.length) pass("রাস্তা আলাদা, পৌঁছানো একই জায়গায়।");
     });
   };
   const cur = ROUTES.find((x) => x.id === active);
@@ -947,10 +944,10 @@ export function BallAddress({ goal = "spots" }: { goal?: "spots" | "negative" })
     w.start(route(c));
     const next = spots.includes(c.join()) ? spots : [...spots, c.join()];
     setSpots(next);
-    if (goal === "spots" && next.length === SPOTS_GOAL) pass("যেখানেই রাখুন — ঠিকানা বলতে দুইটা সংখ্যাই যথেষ্ট।");
+    if (goal === "spots" && next.length === SPOTS_GOAL) pass("ঠিকানা বলতে দুইটা সংখ্যাই যথেষ্ট।");
     if (goal === "negative" && (c[0] < 0 || c[1] < 0)) {
       setNeg(true);
-      pass("বাঁয়ে বা নিচে মানে উল্টো দিক — তাই সংখ্যার আগে “−”।");
+      pass("বাঁয়ে বা নিচে মানে সংখ্যার আগে “−”।");
     }
   };
 
@@ -1078,7 +1075,7 @@ export function PaperReveal() {
           disabled={!paper || drawn}
           onClick={() => {
             setDrawn(true);
-            pass("আরে! এটা তো আবার সেই tiles-ওয়ালা room-এর মতোই হয়ে গেল।");
+            pass("আরে, এটা তো সেই tiles-এর room!");
           }}
           className="inline-flex h-11 cursor-pointer items-center gap-2 rounded-full bg-cat-blue px-5 font-semibold text-white transition-all hover:-translate-y-px disabled:cursor-default disabled:opacity-40 disabled:hover:translate-y-0"
         >
@@ -1159,7 +1156,7 @@ export function NameAxes() {
     const ny = y || which === "y";
     setX(nx);
     setY(ny);
-    if (nx && ny) pass("দুই দাগ যেখানে মিলেছে, সেই dot-এর নাম origin। ঠিকানা (0, 0)।");
+    if (nx && ny) pass("দুই দাগের মিলনবিন্দু origin, (0, 0)।");
   };
 
   return (
@@ -1235,7 +1232,7 @@ export function ReadAddresses() {
     const next = [...seen, i];
     setSeen(next);
     if (next.length === MYSTERY.length)
-      pass("ডানে আর ওপরে গেলে +, বাঁয়ে আর নিচে গেলে −। প্রতিটা বিন্দুর নিজের একটা ঠিকানা।");
+      pass("ডানে-ওপরে +, বাঁয়ে-নিচে −।");
   };
 
   return (
@@ -1328,7 +1325,7 @@ export function FindPoint() {
     if (same(c, target)) {
       setMiss(null);
       setK(k + 1);
-      if (k + 1 === TARGETS.length) pass("দুইটাই খুঁজে পেয়েছেন — আপনি এখন graph paper পড়তে পারেন!");
+      if (k + 1 === TARGETS.length) pass("আপনি এখন graph paper পড়তে পারেন।");
     } else setMiss((m) => ({ at: c, n: (m?.n ?? 0) + 1 }));
   };
 

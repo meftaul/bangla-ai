@@ -210,6 +210,8 @@ each sentence:
 8. **Consistency (N–P):** spoken glue, one name per thing, `“ ”` quotes, the gloss given once, no unverifiable claim.
 9. **Author's text (§2):** no romanized text or parenthetical notes left, and the author's own lines kept in their words.
 
+10. **Follow-up checks and side quests (pathshala-journey §3.1):** the setup line reacts to the last screen (`নিয়মটা তো পাওয়া গেল। কিন্তু কেন খাটে?`). The question can be answered from what the reader just did, and never asks for a name they haven't met. The wrong options are real slips, not jokes. The hint is a question back, not the answer. The `praise` is the eureka said like a person (it lands in the ending's recap), never `ঠিক ধরেছেন!`. A `SideQuest` title is a plain noun phrase (`Code-এ চেনা bug: u * v বনাম u @ v`).
+
 Then check the mechanics:
 - sentences end in `।`;
 - tuples in Latin digits, counts through `bn()`;

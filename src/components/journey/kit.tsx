@@ -124,7 +124,7 @@ export function useTween(target: number[], ms: number, start?: number[]): number
 //
 // A scene never starts by itself. It waits on its first frame with two ways
 // in: "একবারে দেখুন" plays every beat on a timer (one per `ms`, or `ms[k]`
-// before beat k + 1), and "ধাপে ধাপে" lets the reader walk the beats with
+// before beat k + 1), and "step by step" lets the reader walk the beats with
 // আগের / পরের at their own pace (tapping it mid-play takes over from there).
 // Reduced motion opens on the last beat; a preview (`npm run shot`) does too,
 // unless its seed sets `k`.
@@ -181,7 +181,7 @@ const ctlQuiet = `${ctlBtn} border border-border text-foreground hover:border-ca
 
 /**
  * The two ways to watch a scene. Before and after a run: "একবারে দেখুন" (or
- * "আবার দেখুন") and "ধাপে ধাপে". While stepping: আগের, where it is, পরের,
+ * "আবার দেখুন") and "step by step". While stepping: আগের, where it is, পরের,
  * and a way back to watching it all.
  */
 export function SceneControls({ scene: { k, steps, done, playing, stepping, play, step, byHand } }: { scene: SceneState }) {
@@ -214,7 +214,7 @@ export function SceneControls({ scene: { k, steps, done, playing, stepping, play
         </button>
       )}
       <button type="button" onClick={byHand} className={ctlQuiet}>
-        ধাপে ধাপে
+        step by step
       </button>
     </div>
   );
@@ -360,9 +360,15 @@ export function Choice({
       type="button"
       disabled={disabled}
       onClick={onClick}
-      className={`flex w-full cursor-pointer items-center gap-3 rounded-xl border-2 px-4 py-2.5 text-left transition-[color,background-color,border-color,opacity] duration-200 disabled:cursor-default ${LOOK[look]}`}
+      className={`flex w-full cursor-pointer items-center rounded-xl border-2 text-left transition-[color,background-color,border-color,opacity,padding] duration-200 disabled:cursor-default ${
+        // Passed over once the guess is in: a compact line, so the figure the guess
+        // reveals below still fits the screen with its controls.
+        look === "dim" ? "gap-2 px-3 py-1 text-sm" : "gap-3 px-4 py-2.5"
+      } ${LOOK[look]}`}
     >
-      <span className="grid size-7 shrink-0 place-items-center rounded-lg border border-current/30 text-sm font-semibold">
+      <span
+        className={`grid shrink-0 place-items-center rounded-lg border border-current/30 font-semibold ${look === "dim" ? "size-5 text-xs" : "size-7 text-sm"}`}
+      >
         {look === "right" ? "✓" : look === "wrong" ? "✕" : String.fromCharCode(65 + n)}
       </span>
       <span className="min-w-0">{children}</span>

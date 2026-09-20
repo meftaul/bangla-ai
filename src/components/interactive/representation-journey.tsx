@@ -181,7 +181,7 @@ export function SortInbox() {
     const o = spam ? okBin : [...okBin, i];
     setSpamBin(s);
     setOkBin(o);
-    if (s.length + o.length === INBOX.length) pass("ছয়টাই ঠিক জায়গায়। আপনার চোখে এক সেকেন্ডও লাগলো না।");
+    if (s.length + o.length === INBOX.length) pass("চোখের কাছে এটা এক সেকেন্ডের কাজ।");
   };
 
   return (
@@ -252,7 +252,7 @@ export function TellMachine() {
     chew.play(2, () => {
       const t = [...tried, j];
       setTried(t);
-      if (t.length === TRIES.length) pass("মুখের কথা দিয়ে কোনোভাবেই বোঝানো গেল না।");
+      if (t.length === TRIES.length) pass("মুখের কথায় বোঝানো গেল না।");
     });
   };
 
@@ -458,7 +458,7 @@ export function CountClues() {
     run.play(steps, () => {
       const g = [...got, c];
       setGot(g);
-      if (g.length === CLUES.length) pass("চারটা মাপ, চারটা সংখ্যা। Mail-টার মানে একবারও লাগলো না।");
+      if (g.length === CLUES.length) pass("মানে না পড়েই চারটা সংখ্যা।");
     });
   };
 
@@ -543,7 +543,7 @@ export function MeasureNormal() {
       <MailCard mail={NORMAL} clue={clue} upto={Infinity} />
       {!started && (
         <div className="mt-4 flex justify-center">
-          <button type="button" onClick={() => run.play(CLUES.length, () => pass("দুইটা mail, একই চারটা ঘর, একদম আলাদা সংখ্যা।"))} className={primaryBtn}>
+          <button type="button" onClick={() => run.play(CLUES.length, () => pass("একই চারটা ঘর, আলাদা সংখ্যা।"))} className={primaryBtn}>
             একই চারটা মাপ নিন
           </button>
         </div>
@@ -626,7 +626,7 @@ export function ShuffleTrap() {
     setGuess(i);
     mix();
     reveal.play(1, () =>
-      pass(i === SHUFFLE_RIGHT ? "ঠিক ধরেছেন! একই চারটা সংখ্যা। Machine মানে পড়ে না, মাপে।" : "একই চারটা সংখ্যা। Machine মানে পড়ে না, মাপে।"),
+      pass("Machine মানে পড়ে না, মাপে।"),
     );
   };
 
@@ -743,7 +743,7 @@ export function MovieMatch() {
     const w = [...won, card];
     setWon(w);
     setMiss(null);
-    if (w.length === CARDS.length) pass("দুইটা সংখ্যা দেখেই সিনেমার মেজাজ ধরে ফেললেন।");
+    if (w.length === CARDS.length) pass("দুইটা সংখ্যায় সিনেমার মেজাজ।");
   };
 
   return (
@@ -873,7 +873,7 @@ export function KhichuriVector() {
   const set = (j: number, x: number) => {
     const next = v.map((o, i) => (i === j ? x : o));
     setV(next);
-    if (next.every((o) => o !== null)) pass(`খিচুড়ি = (${next.join(", ")})। প্রিয় খাবার এবার সংখ্যায়।`);
+    if (next.every((o) => o !== null)) pass(`খিচুড়ি এবার সংখ্যায়: (${next.join(", ")})।`);
   };
 
   return (
@@ -1002,7 +1002,7 @@ export function Pipeline() {
     const next = n + 1;
     setN(next);
     lock.play(1, () => {
-      if (next === THINGS.length) pass("ছয়টা আলাদা জিনিস, অথচ মাঝের box-টা প্রতিবার একই রকম।");
+      if (next === THINGS.length) pass("জিনিস আলাদা, মাঝের box একই।");
     });
   };
 
@@ -1103,7 +1103,7 @@ export function PatientPicker() {
     const next = [...on, j];
     setOn(next);
     setNo(null);
-    if (next.length === GOOD) pass("চারটা কাজের সংখ্যা। Representation-টা আপনি নিজেই বানালেন।");
+    if (next.length === GOOD) pass("Representation-টা নিজেই বানালেন।");
   };
 
   return (
