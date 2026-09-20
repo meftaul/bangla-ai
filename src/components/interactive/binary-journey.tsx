@@ -159,7 +159,7 @@ export function FiveQuestions() {
     }
     const next = [...answers, a];
     setAnswers(next);
-    if (next.length === Q) pass("৩২টা সংখ্যা, মাত্র ৫টা প্রশ্ন। প্রতিটা উত্তর বাকি সংখ্যাগুলোর অর্ধেক বাদ দিয়ে দিলো: ৩২ → ১৬ → ৮ → ৪ → ২ → ১।");
+    if (next.length === Q) pass("প্রতিটা প্রশ্ন বাকিদের অর্ধেক বাদ দেয়।");
   };
 
   if (secret === null) {
@@ -245,7 +245,7 @@ export function HowMany() {
     setGuess(i);
     run.play(LADDER.length - 1, () => {
       setDone(true);
-      pass("মাত্র ১০টা প্রশ্ন! প্রশ্ন একটা বাড়লেই সংখ্যার পাল্লা দ্বিগুণ হয়ে যায়।");
+      pass("একটা প্রশ্ন বাড়লে পাল্লা দ্বিগুণ।");
     });
   };
 
@@ -317,7 +317,7 @@ export function RowToNumber() {
   const next = () => {
     const s = step + 1;
     setStep(s);
-    if (s === Q) pass("প্রতিটা হ্যাঁ ঠিক ততগুলো সংখ্যা জমা করলো, যতগুলো সে পেছনে ফেলে এলো: ১৬ + ৪ + ২ = ২২।");
+    if (s === Q) pass("প্রতিটা হ্যাঁ তার দামটা জমা করে।");
   };
 
   return (
@@ -380,7 +380,7 @@ export function BuildRow() {
     setN(v);
     if (target !== undefined && v === target) {
       setK(k + 1);
-      if (k + 1 === BUILD.length) pass("যেকোনো সংখ্যা মানে ১৬, ৮, ৪, ২, ১-এর কয়েকটার যোগফল, আর প্রতিটা সংখ্যার জন্য উপায় ঠিক একটাই।");
+      if (k + 1 === BUILD.length) pass("প্রতিটা সংখ্যা লেখার উপায় একটাই।");
     }
   };
 
@@ -465,7 +465,7 @@ export function OneWire() {
     if (!seen.includes(z)) {
       const s = [...seen, z];
       setSeen(s);
-      if (s.length === 3) pass("একটা তার ঠিক একটা প্রশ্নের উত্তর দিতে পারে: কারেন্ট আছে, নাকি নাই। মাঝামাঝি কারেন্ট মেশিন ভরসা করে পড়তেই পারে না।");
+      if (s.length === 3) pass("তার শুধু বলে: কারেন্ট আছে, নাকি নাই।");
     }
   };
 
@@ -564,7 +564,7 @@ export function EightWires() {
   const toggle = (w: number) => {
     const v = n ^ w;
     setN(v);
-    if (v === 255) pass("আটটা উত্তরে ২৫৬টা আলাদা ধাপ: 0 মানে ঘুটঘুটে কালো, 255 মানে একদম সাদা।");
+    if (v === 255) pass("আটটা হ্যাঁ-না মানে ২৫৬টা ধাপ।");
   };
 
   return (

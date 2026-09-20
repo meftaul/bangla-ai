@@ -12,7 +12,7 @@ export const metadata = {
     picks up at Σ. Pythagoras is built from nothing here, since a reader may
     never have met it. */}
 
-import { Journey, Step } from "@/components/journey/journey";
+import { Journey, Step, Check } from "@/components/journey/journey";
 import {
   TwoLines,
   PlotTogether,
@@ -29,6 +29,28 @@ import {
 
 <Step>
 
+হাসপাতালে যাওয়ার আগে আগের lesson থেকে একটা প্রশ্ন।
+
+<Check
+  question="Speed আর velocity-র তফাত কী?"
+  options={[
+    "Velocity-তে দিকও আছে, speed শুধু একটা সংখ্যা",
+    "কোনো তফাত নাই",
+    "Speed-এ দিক আছে, velocity-তে নাই",
+  ]}
+  answer={0}
+  hint="বাস ঘণ্টায় 60-এ চলছে। কোন দিকে, সেটা কে বলে?"
+  praise="Speed scalar, velocity vector।"
+>
+
+Speed শুধু একটা সংখ্যা, “ঘণ্টায় 60”। Velocity-তে সাথে দিকও থাকে। তার মানে velocity থেকে দিক ফেলে দিলে থাকে speed, একটা scalar।
+
+</Check>
+
+</Step>
+
+<Step>
+
 এতক্ষণ সব ছবি ছিল দুই dimension-এর। Shiku-র graph paper, word-এর mapping। কিন্তু আসল কাজ হয় 300, 784 বা 12,288 dimension-এ। একটা গল্প দিয়ে শুরু করা যাক।
 
 হাসপাতালের একটা ওয়ার্ডে পনেরোজন রোগী। ডাক্তার আপা প্রত্যেকের দুইটা জিনিস খাতায় লিখে রাখেন, বয়স আর blood pressure, সংক্ষেপে BP। আজকে ওনার কেন যেন মনে হচ্ছে কোনো একজন রোগীর information গড়বড়ে। তাকে আবার check up করা দরকার।
@@ -41,6 +63,28 @@ import {
 
 <Step>
 
+দুই দাগে পনেরোজন বসলো। এবার graph paper-এর lesson থেকে একটা প্রশ্ন।
+
+<Check
+  question="Graph paper-এ একটা বিন্দুর ঠিকানা লিখতে কয়টা সংখ্যা লাগে?"
+  options={[
+    "১টা",
+    "চারটা, চার দিকের জন্য",
+    "দুইটা: ডানে কত, ওপরে কত",
+  ]}
+  answer={2}
+  hint="Ball-এর ঠিকানা কেমন দেখতে ছিল?"
+  praise="ঠিকানা মানে দুইটা সংখ্যা: x আর y।"
+>
+
+ডানে কত ঘর আর ওপরে কত ঘর, এই দুইটা সংখ্যাতেই কাগজের যেকোনো জায়গা। বাঁয়ে বা নিচে গেলে শুধু minus বসে, আলাদা সংখ্যা লাগে না। ডাক্তার আপার খাতাতেও প্রত্যেক রোগীর ঠিক দুইটা সংখ্যা, বয়স আর BP।
+
+</Check>
+
+</Step>
+
+<Step>
+
 But এটা দেখে তো কার information suspicious সেটা বোঝা যাচ্ছে না, সেটা ধরতে হলে প্রত্যেকের age আর BP মিলিয়ে মিলিয়ে দেখতে হবে। পনেরোজনের বেলায় হয়তো সেটা পারা যায়। পনেরোশো জন হলে?
 
 গ্রাফ পেপারের lesson-এর কথা মনে আছে? Shiku-র apartment-এর floor, যেখানে যেকোনো জায়গার adress ছিল দুইটা সংখ্যা: ডানে কত ঘর, আর ওপরে কত ঘর। একটা দাগ ডানে-বাঁয়ে(x axis), আরেকটা ওপরে-নিচে(y axis).
@@ -48,6 +92,28 @@ But এটা দেখে তো কার information suspicious সেটা 
 BP-র দাগটাকে দাঁড় করিয়ে দিলেই তো সেই গ্রাফ পেপার। বয়স হবে ডানে কত ঘর, আর BP হবে ওপরে কত ঘর।
 
 <PlotTogether />
+
+</Step>
+
+<Step>
+
+অদ্ভুত রোগীটা এখন কাগজে একটা dot। কত দূরে, সেটা মাপবে Shiku। তার আগে ওর চালচলনটা মনে করি।
+
+<Check
+  question="Shiku একবারে কয় ঘর, কোন দিকে যেতে পারে?"
+  options={[
+    "যত খুশি ঘর, কোণাকুনিও",
+    "এক ঘর, উপরে-নিচে-ডানে-বাঁয়ে যেকোনো দিকে",
+    "এক ঘর, শুধু ডানে",
+  ]}
+  answer={1}
+  hint="Remote চেপে চেপে চালানোর কথা মনে করুন।"
+  praise="এক চাপে এক ঘর, শুধু চার দিকে।"
+>
+
+Remote-এর এক চাপে এক ঘর, শুধু উপরে, নিচে, ডানে বা বাঁয়ে। তার মানে Shiku কোণাকুনি যেতে পারে না, ওকে ঘুরপথে হাঁটতে হয়।
+
+</Check>
 
 </Step>
 

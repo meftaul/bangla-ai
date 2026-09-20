@@ -167,7 +167,7 @@ export function DiceOne() {
     const n = roll + 1;
     setRoll(n);
     spin.play(8, () => {
-      if (n === 3) pass("একটা করে ছক্কায় কারো ভাগ্যে 1, কারো 6। তাই কে কত পেল, তাতে বিস্তর ফারাক।");
+      if (n === 3) pass("এক ছক্কায় কারো 1, কারো 6।");
     });
   };
 
@@ -229,7 +229,7 @@ export function DiceMany() {
     setCi(i);
     if (!hit && DICE_COUNTS[i] === 100) {
       setHit(true);
-      pass("ছক্কা যত বেশি, বড় আর ছোট তত কাটাকাটি হয়ে যায়। তাই শেষমেশ সবার যোগফল প্রায় একই জায়গায়।");
+      pass("ছক্কা বেশি হলে সবার যোগফল কাছাকাছি।");
     }
   };
 
@@ -282,7 +282,7 @@ export function DiceMany() {
           </div>
         </div>
       )}
-      <Task done={hit}>আগে একটা guess দিন। তারপর ছক্কা 1 থেকে বাড়াতে বাড়াতে 100-তে নিয়ে যান।</Task>
+      <Task done={hit}>আগে একটা guess করুন। তারপর ছক্কা 1 থেকে বাড়াতে বাড়াতে 100-তে নিয়ে যান।</Task>
     </>
   );
 }
@@ -292,7 +292,6 @@ export function DiceMany() {
 
 const BUNCH_NS = [2, 3, 10, 30, 100, 300, 1000];
 const BUNCH_COUNT = 150;
-const BUNCH_GUESS = ["আরও ছড়িয়ে যাবে, কেউ খুব কাছে আর কেউ অনেক দূরে", "সবাই কাছাকাছি চলে আসবে"];
 const bunchCache = new Map<number, number[]>();
 function spread(n: number) {
   const hit = bunchCache.get(n);
@@ -309,7 +308,6 @@ const SX1 = 304;
 
 export function DotsBunch() {
   const pass = useGate();
-  const [guess, setGuess] = useSeed<number | null>("guess", null);
   const [ni, setNi] = useSeed("ni", 0);
   const [reached, setReached] = useSeed("reached", false);
   const n = BUNCH_NS[ni];
@@ -321,79 +319,69 @@ export function DotsBunch() {
     setNi(i);
     if (!reached && BUNCH_NS[i] >= 300) {
       setReached(true);
-      pass("ঠিক ছক্কার মতো! ঘর যত বেশি, তফাতগুলো তত কাটাকাটি, আর সবাই প্রায় সমান দূরে। “সবচেয়ে কাছের” কথাটার জোর কমে যায়।");
+      pass("ঘর বেশি হলে সবাই প্রায় সমান দূরে।");
     }
   };
   const pct = Math.round(ratio * 100);
 
   return (
     <>
-      <div className="mt-5 text-sm font-medium text-muted">Dimension যত বাড়বে, একটা point থেকে বাকিদের দূরত্বের কী হবে বলে মনে হয়?</div>
-      <div className="mt-2 grid gap-2">
-        {BUNCH_GUESS.map((o, i) => (
-          <Choice key={o} n={i} look={predictLook(i, guess, reached, 1)} disabled={guess !== null} onClick={() => setGuess(i)}>
-            {o}
-          </Choice>
-        ))}
-      </div>
-      {guess !== null && (
-        <div className={FADE}>
-          <div className="mt-5 text-center text-sm text-muted">এলোমেলো {bn(BUNCH_COUNT)}টা point নিলাম। একটা point থেকে বাকি সবাই কত দূরে, সেটা দাগের ওপর বসানো আছে।</div>
-          <svg viewBox="0 0 320 96" role="img" aria-label={`distances in ${n} dimensions, nearest ${Math.round(ratio * 100)} percent of farthest`} className="mx-auto mt-2 block h-auto w-full max-w-md select-none">
-            <path d={`M${SX0} 50H${SX1}`} strokeWidth={1.5} className="stroke-foreground/30" />
-            <text x={SX0} y={80} fontSize={9} className="fill-muted">
-              0
-            </text>
-            <text x={SX1} y={80} textAnchor="end" fontSize={9} className="fill-muted">
-              সবচেয়ে দূরেরটা
-            </text>
-            <rect
-              x={SX0 + ratio * (SX1 - SX0)}
-              y={34}
-              width={(1 - ratio) * (SX1 - SX0)}
-              height={32}
-              rx={6}
-              className="fill-cat-amber/15 transition-[x,width] duration-700 motion-reduce:transition-none"
+      <div className={FADE}>
+        <div className="mt-5 text-center text-sm text-muted">এলোমেলো {bn(BUNCH_COUNT)}টা point নিলাম। একটা point থেকে বাকি সবাই কত দূরে, সেটা দাগের ওপর বসানো আছে।</div>
+        <svg viewBox="0 0 320 96" role="img" aria-label={`distances in ${n} dimensions, nearest ${Math.round(ratio * 100)} percent of farthest`} className="mx-auto mt-2 block h-auto w-full max-w-md select-none">
+          <path d={`M${SX0} 50H${SX1}`} strokeWidth={1.5} className="stroke-foreground/30" />
+          <text x={SX0} y={80} fontSize={9} className="fill-muted">
+            0
+          </text>
+          <text x={SX1} y={80} textAnchor="end" fontSize={9} className="fill-muted">
+            সবচেয়ে দূরেরটা
+          </text>
+          <rect
+            x={SX0 + ratio * (SX1 - SX0)}
+            y={34}
+            width={(1 - ratio) * (SX1 - SX0)}
+            height={32}
+            rx={6}
+            className="fill-cat-amber/15 transition-[x,width] duration-700 motion-reduce:transition-none"
+          />
+          {ds.map((d, i) => (
+            <circle
+              key={i}
+              r={3.2}
+              style={{ transform: `translate(${SX0 + (d / max) * (SX1 - SX0)}px, ${50 + ((i % 7) - 3) * 3.4}px)` }}
+              className="fill-cat-blue/70 transition-transform duration-700 ease-out motion-reduce:transition-none"
             />
-            {ds.map((d, i) => (
-              <circle
-                key={i}
-                r={3.2}
-                style={{ transform: `translate(${SX0 + (d / max) * (SX1 - SX0)}px, ${50 + ((i % 7) - 3) * 3.4}px)` }}
-                className="fill-cat-blue/70 transition-transform duration-700 ease-out motion-reduce:transition-none"
-              />
-            ))}
-            <text x={Math.min(Math.max(SX0 + ratio * (SX1 - SX0), SX0 + 34), SX1 - 34)} y={24} textAnchor="middle" fontSize={9} fontWeight={600} className="fill-cat-amber">
-              সবচেয়ে কাছেরটা
-            </text>
-          </svg>
-          <div className="text-center">
-            <div className="font-mono text-2xl font-bold">
-              n = <span key={n} className={`${POP} inline-block`}>{n}</span>
-            </div>
-            <div key={n} className={`${FADE} mt-1 text-[0.95rem]`}>
-              {pct < 30 ? "সবচেয়ে কাছের point-টা আছে সবচেয়ে দূরেরটার মাত্র " : "সবচেয়ে কাছেরটাও সবচেয়ে দূরেরটার "}
-              <b className="font-mono">{pct}%</b> দূরে।
-              <div className="text-sm text-muted">
-                {pct < 30 ? "কে কাছে আর কে দূরে, একদম স্পষ্ট।" : pct < 60 ? "ফারাকটা কমে আসছে।" : pct < 80 ? "কাছে আর দূরে এখন প্রায় গায়ে গায়ে।" : "কে কাছে আর কে দূরে, বোঝাই মুশকিল!"}
-              </div>
+          ))}
+          <text x={Math.min(Math.max(SX0 + ratio * (SX1 - SX0), SX0 + 34), SX1 - 34)} y={24} textAnchor="middle" fontSize={9} fontWeight={600} className="fill-cat-amber">
+            সবচেয়ে কাছেরটা
+          </text>
+        </svg>
+        <div className="text-center">
+          <div className="font-mono text-2xl font-bold">
+            n = <span key={n} className={`${POP} inline-block`}>{n}</span>
+          </div>
+          <div key={n} className={`${FADE} mt-1 text-[0.95rem]`}>
+            {pct < 30 ? "সবচেয়ে কাছের point-টা আছে সবচেয়ে দূরেরটার মাত্র " : "সবচেয়ে কাছেরটাও সবচেয়ে দূরেরটার "}
+            <b className="font-mono">{pct}%</b> দূরে।
+            <div className="text-sm text-muted">
+              {pct < 30 ? "কে কাছে আর কে দূরে, একদম স্পষ্ট।" : pct < 60 ? "ফারাকটা কমে আসছে।" : pct < 80 ? "কাছে আর দূরে এখন প্রায় গায়ে গায়ে।" : "কে কাছে আর কে দূরে, বোঝাই মুশকিল!"}
             </div>
           </div>
-          <label className="mx-auto mt-4 flex max-w-sm items-center gap-3">
-            <span className="shrink-0 text-sm text-muted">dimension</span>
-            <input
-              type="range"
-              min={0}
-              max={BUNCH_NS.length - 1}
-              value={ni}
-              aria-label="dimension"
-              onChange={(e) => pick(Number(e.target.value))}
-              className="h-6 min-w-0 flex-1 cursor-pointer accent-[var(--cat-blue)]"
-            />
-          </label>
         </div>
-      )}
-      <Task done={reached}>আগে একটা guess দিন। তারপর slider টেনে dimension বাড়াতে থাকুন, অন্তত 300 পর্যন্ত।</Task>
+        <label className="mx-auto mt-4 flex max-w-sm items-center gap-3">
+          <span className="shrink-0 text-sm text-muted">dimension</span>
+          <input
+            type="range"
+            min={0}
+            max={BUNCH_NS.length - 1}
+            value={ni}
+            aria-label="dimension"
+            onChange={(e) => pick(Number(e.target.value))}
+            className="h-6 min-w-0 flex-1 cursor-pointer accent-[var(--cat-blue)]"
+          />
+        </label>
+      </div>
+      <Task done={reached}>Slider টেনে dimension বাড়াতে থাকুন, অন্তত 300 পর্যন্ত। খেয়াল করুন, দূরত্বগুলোর কী হয়।</Task>
     </>
   );
 }
@@ -468,7 +456,7 @@ export function CoinArrows() {
     if (seen.includes(g)) return;
     const next = [...seen, g];
     setSeen(next);
-    if (next.length === RULE.length) pass("সব টসে দুইটা coin-এ একই জিনিস এলে arrow দুটো একই দিকে, সব বার different হলে একদম উল্টো দিকে। আর মিল-অমিল সমান সমান হলে একে অপরের সাথে লম্বালম্বি, অর্থাৎ 90 degree।।");
+    if (next.length === RULE.length) pass("মিল-অমিল সমান হলে arrow 90°-এ।");
   };
   const toss = () => {
     const r = rng(tosses * 97 + 11);
@@ -520,6 +508,11 @@ export function CoinArrows() {
               </tr>
             </tbody>
           </table>
+          <div className="mt-3 flex justify-center">
+            <button type="button" onClick={toss} className={primaryBtn}>
+              চারটা coin-ই ছুড়ুন
+            </button>
+          </div>
         </div>
         <Plane f={FC} label={`two arrows made of coin flips, ${deg} degrees apart`} className="max-w-[15rem]">
           <AngleArc f={FC} a={a} b={b} deg={deg} />
@@ -533,11 +526,6 @@ export function CoinArrows() {
           : matches === 1
             ? "এক ঘরে মিল, আরেক ঘরে অমিল। Arrow দুইটা এবার কোন দিকে, দেখেছেন?"
             : "দুই ঘরেই অমিল, তাই arrow দুইটা একদম উল্টো দিকে মুখ করে আছে।"}
-      </div>
-      <div className="mt-3 flex justify-center">
-        <button type="button" onClick={toss} className={primaryBtn}>
-          চারটা coin-ই ছুড়ুন
-        </button>
       </div>
       <div className="mx-auto mt-4 max-w-sm rounded-2xl border border-border px-4 py-3">
         <div className="text-center text-sm font-semibold">আপনার খুঁজে পাওয়া নিয়ম</div>
@@ -631,7 +619,7 @@ export function CoinMany() {
     if (n >= 100) {
       const nb = big + 1;
       setBig(nb);
-      if (nb === 3) pass("হেড আর টেল প্রায় সমান সমান পড়ে, তাই মিল আর অমিলও প্রায় আধাআধি। কাঁটা তাই বারবার গিয়ে থামে 90°-এর আশেপাশে।");
+      if (nb === 3) pass("Random দুই arrow থামে 90°-এর কাছে।");
     }
   };
   const pick = (i: number) => {
@@ -709,7 +697,7 @@ export function CoinMany() {
         </div>
       )}
       <Ticks items={[[`100 বা 1000 coin নিয়ে ছোড়া হলো ${bn(Math.min(big, 3))} বার, দরকার ৩ বার`, big >= 3]]} />
-      <Task done={big >= 3}>আগে একটা guess দিন। তারপর 100 বা 1000 coin নিয়ে অন্তত তিনবার ছুড়ে দেখুন, কাঁটাটা কোথায় গিয়ে থামে।</Task>
+      <Task done={big >= 3}>আগে একটা guess করুন। তারপর 100 বা 1000 coin নিয়ে অন্তত তিনবার ছুড়ে দেখুন, কাঁটাটা কোথায় গিয়ে থামে।</Task>
     </>
   );
 }
@@ -719,20 +707,18 @@ export function CoinMany() {
 
 const TILE = "bg-[#eadcc3] border border-[#c6ad82]";
 const SKIN = "bg-cat-amber/80 border border-cat-amber";
-const FLOOR_GUESS = ["20টা", "36টা", "50টা"];
 
 // 3a · Peel a row, then a floor. Inside keeps 8 of 10 per direction.
 
 export function EdgeFloor() {
   const pass = useGate();
   const [rowPeeled, setRowPeeled] = useSeed("rowPeeled", false);
-  const [guess, setGuess] = useSeed<number | null>("guess", null);
   const [floorPeeled, setFloorPeeled] = useSeed("floorPeeled", false);
   const edge = (i: number) => i === 0 || i === 9;
 
   const peelFloor = () => {
     setFloorPeeled(true);
-    pass("মেঝের ভেতরে থাকতে হলে ডানে-বাঁয়েও ভেতরে থাকতে হয়, ওপরে-নিচেও। তাই ভেতরে রইলো 8 সারিতে 8টা করে, 64টা।");
+    pass("দুই দিকেই ভেতরে থাকলে তবেই ভেতরে।");
   };
 
   return (
@@ -767,23 +753,11 @@ export function EdgeFloor() {
             })}
           </div>
           {!floorPeeled && (
-            <>
-              <div className="mt-4 text-sm font-medium text-muted">খোসায় কয়টা tile পড়বে, আন্দাজ করুন তো?</div>
-              <div className="mt-2 grid gap-2">
-                {FLOOR_GUESS.map((o, i) => (
-                  <Choice key={o} n={i} look={predictLook(i, guess, floorPeeled, 1)} disabled={guess !== null} onClick={() => setGuess(i)}>
-                    {o}
-                  </Choice>
-                ))}
-              </div>
-              {guess !== null && (
-                <div className="mt-3 flex justify-center">
-                  <button type="button" onClick={peelFloor} className={`${primaryBtn} ${FADE}`}>
-                    মেঝের খোসা ছাড়ান
-                  </button>
-                </div>
-              )}
-            </>
+            <div className="mt-3 flex justify-center">
+              <button type="button" onClick={peelFloor} className={primaryBtn}>
+                মেঝের খোসা ছাড়ান
+              </button>
+            </div>
           )}
           {floorPeeled && (
             <div className={`${FADE} mx-auto mt-3 max-w-md rounded-2xl border border-border px-4 py-3 text-center text-[0.95rem]`}>
@@ -793,7 +767,7 @@ export function EdgeFloor() {
           )}
         </div>
       )}
-      <Task done={floorPeeled}>আগে লাইনের খোসা ছাড়ান। তারপর মেঝের খোসায় কয়টা tile পড়বে আন্দাজ করে, ওটাও ছাড়িয়ে ফেলুন।</Task>
+      <Task done={floorPeeled}>আগে লাইনের খোসা ছাড়ান, তারপর মেঝের খোসাটাও।</Task>
     </>
   );
 }
@@ -827,13 +801,14 @@ export function SugarCube() {
   const [peeled, setPeeled] = useSeed("peeled", false);
   const peel = () => {
     setPeeled(true);
-    pass("1000টার মধ্যে 488টাই খোসায়, প্রায় অর্ধেক! ভেতরে থাকতে হলে এবার তিন দিকেই ভেতরে থাকতে হয়।");
+    pass("তিন dimension-এ প্রায় অর্ধেক খোসায়।");
   };
   const faceTone = { top: "fill-[#faf6ee]", right: "fill-[#ece2d2]", left: "fill-[#dfd2bd]" };
 
   return (
     <>
-      <svg viewBox="0 0 264 290" role="img" aria-label={peeled ? "the outer layer of sugar cubes lifted off, showing an 8 by 8 by 8 cube inside" : "a 10 by 10 by 10 block of sugar cubes"} className="mx-auto my-5 block h-auto w-full max-w-[17rem] select-none">
+      {/* 40svh wide ≈ 44svh tall: never taller than a Plane may be (plane.tsx) */}
+      <svg viewBox="0 0 264 290" role="img" aria-label={peeled ? "the outer layer of sugar cubes lifted off, showing an 8 by 8 by 8 cube inside" : "a 10 by 10 by 10 block of sugar cubes"} className="mx-auto my-5 block h-auto w-full max-w-[17rem] select-none" style={{ width: "min(100%, 40svh)" }}>
         {(["top", "right", "left"] as const).map((k) => (
           <g key={`in-${k}`}>
             <polygon points={INNER[k].poly} className={faceTone[k]} />
@@ -851,6 +826,13 @@ export function SugarCube() {
           </g>
         ))}
       </svg>
+      {guess !== null && !peeled && (
+        <div className="mt-3 flex justify-center">
+          <button type="button" onClick={peel} className={`${primaryBtn} ${FADE}`}>
+            খোসা তুলে ফেলুন
+          </button>
+        </div>
+      )}
       {!peeled ? (
         <>
           <div className="text-sm font-medium text-muted">মোট 1000টা চিনির কিউব। শুধু বাইরের এক স্তর, মানে খোসাটা তুলে ফেললে, তাতে কত ভাগ কিউব উঠে আসবে?</div>
@@ -861,13 +843,6 @@ export function SugarCube() {
               </Choice>
             ))}
           </div>
-          {guess !== null && (
-            <div className="mt-3 flex justify-center">
-              <button type="button" onClick={peel} className={`${primaryBtn} ${FADE}`}>
-                খোসা তুলে ফেলুন
-              </button>
-            </div>
-          )}
         </>
       ) : (
         <div className={`${FADE} mx-auto max-w-md rounded-2xl border border-border px-4 py-3 text-center text-[0.95rem]`}>
@@ -880,21 +855,19 @@ export function SugarCube() {
           <div className="mt-2 text-sm text-muted">ভেতরে ছিল লাইনে 80%, মেঝেতে 64%, আর কিউবে 51%।</div>
         </div>
       )}
-      <Task done={peeled}>আগে একটা guess দিন, তারপর খোসাটা তুলে দেখুন।</Task>
+      <Task done={peeled}>আগে একটা guess করুন, তারপর খোসাটা তুলে দেখুন।</Task>
     </>
   );
 }
 
 // 3c · Keep adding directions: inside × 0.8 each time, like one more exam.
 
-const SHRINK_GUESS = ["প্রায় 70%", "প্রায় 30%", "প্রায় 10%"];
 const BW = 300;
 const BH = 110;
 const SHOW = 20;
 
 export function InsideShrinks() {
   const pass = useGate();
-  const [guess, setGuess] = useSeed<number | null>("guess", null);
   const [n, setN] = useSeed("n", 3);
   const inside = 0.8 ** n;
   const say = inside >= 0.5 ? "এখনো অর্ধেকের বেশি ভেতরে।" : inside >= 0.05 ? "খোসাই এখন দলে ভারী।" : "ভেতরটা প্রায় ফাঁকা!";
@@ -903,77 +876,67 @@ export function InsideShrinks() {
 
   const add = (to: number) => {
     setN(to);
-    if (n < 10 && to >= 10) pass("প্রত্যেক নতুন দিক মানে আরেকটা পরীক্ষা, আর দশটা পরীক্ষায় একসাথে পাশ করা কঠিন। তাই বেশিরভাগ কিউবই গিয়ে পড়ে খোসায়।");
+    if (n < 10 && to >= 10) pass("দিক বাড়লে বেশিরভাগই খোসায়।");
   };
 
   return (
     <>
-      <div className="mt-5 text-sm font-medium text-muted">এবার 10 dimension-এর একটা কিউব, প্রত্যেক দিকে সেই 10টা করে। ভেতরে কত ভাগ টিকে থাকবে বলে মনে হয়?</div>
-      <div className="mt-2 grid gap-2">
-        {SHRINK_GUESS.map((o, i) => (
-          <Choice key={o} n={i} look={predictLook(i, guess, n >= 10, 2)} disabled={guess !== null} onClick={() => setGuess(i)}>
-            {o}
-          </Choice>
-        ))}
-      </div>
-      {guess !== null && (
-        <div className={FADE}>
-          <svg viewBox={`0 0 ${BW} ${BH + 34}`} role="img" aria-label={`inside share by number of directions, now ${n}`} className="mx-auto mt-5 block h-auto w-full max-w-md select-none">
-            <path d={`M0 ${BH}H${BW}`} strokeWidth={1} className="stroke-foreground/30" />
-            {Array.from({ length: bars }, (_, k) => {
-              const h = 0.8 ** (k + 1) * BH;
-              const last = k === bars - 1;
-              return (
-                <g key={k}>
-                  <rect x={k * w + 1.5} y={BH - h} width={w - 3} height={h} rx={2} className={`${POP} ${last ? "fill-cat-teal" : "fill-cat-teal/40"}`} />
-                  <text x={k * w + w / 2} y={BH + 12} textAnchor="middle" fontSize={8} className="fill-muted font-mono">
-                    {k + 1}
-                  </text>
-                </g>
-              );
-            })}
-            <text x={BW / 2} y={BH + 28} textAnchor="middle" fontSize={9} className="fill-muted">
-              কয়টা দিক (dimension)
-            </text>
-          </svg>
-          <div className="mt-1 text-center">
-            <div className="font-mono text-2xl font-bold">
-              n = <span key={n} className={`${POP} inline-block`}>{n}</span>
-            </div>
-            <div className="text-[0.95rem]">
-              ভেতরে টিকে আছে <b key={n} className={`${POP} inline-block font-mono text-cat-teal`}>{percent(inside)}</b>, খোসায়{" "}
-              <b className="font-mono text-cat-amber">{percent(1 - inside)}</b>।
-            </div>
-            <div key={say} className={`${FADE} mt-0.5 text-sm text-muted`}>
-              {say}
-            </div>
+      <div className={FADE}>
+        <svg viewBox={`0 0 ${BW} ${BH + 34}`} role="img" aria-label={`inside share by number of directions, now ${n}`} className="mx-auto mt-5 block h-auto w-full max-w-md select-none">
+          <path d={`M0 ${BH}H${BW}`} strokeWidth={1} className="stroke-foreground/30" />
+          {Array.from({ length: bars }, (_, k) => {
+            const h = 0.8 ** (k + 1) * BH;
+            const last = k === bars - 1;
+            return (
+              <g key={k}>
+                <rect x={k * w + 1.5} y={BH - h} width={w - 3} height={h} rx={2} className={`${POP} ${last ? "fill-cat-teal" : "fill-cat-teal/40"}`} />
+                <text x={k * w + w / 2} y={BH + 12} textAnchor="middle" fontSize={8} className="fill-muted font-mono">
+                  {k + 1}
+                </text>
+              </g>
+            );
+          })}
+          <text x={BW / 2} y={BH + 28} textAnchor="middle" fontSize={9} className="fill-muted">
+            কয়টা দিক (dimension)
+          </text>
+        </svg>
+        <div className="mt-1 text-center">
+          <div className="font-mono text-2xl font-bold">
+            n = <span key={n} className={`${POP} inline-block`}>{n}</span>
           </div>
-          <div className="mx-auto mt-3 max-w-md rounded-2xl border border-border px-3 py-2.5 text-center text-sm">
-            <div>ভেতরে টিকে থাকতে হলে প্রত্যেক দিকের “পরীক্ষায়” পাশ করতে হয়। একেকটায় পাশ করে দশজনে আটজন।</div>
-            <div className="mt-2 flex flex-wrap justify-center gap-1">
-              {Array.from({ length: Math.min(n, 30) }, (_, k) => (
-                <span key={k} className={`${POP} rounded-md bg-cat-teal/15 px-1.5 py-0.5 text-xs text-cat-teal`}>
-                  দিক {bn(k + 1)} ✓
-                </span>
-              ))}
-              {n > 30 && <span className="px-1.5 py-0.5 text-xs text-muted">…আরও {bn(n - 30)}টা</span>}
-            </div>
+          <div className="text-[0.95rem]">
+            ভেতরে টিকে আছে <b key={n} className={`${POP} inline-block font-mono text-cat-teal`}>{percent(inside)}</b>, খোসায়{" "}
+            <b className="font-mono text-cat-amber">{percent(1 - inside)}</b>।
           </div>
-          <div className="mt-3 flex flex-wrap justify-center gap-2">
-            {n < SHOW && (
-              <button type="button" onClick={() => add(n + 1)} className={primaryBtn}>
-                + আরেকটা দিক যোগ করুন
-              </button>
-            )}
-            {n >= 10 && n < 100 && (
-              <button type="button" onClick={() => add(100)} className={quietBtn}>
-                এক লাফে 100 dimension
-              </button>
-            )}
+          <div key={say} className={`${FADE} mt-0.5 text-sm text-muted`}>
+            {say}
           </div>
         </div>
-      )}
-      <Task done={n >= 10}>আগে একটা guess দিন। তারপর একটা একটা করে দিক যোগ করে 10 পর্যন্ত যান।</Task>
+        <div className="mt-3 flex flex-wrap justify-center gap-2">
+          {n < SHOW && (
+            <button type="button" onClick={() => add(n + 1)} className={primaryBtn}>
+              + আরেকটা দিক যোগ করুন
+            </button>
+          )}
+          {n >= 10 && n < 100 && (
+            <button type="button" onClick={() => add(100)} className={quietBtn}>
+              এক লাফে 100 dimension
+            </button>
+          )}
+        </div>
+        <div className="mx-auto mt-3 max-w-md rounded-2xl border border-border px-3 py-2.5 text-center text-sm">
+          <div>ভেতরে টিকে থাকতে হলে প্রত্যেক দিকের “পরীক্ষায়” পাশ করতে হয়। একেকটায় পাশ করে দশজনে আটজন।</div>
+          <div className="mt-2 flex flex-wrap justify-center gap-1">
+            {Array.from({ length: Math.min(n, 30) }, (_, k) => (
+              <span key={k} className={`${POP} rounded-md bg-cat-teal/15 px-1.5 py-0.5 text-xs text-cat-teal`}>
+                দিক {bn(k + 1)} ✓
+              </span>
+            ))}
+            {n > 30 && <span className="px-1.5 py-0.5 text-xs text-muted">…আরও {bn(n - 30)}টা</span>}
+          </div>
+        </div>
+      </div>
+      <Task done={n >= 10}>একটা একটা করে দিক যোগ করে 10 পর্যন্ত যান। খেয়াল করুন, ভেতরে কত ভাগ টিকে থাকে।</Task>
     </>
   );
 }
@@ -983,7 +946,6 @@ export function InsideShrinks() {
 //      is only for show), crowd to the skin as n grows.
 
 const BALL_NS = [2, 3, 10, 30, 100];
-const BALL_GUESS = ["মাঝখানে জড়ো হবে", "আগের মতোই সবখানে ছড়িয়ে থাকবে", "খোসার কাছে গিয়ে ভিড় করবে"];
 const BALL = (() => {
   const r = rng(7);
   return Array.from({ length: 220 }, () => ({ t: r() * 2 * Math.PI, u: r() }));
@@ -991,7 +953,6 @@ const BALL = (() => {
 
 export function BallSkin() {
   const pass = useGate();
-  const [guess, setGuess] = useSeed<number | null>("guess", null);
   const [ni, setNi] = useSeed("ni", 0);
   const [reached, setReached] = useSeed("reached", false);
   const n = BALL_NS[ni];
@@ -1001,66 +962,56 @@ export function BallSkin() {
     setNi(i);
     if (!reached && BALL_NS[i] >= 100) {
       setReached(true);
-      pass("চিনির কিউবের সেই একই কাহিনি। Dimension যত বাড়ে, বলের ভেতরটা তত ফাঁকা, আর সবাই গিয়ে জমে খোসায়।");
+      pass("Dimension বাড়লে ভেতরটা ফাঁকা হয়।");
     }
   };
 
   return (
     <>
-      <div className="mt-5 text-sm font-medium text-muted">বলের ভেতরে সবখানে সমানভাবে এলোমেলো point ছিটিয়ে দিলাম। 100 dimension-এ গেলে point-গুলো বেশিরভাগ কোথায় পাওয়া যাবে?</div>
-      <div className="mt-2 grid gap-2">
-        {BALL_GUESS.map((o, i) => (
-          <Choice key={o} n={i} look={predictLook(i, guess, reached, 2)} disabled={guess !== null} onClick={() => setGuess(i)}>
-            {o}
-          </Choice>
-        ))}
-      </div>
-      {guess !== null && (
-        <div className={FADE}>
-          <svg viewBox="0 0 160 122" role="img" aria-label={`points spread through a ball in ${n} dimensions; ${percent(shell)} lie in the outer tenth`} className="mx-auto mt-4 block h-auto w-full max-w-[17rem]">
-            <circle cx={80} cy={56} r={50} strokeWidth={1} className="fill-cat-blue/5 stroke-foreground/30" />
-            <circle cx={80} cy={56} r={47.5} strokeWidth={5} className="fill-none stroke-cat-amber/30" />
-            {BALL.map((d, i) => {
-              const rho = d.u ** (1 / n);
-              return (
-                <circle
-                  key={i}
-                  r={1.7}
-                  style={{ transform: `translate(${80 + 50 * rho * Math.cos(d.t)}px, ${56 + 50 * rho * Math.sin(d.t)}px)` }}
-                  className="fill-cat-blue/70 transition-transform duration-700 ease-out motion-reduce:transition-none"
-                />
-              );
-            })}
-            <text x={80} y={119} textAnchor="middle" fontSize={8.5} className="fill-cat-amber">
-              হলুদ রিং-টাই খোসা, বাইরের 10%
-            </text>
-          </svg>
-          <div className="text-center">
-            <div className="font-mono text-2xl font-bold">
-              n = <span key={n} className={`${POP} inline-block`}>{n}</span>
-            </div>
-            <div className="text-[0.95rem]">
-              Point-গুলোর <b className="text-cat-amber">{percent(shell)}</b> এখন খোসায়।
-            </div>
-            <div key={say} className={`${FADE} mt-0.5 text-sm text-muted`}>
-              {say}
-            </div>
+      <div className={FADE}>
+        <svg viewBox="0 0 160 122" role="img" aria-label={`points spread through a ball in ${n} dimensions; ${percent(shell)} lie in the outer tenth`} className="mx-auto mt-4 block h-auto w-full max-w-[17rem]">
+          <circle cx={80} cy={56} r={50} strokeWidth={1} className="fill-cat-blue/5 stroke-foreground/30" />
+          <circle cx={80} cy={56} r={47.5} strokeWidth={5} className="fill-none stroke-cat-amber/30" />
+          {BALL.map((d, i) => {
+            const rho = d.u ** (1 / n);
+            return (
+              <circle
+                key={i}
+                r={1.7}
+                style={{ transform: `translate(${80 + 50 * rho * Math.cos(d.t)}px, ${56 + 50 * rho * Math.sin(d.t)}px)` }}
+                className="fill-cat-blue/70 transition-transform duration-700 ease-out motion-reduce:transition-none"
+              />
+            );
+          })}
+          <text x={80} y={119} textAnchor="middle" fontSize={8.5} className="fill-cat-amber">
+            হলুদ রিং-টাই খোসা, বাইরের 10%
+          </text>
+        </svg>
+        <div className="text-center">
+          <div className="font-mono text-2xl font-bold">
+            n = <span key={n} className={`${POP} inline-block`}>{n}</span>
           </div>
-          <label className="mx-auto mt-3 flex max-w-sm items-center gap-3">
-            <span className="shrink-0 text-sm text-muted">dimension</span>
-            <input
-              type="range"
-              min={0}
-              max={BALL_NS.length - 1}
-              value={ni}
-              aria-label="dimension"
-              onChange={(e) => pick(Number(e.target.value))}
-              className="h-6 min-w-0 flex-1 cursor-pointer accent-[var(--cat-blue)]"
-            />
-          </label>
+          <div className="text-[0.95rem]">
+            Point-গুলোর <b className="text-cat-amber">{percent(shell)}</b> এখন খোসায়।
+          </div>
+          <div key={say} className={`${FADE} mt-0.5 text-sm text-muted`}>
+            {say}
+          </div>
         </div>
-      )}
-      <Task done={reached}>আগে একটা guess দিন। তারপর slider টেনে dimension 100 পর্যন্ত নিয়ে যান।</Task>
+        <label className="mx-auto mt-3 flex max-w-sm items-center gap-3">
+          <span className="shrink-0 text-sm text-muted">dimension</span>
+          <input
+            type="range"
+            min={0}
+            max={BALL_NS.length - 1}
+            value={ni}
+            aria-label="dimension"
+            onChange={(e) => pick(Number(e.target.value))}
+            className="h-6 min-w-0 flex-1 cursor-pointer accent-[var(--cat-blue)]"
+          />
+        </label>
+      </div>
+      <Task done={reached}>Slider টেনে dimension 100 পর্যন্ত নিয়ে যান। খেয়াল করুন, point-গুলো কোথায় জমে।</Task>
     </>
   );
 }
@@ -1105,12 +1056,12 @@ export function SurpriseRecap() {
 export const fixtures: Fixtures = {
   DiceOne: { start: {}, rolled: { roll: 3 } },
   DiceMany: { guessed: { guess: 1 }, hundred: { guess: 1, ci: 3 } },
-  DotsBunch: { low: { guess: 1 }, high: { guess: 1, ni: 5 } },
+  DotsBunch: { low: {}, high: { ni: 5 } },
   CoinArrows: { right: {}, same: { a: [1, 1], b: [1, 1] }, opposite: { a: [1, -1], b: [-1, 1] } },
   CoinMany: { ten: { guess: 1 }, hundred: { guess: 1, ni: 2, marks: [84, 95, 88, 91, 97, 86] } },
-  EdgeFloor: { row: { rowPeeled: true }, floor: { rowPeeled: true, guess: 1, floorPeeled: true } },
+  EdgeFloor: { row: { rowPeeled: true }, floor: { rowPeeled: true, floorPeeled: true } },
   SugarCube: { start: {}, peeled: { guess: 2, peeled: true } },
-  InsideShrinks: { three: { guess: 2 }, twelve: { guess: 2, n: 12 } },
-  BallSkin: { flat: { guess: 2 }, hundred: { guess: 2, ni: 4 } },
+  InsideShrinks: { three: {}, twelve: { n: 12 } },
+  BallSkin: { flat: {}, hundred: { ni: 4 } },
   SurpriseRecap: { start: {} },
 };

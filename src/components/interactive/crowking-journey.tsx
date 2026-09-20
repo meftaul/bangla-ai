@@ -240,7 +240,7 @@ export function HowFar() {
 
   const show = () => {
     setShown(true);
-    pass("তিনজনই ঠিক! Drone সোজা উড়ে গেলে 5, সারির ফাঁক দিয়ে হাঁটলে 7, আর দাবার রাজার চালে 4। আসল প্রশ্নটা ছিল, আপনি যাবেন কীভাবে।");
+    pass("দূরত্ব নির্ভর করে কীভাবে যাবেন।");
   };
 
   return (
@@ -260,23 +260,6 @@ export function HowFar() {
         <Gate f={FH} />
         <Star f={FH} at={STALL} done={shown} />
       </Plane>
-      <Speech who="Robotics club-এর drone" initial="ড">
-        উড়ে গেলে 5 ঘর।
-      </Speech>
-      <Speech who="সামিন" initial="সা" tint="teal">
-        আমি তো হেঁটে হেঁটে গুনলাম, 7 ঘর।
-      </Speech>
-      <Speech who="সোম" initial="সো">
-        আমার দাবার রাজা 4 চালেই পৌঁছে যায়।
-      </Speech>
-      <div className="mt-4 text-sm font-medium text-muted">বলুন তো, কার উত্তর ঠিক?</div>
-      <div className="mt-2 grid gap-2 sm:grid-cols-2">
-        {HOW_GUESS.map((o, i) => (
-          <Choice key={o} n={i} look={predictLook(i, guess, shown, 3)} disabled={guess !== null} onClick={() => setGuess(i)}>
-            {o}
-          </Choice>
-        ))}
-      </div>
       {guess !== null && !shown && (
         <div className={`${FADE} mt-3 flex justify-center`}>
           <button type="button" onClick={show} className={primaryBtn}>
@@ -300,6 +283,23 @@ export function HowFar() {
           </div>
         </div>
       )}
+      <Speech who="Robotics club-এর drone" initial="ড">
+        উড়ে গেলে 5 ঘর।
+      </Speech>
+      <Speech who="সামিন" initial="সা" tint="teal">
+        আমি তো হেঁটে হেঁটে গুনলাম, 7 ঘর।
+      </Speech>
+      <Speech who="সোম" initial="সো">
+        আমার দাবার রাজা 4 চালেই পৌঁছে যায়।
+      </Speech>
+      <div className="mt-4 text-sm font-medium text-muted">বলুন তো, কার উত্তর ঠিক?</div>
+      <div className="mt-2 grid gap-2 sm:grid-cols-2">
+        {HOW_GUESS.map((o, i) => (
+          <Choice key={o} n={i} look={predictLook(i, guess, shown, 3)} disabled={guess !== null} onClick={() => setGuess(i)}>
+            {o}
+          </Choice>
+        ))}
+      </div>
       <Task done={shown}>আগে বলুন কার উত্তর ঠিক, তারপর তিনজনের পথ এঁকে মিলিয়ে নিন।</Task>
     </>
   );
@@ -527,7 +527,7 @@ export function WalkRows() {
     const all = [...done, r];
     setDone(all);
     if (all.filter((x) => x.length === 7).length === 3)
-      pass("যে পথেই যান, সবচেয়ে কম হাঁটতে হয় 7 ঘর। পূর্বে 3 আর উত্তরে 4 তো যেতেই হবে, শুধু কোনটা আগে কোনটা পরে সেটা আলাদা।");
+      pass("যে পথেই হাঁটুন, কমপক্ষে 7 ঘর।");
   };
   const onKey = (e: KeyboardEvent<SVGSVGElement>) => {
     const d = KEY_DIR[e.key];
@@ -910,7 +910,7 @@ export function KingMoves() {
     setBest((b) => (b === null ? n : Math.min(b, n)));
     if (n === 4) {
       setWon(true);
-      pass("এক কোণাকুনি চালেই রাজা পূর্বে আর উত্তরে এক ঘর করে এগোয়। তাই দূরত্ব ঠিক করে বড় ঘরটা: max(3, 4) = 4।");
+      pass("রাজার দূরত্ব বড় ঘরটা: max(3, 4) = 4।");
     }
   };
 
@@ -1129,7 +1129,7 @@ export function NameThree() {
     setMiss(null);
     const next = got.map((g, i) => g || i === row);
     setGot(next);
-    if (next.every(Boolean)) pass("একই (3, 4)-এর তিনটা দৈর্ঘ্য: drone-এর L2 হলো 5, সামিনের L1 হলো 7, আর রাজার L∞ হলো 4। নিচে ছোট সংখ্যা না থাকলে ‖v‖ মানে L2।");
+    if (next.every(Boolean)) pass("একই (3, 4): L2 5, L1 7, L∞ 4।");
   };
 
   return (
@@ -1198,7 +1198,7 @@ const X4_RULES = [
   { rule: "ঘুরপথ ছোট না", on: "(3, 0)", via: "হয়ে", cells: ["7 ≥ 5", "7 ≥ 7", "7 ≥ 4"] },
 ];
 const X4_SAY = [
-  "দৈর্ঘ্যের তিনটা নিয়ম, তিনটা ফিতা। Card (3, 4) দিয়ে পরীক্ষা করি।",
+  "length এর  তিনটা নিয়ম, তিনটা ফিতা। Card (3, 4) দিয়ে পরীক্ষা করি।",
   "কারো মাপই negative না।",
   "Card-টা 2 গুণ stretch করে (6, 8) বানালে তিনটা মাপই ঠিক 2 গুণ।",
 ];
@@ -1404,7 +1404,7 @@ export function OneAway() {
     const mine = [...bins[who], b];
     setBins(bins.map((x, i) => (i === who ? mine : x)));
     if (who === WAYS.length - 1 && mine.length === ENOUGH && full.slice(0, -1).every(Boolean))
-      pass("একই “1 দূর”, অথচ আকার তিন রকম: drone-এর গোল, সামিনের হীরা, রাজার বর্গ। কোন মাপ নেবেন, তার ওপরই নির্ভর করে কে কাছে।");
+      pass("“1 দূর”-এর আকার: গোল, হীরা, বর্গ।");
   };
 
   return (
@@ -1701,7 +1701,7 @@ export function OneWildValue() {
 
   const measure = () => {
     setMeasured(true);
-    pass("সামিনের মাপে দুই জোড়াই 10 দূরে। কিন্তু drone আগে বর্গ করে, তাই 10 হয়ে যায় 100, অথচ 1 থাকে 1-ই।");
+    pass("বর্গ করলে বড় পার্থক্য আরও বড়।");
   };
 
   return (
@@ -1736,18 +1736,6 @@ export function OneWildValue() {
           </div>
         ))}
       </div>
-      {WILD_Q.map((w, qi) => (
-        <div key={w.q}>
-          <div className="mt-4 text-sm font-medium text-muted">{w.q}</div>
-          <div className="mt-2 grid gap-2">
-            {WILD_OPTS.map((o, i) => (
-              <Choice key={o} n={i} look={predictLook(i, guess[qi], measured, w.answer)} disabled={guess[qi] !== null} onClick={() => setGuess(guess.map((x, k) => (k === qi ? i : x)))}>
-                {o}
-              </Choice>
-            ))}
-          </div>
-        </div>
-      ))}
       {ready && !measured && (
         <div className={`${FADE} mt-3 flex justify-center`}>
           <button type="button" onClick={measure} className={primaryBtn}>
@@ -1761,7 +1749,19 @@ export function OneWildValue() {
           <div>√(10² + 0 + … + 0) = √100 = <b className="text-cat-teal">10</b></div>
         </div>
       )}
-      <Task done={measured}>দুইটা প্রশ্নেই আগে একটা guess দিন, তারপর মেপে মিলিয়ে নিন।</Task>
+      {WILD_Q.map((w, qi) => (
+        <div key={w.q}>
+          <div className="mt-4 text-sm font-medium text-muted">{w.q}</div>
+          <div className="mt-2 grid gap-2">
+            {WILD_OPTS.map((o, i) => (
+              <Choice key={o} n={i} look={predictLook(i, guess[qi], measured, w.answer)} disabled={guess[qi] !== null} onClick={() => setGuess(guess.map((x, k) => (k === qi ? i : x)))}>
+                {o}
+              </Choice>
+            ))}
+          </div>
+        </div>
+      ))}
+      <Task done={measured}>দুইটা প্রশ্নেই আগে একটা guess করুন, তারপর মেপে মিলিয়ে নিন।</Task>
     </>
   );
 }
@@ -2034,7 +2034,7 @@ export function KnobFine() {
     if (!hit) return;
     setWon(won.map((w, i) => w || i === round));
     if (round === 1)
-      pass("গোল budget-এ সবচেয়ে ভালো জায়গায় দুইটা knob-ই একটু একটু চালু থাকে। হীরার budget-এ সেটা পড়ে কোণায়, তাই knob ২ পুরো 0।");
+      pass("হীরার budget-এ একটা knob পুরো 0।");
   };
   const next = () => {
     setRound(1);
@@ -2344,7 +2344,7 @@ export function WorstPixel() {
     const trip = tripped || linf(next) > LIMIT;
     if (trip !== tripped) setTripped(true);
     if (!done && trip && next.every((d) => d !== 0) && linf(next) <= LIMIT)
-      pass(`আটটা pixel-ই বদলে গেল, সব মিলিয়ে L1 হলো ${l1(next)}। কিন্তু পাহারাদার দেখে শুধু সবচেয়ে বড় বদলটা, আর সেটাই L∞ নিয়ম।`);
+      pass("পাহারাদার দেখে শুধু সবচেয়ে বড় বদল: L∞।");
   };
 
   const strip = (vals: number[], pick: boolean) => (
@@ -2607,7 +2607,7 @@ export function PickTape() {
     setPicks(next);
     if (t !== TAPE_JOBS[i].want) setMiss({ n: (miss?.n ?? 0) + 1, i });
     else if (next.every((p, k) => p === TAPE_JOBS[k].want))
-      pass("চারটাই মিললো। দূরত্ব মাপার একটাই “ঠিক” ফিতা নাই, কাজটা কী তার ওপরই নির্ভর করে কোনটা নেবেন।");
+      pass("কোন ফিতা, সেটা ঠিক করে কাজটা কী।");
   };
 
   return (
@@ -2691,14 +2691,14 @@ export function GentWalks() {
 //       the tape, L2, √(9 + 16) = 5.
 
 const X10_ROWS = [
-  { f: "3 + (−4) = −1", tag: "দৈর্ঘ্য negative?", tone: "text-danger" },
+  { f: "3 + (−4) = −1", tag: "length negative?", tone: "text-danger" },
   { f: "|3| + |−4| = 7", tag: "L1, সামিনের হাঁটা", tone: "text-cat-coral" },
   { f: "√(9 + 16) = 5", tag: "‖v‖, মানে L2", tone: "text-cat-teal" },
 ];
 const X10_SAY = [
   "সোমের কথামতো card (3, −4)-এর ঘরগুলো সোজা যোগ করি।",
-  "দৈর্ঘ্য দাঁড়ালো −1!",
-  "দৈর্ঘ্য তো negative হয় না। এই যোগটা দৈর্ঘ্য না।",
+  "length দাঁড়ালো −1!",
+  "length তো negative হয় না। এই যোগটা length না।",
   "Minus ফেলে দিয়ে যোগ করলে 7। এটা সামিনের হাঁটা, L1।",
 ];
 
@@ -2811,7 +2811,7 @@ const X11B_SAY = [
   "দর্শক comedy বেশি ভালোবাসেন: (2, 5)।",
   "Club-এর হিসাবে comedy ছবিটা পেলো 22।",
   "আর drama পেলো 20, প্রায় সমান!",
-  "Drama-র arrow বেশি লম্বা। দৈর্ঘ্যের জোরেই এত নম্বর।",
+  "Drama-র arrow বেশি লম্বা। length এর  জোরেই এত নম্বর।",
 ];
 
 export function LongerWins() {
@@ -2819,7 +2819,7 @@ export function LongerWins() {
   const k = s.k;
   const f = X11B_F;
   return (
-    <Scene scene={s} caption={s.done ? <span className={FADE}>দৈর্ঘ্যটা সরিয়ে দিয়ে শুধু দিকটা রাখা যায় কি?</span> : X11B_SAY[k]}>
+    <Scene scene={s} caption={s.done ? <span className={FADE}>lengthটা সরিয়ে দিয়ে শুধু দিকটা রাখা যায় কি?</span> : X11B_SAY[k]}>
       <div className="flex items-center justify-center gap-3">
         <div className="w-[8.5rem] shrink-0">
           <Plane f={f} ticks={1} label="the visitor (2, 5) loves comedy; the comedy (1, 4) scores 22 and the drama (5, 2) scores 20, almost level, because the drama's arrow is longer" className="my-0! max-w-none">
@@ -2845,7 +2845,7 @@ export function LongerWins() {
           </div>
           <span />
           <span className={`text-xs text-muted ${k >= 2 ? FADE : "invisible"}`}>score</span>
-          <span className={`text-xs text-muted ${k >= 4 ? FADE : "invisible"}`}>দৈর্ঘ্য</span>
+          <span className={`text-xs text-muted ${k >= 4 ? FADE : "invisible"}`}>length</span>
           {X11B_FILMS.map((m) => (
             <div key={m.name} className="contents">
               <span className={`flex items-center gap-1.5 whitespace-nowrap ${k >= m.show ? FADE : "invisible"}`}>

@@ -15,10 +15,12 @@ import {
   useState,
   type ReactElement,
   type ReactNode,
+  type Ref,
 } from "react";
 import { createPortal } from "react-dom";
 
 import { bn } from "@/components/interactive/figure-kit";
+import { COURSES } from "@/content/courses";
 import { GROW_WIDGET } from "@/components/journey/kit";
 
 // A lesson told one screen at a time, Brilliant-style.
@@ -52,13 +54,22 @@ import { GROW_WIDGET } from "@/components/journey/kit";
 //                   back to the widget, which stays mounted with its state.
 //
 // Breaks are measured on arrival, before paint, between paragraphs: a heading
-// stays with what follows it, a display formula with what precedes it. The
-// screen still scrolls as a last resort, when one widget alone is taller than
-// the phone; content a tap adds below the fold is then scrolled into view.
+// stays with what follows it, a display formula with what precedes it. A screen
+// that grows later (a guess reveals a figure) breaks again into more screens; one
+// widget or figure that is too tall alone is zoomed down to fit. The screen
+// scrolls only as a last resort, past that zoom's floor; content a tap adds
+// below the fold is then scrolled into view.
 //
-// Progress ({ at, furthest }) is kept per browser in localStorage, so a phone
-// reloading the tab in the background does not send the reader to screen 1.
-// ponytail: per browser, not per user; move it to Supabase if readers switch devices.
+// Progress (the step and screen, how far they got, whether the task in hand is
+// done, what they found, whether they finished) is kept per browser in
+// localStorage, so a phone reloading the tab in the background puts the reader
+// back on the very screen they were on, with Continue as they left it.
+// ponytail: per browser, not per user; move it to Supabase if readers switch
+// devices, or if the Library should show which journeys are finished.
+//
+// Continue, when locked, still answers a tap: it says why and shakes the Task.
+// A turn moves focus to the new screen and is announced, as is an unlock. After
+// the last screen comes an ending: what the reader found, and where to go next.
 //
 // Styling is Tailwind only. Note this renders inside the page's `.article`
 // wrapper, whose unlayered `p`/`h1`/`h2` rules beat layered utilities — so the
@@ -105,8 +116,25 @@ type StageApi = {
   taskSlot: HTMLElement | null;
   thenSlot: HTMLElement | null;
   announceThen: () => () => void;
+  /** taps on a locked Continue on this screen; the Task shakes on each */
+  nudged: number;
 };
 const StageCtx = createContext<StageApi | null>(null);
+
+/** What a Journey keeps in localStorage, per lesson path. */
+type Saved = {
+  at?: number;
+  furthest?: number;
+  page?: number;
+  /** the task of step `at` was done */
+  cleared?: boolean;
+  /** each step's pass note, by step, for the ending's recap */
+  found?: Record<number, string>;
+  /** on the ending now */
+  finished?: boolean;
+  /** reached the ending at least once */
+  done?: boolean;
+};
 
 const calm = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -130,13 +158,30 @@ export function Journey({ title, children }: { title?: string; children: ReactNo
   const [taskSlot, setTaskSlot] = useState<HTMLElement | null>(null);
   const [thenSlot, setThenSlot] = useState<HTMLElement | null>(null);
   const [thens, setThens] = useState(0);
+  // The step whose task was done before a reload (its gates re-register unpassed).
+  const [solvedAt, setSolvedAt] = useState(-1);
+  const [nudged, setNudged] = useState(0);
+  // What each step's pass note said, for the ending's recap (text notes only).
+  const [found, setFound] = useState<Record<number, string>>({});
+  const [finished, setFinished] = useState(false);
+  const [next, setNext] = useState<string | null>(null);
+  // Said to a screen reader on a turn.
+  const [said, setSaid] = useState("");
+  const ids = useId();
   const scroller = useRef<HTMLDivElement>(null);
   const screen = useRef<HTMLDivElement>(null);
   const measured = useRef<HTMLDivElement>(null);
+  const ending = useRef<HTMLDivElement>(null);
   // The control last tapped: where it sat in the scrolled content, how tall the
   // screen was then, and when.
   const touched = useRef<{ top: number; height: number; t: number } | null>(null);
   const saveKey = useRef<string | null>(null);
+  // Set by a turn the reader made, so only those move focus (not a restore or a re-split).
+  const turned = useRef(false);
+  const atNow = useRef(0);
+  useEffect(() => {
+    atNow.current = at;
+  });
 
   const register = useCallback((id: string) => {
     setGates((g) => [...g, id]);
@@ -145,6 +190,7 @@ export function Journey({ title, children }: { title?: string; children: ReactNo
   const pass = useCallback((id: string, n?: ReactNode) => {
     setPassed((p) => (p.includes(id) ? p : [...p, id]));
     if (n) setNote(n);
+    if (typeof n === "string") setFound((f) => ({ ...f, [atNow.current]: n }));
   }, []);
   const gateApi = useMemo(() => ({ register, pass }), [register, pass]);
 
@@ -156,6 +202,7 @@ export function Journey({ title, children }: { title?: string; children: ReactNo
   // This step's screens: story 0…W−1, widget W, explanation W+1…lastPage.
   const { main, after } = splitStep(steps[at]);
   const staged = growWidget(main);
+  const widgetAt = main.findIndex((c) => !isProse(c));
   const cut = storyCuts[at];
   const afterCut = afterCuts[at];
   const W = cut?.length ?? 0;
@@ -167,13 +214,13 @@ export function Journey({ title, children }: { title?: string; children: ReactNo
 
   // Passed ids are kept apart from registered ones, so a gate that re-registers
   // (StrictMode, a re-run effect) cannot re-lock a task already done.
-  const cleared = at < furthest || gates.every((g) => passed.includes(g));
+  const cleared = at < furthest || at === solvedAt || gates.every((g) => passed.includes(g));
   const reachable = (i: number) => i <= Math.max(furthest, cleared ? at + 1 : at);
   const locked = !cleared && onWidget;
   // The Task belongs to the widget: keep it out of the top bar on every other screen.
   const stageApi = useMemo(
-    () => ({ taskSlot: onWidget ? taskSlot : null, thenSlot: page > W ? thenSlot : null, announceThen }),
-    [onWidget, taskSlot, page, W, thenSlot, announceThen],
+    () => ({ taskSlot: onWidget ? taskSlot : null, thenSlot: page > W ? thenSlot : null, announceThen, nudged }),
+    [onWidget, taskSlot, page, W, thenSlot, announceThen, nudged],
   );
 
   const go = (to: number, toPage = 0) => {
@@ -184,18 +231,42 @@ export function Journey({ title, children }: { title?: string; children: ReactNo
     setPage(toPage);
     setPassed([]);
     setNote(null);
+    setNudged(0);
+    setFinished(false);
+    turned.current = true;
+    setSaid(`ধাপ ${bn(to + 1)} / ${bn(steps.length)}`);
   };
   const turn = (p: number) => {
     setDir(p > page ? 1 : -1);
     setPage(p);
+    setNudged(0);
+    turned.current = true;
+    setSaid(`ধাপ ${bn(at + 1)}, ${p < W ? "গল্প" : p === W ? "কাজের screen" : "ব্যাখ্যা"}`);
   };
-  const forward = () => (locked ? undefined : page < lastPage ? turn(page + 1) : go(at + 1));
-  const back = () => (page > 0 ? turn(page - 1) : go(at - 1, pagesOf(at - 1)));
+  const finish = () => {
+    setDir(1);
+    setFinished(true);
+    turned.current = true;
+    setSaid("Journey শেষ।");
+  };
+  // A locked Continue is not dead: a tap (or →) says what is missing and shakes the Task.
+  const nudge = () => setNudged((n) => n + 1);
+  const atEnd = at === last && page === lastPage;
+  const forward = () => (finished ? undefined : locked ? nudge() : !atEnd ? (page < lastPage ? turn(page + 1) : go(at + 1)) : finish());
+  const back = () => {
+    if (!finished) return page > 0 ? turn(page - 1) : go(at - 1, pagesOf(at - 1));
+    turned.current = true;
+    setFinished(false);
+  };
 
-  // Every screen starts at its top.
+  // Every screen starts at its top; one the reader turned to takes the focus, so
+  // a screen reader reads on from the new screen, not from the button.
   useLayoutEffect(() => {
     scroller.current?.scrollTo({ top: 0 });
-  }, [at, page]);
+    if (!turned.current) return;
+    turned.current = false;
+    (finished ? ending.current : screen.current)?.focus({ preventScroll: true });
+  }, [at, page, finished]);
 
   // Measure what rendered whole (see `measured` below) and fix its breaks, before paint.
   useLayoutEffect(() => {
@@ -225,17 +296,112 @@ export function Journey({ title, children }: { title?: string; children: ReactNo
     Array.from(thenSlot.children).forEach((c, i) => ((c as HTMLElement).style.display = i >= from && i < to ? "" : "none"));
   });
 
-  // A turned phone is a different screen: measure again, except the step in hand.
+  // A screen is meant to be seen whole, never scrolled: a figure and the control
+  // that drives it must be on screen together, or the reader turns a knob and
+  // watches nothing. Breaks are planned on arrival, but a screen can grow after
+  // (a guess reveals the graph paper, an explanation figure opens up). Then it
+  // becomes more screens, as it would have on arrival:
+  //   widget screen       the story words kept beside the widget move onto a
+  //                       story screen of their own, before it;
+  //   explanation screen  the blocks that no longer fit start the next screen.
+  // Only what cannot be split, one widget or one figure alone, is zoomed down to
+  // fit, as GROW_WIDGET zooms a widget up on a big screen; past FIT_MIN the words
+  // get too small to read and the screen scrolls, the last resort. Never while a
+  // part is still being measured whole: the breaks are planned at ×1.
+  useLayoutEffect(() => {
+    const root = scroller.current;
+    const box = screen.current;
+    if (!root || !box || cut === undefined || (page > W && afterCut === undefined)) return;
+    const shown = (Array.from(box.children) as HTMLElement[]).find((c) => getComputedStyle(c).display !== "none");
+    // A story screen stretches to the room to centre its words; fit the words.
+    const el = (page < W ? shown?.firstElementChild : shown) as HTMLElement | null | undefined;
+    if (!el) return;
+    const w = widgetAt;
+    let z = 1;
+    el.style.zoom = "";
+    const fit = () => {
+      if (!el.getBoundingClientRect().height) return; // no longer on stage: display:none
+      const s = getComputedStyle(box);
+      const room = root.clientHeight - parseFloat(s.paddingTop) - parseFloat(s.paddingBottom) - 2;
+      // Measured at ×1, like the breaks.
+      el.style.zoom = "";
+      const h = el.getBoundingClientRect().height;
+      if (h > room && split(room)) return; // the new breaks re-run this effect
+      z = Math.max(FIT_MIN, Math.min(1, room / h));
+      el.style.zoom = z === 1 ? "" : String(z);
+    };
+    const split = (room: number): boolean => {
+      if (page < W) {
+        // A story screen whose words grew (a font or picture came in late): the
+        // blocks that no longer fit start a story screen of their own after it.
+        const blocks = Array.from(el.children) as HTMLElement[];
+        const limit = el.getBoundingClientRect().top + room;
+        let j = blocks.findIndex((b, i) => i > 0 && b.getBoundingClientRect().bottom > limit);
+        if (j < 0) return false;
+        while (j > 1 && (isHeading(blocks[j - 1]) || isFormula(blocks[j]))) j--;
+        const from = page ? cut[page - 1] : 0;
+        setStoryCuts((c) => ({ ...c, [at]: [...cut.slice(0, page), from + j, ...cut.slice(page)] }));
+        return true;
+      }
+      if (page === W) {
+        const from = W ? cut[W - 1] : 0;
+        if (w <= from) return false; // the widget is already alone
+        const kept = Array.from(el.children).slice(0, w - from);
+        if (kept.every(isHeading)) return false; // a screen of headings alone helps no one
+        setStoryCuts((c) => ({ ...c, [at]: [...cut, w] }));
+        setPage(W + 1);
+        return true;
+      }
+      if (page > W && thenSlot && afterCut) {
+        const k = page - W - 1;
+        const blocks = (Array.from(thenSlot.children) as HTMLElement[]).map((b, i) => [b, i] as const).filter(([b]) => b.style.display !== "none");
+        if (blocks.length < 2) return false;
+        const limit = el.getBoundingClientRect().top + room;
+        const over = blocks.findIndex(([b], j) => j > 0 && b.getBoundingClientRect().bottom > limit);
+        if (over < 0) return false;
+        let j = over;
+        while (j > 1 && (isHeading(blocks[j - 1][0]) || isFormula(blocks[j][0]))) j--;
+        const next = blocks[j][1];
+        setAfterCuts((c) => ({ ...c, [at]: [...afterCut.slice(0, k), next, ...afterCut.slice(k)] }));
+        return true;
+      }
+      return false;
+    };
+    fit();
+    const ro = new ResizeObserver(fit);
+    ro.observe(el);
+    ro.observe(root);
+    return () => {
+      ro.disconnect();
+      el.style.zoom = "";
+    };
+  }, [at, page, W, cut, afterCut, widgetAt, thenSlot]);
+
+  // A turned phone, a window made shorter or taller, a web font (Bangla, KaTeX)
+  // arriving after a step was measured: the old breaks are stale, so every other
+  // step is measured again on arrival. The step in hand keeps its breaks, since
+  // measuring whole would remount its widget; the effect above splits or fits
+  // its screen if it no longer fits. A few px of height (a phone's toolbar) are
+  // not a new screen.
   useEffect(() => {
     let width = window.innerWidth;
-    const onResize = () => {
-      if (window.innerWidth === width) return;
-      width = window.innerWidth;
+    let height = window.innerHeight;
+    const stale = () => {
       setStoryCuts((c) => ({ [at]: c[at] }) as Record<number, number[]>);
       setAfterCuts((c) => ({ [at]: c[at] }) as Record<number, number[]>);
     };
+    const onResize = () => {
+      if (window.innerWidth === width && Math.abs(window.innerHeight - height) < 80) return;
+      width = window.innerWidth;
+      height = window.innerHeight;
+      stale();
+    };
     window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
+    document.fonts?.addEventListener("loadingdone", stale);
+    return () => {
+      window.removeEventListener("resize", onResize);
+      document.fonts?.removeEventListener("loadingdone", stale);
+    };
   }, [at]);
 
   // Pick up where this browser left off. A layout effect, so the saved screen
@@ -243,13 +409,25 @@ export function Journey({ title, children }: { title?: string; children: ReactNo
   useLayoutEffect(() => {
     const key = `journey:${window.location.pathname}`;
     saveKey.current = key;
+    // The lesson after this one in its course, for the ending. Client-side because
+    // the MDX page does not tell the Journey its own slug.
+    const slug = decodeURIComponent(window.location.pathname.replace(/^\/dashboard\/articles\//, ""));
+    const course = COURSES.find((c) => c.items.includes(slug));
+    const after = course?.items[course.items.indexOf(slug) + 1];
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- the pathname, which the server render cannot see
+    setNext(after ? `/dashboard/articles/${after}` : null);
     try {
-      const saved = JSON.parse(localStorage.getItem(key) ?? "null") as { at?: number; furthest?: number } | null;
+      const saved = JSON.parse(localStorage.getItem(key) ?? "null") as Saved | null;
       if (saved && Number.isInteger(saved.furthest) && Number.isInteger(saved.at)) {
         const f = Math.min(Math.max(0, saved.furthest!), last);
-        // eslint-disable-next-line react-hooks/set-state-in-effect -- restoring browser storage, which the server render cannot see
+        const a = Math.min(Math.max(0, saved.at!), f);
         setFurthest(f);
-        setAt(Math.min(Math.max(0, saved.at!), f));
+        setAt(a);
+        // The screen within the step; clamped below once the step is measured.
+        if (Number.isInteger(saved.page)) setPage(Math.max(0, saved.page!));
+        if (saved.cleared) setSolvedAt(a);
+        if (saved.found && typeof saved.found === "object") setFound(saved.found);
+        if (saved.finished && a === last) setFinished(true);
       }
     } catch {
       // storage blocked or corrupt: start from screen 1
@@ -258,11 +436,21 @@ export function Journey({ title, children }: { title?: string; children: ReactNo
   useEffect(() => {
     if (!saveKey.current) return;
     try {
-      localStorage.setItem(saveKey.current, JSON.stringify({ at, furthest }));
+      const done = finished || !!(JSON.parse(localStorage.getItem(saveKey.current) ?? "null") as Saved | null)?.done;
+      const saved: Saved = { at, furthest, page, cleared, found, finished, done };
+      localStorage.setItem(saveKey.current, JSON.stringify(saved));
     } catch {
       // storage blocked: progress just is not kept
     }
-  }, [at, furthest]);
+  }, [at, furthest, page, cleared, found, finished]);
+  // A restored screen may no longer exist (a different screen size breaks the
+  // step differently) or may be past a task that was not done: pull it back.
+  useLayoutEffect(() => {
+    if (cut === undefined) return;
+    const max = !cleared || !explains ? W : afterCut === undefined ? page : lastPage;
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- a restored page checked against the step's measured screens
+    if (page > max) setPage(max);
+  }, [cut, afterCut, cleared, explains, page, W, lastPage]);
 
   // A tap that adds something below the fold scrolls it into view, but never so
   // far that the control just tapped leaves the top of the screen. Only when the
@@ -294,17 +482,58 @@ export function Journey({ title, children }: { title?: string; children: ReactNo
     return () => mo.disconnect();
   }, [at]);
 
-  const touch = (e: { target: EventTarget }) => {
+  // The other half: a tap that changes a figure in place adds nothing, so the
+  // observer above stays quiet — and on a short screen the reader taps a control
+  // and watches nothing happen, because the graph paper it drives is below the
+  // fold. Bring that figure into view. Same limit as above: never so far that the
+  // control just tapped leaves the screen, since the next tap must stay in reach.
+  const showFigure = (el: Element) => {
+    const root = scroller.current;
+    const box = screen.current;
+    if (!root || !box || !box.contains(el)) return;
+    // A tap inside the figure needs no help: the reader is already looking at it.
+    const figures = Array.from(box.querySelectorAll<SVGSVGElement>("svg[aria-label]")).filter((s) => !s.contains(el) && s.getBoundingClientRect().height > 0);
+    if (!figures.length) return;
+    const c = el.getBoundingClientRect();
+    const near = (s: Element) => {
+      const r = s.getBoundingClientRect();
+      return Math.abs(r.top + r.height / 2 - (c.top + c.height / 2));
+    };
+    const f = figures.reduce((a, b) => (near(b) < near(a) ? b : a)).getBoundingClientRect();
+    const view = root.getBoundingClientRect();
+    const M = 12;
+    // A figure taller than the screen shows from its top down, as much as fits.
+    const want = Math.min(f.height, view.height - 2 * M);
+    let by = 0;
+    if (f.top < view.top + M) by = f.top - view.top - M;
+    else if (f.top + want > view.bottom - M) by = f.top + want - view.bottom + M;
+    if (by > 0) by = Math.min(by, c.top - view.top - 8);
+    else if (by < 0) by = Math.max(by, c.bottom - view.bottom + 8);
+    if (Math.abs(by) > 8) root.scrollBy({ top: by, behavior: calm() ? "auto" : "smooth" });
+  };
+
+  const touch = (e: { target: EventTarget; type: string }) => {
     const root = scroller.current;
     const box = screen.current;
     const t = e.target as Element;
-    const el = t.closest?.("button, a, input, label, [role=slider], [role=application], svg") ?? t;
+    const control = t.closest?.("button, a, input, label, [role=slider], [role=application], svg") ?? null;
+    const el = control ?? t;
     if (!root || !box || !el.getBoundingClientRect) return;
     const top = el.getBoundingClientRect().top - root.getBoundingClientRect().top + root.scrollTop;
     // pointerdown and the click after it are one tap: keep the first spot.
     const prev = touched.current;
     if (prev && performance.now() - prev.t < 700) prev.t = performance.now();
     else touched.current = { top, height: box.offsetHeight, t: performance.now() };
+    // pointerdown is too early to see what the tap changed; the click after it isn't.
+    if (e.type === "pointerdown" || !control) return;
+    const was = box.offsetHeight;
+    requestAnimationFrame(() =>
+      requestAnimationFrame(() => {
+        // Content added below the fold is the observer's job, not this one.
+        if (!screen.current || screen.current.offsetHeight - was >= 24) return;
+        showFigure(control);
+      }),
+    );
   };
 
   // → / Enter to continue, ← to go back. A screen that wants the arrow keys for
@@ -374,7 +603,7 @@ export function Journey({ title, children }: { title?: string; children: ReactNo
             {bn(at + 1)}/{bn(steps.length)}
           </span>
         </div>
-        <div ref={setTaskSlot} aria-live="polite" className="mt-2.5 empty:hidden" />
+        <div ref={setTaskSlot} id={`${ids}-task`} aria-live="polite" className="mt-2.5 empty:hidden" />
       </div>
 
       {/* ---- the screen -------------------------------------------------------- */}
@@ -388,7 +617,13 @@ export function Journey({ title, children }: { title?: string; children: ReactNo
         <GateCtx.Provider value={gateApi}>
           <StageCtx.Provider value={stageApi}>
             <ClearedCtx.Provider value={cleared}>
-              <div ref={screen} key={at} className="flex min-h-full flex-col px-4 pt-5 pb-8 text-[1.07rem] leading-[1.75] sm:px-8 sm:pt-6">
+              <div
+                ref={screen}
+                key={at}
+                tabIndex={-1}
+                aria-label={`ধাপ ${bn(at + 1)} / ${bn(steps.length)}`}
+                className={`${finished ? "hidden" : "flex"} min-h-full flex-col px-4 pt-5 pb-8 text-[1.07rem] leading-[1.75] outline-none sm:px-8 sm:pt-6`}
+              >
                 {cut === undefined ? (
                   // First sight of the step: story and widget whole, to be measured.
                   <div ref={measured} className={`${enter(dir)} ${FIRST}`}>
@@ -435,13 +670,34 @@ export function Journey({ title, children }: { title?: string; children: ReactNo
             </ClearedCtx.Provider>
           </StageCtx.Provider>
         </GateCtx.Provider>
+        {finished ? <Ending ref={ending} title={title} steps={steps.length} found={found} next={next} onAgain={() => go(0)} /> : null}
         {/* a soft edge that says "more below"; at the very end it only covers the bottom padding */}
         <div aria-hidden="true" className="pointer-events-none sticky bottom-0 -mt-6 h-6 bg-linear-to-t from-surface" />
       </div>
 
       {/* ---- bottom bar: what they found, back, Continue ------------------- */}
       <div className="shrink-0 border-t border-border bg-surface px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:px-8 sm:pb-4">
+        {/* a turn, said to a screen reader */}
+        <div aria-live="polite" className="sr-only">
+          {said}
+        </div>
         <div aria-live="polite">
+          {locked && nudged ? (
+            <div
+              key={nudged}
+              className="nudge mb-3 flex items-start gap-2 rounded-xl bg-cat-amber/15 px-3 py-2 text-sm leading-snug font-medium motion-reduce:animate-none"
+            >
+              <span aria-hidden="true" className="mt-px grid size-5 shrink-0 place-items-center rounded-full bg-cat-amber text-xs font-bold text-white">
+                !
+              </span>
+              <span>
+                {taskSlot?.childElementCount
+                  ? "আগে ওপরের কাজটা করে ফেলুন, তারপর সামনে যাওয়া যাবে।"
+                  : "আগে এই screen-এর কাজটা করে ফেলুন, তারপর সামনে যাওয়া যাবে।"}
+              </span>
+            </div>
+          ) : null}
+          {onWidget && cleared && passed.length ? <span className="sr-only">কাজ শেষ। এখন সামনে যাওয়া যাবে।</span> : null}
           {onWidget && cleared && note ? (
             <div className="mb-3 flex items-start gap-2 rounded-xl bg-accent/10 px-3 py-2 text-sm leading-snug font-medium text-accent-text transition duration-300 motion-reduce:transition-none starting:translate-y-2 starting:opacity-0">
               <span className="mt-px grid size-5 shrink-0 place-items-center rounded-full bg-accent text-xs text-accent-foreground">✓</span>
@@ -454,13 +710,31 @@ export function Journey({ title, children }: { title?: string; children: ReactNo
             type="button"
             aria-label="আগের পাতা"
             onClick={back}
-            disabled={at === 0 && page === 0}
+            disabled={at === 0 && page === 0 && !finished}
             className="grid size-12 shrink-0 cursor-pointer place-items-center rounded-full border border-border text-lg text-muted transition-colors hover:border-accent hover:text-foreground disabled:cursor-default disabled:opacity-30 disabled:hover:border-border"
           >
             <span aria-hidden="true">←</span>
           </button>
-          {locked ? (
-            <button type="button" disabled title="কাজটা করলেই সামনে যাওয়া যাবে" className={`${bigBtn} cursor-not-allowed bg-border text-muted`}>
+          {finished ? (
+            next ? (
+              <Link href={next} style={{ textDecoration: "none" }} className={`${bigBtn} ${goBtn} text-accent-foreground!`}>
+                পরের পাঠ <span aria-hidden="true">→</span>
+              </Link>
+            ) : (
+              <Link href="/dashboard/articles" style={{ textDecoration: "none" }} className={`${bigBtn} ${goBtn} text-accent-foreground!`}>
+                লাইব্রেরিতে ফিরুন
+              </Link>
+            )
+          ) : locked ? (
+            // Not `disabled`: a disabled button swallows the tap and a screen reader
+            // may skip it. This one says why it is locked, and on a tap, what to do.
+            <button
+              type="button"
+              aria-disabled="true"
+              aria-describedby={`${ids}-task ${ids}-lock`}
+              onClick={nudge}
+              className={`${bigBtn} cursor-not-allowed bg-border text-muted`}
+            >
               {at < last || page < lastPage ? (
                 <>
                   এগিয়ে যান <span aria-hidden="true">→</span>
@@ -468,6 +742,9 @@ export function Journey({ title, children }: { title?: string; children: ReactNo
               ) : (
                 "শেষ ধাপ"
               )}
+              <span id={`${ids}-lock`} className="sr-only">
+                কাজটা শেষ হলে খুলবে।
+              </span>
             </button>
           ) : page === W && explains ? (
             <button type="button" onClick={forward} className={`${bigBtn} ${goBtn}`}>
@@ -478,8 +755,8 @@ export function Journey({ title, children }: { title?: string; children: ReactNo
               এগিয়ে যান <span aria-hidden="true">→</span>
             </button>
           ) : (
-            <button type="button" onClick={() => go(0)} className={`${bigBtn} border border-border text-foreground hover:border-accent`}>
-              <span aria-hidden="true">↺</span> আবার Start থেকে
+            <button type="button" onClick={finish} className={`${bigBtn} ${goBtn}`}>
+              শেষ করুন <span aria-hidden="true">✓</span>
             </button>
           )}
         </div>
@@ -487,6 +764,9 @@ export function Journey({ title, children }: { title?: string; children: ReactNo
     </div>
   );
 }
+
+/** The smallest a screen is zoomed to fit (see the fit effect in Journey). */
+const FIT_MIN = 0.7;
 
 /** The first block of a screen sits flush with its top. */
 const FIRST = "[&>*:first-child]:mt-0!";
@@ -606,6 +886,75 @@ function planStory(main: ReactNode[], el: HTMLElement, room: number, storyRoom: 
   return [...packBlocks(el, () => storyRoom, keep, topOf(keep)), keep];
 }
 
+/**
+ * After the last screen: the lesson is done, what the reader found on the way
+ * (each step's pass note), and where to go next. Focused on arrival.
+ */
+function Ending({
+  ref,
+  title,
+  steps,
+  found,
+  next,
+  onAgain,
+}: {
+  ref: Ref<HTMLDivElement>;
+  title?: string;
+  steps: number;
+  found: Record<number, string>;
+  next: string | null;
+  onAgain: () => void;
+}) {
+  const notes = Object.keys(found)
+    .map(Number)
+    .sort((a, b) => a - b)
+    .map((i) => found[i]);
+  return (
+    <div
+      ref={ref}
+      tabIndex={-1}
+      aria-labelledby="journey-ending"
+      className="flex min-h-full flex-col items-center px-4 pt-8 pb-8 text-center outline-none sm:px-8 transition duration-500 ease-out motion-reduce:transition-none starting:translate-y-3 starting:opacity-0"
+    >
+      <div aria-hidden="true" className="win-pop grid size-16 place-items-center rounded-full bg-accent text-3xl text-accent-foreground">
+        ✓
+      </div>
+      <div id="journey-ending" className="mt-4 text-2xl font-bold">
+        শেষ!
+      </div>
+      <div className="mt-1 text-muted">
+        {title ? `${title}: ` : ""}
+        {bn(steps)}টা ধাপ শেষ করলেন।
+      </div>
+      {notes.length ? (
+        <div className="mt-6 w-full max-w-xl text-left">
+          <div className="text-sm font-semibold text-muted">পথে যা যা খুঁজে পেলেন</div>
+          <ol className="mt-2 flex list-none flex-col gap-2 p-0">
+            {notes.map((n, i) => (
+              <li key={i} className="flex items-start gap-2.5 rounded-xl bg-accent/10 px-3 py-2 text-[0.95rem] leading-snug">
+                <span aria-hidden="true" className="mt-px grid size-5 shrink-0 place-items-center rounded-full bg-accent text-xs text-accent-foreground">
+                  ✓
+                </span>
+                <span>{n}</span>
+              </li>
+            ))}
+          </ol>
+        </div>
+      ) : null}
+      <div className="mt-6 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm">
+        {next ? (
+          <Link href="/dashboard/articles" style={{ color: "inherit" }} className="text-muted underline-offset-2 hover:underline">
+            লাইব্রেরিতে ফিরুন
+          </Link>
+        ) : null}
+        <button type="button" onClick={onAgain} className="cursor-pointer text-muted underline-offset-2 hover:underline">
+          <span aria-hidden="true">↺</span> আবার Start থেকে
+        </button>
+      </div>
+    </div>
+  );
+}
+
 /** Whether the step on stage is done. True outside a Journey, so `Then` still shows in a plain article. */
 const ClearedCtx = createContext(true);
 
@@ -626,16 +975,71 @@ export function Then({ children }: { children: ReactNode }) {
 }
 
 /**
+ * A side quest: words worth keeping that the lesson does not need (a story from
+ * the news, a reference table). One line in the explanation, and a tap opens
+ * it in a sheet over the Journey, so it never makes an explanation longer than a
+ * screen. The sheet sits on document.body, out of the Journey's zoom and split.
+ */
+export function SideQuest({ title, children }: { title: string; children: ReactNode }) {
+  const [open, setOpen] = useState(false);
+  const sheet = useRef<HTMLDialogElement>(null);
+  useEffect(() => {
+    if (open) sheet.current?.showModal();
+  }, [open]);
+  const close = () => sheet.current?.close();
+
+  return (
+    <div className="mt-4" data-nogrow>
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        className="flex w-full cursor-pointer items-center gap-3 rounded-xl border border-dashed border-muted/50 px-3.5 py-2.5 text-left text-[0.95rem] leading-snug transition-colors duration-200 hover:border-accent hover:bg-accent/5 motion-reduce:transition-none"
+      >
+        <span className="shrink-0 rounded-md bg-cat-amber/15 px-1.5 py-0.5 text-xs font-semibold text-cat-amber">Side quest</span>
+        <span className="min-w-0 flex-1">{title}</span>
+        <span aria-hidden="true" className="text-muted">
+          →
+        </span>
+      </button>
+      {open
+        ? createPortal(
+            <dialog
+              ref={sheet}
+              aria-label={title}
+              onClose={() => setOpen(false)}
+              onClick={(e) => e.target === e.currentTarget && close()}
+              className="article m-auto max-h-[85svh] w-[min(34rem,calc(100vw-2rem))] overflow-y-auto rounded-2xl border border-border bg-background p-0 text-foreground backdrop:bg-black/40"
+            >
+              <div className="sticky top-0 flex items-center gap-3 border-b border-border bg-background px-5 py-3">
+                <span className="shrink-0 rounded-md bg-cat-amber/15 px-1.5 py-0.5 text-xs font-semibold text-cat-amber">Side quest</span>
+                <span className="min-w-0 flex-1 font-semibold">{title}</span>
+                <button type="button" onClick={close} aria-label="বন্ধ করুন" className="cursor-pointer rounded-lg px-2 py-1 text-muted hover:bg-foreground/5">
+                  ✕
+                </button>
+              </div>
+              <div className="px-5 pb-5">{children}</div>
+            </dialog>,
+            document.body,
+          )
+        : null}
+    </div>
+  );
+}
+
+/**
  * The one thing a screen asks the reader to do, ticked when done. In a Journey
  * it is pinned in the top bar wherever the screen puts it, so the instruction
  * comes before the widget; in a plain article it stays where it is written.
  */
 export function Task({ done, children }: { done: boolean; children: ReactNode }) {
   const stage = useContext(StageCtx);
+  // A tap on a locked Continue shakes the Task and outlines it, to say "this first".
+  const nudged = !done && !!stage?.nudged;
   const card = (
     <div
+      key={nudged ? stage?.nudged : 0}
       className={`flex items-start gap-2.5 rounded-xl border px-3.5 py-2.5 text-[0.95rem] leading-snug transition-colors duration-300 motion-reduce:transition-none ${
-        done ? "border-accent/40 bg-accent/10" : "border-dashed border-muted/40"
+        done ? "border-accent/40 bg-accent/10" : nudged ? "nudge border-2 border-cat-amber bg-cat-amber/10 motion-reduce:animate-none" : "border-dashed border-muted/40"
       } ${stage ? "py-2 text-sm sm:text-[0.95rem]" : "mt-4"}`}
     >
       <span
@@ -665,7 +1069,7 @@ export function Check({
   options,
   answer,
   hint,
-  praise = "ঠিক ধরেছেন!",
+  praise,
   children,
 }: {
   question: string;
@@ -673,6 +1077,7 @@ export function Check({
   answer: number;
   /** shown after the first wrong pick */
   hint?: ReactNode;
+  /** the pass note: a one-line eureka, kept for the ending's recap */
   praise?: ReactNode;
   children?: ReactNode;
 }) {
@@ -684,7 +1089,9 @@ export function Check({
     if (won) return;
     if (i === answer) {
       setWon(true);
-      pass(praise);
+      // Without a praise of its own, the default is shown but kept out of the ending's
+      // recap (only string notes are recorded): "ঠিক ধরেছেন!" is not something found.
+      pass(praise ?? <>ঠিক ধরেছেন!</>);
     } else setWrong((w) => (w.includes(i) ? w : [...w, i]));
   };
 
