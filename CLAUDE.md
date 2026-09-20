@@ -11,6 +11,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `npm run dev` — dev server (http://localhost:3000)
 - `npm run build` / `npm start` — production build / serve
 - `npm run lint` — ESLint (flat config, `eslint-config-next`)
+- `npm run check` — tsc + ESLint on git-changed files + MDX compile of every article (`-- --all` lints everything)
+- `npm run shot -- <component-file> [Screen[:state]]` — PNGs of journey screens in named states, into `.shots/` (no dev server or login needed)
 - Tests are standalone `assert`-based self-checks, **not** a test runner (no `npm test`):
   - `npx tsx src/lib/articles.test.ts`
   - `SESSION_SELFCHECK=1 npx tsx src/lib/session.ts`
@@ -41,6 +43,8 @@ Key patterns: activities **self-register** to `session_activities` on presenter 
 **Scoring** (`src/lib/session.ts`) is pure and Supabase-free for testability: polls aren't scorable; unanswered activities count against the total.
 
 ## Conventions
+
+- Math for AI **journeys** (`src/content/articles/math_for_ai/`, `src/components/interactive/*-journey.tsx`): follow the `pathshala-journey` skill in `.claude/skills/`. To cut a source article into journeys first, use `pathshala-journey-plan`, which writes the `<nn>_journey_specs.md` that `pathshala-journey` then builds from. To animate a journey (story scenes before the widget, watch-only figures in `<Then>`), use `pathshala-animate`. Before handing a journey over, run its prose and screen text through `pathshala-voice` (the author's own editing pass).
 
 - `// ponytail:` comments mark **deliberate** simplifications with their upgrade path — respect them; don't "fix" them without reason.
 - PostgREST query builders are lazy: a bare `.update(...)` never runs — chain `.then(() => {})` to fire it.
