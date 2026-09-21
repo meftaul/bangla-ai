@@ -17,6 +17,7 @@ import {
   primaryBtn,
   usePlay,
   useScene,
+  useTween,
   useSeed,
   type Fixtures,
   type Look,
@@ -1027,6 +1028,233 @@ export function BackStep() {
 }
 
 // ---------------------------------------------------------------------------
+// 6¾ · A side quest off screen 6: the presses worked out instead of hunted,
+//      floor first and the symbols last. PressesFirst replays remote A, where
+//      each button owns one direction and the counts are the mark's own two
+//      numbers, so the reader watches the journey before anything is named.
+//      Then SolveWalk: settle how many times v is pressed (that is β), and
+//      slot 1 settles the presses of u with no choice left, so every landing
+//      sits on the x = 3 line and only the height is still in question. The
+//      reader walks β and watches the dot slide that line — on A it reaches
+//      the almirah at β = 5, on C at β = −1 (Fahim's own 5·u − 1·v), on B it
+//      never leaves (3, 3). Nothing is gated: a side quest has no Task, no
+//      pass().
+
+const X6Q_F = makeFrame(-1, 5, -1, 6, 15, 10);
+const X6Q_SAY = [
+  "Remote A's two buttons: u goes one tile right, v one tile up.",
+  "Press u three times, and Shiku is three tiles to the right.",
+  "Then v five times, five tiles up, right onto the almirah.",
+];
+
+export function PressesFirst() {
+  const s = useScene(3, [700, 1900, 2000]);
+  const k = s.k;
+  const keys = SHELF[0].keys;
+  const amt = k >= 2 ? [3, 5] : k >= 1 ? [3, 0] : [0, 0];
+
+  return (
+    <Scene
+      scene={s}
+      caption={k < 3 ? X6Q_SAY[k] : <span className={FADE}>3 right and 5 up. The almirah&apos;s own two numbers.</span>}
+    >
+      <div className="mx-auto flex items-center justify-center gap-4">
+        <div className="w-[7rem] shrink-0">
+          <Plane f={X6Q_F} grid={1} ticks={5} label="remote A: three presses of u go right, five presses of v go up, landing on (3, 5)" className="my-0! max-w-none">
+            <Chalk f={X6Q_F} at={ALMIRAH} name="almirah" on={k >= 2} />
+            {k === 0 ? (
+              <>
+                <Arrow f={X6Q_F} from={O} to={keys[0].v} tone={keys[0].tone} w={2.6} />
+                <Arrow f={X6Q_F} from={O} to={keys[1].v} tone={keys[1].tone} w={2.6} />
+              </>
+            ) : (
+              <Chains f={X6Q_F} keys={keys} amt={amt} />
+            )}
+            <Door f={X6Q_F} />
+            <Shiku f={X6Q_F} at={land(keys, amt)} />
+          </Plane>
+        </div>
+        <div className="min-w-0 font-mono text-[0.95rem] leading-relaxed">
+          <div className={TEXT[keys[0].tone]}>
+            {keys[0].name} = {tup(keys[0].v)}
+          </div>
+          <div className={TEXT[keys[1].tone]}>
+            {keys[1].name} = {tup(keys[1].v)}
+          </div>
+          <div className={`mt-2 ${k >= 1 ? "" : "opacity-30"}`}>
+            <span className={TEXT[keys[0].tone]}>3</span>·{keys[0].name} <span className="text-muted">right</span>
+          </div>
+          <div className={k >= 2 ? "" : "opacity-30"}>
+            <span className={TEXT[keys[1].tone]}>5</span>·{keys[1].name} <span className="text-muted">up</span>
+          </div>
+          <div className="mt-1 border-t border-border pt-1">
+            = <b className={k >= 2 ? "text-accent-text" : ""}>{tup(land(keys, amt))}</b>
+          </div>
+        </div>
+      </div>
+    </Scene>
+  );
+}
+
+/** the three remotes worth walking, in shelf order: A separates, B is stuck, C is Fahim's */
+const SQ_PICK = [0, 1, 2];
+const SQ_BETA = [-1, 0, 1, 2, 3, 4, 5];
+/** the almirah, the mark screen 6 was chasing */
+const SQ_GOAL = ALMIRAH;
+/** tall and narrow: every landing sits on one vertical line, so the height is what matters */
+const SQ_F = makeFrame(-1, 5, -2, 12, 11, 10);
+
+/** α is whatever puts slot 1 right, once β is settled. No choice is left in it. */
+const sqAlpha = (keys: Key[], b: number) => (SQ_GOAL[0] - b * keys[1].v[0]) / keys[0].v[0];
+/** and then slot 2 is whatever it turns out to be — nobody gets to pick it */
+const sqSlot2 = (keys: Key[], b: number) => sqAlpha(keys, b) * keys[0].v[1] + b * keys[1].v[1];
+
+function SqBox({ children, tone = "plain" }: { children: ReactNode; tone?: "plain" | "ok" | "bad" }) {
+  const look = { plain: "border-border", ok: "border-accent bg-accent/10 text-accent-text", bad: "border-danger/60 bg-danger/5 text-danger" }[tone];
+  return <span className={`inline-grid min-w-[3.1rem] place-items-center rounded-lg border-2 px-1 py-0.5 font-mono text-[1rem] ${look}`}>{children}</span>;
+}
+
+export function SolveWalk() {
+  const [pick, setPick] = useSeed("pick", 2);
+  const [b, setB] = useSeed("b", 0);
+  const keys = SHELF[SQ_PICK[pick]].keys;
+  const a = sqAlpha(keys, b);
+  const got = sqSlot2(keys, b);
+  const hit = got === SQ_GOAL[1];
+  const [dy] = useTween([got], 420);
+  /** on remote A the second button puts nothing in slot 1, so α comes out the same whatever β is */
+  const flat = keys[1].v[0] === 0;
+
+  const say = pick === 1
+    ? "Slot 2 reads 3 for every β there is. The dot never leaves (3, 3), so the almirah is out of reach."
+    : hit
+      ? pick === 0
+        ? `Landed. ${keys[0].name} three times and ${keys[1].name} five times — the almirah's own two numbers.`
+        : "There it is. u five times, v once backwards: the detour Fahim found by hunting."
+      : "One step of β, one step up the line. Keep walking until the dot reaches the almirah.";
+
+  return (
+    <div className="mt-3">
+      <div className="flex justify-center gap-2">
+        {SQ_PICK.map((s, i) => (
+          <button
+            key={SHELF[s].name}
+            type="button"
+            onClick={() => {
+              setPick(i);
+              setB(0);
+            }}
+            className={pill(pick === i)}
+          >
+            remote {SHELF[s].name}
+          </button>
+        ))}
+      </div>
+
+      <div className="mt-3 flex items-center justify-center gap-3">
+        <div className="w-[5.5rem] shrink-0">
+          <Plane f={SQ_F} grid={1} ticks={5} label="every landing sits on the vertical line through 3, and walking β slides it up and down that line" className="my-0! max-w-none">
+            <line
+              x1={SQ_F.sx(SQ_GOAL[0])}
+              y1={SQ_F.sy(-2)}
+              x2={SQ_F.sx(SQ_GOAL[0])}
+              y2={SQ_F.sy(12)}
+              strokeWidth={1.5}
+              strokeDasharray="3 3"
+              className="stroke-cat-blue/30"
+            />
+            {SQ_BETA.map((x) => (
+              <Dot key={x} f={SQ_F} at={[SQ_GOAL[0], sqSlot2(keys, x)]} r={2.2} className="fill-cat-blue/25" />
+            ))}
+            <Chalk f={SQ_F} at={SQ_GOAL} name="almirah" on={hit} />
+            <Arrow f={SQ_F} from={O} to={keys[0].v} tone={keys[0].tone} w={2.2} />
+            <Arrow f={SQ_F} from={O} to={keys[1].v} tone={keys[1].tone} w={2.2} />
+            <Door f={SQ_F} />
+            <Dot f={SQ_F} at={[SQ_GOAL[0], dy]} r={4.4} className={hit ? "fill-accent" : "fill-cat-blue"} />
+          </Plane>
+        </div>
+
+        <div className="min-w-0">
+          <div className="font-mono text-[0.9rem] leading-relaxed">
+            <div className={TEXT[keys[0].tone]}>
+              {keys[0].name} = {tup(keys[0].v)}
+            </div>
+            <div className={TEXT[keys[1].tone]}>
+              {keys[1].name} = {tup(keys[1].v)}
+            </div>
+          </div>
+          <div className="mt-2 grid grid-cols-[auto_auto_auto] items-center gap-x-1.5 gap-y-1 text-xs">
+            <span className="text-muted">wants</span>
+            <SqBox>{SQ_GOAL[0]}</SqBox>
+            <SqBox>{SQ_GOAL[1]}</SqBox>
+
+            <span className="text-muted">you get</span>
+            <span key={`a${a}${pick}`} className={POP}>
+              <SqBox tone="ok">{sg(SQ_GOAL[0])}</SqBox>
+            </span>
+            <span key={`b${got}${pick}`} className={POP}>
+              <SqBox tone={hit ? "ok" : "bad"}>{sg(got)}</SqBox>
+            </span>
+
+            <span />
+            <span className="text-center text-muted">slot 1</span>
+            <span className="text-center text-muted">slot 2</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-3 flex flex-wrap items-center justify-center gap-x-3 gap-y-2">
+        <span className="text-sm text-muted">
+          press <span className={`font-mono ${TEXT[keys[1].tone]}`}>{keys[1].name}</span> <span className="font-mono text-cat-coral">β</span> times
+        </span>
+        <Stepper value={b} onChange={setB} min={SQ_BETA[0]} max={SQ_BETA[SQ_BETA.length - 1]} label="β" />
+      </div>
+
+      <div className="mt-2 text-center font-mono text-[0.95rem]">
+        slot 1 then forces <span className="text-cat-blue">α</span> ={" "}
+        {flat ? (
+          <>
+            <b>{sg(a)}</b>, whatever β is
+          </>
+        ) : (
+          <>
+            {SQ_GOAL[0]} − {keys[1].v[0]}β = <b>{sg(a)}</b>
+          </>
+        )}
+      </div>
+
+      <div className="mt-1">
+        <Recipe keys={keys} amt={[a, b]} hit={hit} size="text-base" />
+      </div>
+
+      <div className="mt-3 rounded-xl bg-foreground/[0.04] px-3 py-2">
+        <div className="text-center text-xs text-muted">how high you land, as β walks</div>
+        <div className="mt-1 grid grid-cols-7 gap-1 text-center font-mono text-sm">
+          {SQ_BETA.map((x) => (
+            <div key={`h${x}`} className="text-xs text-muted">
+              {sg(x)}
+            </div>
+          ))}
+          {SQ_BETA.map((x) => {
+            const val = sqSlot2(keys, x);
+            const look = x === b ? "bg-cat-blue text-white" : val === SQ_GOAL[1] ? "text-accent-text" : "text-muted";
+            return (
+              <div key={`v${x}`} className={`rounded-md py-0.5 transition-colors duration-200 motion-reduce:transition-none ${look}`}>
+                {sg(val)}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      <div key={`say${pick}${hit}`} className={`${FADE} mt-2 text-center text-[0.95rem] ${hit ? "text-accent-text" : "text-muted"}`}>
+        {say}
+      </div>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
 // 7 · The paint toggle. For each remote in turn, shade every spot its buttons
 //     can reach between them: A the whole floor, B one slanted line, C the
 //     whole floor, D the wall line along the door. Four shapes, one word.
@@ -1678,6 +1906,8 @@ export const fixtures: Fixtures = {
   TwinSlots: { start: { k: 0 }, three: { k: 2 }, end: {} },
   MessyRemote: { start: {}, hunt: { guess: 0, amt: [5, 0] }, found: { guess: 0, amt: [5, -1], hit: ["almirah"] } },
   BackStep: { over: { k: 2 }, end: {} },
+  PressesFirst: { arrows: { k: 0 }, right: { k: 1 }, end: {} },
+  SolveWalk: { start: {}, found: { pick: 2, b: -1 }, stuck: { pick: 1, b: 2 }, plain: { pick: 0, b: 5 } },
   PaintReach: { start: {}, b: { pick: 1, on: true, painted: [0, 1] }, all: { pick: 3, on: true, painted: [0, 1, 2, 3] } },
   ThreeSpans: { mid: { k: 2 }, end: {} },
   DoorEveryTime: { start: { k: 0 }, mid: { k: 2 }, end: {} },

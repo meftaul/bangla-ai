@@ -35,6 +35,8 @@ import {
   TwinSlots,
   MessyRemote,
   BackStep,
+  PressesFirst,
+  SolveWalk,
   PaintReach,
   ThreeSpans,
   DoorEveryTime,
@@ -52,21 +54,20 @@ import {
 
 <Step>
 
-Fahim still remembers the library machine: the thick book on boats and paddy jumped to number two in a search for fish, just because its arrow was long. But the holidays are over, and Fahim's family is moving house. In the new flat, it turns out this time the question isn't about measuring likeness at all.
-
-The new flat is still empty. There's only the squares of the floor tiles and a few boxes. Ammu chalked four marks on the floor, for where each thing will go.
-
-Shiku's remote broke in the packing. The toy shop downstairs has four kinds of remote, each with two buttons, and Fahim has money for one. From the door corner, Shiku has to reach all four marks.
-
-Nasib heard and said, “With two buttons you can go anywhere.” The shop closes at Maghrib.
-
+ছুটি শেষ। আর Fahim-এর Family-ও বাসা Shift করছে।
+নতুন Flat এখনও ফাঁকা। Furniture-ও এখনও কিছু গোছানো হয়নি। কোথায় কী রাখবেন, তা ঠিক করার জন্য Ammu Chalk দিয়ে Floor-এর চার জায়গায় Mark করলেন।
+Pack করার সময় Shiku-র Remote-টা ভেঙে গেছে।
+নিচের Toy Shop-এ ৪ ধরনের Remote পাওয়া যাচ্ছে। প্রত্যেকটারই দুটো করে Button। কিন্তু Fahim-এর কাছে অত টাকা নেই। ও শুধু একটা Remote-ই কিনতে পারবে। Shiku-কে দিয়ে ও মালপত্র গোছাবে বলে ভাবছে। Door-এর Corner থেকে Shiku-কে চারটা Spot-এই যেতে পারতে হবে।
+Nasib শুনে বলল, “দুটো Button দিয়েই সব জায়গায় যাওয়া যাবে, সমস্যা নেই।”
+Decision নাও তাড়াতাড়ি। Maghrib-এর পর দোকান বন্ধ হয়ে যাবে।
 <MovingDay story />
 
 <RemoteShelf />
 
 <Then>
+4 টা Remote-ই দেখতে Almost Same। সবগুলোতেই দুটো করে Button। অবশ্য Button-এর ওপর কী লেখা আছে, সেটা দেখেই একমাত্র ওদের আলাদা করা যায়।
+Button-এর ওপর কিছু Number লেখা আছে। Shiku কোথায় যেতে পারবে আর কোথায় পারবে না, সেটা এই Number-গুলোই Decide করবে।
 
-Bet sealed. The four remotes look almost the same, two buttons each. The only difference is the numbers written on the buttons. Those numbers will decide where Shiku can go, and where he can't.
 
 <ShelfFour />
 
@@ -75,14 +76,17 @@ Bet sealed. The four remotes look almost the same, two buttons each. The only di
 </Step>
 
 <Step>
+দোকানের সবচেয়ে সস্তা Remote-টায় ১টাই Button আছে। তাতে লেখা $v=(1,1)$)।
+Fahim মনে মনে ভাবল, “এটাই আগে Use করে দেখি।”
+আরে বাহ! Button-টা দেখি সামনে-পিছনেও আনা-নেওয়া করা যায়। Press করার সময় যদি অর্ধেক গিয়ে থেমে যাই, তাহলে সেটা Half-Press হিসেবে Count হবে।
 
-The cheapest remote in the shop has only one button, $v = (1, 1)$. Fahim thought, let's try this one first. The button can be pressed forwards, and backwards too, and if you stop half-way, that's half a press.
 
 <OneButton />
 
 <Then>
 
 Wherever Shiku stopped, the dots sat on one straight line. Remember the sherbet in 3.2? Multiply a card by any number you like, and its tip stays on that one line. Same here, and the line passes right through the door.
+
 
 Everywhere one button can take you, all together, is that line. It has a name: **span**. Written down, it's $\text{span}\{v\}$.
 
@@ -161,6 +165,40 @@ First u five times, and Shiku went up to $(5, 10)$, with the almirah left far be
 Messy to look at, but u and v push two different ways. Neither one is a multiple of the other. That's all it takes. Go a little past, then step back, and you can land on any tile.
 
 <BackStep />
+
+<SideQuest title="The presses, worked out instead of hunted">
+
+Fahim found those presses by hunting: five forward, one back. You don't have to hunt. But before any symbols, watch what happens on the floor.
+
+Start with the old remote A, because its buttons are the easiest to picture. One goes right, one goes up.
+
+<PressesFirst />
+
+On remote A the counts were sitting there in plain sight. The almirah is at $(3, 5)$, so the right-going button 3 times and the up-going button 5 times. Each button owns one direction, so neither count gets in the other's way.
+
+Remote C is not so kind. Both of its buttons move right and up at the same time. So there are still two counts to find, and nothing to read them off.
+
+Here's the way in. Don't chase both counts at once. Settle one of them, and then look at what is left over.
+
+Say you settle how many times to press the second button. Now look at the first slot on its own, meaning how far right Shiku ends up. The second button has already put in its share of that, and the first button has to make up exactly the rest. So the first slot settles the other count for you, and leaves you no choice in it.
+
+Only one number was ever really free. Give the two counts their names now: the first button pressed $\alpha$ times, the second pressed $\beta$ times. Walk $\beta$ along and watch where Shiku lands.
+
+<SolveWalk />
+
+Every landing sits on the same vertical line, because $\alpha$ was picked to put the first slot at 3. So the only question left is height.
+
+On remote A, walking $\beta$ walks the height one for one, and 5 turns up at $\beta = 5$. On remote C the height climbs one at a time too, so it passes through 5, and through every other number besides. That is what reaching the whole floor really means.
+
+On remote B the dot never moves. Tell the first slot to be 3 and the second turns 3 along with it, for every $\beta$ there is. So remote B only reaches marks that ask for the same number twice: the table at $(2, 2)$, and the rest of that one line.
+
+Now the books' line is safe to read:
+
+$$\alpha u + \beta v = (3, 5)$$
+
+It is only asking how many times you press the first button, and how many times the second, to land on that one dot.
+
+</SideQuest>
 
 </Then>
 
@@ -296,3 +334,6 @@ Tomorrow morning, Dalal Bhai the broker brings the rent ledger. His app priced o
 </Step>
 
 </Journey>
+
+
+

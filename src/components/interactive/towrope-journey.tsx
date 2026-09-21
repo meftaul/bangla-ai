@@ -6,12 +6,11 @@ import { Bubble, Card as CastCard, Loop, Person, Stage, StoryFrame } from "@/com
 import { Task, useGate } from "@/components/journey/journey";
 import { Choice, Draw, FADE, Nope, POP, Scene, Ticks, pill, primaryBtn, useScene, useSeed, useTween, type Fixtures } from "@/components/journey/kit";
 import { Arrow, Label, Plane, makeFrame, sg, snap, type Frame, type XY } from "@/components/journey/plane";
-import { bn } from "./figure-kit";
 import { dot, num, tupN } from "./haat-journey";
 
-// Screens for "Math for AI 4.5 — গুণ টানা, টানের কতটা কাজে লাগে", told as a Journey.
+// Screens for "Math for AI 4.6 — Towing the boat, how much of the pull works", told as a Journey.
 //
-// The boat full of হাটের মাল is towed home from the bank (গুণ টানা). মাঝি চাচা
+// The boat full of the haat's goods is towed home from the bank (towing). Majhi chacha
 // says the longer the rope, the less pull is wasted; the reader bets. A pull
 // splits into a part along the river (the shadow) and a part at right angles
 // (the leftover). On a bending river the reader slides a point along it until
@@ -24,7 +23,7 @@ import { dot, num, tupN } from "./haat-journey";
 // unaided.
 //
 // After the screens come the story scenes (the tow, the river's bend, the
-// হালের মাঝি, ফাহিমের বুদ্ধি, the ghat's riddle, the পাঠাগার) and the watch-only
+// helmsman, Fahim's idea, the ghat's riddle, the library) and the watch-only
 // figures for each <Then>, numbered after their screen (1a, 1½, …).
 //
 // Tailwind only; the sheets are journey/plane. Ink on the white sheet is fixed.
@@ -79,7 +78,7 @@ function Man({ f, at }: { f: Frame; at: XY }) {
 //     (screen 6) settles it.
 
 const FT = makeFrame(-1, 9, -1, 4, 30);
-const ROPE_BET = ["ঠিক, লম্বা দড়িতে টান কম নষ্ট হয়", "দড়ির lengthে কিছু যায় আসে না, টান তো একই", "উল্টো, ছোট দড়িতে টান কাছ থেকে আসে, তাই বেশি কাজের"];
+const ROPE_BET = ["True — a long rope wastes less pull", "The rope's length changes nothing; a pull is a pull", "The other way — a short rope pulls from close by, so more of it works"];
 
 export function RopeBet() {
   const pass = useGate();
@@ -87,25 +86,25 @@ export function RopeBet() {
 
   const seal = (i: number) => {
     setBet(i);
-    pass("বাজি সিল হলো, মিলিয়ে দেখবো শেষে।");
+    pass("Bet sealed. We'll compare at the end.");
   };
 
   return (
     <>
-      <Plane f={FT} grid={0} axes={false} label="নদীতে নৌকা, পাড় থেকে দুইজন দড়ি দিয়ে টানছে" className="max-w-[20rem]">
+      <Plane f={FT} grid={0} axes={false} label="A boat in the river, two people pulling it by rope from the bank" className="max-w-[20rem]">
         <River f={FT} bank={3} />
         <path d={`M${FT.sx(0)} ${FT.sy(0)}L${FT.sx(6)} ${FT.sy(3)}`} strokeWidth={1.4} className="pointer-events-none stroke-[#78350f]" />
         <Boat f={FT} />
         <Man f={FT} at={[6, 3]} />
         <Man f={FT} at={[7, 3]} />
         <Label f={FT} at={[4, 0]} dy={20} size={9} weight={500} className="fill-[#0284c7]">
-          নদী →
+          River →
         </Label>
         <Label f={FT} at={[1.5, 3.4]} size={9} weight={500} className="fill-[#4d7c0f]">
-          পাড়
+          Bank
         </Label>
       </Plane>
-      <div className="text-sm font-medium text-muted">মাঝি চাচা বলছেন, “দড়ি যত লম্বা, টান তত কম নষ্ট।” আপনার কী মনে হয়?</div>
+      <div className="text-sm font-medium text-muted">Majhi chacha says, “The longer the rope, the less of the pull is wasted.” What do you think?</div>
       <div className="mt-2 grid gap-2">
         {ROPE_BET.map((o, i) => (
           <Choice key={o} n={i} look={bet === i ? "picked" : bet !== null ? "dim" : "idle"} disabled={bet !== null} onClick={() => seal(i)}>
@@ -113,7 +112,7 @@ export function RopeBet() {
           </Choice>
         ))}
       </div>
-      <Task done={bet !== null}>ছবিটা দেখে একটাতে বাজি ধরুন।</Task>
+      <Task done={bet !== null}>Look at the picture and bet on one.</Task>
     </>
   );
 }
@@ -124,7 +123,7 @@ export function RopeBet() {
 //     drawn live. Find: all forward, no forward at all, and (4, 3).
 
 const FS = makeFrame(-1, 7, -1, 4.5, 34);
-const SPLIT_GOALS = ["পুরো টান সামনে", "সামনে একটুও না", "সামনে 4, পাড়ের দিকে 3"];
+const SPLIT_GOALS = ["The whole pull forward", "Nothing forward at all", "4 forward, 3 towards the bank"];
 
 export function SplitPull() {
   const pass = useGate();
@@ -146,12 +145,12 @@ export function SplitPull() {
     if (g < 0 || hit.includes(g)) return;
     const next = [...hit, g];
     setHit(next);
-    if (next.length === SPLIT_GOALS.length) pass("প্রতিটা টান দুই ভাগ: সামনে আর পাড়ে।");
+    if (next.length === SPLIT_GOALS.length) pass("Every pull splits in two: forward, and towards the bank.");
   };
 
   return (
     <>
-      <Plane f={FS} ticks={1} label={`টান ${tupN(w)}`} drag={{ down: move, move }} className="max-w-[20rem]">
+      <Plane f={FS} ticks={1} label={`Pull ${tupN(w)}`} drag={{ down: move, move }} className="max-w-[20rem]">
         <River f={FS} />
         <Boat f={FS} />
         {w[0] !== 0 && <Arrow f={FS} from={O} to={[w[0], 0]} tone="teal" w={3} />}
@@ -160,16 +159,16 @@ export function SplitPull() {
       </Plane>
       <div className="grid grid-cols-2 gap-2 text-center">
         <div className="rounded-xl border-2 border-cat-teal/40 px-2 py-1.5">
-          <div className="text-xs text-muted">সামনে, নদী ধরে</div>
+          <div className="text-xs text-muted">Forward, along the river</div>
           <div className="font-mono text-lg font-bold">{sg(w[0])}</div>
         </div>
         <div className="rounded-xl border-2 border-cat-amber/40 px-2 py-1.5">
-          <div className="text-xs text-muted">পাড়ের দিকে, ৯০ degree কোণে</div>
+          <div className="text-xs text-muted">Towards the bank, at a right angle</div>
           <div className="font-mono text-lg font-bold">{sg(w[1])}</div>
         </div>
       </div>
       <Ticks items={SPLIT_GOALS.map((g, i) => [g, hit.includes(i)])} />
-      <Task done={all}>টানের মাথা টেনে টেনে তিনটা অবস্থা খুঁজে বের করুন।</Task>
+      <Task done={all}>Drag the pull's tip around and find the three states.</Task>
     </>
   );
 }
@@ -199,7 +198,7 @@ export function FindFoot() {
     if (Math.abs(7 - 13 * x) < 0.15) {
       setLam(FOOT);
       setFound(true);
-      pass("ছায়ার মাথায় দাগটা ৯০ degree কোণে, box এ  0।");
+      pass("At the shadow's head the dropped line is square: the box says 0.");
       return;
     }
     setLam(x);
@@ -207,7 +206,7 @@ export function FindFoot() {
 
   return (
     <>
-      <Plane f={FF} ticks={1} label={`নদী (2, 3), দড়ি (2, 1), নদীর ওপর বিন্দু ${tupF(P)}`} className="max-w-[14rem]">
+      <Plane f={FF} ticks={1} label={`River (2, 3), rope (2, 1), a point on the river ${tupF(P)}`} className="max-w-[14rem]">
         <path d={`M${FF.sx(-0.3)} ${FF.sy(-0.45)}L${FF.sx(2.3)} ${FF.sy(3.45)}`} strokeWidth={18} className="pointer-events-none stroke-[#38bdf8]/20" />
         <Arrow f={FF} from={O} to={V} tone="blue" w={2.4} />
         <Arrow f={FF} from={O} to={W} tone="coral" w={2.4} />
@@ -220,10 +219,10 @@ export function FindFoot() {
         />
         <circle cx={FF.sx(P[0])} cy={FF.sy(P[1])} r={4} className={`pointer-events-none ${found ? "fill-accent" : "fill-[#0f1b2d]"}`} />
         <Label f={FF} at={V} dx={-4} dy={-4} anchor="end" className="fill-cat-blue">
-          নদী
+          River
         </Label>
         <Label f={FF} at={W} dx={6} dy={4} anchor="start" className="fill-cat-coral">
-          দড়ি
+          Rope
         </Label>
       </Plane>
       <div className="mx-auto flex max-w-sm items-center gap-3">
@@ -235,22 +234,22 @@ export function FindFoot() {
           step={0.01}
           value={lam}
           disabled={found}
-          aria-label="নদীর arrow-এর কত ভাগ"
+          aria-label="What share of the river's arrow"
           onChange={(e) => slide(Number(e.target.value))}
           className="h-6 min-w-0 flex-1 cursor-pointer accent-[var(--cat-blue)] disabled:cursor-default"
         />
         <span className="font-mono text-sm text-muted">1</span>
       </div>
       <div className="mt-1 text-center text-[0.95rem]">
-        নদীর <b className="font-mono">{found ? "7/13" : fix(lam, 2)}</b> ভাগ, বিন্দু <span className="font-mono">{tupF(P)}</span>
+        <b className="font-mono">{found ? "7/13" : fix(lam, 2)}</b> of the river, point <span className="font-mono">{tupF(P)}</span>
       </div>
       <div className="mt-1 text-center text-[0.95rem]">
-        দাগ · নদী ={" "}
+        line · river ={" "}
         <b key={String(found)} className={`font-mono ${found ? `${POP} inline-block text-accent-text` : ""}`}>
           {found ? "0" : fix(box, 2)}
         </b>
       </div>
-      <Task done={found}>নদীর ওপর বিন্দুটা সরিয়ে এমন জায়গা খুঁজুন, যেখানে দড়ির মাথা থেকে নামানো দাগ নদীর সাথে ৯০ degree কোণ করে, মানে box এ  0।</Task>
+      <Task done={found}>Slide the point along the river and find the spot where the line down from the rope's tip meets the river at a right angle — the box says 0.</Task>
     </>
   );
 }
@@ -261,11 +260,11 @@ export function FindFoot() {
 //     leftover's box with the river is 24/13 − 24/13 = 0.
 
 const RECIPE = [
-  { btn: "দড়ি · নদী", line: "w · v = 2 × 2 + 1 × 3 = 7" },
-  { btn: "নদী · নদী", line: "v · v = 2 × 2 + 3 × 3 = 13" },
-  { btn: "ছায়া বানান", line: "ছায়া = (7 ÷ 13) × (2, 3) = (14/13, 21/13) ≈ (1.08, 1.62)" },
-  { btn: "বাকিটুকু বের করুন", line: "বাকি = w − ছায়া = (12/13, −8/13) ≈ (0.92, −0.62)" },
-  { btn: "বাকি · নদী", line: "বাকি · v = 24/13 − 24/13 = 0" },
+  { btn: "rope · river", line: "w · v = 2 × 2 + 1 × 3 = 7" },
+  { btn: "river · river", line: "v · v = 2 × 2 + 3 × 3 = 13" },
+  { btn: "Build the shadow", line: "shadow = (7 ÷ 13) × (2, 3) = (14/13, 21/13) ≈ (1.08, 1.62)" },
+  { btn: "Find the rest", line: "rest = w − shadow = (12/13, −8/13) ≈ (0.92, −0.62)" },
+  { btn: "rest · river", line: "rest · v = 24/13 − 24/13 = 0" },
 ];
 const FR = makeFrame(-0.5, 3, -1, 3.5, 36);
 
@@ -276,13 +275,13 @@ export function ShadowRecipe() {
 
   const step = () => {
     setK(k + 1);
-    if (k + 1 === RECIPE.length) pass("ছায়ার formula: (w · v ÷ v · v) × v।");
+    if (k + 1 === RECIPE.length) pass("The shadow's formula: (w · v ÷ v · v) × v.");
   };
 
   return (
     <>
       <div className="flex items-center gap-2">
-        <Plane f={FR} ticks={1} label="দড়ি, তার ছায়া আর বাকিটুকু" className="max-w-[8.5rem] shrink-0">
+        <Plane f={FR} ticks={1} label="The rope, its shadow and the rest" className="max-w-[8.5rem] shrink-0">
           <Arrow f={FR} from={O} to={V} tone="blue" w={2} faint />
           <Arrow f={FR} from={O} to={W} tone="coral" w={2.2} />
           {k >= 3 && <Arrow f={FR} from={O} to={shadow} tone="teal" w={3} draw />}
@@ -294,7 +293,7 @@ export function ShadowRecipe() {
               {r.line}
             </div>
           ))}
-          {k === 0 && <div className="text-sm text-muted">দড়ি w = (2, 1), নদী v = (2, 3)</div>}
+          {k === 0 && <div className="text-sm text-muted">rope w = (2, 1), river v = (2, 3)</div>}
         </div>
       </div>
       {k < RECIPE.length && (
@@ -304,7 +303,7 @@ export function ShadowRecipe() {
           </button>
         </div>
       )}
-      <Task done={k >= RECIPE.length}>হিসাবটা এক ধাপ এক ধাপ করে চালান।</Task>
+      <Task done={k >= RECIPE.length}>Run the sum one step at a time.</Task>
     </>
   );
 }
@@ -315,7 +314,7 @@ export function ShadowRecipe() {
 //     it runs straight. The leftover never moves it forward.
 
 const FP = makeFrame(-1, 8, -1, 3.5, 30);
-const DRIFT = ["সোজা সামনে", "সামনে যাবে, আবার পাড়ের দিকেও সরে যাবে", "শুধু পাড়ের দিকে যাবে, সামনে একটুও না"];
+const DRIFT = ["Straight forward", "It will go forward, and drift towards the bank too", "Only towards the bank, nothing forward at all"];
 
 export function SidePull() {
   const pass = useGate();
@@ -329,12 +328,12 @@ export function SidePull() {
     if (seen.includes(f)) return;
     const next = [...seen, f];
     setSeen(next);
-    if (next.includes(true) && next.includes(false)) pass("৯০ degree কোণের ভাগে নৌকা এগোয় না।");
+    if (next.includes(true) && next.includes(false)) pass("At a right angle, the part doesn't move the boat forward.");
   };
 
   return (
     <>
-      <Plane f={FP} grid={0} axes={false} label="হাল ছাড়লে নৌকা কোন দিকে যায়" className="max-w-[20rem]">
+      <Plane f={FP} grid={0} axes={false} label="Where the boat goes when the tiller is let go" className="max-w-[20rem]">
         <River f={FP} bank={3} />
         <path d={`M${FP.sx(0)} ${FP.sy(0)}L${FP.sx(5)} ${FP.sy(3)}`} strokeWidth={1.2} className="pointer-events-none stroke-[#78350f]/60" />
         <Man f={FP} at={[5, 3]} />
@@ -345,7 +344,7 @@ export function SidePull() {
       </Plane>
       {guess === null ? (
         <>
-          <div className="text-sm font-medium text-muted">হালের মাঝি হাল ছেড়ে দিলে নৌকা কোন দিকে যাবে?</div>
+          <div className="text-sm font-medium text-muted">The helmsman lets go of the tiller — which way will the boat go?</div>
           <div className="mt-2 grid gap-2">
             {DRIFT.map((o, i) => (
               <Choice key={o} n={i} look="idle" disabled={false} onClick={() => setGuess(i)}>
@@ -358,26 +357,26 @@ export function SidePull() {
         <div className={FADE}>
           <div className="flex justify-center gap-2">
             <button type="button" onClick={() => toggle(true)} className={`${pill(free === true)} font-sans`}>
-              হাল ছেড়ে দিন
+              Let go of the tiller
             </button>
             <button type="button" onClick={() => toggle(false)} className={`${pill(free === false)} font-sans`}>
-              হাল ধরুন
+              Hold the tiller
             </button>
           </div>
           {seen.includes(true) && (
             <div className={`${FADE} mt-2 text-center text-[0.95rem]`}>
-              {guess === 1 ? "ঠিক ধরেছেন।" : "নৌকা সামনেও গেল, পাড়ের দিকেও সরলো।"} সামনে যাওয়াটা পুরোটাই সবুজ ভাগের কাজ। হলুদ ভাগটা শুধু পাশে টানে।
+              {guess === 1 ? "Good guess." : "The boat went forward, and drifted towards the bank too."} The going-forward is all the green part's work. The yellow part only pulls sideways.
             </div>
           )}
         </div>
       )}
       <Ticks
         items={[
-          ["হাল ছাড়া", seen.includes(true)],
-          ["হাল ধরা", seen.includes(false)],
+          ["Tiller let go", seen.includes(true)],
+          ["Tiller held", seen.includes(false)],
         ]}
       />
-      <Task done={both}>আগে guess করুন, তারপর হাল একবার ছেড়ে আর একবার ধরে দেখুন।</Task>
+      <Task done={both}>Guess first, then let the tiller go once and hold it once, and watch.</Task>
     </>
   );
 }
@@ -407,38 +406,38 @@ export function LongRope() {
     if (b < 0 || seen.includes(b)) return;
     const next = [...seen, b];
     setSeen(next);
-    if (next.length === 3) pass("দড়ি লম্বা হলে টানের বেশিটা সামনে।");
+    if (next.length === 3) pass("A long rope sends most of the pull forward.");
   };
 
   return (
     <>
-      <Plane f={FLR} grid={0} axes={false} label={`${rope} মিটার দড়ি, কোণ ${fix(theta, 0)}°`} className="max-w-[22rem]">
+      <Plane f={FLR} grid={0} axes={false} label={`${rope} metres of rope, angle ${fix(theta, 0)}°`} className="max-w-[22rem]">
         <River f={FLR} bank={3} />
         <path d={`M${FLR.sx(0)} ${FLR.sy(0)}L${FLR.sx(x)} ${FLR.sy(3)}`} strokeWidth={1.4} className="pointer-events-none stroke-[#78350f]" />
         <Man f={FLR} at={[x, 3]} />
         <Boat f={FLR} />
       </Plane>
       <div className="mx-auto flex max-w-sm items-center gap-3">
-        <span className="text-sm text-muted">ছোট</span>
+        <span className="text-sm text-muted">short</span>
         <input
           type="range"
           min={3.5}
           max={15}
           step={0.5}
           value={rope}
-          aria-label="দড়ি কত মিটার"
+          aria-label="How many metres of rope"
           onChange={(e) => slide(Number(e.target.value))}
           className="h-6 min-w-0 flex-1 cursor-pointer accent-[var(--cat-blue)]"
         />
-        <span className="text-sm text-muted">লম্বা</span>
+        <span className="text-sm text-muted">long</span>
       </div>
       <div className="mt-1 text-center text-[0.95rem]">
-        দড়ি <b className="font-mono">{rope}</b> মিটার, কোণ <b className="font-mono">{fix(theta, 0)}°</b>
+        Rope <b className="font-mono">{rope}</b> metres, angle <b className="font-mono">{fix(theta, 0)}°</b>
       </div>
       <div className="mx-auto mt-2 grid max-w-sm gap-1.5">
         {[
-          { name: "সামনে", v: fwd, bar: "bg-cat-teal" },
-          { name: "পাড়ের দিকে, নষ্ট", v: side, bar: "bg-cat-amber" },
+          { name: "Forward", v: fwd, bar: "bg-cat-teal" },
+          { name: "Towards the bank, wasted", v: side, bar: "bg-cat-amber" },
         ].map((r) => (
           <div key={r.name} className="grid grid-cols-[6.5rem_1fr_2.5rem] items-center gap-2 text-sm">
             <span className="text-muted">{r.name}</span>
@@ -451,12 +450,12 @@ export function LongRope() {
       </div>
       <Ticks
         items={[
-          ["৪ মিটার বা কম", seen.includes(0)],
-          ["৮ মিটারের কাছে", seen.includes(1)],
-          ["১৪ মিটার বা বেশি", seen.includes(2)],
+          ["4 metres or less", seen.includes(0)],
+          ["Around 8 metres", seen.includes(1)],
+          ["14 metres or more", seen.includes(2)],
         ]}
       />
-      <Task done={all}>দড়িটা ছোট, মাঝারি আর লম্বা করে দেখুন, টানের কতটা সামনে যায়। মোট টান সবসময় {bn(PULL)}।</Task>
+      <Task done={all}>Make the rope short, middle and long, and watch how much of the pull goes forward. The total pull is always {PULL}.</Task>
     </>
   );
 }
@@ -491,12 +490,12 @@ export function KeepShadows() {
     if (seen.includes(m)) return;
     const next = [...seen, m];
     setSeen(next);
-    if (next.includes(1) && next.includes(2)) pass("ঠিক দিকে ছায়া নিলে হারায় সামান্যই।");
+    if (next.includes(1) && next.includes(2)) pass("Shadows on the right line lose almost nothing.");
   };
 
   return (
     <>
-      <Plane f={FK} grid={1} axes={false} label="বারোটা বিন্দু আর তাদের ছায়া" className="max-w-[18rem]">
+      <Plane f={FK} grid={1} axes={false} label="Twelve points and their shadows" className="max-w-[18rem]">
         {mode !== 0 && (
           <path
             d={`M${FK.sx(-4.4 * line[0])} ${FK.sy(-4.4 * line[1])}L${FK.sx(4.4 * line[0])} ${FK.sy(4.4 * line[1])}`}
@@ -516,28 +515,28 @@ export function KeepShadows() {
       </Plane>
       <div className="grid grid-cols-2 gap-2">
         <button type="button" onClick={() => go(1)} className={`${pill(mode === 1)} font-sans`}>
-          ছড়ানোর দিকে ছায়া
+          Shadows on the spread's line
         </button>
         <button type="button" onClick={() => go(2)} className={`${pill(mode === 2)} font-sans`}>
-          ৯০ degree কোণের দাগে ছায়া
+          Shadows on the line at a right angle
         </button>
       </div>
       <div className="mt-2 min-h-12 text-center text-[0.95rem]">
         {mode === 0 ? (
-          "প্রতিটা বিন্দু এখন দুইটা সংখ্যা, মোট ২৪টা।"
+          "Each point is now two numbers, 24 in all."
         ) : (
           <span key={mode} className={FADE}>
-            প্রতিটা বিন্দু এখন একটা সংখ্যা, মোট ১২টা। সবচেয়ে বড় হারানো বাকিটুকু <b className={`font-mono ${mode === 2 ? "text-danger" : ""}`}>{num(lost)}</b>।
+            Each point is now one number, 12 in all. The biggest lost leftover is <b className={`font-mono ${mode === 2 ? "text-danger" : ""}`}>{num(lost)}</b>.
           </span>
         )}
       </div>
       <Ticks
         items={[
-          ["ছড়ানোর দিকে", seen.includes(1)],
-          ["৯০ degree কোণের দাগে", seen.includes(2)],
+          ["On the spread's line", seen.includes(1)],
+          ["On the line at 90°", seen.includes(2)],
         ]}
       />
-      <Task done={both}>দুইটা দাগের ওপরই ছায়া ফেলে দেখুন, কোনটায় কম হারায়।</Task>
+      <Task done={both}>Take shadows on both lines and see which loses less.</Task>
     </>
   );
 }
@@ -548,11 +547,11 @@ export function KeepShadows() {
 //     tries bounce.
 
 const ASK = [
-  { q: "w · v কত?", opts: ["6", "8", "4"], ans: 0, say: "w · v = 4 + 2 = 6" },
-  { q: "v · v কত?", opts: ["1", "2", "4"], ans: 1, say: "v · v = 1 + 1 = 2" },
-  { q: "তাহলে ছায়া কত?", opts: ["(6, 6)", "(1.5, 1.5)", "(3, 3)"], ans: 2, say: "ছায়া = (6 ÷ 2) × (1, 1) = (3, 3)" },
-  { q: "বাকিটুকু, w − ছায়া?", opts: ["(1, −1)", "(7, 5)", "(−1, 1)"], ans: 0, say: "বাকি = (4, 2) − (3, 3) = (1, −1)" },
-  { q: "বাকি · v কত?", opts: ["2", "0", "−2"], ans: 1, say: "বাকি · v = 1 − 1 = 0 ✓" },
+  { q: "What is w · v?", opts: ["6", "8", "4"], ans: 0, say: "w · v = 4 + 2 = 6" },
+  { q: "What is v · v?", opts: ["1", "2", "4"], ans: 1, say: "v · v = 1 + 1 = 2" },
+  { q: "So what is the shadow?", opts: ["(6, 6)", "(1.5, 1.5)", "(3, 3)"], ans: 2, say: "shadow = (6 ÷ 2) × (1, 1) = (3, 3)" },
+  { q: "The rest, w − shadow?", opts: ["(1, −1)", "(7, 5)", "(−1, 1)"], ans: 0, say: "rest = (4, 2) − (3, 3) = (1, −1)" },
+  { q: "What is rest · v?", opts: ["2", "0", "−2"], ans: 1, say: "rest · v = 1 − 1 = 0 ✓" },
 ];
 const FY = makeFrame(-0.5, 4.5, -1.5, 3.5, 30);
 const WY: XY = [4, 2];
@@ -570,7 +569,7 @@ export function YourShadow() {
     if (i !== a.ans) return setMiss((miss ?? 0) + 1);
     setMiss(null);
     setDone(done + 1);
-    if (done + 1 === ASK.length) pass("(4, 2) ভাঙলো দুই ৯০ degree কোণের ভাগে।");
+    if (done + 1 === ASK.length) pass("(4, 2) split into two pieces at a right angle.");
   };
 
   return (
@@ -601,11 +600,11 @@ export function YourShadow() {
               </button>
             ))}
           </div>
-          {miss !== null && <Nope key={miss}>উঁহু। হিসাবটা ৪ নম্বর screen-এর মতোই: আগে দুইটা box, তারপর ভাগ, তারপর গুণ।</Nope>}
+          {miss !== null && <Nope key={miss}>No. The sum is just like screen 4's: first two boxes, then the division, then the multiply.</Nope>}
         </>
       )}
       <Task done={all}>
-        (4, 2)-এর ছায়া (1, 1)-এর ওপর বের করুন, step by step ({bn(done)}/{bn(ASK.length)})।
+        Find the shadow of (4, 2) on (1, 1), step by step ({done}/{ASK.length}).
       </Task>
     </>
   );
@@ -615,10 +614,10 @@ export function YourShadow() {
 // Story scenes and explanation figures. Watch-only, driven by the reader
 // (useScene): a story scene acts out a step's setup words, a figure acts out
 // the <Then> paragraph right before it. The river seen from the side (a boat,
-// the bank, the মাঝি in লুঙ্গি and গামছা, the ghat's stairs, a ডাব) and the
-// পাঠাগার's computer aren't in the cast, so they are drawn here in fixed ink,
-// like the rest of a Stage. পাঠাগারের আপা borrows রিনা's look and gets her own
-// name drawn under her feet.
+// the bank, the boatmen in lungi and gamchha, the ghat's stairs, a green
+// coconut) and the library's computer aren't in the cast, so they are drawn
+// here in fixed ink, like the rest of a Stage. The library apu borrows Rina's
+// look and gets her own name drawn under her feet.
 
 const T_INK = "#0f1b2d";
 const T_SKIN = "#b0764a";
@@ -673,8 +672,8 @@ function T_Sack({ x, y }: { x: number; y: number }) {
 
 /**
  * A country boat seen from the side, bow to the right, its waterline centre at
- * (x, y): হাটের মাল on board, the sail furled (no wind), and at the stern the
- * হাল. The mast's head, where the rope is tied, is at (x − 14, y − 62).
+ * (x, y): the haat's goods on board, the sail furled (no wind), and at the
+ * stern the tiller. The mast's head, where the rope is tied, is at (x − 14, y − 62).
  */
 function T_Boat({ x, y, s = 1 }: { x: number; y: number; s?: number }) {
   return (
@@ -695,7 +694,7 @@ function T_Boat({ x, y, s = 1 }: { x: number; y: number; s?: number }) {
 }
 
 /**
- * A মাঝি (not in the cast): লুঙ্গি, a white vest, a red গামছা round the head.
+ * A boatman (not in the cast): a lungi, a white vest, a red gamchha round the head.
  * Feet at (x, y), about 62 units tall at s = 1. `pose` "pull" leans into a
  * rope held at the chest; "hold" reaches forward; `walking` swings the legs for
  * `ms` each time `run` changes.
@@ -785,10 +784,10 @@ function T_Dab() {
 }
 
 // ---------------------------------------------------------------------------
-// 1a · A story scene for screen 1's setup, no task: গুণ টানা. The loaded boat
-//      on a river running the wrong way, the sail furled; মাঝি চাচা and his
-//      brother step onto the bank with the rope and walk, pulling; ফাহিম asks,
-//      and মাঝি চাচা gives the claim. Which rope wastes less is left open.
+// 1a · A story scene for screen 1's setup, no task: towing. The loaded boat
+//      on a river running the wrong way, the sail furled; Majhi chacha and his
+//      brother step onto the bank with the rope and walk, pulling; Fahim asks,
+//      and Majhi chacha gives the claim. Which rope wastes less is left open.
 
 const S1_WL = 158;
 const S1_BANK = 118;
@@ -804,7 +803,7 @@ export function GunTana({}: Story) {
   );
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="field" ground={100} label="মাল বোঝাই নৌকা, স্রোত উল্টো দিকে; মাঝি চাচা আর তাঁর ভাই পাড়ে নেমে লম্বা দড়িতে নৌকা টানেন; মাঝি চাচা বলেন, দড়ি যত লম্বা, টান তত কম নষ্ট">
+      <Stage backdrop="field" ground={100} label="A loaded boat, the current against it; Majhi chacha and his brother step onto the bank and tow the boat with a long rope; Majhi chacha says the longer the rope, the less pull is wasted">
         <T_Water top={124} />
         {k >= 1 &&
           [300, 206, 112].map((x) => (
@@ -815,16 +814,16 @@ export function GunTana({}: Story) {
           ))}
         {k >= 1 && (
           <text x={281} y={164} textAnchor="middle" fontSize={8.5} fontWeight={700} fill="#1e3a8a" className={FADE}>
-            স্রোত
+            current
           </text>
         )}
         <T_Boat x={bx} y={S1_WL} />
         <Person who="fahim" x={bx + 6} y={S1_WL - 10} scale={0.75} ms={0} mood={k === 4 ? "puzzled" : "plain"} arm={k === 4 ? "point" : "down"} />
         {ashore && <path d={`M${bx - 14} ${S1_WL - 62}L${cx + 3} ${my - 27}`} stroke="#78350f" strokeWidth={1.4} fill="none" className={FADE} />}
-        <T_Majhi x={dx} y={my} walking={k === 2 || k === 3} run={String(k)} ms={far ? 1800 : 1200} pose={far ? "pull" : "down"} cloth="#15803d" name={ashore ? "ভাই" : undefined} />
-        <T_Majhi x={cx} y={my} walking={k === 2 || k === 3} run={String(k)} ms={far ? 1800 : 1200} pose={far ? "pull" : "down"} mood={k >= 5 ? "happy" : "plain"} name={ashore ? "মাঝি চাচা" : undefined} />
-        {k === 4 && <Bubble x={bx + 6} y={S1_WL - 60} lines={["দড়িটা এত লম্বা কেন?"]} />}
-        {k >= 5 && <Bubble x={cx} y={my - 50} side="left" lines={["দড়ি যত লম্বা,", "টান তত কম নষ্ট।"]} />}
+        <T_Majhi x={dx} y={my} walking={k === 2 || k === 3} run={String(k)} ms={far ? 1800 : 1200} pose={far ? "pull" : "down"} cloth="#15803d" name={ashore ? "Brother" : undefined} />
+        <T_Majhi x={cx} y={my} walking={k === 2 || k === 3} run={String(k)} ms={far ? 1800 : 1200} pose={far ? "pull" : "down"} mood={k >= 5 ? "happy" : "plain"} name={ashore ? "Majhi chacha" : undefined} />
+        {k === 4 && <Bubble x={bx + 6} y={S1_WL - 60} lines={["Why is the rope so long?"]} />}
+        {k >= 5 && <Bubble x={cx} y={my - 50} side="left" lines={["The longer the rope,", "the less pull is wasted."]} />}
       </Stage>
     </StoryFrame>
   );
@@ -832,16 +831,16 @@ export function GunTana({}: Story) {
 
 // ---------------------------------------------------------------------------
 // 1½ · A figure for screen 1's explanation, no task: the tow seen from above.
-//      The মাঝিরা walk along the bank and the boat along the river, side by
+//      The boatmen walk along the bank and the boat along the river, side by
 //      side, so the rope runs slantwise; one pull along it, and a "?" for the
 //      part that is "wasted".
 
 const X1_F = makeFrame(-1, 10, -1, 4, 28);
 const X1_SAY = [
-  "ওপর থেকে দেখলে: নৌকা নদীতে, মাঝিরা পাড়ে।",
-  "মাঝিরা হাঁটেন পাড় ধরে, নৌকা চলে নদী ধরে। দুই দাগ পাশাপাশি।",
-  "তাই দড়িটা কোণাকুণি, নদীর সাথে একটা কোণ করে থাকে।",
-  "টান একটাই, দড়ি বরাবর। তাহলে “নষ্ট” হয় কোন অংশটা?",
+  "From above: the boat in the river, the boatmen on the bank.",
+  "The boatmen walk along the bank, the boat moves along the river. Two lines side by side.",
+  "So the rope runs slantwise, at an angle to the river.",
+  "There's only one pull, along the rope. So which part is “wasted”?",
 ];
 
 export function SlantRope() {
@@ -853,7 +852,7 @@ export function SlantRope() {
   return (
     <Scene scene={s} caption={T_say(X1_SAY, k)}>
       <div className="mx-auto w-full max-w-[19rem]">
-        <Plane f={f} grid={0} axes={false} label="ওপর থেকে: নৌকা নদীতে, মাঝিরা পাড়ে, দড়ি কোণাকুণি" className="my-0! max-w-none">
+        <Plane f={f} grid={0} axes={false} label="From above: boat in the river, boatmen on the bank, rope slantwise" className="my-0! max-w-none">
           <River f={f} bank={3} />
           {k >= 1 && <Draw d={`M${f.sx(0)} ${f.sy(0)}H${f.sx(1.5)}`} strokeWidth={3} ms={1600} className="stroke-[#0284c7]/60" />}
           {k >= 1 && <Draw d={`M${f.sx(6)} ${f.sy(3)}H${f.sx(8.5)}`} strokeWidth={3} ms={1600} className="stroke-[#4d7c0f]/60" />}
@@ -888,7 +887,7 @@ export function SlantRope() {
 
 // ---------------------------------------------------------------------------
 // 2½ · Two figures for screen 2's explanation, no task.
-//      (a) The split, built: noon sun straight over the river (4.3's রোদ)
+//      (a) The split, built: noon sun straight over the river (4.3's sun)
 //          drops the pull (3, 2) onto it; the shadow, then the leftover at a
 //          right angle, then the two joined back into the whole pull.
 //      (b) Why east is easy: on an east river the shadow is the first number
@@ -897,11 +896,11 @@ export function SlantRope() {
 const X2_F = makeFrame(-0.6, 4.4, -0.8, 3, 36);
 const X2_W: XY = [3, 2];
 const X2A_SAY = [
-  "নদী পূর্বে, দড়ির টান (3, 2)।",
-  "৪.৩-এর মতো রোদ ফেলি, একদম মাথার ওপর থেকে।",
-  "নদীর ওপর যা পড়লো, সেটা টানের ছায়া, মানে projection।",
-  "বাকি থাকে হলুদ অংশটা, নদীর সাথে একদম ৯০ degree কোণে।",
-  "সবুজের মাথায় হলুদ জুড়ে দিলে আবার পুরো টান।",
+  "The river runs east, the rope's pull is (3, 2).",
+  "Let the sun fall from straight overhead, as in 4.3.",
+  "What lands on the river is the pull's shadow, its projection.",
+  "Left over is the yellow part, at a right angle to the river.",
+  "Join the yellow to the green's tip and the whole pull is back.",
 ];
 
 /** A right-angle mark at `at`, its sides along the unit directions `a` and `b`, in units of `f`. */
@@ -917,7 +916,7 @@ export function ShadowDrop() {
   return (
     <Scene scene={s} caption={T_say(X2A_SAY, k)}>
       <div className="mx-auto w-full max-w-[13rem]">
-        <Plane f={f} grid={0} axes={false} label="টান (3, 2): নদীর ওপর ছায়া 3, আর ৯০ degree কোণে বাকি 2" className="my-0! max-w-none">
+        <Plane f={f} grid={0} axes={false} label="Pull (3, 2): shadow 3 on the river, and the rest 2 at a right angle" className="my-0! max-w-none">
           <River f={f} />
           {k >= 1 && (
             <g className={FADE}>
@@ -931,14 +930,14 @@ export function ShadowDrop() {
           {k >= 2 && <Arrow f={f} from={O} to={[3, 0]} tone="teal" w={3.4} draw />}
           {k >= 2 && (
             <Label f={f} at={[1.5, 0]} dy={16} size={9} className={`fill-[#0f766e] ${FADE}`}>
-              ছায়া
+              shadow
             </Label>
           )}
           {k >= 3 && <Arrow f={f} from={[3, 0]} to={X2_W} tone="amber" w={2.4} dashed />}
           {k >= 3 && <T_Square f={f} at={[3, 0]} a={[-1, 0]} b={[0, 1]} />}
           {k >= 3 && (
             <Label f={f} at={[3, 1]} dx={7} anchor="start" size={9} className={`fill-[#b45309] ${FADE}`}>
-              বাকি
+              rest
             </Label>
           )}
           <Arrow key={k >= 4 ? "again" : "w"} f={f} from={O} to={X2_W} tone="coral" w={2.6} draw={k >= 4} />
@@ -951,10 +950,10 @@ export function ShadowDrop() {
 
 const X2B_F = makeFrame(-0.5, 3.6, -0.6, 3.2, 34);
 const X2B_SAY = [
-  "টান আবার (3, 2), নদী পূর্বে।",
-  "নদী ধরে ছায়া 3, মানে টানের প্রথম সংখ্যাটাই।",
-  "বাকিটুকু 2, দ্বিতীয় সংখ্যা। কোনো হিসাব লাগলো না।",
-  "কিন্তু নদী তো সবসময় পূর্বে যায় না। বাঁক নিলে ছায়া কত?",
+  "The pull is (3, 2) again, the river running east.",
+  "The shadow along the river is 3 — the pull's first number.",
+  "The rest is 2, the second number. No sum needed.",
+  "But a river doesn't always run east. It takes a bend — how long is the shadow then?",
 ];
 
 export function EastEasy() {
@@ -966,7 +965,7 @@ export function EastEasy() {
     <Scene scene={s} caption={T_say(X2B_SAY, k)}>
       <div className="mx-auto flex w-full max-w-[19rem] items-center gap-3">
         <div className="w-full max-w-[9.5rem] shrink-0">
-          <Plane f={f} ticks={1} label={bend ? "নদী বাঁক নিয়েছে (2, 3)-এর দিকে, ছায়া অজানা" : "নদী পূর্বে, টান (3, 2)"} className="my-0! max-w-none">
+          <Plane f={f} ticks={1} label={bend ? "The river has bent along (2, 3); the shadow is unknown" : "The river runs east, pull (3, 2)"} className="my-0! max-w-none">
             <g
               style={{ transform: `rotate(${bend ? -56.31 : 0}deg)`, transformOrigin: `${f.sx(0)}px ${f.sy(0)}px` }}
               className="pointer-events-none transition-transform duration-1000 ease-in-out motion-reduce:transition-none"
@@ -980,7 +979,7 @@ export function EastEasy() {
           </Plane>
         </div>
         <div className="min-w-0 flex-1 text-center">
-          <div className="text-xs text-muted">টান</div>
+          <div className="text-xs text-muted">Pull</div>
           <div className="font-mono text-2xl font-bold">
             (<span className={`transition-colors duration-500 motion-reduce:transition-none ${k >= 1 && !bend ? "text-cat-teal" : ""}`}>3</span>,{" "}
             <span className={`transition-colors duration-500 motion-reduce:transition-none ${k >= 2 && !bend ? "text-cat-amber" : ""}`}>2</span>)
@@ -988,17 +987,17 @@ export function EastEasy() {
           <div className="mt-1 min-h-10 text-sm leading-snug">
             {k >= 1 && !bend && (
               <div className={FADE}>
-                ছায়া <b className="font-mono text-cat-teal">3</b>
+                shadow <b className="font-mono text-cat-teal">3</b>
               </div>
             )}
             {k >= 2 && !bend && (
               <div className={FADE}>
-                বাকি <b className="font-mono text-cat-amber">2</b>
+                rest <b className="font-mono text-cat-amber">2</b>
               </div>
             )}
             {bend && (
               <div className={FADE}>
-                ছায়া <b className="font-mono text-lg">?</b>
+                shadow <b className="font-mono text-lg">?</b>
               </div>
             )}
           </div>
@@ -1039,7 +1038,7 @@ export function RiverBend({}: Story) {
   const q = S3_at(S3_V, 50);
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="field" ground={0} label="ওপর থেকে নদী: পূর্বে গিয়ে বাঁক নিয়েছে (2, 3)-এর দিকে; দড়ির টান (2, 1); ছায়ার মাথা কোথায়, প্রশ্ন">
+      <Stage backdrop="field" ground={0} label="The river from above: it has bent along (2, 3); the rope's pull is (2, 1); where is the shadow's head, the question">
         <path d={`M-20 ${S3_BEND[1]}H${S3_BEND[0]}L${end[0]} ${end[1]}`} stroke="#7cb8e8" strokeWidth={42} fill="none" strokeLinejoin="round" />
         <g
           style={{ transform: `translate(${k >= 1 ? S3_BEND[0] : 42}px, ${S3_BEND[1]}px)` }}
@@ -1058,7 +1057,7 @@ export function RiverBend({}: Story) {
               style={{ transitionDelay: "450ms" }}
             />
             <text x={tip[0] + 34} y={tip[1] - 10} textAnchor="middle" fontSize={9} fontWeight={700} fill={T_INK} className={FADE}>
-              নদী
+              River
             </text>
             <CastCard x={tip[0] + 34} y={tip[1] + 4} text="(2, 3)" tone="blue" />
           </g>
@@ -1071,7 +1070,7 @@ export function RiverBend({}: Story) {
               <T_ManTop x={men[0] + 16} y={men[1] - 4} />
             </g>
             <text x={men[0] + 36} y={men[1] + 10} textAnchor="middle" fontSize={9} fontWeight={700} fill={T_INK} className={FADE}>
-              দড়ি
+              Rope
             </text>
             <CastCard x={men[0] + 36} y={men[1] + 24} text="(2, 1)" tone="coral" />
           </g>
@@ -1080,7 +1079,7 @@ export function RiverBend({}: Story) {
           <g>
             <CastCard x={q[0]} y={q[1]} text="?" tone="amber" w={18} />
             <text x={q[0] - 16} y={q[1] + 3} textAnchor="end" fontSize={9} fontWeight={700} fill={T_INK} className={FADE}>
-              ছায়ার মাথা কোথায়?
+              Where is the shadow's head?
             </text>
           </g>
         )}
@@ -1099,11 +1098,11 @@ export function RiverBend({}: Story) {
 
 const X3_F = makeFrame(-0.4, 2.9, -0.4, 3.4, 40);
 const X3A_SAY = [
-  "ছায়ার মাথা পড়েছিল নদীর arrow-এর ঠিক 7/13 ভাগে।",
-  "নদীর arrow-কে 13 ভাগ করলে ছায়ার মাথা ঠিক 7 নম্বর দাগে।",
-  "এবার দড়ি আর নদীর box: 4 + 3 = 7।",
-  "আর নদীর নিজের সাথে box: 4 + 9 = 13।",
-  "7 আর 13, দুইটাই box থেকে আসা। কাকতালীয় না।",
+  "The shadow's head landed exactly 7/13 of the way along the river's arrow.",
+  "Cut the river's arrow into 13 parts and the shadow's head sits on mark 7.",
+  "Now the box of rope and river: 4 + 3 = 7.",
+  "And the box of the river with itself: 4 + 9 = 13.",
+  "7 and 13, both from the box. No coincidence.",
 ];
 
 export function SevenThirteen() {
@@ -1116,7 +1115,7 @@ export function SevenThirteen() {
     <Scene scene={s} caption={T_say(X3A_SAY, k)}>
       <div className="mx-auto flex w-full max-w-[19rem] items-center gap-3">
         <div className="w-full max-w-[8.5rem] shrink-0">
-          <Plane f={f} ticks={1} label="নদী (2, 3), দড়ি (2, 1), ছায়ার মাথা নদীর 7/13 ভাগে" className="my-0! max-w-none">
+          <Plane f={f} ticks={1} label="River (2, 3), rope (2, 1), the shadow's head 7/13 of the way" className="my-0! max-w-none">
             <Arrow f={f} from={O} to={V} tone="blue" w={2.2} />
             <Arrow f={f} from={O} to={W} tone="coral" w={2.2} />
             {k >= 1 && (
@@ -1143,11 +1142,11 @@ export function SevenThirteen() {
         </div>
         <div className="grid min-w-0 flex-1 gap-1 text-[0.85rem] leading-snug">
           <div>
-            ভাগ <b className="font-mono">7/13</b>
+            share <b className="font-mono">7/13</b>
           </div>
           {k >= 2 && <div className={`${FADE} font-mono`}>w · v = 4 + 3 = 7</div>}
           {k >= 3 && <div className={`${FADE} font-mono`}>v · v = 4 + 9 = 13</div>}
-          {k >= 4 && <div className={`${FADE} font-bold text-accent-text`}>কাকতালীয় না।</div>}
+          {k >= 4 && <div className={`${FADE} font-bold text-accent-text`}>No coincidence.</div>}
         </div>
       </div>
     </Scene>
@@ -1155,19 +1154,19 @@ export function SevenThirteen() {
 }
 
 const X3B_ROWS: { name: string; f: string[] }[] = [
-  { name: "৪.৩: ছায়ার length", f: ["", "‖w‖ cos θ"] },
+  { name: "4.3: the shadow's length", f: ["", "‖w‖ cos θ"] },
   { name: "box", f: ["w · v = ‖v‖ ", "‖w‖ cos θ"] },
-  { name: "তাই ছায়ার length", f: ["w · v ÷ ‖v‖"] },
-  { name: "নদীর কত ভাগ", f: ["w · v ÷ ‖v‖²"] },
-  { name: "৪.১: ‖v‖² = v · v, তাই", f: ["7 ÷ 13"] },
+  { name: "so the shadow's length", f: ["w · v ÷ ‖v‖"] },
+  { name: "what share of the river", f: ["w · v ÷ ‖v‖²"] },
+  { name: "4.1: ‖v‖² = v · v, so", f: ["7 ÷ 13"] },
 ];
 const X3B_SAY = [
-  "হিসাবটা মেলাতে ৪.৩ আর ৪.১-এর দুইটা কথাই যথেষ্ট।",
-  "৪.৩ থেকে: ছায়ার length হলো ‖w‖ cos θ।",
-  "box-এর ভেতরেও সেই ‖w‖ cos θ আছে, সাথে বাড়তি একটা ‖v‖।",
-  "তাই box-কে ‖v‖ দিয়ে ভাগ করলেই ছায়ার length।",
-  "সেটা নদীর arrow-এর কত ভাগ, জানতে আরেকবার ‖v‖ দিয়ে ভাগ।",
-  "৪.১ থেকে ‖v‖² মানে v · v। তাই ভাগটা 7 ÷ 13।",
+  "Two facts, from 4.3 and 4.1, are enough to match the sum.",
+  "From 4.3: the shadow's length is ‖w‖ cos θ.",
+  "The same ‖w‖ cos θ sits inside the box, with an extra ‖v‖.",
+  "So dividing the box by ‖v‖ gives the shadow's length.",
+  "To find its share of the river's arrow, divide by ‖v‖ once more.",
+  "From 4.1, ‖v‖² means v · v. So the share is 7 ÷ 13.",
 ];
 
 export function WhySeven() {
@@ -1201,24 +1200,24 @@ export function WhySeven() {
 // ---------------------------------------------------------------------------
 // 4½ · Two figures for screen 4's explanation, no task.
 //      (a) The recipe read aloud: two boxes, one division, a stretch of the
-//          river's arrow down to 7/13 of itself; no root, no চাঁদা.
+//          river's arrow down to 7/13 of itself; no root, no protractor.
 //      (b) Any pull, any river: four pairs in turn, each split into shadow
 //          and leftover with the leftover square to the river. Only the first
 //          pair is the screen's; the other three are made up to show "any".
 
 const X4_F = makeFrame(-0.4, 2.6, -0.4, 3.4, 30);
 const X4A_SAY = [
-  "ছায়ার recipe, মুখে পড়ি।",
-  "প্রথম box: দড়ি আর নদী, 7।",
-  "দ্বিতীয় box: নদী আর নদী, 13।",
-  "একটা ভাগ: 7 ÷ 13।",
-  "তারপর নদীর arrow-কে সেই ভাগফল দিয়ে stretch। এটাই ছায়া।",
-  "কোনো root লাগে না, চাঁদাও না।",
+  "The shadow's recipe, read out loud.",
+  "First box: rope and river, 7.",
+  "Second box: river and river, 13.",
+  "One division: 7 ÷ 13.",
+  "Then stretch the river's arrow by that share. That's the shadow.",
+  "No root needed, and no protractor either.",
 ];
 const X4A_ROWS = [
   { name: "box", val: "w · v = 7" },
   { name: "box", val: "v · v = 13" },
-  { name: "ভাগ", val: "7 ÷ 13" },
+  { name: "divide", val: "7 ÷ 13" },
   { name: "stretch", val: "(7 ÷ 13) × v" },
 ];
 
@@ -1232,7 +1231,7 @@ export function RecipeAloud() {
     <Scene scene={s} caption={T_say(X4A_SAY, k)}>
       <div className="mx-auto flex w-full max-w-[19rem] items-center gap-3">
         <div className="w-full max-w-[7.5rem] shrink-0">
-          <Plane f={f} ticks={1} label="নদী (2, 3) stretch হয়ে তার 7/13 ভাগ, দড়ি (2, 1)-এর ছায়া" className="my-0! max-w-none">
+          <Plane f={f} ticks={1} label="The river (2, 3) stretched to 7/13 of itself — the rope's (2, 1) shadow" className="my-0! max-w-none">
             <Arrow f={f} from={O} to={V} tone="blue" w={2} faint={k >= 4} />
             <Arrow f={f} from={O} to={W} tone="coral" w={2} faint />
             {k >= 4 && <Arrow f={f} from={O} to={[t * V[0], t * V[1]]} tone="teal" w={3.2} />}
@@ -1256,7 +1255,7 @@ export function RecipeAloud() {
                 </text>
                 <path d="M3 17L21 3" strokeWidth={2} className="stroke-danger" strokeLinecap="round" />
               </svg>
-              <svg viewBox="0 0 28 20" aria-label="চাঁদা" className="h-5 w-7">
+              <svg viewBox="0 0 28 20" aria-label="protractor" className="h-5 w-7">
                 <path d="M3 16A11 11 0 0 1 25 16Z" strokeWidth={1.4} className="fill-none stroke-muted" />
                 <path d="M14 16V11M8 14l1.5 -2M20 14l-1.5 -2" strokeWidth={1} className="stroke-muted" />
                 <path d="M4 18L24 3" strokeWidth={2} className="stroke-danger" strokeLinecap="round" />
@@ -1288,7 +1287,7 @@ export function AnyRiver() {
   const sh: XY = [t * v[0], t * v[1]];
   const rest: XY = [w[0] - sh[0], w[1] - sh[1]];
   const rl = Math.hypot(rest[0], rest[1]);
-  const caption = `নদী ${tupN(v)}, টান ${tupN(w)}: বাকি · নদী = 0।${k === 3 ? " যেকোনো টান, যেকোনো নদী।" : ""}`;
+  const caption = `River ${tupN(v)}, pull ${tupN(w)}: rest · river = 0.${k === 3 ? " Any pull, any river." : ""}`;
   return (
     <Scene
       scene={s}
@@ -1299,7 +1298,7 @@ export function AnyRiver() {
       }
     >
       <div className="mx-auto w-full max-w-[11rem]">
-        <Plane f={f} ticks={1} label={`নদী ${tupN(v)}, টান ${tupN(w)}, ছায়া আর বাকিটুকু ৯০ degree কোণে`} className="my-0! max-w-none">
+        <Plane f={f} ticks={1} label={`River ${tupN(v)}, pull ${tupN(w)}, shadow and rest at a right angle`} className="my-0! max-w-none">
           <g key={k}>
             <path
               d={`M${f.sx(-u[0])} ${f.sy(-u[1])}L${f.sx(3.2 * u[0])} ${f.sy(3.2 * u[1])}`}
@@ -1325,9 +1324,9 @@ export function AnyRiver() {
 
 // ---------------------------------------------------------------------------
 // 5a · A story scene for screen 5's setup, no task: the boat under tow on a
-//      straight river again, and at the stern the হালের মাঝি on the হাল.
-//      ফাহিম wonders where the sideways pull goes, then what happens if the
-//      হাল is let go. The drift is left for the screen.
+//      straight river again, and at the stern the helmsman on the tiller.
+//      Fahim wonders where the sideways pull goes, then what happens if the
+//      tiller is let go. The drift is left for the screen.
 
 export function RudderMan({}: Story) {
   const s = useScene(3, [600, 1800, 2400, 2400]);
@@ -1335,17 +1334,17 @@ export function RudderMan({}: Story) {
   const [bx, cx, dx] = useTween([k >= 1 ? 112 : 88, k >= 1 ? 290 : 266, k >= 1 ? 236 : 212], 1600);
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="field" ground={100} label="গুণ টানা নৌকা, পেছনে হালের মাঝি হাল ধরে বসে; ফাহিম ভাবে, পাড়ের দিকের টান যায় কোথায়, হাল ছেড়ে দিলে কী হবে">
+      <Stage backdrop="field" ground={100} label="The boat under tow, the helmsman at the tiller at the stern; Fahim wonders where the bankwards pull goes, and what happens if the tiller is let go">
         <T_Water top={124} />
         <T_Boat x={bx} y={S1_WL} />
         <T_Majhi x={bx - 55} y={S1_WL - 10} pose="hold" cloth="#7c2d12" />
-        {k >= 1 && <T_Tag x={bx - 55} y={S1_WL - 66} text="হালের মাঝি" />}
+        {k >= 1 && <T_Tag x={bx - 55} y={S1_WL - 66} text="Helmsman" />}
         <Person who="fahim" x={bx + 8} y={S1_WL - 10} scale={0.75} ms={0} mood={k >= 2 ? "puzzled" : "plain"} />
         <path d={`M${bx - 14} ${S1_WL - 62}L${cx + 3} ${S1_BANK - 27}`} stroke="#78350f" strokeWidth={1.4} fill="none" />
         <T_Majhi x={dx} y={S1_BANK} walking={k === 1} run={String(k)} ms={1600} pose="pull" cloth="#15803d" />
         <T_Majhi x={cx} y={S1_BANK} walking={k === 1} run={String(k)} ms={1600} pose="pull" />
-        {k === 2 && <Bubble x={bx + 8} y={S1_WL - 60} side="right" tone="think" lines={["পাড়ের দিকের টানটা", "যায় কোথায়?"]} />}
-        {k >= 3 && <Bubble x={bx + 8} y={S1_WL - 60} side="right" tone="think" lines={["হাল ছেড়ে দিলে", "কী হবে?"]} />}
+        {k === 2 && <Bubble x={bx + 8} y={S1_WL - 60} side="right" tone="think" lines={["Where does the bankwards", "pull go?"]} />}
+        {k >= 3 && <Bubble x={bx + 8} y={S1_WL - 60} side="right" tone="think" lines={["What happens if", "the tiller is let go?"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1353,20 +1352,20 @@ export function RudderMan({}: Story) {
 
 // ---------------------------------------------------------------------------
 // 5½ · Two figures for screen 5's explanation, no task.
-//      (a) The হাল holds: the yellow part alone would only drag the boat to
-//          the bank; the হাল pushes back just as hard; the two cancel and the
-//          boat runs on the green part alone. The yellow is the "নষ্ট টান".
-//      (b) 0 is not −1: 4.2's van on its road (4, 3). মামী pushes from 90°
+//      (a) The tiller holds: the yellow part alone would only drag the boat to
+//          the bank; the tiller pushes back just as hard; the two cancel and the
+//          boat runs on the green part alone. The yellow is the "wasted pull".
+//      (b) 0 is not −1: 4.2's van on its road (4, 3). Mami pushes from 90°
 //          and the push's shadow on the road is a single point; a push from
 //          dead ahead has a shadow all the way backwards, cosine −1.
 
 const X5_F = makeFrame(-1, 7, -1.6, 3.3, 28);
 const X5A_SAY = [
-  "টানের দুই ভাগ: সবুজটা সামনে, হলুদটা পাড়ের দিকে।",
-  "হলুদ ভাগ একা থাকলে নৌকাকে শুধু পাড়ের দিকে নেয়, সামনে এক পা-ও না।",
-  "হালের মাঝি হাল দিয়ে ঠিক উল্টো দিকে ঠেকিয়ে রাখেন।",
-  "হলুদ আর হালের ঠেকা কাটাকাটি। নৌকা এগোয় শুধু সবুজ ভাগে।",
-  "হলুদ ভাগটা খরচ হলো, কাজে লাগলো না। এটাই মাঝি চাচার “নষ্ট টান”।",
+  "The pull in two parts: green forward, yellow towards the bank.",
+  "The yellow part alone would only take the boat to the bank, not one step forward.",
+  "The helmsman holds it off with the tiller, pushing exactly the other way.",
+  "The yellow and the tiller's hold cancel. The boat moves on the green part alone.",
+  "The yellow part was spent and did nothing. That is Majhi chacha's “wasted pull”.",
 ];
 
 export function RudderHolds() {
@@ -1377,7 +1376,7 @@ export function RudderHolds() {
   return (
     <Scene scene={s} caption={T_say(X5A_SAY, k)}>
       <div className="mx-auto w-full max-w-[16rem]">
-        <Plane f={f} grid={0} axes={false} label="নৌকার ওপর টানের সবুজ ভাগ সামনে, হলুদ ভাগ পাড়ের দিকে, হাল উল্টো দিকে ঠেকায়" className="my-0! max-w-none">
+        <Plane f={f} grid={0} axes={false} label="On the boat: the green part forward, the yellow towards the bank, the tiller holding the other way" className="my-0! max-w-none">
           <River f={f} bank={3} />
           {k === 1 && (
             <g opacity={0.25}>
@@ -1391,12 +1390,12 @@ export function RudderHolds() {
             {k >= 2 && <Arrow f={f} from={O} to={[0, -1.2]} tone="violet" w={2.4} draw={k === 2} faint={k >= 3} />}
             {k >= 2 && (
               <Label f={f} at={[0, -1.2]} dx={6} dy={2} anchor="start" size={9} className={`fill-[#6d28d9] ${FADE}`}>
-                হাল
+                tiller
               </Label>
             )}
             {k >= 4 && (
               <Label f={f} at={[0, 1.2]} dx={-6} dy={4} anchor="end" size={9} weight={700} className={`fill-[#b45309] ${FADE}`}>
-                নষ্ট টান
+                wasted pull
               </Label>
             )}
             <Boat f={f} />
@@ -1411,11 +1410,11 @@ const X5B_F = makeFrame(-2.6, 2.6, -1.8, 1.9, 30);
 const X5B_R: XY = [0.8, 0.6];
 const X5B_N: XY = [-0.6, 0.8];
 const X5B_SAY = [
-  "৪.২-এর ভ্যান, রাস্তা ধরে।",
-  "মামী ঠেললেন ৯০ degree কোণ থেকে। ভ্যান এক চুলও আগালো না।",
-  "রাস্তার ওপর ধাক্কার ছায়া একটা বিন্দু, মানে 0। একটার দিকে আরেকটার কোনো ভাগই নাই।",
-  "কেউ সামনে থেকে উল্টো দিকে ঠেললে ছায়া পুরোটাই উল্টা দিকে। Cosine তখন −1।",
-  "0 মানে সম্পর্কটাই নাই। −1 মানে উল্টা, আর সেটা একটা শক্ত সম্পর্ক।",
+  "4.2's van, on its road.",
+  "Mami pushed at a right angle. The van didn't move a hair.",
+  "On the road, the push's shadow is a single point, meaning 0. Nothing of one is in the direction of the other.",
+  "Pushed from dead ahead the other way, the shadow is the whole way backwards. The cosine is −1.",
+  "0 means no relationship. −1 means opposite, and that is a strong relationship.",
 ];
 
 export function ZeroNotMinus() {
@@ -1431,7 +1430,7 @@ export function ZeroNotMinus() {
   return (
     <Scene scene={s} caption={T_say(X5B_SAY, k)}>
       <div className="mx-auto w-full max-w-[12.5rem]">
-        <Plane f={f} grid={0} axes={false} label="ভ্যানের রাস্তা (4, 3); মামীর ধাক্কা ৯০ degree কোণে, ছায়া 0; সামনে থেকে উল্টো ধাক্কা, cosine −1" className="my-0! max-w-none">
+        <Plane f={f} grid={0} axes={false} label="The van's road (4, 3); Mami's push at a right angle, shadow 0; a push from dead ahead, cosine −1" className="my-0! max-w-none">
           <path
             d={`M${f.sx(-2.4 * X5B_R[0])} ${f.sy(-2.4 * X5B_R[1])}L${f.sx(2.4 * X5B_R[0])} ${f.sy(2.4 * X5B_R[1])}`}
             strokeWidth={22}
@@ -1450,7 +1449,7 @@ export function ZeroNotMinus() {
           {k >= 1 && <Arrow f={f} from={mTail} to={mHead} tone="violet" w={2.6} draw={k === 1} />}
           {k >= 1 && (
             <Label f={f} at={mTail} dx={-4} dy={-5} anchor="end" size={9} className={`fill-[#6d28d9] ${FADE}`}>
-              মামী
+              Mami
             </Label>
           )}
           {k >= 2 && (
@@ -1490,11 +1489,11 @@ const X6_ROPES = [4, 8, 15].map((L) => {
   return { L, x, deg: (Math.atan2(3, x) * 180) / Math.PI, cos: x / L };
 });
 const X6A_SAY = [
-  "পাড় নৌকা থেকে 3 মিটার দূরে, দড়ি যত লম্বাই হোক।",
-  `দড়ি 4 মিটার: মাঝিরা প্রায় পাশাপাশি, কোণ ${fix(X6_ROPES[0].deg, 0)}°। cos θ মাত্র ${fix(X6_ROPES[0].cos, 2)}।`,
-  `দড়ি 8 মিটার: কোণ ছোট হয়ে ${fix(X6_ROPES[1].deg, 0)}°, cos θ ${fix(X6_ROPES[1].cos, 2)}।`,
-  `দড়ি 15 মিটার: কোণ মাত্র ${fix(X6_ROPES[2].deg, 0)}°, cos θ ${fix(X6_ROPES[2].cos, 2)}, প্রায় 1। টানের প্রায় পুরোটাই সামনে।`,
-  "দড়ি যত লম্বা, কোণ তত ছোট, cos θ তত 1-এর কাছে। মাঝি চাচাই ঠিক।",
+  "The bank is 3 metres from the boat, however long the rope.",
+  `Rope 4 metres: the boatmen stand almost level with it, angle ${fix(X6_ROPES[0].deg, 0)}°. cos θ is only ${fix(X6_ROPES[0].cos, 2)}.`,
+  `Rope 8 metres: the angle shrinks to ${fix(X6_ROPES[1].deg, 0)}°, cos θ ${fix(X6_ROPES[1].cos, 2)}.`,
+  `Rope 15 metres: the angle is only ${fix(X6_ROPES[2].deg, 0)}°, cos θ ${fix(X6_ROPES[2].cos, 2)}, nearly 1. Almost the whole pull goes forward.`,
+  "The longer the rope, the smaller the angle, the closer cos θ gets to 1. Majhi chacha was right.",
 ];
 
 export function RopeFan() {
@@ -1504,11 +1503,11 @@ export function RopeFan() {
   return (
     <Scene scene={s} caption={T_say(X6A_SAY, k)}>
       <div className="mx-auto w-full max-w-[20rem]">
-        <Plane f={f} grid={0} axes={false} label="একই পাড়ে 4, 8 আর 15 মিটার দড়ি: কোণ ছোট হয়, cos θ 1-এর দিকে যায়" className="my-0! max-w-none">
+        <Plane f={f} grid={0} axes={false} label="Ropes of 4, 8 and 15 metres to the same bank: the angle shrinks, cos θ creeps to 1" className="my-0! max-w-none">
           <River f={f} bank={3} />
           <path d={`M${f.sx(15)} ${f.sy(0)}V${f.sy(3)}M${f.sx(14.8)} ${f.sy(0)}H${f.sx(15.2)}M${f.sx(14.8)} ${f.sy(3)}H${f.sx(15.2)}`} strokeWidth={1} className="pointer-events-none stroke-[#0f1b2d]/60" />
           <Label f={f} at={[14.8, 1.5]} dy={3} anchor="end" size={8} className="fill-[#0f1b2d]">
-            3 মিটার
+            3 metres
           </Label>
           {X6_ROPES.map((r, i) => {
             if (k < i + 1) return null;
@@ -1536,7 +1535,7 @@ export function RopeFan() {
         {X6_ROPES.map((r, i) =>
           k > i ? (
             <span key={r.L} className={`${FADE} rounded-full px-2 py-0.5 ${i === 2 ? "bg-accent/15 font-semibold" : "bg-foreground/5"}`}>
-              <b className="font-mono">{r.L}</b> মিটার, cos θ <b className="font-mono">{fix(r.cos, 2)}</b>
+              <b className="font-mono">{r.L}</b> metres, cos θ <b className="font-mono">{fix(r.cos, 2)}</b>
             </span>
           ) : null,
         )}
@@ -1546,10 +1545,10 @@ export function RopeFan() {
 }
 
 const X6B_SAY = [
-  "অঙ্ক বলে, দড়ি যত লম্বা তত ভালো।",
-  "কিন্তু দড়ি খুব লম্বা হলে ভারী হয়, মাঝখানে পানিতে ঝুলে পড়ে।",
-  "আর নিচে বাঁধলে দড়ি পাড়ের ঝোপঝাড়ে আটকায়।",
-  "তাই মাঝিরা বাছেন মাঝামাঝি length, আর দড়ি বাঁধেন মাস্তুলের মাথায়।",
+  "The maths says: the longer the rope, the better.",
+  "But a very long rope is heavy and sags into the water in the middle.",
+  "And tied low, the rope snags on the bank's bushes.",
+  "So the boatmen pick a middle length and tie the rope at the top of the mast.",
 ];
 
 export function SagRope() {
@@ -1563,7 +1562,7 @@ export function SagRope() {
   const midy = (ay + hy) / 2 + sag;
   return (
     <Scene scene={s} caption={T_say(X6B_SAY, k)}>
-      <svg viewBox="0 0 300 112" role="img" aria-label="পাশ থেকে গুণ টানা: খুব লম্বা দড়ি পানিতে ঝোলে, নিচে বাঁধা দড়ি ঝোপে আটকায়, মাস্তুলের মাথায় বাঁধা মাঝারি দড়ি পরিষ্কার" className="mx-auto block h-auto w-full max-w-[18rem]">
+      <svg viewBox="0 0 300 112" role="img" aria-label="Towing from the side: a very long rope sags into the water, a low-tied rope snags on the bushes, a middle rope tied at the mast's head clears them" className="mx-auto block h-auto w-full max-w-[18rem]">
         <rect width={300} height={112} rx={10} fill="#e0f2fe" />
         <rect y={56} width={300} height={16} fill="#86c06c" />
         <path d="M0 72H300V102Q300 112 290 112H10Q0 112 0 102Z" fill="#7cb8e8" />
@@ -1594,8 +1593,8 @@ export function SagRope() {
 }
 
 // ---------------------------------------------------------------------------
-// 7a · A story scene for screen 7's setup, no task: ফাহিমের বুদ্ধি. Near the
-//      ghat, ফাহিম in the boat thinks: a shadow turns an arrow into one number;
+// 7a · A story scene for screen 7's setup, no task: Fahim's idea. Near the
+//      ghat, Fahim in the boat thinks: a shadow turns an arrow into one number;
 //      what about a whole cloud of points lying along a line? Dashes drop
 //      from each point to the line, and a "?" for what is lost.
 
@@ -1612,7 +1611,7 @@ export function FahimIdea({}: Story) {
   const lineB = c([4.2 * DIR[0], 4.2 * DIR[1]]);
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="evening" ground={100} label="ঘাটের কাছে নৌকায় ফাহিম ভাবছে: ছায়া নিলে arrow থেকে একটা সংখ্যা; একগাদা বিন্দুর ছায়া একটা দাগে নিলে কী হারায়">
+      <Stage backdrop="evening" ground={100} label="Near the ghat, Fahim in the boat thinks: a shadow turns an arrow into one number; take a whole cloud of points' shadows on one line — what is lost?">
         <T_Water top={124} />
         <T_Boat x={bx} y={S7_WL} />
         <Person who="fahim" x={bx + 8} y={S7_WL - 10} scale={0.75} ms={0} mood={k >= 1 ? "smug" : "plain"} />
@@ -1630,7 +1629,7 @@ export function FahimIdea({}: Story) {
             <path d={`M${cx + 96} ${cy + 26}V${cy + 70}`} stroke="#0f1b2d" strokeOpacity={0.5} strokeDasharray="3 2" />
             <path d={`M${cx + 24} ${cy + 70}H${cx + 96}`} stroke="#0f766e" strokeWidth={3.4} strokeLinecap="round" />
             <text x={cx + 60} y={cy + 86} textAnchor="middle" fontSize={9} fontWeight={700} fill="#0f766e">
-              একটা সংখ্যা
+              one number
             </text>
           </g>
         )}
@@ -1651,7 +1650,7 @@ export function FahimIdea({}: Story) {
         )}
         {k >= 3 && (
           <text x={cx + 140} y={cy + 88} textAnchor="end" fontSize={9.5} fontWeight={800} fill="#b45309" className={FADE}>
-            কী হারায়?
+            What is lost?
           </text>
         )}
       </Stage>
@@ -1671,10 +1670,10 @@ export function FahimIdea({}: Story) {
 const X7_F = makeFrame(-1, 3, -1, 2.1, 40);
 const X7_P = CLOUD[9];
 const X7A_SAY = [
-  "বারোটার একটা বিন্দু, দুইটা সংখ্যা: (2.46, 0.89)।",
-  "ছড়ানোর দিকের দাগে ছায়া নিলে থাকে একটাই সংখ্যা, 2.6।",
-  "হারালো শুধু বাকিটুকু, 0.3।",
-  "৯০ degree কোণের দাগে ছায়া নিলে থাকে −0.3, আর হারায় 2.6। প্রায় সবটাই।",
+  "One of the twelve points, two numbers: (2.46, 0.89).",
+  "Shadow on the spread's line: one number left, 2.6.",
+  "Lost only the rest, 0.3.",
+  "Shadow on the line at a right angle: −0.3 left, and 2.6 lost. Nearly everything.",
 ];
 
 export function OnePoint() {
@@ -1688,7 +1687,7 @@ export function OnePoint() {
   return (
     <Scene scene={s} caption={T_say(X7A_SAY, k)}>
       <div className="mx-auto w-full max-w-[11rem]">
-        <Plane f={f} grid={1} axes={false} label="একটা বিন্দুর ছায়া দুই দাগে: ছড়ানোর দিকে 2.6 থাকে, 0.3 হারায়; ৯০ degree কোণের দাগে −0.3 থাকে, 2.6 হারায়" className="my-0! max-w-none">
+        <Plane f={f} grid={1} axes={false} label="One point's shadow on two lines: on the spread's line 2.6 stays, 0.3 lost; on the line at 90°, −0.3 stays, 2.6 lost" className="my-0! max-w-none">
           {CLOUD.map((p, i) =>
             i === 9 || p[0] < f.x0 || p[0] > f.x1 || p[1] < f.y0 || p[1] > f.y1 ? null : (
               <circle key={i} cx={f.sx(p[0])} cy={f.sy(p[1])} r={2.6} className="pointer-events-none fill-[#0f1b2d]/15" />
@@ -1717,10 +1716,10 @@ export function OnePoint() {
       </div>
       <div className="mx-auto mt-1 flex max-w-[14rem] justify-center gap-4 text-sm">
         <span>
-          থাকে <b className={`font-mono ${across ? "text-cat-coral" : "text-cat-teal"}`}>{k >= 1 ? fix(dot(X7_P, line), 1) : "–"}</b>
+          stays <b className={`font-mono ${across ? "text-cat-coral" : "text-cat-teal"}`}>{k >= 1 ? fix(dot(X7_P, line), 1) : "–"}</b>
         </span>
         <span>
-          হারায় <b className="font-mono text-cat-amber">{k >= 2 ? fix(Math.abs(dot(X7_P, across ? DIR : NRM)), 1) : "–"}</b>
+          lost <b className="font-mono text-cat-amber">{k >= 2 ? fix(Math.abs(dot(X7_P, across ? DIR : NRM)), 1) : "–"}</b>
         </span>
       </div>
     </Scene>
@@ -1728,10 +1727,10 @@ export function OnePoint() {
 }
 
 const X7B_SAY = [
-  "ধরেন data-র প্রতিটা বিন্দু 300টা সংখ্যা।",
-  "কিন্তু বিন্দুগুলো আসলে ছড়িয়ে আছে মাত্র কয়েকটা দিক ধরে। সেই দিকগুলোর ওপর ছায়া নিই।",
-  "প্রতিটা দিক থেকে একটা করে সংখ্যা। 300টার কাজ চলে কয়েকটায়।",
-  "বাকিটুকু ফেলে দিই। হারায় শুধু ছোট ছোট বাকিটুকু।",
+  "Say each point of your data is 300 numbers.",
+  "But the points really spread along only a few directions. Take shadows on those directions.",
+  "One number per direction. The work of 300 gets done by a few.",
+  "Throw the rest away. Only small leftovers are lost.",
 ];
 
 export function FewNumbers() {
@@ -1739,21 +1738,21 @@ export function FewNumbers() {
   const k = s.k;
   return (
     <Scene scene={s} caption={T_say(X7B_SAY, k)}>
-      <svg viewBox="0 0 280 96" role="img" aria-label="300টা সংখ্যার একটা বিন্দু, কয়েকটা দিকে ছায়া নিয়ে কয়েকটা সংখ্যা, বাকিটুকু ফেলে দেওয়া" className="mx-auto block h-auto w-full max-w-[18rem]">
+      <svg viewBox="0 0 280 96" role="img" aria-label="A point of 300 numbers, shadows on a few directions give a few numbers, the rest thrown away" className="mx-auto block h-auto w-full max-w-[18rem]">
         <g opacity={k >= 3 ? 0.18 : 1} className="transition-opacity duration-700 motion-reduce:transition-none">
           {Array.from({ length: 300 }, (_, i) => (
             <rect key={i} x={6 + (i % 30) * 3.8} y={14 + Math.floor(i / 30) * 3.8} width={3} height={3} rx={0.6} className="fill-cat-blue" />
           ))}
         </g>
         <text x={63} y={66} textAnchor="middle" fontSize={10} fontWeight={700} className="fill-foreground">
-          300টা সংখ্যা
+          300 numbers
         </text>
         {k >= 1 && (
           <g>
             <Draw d="M128 33H176" strokeWidth={2} className="stroke-muted" />
             <path d="M182 33l-7 -4v8Z" className={`fill-muted ${POP}`} style={{ transitionDelay: "450ms" }} />
             <text x={152} y={22} textAnchor="middle" fontSize={8.5} className={`fill-muted ${FADE}`}>
-              ছায়া
+              shadow
             </text>
           </g>
         )}
@@ -1763,7 +1762,7 @@ export function FewNumbers() {
           ))}
         {k >= 2 && (
           <text x={227} y={58} textAnchor="middle" fontSize={10} fontWeight={700} className={`fill-foreground ${FADE}`}>
-            কয়েকটা সংখ্যা
+            a few numbers
           </text>
         )}
         {k >= 3 &&
@@ -1779,7 +1778,7 @@ export function FewNumbers() {
           ))}
         {k >= 3 && (
           <text x={128} y={87} fontSize={8.5} className={`fill-muted ${FADE}`}>
-            বাকিটুকু, ফেলে দিলাম
+            the rest, thrown away
           </text>
         )}
       </svg>
@@ -1790,7 +1789,7 @@ export function FewNumbers() {
 // ---------------------------------------------------------------------------
 // 8a · A story scene for screen 8's setup, no task: at the ghat. The boat is
 //      tied to a post on the stairs, which rise one step up for one across,
-//      like (1, 1). মাঝি চাচা, laughing, gives the riddle: the rope's pull
+//      like (1, 1). Majhi chacha, laughing, gives the riddle: the rope's pull
 //      (4, 2), the stairs (1, 1); how much along the stairs, how much left?
 
 /** The ghat's stairs rising from the water to the bank, one up for one across, and the post the boat is tied to. */
@@ -1815,13 +1814,13 @@ export function GhatRiddle({}: Story) {
   const [bx] = useTween([k >= 1 ? S8_BOAT : 88], 1300);
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="evening" ground={100} label="ঘাটে নৌকা বাঁধা হচ্ছে; দড়ির টান (4, 2), সিঁড়ি উঠে গেছে (1, 1)-এর দিকে; মাঝি চাচা হাসতে হাসতে ধাঁধা দেন">
+      <Stage backdrop="evening" ground={100} label="At the ghat the boat is being tied up; the rope's pull is (4, 2), the stairs climb along (1, 1); Majhi chacha, laughing, sets the riddle">
         <T_Water top={124} />
         <T_Ghat />
         <T_Boat x={bx} y={S1_WL} />
         <Person who="fahim" x={bx + 8} y={S1_WL - 10} scale={0.75} ms={0} />
         {k >= 1 && <Draw d={`M${S8_BOAT + 58} ${S1_WL - 13}L${S8_POST[0]} ${S8_POST[1]}`} strokeWidth={1.6} className="stroke-[#78350f]" />}
-        <T_Majhi x={288} y={106} facing={-1} pose={k >= 2 ? "hold" : "down"} mood={k >= 2 ? "happy" : "plain"} name="মাঝি চাচা" />
+        <T_Majhi x={288} y={106} facing={-1} pose={k >= 2 ? "hold" : "down"} mood={k >= 2 ? "happy" : "plain"} name="Majhi chacha" />
         {k >= 2 && <CastCard x={172} y={118} text="(4, 2)" tone="coral" />}
         {k >= 3 && (
           <g>
@@ -1830,7 +1829,7 @@ export function GhatRiddle({}: Story) {
             <CastCard x={216} y={96} text="(1, 1)" tone="blue" />
           </g>
         )}
-        {k >= 4 && <Bubble x={288} y={106 - 50} side="left" lines={["টানের কতটা সিঁড়ি বরাবর,", "আর কতটা বাকি?"]} />}
+        {k >= 4 && <Bubble x={288} y={106 - 50} side="left" lines={["How much of the pull is along", "the stairs, and how much is left?"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1839,7 +1838,7 @@ export function GhatRiddle({}: Story) {
 // ---------------------------------------------------------------------------
 // 8½ · A figure for screen 8's explanation, no task: the answer on cards,
 //      (4, 2) = (3, 3) + (1, −1), the box check (1, −1) · (1, 1) = 0, and
-//      মাঝি চাচা handing ফাহিম a ডাব.
+//      Majhi chacha handing Fahim a green coconut.
 
 export function DabTreat() {
   const s = useScene(3, [600, 1800, 1600, 1800]);
@@ -1847,13 +1846,13 @@ export function DabTreat() {
   const [dx, dy] = useTween([k >= 3 ? S8_BOAT + 18 : 276, k >= 3 ? S1_WL - 44 : 76], 1400);
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="evening" ground={100} label="(4, 2) = (3, 3) + (1, −1), আর (1, −1) · (1, 1) = 0; মাঝি চাচা খুশি হয়ে ফাহিমকে ডাব দেন">
+      <Stage backdrop="evening" ground={100} label="(4, 2) = (3, 3) + (1, −1), and (1, −1) · (1, 1) = 0; pleased, Majhi chacha hands Fahim a green coconut">
         <T_Water top={124} />
         <T_Ghat />
         <T_Boat x={S8_BOAT} y={S1_WL} />
         <path d={`M${S8_BOAT + 58} ${S1_WL - 13}L${S8_POST[0]} ${S8_POST[1]}`} stroke="#78350f" strokeWidth={1.6} />
         <Person who="fahim" x={S8_BOAT + 8} y={S1_WL - 10} scale={0.75} ms={0} mood={k >= 3 ? "happy" : "plain"} arm={k >= 3 ? "hold" : "down"} />
-        <T_Majhi x={288} y={106} facing={-1} pose={k >= 2 ? "hold" : "down"} mood={k >= 2 ? "happy" : "plain"} name="মাঝি চাচা" />
+        <T_Majhi x={288} y={106} facing={-1} pose={k >= 2 ? "hold" : "down"} mood={k >= 2 ? "happy" : "plain"} name="Majhi chacha" />
         <CastCard x={52} y={22} text="(4, 2)" tone="coral" />
         <text x={86} y={26} textAnchor="middle" fontSize={11} fontWeight={800} fill={T_INK}>
           =
@@ -1875,10 +1874,10 @@ export function DabTreat() {
 }
 
 // ---------------------------------------------------------------------------
-// 9a · A story scene for the ending's teaser, no task: the পাঠাগার in the
-//      evening. The আপা's new computer; ফাহিম types “মাছ”; two machines, two
+// 9a · A story scene for the ending's teaser, no task: the library in the
+//      evening. The apu's new computer; Fahim types "fish"; two machines, two
 //      top answers (a thick book, a small letter); which one to keep is left
-//      open for 4.6.
+//      open for 4.7.
 
 /** The পাঠাগার's desk with its new computer; the screen shows `show` of: nothing, the search, both answers. */
 function T_Computer({ show }: { show: number }) {
@@ -1903,7 +1902,7 @@ function T_Computer({ show }: { show: number }) {
         <g className={FADE}>
           <rect x={132} y={49} width={80} height={12} rx={6} fill="#f1f5f9" stroke="#94a3b8" strokeWidth={0.8} />
           <text x={140} y={58.5} fontSize={8} fontWeight={700} fill={T_INK}>
-            মাছ
+            fish
           </text>
         </g>
       )}
@@ -1911,10 +1910,10 @@ function T_Computer({ show }: { show: number }) {
         <g className={FADE}>
           <path d="M172 65V98" stroke="#cbd5e1" strokeWidth={0.8} />
           <text x={149} y={72} textAnchor="middle" fontSize={6.5} fontWeight={700} fill="#475569">
-            machine ১
+            machine 1
           </text>
           <text x={195} y={72} textAnchor="middle" fontSize={6.5} fontWeight={700} fill="#475569">
-            machine ২
+            machine 2
           </text>
           <rect x={138} y={77} width={22} height={17} rx={1.5} fill="#1d4ed8" />
           <rect x={138} y={77} width={4} height={17} fill="#1e3a8a" />
@@ -1931,14 +1930,14 @@ export function LibraryTwo({}: Story) {
   const k = s.k;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="room" ground={150} label="সন্ধ্যায় পাঠাগারে আপার নতুন কম্পিউটার; ফাহিম মাছ লিখে সার্চ দেয়; এক machine দেখায় মোটা বই, আরেকটা ছোট চিঠি; আপা ভাবেন কোনটা রাখবেন">
+      <Stage backdrop="room" ground={150} label="Evening at the library, Apu's new computer; Fahim types fish and searches; one machine shows a thick book, the other a small letter; Apu wonders which to keep">
         <T_Computer show={k >= 3 ? 2 : k >= 2 ? 1 : 0} />
         <Person who="rina" x={282} y={150} facing={-1} scale={0.9} mood={k >= 4 ? "puzzled" : "plain"} />
         <text x={282} y={161} textAnchor="middle" fontSize={8} fontWeight={700} fill={T_INK}>
-          পাঠাগারের আপা
+          Apu, the librarian
         </text>
         <Person who="fahim" x={k >= 1 ? 100 : -30} y={150} walking={k === 1} ms={1400} scale={0.9} arm={k === 2 ? "point" : "down"} mood={k >= 3 ? "puzzled" : "plain"} label={k >= 1} />
-        {k >= 4 && <Bubble x={282} y={150 - 60} side="left" tone="think" lines={["কোন machine", "রাখবো?"]} />}
+        {k >= 4 && <Bubble x={282} y={150 - 60} side="left" tone="think" lines={["Which machine", "should I keep?"]} />}
       </Stage>
     </StoryFrame>
   );
