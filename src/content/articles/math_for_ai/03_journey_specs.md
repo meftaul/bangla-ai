@@ -46,7 +46,7 @@ Every clue card is an arrow: "3 ঘর পূর্বে, 1 ঘর উত্ত
 
 1. TwoClues — Two cards: (3, 1), then (1, 4). Where is the prize? → reader taps a guess
    cell, then presses "হাঁটো" and Shiku walks card 1, then card 2 from where it stopped
-   (tip to tail). → pass: "(3, 1) তারপর (1, 4) → (4, 5)। শেষ ঠিকানা = দুই হাঁটা জোড়া।"
+   (tip to tail). → pass: "(3, 1) তারপর (1, 4) → (4, 5)। শেষ address = দুই হাঁটা জোড়া।"
    [copy: useWalk / ShikuTape]
 2. SlotAdd — Three more card pairs, shown only as numbers. The reader fills the answer
    box by box before Shiku walks it to check. → pattern: 1st with 1st, 2nd with 2nd.

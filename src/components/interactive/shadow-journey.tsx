@@ -1642,7 +1642,7 @@ const X6_OFF: XY = [-0.2, 0.27];
 const X6_SAY = [
   "৪.২-এর রাস্তার card (4, 3), লম্বায় 5।",
   "ফাহিম ঠেলছিল ঠিক রাস্তা বরাবর, (4, 3)।",
-  "ঠেলা রাস্তা বরাবর, তাই রাস্তার ওপর তার ছায়া পুরো 5।",
+  "ধাক্কা রাস্তা বরাবর, তাই রাস্তার ওপর তার ছায়া পুরো 5।",
   "রাস্তার length 5, গুণ ছায়া 5: 25। বাড়তি 5 গুণটা আসছিল রাস্তার length থেকে।",
 ];
 
@@ -1653,7 +1653,7 @@ export function RoadDebt() {
     <Scene scene={s} caption={say(X6_SAY, k)}>
       <div className="mx-auto flex max-w-xs items-center gap-3">
         <S_Sheet max="max-w-[9rem]">
-          <Plane f={FRD} ticks={1} label="রাস্তা (4, 3), ফাহিমের ঠেলা রাস্তা বরাবর, ছায়া 5, box 25" className="my-0! max-w-none">
+          <Plane f={FRD} ticks={1} label="রাস্তা (4, 3), ফাহিমের ধাক্কা রাস্তা বরাবর, ছায়া 5, box 25" className="my-0! max-w-none">
             {k >= 2 && <S_Bar f={FRD} to={X6_ROAD} w={10} />}
             <Arrow f={FRD} from={O} to={X6_ROAD} tone="teal" w={3.2} />
             {k >= 1 && <Arrow f={FRD} from={X6_OFF} to={[4 + X6_OFF[0], 3 + X6_OFF[1]]} tone="coral" w={2.2} draw />}
@@ -1662,7 +1662,7 @@ export function RoadDebt() {
             </Label>
             {k >= 1 && (
               <Label f={FRD} at={[1.4, 1.35]} dx={-7} dy={-2} anchor="end" size={9} className={`${FADE} fill-cat-coral`}>
-                ঠেলা
+                ধাক্কা
               </Label>
             )}
           </Plane>
@@ -1673,7 +1673,7 @@ export function RoadDebt() {
           </div>
           {k >= 2 && (
             <div className={FADE}>
-              ঠেলার ছায়া <b className="font-mono">5</b>
+              ধাক্কার ছায়া <b className="font-mono">5</b>
             </div>
           )}
           {k >= 3 && <div className={`${FADE} font-mono font-bold`}>5 × 5 = 25</div>}
@@ -1791,10 +1791,10 @@ export function WalkIsShadow() {
 
 const FT = makeFrame(-1.5, 3.5, -0.5, 3.5, 28);
 const X9_SAY = [
-  "পুরানো axis-এ ঠিকানা (2, 3)।",
+  "পুরানো axis-এ address (2, 3)।",
   "নতুন দুইটা axis: দুইটাই 1 unit লম্বা, একটা আরেকটার সাথে ৯০ degree কোণে।",
   "প্রথম নতুন axis (0.8, 0.6)-এর সাথে box: 2 × 0.8 + 3 × 0.6 = 3.4। ওর ওপর ছায়াও 3.4।",
-  "দ্বিতীয়টা (−0.6, 0.8)-এর সাথে box: 1.2। একই জায়গার নতুন ঠিকানা (3.4, 1.2)।",
+  "দ্বিতীয়টা (−0.6, 0.8)-এর সাথে box: 1.2। একই জায়গার নতুন address (3.4, 1.2)।",
 ];
 
 export function TiltedAddress() {
@@ -1809,7 +1809,7 @@ export function TiltedAddress() {
     <Scene scene={s} caption={say(X9_SAY, k)}>
       <div className="mx-auto flex max-w-xs items-center gap-3">
         <S_Sheet max="max-w-[9.5rem]">
-          <Plane f={FT} axes={false} label="(2, 3) আর দুইটা হেলানো axis; নতুন ঠিকানা (3.4, 1.2)" className="my-0! max-w-none">
+          <Plane f={FT} axes={false} label="(2, 3) আর দুইটা হেলানো axis; নতুন address (3.4, 1.2)" className="my-0! max-w-none">
             <S_Line f={FT} v={u1} />
             <S_Line f={FT} v={u2} />
             {k >= 2 && <S_Bar f={FT} to={f1} />}
@@ -1823,7 +1823,7 @@ export function TiltedAddress() {
         </S_Sheet>
         <div className="grid min-w-0 flex-1 gap-1 text-sm">
           <div className={k >= 1 ? "text-muted line-through decoration-1" : ""}>
-            ঠিকানা <b className="font-mono">(2, 3)</b>
+            address <b className="font-mono">(2, 3)</b>
           </div>
           {k >= 2 && (
             <div className={FADE}>
@@ -1837,7 +1837,7 @@ export function TiltedAddress() {
           )}
           {k >= 3 && (
             <div className={`${FADE} font-semibold`}>
-              নতুন ঠিকানা <span className="font-mono whitespace-nowrap">(3.4, 1.2)</span>
+              নতুন address <span className="font-mono whitespace-nowrap">(3.4, 1.2)</span>
             </div>
           )}
         </div>

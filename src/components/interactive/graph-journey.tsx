@@ -944,7 +944,7 @@ export function BallAddress({ goal = "spots" }: { goal?: "spots" | "negative" })
     w.start(route(c));
     const next = spots.includes(c.join()) ? spots : [...spots, c.join()];
     setSpots(next);
-    if (goal === "spots" && next.length === SPOTS_GOAL) pass("ঠিকানা বলতে দুইটা সংখ্যাই যথেষ্ট।");
+    if (goal === "spots" && next.length === SPOTS_GOAL) pass("address বলতে দুইটা সংখ্যাই যথেষ্ট।");
     if (goal === "negative" && (c[0] < 0 || c[1] < 0)) {
       setNeg(true);
       pass("বাঁয়ে বা নিচে মানে সংখ্যার আগে “−”।");
@@ -1246,7 +1246,7 @@ export function ReadAddresses() {
               key={i}
               role="button"
               tabIndex={open ? -1 : 0}
-              aria-label={open ? addr([x, y]) : "লুকানো বিন্দু — ঠিকানা দেখুন"}
+              aria-label={open ? addr([x, y]) : "লুকানো বিন্দু — address দেখুন"}
               className={open ? "" : "cursor-pointer"}
               onClick={() => reveal(i)}
               onKeyDown={(e) => {
@@ -1289,7 +1289,7 @@ export function ReadAddresses() {
         })}
       </Board>
       <Task done={seen.length === MYSTERY.length}>
-        লাল বিন্দুগুলোতে tap করে ঠিকানা বের করুন ({bn(seen.length)}/{bn(MYSTERY.length)})
+        লাল বিন্দুগুলোতে tap করে address বের করুন ({bn(seen.length)}/{bn(MYSTERY.length)})
       </Task>
     </>
   );

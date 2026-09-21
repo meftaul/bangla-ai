@@ -68,6 +68,7 @@ export const COURSES: Course[] = [
       "math_for_ai/04e_tow_rope",
       "math_for_ai/04f_library_search",
       "math_for_ai/05a_remote_span",
+      "math_for_ai/05b_extra_column",
     ],
   },
 ];

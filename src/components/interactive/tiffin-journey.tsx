@@ -148,8 +148,8 @@ const JOBS = [
   "Class-এর average গড়ন বের করা",
   "একটা মন্তব্য খুশি না বেজার, সেটা ধরা",
   "আপার শর্ত মানা combo box বানানো",
-  "মাঠের যেকোনো ঠিকানায় যাওয়া",
-  "মাঠ তেরছা হলেও যেকোনো ঠিকানায় যাওয়া",
+  "মাঠের যেকোনো addressয় যাওয়া",
+  "মাঠ তেরছা হলেও যেকোনো addressয় যাওয়া",
   "পুকুরের পাড়ের বাঁকা রাস্তায় দড়ি বসানো",
 ];
 
@@ -396,7 +396,7 @@ function Coins({ f, shown, show }: { f: Frame; shown: string[]; show: (n: string
               cy={y}
               r={15}
               role="button"
-              aria-label={`${k.n}-এর ঠিকানা`}
+              aria-label={`${k.n}-এর address`}
               className="cursor-pointer fill-transparent"
               onPointerDown={(e) => {
                 e.stopPropagation();
@@ -2022,7 +2022,7 @@ export function SubscriptTrap() {
 // 7a · A story scene for screen 7's setup, no task: the robotics club's
 //      remote. It lands beside Shiku on the chalk grid with two buttons, and
 //      each press is one step: e₁ east, e₂ north, and with the minus the other
-//      way. Three presses, three steps; no ঠিকানা from the widget is walked.
+//      way. Three presses, three steps; no address from the widget is walked.
 
 /** the chalk grid for the remote scenes: cell c, grid point (0, 0) at (ox, oy) */
 type S7G = { ox: number; oy: number; c: number };
@@ -2690,7 +2690,7 @@ export function TwoWaysStar() {
   const f = X8_F;
 
   return (
-    <Scene scene={s} caption={k < 3 ? X8_SAY[k] : <span className={FADE}>পথ আলাদা, পৌঁছানো একই তারায়। একই ঠিকানা, দুইভাবে লেখা।</span>}>
+    <Scene scene={s} caption={k < 3 ? X8_SAY[k] : <span className={FADE}>পথ আলাদা, পৌঁছানো একই তারায়। একই address, দুইভাবে লেখা।</span>}>
       <div className="flex items-center justify-center gap-3">
         <div className="w-[7rem] shrink-0">
           <Plane f={f} grid={1} label="2e₁ + 4e₂ and 3a + 1b both reach the star at (2, 4)" className="my-0! max-w-none">

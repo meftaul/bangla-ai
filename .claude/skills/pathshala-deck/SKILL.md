@@ -43,7 +43,7 @@ What makes a deck engaging here, in order of impact:
   in. Never put it above the question, where it gives the answer away.
 - **Bangla decks speak in the author's voice** (`bangla-story-article` skill): slide
   text, Terminal lines and activity options read as spoken Bangla with English terms,
-  in full sentences rather than formula shorthand (`শেষ ঠিকানা = দুই হাঁটা জোড়া` is
+  in full sentences rather than formula shorthand (`শেষ address = দুই হাঁটা জোড়া` is
   what to avoid).
 
 ## 3 · Theming — write a delta, not a stylesheet
