@@ -466,7 +466,7 @@ export function BallAddressFigure() {
           আপনার পায়ের কাছে
         </Btn>
         <span className="mfig-read">
-          ঠিকানা: <b>({bx}, {by})</b>
+          address: <b>({bx}, {by})</b>
         </span>
       </div>
 

@@ -130,13 +130,13 @@ Story:    Friday হাট. ফাহিম goes round with মামা and ম
 10. Finale — ## শেষ! তর্কের ফয়সালা. The bet table ✓ ✓ ✓ ✗ ✓: মামা wins 4–1, মামী
     buys the জিলাপি. Rule: "দুই list, ঘরে ঘরে গুণ, সব যোগ, হাতে একটা সংখ্যা।"
     Symbols: u · v · Σ uᵢvᵢ · v · v = ‖v‖². Bridge: on the way home the van sinks in the
-    mud. মামা: "সবাই ঠেলো, ঠেলা তো ঠেলাই!" Is every push a help? (4.2)
+    mud. মামা: "সবাই ঠেলো, ধাক্কা তো ধাক্কাই!" Is every push a help? (4.2)
 ```
 
 ```
 4.2 — পক্ষে না বিপক্ষে, কাদায় আটকানো ভ্যান
 Question: The van is stuck on the কাদা রাস্তা, and five people push from all sides.
-          মামা says every push helps a little ("ঠেলা তো ঠেলাই"). Is he right, or is
+          মামা says every push helps a little ("ধাক্কা তো ধাক্কাই"). Is he right, or is
           someone doing nothing, or even pushing it back? The rain is coming.
 Story:    Road direction r = (4, 3). Pushes: ফাহিম (4, 3), মামা (6, 2), ভ্যানওয়ালা
           চাচা (1, 4), মামী (−3, 4), পাশের বাড়ির রফিক (−5, 5). By eye মামী and রফিক
@@ -145,11 +145,11 @@ Story:    Road direction r = (4, 3). Pushes: ফাহিম (4, 3), মাম�
 
 1. VanStuck — The scene on graph paper: the road, the van, five push arrows. Sealed
    bet: সবাই সাহায্য করছে · কেউ কেউ কোনো কাজে আসছে না, ক্ষতি কেউ করছে না · কেউ
-   একজন উল্টো পেছনে ঠেলছে. → pass: "বাজি সিল হলো। কার ঠেলা কতটা কাজের, সেটা
+   একজন উল্টো পেছনে ঠেলছে. → pass: "বাজি সিল হলো। কার ধাক্কা কতটা কাজের, সেটা
    মাপার একটা যন্ত্র লাগবে।"
 2. StraightPush — The simplest case by hand: ফাহিম pushes straight along the road
    (4, 3) → box 25; then from the front, (−4, −3) → −25. → pass: "পেছন থেকে ঠেললে
-   +25, সামনে থেকে −25। চিহ্নটাই বলে ঠেলা পক্ষে না বিপক্ষে।"
+   +25, সামনে থেকে −25। চিহ্নটাই বলে ধাক্কা পক্ষে না বিপক্ষে।"
    Then: the box's number is not newtons; the road card is 5 long, so every number is
    5 × the real help. Why 5 × is 4.3's question. The sign and the ranking are exact.
 3. PushRing — ফাহিম walks round the van, same strength (length 5): 12 spots on a

@@ -26,8 +26,9 @@ import { rng } from "./surprise-journey";
 // The box is 4.1's DotBox. The setups that tell a scene get a story scene on
 // the stage (1a the van sinking, 4a the কুলি arriving, 5a নাসিবের coins
 // remembered, 6a চাচা's 80, 12½ the van coming out, 12a the dinner bet), and
-// every <Then> gets one or two watch-only figures (1½, 2½, 2¾, 3½, 3¾, 4½,
-// 4¾, 5½, 5¾, 6½, 6¾). Tailwind only; the
+// every <Then> gets one or two figures (1½, 2½, 2¾, 3½, 3¾, 4¼, 4½, 4¾, 5½,
+// 5¾, 6½, 6¾) — all watch-only but 4¼, which the reader breaks apart and
+// swings. Tailwind only; the
 // sheets are journey/plane. Ink on the white sheet (the road, the van) is
 // fixed.
 
@@ -137,7 +138,7 @@ export function VanStuck() {
           </div>
         ))}
       </div>
-      <div className="mt-3 text-sm font-medium text-muted">মামা বলছেন, “ঠেলা তো ঠেলাই।” আপনার কী মনে হয়?</div>
+      <div className="mt-3 text-sm font-medium text-muted">মামা বলছেন, “ধাক্কা তো ধাক্কাই।” আপনার কী মনে হয়?</div>
       <div className="mt-2 grid gap-2">
         {VAN_BET.map((o, i) => (
           <Choice key={o} n={i} look={bet === i ? "picked" : bet !== null ? "dim" : "idle"} disabled={bet !== null} onClick={() => seal(i)}>
@@ -170,12 +171,12 @@ export function StraightPush() {
   const runFront = () => {
     setSide(1);
     setFront(true);
-    pass("চিহ্ন বলে ঠেলা পক্ষে না বিপক্ষে।");
+    pass("plus,minus sign বলবে ধাক্কা পক্ষে নাকি বিপক্ষে");
   };
 
   return (
     <>
-      <Plane f={FS} label={`রাস্তা (4, 3), ফাহিমের ঠেলা ${tupN(push)}`} className="max-w-[14rem]">
+      <Plane f={FS} label={`রাস্তা (4, 3), ফাহিমের ধাক্কা ${tupN(push)}`} className="max-w-[14rem]">
         <Road f={FS} />
         <Van f={FS} />
         {side !== null && <Arrow key={side} f={FS} from={O} to={push} tone={side === 1 ? "coral" : "blue"} w={2.6} draw />}
@@ -318,7 +319,7 @@ export function PushRing() {
 
   return (
     <>
-      <Plane f={FR} label="ভ্যানের চারপাশে ঠেলার বারোটা জায়গা" drag={{ down: pick }} onKey={onKey} className="max-w-[15rem]">
+      <Plane f={FR} label="ভ্যানের চারপাশে ধাক্কার বারোটা জায়গা" drag={{ down: pick }} onKey={onKey} className="max-w-[15rem]">
         <Road f={FR} />
         <Van f={FR} />
         {RING.map((q, i) => (
@@ -432,7 +433,7 @@ export function StrongPush() {
           </button>
         </div>
       )}
-      <div className="mt-2 text-sm font-medium text-muted">ভ্যানের কাজে কার ঠেলা বেশি লাগবে?</div>
+      <div className="mt-2 text-sm font-medium text-muted">ভ্যানকে কে বেশি জোরে ঠেলছে?</div>
       <div className="mt-2 grid gap-2">
         {STRONG_GUESS.map((o, i) => (
           <Choice key={o} n={i} look={predictLook(i, guess, ran, 1)} disabled={guess !== null} onClick={() => setGuess(i)}>
@@ -440,7 +441,7 @@ export function StrongPush() {
           </Choice>
         ))}
       </div>
-      <Task done={ran}>আগে guess করুন কার ঠেলা বেশি কাজে লাগবে, তারপর দুইজনকেই রাস্তার সাথে box এ  দিন।</Task>
+      <Task done={ran}>আগে guess করুন কার ধাক্কা বেশি কাজে লাগবে, তারপর দুইজনকেই রাস্তার সাথে box এ  দিন।</Task>
     </>
   );
 }
@@ -596,7 +597,7 @@ export function FixTheCrew() {
   };
   const fix = () => {
     setFixed(true);
-    pass("উল্টো ঠেলা minus, অকাজের ঠেলা 0।");
+    pass("উল্টো ধাক্কা minus, অকাজের ধাক্কা 0।");
   };
 
   return (
@@ -607,7 +608,7 @@ export function FixTheCrew() {
       <div className="mt-3 min-h-16">
         {!all ? (
           <div key={done} className={`${POP} mx-auto w-fit rounded-2xl border-2 border-cat-violet/40 bg-surface px-5 py-2 text-center`}>
-            <div className={`text-sm font-semibold ${TEXT[card.tone]}`}>{card.name}-এর ঠেলা</div>
+            <div className={`text-sm font-semibold ${TEXT[card.tone]}`}>{card.name}-এর ধাক্কা</div>
             <div className="font-mono text-lg font-bold">{tupN(card.v)}</div>
           </div>
         ) : (
@@ -672,7 +673,7 @@ export function FixTheCrew() {
         </div>
       )}
       <Task done={fixed}>
-        প্রতিজনের ঠেলা রাস্তার সাথে মনে মনে box এ  দিয়ে বিচার করুন ({bn(done)}/{bn(CREW.length)})। তারপর ভ্যানটাকে কাদা থেকে তুলুন।
+        প্রতিজনের ধাক্কা রাস্তার সাথে মনে মনে box এ  দিয়ে বিচার করুন ({bn(done)}/{bn(CREW.length)})। তারপর ভ্যানটাকে কাদা থেকে তুলুন।
       </Task>
     </>
   );
@@ -787,12 +788,12 @@ function RightAngle({ f, to }: { f: Frame; to: XY }) {
 
 const X2T_SAY = [
   "পেছন থেকে ঠেললে (4, 3): box এ +25।",
-  "সামনে থেকে সেই একই ঠেলা (−4, −3): −25।",
+  "সামনে থেকে সেই একই ধাক্কা (−4, −3): −25।",
   "সংখ্যা একই, শুধু চিহ্ন উল্টা — এই দুইটা খবরই box একদম ঠিক দেয়।",
 ];
 const X2T_ROWS = [
-  { head: "পেছন থেকে", tup: "(4, 3)", out: "+25", team: "রাস্তার দলে", ink: "text-cat-blue", edge: "border-cat-blue/40", chip: "bg-cat-blue/10 text-cat-blue" },
-  { head: "সামনে থেকে", tup: "(−4, −3)", out: "−25", team: "উল্টো দলে", ink: "text-cat-coral", edge: "border-cat-coral/40", chip: "bg-cat-coral/10 text-cat-coral" },
+  { head: "পেছন থেকে", tup: "(4, 3)", out: "+25", team: "ভ্যানের দলে", ink: "text-cat-blue", edge: "border-cat-blue/40", chip: "bg-cat-blue/10 text-cat-blue" },
+  { head: "সামনে থেকে", tup: "(−4, −3)", out: "−25", team: "ভ্যানের against-এ", ink: "text-cat-coral", edge: "border-cat-coral/40", chip: "bg-cat-coral/10 text-cat-coral" },
 ];
 
 export function TeamSign() {
@@ -802,7 +803,7 @@ export function TeamSign() {
     <Scene scene={s} caption={say(X2T_SAY, k)}>
       <div className="flex items-center justify-center gap-3">
         <div className="w-[9.5rem] shrink-0">
-          <Plane f={FS} label="একই ঠেলা — পেছন থেকে (4, 3) আর সামনে থেকে (−4, −3)" className="my-0! max-w-none">
+          <Plane f={FS} label="একই ধাক্কা — পেছন থেকে (4, 3) আর সামনে থেকে (−4, −3)" className="my-0! max-w-none">
             <Road f={FS} />
             <Van f={FS} />
             <Arrow f={FS} from={O} to={BEHIND} tone="blue" w={2.6} />
@@ -839,7 +840,7 @@ const F2F = makeFrame(-0.6, 4.8, -0.6, 3.9, 24);
 const X2F_SAY = [
   "রাস্তার arrow (4, 3) নিজে কত লম্বা?",
   "ফিতা দিয়ে মাপা যায়: ঠিক 5।",
-  "তাই box এর নম্বর আসল ঠেলার 5 গুণ: 25 = 5 × 5।",
+  "তাই box এর নম্বর আসল ধাক্কার 5 গুণ: 25 = 5 × 5।",
 ];
 
 export function FiveTimes() {
@@ -967,6 +968,111 @@ export function KoolyArrives({}: Story) {
 }
 
 // ---------------------------------------------------------------------------
+// 4¼ · A figure for screen 4's explanation, before 4½: a slanted push is two
+//      pushes at once. The reader breaks the কুলি's 10 into a road-ward piece
+//      and a sideways piece, then swings the push and watches the two trade
+//      length — flat on the road the side piece dies, square to it the road
+//      piece does. No numbers until the reader's own aim makes them.
+
+const FBREAK = makeFrame(-7, 8.8, -1.2, 11, 12);
+/** the road's way, one unit long */
+const RHAT: XY = [0.8, 0.6];
+/** straight across the road, one unit long */
+const UHAT: XY = [-0.6, 0.8];
+/** where the কুলি stands, (0, 10), in degrees off the road */
+const KULI_SLANT = 53;
+
+export function BreakThePush() {
+  const [broke, setBroke] = useSeed("broke", false);
+  const [th, setTh] = useSeed("th", KULI_SLANT);
+  const [deg] = useTween([th], 400);
+  const rad = (deg * Math.PI) / 180;
+  const along = 10 * Math.cos(rad);
+  const across = 10 * Math.sin(rad);
+  const foot: XY = [along * RHAT[0], along * RHAT[1]];
+  const whole: XY = [foot[0] + across * UHAT[0], foot[1] + across * UHAT[1]];
+
+  /** any tap or drag re-aims the push: only its slant off the road matters, so it folds into 0…90° */
+  const aim = (p: XY) => {
+    if (Math.hypot(...p) < 1) return;
+    const d = Math.atan2(p[1], p[0]) - Math.atan2(RHAT[1], RHAT[0]);
+    setTh(Math.min(90, Math.abs((d * 180) / Math.PI)));
+  };
+  const onKey = (e: KeyboardEvent<SVGSVGElement>) => {
+    if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
+    e.preventDefault();
+    setTh(Math.max(0, Math.min(90, th + (e.key === "ArrowLeft" ? 5 : -5))));
+  };
+
+  return (
+    <>
+      <Plane f={FB} label="কুলির বাঁকা ধাক্কা আর তার দুই টুকরো" drag={{ down: aim, move: aim }} onKey={onKey} className="max-w-[17rem]">
+        <Road f={FB} />
+        <Van f={FB} />
+        {broke && (
+          <>
+            <Arrow f={FB} from={O} to={foot} tone="teal" w={2.6} draw />
+            <Arrow f={FB} from={foot} to={whole} tone="violet" w={2.6} draw delay={450} />
+            {along > 1 && across > 1 && (
+              <path
+                d={`M${FBREAK.sx(foot[0] + 0.55 * UHAT[0])} ${FBREAK.sy(foot[1] + 0.55 * UHAT[1])}L${FBREAK.sx(foot[0] + 0.55 * (UHAT[0] + RHAT[0]))} ${FBREAK.sy(foot[1] + 0.55 * (UHAT[1] + RHAT[1]))}L${FBREAK.sx(foot[0] + 0.55 * RHAT[0])} ${FBREAK.sy(foot[1] + 0.55 * RHAT[1])}`}
+                fill="none"
+                strokeWidth={1.3}
+                className={`${FADE} stroke-[#0f1b2d]/40`}
+              />
+            )}
+            {along > 1 && (
+              <Label f={FB} at={[foot[0] / 2, foot[1] / 2]} dx={0} dy={13} className={`${FILL.teal} font-mono`}>
+                {Math.round(along)}
+              </Label>
+            )}
+            {across > 1 && (
+              <Label f={FB} at={[foot[0] + (across / 2) * UHAT[0], foot[1] + (across / 2) * UHAT[1]]} dx={-6} dy={0} anchor="end" className={`${FILL.violet} font-mono`}>
+                {Math.round(across)}
+              </Label>
+            )}
+          </>
+        )}
+        <Arrow f={FB} from={O} to={whole} tone="coral" w={2.6} />
+        {/* the whole 10 needs no tag of its own where a piece already is the whole 10 */}
+        {(!broke || (along < 9.6 && across < 9.6)) && (
+          <Label f={FB} at={[whole[0] / 2, whole[1] / 2]} dx={-5} dy={0} anchor="end" className={`${FILL.coral} font-mono`}>
+            10
+          </Label>
+        )}
+        <Label f={FB} at={whole} dx={0} dy={-7} anchor="middle" className={FILL.coral}>
+          কুলি
+        </Label>
+      </Plane>
+      {!broke ? (
+        <div className="mt-3 flex justify-center">
+          <button type="button" onClick={() => setBroke(true)} className={primaryBtn}>
+            ধাক্কাটা ভাঙা যায় দুই টুকরোয়
+          </button>
+        </div>
+      ) : (
+        <>
+          <div className="mx-auto mt-3 grid max-w-xs gap-1.5">
+            <div className={`${FADE} flex items-center gap-1.5`}>
+              <span className="w-[5.5rem] shrink-0 text-[0.65rem] leading-tight text-muted">রাস্তা বরাবর</span>
+              <span className="h-2.5 rounded-full bg-cat-teal/70" style={{ width: along * 9.5 }} />
+              <b className="font-mono text-sm text-cat-teal">{Math.round(along)}</b>
+            </div>
+            <div className={`${FADE} flex items-center gap-1.5`}>
+              <span className="w-[5.5rem] shrink-0 text-[0.65rem] leading-tight text-muted">সোজা পাশে</span>
+              <span className="h-2.5 rounded-full bg-cat-violet/70" style={{ width: across * 9.5 }} />
+              <b className="font-mono text-sm text-cat-violet">{Math.round(across)}</b>
+            </div>
+          </div>
+          <div className="mt-2 text-center text-sm text-muted">ধাক্কাটা ধরে ঘুরিয়ে দেখুন — কখন রাস্তার টুকরো পুরো 10 হয়ে যায়, কখন শূন্য?</div>
+        </>
+      )}
+      {!broke && <div className="mt-2 text-center text-sm text-muted">চাইলে ছবিতেই tap করে ধাক্কাটা অন্যদিকে ঘোরান।</div>}
+    </>
+  );
+}
+
+// ---------------------------------------------------------------------------
 // 4½ · A figure for screen 4's explanation: where a slanted push's strength
 //      goes. The dashed line is the part that doesn't push the road; the piece
 //      under it, on the road, is 6 — longer than ফাহিম's whole 5. That is how
@@ -975,9 +1081,9 @@ export function KoolyArrives({}: Story) {
 const F4F = makeFrame(-0.6, 6.4, -0.6, 10.6, 13);
 const KULI_FOOT: XY = [4.8, 3.6];
 const X4_SAY = [
-  "ফাহিম (4, 3): রাস্তা বরাবর, জোর 5। কুলি (0, 10): 53° বাঁকা, জোর 10।",
-  "বাঁকা ঠেলার একটা অংশ রাস্তার দিকে যায় না — ওই ফাঁকা রেখাটা।",
-  "রাস্তার দিকে যে অংশ গেল: 6। ফাহিমের পুরো ঠেলাও 5 — তাই box এ 30 বনাম 25।",
+  "ফাহিম (4, 3):ঠিক রাস্তা বরাবর, জোর 5। কুলি (0, 10):রাস্তার সাথে 53° angle করে, জোর 10।",
+  "কুলির ধাক্কার একটা অংশ রাস্তার কোনো কাজে লাগে না — ওই dot dot রেখাটা।",
+  "রাস্তা সেটার কত অংশ পেলো: 6। ফাহিমের পুরো ধাক্কাও 5",
 ];
 
 export function RoadShadow() {
@@ -987,7 +1093,7 @@ export function RoadShadow() {
     <Scene scene={s} caption={say(X4_SAY, k)}>
       <div className="flex items-center justify-center gap-3">
         <div className="w-[6.5rem] shrink-0">
-          <Plane f={F4F} label="কুলির বাঁকা ঠেলা (0, 10) আর ফাহিমের সোজা ঠেলা (4, 3)" className="my-0! max-w-none">
+          <Plane f={F4F} label="কুলির বাঁকা ধাক্কা (0, 10) আর ফাহিমের সোজা ধাক্কা (4, 3)" className="my-0! max-w-none">
             <Road f={F4F} />
             <Van f={F4F} />
             <Arrow f={F4F} from={O} to={BEHIND} tone="blue" w={2.6} />
@@ -1029,7 +1135,7 @@ export function RoadShadow() {
                 <b className="font-mono text-sm text-cat-teal">6</b>
               </div>
               <div className={`${FADE} flex items-center gap-1.5`}>
-                <span className="w-[5.5rem] shrink-0 text-[0.65rem] leading-tight text-muted">ফাহিমের পুরো ঠেলা</span>
+                <span className="w-[5.5rem] shrink-0 text-[0.65rem] leading-tight text-muted">ফাহিমের পুরো ধাক্কা</span>
                 <span className="h-2.5 rounded-full bg-cat-blue/70" style={{ width: 55 }} />
                 <b className="font-mono text-sm text-cat-blue">5</b>
               </div>
@@ -1207,7 +1313,7 @@ export function SidePress() {
   return (
     <Scene scene={s} caption={say(X6_SAY, k)}>
       <div className="mx-auto w-[11.5rem]">
-        <Plane f={F6F} label="মামীর ঠেলা (−3, 4) আর রফিকের ঠেলা (−5, 5), রাস্তার সাথে" className="my-0! max-w-none">
+        <Plane f={F6F} label="মামীর ধাক্কা (−3, 4) আর রফিকের ধাক্কা (−5, 5), রাস্তার সাথে" className="my-0! max-w-none">
           <Road f={F6F} />
           <Van f={F6F} />
           <Arrow f={F6F} from={O} to={[-3, 4]} tone="violet" w={2.6} />
@@ -1251,6 +1357,7 @@ export function SidePress() {
 }
 
 // ---------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
 // 6¾ · A figure for screen 6's explanation, second half: add the five pushes
 //      tip-to-tail (৩.১) and the total arrow (3, 18) lands far off the road —
 //      yet its box with the road is the same 66 as the five numbers added one
@@ -1263,53 +1370,68 @@ const X7_CHAIN: XY[] = (() => {
   return [O, ...CREW.map((c) => ((x += c.v[0]), (y += c.v[1]), [x, y] as XY))];
 })();
 const X7_SAY = [
-  "পাঁচজনের ঠেলা একটার ঘাড়ে আরেকটা বসিয়ে যোগ করুন (৩.১)।",
-  "শেষে পৌঁছানো গেল (3, 18)-এ।",
+  "পাঁচজনের ধাক্কা প্রথমে একই বিন্দুতে লাগছে — দেখুন, সব অ্যারো একই জায়গায়।",
+  "এবার একটার ঘাড়ে আরেকটা বসিয়ে যোগ করুন (৩.১)। অ্যারোগুলো একটার পর একটা স্ট্যাক হচ্ছে।",
+  "শেষে পৌঁছানো গেল (3, 18)-এ। ফাইনাল অ্যারো হলো শুরু থেকে শেষ পর্যন্ত সব অ্যারোর যোগফল।",
   "মোট arrow-টা রাস্তার সাথে box এ: 12 + 54 = 66।",
   "আলাদা আলাদা নম্বরগুলোর যোগফলও 66 — আগে যোগ পরে box, উত্তর একই।",
 ];
 
 export function SumThenBox() {
-  const s = useScene(3, [600, 2000, 2000]);
+  const s = useScene(5, [600, 2000, 2000, 2000, 2000]);
   const k = s.k;
   return (
     <Scene scene={s} caption={say(X7_SAY, k)}>
       <div className="flex items-center justify-center gap-3">
         <div className="w-[7.5rem] shrink-0">
-          <Plane f={F7F} label="পাঁচটা ঠেলা একটার পর একটা যোগ করলে মোট arrow (3, 18)" className="my-0! max-w-none" grid={0}>
+          <Plane f={F7F} label="একই বিন্দু থেকে অ্যারোগুলো একটার ঘাড়ে আরেকটা বসিয়ে যোগ, ফাইনাল অ্যারো (3, 18)" className="my-0! max-w-none" grid={0}>
             <Road f={F7F} />
             <Van f={F7F} />
-            {CREW.map((c, i) =>
-              i < 2 || k >= 1 ? (
-                <Arrow key={c.name} f={F7F} from={X7_CHAIN[i]} to={X7_CHAIN[i + 1]} tone={c.tone} w={2.4} draw={i >= 2} />
-              ) : null,
+            {k === 0 && (
+              <>
+                {CREW.map((c) => (
+                  <Arrow key={`base-${c.name}`} f={F7F} from={O} to={c.v} tone={c.tone} w={2.4} />
+                ))}
+              </>
             )}
-            {k >= 2 && (
+            {k >= 1 && (
+              <>
+                {CREW.map((c, i) =>
+                  i < 2 || k >= 2 ? (
+                    <Arrow key={`chain-${c.name}`} f={F7F} from={X7_CHAIN[i]} to={X7_CHAIN[i + 1]} tone={c.tone} w={2.4} draw={i >= 2} />
+                  ) : null,
+                )}
+              </>
+            )}
+            {k >= 3 && (
               <>
                 <Arrow f={F7F} from={O} to={X7_CHAIN[5]} tone="violet" w={3.4} draw />
                 <Label f={F7F} at={X7_CHAIN[5]} dx={2} dy={-5} anchor="start" className={`${FILL.violet} font-mono`}>
                   (3, 18)
+                </Label>
+                <Label f={F7F} at={[1.5, 9]} dx={0} dy={0} anchor="middle" size={8.5} className={`${FILL.violet} font-mono`}>
+                  ফাইনাল যোগফল
                 </Label>
               </>
             )}
           </Plane>
         </div>
         <div className="min-w-0 flex-1 space-y-1.5">
-          {k >= 2 && (
+          {k >= 3 && (
             <div className={`${FADE} rounded-xl border-2 border-cat-violet/40 bg-surface px-2 py-1.5 text-center`}>
               <div className="text-[0.65rem] text-muted">মোট arrow দিয়ে</div>
               <div className="font-mono text-xs font-bold">(4, 3) · (3, 18)</div>
               <div className="font-mono text-xs">= 12 + 54 = 66</div>
             </div>
           )}
-          {k >= 3 && (
+          {k >= 4 && (
             <div className={`${FADE} rounded-xl border-2 border-border bg-surface px-2 py-1.5 text-center`}>
               <div className="text-[0.65rem] text-muted">আলাদা করে</div>
               <div className="font-mono text-xs">25 + 30 + 16 + 0 − 5</div>
               <div className="font-mono text-xs font-bold">= 66</div>
             </div>
           )}
-          {k >= 3 && (
+          {k >= 4 && (
             <div className={`${POP} mx-auto w-fit rounded-full bg-accent/15 px-2.5 py-0.5 text-center text-xs font-semibold text-accent-text`}>
               উত্তর একই
             </div>
@@ -1499,9 +1621,9 @@ const X1_MAMI = CREW[3];
 const X1_RAFIQ = CREW[4];
 const X1_SAY = [
   "মামী আর রফিক, দুইজনই মোটামুটি পাশ থেকে ঠেলছে।",
-  "কার ঠেলা কতটা কাজের? চোখে দেখে বলা মুশকিল।",
-  "রাস্তার arrow আর কারো ঠেলার arrow, দুইটাই তো list।",
-  "box এ দিলে বের হবে একটা সংখ্যা। সেটা দিয়ে কি ঠেলা মাপা যায়?",
+  "কার ধাক্কা কতটা কাজের? চোখে দেখে বলা মুশকিল।",
+  "রাস্তার arrow আর কারো ধাক্কার arrow, দুইটাই তো list।",
+  "box এ দিলে বের হবে একটা সংখ্যা। সেটা দিয়ে কি ধাক্কাটা মাপা যায়?",
 ];
 
 export function PushToBox() {
@@ -1511,7 +1633,7 @@ export function PushToBox() {
     <Scene scene={s} caption={say(X1_SAY, k)}>
       <div className="flex items-center justify-center gap-3">
         <div className="w-[9rem] shrink-0">
-          <Plane f={FB} label="কাদার রাস্তায় ভ্যান; মামী আর রফিকের ঠেলা পাশ থেকে" className="my-0! max-w-none">
+          <Plane f={FB} label="কাদার রাস্তায় ভ্যান; মামী আর রফিকের ধাক্কা পাশ থেকে" className="my-0! max-w-none">
             <Road f={FB} />
             <Van f={FB} />
             {CREW.slice(0, 3).map((c) => (
@@ -1606,7 +1728,7 @@ export function PlusSide() {
     <Scene scene={s} caption={say(X3P_SAY, k)}>
       <div className="flex items-center justify-center gap-3">
         <div className="w-[9rem] shrink-0">
-          <Plane f={F3F} label="একই জোরের ঠেলা রাস্তা থেকে 53° সরে গেল; রাস্তার 90°-এর ভেতরের পুরো দিকটা plus" className="my-0! max-w-none">
+          <Plane f={F3F} label="একই জোরের ধাক্কা রাস্তা থেকে 53° সরে গেল; রাস্তার 90°-এর ভেতরের পুরো দিকটা plus" className="my-0! max-w-none">
             {k >= 2 && (
               <>
                 <path d={plusSide(F3F)} className={`${FADE} fill-cat-teal/15`} />
@@ -1815,7 +1937,7 @@ export function EightyNeeded({}: Story) {
   );
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="evening" label="আকাশে মেঘ ডাকছে; চাচা বলছেন সবার ঠেলা মিলে অন্তত 80 লাগবে; রাস্তা (4, 3), পাঁচজনের মাথায় প্রশ্ন">
+      <Stage backdrop="evening" label="আকাশে মেঘ ডাকছে; চাচা বলছেন সবার ধাক্কা মিলে অন্তত 80 লাগবে; রাস্তা (4, 3), পাঁচজনের মাথায় প্রশ্ন">
         <P_Clouds />
         {k >= 1 && <P_Storm bolt={k < 3} />}
         <P_Mud cx={160} />
@@ -1824,7 +1946,7 @@ export function EightyNeeded({}: Story) {
         </g>
         <P_Sunk x={110} />
         {S6_CREW.map(person)}
-        {k === 2 && <Bubble x={236} y={PG - 66} side="left" lines={["সবার ঠেলা মিলে", "অন্তত 80 লাগবে!"]} />}
+        {k === 2 && <Bubble x={236} y={PG - 66} side="left" lines={["সবার ধাক্কা মিলে", "অন্তত 80 লাগবে!"]} />}
         {k >= 3 && (
           <>
             <text x={143} y={59.5} textAnchor="end" fontSize={9} fontWeight={700} fill="#a16207" className={FADE}>
@@ -1914,6 +2036,7 @@ export const fixtures: Fixtures = {
   FiveTimes: { start: { k: 0 }, taped: { k: 1 }, done: {} },
   AngleFan: { start: { k: 0 }, walk: { k: 2 }, zero: { k: 3 }, done: {} },
   KoolyArrives: { start: { k: 0 }, run: { k: 1 }, slant: { k: 2 }, done: {} },
+  BreakThePush: { start: {}, broke: { broke: true }, flat: { broke: true, th: 0 }, upright: { broke: true, th: 90 } },
   RoadShadow: { start: { k: 0 }, drop: { k: 1 }, done: {} },
   CoinTug: { start: { k: 0 }, pull: { k: 2 }, zero: { k: 3 }, hundred: { k: 4 }, done: {} },
   AnySize: { start: { k: 0 }, coins: { k: 1 }, done: {} },

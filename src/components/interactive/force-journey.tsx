@@ -374,7 +374,7 @@ export function TablePush() {
           </>
         )}
         <text x={TW / 2} y={TABLE.y + TABLE.h + 44} textAnchor="middle" fontSize={11} fontWeight={600} className="fill-muted">
-          মোট ঠেলা: {net === 0 ? "0" : net > 0 ? `ডানে ${net}` : `বাঁয়ে ${-net}`}
+          মোট ধাক্কা: {net === 0 ? "0" : net > 0 ? `ডানে ${net}` : `বাঁয়ে ${-net}`}
         </text>
         <PxArrow x1={TW / 2} x2={TW / 2 + net * PER} y={TABLE.y + TABLE.h + 22} stroke="stroke-foreground" fill="fill-foreground" />
         {net === 0 && <circle cx={TW / 2} cy={TABLE.y + TABLE.h + 22} r={4} className="fill-foreground" />}
@@ -422,7 +422,7 @@ export function TablePush() {
           ["টেবিলটা সরান", got.includes("moved")],
         ]}
       />
-      <Task done={got.length === 2}>দুইজনকে দিয়েই জোরে ঠেলান, কিন্তু টেবিল যেন না নড়ে। তারপর এমনভাবে ঠেলান যেন টেবিলটা সরে যায়।</Task>
+      <Task done={got.length === 2}>দুইজনকে দিয়েই জোরে ধাক্কান, কিন্তু টেবিল যেন না নড়ে। তারপর এমনভাবে ধাক্কান যেন টেবিলটা সরে যায়।</Task>
     </>
   );
 }
@@ -744,7 +744,7 @@ const REEL: { to: XY; name: string; tone: Tone; chosen?: boolean; dx: number; dy
   { to: [-2.4, 2.0], name: "বাতাস", tone: "teal", dx: -4, dy: -6, anchor: "end" },
   { to: [0.3, 2.7], name: "বাস", tone: "blue", dx: 6, dy: -4, anchor: "start" },
   { to: [2.6, 1.9], name: "golf ball", tone: "violet", dx: 6, dy: -4, anchor: "start" },
-  { to: [-3.2, -0.5], name: "ঠেলা", tone: "amber", dx: 0, dy: 16, anchor: "middle" },
+  { to: [-3.2, -0.5], name: "ধাক্কা", tone: "amber", dx: 0, dy: 16, anchor: "middle" },
   { to: [2.9, -1.2], name: "নাসিব − সোম", tone: "coral", chosen: true, dx: 0, dy: 16, anchor: "middle" },
   { to: [-1.0, -2.6], name: "king − man", tone: "coral", chosen: true, dx: 6, dy: 12, anchor: "start" },
 ];

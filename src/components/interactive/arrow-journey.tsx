@@ -24,7 +24,7 @@ import {
 } from "@/components/journey/plane";
 import { bn } from "./figure-kit";
 
-// Screens for "Math for AI 2.2 — Arrow, যার কোনো ঠিকানা নাই", told as a Journey.
+// Screens for "Math for AI 2.2 — Arrow, যার কোনো address নাই", told as a Journey.
 //
 // Shiku, the robot from the graph-paper lesson, is read (2, 3) as a recipe and
 // walks it; what is left is an arrow from where he started to where he
@@ -674,7 +674,7 @@ const SAYINGS: { say: string; kind: Kind; hint: string }[] = [
   { say: "ঢাকা আছে (23.8°N, 90.4°E)-এ", kind: "point", hint: "দুইটা সংখ্যা আছে ঠিকই, কিন্তু প্রশ্নটা কী? “কোথায়?”" },
   { say: "ডানে 3 ঘর, তারপর ওপরে 2 ঘর", kind: "vector", hint: "Shiku-র recipe। যেকোনো ঘর থেকে Start করা যায়।" },
   { say: "স্কুল থেকে বাসায় যেতে যতটা হাঁটতে হয়", kind: "vector", hint: "দুইটা জায়গার মাঝের সম্পর্ক। নিজে কোনো জায়গা না।" },
-  { say: "বাসার ঠিকানা: রোড ৫, বাড়ি ১২", kind: "point", hint: "ঠিকানা মানেই “কোথায়?”" },
+  { say: "বাসার address: রোড ৫, বাড়ি ১২", kind: "point", hint: "address মানেই “কোথায়?”" },
 ];
 const KINDS: { id: Kind; label: string; q: string; tone: string }[] = [
   { id: "point", label: "জায়গা (point)", q: "কোথায়?", tone: "border-cat-teal/60 text-cat-teal" },

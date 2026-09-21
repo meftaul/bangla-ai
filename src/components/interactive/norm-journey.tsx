@@ -874,7 +874,7 @@ export function TripLength() {
           </div>
           {miss && (
             <Nope key={miss.n}>
-              উঁহু, সামিন {tup(miss.a)} হাঁটলে থামবে {tup(plus(T_FROM, miss.a))}-এ। পুরস্কার আর সামিনের ঠিকানা দুইটা পাশাপাশি রেখে দেখুন তো।
+              উঁহু, সামিন {tup(miss.a)} হাঁটলে থামবে {tup(plus(T_FROM, miss.a))}-এ। পুরস্কার আর সামিনের address দুইটা পাশাপাশি রেখে দেখুন তো।
             </Nope>
           )}
         </>
@@ -1756,7 +1756,7 @@ export function Detour() {
       </div>
       {lined && (
         <div className={`${FADE} mx-auto mt-3 max-w-sm rounded-2xl bg-accent/10 px-4 py-3 text-center text-[0.95rem]`}>
-          দুইটা card এক লাইনে আসতেই মাপ দুইটা মিলে গেল। Golf ball-এর বেলায় ঠেলা ছিল 60 আর 60, কিন্তু দুই দিকে। তাই বেগ হয়েছিল √(60² + 60²) = <b className="font-mono">84.9</b>, 120 না।
+          দুইটা card এক লাইনে আসতেই মাপ দুইটা মিলে গেল। Golf ball-এর বেলায় ধাক্কা ছিল 60 আর 60, কিন্তু দুই দিকে। তাই বেগ হয়েছিল √(60² + 60²) = <b className="font-mono">84.9</b>, 120 না।
         </div>
       )}
       <Task done={lined}>আগে ফাহিমকে একবার হাঁটান। তারপর লাল card-টার মাথা ধরে ঘোরান, মাপ দুইটা সমান করতে পারেন কিনা দেখুন তো।</Task>
