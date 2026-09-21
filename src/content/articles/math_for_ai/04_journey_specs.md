@@ -66,9 +66,15 @@ phone when the club is needed.
 | 4.1 | `04a_haat_dot` | Math for AI 4.1 — ঘরে ঘরে গুণ, হাটের হিসাব | `haat-journey.tsx` |
 | 4.2 | `04b_van_push` | Math for AI 4.2 — পক্ষে না বিপক্ষে, কাদায় আটকানো ভ্যান | `push-journey.tsx` |
 | 4.3 | `04c_noon_shadow` | Math for AI 4.3 — দুপুরের ছায়া, দুই হিসাব এক উত্তর | `shadow-journey.tsx` |
-| 4.4 | `04d_cosine_movie` | Math for AI 4.4 — Cosine similarity, কার ছবি বেশি মানানসই | `cosine-journey.tsx` |
-| 4.5 | `04e_tow_rope` | Math for AI 4.5 — গুণ টানা, টানের কতটা কাজে লাগে | `towrope-journey.tsx` |
-| 4.6 | `04f_library_search` | Math for AI 4.6 — পাঠাগারের খোঁজ, dot না cosine | `library-journey.tsx` |
+| 4.4 | `04c2_axis_shadow` | Math for AI 4.4 — দুই হিসাব কেন মেলে, axis-এর ছায়া | `shadow-journey.tsx` |
+| 4.5 | `04d_cosine_movie` | Math for AI 4.5 — Cosine similarity, কার ছবি বেশি মানানসই | `cosine-journey.tsx` |
+| 4.6 | `04e_tow_rope` | Math for AI 4.6 — গুণ টানা, টানের কতটা কাজে লাগে | `towrope-journey.tsx` |
+| 4.7 | `04f_library_search` | Math for AI 4.7 — পাঠাগারের খোঁজ, dot না cosine | `library-journey.tsx` |
+| 4.8 | `04f2_attention_box` | Math for AI 4.8 — এক box, ChatGPT-র ভেতরেও | `library-journey.tsx` |
+
+(Built as six, then 4.3 and the library journey were each split in two; see
+"The splits" at the end. The specs below keep their original numbers: 4.4–4.6
+in them are now 4.5–4.7/4.8.)
 
 Wiring: append all six after `03g_grams_trap` in `courses.ts`; 3.7's `Finale` step
 gets a `LessonLink` to 4.1 (its last `<Then>` already names the dot product as the next
@@ -371,3 +377,38 @@ the "why 5 ×" debt), and 4.3 `NoCrossTalk` is a 2 × 2 tap grid on concrete num
 - **4.6:** `WhoIsIt` has two rounds ("…খিদে পেয়েছিল" → বিড়ালটা, "…টাটকা ছিল" → দুধ).
   The finale's full notation table lives in the `Finale` step's `<Then>`; the bridge
   to Article 5 is in words only (no slug yet).
+
+## The splits (eight journeys now)
+
+4.3 carried cos θ, projection, মামা's recipe, shadows on the axes, turned axes,
+the two rules, the 2 × 2 proof and three slots: too many ideas for one
+journey, and the turned-axes step was a text-only `<Check>` that was hard to
+picture. It is now two journeys, both on the ছাদ, screens in `shadow-journey.tsx`:
+
+- **4.3 `04c_noon_shadow`** asks only "মামার ফিতা-চাঁদা থেকে কত আসবে?" (`TwoRecipes`,
+  bet: 7-এর বেশি · ঠিক 7 · কম) and settles it in `TwoTests`. New: a 4.1 retrieval
+  (v · v = 13 → √13) before `TwoTests`; `RoadDebt` is the `এবার আপনার পালা`; a new
+  review check (2 × 3 × cos 60° = 3). The finale takes the SayIt table and ends
+  on `NotYetProof`: two matches are not "always".
+- **4.4 `04c2_axis_shadow`** asks "সবসময় মিলবে?" (`AlwaysBet`, sealed; `MamiDoubt`
+  story). Every step of the why is played: `AxisShadow` → `TiltedAxes` (new: turn
+  the axes to 0°, 37°, 53°, 90°; shadow and box agree at each; replaces the
+  text-only "Axis যদি বদলে যায়?" check) → `ShadowRules` (new: the two rules by hand,
+  walks end to end, then × 2, × 3, × −1) → `NoCrossTalk` (cells now draw the two
+  axes) → three slots → a 4.2 retrieval (মামীর ধাক্কা, box 0) → `YourPair`. The
+  finale is 4.3's old one, bridging to the TV argument.
+
+The library journey had 16 steps, so it split too:
+
+- **4.7 `04f_library_search`** keeps the search question (which machine does
+  আপা keep?): `TwoMachines` → `DotRanking` → `CosRanking` → `LoudForBoth` →
+  `LengthIsNews` → `PickTool` (এবার আপনার পালা) → the news check → a new finale,
+  `## শেষ! আপা রাখলেন machine খ` (the old finale's first paragraph and `KeepBoth`).
+- **4.8 `04f2_attention_box`** asks সোমের দাবি: is the হাট's box inside ChatGPT?
+  (`NightCall` + new sealed `BoxBet`). Evidence: `OneRanking` (normalise once, box
+  = cosine) → `ChordCos` check (distance agrees) → a 2.3 retrieval (words are
+  vectors) → `WhoIsIt` → the "who sets the numbers" check (attention, the neuron)
+  settles it. New: a recall on the loud film, an এবার আপনার পালা check (1-unit
+  cards: box = cosine = 0.96), a review check on the toy attention. The Module 1
+  finale and the span teaser end it.
+

@@ -8,7 +8,9 @@ import { Choice, FADE, Nope, POP, Scene, Ticks, pill, useScene, useSeed, useTwee
 import { bn } from "./figure-kit";
 import { DotBox, dot, tupN } from "./haat-journey";
 
-// Screens for "Math for AI 4.6 — পাঠাগারের খোঁজ, dot না cosine", told as a Journey.
+// Screens for two journeys, "Math for AI 4.7 — পাঠাগারের খোঁজ, dot না cosine"
+// (TwoMachines to PickTool) and "Math for AI 4.8 — এক box, ChatGPT-র ভেতরেও"
+// (BoxBet, OneRanking, WhoIsIt, Finale).
 //
 // The village library's new computer has two search machines, and for "মাছ"
 // they disagree: the box ranks a long book about boats and rice above a short
@@ -565,6 +567,48 @@ export function PickTool() {
 }
 
 // ---------------------------------------------------------------------------
+// 8½ · Math for AI 4.8 opens here. সোম says the হাট's box is inside ChatGPT
+//      too. The reader seals a bet on it, unmarked; OneRanking, ChordCos and
+//      WhoIsIt collect the evidence, and the check after WhoIsIt settles it.
+
+const BOX_BET = ["সত্যি, ভেতরে এই box-ই চলে", "না, ওটা একদম অন্য অঙ্ক", "box আছে, কিন্তু আসল কাজে না"];
+
+export function BoxBet() {
+  const pass = useGate();
+  const [bet, setBet] = useSeed<number | null>("bet", null);
+
+  const seal = (i: number) => {
+    setBet(i);
+    pass("বাজি সিল হলো। শুরু পাঠাগারের machine দিয়ে।");
+  };
+
+  return (
+    <>
+      <div className="grid grid-cols-2 gap-2 text-center">
+        <div className="rounded-2xl border-2 border-cat-amber/40 bg-cat-amber/5 px-2 py-2">
+          <div className="text-sm font-semibold">হাটের box</div>
+          <div className="font-mono text-[0.8rem]">2×60 + 1×180 + 12×12</div>
+          <div className="text-xs text-muted">ঘরে ঘরে গুণ করে যোগ</div>
+        </div>
+        <div className="grid place-content-center rounded-2xl border-2 border-dashed border-border px-2 py-2">
+          <div className="text-sm font-semibold">ChatGPT-র ভেতরে</div>
+          <div className="font-mono text-2xl text-muted">?</div>
+        </div>
+      </div>
+      <div className="mt-3 text-sm font-medium text-muted">সোমের কথাটা কি সত্যি?</div>
+      <div className="mt-2 grid gap-2">
+        {BOX_BET.map((o, i) => (
+          <Choice key={o} n={i} look={bet === i ? "picked" : bet !== null ? "dim" : "idle"} disabled={bet !== null} onClick={() => seal(i)}>
+            {o}
+          </Choice>
+        ))}
+      </div>
+      <Task done={bet !== null}>সোমের কথায় একটা বাজি ধরুন।</Task>
+    </>
+  );
+}
+
+// ---------------------------------------------------------------------------
 // 9 · Module 1, read out loud. The formula from the start of the series laid
 //     out as a fraction; each piece opens on a tap to say what it is and where
 //     it was learned. No gate: this is the send-off.
@@ -573,8 +617,8 @@ const PIECES = [
   { sym: "u, v", say: "দুইটা জিনিস, সংখ্যার list বানানো", where: "Article 1, representation" },
   { sym: "arrow", say: "আবার সেই u আর v, এবার arrow হিসেবে: একটা দিক আর একটা length", where: "Article 2, vector-এর দুই চেহারা" },
   { sym: "‖u‖ ‖v‖", say: "তাদের length: বর্গ, যোগ, root", where: "Article 3, ফিতা" },
-  { sym: "u · v", say: "ঘরে ঘরে গুণ করে যোগ, মানে length × length × কতটা একই দিকে", where: "৪.১ থেকে ৪.৩, হাট, ভ্যান, ছাদ" },
-  { sym: "cos θ", say: "শুধু কতটা একই দিকে, −1 থেকে 1", where: "৪.৪, TV-র সামনে" },
+  { sym: "u · v", say: "ঘরে ঘরে গুণ করে যোগ, মানে length × length × কতটা একই দিকে", where: "৪.১ থেকে ৪.৪, হাট, ভ্যান, ছাদ" },
+  { sym: "cos θ", say: "শুধু কতটা একই দিকে, −1 থেকে 1", where: "৪.৫, TV-র সামনে" },
 ];
 
 export function Finale() {
@@ -773,7 +817,7 @@ function L_Note({ x, y, lines, tone = L_INK, fs = 7.5 }: { x: number; y: number;
 //      6.6 forward; a 15 m rope comes in flat and sends 9.8.
 
 const X1_SAY = [
-  "৪.৫-এর ঘাট। পাড় থেকে নৌকা 3 মিটার দূরে, টান 10।",
+  "৪.৬-এর ঘাট। পাড় থেকে নৌকা 3 মিটার দূরে, টান 10।",
   "4 মিটার দড়ি: কোণ বড়, নদী বরাবর যায় 6.6।",
   "15 মিটার দড়ি: কোণ ছোট, নদী বরাবর যায় 9.8।",
   "লম্বা দড়ি, ছোট কোণ, ছায়া প্রায় পুরো টান।",
@@ -2339,6 +2383,7 @@ export const fixtures: Fixtures = {
   OneRanking: { start: {}, all: { seen: [0, 1, 2] } },
   WhoIsIt: { start: {}, one: { ran: true }, two: { round: 1, ran: true } },
   PickTool: { start: {}, miss: { done: 2, miss: 1 }, all: { done: 5 } },
+  BoxBet: { start: {}, bet: { bet: 0 } },
   Finale: { start: {}, some: { open: [4, 3] }, all: { open: [0, 1, 2, 3, 4] } },
   // the watch-only scenes: `k` beats shown; `stepping` shows the step controls
   RopeRecall: { start: { k: 0 }, short: { k: 1 }, done: {} },

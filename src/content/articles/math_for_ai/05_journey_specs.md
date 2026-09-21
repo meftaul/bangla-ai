@@ -1,4 +1,4 @@
-# Article 5 → five journeys (Math for AI 5.x)
+# Article 5 → six journeys (Math for AI 5.x)
 
 Source: `05-vector-spaces-span-and-basis.md`. One running story: **বাসা বদল**. The
 holiday is over and ফাহিমের family is moving to a flat in a new এলাকা. Each journey is
@@ -93,13 +93,18 @@ drone from 3.5 (5.3, the one remote that has to go up).
 - Next (Article 6, matrices as a table and as a verb) → the 5.5 bridge
 - the credits paragraph → stays in the source only (dropped from the lessons on purpose)
 
-| # | Slug | Title | Screens file |
-| --- | --- | --- | --- |
-| 5.1 | `05a_remote_span` | Math for AI 5.1 — Span, কোন remote কোথায় পৌঁছায় | `remote-journey.tsx` |
-| 5.2 | `05b_extra_column` | Math for AI 5.2 — বাড়তি column, বাথরুমের দাম কত | `rent-journey.tsx` |
-| 5.3 | `05c_moving_basis` | Math for AI 5.3 — Basis আর dimension, সবচেয়ে কম কয়টা button | `moving-journey.tsx` |
-| 5.4 | `05d_school_lanes` | Math for AI 5.4 — একই arrow, নতুন সংখ্যা, স্কুলের রাস্তা | `lanes-journey.tsx` |
-| 5.5 | `05e_rooftop_rent` | Math for AI 5.5 — ছাদের flat-এর ভাড়া, basis বদলে দেখা | `rooftop-journey.tsx` |
+| # | Slug | Title | Steps | Screens file |
+| --- | --- | --- | --- | --- |
+| 5.1 | `05a_remote_span` | Math for AI 5.1 — Span, which remote reaches where | 11 (built) | `remote-journey.tsx` |
+| 5.2 | `05b_extra_column` | Math for AI 5.2 — The extra column, what a bathroom is worth | 11 (built) | `rent-journey.tsx` |
+| 5.3 | `05c_moving_basis` | Math for AI 5.3 — Basis and dimension, the fewest buttons | 8 | `moving-journey.tsx` |
+| 5.4 | `05d_flat_sheet` | Math for AI 5.4 — The flat sheet, where the khata really lives | 8 | `sheet-journey.tsx` |
+| 5.5 | `05e_school_lanes` | Math for AI 5.5 — Same arrow, new numbers, the road to school | 9 | `lanes-journey.tsx` |
+| 5.6 | `05f_rooftop_rent` | Math for AI 5.6 — The rooftop flat's rent, a new basis | 10 | `rooftop-journey.tsx` |
+
+(Planned as five, revised to six on 2026-09-21 under the 11-step cap; see "The
+revision" at the end. Language: English, set in Bengali life. Every journey ≤ 11
+steps, every step moves, every exercise is visual.)
 
 Wiring: append all five after `04f_library_search` in `courses.ts`; 4.6's `Finale` gets a
 `LessonLink` to 5.1 (its last `<Then>` already names span, independence and basis as the
@@ -218,162 +223,248 @@ Story:    The দালাল's খাতা: 6 flats with (bed, bath, মোট
 ```
 
 ```
-5.3 — Basis আর dimension, সবচেয়ে কম কয়টা button
-Question: Moving day. Every remote button costs 50 টাকা at the shop. Shiku needs a floor
+5.3 — Basis and dimension, the fewest buttons
+Question: Moving day. Every remote button costs 50 taka at the shop. Shiku needs a floor
           remote, and the robotics club's drone needs one that reaches the ceiling fan.
-          The shopkeeper: "যত বেশি button, তত নিরাপদ।" নাসিব: "ঠিক দিকের একটা button-ই
-          যথেষ্ট।" সোম: "যেভাবেই বানাও, সংখ্যাটা একই।" What is the fewest for the
-          floor, and for the room, and is that number the same whoever designs it?
-Story:    The flat fills with boxes. 3.3 already found that a, b reach everywhere exactly one
-          way (callback line only); the new question is the count.
+          The shopkeeper: "The more buttons, the safer." Nasib: "One button in the right
+          direction is enough." Som: "However you build it, the number comes out the
+          same." What is the fewest for the floor, and for the room, and is that number
+          the same whoever designs it?
+Story:    The flat fills with boxes; the truck is unloading. 3.3 already found that a, b
+          reach everywhere exactly one way (callback line only); the new question is the count.
+Steps:    8
 
-1. FewestButtons — sealed: floor 1 / 2 / 3 / যত বেশি তত ভালো; room 2 / 3 / 4.
-2. DropOne — Start with {(1, 0), (0, 1), (2, 3)} from 5.2. The reader removes buttons one at a
-   time and paints: drop (2, 3) → still the whole floor; drop another → a line.
-   → pass: "একটা বাদ দিলে কিছু হারায় না, আরেকটা বাদ দিলেই সব যায়। মাঝের জায়গাটাই basis।"
-   Then: basis = independent AND spanning; the smallest complete set. Callback to 3.3,
-   where a, b already did "every spot, one way".
-3. ShopShelf — The source's 5-row table as a sort: {(1,0),(0,1)} · {(1,2),(2,5)} ·
-   {(1,1),(2,2)} · {(1,0)} · {(1,0),(0,1),(2,3)} into basis / not, then the reason
-   (বাড়তি আছে / সব জায়গায় যায় না). The table fills. [copy: CoinArrows table]
+1. FewestButtons [predict] — sealed: floor 1 / 2 / 3 / "the more the better"; room 2 / 3 / 4.
+   → pass: "Bet sealed. Let's start dropping buttons."
+   Scene: the truck at the gate, boxes going up; the shopkeeper, Nasib and Som each make
+   their claim with a card.
+   Then: why the count matters (50 taka a button) · Fig: three claims side by side, "?"
+2. DropOne — Start with {(1, 0), (0, 1), (2, 3)} from 5.2. The reader removes buttons one at
+   a time and paints: drop (2, 3) → still the whole floor; drop another → a line.
+   → pass: "Drop one: nothing lost. Drop two: everything goes."
+   Then: basis = independent AND reaches everywhere; the smallest complete set. Callback to
+   3.3, where a, b already did "every spot, one way" · Fig: the three-button remote shrinks
+   to two, the paint stays; then to one, the paint collapses to a line
+3. ShopShelf — The source's 5-row table as a sort: the reader drags five remotes into two
+   bins, basis / not, and each lands with its reason (has an extra / doesn't reach
+   everywhere): {(1,0),(0,1)} · {(1,2),(2,5)} · {(1,1),(2,2)} · {(1,0)} ·
+   {(1,0),(0,1),(2,3)}. The table fills. [copy: CoinArrows table]
+   → pass: "Too many has an extra. Too few misses spots."
+   Then: the two ways to fail, one line each · Fig: an overfull remote and a thin one, each
+   failing its own way
 4. AnyPairTwo — The reader designs their own floor remote by dragging buttons anywhere.
-   Every working design has exactly two; three always lights a "বাড়তি" flag, one always
-   paints a line. → pass: "যে-ই বানাক, মেঝের জন্য ঠিক দুইটা। এই সংখ্যার নাম dimension।"
-5. FanOnCeiling — The drone in the room (3D view). Two floor buttons can't lift it; a
-   slanted pair paints only a tilted plank. Add an "up" button: the fan is reached. A fourth
-   is always extra. → pass: "ঘরের জন্য তিনটা। দুইটা button দিয়ে ঘর ভরে না।"
-6. FloorInRoom — Inside the 3D room: the floor is the span of two buttons, a flat sheet
+   Every working design has exactly two; three always lights an "extra" flag, one always
+   paints a line. → pass: "Whoever builds it, the floor takes exactly two."
+   Then: the name **dimension** · Fig: three different designers' pairs, all two
+5. FanOnCeiling [predict] — the drone in the room (3D view). Guess first: can two
+   well-chosen buttons reach the fan? Two floor buttons can't lift it; a slanted pair
+   paints only a tilted plank. Add an "up" button: the fan is reached. A fourth is always
+   extra. → pass: "The room takes three. Two only paint a sheet."
+   Scene: the drone hovering under the fan, dust on the blades.
+   Then: floor 2, room 3; ℝⁿ takes n · Fig: floor sheet, then the up arrow lifting it
+   into the room
+6. ShopOrder — Your turn: the shelf holds 7 buttons, including traps (a copy, a sum of two
+   others, the zero button, a floor-only pair). The reader buys the cheapest set that
+   reaches both the floor marks and the fan. Only 3 independent ones pass; wrong carts
+   bounce with the paint showing what they miss.
+   Then: the shopkeeper's rule lost · Fig: the cart of three, the paint filling the room
+7. TryTwoInRoom — visual exercise (Check-yourself Q8, and FAQ "more vectors than the
+   dimension?"): two arrows in the room. The reader picks one of three pictures of what
+   they paint: a tilted sheet · the whole room (if long enough — the trap) · a line. A
+   wrong pick paints that shape and shows a spot the arrows can't reach. Then a second
+   round: four arrows in the room — pick "one is extra".
+   Then: a plane at most; length never adds a direction · Fig: long arrows, same sheet
+8. The end! Two and three — Som wins: floor 2, room 3, whoever designs it. Rule: "A basis
+   has nothing extra and reaches everywhere. How many it takes is the dimension."
+   Scene: the drone dusts the fan; Fahim pays for three buttons.
+   Side quest: symbols dim(V), V ⊆ ℝⁿ. Bridge → 5.4: that evening Samin opens the dalal's
+   khata again — three columns, but he says the six flats need only two directions.
+```
+
+```
+5.4 — The flat sheet, where the khata really lives
+Question: Evening among the boxes. Samin has the dalal's khata from 5.2 (bed, bath, total
+          rooms). Nasib: "Three columns, so the flats spread in three directions." Samin:
+          "They sit on one flat sheet. Two directions do it." How many directions do the
+          six flats really need? Loser carries the last box up.
+Story:    The 3D room from 5.3 is now a room of numbers: each flat is a dot at (bed, bath,
+          total). The source's "pancake" picture is introduced here, fresh (no journey has
+          shown it).
+Steps:    8
+
+1. SheetBet [predict] — sealed: 3 · 2 · 1 directions. → pass: "Bet sealed. The loser
+   carries the box."
+   Scene: Samin and Nasib on the stairs with the khata and the last box.
+   Then: what "directions" means here, in the room of 5.3 · Fig: six dots appearing one by
+   one in the room, "?"
+2. FloorInRoom — Inside the 3D room: the floor is the span of two buttons, a flat sheet
    through the door corner. A tilted plank through the corner is a span too; a shelf 1 m
-   above the floor is not: scale by 0 and you fall off it. → pass: "ঘরের ভেতরের যেকোনো
-   span দরজার কোণ ছুঁয়ে যায়। না ছুঁলে ওটা span না।"
-   Then: the name subspace; the complete list in ℝ³ (the corner alone, lines through it,
-   planes through it, the whole room); every span is one. (FAQ: why the origin.)
-7. CantFallOut — Four clubs of arrows; the reader tries to add or stretch their way out of
+   above the floor is not: the reader scales a shelf arrow by 0 and watches it fall off.
+   → pass: "Every span inside the room touches the door corner."
+   Then: the name **subspace**; the complete list in ℝ³ (the corner alone, lines through
+   it, planes through it, the whole room); every span is one. (FAQ: why the origin.)
+   Fig: the four kinds lighting up one after another
+3. CantFallOut — Four clubs of arrows; the reader tries to add or stretch their way out of
    each: all floor arrows (can't) · the floor minus the door corner ((1, 1) + (−1, −1)
    falls out) · the 1-long ring from 3.6 ((1, 0) + (0, 1) is 1.41 long) · only positive
-   counts (× −1 falls out). → pass: "যোগ আর stretch করে যেখান থেকে বের হওয়া যায় না, সেটাই
-   vector space।" (Check-yourself Q7)
-   Then: the eight rules as one Table, "you already assume all of them"; they are what made
-   4.3's NoCrossTalk multiplying-out legal. Anything obeying them is a vector space:
-   polynomials, 28 × 28 images, a network's weights. "Our embeddings live on the unit
-   sphere" is a surface, not a space.
-8. FlatSheet — The দালাল's খাতা from 5.2 as 6 dots in 3D (bed, bath, মোট ঘর). The reader
-   rotates the view until the cloud goes edge-on: a line. All six lie on one flat sheet.
-   → pass: "তিনটা column, কিন্তু data থাকে একটা চ্যাপ্টা পাতে: আসলে দুইটা দিক।"
-   Then: the picture is introduced here, not recalled (no journey has shown it before): real
-   data rarely lies exactly on a sheet, but often close to one, like a চ্যাপ্টা পিঠা floating
-   in the room. In words: data lying near a small subspace of a big space. 300 columns,
-   maybe 20 real directions. That true count has a name, rank (Module
-   3). This answers ফাহিম's question from the ঘাট: "আমার data-র আসলে কয়টা দিক লাগে?"
-9. ShopOrder — এবার আপনার পালা: the shelf holds 7 buttons, including traps (a copy, a sum
-   of two others, the zero button, a floor-only pair). The reader buys the cheapest set that
-   reaches both the floor marks and the fan. Only 3 independent ones pass.
-10. Check — Why can no set of two vectors be a basis of ℝ³? (a plane at most · they could if
-    long enough · only if at right angles) and "can a basis have more vectors than the
-    dimension?"
-11. Finale — ## শেষ! দুই আর তিন. সোম wins: floor 2, room 3, whoever designs it. Rule:
-    "Basis = কিছু বাড়তি নাই, আর সবখানে যায়। কয়টা লাগে, সেটাই dimension।" Symbols:
-    dim(V), V ⊆ ℝⁿ. Bridge: tomorrow is the first day at the new school, and the new এলাকা
-    has no road going north. (5.4)
+   counts (× −1 falls out). Each escape plays as an arrow leaving the club.
+   → pass: "No way out by adding or stretching: a vector space." (Check-yourself Q7)
+   Then: "you already assume every rule"; they are what made 4.3's NoCrossTalk
+   multiplying-out legal · Fig: the floor club, arrows added and stretched, never leaving
+   Side quest: the eight rules as one Table; polynomials, 28 × 28 images and a network's
+   weights are vector spaces; "our embeddings live on the unit sphere" is a surface, not
+   a space.
+4. FlatSheet — The khata's 6 flats as dots in the room. The reader rotates the view until
+   the cloud goes edge-on: a line. All six lie on one flat sheet through the corner.
+   → pass: "Three columns, but the data lives on one sheet."
+   Then: why — total = bed + bath is 5.2's extra column, seen as a picture · Fig: the sheet
+   drawn through the dots, the total axis folding onto it
+5. SheetFromButtons — the sheet is a span: the reader finds its two buttons, (1, 0, 1) and
+   (0, 1, 1) (one bed, one bath), and paints — the paint covers all six dots.
+   → pass: "Two buttons paint the whole khata."
+   Then: the khata lives in a 2-dimensional subspace of a 3-dimensional room · Fig: the two
+   buttons painting the sheet
+6. YourCloud — Your turn: three new pages with three columns each (rent in taka, rent in
+   thousands, bed · bed, bath, floor · a column that is 2 × bed + bath). The reader turns
+   each cloud and taps line / sheet / fills the room. Wrong tries bounce.
+7. TryNearlyFlat — visual exercise: a real khata whose dots sit *near* a sheet, not on it.
+   The reader drags a sheet to fit and picks the honest verdict among three pictures:
+   "on a sheet" · "near a sheet" · "fills the room". → pass: "Real data sits near a sheet."
+   Then: the pancake — real data rarely lies exactly on a sheet but often close; 300
+   columns, maybe 20 real directions; the true count is **rank** (Module 3). Answers the
+   module debt: "how many directions does my data really need?"
+   Fig: a thin pancake of dots floating in the room
+8. The end! Samin was right: two directions — Nasib carries the box. Rule: "Count the
+   directions the data uses, not the columns it has."
+   Scene: Nasib on the stairs with the last box.
+   Bridge → 5.5: tomorrow is the first day at the new school, and the new neighbourhood
+   has no road going north.
 ```
 
 ```
-5.4 — একই arrow, নতুন সংখ্যা, স্কুলের রাস্তা
-Question: The map says the new school is (2, 3) from home: 2 east, 3 north. But the এলাকা
-          has only two kinds of road: the সোজা main road going east, w = (1, 0), and the
-          কোনাকুনি গলি going north-east, z = (1, 1). No road goes north at all. The
-          রিকশাওয়ালা মামা wants the trip in "কত block সোজা, কত block কোনাকুনি". Which card
-          does ফাহিম give him? First day, can't be late.
+5.5 — Same arrow, new numbers, the road to school
+Question: The map says the new school is (2, 3) from home: 2 east, 3 north. But the
+          neighbourhood has only two kinds of road: the straight main road going east,
+          w = (1, 0), and the slanting lane going north-east, z = (1, 1). No road goes
+          north at all. The rickshaw mama wants the trip in "how many blocks straight, how
+          many slanting". Which card does Fahim give him? First day, can't be late.
 Story:    The new neighbourhood, a slanted grid laid over the map's square one.
+Steps:    9
 
-1. SchoolBet — sealed, four cards: (2, 3) · (2, 1) · (−1, 3) · "যাওয়াই যাবে না, উত্তরের
-   রাস্তা নাই". → pass: "বাজি সিল হলো। রিকশায় উঠে দেখি।"
-2. NoNorthRoad — The reader drives the rickshaw with the ButtonRemote (সোজা ±, কোনাকুনি ±)
-   → finds 3 blocks কোনাকুনি, then 1 block BACK on the main road. → pass: "উত্তরের রাস্তা
-   ছাড়াই স্কুল, শুধু একটু পিছিয়ে যেতে হলো।" [copy: 3.3 TiltedField]
-3. WhyMinus — Replay: 3 কোনাকুনি blocks land at (3, 3), one block too far east. The reader
-   drags the correction. → pass: "গলি উত্তরে নিতে গিয়ে পূর্বেও ঠেলে দেয়। Minus-টা সেই
-   বাড়তি পূর্ব কেটে দেয়।"
-4. PeelEquations — Solving it without the rickshaw: a two-line step machine. Slot 2: only the
-   গলি moves north, so z-amount = 3. Slot 1: 2 = w-amount + 3, so w-amount = −1. Check:
-   −1·(1, 0) + 3·(1, 1) = (2, 3). → pass: "দ্বিতীয় ঘর থেকে একটা উত্তর সরাসরি, তারপর প্রথম
-   ঘরে বসাও।" [copy: SpreadMachine step] Then: two equations, two unknowns: a system of
-   linear equations. Article 10 does it for any size.
-5. SameSchool — One arrow, two grids. The reader toggles the square map grid and the
-   slanted road grid: the arrow never moves, its card flips between (2, 3) and (−1, 3).
-   → pass: "School নড়েনি, arrow নড়েনি। বদলেছে শুধু grid।"
-   Then: coordinates belong to an arrow AND a basis; [v]_B = (−1, 3). ফাহিম at the old
+1. SchoolBet [predict] — sealed, four cards: (2, 3) · (2, 1) · (−1, 3) · "can't get there,
+   there's no north road". → pass: "Bet sealed. Let's get in the rickshaw."
+   Scene: morning, Fahim in uniform at the gate, the rickshaw mama waiting.
+   Then: the two roads, and no north · Fig: the square map grid, then the slanted road grid
+   laid over it, "?"
+2. NoNorthRoad — The reader drives the rickshaw with the ButtonRemote (straight ±,
+   slanting ±) → finds 3 blocks slanting, then 1 block BACK on the main road.
+   → pass: "No north road, but there's the school." [copy: 3.3 TiltedField]
+   Then: the minus sign is allowed · Fig: the rickshaw's trip replayed calmly
+3. WhyMinus — Replay: 3 slanting blocks land at (3, 3), one block too far east. The reader
+   drags the correction. → pass: "The lane pushes east too. The minus cuts it off."
+   Then: why a slanted road costs a minus · Fig: the east push shown as a shadow along
+   the main road
+4. PeelEquations — Solving it without the rickshaw: a two-line step machine. Slot 2: only
+   the lane moves north, so z-amount = 3. Slot 1: 2 = w-amount + 3, so w-amount = −1.
+   Check: −1·(1, 0) + 3·(1, 1) = (2, 3). → pass: "Slot 2 first, then fill slot 1."
+   [copy: SpreadMachine step]
+   Then: two equations, two unknowns · Fig: the two lines peeling one after the other
+   Side quest: a system of linear equations; Article 10 does it for any size.
+5. SameSchool [predict] — One arrow, two grids. Guess first: when the grid changes, does
+   the arrow move? The reader toggles the square map grid and the slanted road grid: the
+   arrow never moves, its card flips between (2, 3) and (−1, 3).
+   → pass: "The school didn't move. Only the grid did."
+   Then: coordinates belong to an arrow AND a basis; [v]_B = (−1, 3). Fahim at the old
    school was the tallest in the line; at the new one he stands in the middle. His height
-   didn't change, the line did. That's what a basis is: a choice of point of view.
-6. YourErrand — এবার আপনার পালা: আম্মুর দুইটা errand, solved by hand with PeelEquations,
-   then the rickshaw drives it to check: বাজার (4, 1) → (3, 1) (Check-yourself Q5) and
-   মসজিদ (0, 2) → (−2, 2).
-7. WrongTape — Trap: ফাহিম measures the trip on the new card with 3.4's tape, √(1² + 3²)
-   = 3.16. The real tape says 3.61. → pass: "তেরছা grid-এর সংখ্যায় Pythagoras চলে না, কারণ
-   রাস্তাগুলো সোজা কোণে না, আর গলির এক block 1-এর চেয়ে লম্বা।"
-   Then: a basis doesn't need right angles; this one works fine for getting to school. But
-   when the roads ARE at right angles and each block is 1 long (orthonormal), the new
-   numbers are just shadows (4.3 AxisShadow), no solving, and lengths come out right.
-8. Check — "Basis-কে কি সোজা কোণে হতেই হবে?" (no, just independent and spanning · yes ·
-   only in 3D)
-9. Finale — ## শেষ! ঘণ্টা পড়ার আগেই স্কুলে. The bet: (−1, 3) wins; "যাওয়াই যাবে না"
-   was the trap. Rule: "সংখ্যা arrow-এর একার না, arrow আর basis দুইজনের।" Symbols:
-   B = {w, z}, [v]_B. Bridge: at home the বাড়িওয়ালা চাচা is stuck: what rent should
-   he ask for the new ছাদের flat? (5.5)
+   didn't change, the line did. · Fig: Fahim in two assembly lines
+6. YourErrand — Your turn: Ammu's two errands, solved by hand with PeelEquations, then the
+   rickshaw drives it to check: bazaar (4, 1) → (3, 1) (Check-yourself Q5) and mosque
+   (0, 2) → (−2, 2). Wrong cards drive the rickshaw to the wrong place.
+7. WrongTape — Trap: Fahim measures the trip on the new card with 3.4's tape,
+   √(1² + 3²) = 3.16. The real tape says 3.61. → pass: "Pythagoras needs square roads."
+   Then: the roads aren't at right angles, and a lane block is longer than 1. When the
+   roads ARE at right angles and each block is 1 long (orthonormal), the new numbers are
+   just shadows (4.3 AxisShadow), no solving · Fig: the two tapes side by side
+8. TryWhichGrid — visual exercise (FAQ "must a basis be at right angles?"): three road maps
+   as pictures — slanted roads · square roads · two parallel roads. The reader taps every
+   map that can take the rickshaw anywhere. A wrong tap (parallel roads) drives the rickshaw
+   along its one line, never reaching the school; missing the slanted map replays today's
+   trip. → pass: "A basis needn't be square, just not parallel."
+9. The end! At school before the bell — the bet: (−1, 3) wins; "can't get there" was the
+   trap. Rule: "The numbers belong to the arrow and the grid together."
+   Scene: Fahim runs in as the bell rings.
+   Side quest: symbols B = {w, z}, [v]_B. Bridge → 5.6: at home the landlord uncle is
+   stuck: what rent should he ask for the new rooftop flat?
 ```
 
 ```
-5.5 — ছাদের flat-এর ভাড়া, basis বদলে দেখা
-Question: The বাড়িওয়ালা চাচা's খাতা has 8 flats as (bed, bath) with their rents, and the new
-          ছাদের flat (4, 2) needs a rent before the tenant comes this evening. ফাহিম claims
-          he can rewrite the same two columns so that rent needs just ONE number. নাসিব: "নতুন
-          তথ্য ছাড়া নতুন কিছু বের হয় না।" Who's right? A জিলাপি bet.
+5.6 — The rooftop flat's rent, a new basis
+Question: The landlord uncle's khata has 8 flats as (bed, bath) with their rents, and the
+          new rooftop flat (4, 2) needs a rent before the tenant comes this evening. Fahim
+          claims he can rewrite the same two columns so that rent needs just ONE number.
+          Nasib: "No new information, nothing new comes out." Who's right? A jilapi bet.
 Story:    The rents follow total size, and bed/bath balance barely matters. On the
-          (bed, bath) grid the rent climbs diagonally; on ফাহিম's grid it climbs along one
+          (bed, bath) grid the rent climbs diagonally; on Fahim's grid it climbs along one
           axis.
+Steps:    10
 
-1. JilapiBet — sealed: ফাহিম · নাসিব · দুইজনেই.
+1. JilapiBet [predict] — sealed: Fahim · Nasib · both. → pass: "Bet sealed. Jilapi on
+   the line."
+   Scene: the rooftop, the landlord uncle with his khata, Fahim and Nasib with a paper
+   cone of jilapi.
+   Then: the stake and the evening deadline · Fig: the 8 flats appearing, "?"
 2. RentGrid — The 8 flats as dots on (bed, bath), coloured by rent. The reader tries a
-   one-knob rule along bed alone, then bath alone: neither fits. → pass: "ভাড়া বাড়ে
-   কোনাকুনি, কোনো একটা axis ধরে না।"
-3. NewAxes — ফাহিম's two buttons: size = (1, 1), "এক bed আর এক bath একসাথে", and
-   imbalance = (1, −1), "এক bed বেশি, এক bath কম". The reader checks they're a basis
-   (5.3) and taps the box: 1·1 + 1·(−1) = 0, square to each other (4.2). One quick screen.
-4. HouseInNewBasis — Flat (3, 2) in the new basis. Step machine: 3 = s + m, 2 = s − m; add the
-   two lines and m cancels: s = 2.5, then m = 0.5. Check: 2.5·(1, 1) + 0.5·(1, −1) = (3, 2).
-   → pass: "একই flat, নতুন card: (2.5, 0.5)।"
-5. ReadTheNumbers — Tap each number to read it out: 2.5 = "size ধরে আড়াই ধাপ, আর প্রতি ধাপে
-   দুইটা ঘর, মোট 5" · 0.5 = "আধা ধাপ imbalance, মানে bath-এর চেয়ে এক bed বেশি".
-   → pass: "নতুন সংখ্যাগুলো flat-টার কথা বলে, যেটা পুরানো সংখ্যা চুপচাপ লুকিয়ে রাখতো।"
-   Then: the honest 2.5 note: each size step is two rooms, so the steps aren't 1 long.
-   Divide both buttons by √2 (3.6) and the card becomes (3.54, 0.71): orthonormal, both
-   numbers on one scale, the fairness problem 3.7 fixed with scaling.
+   one-knob rule along bed alone, then bath alone: neither fits.
+   → pass: "Rent climbs on the slant, not along one axis."
+   Then: the old way fails · Fig: the colour rising diagonally
+3. NewAxes — Fahim's two buttons: size = (1, 1), "one bed and one bath together", and
+   imbalance = (1, −1), "one more bed, one less bath". The reader checks they're a basis
+   (5.3) and taps the box: 1·1 + 1·(−1) = 0, square to each other (4.2). One quick
+   screen. → pass: "Size and imbalance: a square basis."
+   Then: callback to 4.2's box · Fig: the two buttons drawn, the right-angle mark landing
+4. HouseInNewBasis — Flat (3, 2) in the new basis. Step machine: 3 = s + m, 2 = s − m; add
+   the two lines and m cancels: s = 2.5, then m = 0.5. Check: 2.5·(1, 1) + 0.5·(1, −1) =
+   (3, 2). → pass: "Same flat, new card: (2.5, 0.5)."
+   Then: 5.5's peeling, a new way · Fig: the two lines adding, m cancelling
+5. ReadTheNumbers — Tap each number to read it out: 2.5 = "two and a half steps of size,
+   two rooms a step, 5 rooms" · 0.5 = "half a step of imbalance: one more bed than bath".
+   → pass: "The new numbers tell the flat's story."
+   Then: the honest 2.5 note; divide both buttons by √2 (3.6) and the card becomes
+   (3.54, 0.71): orthonormal, both numbers on one scale, the fairness 3.7 fixed with
+   scaling · Fig: the size step shrinking to length 1
 6. OneNumberRent — All 8 flats redrawn on the new grid: rent climbs along size only;
    imbalance is small and barely moves it. The reader fits a one-knob rule: rent = 8000 ×
-   size. → pass: "একই তথ্য, নতুন grid-এ ভাড়ার পুরো গল্প একটা সংখ্যায়।"
+   size. → pass: "Same facts, new grid: rent in one number."
    Then: feature engineering is a change of basis ((revenue, cost) → (profit, margin),
-   sums and differences of sensors). You add no information; you pick coordinates in which
-   it's easy to see. Keeping size and dropping imbalance is 4.5's KeepShadows again.
+   sums and differences of sensors); keeping size and dropping imbalance is 4.5's
+   KeepShadows again · Fig: the dots sliding onto the size axis
 7. SpinTheGrid — The word map from 2.3 (king, queen, man, woman). The reader rotates a
    square, 1-long grid under it: every slot number changes, while the distance and cosine
-   readouts (3.4, 4.4) never move. → pass: "সংখ্যাগুলো grid-এর, সম্পর্কগুলো আসল।"
+   readouts (3.4, 4.4) never move. → pass: "The numbers are the grid's. The distances
+   are real."
    Then: 2.3's debt paid: slot 137 means nothing because the model never picked a
-   meaningful basis; it landed in some grid while training. Every cosine and every nearest
-   neighbour survives any such turn. (FAQ: is anything real? Everything geometric.)
-8. YourHouse — এবার আপনার পালা: the ছাদের flat (4, 2) → the reader solves (3, 1) by hand,
-   reads it aloud (three size steps = 6 rooms, one imbalance step = two more beds than
-   baths), and prices it with the one-knob rule: 24000. (Check-yourself Q6)
-9. Check — "নতুন basis-এ লিখলে কি নতুন তথ্য আসে?" (no, you can always convert back · yes,
-   the imbalance is new · only if orthonormal)
-10. Finale — ## শেষ! বাজির ফয়সালা, আর নতুন বাসায় প্রথম রাত. Both were right: নাসিব (no new
-    information, the card converts back) and ফাহিম (one number now tells the rent). They
-    split the জিলাপি. Tap-to-reveal the five things to carry forward, then PCA in one line
-    ("data থেকেই এমন একটা orthonormal basis খুঁজে বের করা, যার প্রথম দিকে data সবচেয়ে
-    বেশি ছড়ায়, তারপর পরেরটা, আর প্রথম কয়েকটা রেখে বাকিগুলো বাদ"): every word is now known.
-    The full notation Table (span{v, w} · e₁, e₂ (books also write i, j) · c₁v₁ + … = 0 ·
-    dim(V) · V ⊆ ℝⁿ · B = {w, z} · [v]_B). Bridge → Article 6: so far the grid moved and
-    the arrow stayed. What if a machine picks up the whole grid and moves every arrow at
-    once? And a whole খাতা, one row per flat, is itself one object: the matrix.
+   meaningful basis; every cosine and nearest neighbour survives any such turn. (FAQ: is
+   anything real? Everything geometric.) · Fig: the grid turning, the four words still
+8. YourHouse — Your turn: the rooftop flat (4, 2) → the reader solves (3, 1) by hand, reads
+   it aloud (three size steps = 6 rooms, one imbalance step = two more beds than baths),
+   and prices it with the one-knob rule: 24000. (Check-yourself Q6) Wrong cards bounce.
+9. TryConvertBack — visual exercise (the old "does a new basis bring new information?"
+   Check): a card in the new basis, (2, 1). The reader drags the flat's dot on the
+   (bed, bath) grid to where the card really is, (3, 1); a wrong drop walks size and
+   imbalance from the door and shows where they land. → pass: "Every new card converts
+   back. No new facts."
+10. The end! The bet settled, and the first night in the new flat — both were right: Nasib
+    (no new information, the card converts back) and Fahim (one number now tells the
+    rent). They split the jilapi. Tap-to-reveal the five things to carry forward, then PCA
+    in one line ("find, from the data itself, an orthonormal basis whose first direction
+    spreads the data most, then the next, and keep only the first few"): every word is now
+    known.
+    Scene: the family's first night, lights on in the new flat; the jilapi split in two.
+    Side quest: the full notation Table (span{v, w} · e₁, e₂ (books also write i, j) ·
+    c₁v₁ + … = 0 · dim(V) · V ⊆ ℝⁿ · B = {w, z} · [v]_B).
+    Bridge → Article 6: so far the grid moved and the arrow stayed. What if a machine
+    picks up the whole grid and moves every arrow at once? And a whole khata, one row per
+    flat, is itself one object: the matrix.
 ```
 
 ---
@@ -387,6 +478,7 @@ Story:    The rents follow total size, and bed/bath balance barely matters. On t
 2. **5.3 carries the most vocabulary** (basis, dimension, subspace, vector space, the flat
    sheet): 11 screens. If it runs long, `CantFallOut` becomes a `<Then>` paragraph (the
    source itself says the payoff is small), and `ShopShelf` folds into `ShopOrder`.
+   **Resolved 2026-09-21:** split into 5.3 and 5.4 (see "The revision").
 3. **5.2's app gives arbitrary knobs.** Real least squares with an exact copy either errors or
    quietly picks one answer; the story has it give two different answers on two runs. OK as a
    story simplification (with the one-line honesty in the `SameRent` `<Then>`), or should the
@@ -439,3 +531,41 @@ the journeys are built from, never rendered.
   more.
 - The numbers check out: (2, 3) → (−1, 3); (3, 2) → (2.5, 0.5) and (3.54, 0.71) after ÷ √2;
   the Q5 and Q6 answers (3, 1); Q3's β = 0.
+
+## The revision (2026-09-21): six journeys, each ≤ 11 steps
+
+The skills now cap a journey at 11 steps, want plain English set in Bengali life,
+motion on every step (story scene, interactive animation, a figure in every `<Then>`)
+and visual exercises instead of text-only checks. So:
+
+- **5.1 `05a_remote_span`, built, 14 → 11 steps, ported to English** (remotes ক খ গ ঘ →
+  A B C D; marks almirah, bed, table, shoe rack). The three recall `<Check>`s are gone:
+  the 4.x library one and the 3.1 slot sum became one setup line each; the 3.3 "exactly
+  one way" recall was dropped. The door rule keeps its `<Check>`, with a story figure
+  (`DoorEveryTime`) above it. The "একটু ঝালিয়ে নিন" check became `WallPick`, a visual
+  Try it ({(2, 0)} vs {(2, 0), (−5, 0)}: pick the floor picture). New figures:
+  `ShelfFour`, `AlmirahBuild`, `TwinSlots`, `DeadButton`, `RuleLost`.
+- **5.2 `05b_extra_column`, built, 14 → 11 steps.** As built it follows the plan above
+  with changes: `CopyColumn` → `AreaTwice`, `HiddenSum` → `TotalColumn`, `SameRent` →
+  `TwoKnobSets` + `YourShuffle`, `WalkBack` → `ZeroWalk`, `TrickyPair` →
+  `NoVisibleCopy`, `ThreeInPlane` → `ThirdButton`, `FindTheExtra` → `SpotTheExtra`. The
+  three recall checks (the twin remote, 3.7's grams, 3.3's recipe) became one setup line
+  each; the {(1, 3), (2, 7)} check became `StretchReach`, a visual Try it. Multicollinearity,
+  the Article 8 look-ahead and "nearly-copies wobble" sit in `<SideQuest>` cards.
+  New figures: `BothFit`, `ThreeFacts`, `BuiltRowByRow`, `SlowSum`, `SlotKill`,
+  `ThirdHome`, `TrapPage`, `NoRoomToShuffle`.
+- **Old 5.3 split in two.** It fit 11 screens but carried two ideas (how few buttons, and
+  what counts as a space / where data lives). Now **5.3** asks only "the fewest buttons"
+  (basis, dimension; 8 steps) and the new **5.4 `05d_flat_sheet`** asks Samin's "two
+  directions" bet (subspace, vector space, the flat sheet, rank teaser; 8 steps).
+  In the ledger above, `FloorInRoom`, `CantFallOut` and `FlatSheet` now live in 5.4, and
+  the 5.3 Check's "why can't two vectors be a basis of ℝ³" is 5.3 `TryTwoInRoom`.
+- **Old 5.4 → 5.5 `05e_school_lanes`, old 5.5 → 5.6 `05f_rooftop_rent`**: same content,
+  now in English; each text `<Check>` became a visual Try it (`TryWhichGrid`,
+  `TryConvertBack`). In the ledger and open questions above, read "5.4" as 5.5 and
+  "5.5" as 5.6 where they name school or rooftop screens.
+- **Wiring:** `courses.ts` gets 05c, 05d, 05e, 05f after 05b as each is built. 5.2's
+  ending bridges to 5.3 in words only until `05c_moving_basis` exists.
+- **If six is too many:** fold 5.4 back into 5.3 as its last two steps (`FlatSheet` and
+  `TryNearlyFlat`), with `FloorInRoom` and `CantFallOut` going into a `<SideQuest>`. That
+  makes 5.3 exactly 10 steps, but the "subspace" idea would then be read, not played.

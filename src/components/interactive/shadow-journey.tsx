@@ -1,32 +1,37 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { useId, type ReactNode } from "react";
 
 import { Task, useGate } from "@/components/journey/journey";
 import { Bubble, Card as CastCard, Person, Stage, StoryFrame } from "@/components/journey/cast";
 import { Choice, Draw, FADE, Nope, POP, Scene, Ticks, pill, primaryBtn, useScene, useSeed, useTween, type Fixtures } from "@/components/journey/kit";
 import { Arrow, Label, Plane, clamp, makeFrame, snap, type Frame, type XY } from "@/components/journey/plane";
 import { DotBox, dot, tupN } from "./haat-journey";
+import { bn } from "./figure-kit";
 
-// Screens for "Math for AI 4.3 — দুপুরের ছায়া, দুই হিসাব এক উত্তর", told as a Journey.
+// Screens for two journeys on the same ছাদ, "Math for AI 4.3 — দুপুরের ছায়া"
+// and "Math for AI 4.4 — দুই হিসাব কেন মেলে".
 //
-// মামা claims a second recipe for the box's number that multiplies no slots at
-// all: two tape lengths and one protractor reading. The reader bets whether it
-// will always agree with the box. On the ছাদ at noon a bamboo stick's shadow
-// gives cos θ (a table from 0° to 90°, then past 90° where the shadow falls
-// behind); a chalk arrow's shadow on another is ‖w‖ cos θ; মামা's recipe,
-// ‖v‖ × (w's shadow), matches the box twice (6 and 7). Then the why: a
-// vector's numbers are its shadows on the axes, and in the 2 × 2 grid of
-// axis pairs the crossed ones cast no shadow, leaving only slot × slot. Last
-// the reader predicts মামা's number from the box alone, three times.
+// 4.3: মামা claims a second recipe for the box's number that multiplies no
+// slots at all: two tape lengths and one protractor reading. The reader bets
+// what it will give for the box's 7. On the ছাদ at noon a bamboo stick's
+// shadow gives cos θ (a table from 0° to 90°, then past 90° where the shadow
+// falls behind); a chalk arrow's shadow on another is ‖w‖ cos θ; মামা's
+// recipe, ‖v‖ × (w's shadow), matches the box twice (6 and 7).
+//
+// 4.4 (from AlwaysBet on): will it always match, and why? A vector's numbers
+// are its shadows on the axes, and on turned axes too (TiltedAxes); a shadow
+// adds and scales (ShadowRules); and in the 2 × 2 grid of axis pairs the
+// crossed ones cast no shadow, leaving only slot × slot. Last the reader
+// predicts মামা's number from the box alone, three times.
 //
 // The box is 4.1's DotBox. Tailwind only; the sheets are journey/plane. Ink on
 // the white sheet is fixed.
 //
 // After the screens come the watch-only story scenes (on the ছাদ at noon, and
 // at the TV that night) and the explanation figures for each <Then>, numbered
-// after the screen they belong to (1a, 1½, 2a, 2½, 2¾, 3½, 3¾, 4a, 4½, 4¾, 5a,
-// 5½, 5¾, 5⅞, 6½, 6¾, 6⅞, 7a, 7½, 7¾, 8a, 8½, 8¾, 9a).
+// after the screen they belong to (1a, 1½, 2a, 2½, 2¾, 3½, 3¾, 4a, 4b, 4½, 4¾,
+// 5a, 5b, 5½, 5⅝, 5¾, 5⅞, 6½, 6¾, 6⅞a, 6⅞b, 7a, 7b, 7½, 7¾, 8a, 8½, 8¾, 9a).
 
 const O: XY = [0, 0];
 const len = (v: readonly number[]) => Math.hypot(...v);
@@ -135,12 +140,12 @@ function Rows({ rows }: { rows: [left: ReactNode, right: ReactNode, on: boolean]
 // ---------------------------------------------------------------------------
 // 1 · The two recipes. The box's 7 for (2, 3) · (2, 1) beside মামা's claim:
 //     two tape lengths and a protractor reading give the same number. The
-//     reader bets whether that always holds; NoCrossTalk and YourPair settle it.
+//     reader bets what his tape and protractor will give; TwoTests settles it.
 
 const FB = makeFrame(-0.5, 3.5, -0.5, 3.5, 34);
 const V: XY = [2, 3];
 const W: XY = [2, 1];
-const RECIPE_BET = ["সবসময় মিলবে, যেকোনো দুইটা arrow-এ", "মাঝেমধ্যে মিলবে, কাকতালীয়ভাবে", "কখনোই মিলবে না, দুইটা আলাদা হিসাব"];
+const SEVEN_BET = ["7-এর চেয়ে বেশি", "ঠিক 7", "7-এর চেয়ে কম"];
 
 export function TwoRecipes() {
   const pass = useGate();
@@ -175,9 +180,9 @@ export function TwoRecipes() {
           </div>
         </div>
       </div>
-      <div className="mt-3 text-sm font-medium text-muted">মামা বলছেন তার হিসাব আর box সবসময় একই উত্তর দেবে। আপনার কী মনে হয়?</div>
+      <div className="mt-3 text-sm font-medium text-muted">মামার ফিতা আর চাঁদা থেকে কত আসবে, আপনার কী মনে হয়?</div>
       <div className="mt-2 grid gap-2">
-        {RECIPE_BET.map((o, i) => (
+        {SEVEN_BET.map((o, i) => (
           <Choice key={o} n={i} look={bet === i ? "picked" : bet !== null ? "dim" : "idle"} disabled={bet !== null} onClick={() => seal(i)}>
             {o}
           </Choice>
@@ -315,6 +320,58 @@ const VFLAT: XY = [5, 0];
 const SHADOW_WAYS = ["w-কে ঘুরিয়ে v-এর ওপর শুইয়ে দেওয়া", "w-এর মাথা থেকে v-এর ওপর সোজা দাগ টেনে নামানো"];
 const TARGETS = [3, 0, -2];
 
+const TARGET_NEXT: Record<number, string> = {
+  3: "পরের কাজ: ছায়া 3। w-এর মাথা এমন জায়গায় নিন, যেখান থেকে সোজা নিচে দাগ নামালে পড়ে 3-এ।",
+  0: "পরের কাজ: ছায়া 0। w-কে এমনভাবে দাঁড় করান, যাতে মাথা থেকে দাগ পড়ে ঠিক গোড়ায়।",
+  [-2]: "পরের কাজ: ছায়া −2। w-কে পেছনে হেলিয়ে দিন, যাতে দাগ পড়ে গোড়ার দুই ঘর পেছনে।",
+};
+
+/** Step-by-step commentary on w's shadow where the tip is now: the angle, where the drop lands, the sum. */
+function ShadowSteps({ w, next, hit }: { w: XY; next: number | undefined; hit: number[] }) {
+  const L = len(w);
+  const sh = w[0];
+  const th = Math.round(angleOf(VFLAT, w));
+  const c = Math.cos(th * RAD);
+  const exact = th === 0 || th === 90 || th === 180;
+  const cs = fix(c, exact ? 0 : 2);
+  const flatMiss = L > 0 && w[1] === 0 && TARGETS.includes(sh) && !hit.includes(sh);
+  const lines =
+    L === 0
+      ? ["w-এর মাথা এখন গোড়াতেই, arrow-টাই নাই। মাথাটা একটু দূরে টেনে নিন।"]
+      : [
+          th === 0
+            ? "১. w শুয়ে আছে v-এর ওপরেই, মাঝের কোণ 0°।"
+            : th === 180
+              ? "১. w আর v-এর মাঝের কোণ 180°, w একদম উল্টো দিকে।"
+              : th === 90
+                ? "১. w আর v-এর মাঝের কোণ ঠিক 90°, w একদম খাড়া।"
+                : th < 90
+                  ? `১. w আর v-এর মাঝের কোণ ${th}°, 90°-এর কম।`
+                  : `১. w আর v-এর মাঝের কোণ ${th}°, 90°-এর বেশি। w পেছনে হেলে গেছে।`,
+          th === 0
+            ? `২. রোদ ওপর থেকে পড়লে পুরো w-টাই ছায়া, ${fix(sh, 0)}।`
+            : th === 180
+              ? `২. w উল্টো দিকে শুয়ে আছে, তাই পুরো w-টাই পেছনের ছায়া, ${fix(sh, 0)}।`
+            : sh > 0
+              ? `২. w-এর মাথা থেকে সোজা নিচে দাগ নামালে পড়ে ${fix(sh, 0)}-এ, v-এর দিকেই।`
+              : sh === 0
+                ? "২. মাথা থেকে সোজা নিচে দাগ নামালে পড়ে ঠিক গোড়ায়। ছায়া বলে কিছু নাই, 0।"
+                : `২. মাথা থেকে দাগ নামালে পড়ে গোড়ার ${bn(-sh)} ঘর পেছনে। পেছনের ছায়া, তাই minus।`,
+          `৩. হিসাবেও তাই: ‖w‖ × cos ${th}° = ${fix(L, 2)} × ${c < 0 ? `(${cs})` : cs} ${exact ? "=" : "≈"} ${fix(sh, 0)}।`,
+        ];
+  return (
+    <div className="mx-auto mt-2 max-w-sm rounded-xl border border-border bg-surface px-3 py-2 text-sm leading-snug">
+      {lines.map((l, i) => (
+        <div key={`${i}${l}`} className={FADE}>
+          {l}
+        </div>
+      ))}
+      {flatMiss && <div className="mt-1 font-medium text-danger">শোয়ানো w এখানে গুনবে না, কারণ তখন ছায়া আর w একই জিনিস। মাথাটা একটু ওপরে তুলে একই ছায়া বানান।</div>}
+      {!flatMiss && next !== undefined && <div className="mt-1 font-medium text-accent-text">{TARGET_NEXT[next]}</div>}
+    </div>
+  );
+}
+
 export function ArrowShadow() {
   const pass = useGate();
   const [way, setWay] = useSeed<number | null>("way", null);
@@ -324,7 +381,6 @@ export function ArrowShadow() {
   const right = way === 1;
   const all = TARGETS.every((t) => hit.includes(t));
   const shadow = w[0];
-  const th = len(w) ? angleOf(VFLAT, w) : 0;
 
   const pickWay = (i: number) => {
     if (i !== 1) return setMiss((miss ?? 0) + 1);
@@ -378,12 +434,7 @@ export function ArrowShadow() {
         </>
       ) : (
         <div className={FADE}>
-          <div className="text-center text-[0.95rem]">
-            <span className="font-mono">
-              ‖w‖ {fix(len(w), 2)} × cos {fix(th, 0)}°
-            </span>{" "}
-            = ছায়া <b className={`font-mono ${shadow < 0 ? "text-danger" : ""}`}>{fix(shadow, 0)}</b>
-          </div>
+          <ShadowSteps w={w} hit={hit} next={TARGETS.find((t) => !hit.includes(t))} />
           <Ticks items={TARGETS.map((t) => [`ছায়া ${t < 0 ? `−${-t}` : t}`, hit.includes(t)])} />
         </div>
       )}
@@ -487,17 +538,24 @@ export function TwoTests() {
 
 // ---------------------------------------------------------------------------
 // 6 · A vector's numbers are shadows. Light (2, 3) onto each axis: the shadow
-//     on the east axis is 2, on the north axis 3, and the box with e₁ and e₂
-//     gives the same two numbers.
+//     on the x axis is 2, on the y axis 3, and the box with e₁ and e₂ gives
+//     the same two numbers. Each axis has its own torch, switched on and off.
 
-const FX = makeFrame(-0.5, 3.5, -0.5, 3.5, 40);
+const FX = makeFrame(-0.5, 4, -0.5, 4.2, 36);
+const AXIS_NAME = ["x axis", "y axis"];
 
 export function AxisShadow() {
   const pass = useGate();
   const [lit, setLit] = useSeed<number[]>("lit", []);
+  const [on, setOn] = useSeed<number[]>("on", []);
   const both = lit.length === 2;
+  const f = FX;
+  const dark = on.length === 0;
 
-  const light = (i: number) => {
+  /** switch axis i's torch on or off; lighting both at least once clears the screen */
+  const toggle = (i: number) => {
+    if (on.includes(i)) return setOn(on.filter((j) => j !== i));
+    setOn([...on, i]);
     if (lit.includes(i)) return;
     const next = [...lit, i];
     setLit(next);
@@ -506,45 +564,64 @@ export function AxisShadow() {
 
   return (
     <>
-      <Plane f={FX} ticks={1} label="(2, 3) আর দুইটা axis-এর ওপর তার ছায়া" className="max-w-[13rem]">
-        {lit.includes(0) && (
-          <>
-            <path d={`M${FX.sx(2)} ${FX.sy(3)}V${FX.sy(0)}`} strokeWidth={1.2} strokeDasharray="4 3" className="pointer-events-none stroke-[#d97706]" />
-            <path d={`M${FX.sx(0)} ${FX.sy(0)}H${FX.sx(2)}`} strokeWidth={7} strokeLinecap="round" className={`${POP} pointer-events-none stroke-[#0f1b2d]/60`} />
-          </>
-        )}
-        {lit.includes(1) && (
-          <>
-            <path d={`M${FX.sx(2)} ${FX.sy(3)}H${FX.sx(0)}`} strokeWidth={1.2} strokeDasharray="4 3" className="pointer-events-none stroke-[#d97706]" />
-            <path d={`M${FX.sx(0)} ${FX.sy(0)}V${FX.sy(3)}`} strokeWidth={7} strokeLinecap="round" className={`${POP} pointer-events-none stroke-[#0f1b2d]/60`} />
-          </>
-        )}
-        <Arrow f={FX} from={O} to={[1, 0]} tone="teal" w={2.4} />
-        <Arrow f={FX} from={O} to={[0, 1]} tone="teal" w={2.4} />
-        <Label f={FX} at={[1, 0]} dy={-6} className="fill-cat-teal">
-          e₁
-        </Label>
-        <Label f={FX} at={[0, 1]} dx={7} dy={3} anchor="start" className="fill-cat-teal">
-          e₂
-        </Label>
-        <Arrow f={FX} from={O} to={V} tone="blue" w={2.6} />
-      </Plane>
-      <div className="grid grid-cols-2 gap-2">
-        {["পূর্বের axis-এ রোদ", "উত্তরের axis-এ রোদ"].map((b, i) => (
-          <div key={b} className="grid gap-2">
-            <button type="button" disabled={lit.includes(i)} onClick={() => light(i)} className={`${pill(lit.includes(i))} font-sans`}>
-              {b}
+      <div className="mx-auto w-full max-w-[13rem]">
+        <Plane f={f} ticks={1} label="(2, 3) আর দুই axis-এর torch; x axis-এ ছায়া 2, y axis-এ ছায়া 3" className="my-0! max-w-none">
+          <rect
+            x={f.sx(f.x0)}
+            y={f.sy(f.y1)}
+            width={(f.x1 - f.x0) * f.u}
+            height={(f.y1 - f.y0) * f.u}
+            fill={S_INK}
+            style={{ opacity: dark ? 0.22 : 0 }}
+            className="pointer-events-none transition-opacity duration-500 motion-reduce:transition-none"
+          />
+          {on.includes(0) && (
+            <>
+              <path d={`M${f.sx(1) - 9} ${f.sy(3.95)}L${f.sx(-0.2)} ${f.sy(0)}H${f.sx(2.2)}L${f.sx(1) + 9} ${f.sy(3.95)}Z`} fill="#fde047" fillOpacity={0.3} className={`${FADE} pointer-events-none`} />
+              <path d={`M${f.sx(2)} ${f.sy(3)}V${f.sy(0)}`} strokeWidth={1.2} strokeDasharray="4 3" className="pointer-events-none stroke-[#d97706]" />
+              <path d={`M${f.sx(0)} ${f.sy(0)}H${f.sx(2)}`} strokeWidth={7} strokeLinecap="round" className={`${POP} pointer-events-none stroke-[#0f1b2d]/60`} />
+            </>
+          )}
+          {on.includes(1) && (
+            <>
+              <path d={`M${f.sx(3.7)} ${f.sy(1.5) - 9}L${f.sx(0)} ${f.sy(3.2)}V${f.sy(-0.2)}L${f.sx(3.7)} ${f.sy(1.5) + 9}Z`} fill="#fde047" fillOpacity={0.3} className={`${FADE} pointer-events-none`} />
+              <path d={`M${f.sx(2)} ${f.sy(3)}H${f.sx(0)}`} strokeWidth={1.2} strokeDasharray="4 3" className="pointer-events-none stroke-[#d97706]" />
+              <path d={`M${f.sx(0)} ${f.sy(0)}V${f.sy(3)}`} strokeWidth={7} strokeLinecap="round" className={`${POP} pointer-events-none stroke-[#0f1b2d]/60`} />
+            </>
+          )}
+          <Arrow f={f} from={O} to={[1, 0]} tone="teal" w={2.4} />
+          <Arrow f={f} from={O} to={[0, 1]} tone="teal" w={2.4} />
+          <Label f={f} at={[1, 0]} dy={-6} className="fill-cat-teal">
+            e₁
+          </Label>
+          <Label f={f} at={[0, 1]} dx={7} dy={3} anchor="start" className="fill-cat-teal">
+            e₂
+          </Label>
+          <Arrow f={f} from={O} to={V} tone="blue" w={2.6} />
+          <S_Torch x={f.sx(1)} y={f.sy(3.95)} on={on.includes(0)} />
+          <g transform={`rotate(90 ${f.sx(3.7)} ${f.sy(1.5)})`}>
+            <S_Torch x={f.sx(3.7)} y={f.sy(1.5)} on={on.includes(1)} />
+          </g>
+        </Plane>
+      </div>
+      <div className="mt-2 grid grid-cols-2 gap-2">
+        {AXIS_NAME.map((name, i) => (
+          <div key={name} className="grid content-start gap-2">
+            <button type="button" onClick={() => toggle(i)} className={`${pill(on.includes(i))} font-sans`}>
+              {name}-এর torch {on.includes(i) ? "নিভান" : "জ্বালান"}
             </button>
-            {lit.includes(i) && (
+            {on.includes(i) && (
               <div className={`${FADE} text-center`}>
-                <div className="text-sm">ছায়া {i === 0 ? 2 : 3}</div>
+                <div className="text-sm">
+                  {name} বরাবর ছায়া <b className="font-mono">{i === 0 ? 2 : 3}</b>
+                </div>
                 <DotBox a={V} b={i === 0 ? [1, 0] : [0, 1]} k={3} dense />
               </div>
             )}
           </div>
         ))}
       </div>
-      <Task done={both}>দুইটা axis-এর ওপরই রোদ ফেলুন, আর ছায়া মেপে দেখুন।</Task>
+      <Task done={both}>দুই axis-এর torch-ই একবার করে জ্বালিয়ে আর নিভিয়ে দেখুন, কোন axis বরাবর ছায়া কত।</Task>
     </>
   );
 }
@@ -557,6 +634,29 @@ export function AxisShadow() {
 
 const VP = [2, 3];
 const WP = [2, 1];
+
+/** Two axes in a cell: the same axis lies on itself (a full shadow), crossed ones meet at 90° (a dot). */
+function PairIcon({ same }: { same: boolean }) {
+  const head = (x: number, y: number, dx: number, dy: number) => `M${x - dx * 4 - dy * 2.5} ${y - dy * 4 + dx * 2.5}L${x} ${y}L${x - dx * 4 + dy * 2.5} ${y - dy * 4 - dx * 2.5}`;
+  return (
+    <svg viewBox="0 0 44 26" aria-hidden="true" className="mx-auto block h-6 w-11">
+      {same ? (
+        <>
+          <path d="M8 21H36" strokeWidth={5} strokeLinecap="round" className="stroke-[#0f1b2d]/40" />
+          <path d={`M8 13H36${head(36, 13, 1, 0)}`} fill="none" strokeWidth={1.6} strokeLinecap="round" className="stroke-cat-coral" />
+          <path d={`M8 16H36${head(36, 16, 1, 0)}`} fill="none" strokeWidth={1.6} strokeLinecap="round" className="stroke-cat-blue" />
+        </>
+      ) : (
+        <>
+          <path d={`M12 22H38${head(38, 22, 1, 0)}`} fill="none" strokeWidth={1.6} strokeLinecap="round" className="stroke-cat-blue" />
+          <path d={`M12 22V3${head(12, 3, 0, -1)}`} fill="none" strokeWidth={1.6} strokeLinecap="round" className="stroke-cat-coral" />
+          <path d="M12 18H16V22" fill="none" strokeWidth={0.8} className="stroke-[#0f1b2d]/60" />
+          <circle cx={12} cy={22} r={2.6} className="fill-[#0f1b2d]" />
+        </>
+      )}
+    </svg>
+  );
+}
 
 export function NoCrossTalk() {
   const pass = useGate();
@@ -602,6 +702,7 @@ export function NoCrossTalk() {
                   </div>
                   {on ? (
                     <div className={FADE}>
+                      <PairIcon same={same} />
                       <div className="text-[0.7rem] leading-tight">{same ? "নিজের ওপর পুরো ছায়া, 1" : "৯০ degree কোণ, ছায়া 0"}</div>
                       <div className={`font-mono text-lg font-bold ${same ? "" : "line-through"}`}>{same ? x * y : 0}</div>
                     </div>
@@ -694,6 +795,292 @@ export function YourPair() {
     </>
   );
 }
+
+// ---------------------------------------------------------------------------
+// Math for AI 4.4 starts here: the same ছাদ in the afternoon. 4.3 matched মামা's
+// recipe to the box twice; 4.4 asks whether it always will, and why.
+//
+// 9 · The bet 4.3 left open. Two pairs matched, 6 and 7; will the two recipes
+//     agree for every pair? Sealed, unmarked; NoCrossTalk and YourPair settle it.
+
+const FAB = makeFrame(-0.5, 3.5, -0.5, 3.5, 20);
+const ALWAYS_DONE: { v: XY; w: XY; n: number }[] = [
+  { v: [2, 0], w: [3, 3], n: 6 },
+  { v: [2, 3], w: [2, 1], n: 7 },
+];
+const RECIPE_BET = ["সবসময় মিলবে, যেকোনো দুইটা arrow-এ", "মাঝেমধ্যে মিলবে, কাকতালীয়ভাবে", "এই দুইটার বাইরে আর মিলবে না"];
+
+export function AlwaysBet() {
+  const pass = useGate();
+  const [bet, setBet] = useSeed<number | null>("bet", null);
+
+  const seal = (i: number) => {
+    setBet(i);
+    pass("বাজি সিল হলো। খোঁজ শুরু axis-এর ছায়ায়।");
+  };
+
+  return (
+    <>
+      <div className="grid grid-cols-3 gap-2 text-center">
+        {ALWAYS_DONE.map((d) => (
+          <div key={d.n} className="grid content-start gap-1 rounded-xl border-2 border-accent/50 bg-accent/10 px-1 py-1.5">
+            <Plane f={FAB} label={`${tupN(d.v)} আর ${tupN(d.w)}: box ${d.n}, মামা ${d.n}`} className="mx-auto my-0! max-w-[4.5rem]">
+              <Arrow f={FAB} from={O} to={d.v} tone="blue" w={2.2} />
+              <Arrow f={FAB} from={O} to={d.w} tone="coral" w={2.2} />
+            </Plane>
+            <div className="flex items-center justify-center gap-1 text-xs">
+              <S_Tick /> box {d.n}, মামা {d.n}
+            </div>
+          </div>
+        ))}
+        <div className="grid place-content-center gap-1 rounded-xl border-2 border-dashed border-border px-1 py-1.5 text-muted">
+          <div className="font-mono text-2xl">?</div>
+          <div className="text-xs">বাকি সব জোড়া</div>
+        </div>
+      </div>
+      <div className="mt-3 text-sm font-medium text-muted">মামা বলছেন তাঁর হিসাব আর box সবসময় একই উত্তর দেবে। আপনার কী মনে হয়?</div>
+      <div className="mt-2 grid gap-2">
+        {RECIPE_BET.map((o, i) => (
+          <Choice key={o} n={i} look={bet === i ? "picked" : bet !== null ? "dim" : "idle"} disabled={bet !== null} onClick={() => seal(i)}>
+            {o}
+          </Choice>
+        ))}
+      </div>
+      <Task done={bet !== null}>দুইটা মিলে যাওয়া জোড়া দেখে একটাতে বাজি ধরুন।</Task>
+    </>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 10 · Turn the axes. (2, 3) stays put; the reader turns a pair of axes, both
+//      1 long and at 90°, to four stops (0°, 37°, 53°, 90°, picked so every
+//      number is clean). At each stop the torch's shadow on each axis sits
+//      beside the box of (2, 3) with that axis: always the same number, and
+//      together they are the new address.
+
+const FTA = makeFrame(-1.6, 3.6, -0.6, 3.6, 36);
+const TURN_DEG = [0, 36.87, 53.13, 90];
+const TURN_NAME = ["0°", "37°", "53°", "90°"];
+const TURN_AXES: [XY, XY][] = [
+  [
+    [1, 0],
+    [0, 1],
+  ],
+  [
+    [0.8, 0.6],
+    [-0.6, 0.8],
+  ],
+  [
+    [0.6, 0.8],
+    [-0.8, 0.6],
+  ],
+  [
+    [0, 1],
+    [-1, 0],
+  ],
+];
+const AXIS_BN = ["১", "২"];
+/** one decimal, dropping a ".0" */
+const num = (n: number) => fix(n, 1).replace(/\.0$/, "");
+/** a factor in a product, bracketed when it's negative */
+const par = (n: number) => (n < 0 ? `(${num(n)})` : num(n));
+
+export function TiltedAxes() {
+  const pass = useGate();
+  const [at, setAt] = useSeed("at", 0);
+  const [seen, setSeen] = useSeed<number[]>("seen", [0]);
+  const [t] = useTween([TURN_DEG[at]], 700);
+  const all = seen.length === TURN_DEG.length;
+  const live: [XY, XY] = [
+    [Math.cos(t * RAD), Math.sin(t * RAD)],
+    [-Math.sin(t * RAD), Math.cos(t * RAD)],
+  ];
+  const axes = TURN_AXES[at];
+  const addr = axes.map((u) => dot(V, u));
+
+  const turn = (i: number) => {
+    setAt(i);
+    if (seen.includes(i)) return;
+    const next = [...seen, i];
+    setSeen(next);
+    if (next.length === TURN_DEG.length) pass("যেদিকেই ঘোরান, ছায়া আর box এক।");
+  };
+
+  return (
+    <>
+      <S_Sheet max="max-w-[15rem]">
+        <Plane f={FTA} axes={false} label={`(2, 3) আর ${TURN_NAME[at]} ঘোরানো দুইটা axis; নতুন address (${addr.map(num).join(", ")})`} className="my-0! max-w-none">
+          {live.map((u, i) => (
+            <S_Line key={i} f={FTA} v={u} />
+          ))}
+          {live.map((u, i) => {
+            const s = dot(V, u);
+            const ft: XY = [u[0] * s, u[1] * s];
+            return (
+              <g key={i}>
+                <S_Bar f={FTA} to={ft} tone={i === 0 ? "ink" : "tape"} />
+                <S_Drop f={FTA} from={V} to={ft} />
+              </g>
+            );
+          })}
+          {live.map((u, i) => (
+            <g key={i}>
+              <Arrow f={FTA} from={O} to={u} tone="teal" w={2.4} />
+              <Label f={FTA} at={[u[0] * 0.6 - live[1 - i][0] * 0.4, u[1] * 0.6 - live[1 - i][1] * 0.4]} dy={4} size={10} className="fill-cat-teal">
+                {AXIS_BN[i]}
+              </Label>
+            </g>
+          ))}
+          <Arrow f={FTA} from={O} to={V} tone="blue" w={2.6} />
+        </Plane>
+      </S_Sheet>
+      <div className="mt-2 text-center text-xs text-muted">দুইটা axis কতটা ঘোরাবেন?</div>
+      <div className="mt-1 flex justify-center gap-1.5">
+        {TURN_NAME.map((n, i) => (
+          <button key={n} type="button" onClick={() => turn(i)} className={`${pill(at === i)} font-mono`}>
+            {n}
+          </button>
+        ))}
+      </div>
+      <div key={at} className={`${FADE} mt-2 grid gap-1 text-sm`}>
+        {axes.map((u, i) => (
+          <div key={i} className="grid grid-cols-2 items-baseline gap-2">
+            <span className="text-right">
+              axis {AXIS_BN[i]}-এ ছায়া <b className="font-mono">{num(addr[i])}</b>
+            </span>
+            <span className="font-mono text-[0.78rem] text-cat-amber">
+              box: 2×{par(u[0])} + 3×{par(u[1])}
+            </span>
+          </div>
+        ))}
+        <div className="text-center font-semibold">
+          নতুন address <span className="font-mono whitespace-nowrap">({addr.map(num).join(", ")})</span>
+        </div>
+      </div>
+      <Task done={all}>চারটা কোণেই axis ঘুরিয়ে দেখুন, ছায়া আর box কখনো আলাদা হয় কিনা ({bn(seen.length)}/৪)।</Task>
+    </>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 11 · The shadow's two rules, by hand. Round 1: two walks end to end over a
+//      floor line; the reader lights each walk's shadow, then the whole
+//      path's: 1.5 + 1.5 = 3. Round 2: one arrow times 2, 3 and −1; the shadow
+//      follows, even behind the foot.
+
+const FSR_WALK = makeFrame(-0.3, 3.5, -0.4, 1.9, 44);
+const FSR = makeFrame(-1.5, 3.9, -1.4, 3.5, 30);
+const SR_A: XY = [1.5, 1.5];
+const SR_AB: XY = [3, 1.1];
+const SR_C: XY = [1, 1.1];
+const SR_TIMES = [1, 2, 3, -1];
+const SR_BTN = ["প্রথম হাঁটার ছায়া", "দ্বিতীয় হাঁটার ছায়া", "পুরো পথের ছায়া"];
+
+export function ShadowRules() {
+  const pass = useGate();
+  const [round, setRound] = useSeed("round", 0);
+  const [k, setK] = useSeed("k", 0);
+  const [m, setM] = useSeed("m", 1);
+  const [seen, setSeen] = useSeed<number[]>("seen", [1]);
+  const walkDone = round === 1;
+  const all = walkDone && seen.length === SR_TIMES.length;
+  const c: XY = [SR_C[0] * m, SR_C[1] * m];
+  const g = round === 0 ? FSR_WALK : FSR;
+
+  const times = (n: number) => {
+    setM(n);
+    if (seen.includes(n)) return;
+    const next = [...seen, n];
+    setSeen(next);
+    if (next.length === SR_TIMES.length) pass("ছায়া যোগ হয়, গুণও হয়।");
+  };
+
+  return (
+    <>
+      <div className="text-center text-xs font-semibold text-muted">{round === 0 ? "নিয়ম ১: দুইটা হাঁটা জোড়া দিলে" : "নিয়ম ২: arrow-কে গুণ করলে"}</div>
+      <S_Sheet max="max-w-[12rem]">
+        <Plane key={round} f={g} grid={0} axes={false} label={round === 0 ? "দুইটা হাঁটা আর তাদের ছায়া" : `arrow × ${m}, ছায়া ${m}`} className="my-0! max-w-none">
+          <path d={`M${g.sx(g.x0 + 0.1)} ${g.sy(0)}H${g.sx(g.x1 - 0.1)}`} strokeWidth={1.5} className="stroke-[#0f1b2d]/50" />
+          {round === 0 && (
+            <>
+              {k >= 1 && k < 3 && <S_Bar f={g} to={[1.5, 0]} tone="blue" />}
+              {k >= 1 && <S_Drop f={g} from={SR_A} to={[1.5, 0]} />}
+              {k >= 2 && k < 3 && <S_Bar f={g} from={[1.5, 0]} to={[3, 0]} tone="coral" />}
+              {k >= 2 && <S_Drop f={g} from={SR_AB} to={[3, 0]} />}
+              {k >= 3 && <S_Bar f={g} to={[3, 0]} tone="ink" w={9} />}
+              <Arrow f={g} from={O} to={SR_A} tone="blue" w={2.4} />
+              <Arrow f={g} from={SR_A} to={SR_AB} tone="coral" w={2.4} />
+              {k >= 3 && <Arrow f={g} from={O} to={SR_AB} tone="violet" w={2} dashed />}
+            </>
+          )}
+          {round === 1 && (
+            <>
+              <S_Bar f={g} to={[c[0], 0]} tone={m < 0 ? "danger" : "ink"} />
+              <S_Drop f={g} from={c} to={[c[0], 0]} />
+              <Arrow f={g} from={O} to={c} tone="blue" w={2.6} />
+            </>
+          )}
+        </Plane>
+      </S_Sheet>
+      {round === 0 ? (
+        <>
+          <div className="mt-2 flex justify-center">
+            {k < 3 ? (
+              <button type="button" onClick={() => setK(k + 1)} className={primaryBtn}>
+                {SR_BTN[k]}
+              </button>
+            ) : (
+              <button type="button" onClick={() => setRound(1)} className={primaryBtn}>
+                এবার নিয়ম ২
+              </button>
+            )}
+          </div>
+          <div className="mt-2 grid gap-0.5 text-center text-sm">
+            {k >= 1 && (
+              <div className={FADE}>
+                <span className="text-cat-blue">প্রথম হাঁটার ছায়া</span> <b className="font-mono">1.5</b>
+              </div>
+            )}
+            {k >= 2 && (
+              <div className={FADE}>
+                <span className="text-cat-coral">দ্বিতীয় হাঁটার ছায়া</span> <b className="font-mono">1.5</b>
+              </div>
+            )}
+            {k >= 3 && (
+              <div className={`${FADE} font-semibold`}>
+                পুরো পথের ছায়া <span className="font-mono">3 = 1.5 + 1.5</span>
+              </div>
+            )}
+          </div>
+        </>
+      ) : (
+        <>
+          <div className="mt-2 flex justify-center gap-1.5">
+            {SR_TIMES.map((n) => (
+              <button key={n} type="button" onClick={() => times(n)} className={`${pill(m === n)} font-mono`}>
+                × {sgn(n)}
+              </button>
+            ))}
+          </div>
+          <div key={m} className={`${FADE} mt-2 text-center text-sm`}>
+            arrow <b className="font-mono">× {sgn(m)}</b>, ছায়া <b className="font-mono">{sgn(m)}</b>
+            {m < 0 && <span className="text-muted">, পেছনের দিকে</span>}
+          </div>
+        </>
+      )}
+      <Ticks
+        items={[
+          ["নিয়ম ১: ছায়া যোগ হয়", walkDone],
+          ["নিয়ম ২: ছায়াও গুণ হয়", all],
+        ]}
+      />
+      <Task done={all}>দুই হাঁটার ছায়া আলাদা করে আর একসাথে দেখুন। তারপর arrow-টাকে 2, 3 আর −1 দিয়ে গুণ করে দেখুন।</Task>
+    </>
+  );
+}
+
+/** a whole number with a real minus sign */
+const sgn = (n: number) => (n < 0 ? `−${-n}` : `${n}`);
 
 // ---------------------------------------------------------------------------
 // Story scenes and explanation figures. Watch-only, driven by the reader
@@ -1412,6 +1799,80 @@ export function StickToArrow({}: Story) {
 }
 
 // ---------------------------------------------------------------------------
+// 4b · A watch-only figure for screen 4's setup (a story scene, no task): a
+//      torchlight switched on and off right over v. On, its light falls
+//      straight down and w's shadow shows on v; off, it's gone. In the dark w
+//      tips steeper, and the shadow comes back shorter; then w leans back past
+//      90° and the shadow falls behind v's tail.
+
+const FTD = makeFrame(-2.8, 5.2, -0.6, 4.9, 24);
+const X4T_LEN = Math.hypot(2, 3);
+const X4T_ANG = [56.31, 56.31, 56.31, 76, 76, 124];
+const X4T_ON = [false, true, false, false, true, true];
+const X4T_SAY = [
+  "ঘরটা অন্ধকার। v মেঝেতে শোয়ানো, w একটা কোণ করে উঠে গেছে।",
+  "v-এর ঠিক ওপরে torchlight জ্বালালাম। আলো নামে সোজা নিচে, আর v-এর ওপর পড়ে w-এর ছায়া।",
+  "Torch নিভালে ছায়াও নাই। ছায়াটা আসে শুধু ওপরের আলো থেকে।",
+  "অন্ধকারেই w-কে আরও খাড়া করলাম।",
+  "আবার জ্বালালাম। ছায়া এবার ছোট, কারণ w এখন v-এর দিকে কম যায়।",
+  "w পেছনে হেলে গেলে ছায়া পড়ে v-এর উল্টো দিকে।",
+];
+
+/** A torchlight pointing straight down, its lens centred at (x, y) on the sheet. */
+function S_Torch({ x, y, on }: { x: number; y: number; on: boolean }) {
+  return (
+    <g className="pointer-events-none">
+      <rect x={x - 5} y={y - 24} width={10} height={15} rx={2} fill="#374151" />
+      <rect x={x - 2} y={y - 20} width={4} height={5} rx={1} fill={on ? "#22c55e" : "#9ca3af"} />
+      <path d={`M${x - 5} ${y - 9}L${x - 10} ${y - 1}H${x + 10}L${x + 5} ${y - 9}Z`} fill="#4b5563" />
+      <rect x={x - 10} y={y - 2} width={20} height={3} rx={1} fill={on ? "#fde047" : "#9ca3af"} />
+    </g>
+  );
+}
+
+export function TorchDrop({}: Story) {
+  const s = useScene(5, [600, 2400, 2000, 1400, 2400, 2400]);
+  const k = s.k;
+  const on = X4T_ON[k];
+  const [a] = useTween([X4T_ANG[k]], 900);
+  const f = FTD;
+  const w: XY = [X4T_LEN * Math.cos(a * RAD), X4T_LEN * Math.sin(a * RAD)];
+  const lo = Math.min(0, w[0]) - 0.35;
+  const hi = Math.max(0, w[0]) + 0.35;
+  const tx = f.sx((lo + hi) / 2);
+  const ty = f.sy(4.45);
+  return (
+    <Scene scene={s} caption={say(X4T_SAY, k)}>
+      <S_Sheet max="max-w-[14rem]">
+        <Plane f={f} grid={0} axes={false} label="v-এর ঠিক ওপরে torchlight; জ্বালালে v-এর ওপর w-এর ছায়া পড়ে, নিভালে থাকে না" className="my-0! max-w-none">
+          <rect
+            x={f.sx(f.x0)}
+            y={f.sy(f.y1)}
+            width={(f.x1 - f.x0) * f.u}
+            height={(f.y1 - f.y0) * f.u}
+            fill={S_INK}
+            style={{ opacity: on ? 0 : 0.28 }}
+            className="pointer-events-none transition-opacity duration-500 motion-reduce:transition-none"
+          />
+          {on && <path d={`M${tx - 9} ${ty + 1}L${f.sx(lo)} ${f.sy(0)}H${f.sx(hi)}L${tx + 9} ${ty + 1}Z`} fill="#fde047" fillOpacity={0.35} className={`${FADE} pointer-events-none`} />}
+          {on && Math.abs(w[0]) > 0.02 && <S_Bar f={f} to={[w[0], 0]} tone={w[0] < 0 ? "danger" : "ink"} />}
+          {on && <S_Drop f={f} from={w} to={[w[0], 0]} />}
+          <Arrow f={f} from={O} to={[4.6, 0]} tone="teal" w={3} />
+          <Arrow f={f} from={O} to={w} tone="coral" w={2.6} />
+          <Label f={f} at={[4.6, 0]} dx={-2} dy={-8} anchor="end" className="fill-cat-teal">
+            v
+          </Label>
+          <Label f={f} at={w} dx={w[0] < 0 ? -6 : 6} dy={-2} anchor={w[0] < 0 ? "end" : "start"} className="fill-cat-coral">
+            w
+          </Label>
+          <S_Torch x={tx} y={ty} on={on} />
+        </Plane>
+      </S_Sheet>
+    </Scene>
+  );
+}
+
+// ---------------------------------------------------------------------------
 // 4½ · A figure for screen 4's explanation, no task: two ways to lay w on v.
 //      Rotating w down always gives its whole length, 3.61, whatever the
 //      angle (w tips up to 80° and it's still 3.61). Dropping the sun's line
@@ -1562,6 +2023,61 @@ export function MamaRecipe({}: Story) {
 }
 
 // ---------------------------------------------------------------------------
+// 5b · A watch-only figure for screen 5's setup (a story scene, no task):
+//      মামা's sentence becomes the formula. v's length is ‖v‖ on the tape;
+//      the roof's rule (shadow = stick × cos θ) with w as the stick makes
+//      w's shadow ‖w‖ cos θ; together ‖v‖ × ‖w‖ × cos θ.
+
+const X5B_SAY = [
+  "মামার হিসাব: v-এর length, গুণ v-এর ওপর w-এর ছায়া।",
+  "v-এর length ফিতায় মাপা যায়। এর নাম ‖v‖।",
+  "আর ছায়া? ছাদের লাঠির কথা মনে করুন: ছায়া হলো লাঠি গুণ cos θ।",
+  "এখানে লাঠি হলো w। তাই w-এর ছায়া হলো ‖w‖ গুণ cos θ।",
+  "সব মিলিয়ে ‖v‖ × ‖w‖ × cos θ। দুইটা ফিতার মাপ, আর একটা চাঁদার মাপ।",
+];
+
+export function RecipeBuild({}: Story) {
+  const s = useScene(4, [600, 1800, 2600, 2600, 2800]);
+  const k = s.k;
+  const chip = "rounded-lg border-2 px-1.5 py-0.5 text-center transition-colors duration-500 motion-reduce:transition-none";
+  return (
+    <Scene scene={s} caption={say(X5B_SAY, k)}>
+      <div className="mx-auto flex max-w-xs items-center gap-3">
+        <S_Sheet max="max-w-[8rem]">
+          <Plane f={FN} ticks={1} label="v শোয়ানো, w (2, 3); ফিতায় v-এর length, আর v-এর ওপর w-এর ছায়া" className="my-0! max-w-none">
+            {k === 1 && <S_Bar f={FN} to={[3.2, 0]} tone="tape" w={6} />}
+            {k >= 2 && <Arc f={FN} a={[1, 0]} b={V} r={0.7} label={false} />}
+            {k >= 3 && <S_Bar f={FN} to={[2, 0]} />}
+            {k >= 3 && <S_Drop f={FN} from={V} to={[2, 0]} />}
+            <Arrow f={FN} from={O} to={[3.2, 0]} tone="teal" w={2.8} />
+            <Arrow f={FN} from={O} to={V} tone="coral" w={2.4} />
+            <Label f={FN} at={[3.2, 0]} dx={-2} dy={-7} anchor="end" className="fill-cat-teal">
+              v
+            </Label>
+            <Label f={FN} at={V} dx={6} dy={4} anchor="start" className="fill-cat-coral">
+              w
+            </Label>
+          </Plane>
+        </S_Sheet>
+        <div className="grid min-w-0 flex-1 gap-1.5 text-sm">
+          <div className="flex flex-wrap items-center gap-1">
+            <span key={k >= 1 ? "a" : "b"} className={`${FADE} ${chip} border-cat-teal/50 ${k >= 1 ? "bg-cat-teal/10 font-mono font-bold" : ""}`}>
+              {k >= 1 ? "‖v‖" : "v-এর length"}
+            </span>
+            <span className="font-mono">×</span>
+            <span key={k >= 3 ? "c" : "d"} className={`${FADE} ${chip} border-cat-coral/50 ${k >= 3 ? "bg-cat-coral/10 font-mono font-bold" : ""}`}>
+              {k >= 3 ? "‖w‖ cos θ" : "w-এর ছায়া"}
+            </span>
+          </div>
+          {k >= 2 && <div className={`${FADE} text-xs text-muted`}>ছাদের নিয়ম: ছায়া = লাঠি × cos θ</div>}
+          {k >= 4 && <div className={`${FADE} font-mono text-[0.95rem] font-bold`}>‖v‖ × ‖w‖ × cos θ</div>}
+        </div>
+      </div>
+    </Scene>
+  );
+}
+
+// ---------------------------------------------------------------------------
 // 5½ · A figure for screen 5's explanation, no task: length × shadow, twice.
 //      (2, 0) and (3, 3): w's shadow on v is 3, v is 2 long, 2 × 3 = 6. The
 //      bet's pair: w's shadow on v is 1.94, v is 3.61, 3.61 × 1.94 = 7.0.
@@ -1627,6 +2143,91 @@ export function LengthTimesShadow() {
         </div>
       </div>
       {k >= 5 && <div className={`${FADE} mt-2 text-center font-mono text-sm`}>‖v‖ × ‖w‖ cos θ = v · w</div>}
+    </Scene>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 5⅝ · A figure for screen 5's explanation, no task: the shadow on a tilted
+//      arrow. The bet's v (2, 3) leans; turn the round paper until v lies
+//      flat, drop the sun's line from w's tip (1.94), then turn it back: the
+//      shadow stays on v. Everything is rotated by hand, so labels stay upright.
+
+const X5T = { cx: 120, cy: 88, r: 80, u: 20 };
+const X5T_TURN = 123.69;
+const X5T_SAY = [
+  "বাজির জোড়ায় v = (2, 3) হেলানো। ওর ওপর রোদ ফেলবো কীভাবে?",
+  "কাগজটা ঘুরিয়ে দিন, যতক্ষণ না v মেঝের মতো শুয়ে পড়ে।",
+  "এবার ওপর থেকে রোদ: w-এর মাথা থেকে সোজা নিচে দাগ। ছায়া 1.94।",
+  "কাগজ আগের মতো ঘুরিয়ে দিলেও ছায়াটা v-এর গায়েই লেগে থাকে।",
+];
+
+export function TurnPaper() {
+  const s = useScene(3, [600, 2000, 2400, 2400]);
+  const k = s.k;
+  const clip = useId();
+  const [a] = useTween([k === 1 || k === 2 ? X5T_TURN : 0], 1200);
+  const c = Math.cos(a * RAD);
+  const sn = Math.sin(a * RAD);
+  const { cx, cy, r, u } = X5T;
+  const P = (p: XY): [number, number] => [cx + (p[0] * c - p[1] * sn) * u, cy - (p[0] * sn + p[1] * c) * u];
+  const seg = (p: XY, q: XY) => {
+    const [x1, y1] = P(p);
+    const [x2, y2] = P(q);
+    return `M${x1} ${y1}L${x2} ${y2}`;
+  };
+  const ft = foot(W, V);
+  const grid = [-4, -3, -2, -1, 1, 2, 3, 4].map((t) => seg([t, -4.5], [t, 4.5]) + seg([-4.5, t], [4.5, t])).join("");
+  const arrow = (to: XY, color: string) => {
+    const [x2, y2] = P(to);
+    const [x1, y1] = P(O);
+    const l = Math.hypot(x2 - x1, y2 - y1);
+    const ux = (x2 - x1) / l;
+    const uy = (y2 - y1) / l;
+    return (
+      <path
+        d={`M${x1} ${y1}L${x2} ${y2}M${x2 - ux * 7 - uy * 4} ${y2 - uy * 7 + ux * 4}L${x2} ${y2}L${x2 - ux * 7 + uy * 4} ${y2 - uy * 7 - ux * 4}`}
+        fill="none"
+        stroke={color}
+        strokeWidth={2.6}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    );
+  };
+  const tag = (p: XY, text: string, color: string) => {
+    const [x, y] = P([p[0] * (1 + 0.5 / len(p)), p[1] * (1 + 0.5 / len(p))]);
+    const dy = 4;
+    return (
+      <text x={x} y={y + dy} textAnchor="middle" fontSize={11} fontWeight={700} fill={color}>
+        {text}
+      </text>
+    );
+  };
+  const [mx, my] = P([ft[0] / 2, ft[1] / 2]);
+  return (
+    <Scene scene={s} caption={say(X5T_SAY, k)}>
+      <svg viewBox="0 0 240 176" role="img" aria-label="হেলানো v-এর ওপর ছায়া: কাগজ ঘুরিয়ে v-কে শুইয়ে রোদ ফেলা, ছায়া 1.94, তারপর কাগজ আগের মতো" className="mx-auto block h-auto w-full max-w-[15rem]">
+        <defs>
+          <clipPath id={clip}>
+            <circle cx={cx} cy={cy} r={r} />
+          </clipPath>
+        </defs>
+        <circle cx={cx} cy={cy} r={r} fill="white" stroke="#cbd5e1" strokeWidth={1.5} />
+        <path d={grid} clipPath={`url(#${clip})`} stroke="#e2e8f0" strokeWidth={1} fill="none" />
+        <path d={seg([-4.5, 0], [4.5, 0]) + seg([0, -4.5], [0, 4.5])} clipPath={`url(#${clip})`} stroke="#94a3b8" strokeWidth={1} fill="none" />
+        {k >= 2 && <path d={seg(O, ft)} stroke={S_INK} strokeOpacity={0.6} strokeWidth={7} strokeLinecap="round" className={FADE} />}
+        {k >= 2 && <path d={seg(W, ft)} stroke="#d97706" strokeWidth={1.3} strokeDasharray="4 3" className={FADE} />}
+        {arrow(V, "#2563eb")}
+        {arrow(W, "#e11d48")}
+        {tag(V, "v", "#2563eb")}
+        {tag(W, "w", "#e11d48")}
+        {k >= 2 && (
+          <text x={mx} y={my + (k === 2 ? 17 : 0)} dx={k === 2 ? 0 : -16} textAnchor="middle" fontSize={10} fontWeight={700} fontFamily="ui-monospace, monospace" fill={S_INK} className={FADE}>
+            1.94
+          </text>
+        )}
+      </svg>
     </Scene>
   );
 }
@@ -1704,7 +2305,7 @@ const X6B_SAY = [
   "“সবসময়” মানতে হলে জানতে হবে কেন মেলে।",
 ];
 
-export function NotYetProof() {
+export function NotYetProof({}: Story) {
   const s = useScene(3, [600, 1800, 2000, 2600]);
   const k = s.k;
   return (
@@ -1744,8 +2345,8 @@ const X8_SAY = [
   "২.২-এ (2, 3) মানে ছিল একটা হাঁটা।",
   "পূর্বে 2 পা…",
   "…তারপর উত্তরে 3 পা।",
-  "ওপর থেকে রোদ: পূর্বের axis-এ ছায়া 2, পূর্বে হাঁটার সমান।",
-  "পাশ থেকে রোদ: উত্তরের axis-এ ছায়া 3। কতদূর হাঁটা, সেটাই ছায়া।",
+  "ওপর থেকে রোদ: x axis-এ ছায়া 2, পূর্বে হাঁটার সমান।",
+  "পাশ থেকে রোদ: y axis-এ ছায়া 3। কতদূর হাঁটা, সেটাই ছায়া।",
 ];
 
 export function WalkIsShadow() {
@@ -1754,8 +2355,8 @@ export function WalkIsShadow() {
   const rows: [string, string, boolean][] = [
     ["পূর্বে হাঁটা", "2", k >= 1],
     ["উত্তরে হাঁটা", "3", k >= 2],
-    ["পূর্বের axis-এ ছায়া", "2", k >= 3],
-    ["উত্তরের axis-এ ছায়া", "3", k >= 4],
+    ["x axis-এ ছায়া", "2", k >= 3],
+    ["y axis-এ ছায়া", "3", k >= 4],
   ];
   return (
     <Scene scene={s} caption={say(X8_SAY, k)}>
@@ -1847,9 +2448,95 @@ export function TiltedAddress() {
 }
 
 // ---------------------------------------------------------------------------
-// 6⅞ · A figure for the same check, no task: PCA in one picture. A
-//      cloud of data dots, one good direction through it, each dot dropping
-//      its shadow onto it, and the dots settling there as one number each.
+// 6⅞a · A figure for the PCA side quest in screen 6's explanation, no task:
+//       why turn the axes. A long, thin cloud of data dots on the usual
+//       axes; the axes turn until axis 1 runs along the cloud; the shadows
+//       on axis 1 spread from −2.4 to 2.4, those on axis 2 bunch between
+//       −0.4 and 0.4; axis 2 fades, its number is tiny for every dot.
+//       Captions are in English for now; the author will translate them.
+
+const X9C_SAY = [
+  "Each dot is one piece of data. On the usual axes, every dot needs two numbers.",
+  "Turn the two axes, still 1 unit long and at 90°, until axis 1 runs along the cloud.",
+  "The shadows on axis 1 are spread far apart. This number tells the dots apart.",
+  "The shadows on axis 2 all bunch up near 0. This number is small for every dot.",
+  "So the second number hardly matters. We can almost ignore it.",
+];
+const X9C_SPREAD = [
+  ["axis 1", "−2.4 to 2.4"],
+  ["axis 2", "−0.4 to 0.4"],
+];
+
+export function DataAxes() {
+  const s = useScene(4, [600, 1800, 2400, 2400, 2400]);
+  const k = s.k;
+  const [t] = useTween([k >= 1 ? 26.57 : 0], 1100);
+  const px = (p: XY) => X9B_C.x + p[0] * X9B_C.u;
+  const py = (p: XY) => X9B_C.y - p[1] * X9B_C.u;
+  const axes: XY[] = [
+    [Math.cos(t * RAD), Math.sin(t * RAD)],
+    [-Math.sin(t * RAD), Math.cos(t * RAD)],
+  ];
+  const reachOf = [3.3, 1.6];
+  const on = (p: XY, u: XY): XY => [u[0] * dot(p, u), u[1] * dot(p, u)];
+  const shown = (j: number) => k >= j + 2;
+  return (
+    <Scene scene={s} caption={say(X9C_SAY, k)}>
+      <div className="mx-auto flex max-w-sm items-center gap-3">
+        <svg viewBox="0 0 240 120" role="img" aria-label="লম্বা, সরু একটা data-র মেঘ; axis ঘুরিয়ে মেঘ বরাবর বসালে axis 1-এ ছায়া ছড়ানো, axis 2-এ সব ছায়া 0-এর কাছে" className="block h-auto w-full max-w-[13rem] shrink-0">
+          <rect x={1} y={1} width={238} height={118} rx={10} fill="white" stroke="#cbd5e1" />
+          {axes.map((u, j) => {
+            const r = reachOf[j];
+            const end: XY = [u[0] * r, u[1] * r];
+            const lab: XY = [u[0] * (r - 0.25) - axes[1 - j][0] * 0.25, u[1] * (r - 0.25) - axes[1 - j][1] * 0.25];
+            return (
+              <g key={j} style={{ opacity: k >= 4 && j === 1 ? 0.25 : 1 }} className="transition-opacity duration-700 motion-reduce:transition-none">
+                <path d={`M${px([-end[0], -end[1]])} ${py([-end[0], -end[1]])}L${px(end)} ${py(end)}`} strokeWidth={1.6} stroke="#0d9488" />
+                <text x={px(lab)} y={py(lab) + 3} textAnchor="middle" fontSize={9} fontWeight={700} fill="#0d9488" fontFamily="ui-monospace, monospace">
+                  {j + 1}
+                </text>
+              </g>
+            );
+          })}
+          {axes.map((u, j) =>
+            k === j + 2
+              ? X9B_DOTS.map((p, i) => {
+                  const q = on(p, u);
+                  return <path key={`d${j}${i}`} d={`M${px(p)} ${py(p)}L${px(q)} ${py(q)}`} strokeWidth={1} strokeDasharray="3 2" stroke="#d97706" className={FADE} />;
+                })
+              : null,
+          )}
+          {X9B_DOTS.map((p, i) => (
+            <circle key={i} cx={px(p)} cy={py(p)} r={3.4} fill="#2563eb" />
+          ))}
+          {axes.map((u, j) =>
+            shown(j)
+              ? X9B_DOTS.map((p, i) => {
+                  const q = on(p, u);
+                  return <circle key={`s${j}${i}`} cx={px(q)} cy={py(q)} r={2.4} fill="#d97706" className={FADE} style={{ opacity: k >= 4 && j === 1 ? 0.3 : 1 }} />;
+                })
+              : null,
+          )}
+        </svg>
+        <div className="grid min-w-0 flex-1 gap-1.5 text-sm">
+          {k >= 2 && <div className={`${FADE} text-xs text-muted`}>shadows spread</div>}
+          {X9C_SPREAD.map(([name, range], j) =>
+            shown(j) ? (
+              <div key={j} className={`${FADE} ${k >= 4 && j === 1 ? "text-muted" : ""}`}>
+                {name}: <b className="font-mono whitespace-nowrap">{range}</b>
+              </div>
+            ) : null,
+          )}
+        </div>
+      </div>
+    </Scene>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 6⅞b · A figure for the same side quest, no task: dropping the second
+//       number. The same cloud, axis 1 through it, each dot dropping its
+//       shadow onto it, and the dots settling there as one number each.
 
 const X9B_C = { x: 120, y: 60, u: 34 };
 const X9B_D: XY = [0.894, 0.447];
@@ -1866,10 +2553,10 @@ const X9B_DOTS: XY[] = [
   [2.3, 0.8],
 ];
 const X9B_SAY = [
-  "একগাদা data, প্রতিটা একটা dot।",
-  "Data-র জন্য একটা ভালো দিক, যেদিক বরাবর dot-গুলো ছড়ানো।",
-  "প্রতিটা dot থেকে ওই দিকের ওপর ছায়া।",
-  "এখন প্রতিটা dot মানে একটা সংখ্যা, ওই দিকে তার ছায়া। PCA-র প্রায় পুরো কথা এটাই।",
+  "The same cloud of data. Every dot is still two numbers.",
+  "Keep only axis 1, the direction the dots spread along.",
+  "Each dot drops its shadow onto axis 1.",
+  "Now each dot is just one number, its shadow. We lost only the tiny second numbers. That is almost all of PCA.",
 ];
 
 export function PcaShadow() {
@@ -1980,6 +2667,72 @@ export function TwoRules({}: Story) {
           )}
         </Plane>
       </S_Sheet>
+    </Scene>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 7b · A watch-only figure for screen 7's setup (a story scene, no task): the
+//       four pieces. v = 2e₁ + 3e₂ and w = 2e₁ + 1e₂ break into two pieces
+//       each; by rule one every piece of v pairs with every piece of w (four
+//       lines drawn), and by rule two the numbers step outside, leaving one
+//       pair of axes per piece. No piece's value is shown: that's the widget.
+
+const X7B_V = ["2e₁", "3e₂"];
+const X7B_W = ["2e₁", "1e₂"];
+const X7B_X = [110, 190];
+const X7B_SAY = [
+  "v = 2e₁ + 3e₂, দুইটা টুকরা। w = 2e₁ + 1e₂, এরও দুইটা।",
+  "নিয়ম এক: টুকরা টুকরা করে হিসাব করে যোগ করলেই চলে। তাই v-এর 2e₁ বসে w-এর দুই টুকরার সাথেই।",
+  "v-এর 3e₂-ও বসে দুই টুকরার সাথে। মোট চারটা জোড়া।",
+  "নিয়ম দুই: সামনের সংখ্যাগুলো বাইরে এসে গুণ হয়। ভেতরে থাকে শুধু একজোড়া axis।",
+];
+
+export function FourPieces({}: Story) {
+  const s = useScene(3, [600, 2800, 2200, 2800]);
+  const k = s.k;
+  const node = (x: number, y: number, t: string, tone: string) => (
+    <g key={`${t}${y}`}>
+      <rect x={x - 22} y={y - 11} width={44} height={22} rx={6} fill="white" stroke={tone} strokeWidth={1.6} />
+      <text x={x} y={y + 4} textAnchor="middle" fontSize={11} fontWeight={700} fontFamily="ui-monospace, monospace" fill={tone}>
+        {t}
+      </text>
+    </g>
+  );
+  return (
+    <Scene scene={s} caption={say(X7B_SAY, k)}>
+      <svg viewBox="0 0 260 104" role="img" aria-label="v-এর দুই টুকরা আর w-এর দুই টুকরা; প্রতিটা টুকরা অন্য দিকের দুই টুকরার সাথেই জোড়া বাঁধে, মোট চারটা" className="mx-auto block h-auto w-full max-w-[16rem]">
+        <text x={40} y={22} textAnchor="middle" fontSize={12} fontWeight={800} fill="#2563eb">
+          v
+        </text>
+        <text x={40} y={88} textAnchor="middle" fontSize={12} fontWeight={800} fill="#e11d48">
+          w
+        </text>
+        {[0, 1].map((i) =>
+          k >= i + 1
+            ? X7B_X.map((x2, j) => <Draw key={`${i}${j}`} d={`M${X7B_X[i]} 29L${x2} 73`} delay={j * 300} ms={700} strokeWidth={1.8} className="stroke-cat-violet" />)
+            : null,
+        )}
+        <text x={150} y={22} textAnchor="middle" fontSize={11} fill="#475569">
+          +
+        </text>
+        <text x={150} y={88} textAnchor="middle" fontSize={11} fill="#475569">
+          +
+        </text>
+        {X7B_V.map((t, i) => node(X7B_X[i], 18, t, "#2563eb"))}
+        {X7B_W.map((t, j) => node(X7B_X[j], 84, t, "#e11d48"))}
+      </svg>
+      {k >= 3 && (
+        <div className={`${FADE} mx-auto mt-1 grid max-w-[17rem] grid-cols-2 gap-1 text-center font-mono text-[0.7rem]`}>
+          {[0, 1].flatMap((i) =>
+            [0, 1].map((j) => (
+              <span key={`${i}${j}`} className="rounded-lg border border-border bg-foreground/5 px-1 py-0.5 whitespace-nowrap">
+                {X7B_V[i][0]} × {X7B_W[j][0]} × ({X7B_V[i].slice(1)}·{X7B_W[j].slice(1)})
+              </span>
+            )),
+          )}
+        </div>
+      )}
     </Scene>
   );
 }
@@ -2226,17 +2979,49 @@ export function TvArgue({}: Story) {
 }
 
 // ---------------------------------------------------------------------------
+// 9a½ · A story scene for 4.4's opening, no task: the same ছাদ in the
+//       afternoon. মামী shrugs off the two matches (a lottery wins now and
+//       then too); মামা says any two arrows will do. ফাহিম is left wondering.
+
+export function MamiDoubt({}: Story) {
+  const s = useScene(3, [600, 2600, 2600, 2000]);
+  const k = s.k;
+  return (
+    <StoryFrame scene={s}>
+      <Stage backdrop="field" label="বিকেলে ছাদে মামী বললেন দুইবার মেলা ভাগ্য; মামা বললেন যেকোনো দুইটা arrow-এ মিলবে; ফাহিম ভাবছে">
+        <S_Roof shade />
+        <S_Chalk x={196} y={172} arrows={[V, W]} names={["v", "w"]} u={12} squash={0.5} />
+        <Person who="mami" x={120} y={SG} mood={k === 1 ? "smug" : "plain"} arm={k === 1 ? "point" : "down"} label />
+        <Person who="mama" x={180} y={SG} mood={k === 2 ? "shout" : "plain"} arm={k === 2 ? "wave" : "down"} label />
+        <Person who="fahim" x={270} y={SG} facing={-1} mood={k >= 3 ? "puzzled" : "plain"} label />
+        {k === 1 && <Bubble x={120} y={SG - 66} side="right" lines={["দুইবার মিলেছে, তাতে কী?", "লটারিও মাঝেমধ্যে মেলে।"]} />}
+        {k === 2 && <Bubble x={180} y={SG - 66} side="right" lines={["যেকোনো দুইটা arrow নাও,", "সবসময় মিলবে!"]} />}
+        {k >= 3 && (
+          <text x={270} y={SG - 70} textAnchor="middle" fontSize={22} fontWeight={800} fill={S_INK} className={POP}>
+            ?
+          </text>
+        )}
+      </Stage>
+    </StoryFrame>
+  );
+}
+
+// ---------------------------------------------------------------------------
 // States for `npm run shot` (keys are the useSeed names).
 
 export const fixtures: Fixtures = {
   TwoRecipes: { start: {}, bet: { bet: 0 } },
   StickShadow: { start: {}, some: { deg: 45, seen: [0, 30, 45] }, big: { deg: 60, L: 2, seen: [0, 30, 45, 60, 90], big: true } },
   BackShadow: { start: {}, guessed: { guess: 1, deg: 120, seen: [120] }, all: { guess: 1, deg: 180, seen: [120, 150, 180] } },
-  ArrowShadow: { start: {}, way: { way: 1 }, back: { way: 1, w: [-2, 3], hit: [3, 0, -2] } },
+  ArrowShadow: { start: {}, way: { way: 1 }, up: { way: 1, w: [0, 3], hit: [3] }, flat: { way: 1, w: [-2, 0], hit: [3, 0] }, back: { way: 1, w: [-2, 2], hit: [3, 0, -2] } },
   TwoTests: { start: {}, one: { k: 4 }, two: { round: 1, k: 4 } },
-  AxisShadow: { start: {}, both: { lit: [0, 1] } },
+  AxisShadow: { start: {}, x: { lit: [0], on: [0] }, both: { lit: [0, 1], on: [0, 1] } },
   NoCrossTalk: { start: {}, some: { open: [0, 1] }, all: { open: [0, 1, 2, 3] } },
   YourPair: { start: {}, miss: { done: 1, miss: 1 }, all: { done: 3 } },
+  AlwaysBet: { start: {}, bet: { bet: 0 } },
+  TiltedAxes: { start: {}, tilt: { at: 1, seen: [0, 1] }, all: { at: 3, seen: [0, 1, 2, 3] } },
+  ShadowRules: { start: {}, walk: { k: 3 }, back: { round: 1, m: -1, seen: [1, 2, 3, -1] } },
+  MamiDoubt: { start: { k: 0 }, mami: { k: 1 }, mama: { k: 2 }, done: {} },
   RoofNoon: { start: { k: 0 }, seven: { k: 3 }, claim: { k: 4 }, done: {} },
   RecipeSlots: { start: { k: 0 }, tape: { k: 1 }, angle: { k: 3 }, done: {} },
   StickOnRoof: { start: { k: 0 }, rays: { k: 2 }, done: {} },
@@ -2245,16 +3030,21 @@ export const fixtures: Fixtures = {
   HalfTurn: { start: { k: 0 }, up: { k: 1, stepping: true }, done: {} },
   VanTable: { start: { k: 0 }, two: { k: 2 }, done: {} },
   StickToArrow: { start: { k: 0 }, arrows: { k: 2 }, done: {} },
+  TorchDrop: { dark: { k: 0 }, on: { k: 1 }, steep: { k: 4 }, done: {} },
   RotateVsDrop: { rot: { k: 1 }, steep: { k: 2 }, done: {} },
   FirstNumber: { start: { k: 0 }, done: {} },
   MamaRecipe: { start: { k: 0 }, tape: { k: 1 }, shadow: { k: 2 }, done: {} },
+  RecipeBuild: { start: { k: 0 }, rule: { k: 2 }, shadow: { k: 3 }, done: {} },
   LengthTimesShadow: { first: { k: 2 }, bet: { k: 3 }, done: {} },
+  TurnPaper: { start: { k: 0 }, drop: { k: 2 }, done: {} },
   RoadDebt: { start: { k: 0 }, done: {} },
   NotYetProof: { start: { k: 0 }, more: { k: 1 }, done: {} },
   WalkIsShadow: { walk: { k: 2 }, done: {} },
   TiltedAddress: { start: { k: 0 }, turned: { k: 1 }, done: {} },
+  DataAxes: { start: { k: 0 }, turned: { k: 1 }, one: { k: 2 }, two: { k: 3 }, done: {} },
   PcaShadow: { start: { k: 0 }, drop: { k: 2 }, done: {} },
   TwoRules: { walk: { k: 3 }, double: { k: 5 }, one: { k: 1 } },
+  FourPieces: { start: { k: 0 }, one: { k: 1 }, done: {} },
   ThreeSlots: { start: { k: 0 }, done: {} },
   HiddenProtractor: { start: { k: 0 }, says: { k: 1 }, done: {} },
   ThreePairs: { start: { k: 0 }, chalk: { k: 2 }, done: {} },
