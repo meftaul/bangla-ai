@@ -1,6 +1,6 @@
 export const metadata = {
-  title: "Math for AI 4.7 — পাঠাগারের খোঁজ, dot না cosine",
-  description: "গ্রামের পাঠাগারে দুইটা খোঁজার machine, “মাছ” লিখলে দুই রকম উত্তর। কোনটা রাখবেন, আর কখন অন্যটাই ঠিক?",
+  title: "Math for AI 4.7 — The library search, the box or cosine",
+  description: "Two search machines in the village library: type “fish” and they give two different answers. Which do you keep, and when is the other one right?",
   type: "article",
 };
 
@@ -39,25 +39,25 @@ import {
   KeepBoth,
 } from "@/components/interactive/library-journey";
 
-<Journey title="Dot product · ৪.৭">
+<Journey title="Dot product · 4.7">
 
 <Step>
 
-পাঠাগারে যাওয়ার আগে নদীর ঘাট থেকে একটা প্রশ্ন।
+One question from the river's ghat, before the library.
 
 <Check
-  question="দড়ি লম্বা হলে টানের বেশিরভাগটা কোথায় যায়?"
+  question="When the rope is long, where does most of the pull go?"
   options={[
-    "সামনে, নদী বরাবর",
-    "পাড়ের দিকে",
-    "ছোট হোক বা লম্বা, একই ভাগ সামনে যায়",
+    "Forward, along the river",
+    "Towards the bank",
+    "Short or long, the same share goes forward",
   ]}
   answer={0}
-  hint="লম্বা দড়িতে নদীর সাথে কোণটা ছোট হয়, না বড়?"
-  praise="লম্বা দড়ি, ছোট কোণ, বেশি টান সামনে।"
+  hint="With a long rope, does the angle with the river get smaller or bigger?"
+  praise="Long rope, small angle, more pull forward."
 >
 
-লম্বা দড়িতে কোণ ছোট, আর ছোট কোণে ছায়া প্রায় পুরো টান। 4 মিটারে সামনে যেত 6.6, আর 15 মিটারে 9.8।
+A long rope makes a small angle, and at a small angle the shadow is nearly the whole pull. At 4 metres, 6.6 went forward; at 15 metres, 9.8.
 
 <RopeRecall />
 
@@ -67,9 +67,9 @@ import {
 
 <Step>
 
-সন্ধ্যায় গ্রামের পাঠাগার। পাঠাগারের আপা নতুন কম্পিউটারে বই খোঁজার দুইটা machine বসিয়েছেন, দুইটাই শহরের এক ভাইয়ের বানানো। প্রতিটা বইকে machine দেখে একটা list হিসেবে, (মাছ, নৌকা, ধান), মানে কোন শব্দ বইয়ে কতবার আছে।
+Evening at the village library. On her new computer, Apu the librarian has set up two search machines, both built by a bhai from town. Each machine sees every book as a list — (fish, boats, paddy) — meaning how many times each word appears in the book.
 
-ফাহিম “মাছ” লিখে দুইটা machine-এই সার্চ দিলো।
+Fahim typed “fish” and searched in both.
 
 <LibraryEvening story />
 
@@ -77,7 +77,7 @@ import {
 
 <Then>
 
-বাজি সিল হলো। দুইটা machine একই বই আর একই গোনা দেখছে, code-এও কোনো ভুল নাই। তবু উত্তর আলাদা, আর গরমিলটা ঠিক তৃতীয় বইটা নিয়ে। মাছ খুঁজতে গিয়ে নৌকা আর ধানের বই দুই নম্বরে উঠবে কেন?
+Bet sealed. Both machines see the same books and the same counts, and there's no bug in the code. Yet the answers differ, and the quarrel is about exactly the third book. Searching for fish, why does the boats-and-paddy book climb to number two?
 
 <SameCounts />
 
@@ -87,7 +87,7 @@ import {
 
 <Step>
 
-Machine ক চালানোর আগে হাটের boxটা একবার।
+Before we run machine A, one round of the haat's box.
 
 <Check
   question="(1, 0, 0) · (4, 2, 7) = ?"
@@ -97,11 +97,11 @@ Machine ক চালানোর আগে হাটের boxটা একব�
     "4",
   ]}
   answer={2}
-  hint="0 দিয়ে গুণ করলে কী থাকে?"
-  praise="শুধু প্রথম ঘর বাঁচে: 4।"
+  hint="What's left when you multiply by 0?"
+  praise="Only the first slot survives: 4."
 >
 
-প্রথম ঘরে 1 × 4 = 4, বাকি দুই ঘরে 0 দিয়ে গুণ, তাই 0। যোগ করে 4। যারা 13 বেছেছিলেন, তারা গুণ না করে বইয়ের সব ঘর যোগ করেছিলেন।
+In the first slot, 1 × 4 = 4. In the other two slots you multiply by 0, so 0. Add them up: 4. Those who picked 13 added up all the book's slots without multiplying.
 
 <OneHotBox />
 
@@ -111,17 +111,17 @@ Machine ক চালানোর আগে হাটের boxটা একব�
 
 <Step>
 
-Machine ক-এর নিয়মটা ফাহিমের চেনা, হাটের সেই box। প্রশ্ন “মাছ” মানে $(1, 0, 0)$, শুধু মাছের ঘরে 1। প্রতিটা বইয়ের সাথে boxটা চালান।
+Machine A's rule is an old friend of Fahim's: the haat's box. The query “fish” means $(1, 0, 0)$ — a 1 in the fish slot, nothing else. Run the box against each book.
 
 <DotRanking />
 
 <Then>
 
-মোটা বই পেলো 20, সেটা ঠিকই আছে, মাছে ভরা বই। কিন্তু নৌকা-ধানের বই পেলো 3, আর মাছের চিঠি 2। অথচ চিঠিটা পুরোটাই মাছ নিয়ে, আর বইটা মাছ নিয়ে প্রায় কিছুই না।
+The thick book scored 20 — fair enough, it's stuffed with fish. But the boats-and-paddy book scored 3, and the fish note only 2. Yet the note is all about fish, and the book is almost not about fish at all.
 
 <WordTiles />
 
-box এখানে মাপছে বইটা কতটা লম্বা, কী নিয়ে লেখা সেটা না। ৪.২-এর কুলির কথা মনে আছে? গায়ে জোর বেশি হলে বাঁকা ধাক্কাও জিতে যায়।
+Here the box is measuring how long the book is, not what it's about. Remember the coolie in 4.2? With enough strength behind it, a crooked push wins too.
 
 <SlantWins />
 
@@ -131,17 +131,17 @@ box এখানে মাপছে বইটা কতটা লম্বা, �
 
 <Step>
 
-Machine খ একই box চালায়, তারপর দুইটা length দিয়ে ভাগ করে। মানে ৪.৫-এর cosine similarity। প্রশ্নের length 1, তাই আসলে ভাগ করতে হবে শুধু বইয়ের length দিয়ে।
+Machine B runs the same box, then divides by the two lengths. That is 4.5's cosine similarity. The query's length is 1, so really you only divide by the book's length.
 
 <CosRanking />
 
 <Then>
 
-দুইটা মাছের বই পেলো প্রায় 1, মানে একদম মাছের দিকে তাক করা, বই ছোট হোক বা মোটা। আর নৌকা-ধানের বই নেমে গেল 0.42-এ, প্রায় 65° দূরে।
+Both fish books scored nearly 1 — pointing exactly the fish way, whether the book is short or thick. And the boats-and-paddy book fell to 0.42, about 65° away.
 
 <UnitFan />
 
-length এখানে মানে “কত শব্দ লেখা হয়েছে”, আর সেটার সাথে মাছ খোঁজার কোনো সম্পর্কই নাই। length ভাগ করতেই বইগুলো লড়লো শুধু একটা জিনিস দিয়ে, কী নিয়ে লেখা।
+Length here means “how many words were written”, and that has nothing to do with searching for fish. Divide out the length, and the books compete on only one thing: what they're about.
 
 </Then>
 
@@ -149,21 +149,21 @@ length এখানে মানে “কত শব্দ লেখা হয়�
 
 <Step>
 
-বাড়ি ফিরে ফাহিম দেখলো, মামা-মামী নতুন একটা ছবি নিয়ে হইচই করছেন। ছবিটার নামও হইচই, আর score $(5, 5)$, কান্নাও সবচেয়ে বেশি, হাসিও সবচেয়ে বেশি।
+Back home, Fahim found Mama and Mami in a hullabaloo over a new film. The film is called Hullabaloo, and its score is $(5, 5)$ — the most tears and the most laughs at once.
 
 <LoudFilmHome story />
 
-দুইটা নিয়মেই দেখুন, কার জন্য কোন ছবি জেতে।
+Look under both rules: which film wins for whom.
 
 <LoudForBoth />
 
 <Then>
 
-box এ  হইচই জিতলো দুইজনের কাছেই। কান্নার ছবির মানুষ মামী আর Comedy মুভি র মানুষ মামা, দুইজনকে একই ছবি! যে ছবি সবার জন্য জেতে, সে মানানসই বলে জেতে না, জেতে কারণ তার arrow সবচেয়ে লম্বা, $\|(5, 5)\| \approx 7.07$।
+With the box, Hullabaloo won for both of them. The tearjerker person and the comedy person got the same film! A film that wins for everyone doesn't win by fitting — it wins because its arrow is the longest, $\|(5, 5)\| \approx 7.07$.
 
 <LongestArrow />
 
-Cosine-এ প্রত্যেকে পেলেন নিজের ধরনের ছবি। হইচই দুইজনের কাছেই দুই নম্বরে, কারণ সে দুইজনের মাঝামাঝি একটা দিকে তাক করা।
+With cosine, each got a film of their own kind. Hullabaloo came second for both, because it points somewhere in between the two.
 
 <MiddleDirection />
 
@@ -173,21 +173,21 @@ Cosine-এ প্রত্যেকে পেলেন নিজের ধরন
 
 <Step>
 
-হইচই জিতলো লম্বা বলে। এবার ৩.৬-এর সামিনের খাতা থেকে একটা প্রশ্ন।
+Hullabaloo won by being long. Now a question from Samin's stall notebook in 3.6.
 
 <Check
-  question="৩.৬-এ সামিন জানতে চেয়েছিল stall-এর সবচেয়ে বড় ক্রেতা কে। সেখানে normalise করা কি ঠিক ছিল?"
+  question="In 3.6, Samin wanted to know who the stall's biggest spender was. Was normalising there right?"
   options={[
-    "হ্যাঁ, normalise সবসময় ভালো",
-    "না, খরচের পরিমাণটাই তো খবর",
-    "হ্যাঁ, কারণ দিকটাই আসল",
+    "Yes, normalising is always good",
+    "No, the amount spent is the news",
+    "Yes, because the direction is what matters",
   ]}
   answer={1}
-  hint="Normalise করলে কোন খবরটা মুছে যায়?"
-  praise="length খবর হলে normalise না।"
+  hint="Which news does normalising wipe out?"
+  praise="When length is the news, don't normalise."
 >
 
-Normalise করলে length মুছে যায়, আর এখানে lengthই তো খরচের পরিমাণ। তার মানে সবচেয়ে বড় ক্রেতা খুঁজতে normalise করা মানে নিজের উত্তর নিজেই মুছে ফেলা।
+Normalising wipes out the length, and here the length is the amount spent. So normalising to find the biggest spender is erasing your own answer.
 
 </Check>
 
@@ -195,23 +195,23 @@ Normalise করলে length মুছে যায়, আর এখানে len
 
 <Step>
 
-তাহলে কি box সবসময় খারাপ, আর cosine সবসময় ভালো? ৩.৬-এর শেষে সামিনের খাতার কথা মনে করুন। length কখনো ঝামেলা, কখনো আসল খবর।
+So is the box always bad and cosine always good? Remember Samin's notebook at the end of 3.6. Length is sometimes the trouble, sometimes the real news.
 
-ছয়টা কাজ আসছে। প্রতিটার জন্য বলুন কোন মাপ লাগবে।
+Six jobs are coming. For each, say which measure it needs.
 
 <LengthIsNews />
 
 <Then>
 
-প্রশ্ন একটাই: **length কি এখানে আসল খবর?** গরুর দামে গরুর ওজনই তো দাম, ভাগ করে ফেললে উত্তরটাই হারিয়ে যায়। ভ্যানের মোট ধাক্কায় জোরটাই আসল।
+There's just one question: **is length the real news here?** In a cow's price, the cow's weight is the price — divide it away and the answer is lost. In the van's total push, the strength is what matters.
 
 <CowNews />
 
-শেষ কাজটা একটু মজার। বড় বড় streaming app-এ machine নিজে যে ছবির arrow শেখে, জনপ্রিয় ছবির arrow সেখানে প্রায়ই লম্বা হয়ে যায়। তখন লম্বা arrow-এর প্রতি box এর টান ঠিক কাজের জিনিস, জনপ্রিয় ছবি সবাইকে একটু বেশি দেখায়। শুধু জেনে-বুঝে বাছতে হবে।
+The last job is a bit cheeky. In the big streaming apps, the machine learns the film arrows itself, and a popular film's arrow tends to grow long. There, the box's pull towards long arrows is doing real work: a popular film gets shown to everyone a little more. But you'd choose that knowingly.
 
 <PopularPull />
 
-অন্যদিকে বই খোঁজা, শব্দের মানে মেলানো, “এরকম আরো দেখাও”, এসবে length শুধু গোলমাল। তাই সার্চ আর chatbot-এর খোঁজার কাজে প্রায় সবসময় cosine চলে।
+On the other hand, for searching books, matching word meanings, “show me more like this” — length is only noise. So in the searching done by search and chatbots, cosine runs the show almost always.
 
 </Then>
 
@@ -219,17 +219,17 @@ Normalise করলে length মুছে যায়, আর এখানে len
 
 <Step>
 
-পাঠাগার বন্ধ হওয়ার আগে আপা ফাহিমের হাতে একটা তালিকা ধরিয়ে দিলেন। “কোন কাজে কোন মাপ, বলে যা তো।”
+Before the library closed, Apu pressed a list into Fahim's hand. “Which measure for which job — tell me that much.”
 
 <ListHandover story />
 
-এবার আপনার পালা।
+Now it's your turn.
 
 <PickTool />
 
 <Then>
 
-তিনটা মাপ, তিনটা প্রশ্ন। কত বড়, মানে lengthও খবর হলে box। কী ধরনের, মানে শুধু দিক চাইলে cosine। আর কে কোথায় দাঁড়িয়ে, মানে জায়গাটাই প্রশ্ন হলে দূরত্ব।
+Three measures, three questions. How big — when length is news too, the box. What kind — when only the direction is asked, cosine. And who stands where — when the place itself is the question, distance.
 
 <ThreeQuestions />
 
@@ -239,18 +239,18 @@ Normalise করলে length মুছে যায়, আর এখানে len
 
 <Step>
 
-## একটু ঝালিয়ে নিন
+## Try it
 
 <Check
-  question="খবরের কাগজের জন্য একটা সার্চ বানাচ্ছেন। কোনো খবর দুই লাইনের, কোনোটা দশ পাতার। কী দিয়ে সাজাবেন?"
-  options={["box, লম্বা খবরে তথ্য বেশি", "Cosine similarity", "খবরের length দিয়ে, লম্বা আগে"]}
+  question="You're building a search for a newspaper. Some news is two lines, some is ten pages. What do you rank it by?"
+  options={["The box — long news holds more", "Cosine similarity", "By the news' length, longest first"]}
   answer={1}
-  hint="পাঠাগারের নৌকা-ধানের বইটা মাছ খোঁজায় দুই নম্বরে উঠেছিল কেন?"
+  hint="Why did the library's boats-and-paddy book climb to number two in a search for fish?"
 >
 
-Cosine similarity। box এ  লম্বা খবর শুধু লম্বা হওয়ার জোরেই ওপরে ওঠে, এমনকি অন্য বিষয়ের খবরও, ঠিক যেমন নৌকা-ধানের বই মাছের চিঠিকে টপকে গিয়েছিল। length ভাগ করে ফেললে খবরগুলো লড়ে শুধু কী নিয়ে লেখা, সেটা দিয়ে।
+Cosine similarity. With the box, a long article climbs on the strength of being long — even an article about something else, exactly as the boats-and-paddy book jumped over the fish note. Divide out the length, and the articles compete only on what they're about.
 
-যারা box বেছেছিলেন, তাদের যুক্তিটা ফেলনা না, লম্বা খবরে তথ্য সত্যিই বেশি। কিন্তু সার্চের প্রশ্ন “কোন খবরে তথ্য বেশি” না, প্রশ্ন হলো “কোন খবর আমার বিষয় নিয়ে”।
+Those who picked the box — the argument isn't rubbish, long articles really do hold more. But a search isn't asking “which article holds the most”. It's asking “which article is about my subject”.
 
 </Check>
 
@@ -258,22 +258,22 @@ Cosine similarity। box এ  লম্বা খবর শুধু লম্�
 
 <Step>
 
-## শেষ! আপা রাখলেন machine খ
+## The end! Apu kept machine B
 
-আপা machine খ রাখলেন। মাছ খুঁজতে cosine, কারণ length এখানে শুধু “কত শব্দ”। বাজিতে machine খ বলে থাকলে আপনি জিতলেন। তবে machine ক-কেও ফেলে দিতে হয়নি। দাম, মোট, জনপ্রিয়তা, যেখানে lengthই খবর, সেখানে boxই ঠিক।
+Apu kept machine B. For finding fish, cosine — because length here is only “how many words”. If you bet on machine B, you won. But machine A didn't get thrown out either. Price, totals, popularity — wherever length is the news, the box is the right tool.
 
 <KeepBoth story />
 
-এক লাইনে: **length যদি আসল খবর হয়, box। শুধু কী ধরনের জিনিস, সেটা চাইলে cosine।**
+In one line: **if length is the real news, the box. If you only want what kind of thing it is, cosine.**
 
-রাতে ফাহিম পুরো গল্পটা ফোনে সোমকে শোনাবে। আর সোম এমন একটা কথা বলবে যে ফাহিমের ঘুম উড়ে যাবে: ChatGPT-র ভেতরেও নাকি হাটের এই box।
+At night Fahim will tell Som the whole story on the phone. And Som will say one thing that will chase away Fahim's sleep: inside ChatGPT, they say, runs this very box of the haat.
 
 <LessonLink
   href="/dashboard/articles/math_for_ai/04f2_attention_box"
-  eyebrow="পরের পাঠ"
-  title="এক box, ChatGPT-র ভেতরেও"
+  eyebrow="Next lesson"
+  title="The same box, inside ChatGPT"
 >
-  সোম বলে ChatGPT-র ভেতরেও ঘরে ঘরে গুণ করে যোগ। সত্যি কিনা, পাঠাগারের machine থেকে শুরু করে খুঁজে দেখবো।
+  Som says that inside ChatGPT too, it's multiply the slots, then add. True or not, we'll hunt it down, starting from the library's machines.
 </LessonLink>
 
 </Step>

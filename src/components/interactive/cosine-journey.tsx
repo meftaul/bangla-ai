@@ -7,18 +7,17 @@ import { Task, useGate } from "@/components/journey/journey";
 import { Choice, Draw, FADE, Nope, POP, Scene, Speech, Ticks, pill, primaryBtn, useScene, useSeed, useTween, type Fixtures } from "@/components/journey/kit";
 import { Arrow, Label, Plane, makeFrame, type Frame, type XY } from "@/components/journey/plane";
 import { Tape } from "./dimension-journey";
-import { bn } from "./figure-kit";
 import { dot, tupN } from "./haat-journey";
 
-// Screens for "Math for AI 4.4 — Cosine similarity, কার ছবি বেশি মানানসই", told as a Journey.
+// Screens for "Math for AI 4.5 — Cosine similarity, whose film fits better", told as a Journey.
 //
-// TV night. Under 3.6's fixed club rule (films normalised) মামা's Mr. Bean
-// scores 5.34 and মামী's Titanic 4.09, so মামা claims his film fits him
-// better. The reader bets. মামা's own taste arrow turns out longer (he rates
+// TV night. Under 3.6's fixed club rule (films normalised) Mama's Mr. Bean
+// scores 5.34 and Mami's Titanic 4.09, so Mama claims his film fits him
+// better. The reader bets. Mama's own taste arrow turns out longer (he rates
 // everything loudly), so the person's length is in the score too. 4.3's rule
 // run backwards, dividing both sides of a balance, leaves cos θ alone; a
 // fixed −1…1 scale is read (0.9 is 26°, not 90%); 3.6's 3.71 is one division
-// short of মামা's 0.69 with Titanic; নানু, who has watched nothing, has no
+// short of Mama's 0.69 with Titanic; Nanu, who has watched nothing, has no
 // direction and gets NaN. Last the reader computes both cosines unaided:
 // 0.991 and 0.991, a tie, and a mirror shows why.
 //
@@ -54,7 +53,7 @@ function Card({ who, film, score, tone }: { who: string; film: string; score: st
 //     and Mr. Bean 5.34, মামী and Titanic 4.09. মামা claims the win. The
 //     reader seals a bet, settled only by VerdictCos (screen 7).
 
-const FIT_BET = ["মামার ছবি, নম্বর তো বেশি", "মামীর ছবি", "দুইজনেরই একদম সমান", "এই নম্বর দেখে বলাই যায় না"];
+const FIT_BET = ["Mama's film — the number is bigger", "Mami's film", "Exactly equal for both", "Can't tell from these numbers"];
 
 export function WhoFits() {
   const pass = useGate();
@@ -62,19 +61,19 @@ export function WhoFits() {
 
   const seal = (i: number) => {
     setBet(i);
-    pass("বাজি সিল হলো, মিলিয়ে দেখবো শেষে।");
+    pass("Bet sealed. We'll compare at the end.");
   };
 
   return (
     <>
       <div className="mt-2 grid grid-cols-2 gap-2">
-        <Card who="মামা (2, 5)" film="Mr. Bean (1, 4)" score="5.34" tone="teal" />
-        <Card who="মামী (4, 1)" film="Titanic (5, 2)" score="4.09" tone="violet" />
+        <Card who="Mama (2, 5)" film="Mr. Bean (1, 4)" score="5.34" tone="teal" />
+        <Card who="Mami (4, 1)" film="Titanic (5, 2)" score="4.09" tone="violet" />
       </div>
-      <Speech who="মামা" initial="মা">
-        নম্বর দেখো! আমার ছবিটা আমার সাথে বেশি মানানসই। কাল সকালের চা তুমি বানাবে।
+      <Speech who="মামা" initial="M">
+        Look at the numbers! My film fits me better. Tomorrow's tea is yours to make.
       </Speech>
-      <div className="mt-3 text-sm font-medium text-muted">কার ছবি তার সাথে বেশি মানানসই?</div>
+      <div className="mt-3 text-sm font-medium text-muted">Whose film fits them better?</div>
       <div className="mt-2 grid gap-2">
         {FIT_BET.map((o, i) => (
           <Choice key={o} n={i} look={bet === i ? "picked" : bet !== null ? "dim" : "idle"} disabled={bet !== null} onClick={() => seal(i)}>
@@ -82,14 +81,14 @@ export function WhoFits() {
           </Choice>
         ))}
       </div>
-      <Task done={bet !== null}>দুইটা নম্বর দেখে একটাতে বাজি ধরুন।</Task>
+      <Task done={bet !== null}>Look at the two numbers and bet on one.</Task>
     </>
   );
 }
 
 // ---------------------------------------------------------------------------
-// 2 · The loud person. Measure the two tastes: মামা 5.39, মামী 4.12. Then
-//     double মামা's card, (4, 10): same taste, score 5.34 → 10.67.
+// 2 · The loud person. Measure the two tastes: Mama 5.39, Mami 4.12. Then
+//     double Mama's card, (4, 10): same taste, score 5.34 → 10.67.
 
 const FL = makeFrame(-0.5, 5.5, -0.5, 10.5, 20);
 
@@ -104,34 +103,34 @@ export function LoudPerson() {
   const measure = (i: number) => !measured.includes(i) && setMeasured([...measured, i]);
   const double = () => {
     setDoubled(true);
-    pass("দ্বিগুণ নম্বর দিলে score-ও দ্বিগুণ।");
+    pass("Double the numbers and the score doubles too.");
   };
 
   return (
     <>
       <div className="flex items-center gap-3">
-        <Plane f={FL} ticks={2} label={`মামার পছন্দ ${tupN(mama)}, মামীর পছন্দ (4, 1)`} className="max-w-[8rem] shrink-0">
+        <Plane f={FL} ticks={2} label={`Mama's taste ${tupN(mama)}, Mami's taste (4, 1)`} className="max-w-[8rem] shrink-0">
           {measured.includes(0) && !doubled && <Tape f={FL} from={O} to={MAMA} />}
           {measured.includes(1) && <Tape f={FL} from={O} to={MAMI} />}
           {doubled && <Arrow f={FL} from={O} to={MAMA} tone="teal" w={2} dashed faint />}
           <Arrow f={FL} from={O} to={mama} tone="teal" w={2.6} />
           <Arrow f={FL} from={O} to={MAMI} tone="violet" w={2.6} />
           <Label f={FL} at={mama} dx={6} dy={4} anchor="start" className="fill-cat-teal">
-            মামা
+            Mama
           </Label>
           <Label f={FL} at={MAMI} dy={-8} className="fill-cat-violet">
-            মামী
+            Mami
           </Label>
         </Plane>
         <div className="grid min-w-0 flex-1 gap-2">
-          {["মামার", "মামীর"].map((w, i) => (
+          {["Mama's", "Mami's"].map((w, i) => (
             <button key={w} type="button" disabled={measured.includes(i)} onClick={() => measure(i)} className={`${pill(measured.includes(i))} font-sans`}>
-              {measured.includes(i) ? <span className={FADE}>{w} পছন্দ {i === 0 ? "5.39" : "4.12"} লম্বা</span> : `${w} পছন্দ মাপুন`}
+              {measured.includes(i) ? <span className={FADE}>{w} taste is {i === 0 ? "5.39" : "4.12"} long</span> : `Measure ${w} taste`}
             </button>
           ))}
           {both && (
             <div className={`${FADE} rounded-xl border border-border bg-surface px-3 py-2 text-center`}>
-              <div className="text-sm">মামা {tupN(mama)} আর Mr. Bean</div>
+              <div className="text-sm">Mama {tupN(mama)} and Mr. Bean</div>
               <div className="font-mono text-xl font-bold">
                 <span key={String(doubled)} className={`${POP} inline-block`}>
                   {fix(score, 2)}
@@ -143,19 +142,19 @@ export function LoudPerson() {
       </div>
       {both && !doubled && (
         <div className={`${FADE} mt-3 text-center`}>
-          <div className="text-[0.95rem]">মামা যদি একই রুচি রেখে সবকিছুতে দ্বিগুণ নম্বর দিতেন?</div>
+          <div className="text-[0.95rem]">What if Mama kept his tastes and doubled every number?</div>
           <button type="button" onClick={double} className={`${primaryBtn} mt-2`}>
-            মামার card দ্বিগুণ করুন
+            Double Mama's card
           </button>
         </div>
       )}
       <Ticks
         items={[
-          ["দুইজনের length", both],
-          ["মামা দ্বিগুণ", doubled],
+          ["Both lengths", both],
+          ["Mama doubled", doubled],
         ]}
       />
-      <Task done={doubled}>দুইজনের পছন্দের arrow ফিতা দিয়ে মাপুন, তারপর মামার card দ্বিগুণ করে score-টা দেখুন।</Task>
+      <Task done={doubled}>Measure both taste arrows with the tape, then double Mama's card and watch the score.</Task>
     </>
   );
 }
@@ -166,7 +165,7 @@ export function LoudPerson() {
 //     Then a practice pair, (3, 4) and (4, 3): 24 ÷ 5 ÷ 5 = 0.96, about 16°.
 
 const LENGTHS = ["‖v‖", "‖w‖"];
-const MOVES = ["দুই পাশ ‖v‖ দিয়ে ভাগ", "দুই পাশ ‖w‖ দিয়ে ভাগ", "শুধু ডান পাশ ভাগ"];
+const MOVES = ["Divide both sides by ‖v‖", "Divide both sides by ‖w‖", "Divide the right side only"];
 
 function Balance({ tilt }: { tilt: boolean }) {
   return (
@@ -197,7 +196,7 @@ export function RunBackwards() {
   };
   const practise = () => {
     setTried(true);
-    pass("দুই length ভাগ করলে থাকে শুধু cos θ।");
+    pass("Divide by both lengths and only cos θ is left.");
   };
 
   return (
@@ -212,7 +211,7 @@ export function RunBackwards() {
           {right}
         </div>
       </div>
-      {tilt !== null && <Nope key={tilt}>দাঁড়িপাল্লা হেলে গেল। শুধু এক পাশে ভাগ করলে দুই পাশ আর সমান থাকে না।</Nope>}
+      {tilt !== null && <Nope key={tilt}>The balance tipped. Divide one side only, and the two sides are no longer equal.</Nope>}
       {!alone ? (
         <div className="mt-3 grid gap-2">
           {MOVES.map((m, i) => (
@@ -223,22 +222,22 @@ export function RunBackwards() {
         </div>
       ) : (
         <div className={`${FADE} mt-3 text-center`}>
-          <div className="text-[0.95rem]">চলুন একটা জোড়ায় চালিয়ে দেখি: (3, 4) আর (4, 3)। দুইজনই 5 লম্বা।</div>
+          <div className="text-[0.95rem]">Let's run it on a pair: (3, 4) and (4, 3). Both are 5 long.</div>
           {!tried ? (
             <button type="button" onClick={practise} className={`${primaryBtn} mt-2`}>
-              হিসাবটা চালান
+              Run the sum
             </button>
           ) : (
             <div className={`${FADE} mt-2 text-[0.95rem]`}>
               <span className="font-mono">
                 24 ÷ 5 ÷ 5 = <b>0.96</b>
               </span>
-              , মানে প্রায় 16°
+              , about 16°
             </div>
           )}
         </div>
       )}
-      <Task done={tried}>দুই পাশে একই ভাগ করে cos θ-কে একা করুন। তারপর একটা জোড়ায় হিসাবটা চালান।</Task>
+      <Task done={tried}>Divide both sides by the same thing to leave cos θ alone. Then run the sum on a pair.</Task>
     </>
   );
 }
@@ -270,12 +269,12 @@ export function ScaleCard() {
     if (i < 0 || hit.includes(i)) return;
     const next = [...hit, i];
     setHit(next);
-    if (next.length === MARKS.length) pass("0.9 মানে 90% মিল না, 26° কোণ।");
+    if (next.length === MARKS.length) pass("0.9 isn't a 90% match; it's a 26° angle.");
   };
 
   return (
     <>
-      <Plane f={FC} grid={0} axes={false} label={`দুইটা arrow যাদের length 1, মাঝে ${deg}°`} className="max-w-[13rem]">
+      <Plane f={FC} grid={0} axes={false} label={`Two arrows of length 1, ${deg}° apart`} className="max-w-[13rem]">
         <path d={`M${FC.sx(-1.2)} ${FC.sy(0)}H${FC.sx(1.2)}`} strokeWidth={1} className="stroke-[#0f1b2d]/20" />
         <Arrow f={FC} from={O} to={[1, 0]} tone="teal" w={2.6} />
         <Arrow f={FC} from={O} to={b} tone="violet" w={2.6} />
@@ -291,7 +290,7 @@ export function ScaleCard() {
           max={180}
           step={1}
           value={deg}
-          aria-label="দুই arrow-এর মাঝের কোণ"
+          aria-label="The angle between the two arrows"
           onChange={(e) => turn(Number(e.target.value))}
           className="h-6 min-w-0 flex-1 cursor-pointer accent-[var(--cat-blue)]"
         />
@@ -311,7 +310,7 @@ export function ScaleCard() {
         </span>
       </div>
       <Ticks items={MARKS.map((m, i) => [`cos ${m.c < 0 ? "−1" : m.c}`, hit.includes(i)])} />
-      <Task done={all}>কোণটা ঘুরিয়ে এমন চারটা জায়গা খুঁজুন, যেখানে cos হয় 0.9, 0.5, 0 আর −1।</Task>
+      <Task done={all}>Turn the angle and find the four spots where cos is 0.9, 0.5, 0 and −1.</Task>
     </>
   );
 }
@@ -324,25 +323,25 @@ export function ScaleCard() {
 export function LastDivide() {
   const pass = useGate();
   const [k, setK] = useSeed("k", 0);
-  const steps = ["মামার length দিয়ে ভাগ করুন", "পুরো সূত্রে মিলিয়ে দেখুন"];
+  const steps = ["Divide by Mama's length", "Check against the full formula"];
 
   const step = () => {
     setK(k + 1);
-    if (k + 1 === 2) pass("Cosine মানে box ÷ দুই length।");
+    if (k + 1 === 2) pass("Cosine means the box ÷ both lengths.");
   };
 
   return (
     <>
       <div className="mx-auto mt-2 max-w-sm rounded-xl border border-border bg-surface px-3 py-2 text-center">
-        <div className="text-sm text-muted">৩.৬-এর নিয়মে মামা আর Titanic</div>
+        <div className="text-sm text-muted">Under 3.6's rule, Mama and Titanic</div>
         <div className="text-[0.95rem]">
-          Titanic-এর length 1 করে তারপর box: <b className="font-mono">3.71</b>
+          Titanic's length made 1, then the box: <b className="font-mono">3.71</b>
         </div>
       </div>
       <div className="mx-auto mt-3 grid max-w-sm gap-2">
         {k >= 1 && (
           <div className={`${FADE} rounded-xl border-2 border-cat-teal/40 bg-cat-teal/5 px-3 py-2 text-center`}>
-            <div className="text-xs text-muted">মামার পছন্দ 5.39 লম্বা</div>
+            <div className="text-xs text-muted">Mama's taste is 5.39 long</div>
             <div className="font-mono text-lg">
               3.71 ÷ 5.39 = <b>0.69</b>
             </div>
@@ -350,11 +349,11 @@ export function LastDivide() {
         )}
         {k >= 2 && (
           <div className={`${FADE} rounded-xl border-2 border-cat-amber/40 bg-cat-amber/5 px-3 py-2 text-center`}>
-            <div className="text-xs text-muted">পুরো সূত্র: box ÷ মামার length ÷ Titanic-এর length</div>
+            <div className="text-xs text-muted">The full formula: box ÷ Mama's length ÷ Titanic's length</div>
             <div className="font-mono text-lg">
               20 ÷ 5.39 ÷ 5.39 = <b>0.69</b>
             </div>
-            <div className="text-sm">মানে মামা আর Titanic প্রায় 46° দূরে।</div>
+            <div className="text-sm">That is, Mama and Titanic are about 46° apart.</div>
           </div>
         )}
       </div>
@@ -365,7 +364,7 @@ export function LastDivide() {
           </button>
         </div>
       )}
-      <Task done={k >= 2}>৩.৬-এর নম্বরটা মামার নিজের length দিয়ে ভাগ করুন, তারপর পুরো সূত্রের সাথে মিলিয়ে দেখুন।</Task>
+      <Task done={k >= 2}>Divide 3.6's number by Mama's own length, then check it against the full formula.</Task>
     </>
   );
 }
@@ -375,7 +374,7 @@ export function LastDivide() {
 //     length is 0, and 0 ÷ 0 is NaN. Then say why: an arrow of length zero
 //     has no direction, so no angle with anything.
 
-const NANU_WHY = ["নানুর জন্য Titanic-ই ঠিক, নম্বর তো 0-ও হতে পারে", "শূন্য arrow-এর কোনো দিক নাই, তাই কোনো কোণও নাই", "ক্যালকুলেটরটা নষ্ট"];
+const NANU_WHY = ["For Nanu, Titanic is fine — a score of 0 is allowed", "A zero arrow has no direction, so it has no angle either", "The calculator is broken"];
 
 export function NanuCard() {
   const pass = useGate();
@@ -387,19 +386,19 @@ export function NanuCard() {
     if (i !== 1) return setMiss((miss ?? 0) + 1);
     setMiss(null);
     setGot(true);
-    pass("শূন্য arrow-এর কোনো কোণ নাই।");
+    pass("A zero arrow has no angle.");
   };
 
   return (
     <>
       <div className="mx-auto mt-2 w-fit rounded-xl border-2 border-border bg-surface px-4 py-2 text-center">
-        <div className="text-sm font-semibold">নানুর পছন্দ</div>
+        <div className="text-sm font-semibold">Nanu's taste</div>
         <div className="font-mono text-xl font-bold">(0, 0)</div>
       </div>
       {!ran ? (
         <div className="mt-3 flex justify-center">
           <button type="button" onClick={() => setRan(true)} className={primaryBtn}>
-            নানু আর Titanic, সূত্রটা চালান
+            Run the formula on Nanu and Titanic
           </button>
         </div>
       ) : (
@@ -411,7 +410,7 @@ export function NanuCard() {
               0 ÷ (0 × 5.39) = <b className="text-danger">NaN</b>
             </div>
           </div>
-          <div className="mt-3 text-sm font-medium text-muted">ক্যালকুলেটর বলছে NaN, মানে “not a number”। কেন?</div>
+          <div className="mt-3 text-sm font-medium text-muted">The calculator says NaN, “not a number”. Why?</div>
           <div className="mt-2 grid gap-2">
             {NANU_WHY.map((o, i) => (
               <Choice key={o} n={i} look={got && i === 1 ? "right" : "idle"} disabled={got} onClick={() => why(i)}>
@@ -419,10 +418,10 @@ export function NanuCard() {
               </Choice>
             ))}
           </div>
-          {miss !== null && <Nope key={miss}>উঁহু। একটা arrow যদি কোথাও না যায়, সে কোন দিকে তাক করা?</Nope>}
+          {miss !== null && <Nope key={miss}>No. If an arrow doesn't go anywhere, which way does it point?</Nope>}
         </div>
       )}
-      <Task done={got}>নানুর জন্য সূত্রটা চালান, তারপর বলুন উত্তরটা এমন এলো কেন।</Task>
+      <Task done={got}>Run the formula for Nanu, then say why the answer came out this way.</Task>
     </>
   );
 }
@@ -434,8 +433,8 @@ export function NanuCard() {
 //     other.
 
 const VERDICT = [
-  { who: "মামা আর Mr. Bean", a: MAMA, b: BEAN, opts: ["5.34", "0.99", "0.69"], ans: 1, work: "22 ÷ 5.39 ÷ 4.12" },
-  { who: "মামী আর Titanic", a: MAMI, b: TITANIC, opts: ["0.99", "4.09", "0.47"], ans: 0, work: "22 ÷ 4.12 ÷ 5.39" },
+  { who: "Mama and Mr. Bean", a: MAMA, b: BEAN, opts: ["5.34", "0.99", "0.69"], ans: 1, work: "22 ÷ 5.39 ÷ 4.12" },
+  { who: "Mami and Titanic", a: MAMI, b: TITANIC, opts: ["0.99", "4.09", "0.47"], ans: 0, work: "22 ÷ 4.12 ÷ 5.39" },
 ];
 const FM = makeFrame(-0.5, 5.5, -0.5, 5.5, 26);
 const swap = (v: XY): XY => [v[1], v[0]];
@@ -456,14 +455,14 @@ export function VerdictCos() {
   };
   const flip = () => {
     setMirror(true);
-    pass("আয়নায় উল্টালেও কোণ একই: 0.991।");
+    pass("Flipped in a mirror, the angle is the same: 0.991.");
   };
   const pair = (a: XY) => (mirror ? swap(a) : a);
 
   return (
     <>
       <div className="flex items-center gap-3">
-        <Plane f={FM} ticks={1} label="চারটা arrow আর আয়নার দাগ" className="max-w-[10rem] shrink-0">
+        <Plane f={FM} ticks={1} label="Four arrows and the mirror line" className="max-w-[10rem] shrink-0">
           {both && <path d={`M${FM.sx(0)} ${FM.sy(0)}L${FM.sx(5.3)} ${FM.sy(5.3)}`} strokeWidth={1.2} strokeDasharray="4 4" className="pointer-events-none stroke-[#0f1b2d]/40" />}
           <Arrow f={FM} from={O} to={pair(MAMA)} tone="teal" w={2.4} />
           <Arrow f={FM} from={O} to={pair(BEAN)} tone="teal" w={1.6} dashed />
@@ -472,10 +471,10 @@ export function VerdictCos() {
         </Plane>
         <div className="grid min-w-0 flex-1 gap-1 text-xs">
           <div className="rounded-lg bg-surface px-2 py-1">
-            box: মামা · Bean = <b className="font-mono">22</b>, মামী · Titanic = <b className="font-mono">22</b>
+            box: Mama · Bean = <b className="font-mono">22</b>, Mami · Titanic = <b className="font-mono">22</b>
           </div>
           <div className="rounded-lg bg-surface px-2 py-1">
-            length: মামা, Titanic <b className="font-mono">5.39</b>; মামী, Bean <b className="font-mono">4.12</b>
+            length: Mama, Titanic <b className="font-mono">5.39</b>; Mami, Bean <b className="font-mono">4.12</b>
           </div>
           {VERDICT.slice(0, done).map((d) => (
             <div key={d.who} className={`${FADE} rounded-lg bg-accent/10 px-2 py-1`}>
@@ -487,7 +486,7 @@ export function VerdictCos() {
       </div>
       {!both ? (
         <>
-          <div className="mt-3 text-sm font-medium text-muted">{v.who}: cosine similarity কত?</div>
+          <div className="mt-3 text-sm font-medium text-muted">{v.who}: what is the cosine similarity?</div>
           <div className="mt-2 flex justify-center gap-2">
             {v.opts.map((o, i) => (
               <button key={o} type="button" onClick={() => pick(i)} className={pill(false)}>
@@ -495,25 +494,25 @@ export function VerdictCos() {
               </button>
             ))}
           </div>
-          {miss !== null && <Nope key={miss}>উঁহু। box এর নম্বরটাকে দুইজনের length দিয়েই ভাগ করতে হবে, একজনের দিয়ে না।</Nope>}
+          {miss !== null && <Nope key={miss}>No. The box's number must be divided by both people's lengths, not one person's.</Nope>}
         </>
       ) : (
         <div className={`${FADE} mt-3 text-center`}>
-          <div className="text-[0.95rem]">দুইটাই 0.991! এমন কাকতালীয় মিল কেন?</div>
+          <div className="text-[0.95rem]">Both 0.991! Why such an uncanny match?</div>
           {!mirror && (
             <button type="button" onClick={flip} className={`${primaryBtn} mt-2`}>
-              প্রতিটা card-এর দুই ঘর অদলবদল করুন
+              Swap the two slots of each card
             </button>
           )}
         </div>
       )}
       <Ticks
         items={[
-          [`দুইটা cosine (${bn(done)}/২)`, both],
-          ["আয়না", mirror],
+          [`Both cosines (${done}/2)`, both],
+          ["Mirror", mirror],
         ]}
       />
-      <Task done={mirror}>দুই জোড়ার cosine similarity বের করুন, তারপর আয়নাটা দেখুন।</Task>
+      <Task done={mirror}>Work out both pairs' cosine similarity, then look at the mirror.</Task>
     </>
   );
 }
@@ -522,14 +521,15 @@ export function VerdictCos() {
 // Animations. Story scenes act out a step's setup (written `story` in the MDX,
 // so the Journey reads them as words, not as the widget); figures inside a
 // <Then> or a Check's explanation show what its paragraph says. All watch-only:
-// each waits for একবারে দেখুন or step by step, and every beat is drawn from k.
-// Scene pieces the cast doesn't have (TV, sofa, নানু, the boat) are drawn here.
+// each waits for the reader's tap (see it once, or step by step), and every
+// beat is drawn from k. Scene pieces the cast doesn't have (TV, sofa, Nanu,
+// the boat) are drawn here.
 
 type Story = { story?: boolean };
 const C_INK = "#0f1b2d";
 const C_Y = 150;
 
-/** Whether the reader asked for less motion (cast.tsx's useCalm, copied): নানু's bob stays still then. */
+/** Whether the reader asked for less motion (cast.tsx's useCalm, copied): Nanu's bob stays still then. */
 function useCalm() {
   const [calm, setCalm] = useState(true);
   useEffect(() => {
@@ -578,7 +578,7 @@ function C_Phone({ x, y, lit = false }: { x: number; y: number; lit?: boolean })
 }
 
 /**
- * নানু, feet at (x, y): white sari with a red border, its end over grey hair,
+ * Nanu, feet at (x, y): white sari with a red border, its end over grey hair,
  * round glasses. Not in the cast (she comes in only here), so drawn locally on
  * the cast's scale. Change x and she glides over `ms`; `walking` bobs her.
  */
@@ -608,7 +608,7 @@ function C_Nanu({ x, y, facing = 1, walking = false, ms = 1200, happy = false }:
         </g>
       </g>
       <text y={11} textAnchor="middle" fontSize={8.5} fontWeight={700} fill={C_INK}>
-        নানু
+        Nanu
       </text>
     </g>
   );
@@ -678,11 +678,11 @@ function C_Roof({ deg, bx, L, children }: { deg: number; bx: number; L: number; 
 const X0_BX = 62;
 const X0_L = 58;
 const X0_SAY = [
-  "দুপুরের রোদে ছাদের লাঠি, আর মাটিতে তার ছায়া।",
-  "মাটির দিকটা v, লাঠিটা w। ছায়াটা হলো ‖w‖ cos θ।",
-  "তাই v · w-তে তিনটা গুণ: দুইটা length আর cos θ।",
-  "লাঠি খাড়া করলে ছায়াই নাই, cos 90° = 0।",
-  "‖v‖ × ‖w‖ নিলে খাড়া লাঠিতেও বড় একটা নম্বর আসতো। তাই cos বাদ দেওয়া যায় না।",
+  "The noon roof's stick in the sun, and its shadow on the ground.",
+  "The ground's direction is v, the stick is w. The shadow is ‖w‖ cos θ.",
+  "So v · w holds three factors: two lengths and cos θ.",
+  "Stand the stick up and there's no shadow at all: cos 90° = 0.",
+  "With ‖v‖ × ‖w‖ alone, an upright stick would still give a big number. So cos can't be dropped.",
 ];
 
 export function RoofStick() {
@@ -735,10 +735,10 @@ export function RoofStick() {
 }
 
 // ---------------------------------------------------------------------------
-// 1a · A story scene for screen 1's setup, no task: TV night at নানুর বাড়ি.
-//      মামা and মামী tug at the remote, their taste cards come up, ফাহিম runs
+// 1a · A story scene for screen 1's setup, no task: TV night at Nanu's house.
+//      Mama and Mami tug at the remote, their taste cards come up, Fahim runs
 //      3.6's rule on his phone, the TV splits into Mr. Bean and Titanic, and
-//      মামা, seeing the numbers, can't keep quiet. The numbers themselves are
+//      Mama, seeing the numbers, can't keep quiet. The numbers themselves are
 //      the widget's, so the scene stops before them.
 
 const S1_MAMA = 146;
@@ -752,7 +752,7 @@ export function RemoteFight({}: Story) {
 
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="room" label="সন্ধ্যায় নানুর বাড়ি: মামা আর মামী TV-র রিমোট নিয়ে টানাটানি করছেন। ফাহিম ফোনে ৩.৬-এর নিয়ম চালালো, TV-তে মামার জন্য Mr. Bean আর মামীর জন্য Titanic। নম্বর দেখে মামা চেঁচিয়ে উঠলেন।">
+      <Stage backdrop="room" label="Evening at Nanu's house: Mama and Mami tug at the TV remote. Fahim runs 3.6's rule on his phone; on the TV, Mr. Bean for Mama and Titanic for Mami. Seeing the numbers, Mama shouts.">
         <C_Sofa x={196} y={C_Y} w={124} />
         <C_TV x={50} y={C_Y}>
           {k >= 3 && (
@@ -779,7 +779,7 @@ export function RemoteFight({}: Story) {
         )}
         <Person who="fahim" x={k >= 2 ? S1_FAHIM : 360} y={C_Y} facing={-1} walking={k === 2} ms={1400} arm={k >= 2 ? "hold" : "down"} label={k >= 2} />
         {k >= 2 && <C_Phone x={S1_FAHIM - 19} y={C_Y - 47} lit />}
-        {k >= 4 && <Bubble x={S1_MAMA} y={C_Y - 66} lines={["নম্বর দেখো!"]} />}
+        {k >= 4 && <Bubble x={S1_MAMA} y={C_Y - 66} lines={["Look at the numbers!"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -791,11 +791,11 @@ export function RemoteFight({}: Story) {
 //      wiped in 3.6, and one length is still there. Whose? Left open.
 
 const X1_SAY = [
-  "মামা আর Mr. Bean পেলো 5.34।",
-  "৪.৩ বলে, box এর নম্বরে তিনটা জিনিস গুণ হয়ে থাকে।",
-  "একটা হলো কোণ, মানে আসলে কতটা মিল।",
-  "ছবির length তো ৩.৬-এ 1 বানিয়ে মুছে ফেলা হয়েছিল।",
-  "তাহলে বাকি এই length টা কার?",
+  "Mama and Mr. Bean scored 5.34.",
+  "4.3 says three things are multiplied inside a box number.",
+  "One is the angle, that is, how much of a match.",
+  "The film's length was wiped to 1 back in 3.6.",
+  "So whose length is this one left over?",
 ];
 
 function X1Chip({ on, tone, struck, bangla, children, note }: { on: boolean; tone: "amber" | "accent" | "plain"; struck?: boolean; bangla?: boolean; children: ReactNode; note?: ReactNode }) {
@@ -818,7 +818,7 @@ export function WhatsInScore() {
     <Scene scene={s} caption={say(k, X1_SAY)}>
       <div className="flex flex-col items-center gap-2">
         <div className="rounded-xl border-2 border-cat-teal/40 bg-surface px-3 py-1 text-center">
-          <div className="text-xs text-muted">মামা আর Mr. Bean</div>
+          <div className="text-xs text-muted">Mama and Mr. Bean</div>
           <div className="font-mono text-2xl font-bold">5.34</div>
         </div>
         <div className="flex min-h-14 items-start justify-center gap-1.5">
@@ -826,19 +826,19 @@ export function WhatsInScore() {
             <>
               <span className={`${FADE} pt-1 font-mono`}>=</span>
               <div className={FADE}>
-                <X1Chip on={k >= 4} tone="amber" note={k >= 4 ? <b className={`${POP} inline-block text-cat-amber`}>কার?</b> : "length"}>
+                <X1Chip on={k >= 4} tone="amber" note={k >= 4 ? <b className={`${POP} inline-block text-cat-amber`}>Whose?</b> : "length"}>
                   {k >= 4 ? "‖ ? ‖" : "‖ ‖"}
                 </X1Chip>
               </div>
               <span className={`${FADE} pt-1 font-mono`}>×</span>
               <div className={FADE}>
-                <X1Chip on={k >= 3} tone="plain" struck={k >= 3} bangla note={k >= 3 ? "৩.৬-এ মুছেছি, 1" : "ছবির length"}>
-                  ‖ছবি‖
+                <X1Chip on={k >= 3} tone="plain" struck={k >= 3} note={k >= 3 ? "wiped to 1 in 3.6" : "the film's length"}>
+                  ‖film‖
                 </X1Chip>
               </div>
               <span className={`${FADE} pt-1 font-mono`}>×</span>
               <div className={FADE}>
-                <X1Chip on={k >= 2} tone="accent" note={k >= 2 ? "কোণ" : ""}>
+                <X1Chip on={k >= 2} tone="accent" note={k >= 2 ? "the angle" : ""}>
                   cos θ
                 </X1Chip>
               </div>
@@ -857,10 +857,10 @@ export function WhatsInScore() {
 
 const X1L_F = makeFrame(-0.4, 10.6, -0.4, 4.6, 15, 10);
 const X1L_SAY = [
-  "Titanic, (5, 2)।",
-  "দুইটা ঘরই দ্বিগুণ: (10, 4)। Arrow-ও দ্বিগুণ লম্বা।",
-  "5 : 2 আর 10 : 4, drama আর comedy-র ভাগাভাগি একই। তাই দিকও একই।",
-  "একই দিক, শুধু জোর বেশি। এর নামই loud film।",
+  "Titanic, (5, 2).",
+  "Both slots doubled: (10, 4). The arrow is twice as long too.",
+  "5 : 2 and 10 : 4 — the split between drama and comedy is the same. So the direction is too.",
+  "Same direction, only louder. That's what a loud film is.",
 ];
 
 export function LoudFilmAgain() {
@@ -896,7 +896,7 @@ export function LoudFilmAgain() {
 
 // ---------------------------------------------------------------------------
 // 2a · A story scene for screen 2's setup, no task: the answer is on the
-//      sofa. মামা gives his favourite a loud 5; মামী says 4 for hers. Their
+//      sofa. Mama gives his favourite a loud 5; Mami says 4 for hers. Their
 //      cards come up. The lengths are the widget's, so they're not shown.
 
 const S2_MAMA = 124;
@@ -908,19 +908,19 @@ export function LoudSofa({}: Story) {
 
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="room" label="সোফার সামনে মামা আর মামী। মামা জোর দিয়ে Comedy-কে 5 দেন, মামী drama-কে 4। তারপর দুইজনের card।">
+      <Stage backdrop="room" label="Mama and Mami in front of the sofa. Mama gives Comedy a loud 5, Mami gives drama 4. Then both their cards.">
         <C_Sofa x={164} y={C_Y} w={150} />
         <Person who="mama" x={S2_MAMA} y={C_Y} mood={k === 1 ? "shout" : k >= 3 ? "smug" : "plain"} arm={k === 1 ? "wave" : "down"} label />
         <Person who="mami" x={S2_MAMI} y={C_Y} facing={-1} mood={k === 2 ? "happy" : "plain"} label />
         {k === 1 && (
           <>
-            <Bubble x={S2_MAMA} y={C_Y - 66} lines={["Comedy? পুরো 5!"]} />
+            <Bubble x={S2_MAMA} y={C_Y - 66} lines={["Comedy? A full 5!"]} />
             <g className={FADE} fill="none" stroke={C_INK} strokeOpacity={0.5} strokeWidth={1.2} strokeLinecap="round">
               <path d={`M${S2_MAMA + 15} ${C_Y - 50}q4 4 0 8M${S2_MAMA + 20} ${C_Y - 53}q6 7 0 14`} />
             </g>
           </>
         )}
-        {k === 2 && <Bubble x={S2_MAMI} y={C_Y - 66} lines={["Drama? 4।"]} />}
+        {k === 2 && <Bubble x={S2_MAMI} y={C_Y - 66} lines={["Drama? 4."]} />}
         {k >= 3 && (
           <>
             <CastCard x={S2_MAMA} y={C_Y - 78} text="(2, 5)" tone="teal" />
@@ -933,15 +933,15 @@ export function LoudSofa({}: Story) {
 }
 
 // ---------------------------------------------------------------------------
-// 2½ · A figure for screen 2's explanation, no task: 5.34 is মামা's length
+// 2½ · A figure for screen 2's explanation, no task: 5.34 is Mama's length
 //      5.39 times something. Double his card and the length doubles, the score
 //      doubles, and the something doesn't move. The length is his voice.
 
 const X2_SAY = [
-  "মামা আর Mr. Bean: 5.34।",
-  "এই 5.34 হলো মামার length 5.39, গুণ আরেকটা কিছু।",
-  "Card দ্বিগুণ করলে length 10.77, score 10.67। কিন্তু ? একটুও নড়েনি।",
-  "মানে 5.34-এর একটা অংশ ছবির মিল না, মামার গলার জোর।",
+  "Mama and Mr. Bean: 5.34.",
+  "This 5.34 is Mama's length 5.39, times something else.",
+  "Double the card: length 10.77, score 10.67. But the ? didn't move a hair.",
+  "So part of 5.34 isn't the film's match — it's the loudness of Mama's voice.",
 ];
 
 function X2Row({ score, len, voice }: { score: string; len: string; voice: boolean }) {
@@ -952,13 +952,13 @@ function X2Row({ score, len, voice }: { score: string; len: string; voice: boole
       <div className="flex flex-col items-center">
         <span className="rounded-lg border-2 border-cat-teal/50 bg-cat-teal/10 px-2 font-mono font-bold text-cat-teal">{len}</span>
         <span key={String(voice)} className={`${FADE} text-xs text-muted`}>
-          {voice ? "গলার জোর" : "মামার length"}
+          {voice ? "voice" : "Mama's length"}
         </span>
       </div>
       <span className="font-mono">×</span>
       <div className="flex flex-col items-center">
         <span className="rounded-lg border-2 border-dashed border-border px-2 font-mono font-bold">?</span>
-        <span className="text-xs text-muted">ছবির মিল</span>
+        <span className="text-xs text-muted">the film's match</span>
       </div>
     </div>
   );
@@ -973,7 +973,7 @@ export function VoiceInScore() {
       <div className="grid min-h-[6.5rem] content-start gap-2">
         {k === 0 ? (
           <div className="flex items-center justify-center gap-2">
-            <span className="text-sm text-muted">মামা (2, 5) আর Mr. Bean</span>
+            <span className="text-sm text-muted">Mama (2, 5) and Mr. Bean</span>
             <b className="font-mono text-lg">5.34</b>
           </div>
         ) : (
@@ -1000,10 +1000,10 @@ const X3_F = makeFrame(-0.2, 4.3, -0.2, 4.3, 27, 7);
 const X3_V: XY = [3, 4];
 const X3_W: XY = [4, 3];
 const X3_SAY = [
-  "(3, 4) আর (4, 3), দুইজনই 5 লম্বা। box 24।",
-  "প্রথমটার length 5 দিয়ে ভাগ: arrow ছোট হয়ে 1, নম্বর 4.8।",
-  "দ্বিতীয়টারও length ছাঁটা: 0.96।",
-  "জোর ছেঁটে ফেললাম, কোণটা একটুও বদলায়নি। যা থাকলো, সেটাই cosine similarity।",
+  "(3, 4) and (4, 3), both 5 long. The box says 24.",
+  "Divide the first by its length 5: the arrow shrinks to 1, the number to 4.8.",
+  "Shave the second one's length too: 0.96.",
+  "The loudness is shaved off and the angle never moved. What's left is the cosine similarity.",
 ];
 
 export function ShaveLengths() {
@@ -1043,7 +1043,7 @@ export function ShaveLengths() {
 
 // ---------------------------------------------------------------------------
 // 3¾ · A figure for screen 3's explanation, no task: in two slots a
-//      protractor can read the angle; সোমের ফোন's words have 300 slots, no
+//      protractor can read the angle; Som's phone's words have 300 slots, no
 //      picture and no protractor, and the formula still answers. The word
 //      numbers are made up, only to show a long list.
 
@@ -1053,10 +1053,10 @@ const X3P_WORDS = [
   ["0.09", "−0.31", "0.47"],
 ];
 const X3P_SAY = [
-  "দুই ঘরে চাঁদা বসিয়েই কোণটা মাপা যায়।",
-  "কিন্তু সোমের ফোনে একেকটা শব্দ 300টা ঘরের list।",
-  "300 ঘরের কোনো ছবি নাই, চাঁদা বসাবো কোথায়?",
-  "সূত্রটা তবু দিব্যি চলে: box ÷ দুই length = 0.94, মানে দুইটা শব্দ 20° দূরে।",
+  "In two slots, a protractor can measure the angle.",
+  "But in Som's phone, each word is a list of 300 slots.",
+  "No picture of 300 slots exists — where would you put the protractor?",
+  "The formula works all the same: box ÷ both lengths = 0.94, meaning the two words are 20° apart.",
 ];
 
 function X3Protractor({ crossed }: { crossed: boolean }) {
@@ -1084,15 +1084,15 @@ export function NoProtractor() {
           <div className={`${FADE} grid min-w-0 flex-1 grid-cols-[minmax(0,1fr)] gap-1.5`}>
             {X3P_WORDS.map((w, i) => (
               <div key={i} className="flex items-center gap-1.5">
-                <span className="w-9 shrink-0 text-xs text-muted">শব্দ {bn(i + 1)}</span>
+                <span className="w-9 shrink-0 text-xs text-muted">word {i + 1}</span>
                 <span className="min-w-0 truncate rounded-md bg-surface px-1.5 py-0.5 font-mono text-xs ring-1 ring-border">({w.join(", ")}, …)</span>
               </div>
             ))}
-            <div className="text-right text-xs text-muted">প্রতিটায় 300টা ঘর</div>
+            <div className="text-right text-xs text-muted">300 slots each</div>
             <div className="min-h-6">
               {k >= 3 && (
                 <span className={`${POP} inline-block rounded-lg bg-accent/10 px-2 py-0.5 text-sm`}>
-                  cos = <b className="font-mono">0.94</b>, মানে <b className="font-mono">20°</b>
+                  cos = <b className="font-mono">0.94</b>, that is <b className="font-mono">20°</b>
                 </span>
               )}
             </div>
@@ -1114,10 +1114,10 @@ const X4_SPAN = 244;
 const x4Top = (deg: number) => X4_X0 + (deg / 180) * X4_SPAN;
 const x4Bot = (deg: number) => X4_X0 + ((1 - Math.cos((deg * Math.PI) / 180)) / 2) * X4_SPAN;
 const X4_SAY = [
-  "ওপরের দাগে কোণ, 0° থেকে 180°। নিচের দাগে তার cos, 1 থেকে −1।",
-  "প্রতি 15° কোণে একটা সুতা। কোণ সমান তালে বাড়ে, cos কিন্তু দুই কিনারায় গাদাগাদি।",
-  "0.9 শুনলে মনে হয় 90% মিল। আসলে 26° দূরে।",
-  "0.5-ও অর্ধেক মিল না, 60° দূরে। তাই percent না, পড়ুন কে আগে কে পরে।",
+  "The top line is the angle, 0° to 180°. The bottom line is its cos, 1 to −1.",
+  "A thread at every 15°. The angle climbs evenly, but the cos piles up at both ends.",
+  "0.9 sounds like a 90% match. Really it's 26° apart.",
+  "0.5 isn't half a match either; it's 60° apart. So no percents — read who comes first, who after.",
 ];
 const X4_ENDS: [number, string][] = [
   [1, "1"],
@@ -1181,11 +1181,11 @@ export function UnevenScale() {
 const X4S_DEG = [60, 0, 90, 180];
 const X4S_COS = ["0.5", "1", "0", "−1"];
 const X4S_SAY = [
-  "ছাদের সেই লাঠি, 60°-তে। ছায়া লাঠির অর্ধেক।",
-  "একদম শুইয়ে দিলে ছায়া পুরো লাঠিটাই। এর চেয়ে লম্বা হওয়ার উপায় নাই।",
-  "খাড়া করলে ছায়া 0।",
-  "উল্টো দিকে শোয়ালে ছায়া পেছনে, পুরো লাঠি: −1।",
-  "তাই ছায়া ÷ লাঠি সবসময় −1 থেকে 1। বইয়ে এর নাম Cauchy–Schwarz inequality।",
+  "The roof's stick again, at 60°. The shadow is half the stick.",
+  "Laid flat, the shadow is the whole stick. It can never be longer.",
+  "Stand it up: shadow 0.",
+  "Laid the other way, the shadow falls behind — the whole stick: −1.",
+  "So shadow ÷ stick is always between −1 and 1. The books call it the Cauchy–Schwarz inequality.",
 ];
 
 export function ShadowCap() {
@@ -1199,7 +1199,7 @@ export function ShadowCap() {
       <C_Roof deg={deg} bx={110} L={60} />
       <div className="mt-1 flex min-h-7 flex-wrap items-center justify-center gap-x-3 gap-y-1">
         <span className="text-sm">
-          ছায়া ÷ লাঠি ={" "}
+          shadow ÷ stick ={" "}
           <b key={deg} className={`${POP} inline-block font-mono`}>
             {c}
           </b>
@@ -1217,10 +1217,10 @@ export function ShadowCap() {
 
 const X5_T = 6;
 const X5_SAY = [
-  "মামার card (2, 5)।",
-  "দুই ঘরের বর্গ: 2 × 2 = 4, আর 5 × 5 = 25।",
-  "যোগ করলে 29।",
-  "29-এর root প্রায় 5.39। বর্গ না করে যোগ করলে 7, সেটা ভুল।",
+  "Mama's card, (2, 5).",
+  "Square both slots: 2 × 2 = 4, and 5 × 5 = 25.",
+  "Add them: 29.",
+  "The root of 29 is about 5.39. Adding without squaring gives 7 — wrong.",
 ];
 
 function X5Tiles({ n, x, fill }: { n: number; x: number; fill: string }) {
@@ -1264,9 +1264,9 @@ export function SquareUp() {
 }
 
 // ---------------------------------------------------------------------------
-// 5a · A story scene for screen 5's setup, no task: মামা stops short, “was
-//      3.6 wrong?”; ফাহিম says not wrong, unfinished, and holds up 3.6's
-//      number for মামা and Titanic, 3.71. The cosine is the widget's.
+// 5a · A story scene for screen 5's setup, no task: Mama stops short, "was
+//      3.6 wrong?"; Fahim says not wrong, unfinished, and holds up 3.6's
+//      number for Mama and Titanic, 3.71. The cosine is the widget's.
 
 const S5_MAMA = 116;
 const S5_FAHIM = 214;
@@ -1277,13 +1277,13 @@ export function WasItWrong({}: Story) {
 
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="room" label="মামা থমকে জিজ্ঞেস করেন, ৩.৬-এ যা করেছিলাম সেটা কি ভুল ছিল? ফাহিম বলে, ভুল না, অসম্পূর্ণ, আর ফোনে দেখায় মামা আর Titanic-এর 3.71।">
+      <Stage backdrop="room" label="Mama stops short: was what we did in 3.6 wrong? Fahim says, not wrong — unfinished, and shows Mama and Titanic's 3.71 on the phone.">
         <C_Sofa x={166} y={C_Y} w={140} />
         <Person who="mama" x={S5_MAMA} y={C_Y} mood={k >= 1 && k < 3 ? "puzzled" : "plain"} label />
         <Person who="fahim" x={S5_FAHIM} y={C_Y} facing={-1} arm={k >= 3 ? "hold" : "down"} mood={k === 2 ? "happy" : "plain"} label />
         {k >= 3 && <C_Phone x={S5_FAHIM - 19} y={C_Y - 47} lit />}
-        {k === 1 && <Bubble x={S5_MAMA} y={C_Y - 66} lines={["তাহলে ৩.৬-এ আমরা যা", "করেছিলাম, সেটা কি ভুল ছিল?"]} />}
-        {k === 2 && <Bubble x={S5_FAHIM} y={C_Y - 66} lines={["ভুল না, অসম্পূর্ণ।"]} />}
+        {k === 1 && <Bubble x={S5_MAMA} y={C_Y - 66} lines={["Then what we did in 3.6 —", "was it wrong?"]} />}
+        {k === 2 && <Bubble x={S5_FAHIM} y={C_Y - 66} lines={["Not wrong, unfinished."]} />}
         {k >= 3 && <CastCard x={S5_FAHIM} y={C_Y - 80} text="Titanic: 3.71" tone="amber" />}
       </Stage>
     </StoryFrame>
@@ -1298,10 +1298,10 @@ export function WasItWrong({}: Story) {
 
 const X5O_MAX = 6;
 const X5O_SAY = [
-  "৩.৬-এর নিয়মে মামার দুই ছবি: Mr. Bean 5.34, Titanic 3.71।",
-  "দুইটাকেই মামার একই length 5.39 দিয়ে ভাগ। নম্বর ছোট হলো, কিন্তু আগে-পরে একই।",
-  "এবার দুইজন আলাদা মানুষ: মামার 5.34, মামীর 4.09।",
-  "এদের ভাগ করতে হবে আলাদা length দিয়ে, 5.39 আর 4.12। তাই এই দুই নম্বর পাশাপাশি রাখা চলে না।",
+  "Under 3.6's rule, Mama's two films: Mr. Bean 5.34, Titanic 3.71.",
+  "Divide both by Mama's one length, 5.39. The numbers shrink, but the order stays.",
+  "Now two different people: Mama's 5.34, Mami's 4.09.",
+  "These divide by different lengths, 5.39 and 4.12. So these two numbers can't sit side by side.",
 ];
 
 function X5Bar({ name, v, shown, tone, cut }: { name: string; v: number; shown: string; tone: "teal" | "violet"; cut?: string }) {
@@ -1332,7 +1332,7 @@ export function SameOrder() {
   return (
     <Scene scene={s} caption={say(k, X5O_SAY)}>
       <div key={String(one)} className={`${FADE} mx-auto grid min-h-[5.5rem] max-w-xs content-center gap-2`}>
-        <div className="text-center text-xs font-semibold text-muted">{one ? "একজন মানুষ, মামা" : "দুইজন মানুষ"}</div>
+        <div className="text-center text-xs font-semibold text-muted">{one ? "One person, Mama" : "Two people"}</div>
         {one ? (
           <>
             <X5Bar name="Mr. Bean" v={k >= 1 ? 0.99 : 5.34} shown={k >= 1 ? "0.99" : "5.34"} tone="teal" cut={k >= 1 ? "÷ 5.39" : undefined} />
@@ -1340,8 +1340,8 @@ export function SameOrder() {
           </>
         ) : (
           <>
-            <X5Bar name="মামা, Mr. Bean" v={5.34} shown={k >= 3 ? "?" : "5.34"} tone="teal" cut={k >= 3 ? "÷ 5.39" : undefined} />
-            <X5Bar name="মামী, Titanic" v={4.09} shown={k >= 3 ? "?" : "4.09"} tone="violet" cut={k >= 3 ? "÷ 4.12" : undefined} />
+            <X5Bar name="Mama, Mr. Bean" v={5.34} shown={k >= 3 ? "?" : "5.34"} tone="teal" cut={k >= 3 ? "÷ 5.39" : undefined} />
+            <X5Bar name="Mami, Titanic" v={4.09} shown={k >= 3 ? "?" : "4.09"} tone="violet" cut={k >= 3 ? "÷ 4.12" : undefined} />
           </>
         )}
       </div>
@@ -1350,8 +1350,8 @@ export function SameOrder() {
 }
 
 // ---------------------------------------------------------------------------
-// 6a · A story scene for screen 6's setup, no task: নানু comes in and sits by
-//      মামা and মামী, “আমাকেও একটা ছবি দে তো।”, and her card is (0, 0). What
+// 6a · A story scene for screen 6's setup, no task: Nanu comes in and sits by
+//      Mama and Mami, "give me a film too", and her card is (0, 0). What
 //      the formula does with it is the widget's.
 
 const S6_SOFA = 236;
@@ -1362,12 +1362,12 @@ export function NanuComes({}: Story) {
 
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="room" label="নানু এসে সোফার কাছে দাঁড়ালেন, মামা আর মামী পাশে। নানু বললেন, আমাকেও একটা ছবি দে তো। নানুর card (0, 0)।">
+      <Stage backdrop="room" label="Nanu came and stood by the sofa, Mama and Mami beside her. Nanu said, give me a film too. Nanu's card is (0, 0).">
         <C_Sofa x={S6_SOFA} y={C_Y} w={104} />
         <Person who="mama" x={70} y={C_Y} label />
         <Person who="mami" x={128} y={C_Y} label />
         <C_Nanu x={k >= 1 ? S6_SOFA : 360} y={C_Y} facing={-1} walking={k === 1} ms={1600} happy={k >= 2} />
-        {k === 2 && <Bubble x={S6_SOFA} y={C_Y - 66} lines={["আমাকেও একটা ছবি", "দে তো।"]} />}
+        {k === 2 && <Bubble x={S6_SOFA} y={C_Y - 66} lines={["Give me a film", "too."]} />}
         {k >= 3 && <CastCard x={S6_SOFA} y={C_Y - 80} text="(0, 0)" tone="amber" />}
       </Stage>
     </StoryFrame>
@@ -1375,7 +1375,7 @@ export function NanuComes({}: Story) {
 }
 
 // ---------------------------------------------------------------------------
-// 6½ · A figure for screen 6's explanation, no task: shrink মামা's arrow
+// 6½ · A figure for screen 6's explanation, no task: shrink Mama's arrow
 //      (2, 5) toward nothing. It keeps its direction all the way down, until
 //      at (0, 0) there's no arrow left to point anywhere, and code says NaN.
 
@@ -1383,11 +1383,11 @@ const X6_F = makeFrame(-2.6, 2.6, -1.4, 5.4, 16, 6);
 const X6_S = [1, 0.5, 0.15, 0];
 const X6_AT = ["(2, 5)", "(1, 2.5)", "(0.3, 0.75)", "(0, 0)"];
 const X6_SAY = [
-  "মামার arrow (2, 5)। কোন দিকে তাক করা, স্পষ্ট।",
-  "অর্ধেক করলাম: (1, 2.5)। ছোট, কিন্তু দিক একই।",
-  "আরও ছোট, তবু তাক করা ওই দিকেই।",
-  "(0, 0)-তে এসে arrow-ই নাই। এবার কোন দিকে তাক করা?",
-  "দিক নাই, তাই কোণও নাই। হিসাবে আসে 0 দিয়ে ভাগ, আর code বলে NaN।",
+  "Mama's arrow, (2, 5). What it points at is clear.",
+  "Halve it: (1, 2.5). Shorter, but the same direction.",
+  "Even shorter, still pointing that same way.",
+  "At (0, 0) there's no arrow left. Which way does it point now?",
+  "No direction, so no angle. The sum becomes a division by 0, and code says NaN.",
 ];
 
 export function ShrinkToNothing() {
@@ -1438,9 +1438,9 @@ export function ShrinkToNothing() {
 }
 
 // ---------------------------------------------------------------------------
-// 6¾ · A figure for screen 6's explanation, no task: নানু's ranking on the TV
-//      fills with NaN row by row; ফাহিম handles her apart and simply puts on
-//      an old black-and-white Bangla film. নানু খুশি.
+// 6¾ · A figure for screen 6's explanation, no task: Nanu's ranking on the TV
+//      fills with NaN row by row; Fahim handles her apart and simply puts on
+//      an old black-and-white Bangla film. Nanu is happy.
 
 const X6R_ROWS = ["Mr. Bean", "Titanic", "…"];
 
@@ -1452,12 +1452,12 @@ export function NanRanking() {
 
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="room" label="TV-তে নানুর জন্য ranking, একেক করে সব ঘরে NaN। তারপর ফাহিম নানুর জন্য একটা পুরানো সাদাকালো বাংলা ছবি চালিয়ে দিলো, নানু খুশি।">
+      <Stage backdrop="room" label="On the TV, Nanu's ranking fills with NaN, row by row. Then Fahim puts on an old black-and-white Bangla film for her, and Nanu is happy.">
         <C_TV x={96} y={C_Y} w={124} h={70}>
           {!film ? (
             <g>
               <text x={96} y={64} textAnchor="middle" fontSize={8} fontWeight={700} fill="#e2e8f0">
-                নানুর জন্য ranking
+                Nanu's ranking
               </text>
               {X6R_ROWS.map((r, i) => (
                 <g key={r}>
@@ -1480,7 +1480,7 @@ export function NanRanking() {
               <circle cx={104} cy={80} r={5} fill="#1f2937" />
               <path d="M104 98V86" stroke="#1f2937" strokeWidth={6} strokeLinecap="round" />
               <text x={96} y={111} textAnchor="middle" fontSize={7} fontWeight={700} fill="#f3f4f6">
-                সাদাকালো বাংলা ছবি
+                an old B&W Bangla film
               </text>
             </g>
           )}
@@ -1500,10 +1500,10 @@ export function NanRanking() {
 
 const X7_F = makeFrame(-0.3, 5.4, -0.3, 5.4, 15, 6);
 const X7_SAY = [
-  "মামা আর Mr. Bean পেলো 5.34, মামী আর Titanic 4.09।",
-  "কিন্তু দুই জোড়ার মাঝের কোণ একই, প্রায় 8°।",
-  "সবার length সমান করে দিলাম, মানে জোরটা ছেঁটে ফেললাম। দুইটা কোণ হুবহু এক।",
-  "তাই দুইজনেরই 0.991। মামার বাড়তি নম্বরটা পুরোটাই গলার জোর।",
+  "Mama and Mr. Bean scored 5.34, Mami and Titanic 4.09.",
+  "But the angle between each pair is the same, about 8°.",
+  "Make everyone's length the same — the loudness shaved off. The two angles are exactly equal.",
+  "So both pairs get 0.991. Mama's extra number is all voice.",
 ];
 
 function X7Pair({ a, b, tone, arms, score, k }: { a: XY; b: XY; tone: "teal" | "violet"; arms: number[]; score: string; k: number }) {
@@ -1538,11 +1538,11 @@ export function SameWedge() {
     <Scene scene={s} caption={say(k, X7_SAY)}>
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <div className="mb-0.5 text-center text-xs font-semibold text-cat-teal">মামা, Mr. Bean</div>
+          <div className="mb-0.5 text-center text-xs font-semibold text-cat-teal">Mama, Mr. Bean</div>
           <X7Pair a={MAMA} b={BEAN} tone="teal" arms={arms.slice(0, 4)} score={k >= 3 ? "0.991" : "5.34"} k={k} />
         </div>
         <div>
-          <div className="mb-0.5 text-center text-xs font-semibold text-cat-violet">মামী, Titanic</div>
+          <div className="mb-0.5 text-center text-xs font-semibold text-cat-violet">Mami, Titanic</div>
           <X7Pair a={MAMI} b={TITANIC} tone="violet" arms={arms.slice(4, 8)} score={k >= 3 ? "0.991" : "4.09"} k={k} />
         </div>
       </div>
@@ -1556,10 +1556,10 @@ export function SameWedge() {
 //      and (1, 4) becomes মামী (4, 1). One couple is the other in a mirror.
 
 const X7M_SAY = [
-  "এক জোড়া: মামা (2, 5) আর Mr. Bean (1, 4)।",
-  "মামার দুই ঘর অদলবদল করলাম: (5, 2)। এটা তো Titanic।",
-  "Mr. Bean-এর দুই ঘর অদলবদল: (4, 1)। এটা মামী।",
-  "মানে এক জোড়া আরেক জোড়ার আয়নার ছবি। আয়নায় কোণ বদলায় না, তাই cosine-ও একই।",
+  "One pair: Mama (2, 5) and Mr. Bean (1, 4).",
+  "Swap Mama's two slots: (5, 2). That's Titanic.",
+  "Swap Mr. Bean's two slots: (4, 1). That's Mami.",
+  "One pair is the other pair's mirror picture. A mirror doesn't change the angle, so cosine doesn't change either.",
 ];
 
 function X7Swap({ name, v, flipped, becomes }: { name: string; v: XY; flipped: boolean; becomes: string }) {
@@ -1589,12 +1589,12 @@ export function MirrorSlots() {
   return (
     <Scene scene={s} caption={say(k, X7M_SAY)}>
       <div className="mx-auto grid max-w-[16rem] gap-2">
-        <X7Swap name="মামা" v={MAMA} flipped={k >= 1} becomes="Titanic" />
-        <X7Swap name="Mr. Bean" v={BEAN} flipped={k >= 2} becomes="মামী" />
+        <X7Swap name="Mama" v={MAMA} flipped={k >= 1} becomes="Titanic" />
+        <X7Swap name="Mr. Bean" v={BEAN} flipped={k >= 2} becomes="Mami" />
         <div className="min-h-7 text-center">
           {k >= 3 && (
             <span className={`${POP} inline-block rounded-lg bg-accent/10 px-2 py-0.5 text-sm`}>
-              আয়নায় কোণ একই, দুই জোড়াই <b className="font-mono">0.991</b>
+              Same angle in the mirror — both pairs <b className="font-mono">0.991</b>
             </span>
           )}
         </div>
@@ -1604,15 +1604,15 @@ export function MirrorSlots() {
 }
 
 // ---------------------------------------------------------------------------
-// 8 · A figure for the review check's explanation, no task: সামিন (1, 3) with
+// 8 · A figure for the review check's explanation, no task: Samin (1, 3) with
 //     b and c. Box 10 and 11 is nearly a tie; cosine 0.707 and 0.965 is a
 //     clear gap.
 
 const X8_SAY = [
-  "সামিন (1, 3), হাতে দুইটা ছবি: b = (4, 2), c = (2, 3)।",
-  "box-এ 10 বনাম 11, প্রায় হাড্ডাহাড্ডি।",
-  "Cosine-এ 0.707 বনাম 0.965, ফারাকটা স্পষ্ট।",
-  "b 45° দূরে, c প্রায় 15°। দিন c।",
+  "Samin (1, 3), two films in hand: b = (4, 2), c = (2, 3).",
+  "With the box, 10 against 11 — nearly a tie.",
+  "With cosine, 0.707 against 0.965 — a clear gap.",
+  "b is 45° away, c about 15°. Give c.",
 ];
 
 function X8Bars({ title, rows, max }: { title: string; rows: [string, number, string][]; max: number }) {
@@ -1665,8 +1665,8 @@ export function BoxVsCos() {
 }
 
 // ---------------------------------------------------------------------------
-// 9a · A story scene for the last screen, no task: next morning মামা and
-//      মামী, 0.991 each, make the tea together.
+// 9a · A story scene for the last screen, no task: next morning Mama and
+//      Mami, 0.991 each, make the tea together.
 
 export function TeaForTwo({}: Story) {
   const s = useScene(3, [600, 1800, 2000]);
@@ -1675,7 +1675,7 @@ export function TeaForTwo({}: Story) {
 
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="room" label="সকালে মামা আর মামী, দুইজনেরই cosine 0.991। দুইজন একসাথে চা বানাচ্ছেন।">
+      <Stage backdrop="room" label="Morning: Mama and Mami, cosine 0.991 for both. They make the tea together.">
         <rect x={130} y={112} width={60} height={6} rx={2} fill="#92400e" />
         <path d="M136 118V150M184 118V150" stroke="#78350f" strokeWidth={3} />
         <path d="M150 112q0 -14 10 -14t10 14Z" fill="#e11d48" />
@@ -1706,9 +1706,9 @@ export function TeaForTwo({}: Story) {
 }
 
 // ---------------------------------------------------------------------------
-// 9b · A story scene for the last screen's teaser, no task: গুণ টানা. Two
-//      boatmen walk the bank pulling the boat on a long rope; মাঝি চাচা says a
-//      longer rope wastes less pull; ফাহিম, on the boat, wonders why. Whether
+// 9b · A story scene for the last screen's teaser, no task: towing. Two
+//      boatmen walk the bank pulling the boat on a long rope; Majhi chacha says a
+//      longer rope wastes less pull; Fahim, on the boat, wonders why. Whether
 //      it's true is the next journey's question, so the scene stops there.
 
 const S9_BANK = 124;
@@ -1723,7 +1723,7 @@ export function GunTana({}: Story) {
 
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="field" ground={108} label="নদীর পাড় ধরে দুইজন মাঝি লম্বা দড়িতে নৌকা টানছেন, গুণ টানা। মাঝি চাচা বলেন, দড়ি যত লম্বা, টান তত কম নষ্ট। নৌকায় ফাহিমের খটকা লাগে।">
+      <Stage backdrop="field" ground={108} label="Along the bank, two boatmen tow the boat with a long rope. Majhi chacha says the longer the rope, the less pull is wasted. On the boat, Fahim isn't so sure.">
         <rect y={132} width={320} height={48} fill="#60a5fa" />
         <path d="M0 132H320" stroke="#3b82f6" strokeWidth={1.5} />
         <path d="M20 150q10 -3 20 0M120 166q10 -3 20 0M250 158q10 -3 20 0" fill="none" stroke="#dbeafe" strokeWidth={1.2} />
@@ -1732,14 +1732,14 @@ export function GunTana({}: Story) {
           <path d="M72 148V104" stroke="#44403c" strokeWidth={2} />
           <path d={`M72 106L193 ${S9_BANK - 33}L233 ${S9_BANK - 33}`} fill="none" stroke="#a16207" strokeWidth={1.2} />
           <text x={196} y={S9_BANK + 10} textAnchor="middle" fontSize={8} fontWeight={700} fill={C_INK}>
-            মাঝি চাচা
+            Majhi chacha
           </text>
         </g>
         <Person who="fahim" x={38 + dx} y={148} scale={0.7} ms={2200} mood={k >= 3 ? "puzzled" : "plain"} />
         <Person who="karim" x={196 + dx} y={S9_BANK} scale={0.85} walking={pull} ms={2200} arm="hold" />
         <Person who="karim" x={236 + dx} y={S9_BANK} scale={0.85} walking={pull} ms={2200} arm="hold" />
-        {k === 2 && <Bubble x={196 + dx} y={S9_BANK - 58} lines={["দড়ি যত লম্বা,", "টান তত কম নষ্ট।"]} />}
-        {k >= 3 && <Bubble x={38 + dx} y={148 - 46} side="right" tone="think" lines={["টান তো টানই, দড়ি", "লম্বা হলে কী আসে যায়?"]} />}
+        {k === 2 && <Bubble x={196 + dx} y={S9_BANK - 58} lines={["The longer the rope,", "the less pull is wasted."]} />}
+        {k >= 3 && <Bubble x={38 + dx} y={148 - 46} side="right" tone="think" lines={["A pull is a pull — what does", "a longer rope change?"]} />}
       </Stage>
     </StoryFrame>
   );

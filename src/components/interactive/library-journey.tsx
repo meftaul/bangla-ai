@@ -5,27 +5,26 @@ import type { ReactNode } from "react";
 import { Bubble, Building, Card as CastCard, Person, Stage, StoryFrame, Tree } from "@/components/journey/cast";
 import { Task, useGate } from "@/components/journey/journey";
 import { Choice, FADE, Nope, POP, Scene, Ticks, pill, useScene, useSeed, useTween, type Fixtures } from "@/components/journey/kit";
-import { bn } from "./figure-kit";
 import { DotBox, dot, tupN } from "./haat-journey";
 
-// Screens for two journeys, "Math for AI 4.7 — পাঠাগারের খোঁজ, dot না cosine"
-// (TwoMachines to PickTool) and "Math for AI 4.8 — এক box, ChatGPT-র ভেতরেও"
+// Screens for two journeys, "Math for AI 4.7 — The library search, the box or cosine"
+// (TwoMachines to PickTool) and "Math for AI 4.8 — The same box, inside ChatGPT"
 // (BoxBet, OneRanking, WhoIsIt, Finale).
 //
-// The village library's new computer has two search machines, and for "মাছ"
+// The village library's new computer has two search machines, and for "fish"
 // they disagree: the box ranks a long book about boats and rice above a short
 // note about fish; cosine doesn't. The reader bets which to keep, then runs
 // both: 2, 20, 3 against 1.000, 0.999, 0.424. The loud film (5, 5) wins for
-// মামা and মামী alike under the box and for neither under cosine. Six jobs are
+// Mama and Mami alike under the box and for neither under cosine. Six jobs are
 // sorted by whether length is news. Normalising once makes the plain box the
-// cosine, and distance gives the same order. In a sentence, "ওটা" finds its
+// cosine, and distance gives the same order. In a sentence, "it" finds its
 // word by the biggest box (attention), and a change of context changes the
 // answer. Five fresh jobs, unaided, into box / cosine / distance. The finale
 // reads Module 1's formula out loud, one tap per piece.
 //
 // Every setup that tells a scene gets a story scene (2a the library, 6a the
-// loud film at home, 9a দশ লাখ বই, 11a the night call, 13a the list, 15a/15b
-// আপা keeps both and the bus home), and every <Then> gets one or two
+// loud film at home, 9a a million books, 11a the night call, 13a the list,
+// 15a/15b Apu keeps both and the bus home), and every <Then> gets one or two
 // watch-only figures (2½, 4½, 4¾, 5½, 6½, 6¾, 8½, 8¾, 9½, 9¾, 10½, 11½, 12½,
 // 12¾, 13½, 15½, 15¾ in the side quest, 16½, 16¾), plus two Check answers
 // (1½ the rope, 3½ the box). They sit at the end of the file.
@@ -38,12 +37,12 @@ const fix = (n: number, d: number) => {
   return n < 0 && Number(s) !== 0 ? `−${s}` : s;
 };
 
-// Books as word counts: (মাছ, নৌকা, ধান).
+// Books as word counts: (fish, boats, paddy).
 const QUERY = [1, 0, 0];
 const BOOKS = [
-  { id: "A", name: "মাছ নিয়ে ছোট্ট চিঠি", v: [2, 0, 0] },
-  { id: "B", name: "মাছ নিয়ে মোটা বই", v: [20, 1, 0] },
-  { id: "C", name: "নৌকা আর ধানের বই", v: [3, 5, 4] },
+  { id: "A", name: "a short note on fish", v: [2, 0, 0] },
+  { id: "B", name: "the thick book on fish", v: [20, 1, 0] },
+  { id: "C", name: "the boats-and-paddy book", v: [3, 5, 4] },
 ];
 const cosQ = (v: readonly number[]) => dot(QUERY, v) / (len(QUERY) * len(v));
 const rankBy = (score: (v: readonly number[]) => number, low = false) =>
@@ -75,15 +74,15 @@ function BookRow({ name, v, score, on, onClick, label }: { name: string; v: numb
 }
 
 // ---------------------------------------------------------------------------
-// 1 · Two machines, one query. Machine ক ranks by the box, machine খ by
+// 1 · Two machines, one query. Machine A ranks by the box, machine B by
 //     cosine, and they disagree about the fish note. The reader bets which the
 //     librarian should keep; LengthIsNews and PickTool settle it.
 
 const MACHINES = [
-  { name: "machine ক", order: rankBy((v) => dot(QUERY, v)) },
-  { name: "machine খ", order: rankBy(cosQ) },
+  { name: "machine A", order: rankBy((v) => dot(QUERY, v)) },
+  { name: "machine B", order: rankBy(cosQ) },
 ];
-const KEEP_BET = ["machine ক, মোটা বই তো সত্যিই মাছে ভরা", "machine খ", "দুইটাই সমান ভালো, উত্তর তো প্রায় একই"];
+const KEEP_BET = ["machine A — the thick book really is stuffed with fish", "machine B", "Both are fine, the answers are almost the same"];
 
 export function TwoMachines() {
   const pass = useGate();
@@ -91,13 +90,13 @@ export function TwoMachines() {
 
   const seal = (i: number) => {
     setBet(i);
-    pass("বাজি সিল হলো, মিলিয়ে দেখবো শেষে।");
+    pass("Bet sealed. We'll compare at the end.");
   };
 
   return (
     <>
       <div className="mx-auto mt-2 w-fit rounded-full border-2 border-border px-4 py-1 text-sm">
-        সার্চ: <b>মাছ</b>
+        Search: <b>fish</b>
       </div>
       <div className="mt-3 grid grid-cols-2 gap-2">
         {MACHINES.map((m) => (
@@ -106,14 +105,14 @@ export function TwoMachines() {
             <ol className="mt-1 grid gap-1 text-[0.8rem] leading-snug">
               {m.order.map((b, i) => (
                 <li key={b.id} className={`rounded-md px-1.5 py-0.5 ${b.id === "C" ? "bg-cat-coral/10" : ""}`}>
-                  {bn(i + 1)}. {b.name}
+                  {i + 1}. {b.name}
                 </li>
               ))}
             </ol>
           </div>
         ))}
       </div>
-      <div className="mt-3 text-sm font-medium text-muted">মাছের বই খুঁজতে আপা কোন machine রাখবেন?</div>
+      <div className="mt-3 text-sm font-medium text-muted">For finding books on fish, which machine should Apu keep?</div>
       <div className="mt-2 grid gap-2">
         {KEEP_BET.map((o, i) => (
           <Choice key={o} n={i} look={bet === i ? "picked" : bet !== null ? "dim" : "idle"} disabled={bet !== null} onClick={() => seal(i)}>
@@ -121,7 +120,7 @@ export function TwoMachines() {
           </Choice>
         ))}
       </div>
-      <Task done={bet !== null}>দুইটা তালিকা দেখে একটাতে বাজি ধরুন।</Task>
+      <Task done={bet !== null}>Look at the two lists and bet on one.</Task>
     </>
   );
 }
@@ -139,26 +138,26 @@ export function DotRanking() {
     if (ran.includes(id)) return;
     const next = [...ran, id];
     setRan(next);
-    if (next.length === BOOKS.length) pass("box জেতায় লম্বা বইকে, মানানসইকে না।");
+    if (next.length === BOOKS.length) pass("The box lifts the long book, not the fitting one.");
   };
 
   return (
     <>
       <div className="mx-auto mt-2 w-fit rounded-xl border border-border bg-surface px-3 py-1 text-center text-sm">
-        প্রশ্ন “মাছ” = <b className="font-mono">(1, 0, 0)</b>
-        <div className="text-xs text-muted">ঘরগুলো (মাছ, নৌকা, ধান)-এর গোনা</div>
+        Query “fish” = <b className="font-mono">(1, 0, 0)</b>
+        <div className="text-xs text-muted">slots count (fish, boats, paddy)</div>
       </div>
       <div className="mt-3 grid gap-2">
         {BOOKS.map((b) => (
-          <BookRow key={b.id} name={b.name} v={b.v} score={String(dot(QUERY, b.v))} on={ran.includes(b.id)} onClick={() => run(b.id)} label="box এ  দিন" />
+          <BookRow key={b.id} name={b.name} v={b.v} score={String(dot(QUERY, b.v))} on={ran.includes(b.id)} onClick={() => run(b.id)} label="run the box" />
         ))}
       </div>
       {all && (
         <div className={`${FADE} mt-3 text-center text-[0.95rem]`}>
-          ক্রম: <b>মোটা বই</b> 20, <b className="text-cat-coral">নৌকা-ধান</b> 3, <b>চিঠি</b> 2
+          Order: <b>thick book</b> 20, <b className="text-cat-coral">boats-and-paddy</b> 3, <b>the note</b> 2
         </div>
       )}
-      <Task done={all}>প্রশ্নটা প্রতিটা বইয়ের সাথে box এ  দিন।</Task>
+      <Task done={all}>Run the query against every book with the box.</Task>
     </>
   );
 }
@@ -176,18 +175,18 @@ export function CosRanking() {
     if (ran.includes(id)) return;
     const next = [...ran, id];
     setRan(next);
-    if (next.length === BOOKS.length) pass("length ভাগ করতেই মাছের বই উপরে।");
+    if (next.length === BOOKS.length) pass("Divide out the length and the fish books rise.");
   };
 
   return (
     <>
       <div className="mx-auto mt-2 w-fit rounded-xl border border-border bg-surface px-3 py-1 text-center text-sm">
-        প্রশ্নের length <b className="font-mono">1</b>
+        The query's length is <b className="font-mono">1</b>
       </div>
       <div className="mt-3 grid gap-2">
         {BOOKS.map((b) => (
           <div key={b.id}>
-            <BookRow name={b.name} v={b.v} score={fix(cosQ(b.v), 3)} on={ran.includes(b.id)} onClick={() => run(b.id)} label="length দিয়ে ভাগ" />
+            <BookRow name={b.name} v={b.v} score={fix(cosQ(b.v), 3)} on={ran.includes(b.id)} onClick={() => run(b.id)} label="divide by length" />
             {ran.includes(b.id) && (
               <div className={`${FADE} mt-0.5 text-right font-mono text-xs text-muted`}>
                 {dot(QUERY, b.v)} ÷ (1 × {fix(len(b.v), 2)})
@@ -196,24 +195,24 @@ export function CosRanking() {
           </div>
         ))}
       </div>
-      <Task done={all}>প্রতিটা বইয়ের box এর নম্বরকে দুইটা length দিয়ে ভাগ করুন।</Task>
+      <Task done={all}>Divide each book's box number by both lengths.</Task>
     </>
   );
 }
 
 // ---------------------------------------------------------------------------
-// 4 · The loud film. হইচই (5, 5) is loud in both genres. Under the box it wins
-//     for মামা (35) and মামী (25) alike; under cosine each gets their own genre.
-//     The reader toggles both rules.
+// 4 · The loud film. Hullabaloo (5, 5) is loud in both genres. Under the box it
+//     wins for Mama (35) and Mami (25) alike; under cosine each gets their own
+//     genre. The reader toggles both rules.
 
 const TASTES = [
-  { who: "মামা", v: [2, 5] },
-  { who: "মামী", v: [4, 1] },
+  { who: "Mama", v: [2, 5] },
+  { who: "Mami", v: [4, 1] },
 ];
 const FILMS = [
   { name: "Titanic", v: [5, 2] },
   { name: "Mr. Bean", v: [1, 4] },
-  { name: "হইচই", v: [5, 5] },
+  { name: "Hullabaloo", v: [5, 5] },
 ];
 const cosAB = (a: readonly number[], b: readonly number[]) => dot(a, b) / (len(a) * len(b));
 
@@ -229,13 +228,13 @@ export function LoudForBoth() {
     if (seen.includes(r)) return;
     const next = [...seen, r];
     setSeen(next);
-    if (next.length === 2) pass("যে সবার কাছে জেতে, সে জেতে লম্বা বলে।");
+    if (next.length === 2) pass("Whoever wins for everyone wins by being long.");
   };
 
   return (
     <>
       <div className="mx-auto mt-2 w-fit rounded-xl border-2 border-cat-coral/40 bg-cat-coral/5 px-3 py-1 text-center text-sm">
-        নতুন ছবি <b>হইচই</b> <span className="font-mono">(5, 5)</span>: কান্নাও বেশি, হাসিও বেশি
+        New film <b>Hullabaloo</b> <span className="font-mono">(5, 5)</span>: the most tears and the most laughs
       </div>
       <div className="mt-3 flex justify-center gap-2">
         {["box", "cosine"].map((r, i) => (
@@ -272,11 +271,11 @@ export function LoudForBoth() {
       </div>
       <Ticks
         items={[
-          ["box দিয়ে", seen.includes(0)],
-          ["cosine দিয়ে", seen.includes(1)],
+          ["With the box", seen.includes(0)],
+          ["With cosine", seen.includes(1)],
         ]}
       />
-      <Task done={both}>দুইটা নিয়মেই দেখুন, মামা আর মামীর জন্য কোন ছবি জেতে।</Task>
+      <Task done={both}>Look under both rules: which film wins for Mama and Mami.</Task>
     </>
   );
 }
@@ -286,16 +285,16 @@ export function LoudForBoth() {
 //     or cosine (only direction). Wrong tries bounce.
 
 const LENGTH_JOBS = [
-  { t: "দালালের card দিয়ে গরুর দাম", bin: 0 },
-  { t: "মাছের বই খোঁজা, বই লম্বা হোক বা ছোট", bin: 1 },
-  { t: "ভ্যান কাদা থেকে উঠবে কি না, রাস্তা বরাবর মোট ধাক্কা কত", bin: 0 },
-  { t: "দুইটা শব্দের মানে কতটা কাছাকাছি", bin: 1 },
-  { t: "“এরকম আরো ছবি দেখাও”, শুধু ছবির ধরন দেখে", bin: 1 },
-  { t: "যে ছবি সবাই দেখে, সেটা সবাইকে একটু বেশি দেখানো", bin: 0 },
+  { t: "A cow's price from the dalal's card", bin: 0 },
+  { t: "Finding a book on fish, whether the book is long or short", bin: 1 },
+  { t: "Will the van come out of the mud — the total push along the road", bin: 0 },
+  { t: "How close in meaning two words are", bin: 1 },
+  { t: "“Show more films like this”, looking only at the film's type", bin: 1 },
+  { t: "The film everyone watches, shown to everyone a little more", bin: 0 },
 ];
 const LENGTH_BINS = [
-  { name: "box", sub: "lengthও আসল খবর" },
-  { name: "cosine", sub: "শুধু দিক, length ঝামেলা" },
+  { name: "box", sub: "length is news too" },
+  { name: "cosine", sub: "only direction; length is noise" },
 ];
 
 export function LengthIsNews() {
@@ -310,7 +309,7 @@ export function LengthIsNews() {
     if (b !== job.bin) return setMiss((miss ?? 0) + 1);
     setMiss(null);
     setDone(done + 1);
-    if (done + 1 === LENGTH_JOBS.length) pass("আসল প্রশ্ন: length কি এখানে খবর?");
+    if (done + 1 === LENGTH_JOBS.length) pass("The real question: is length the news here?");
   };
 
   return (
@@ -321,9 +320,9 @@ export function LengthIsNews() {
             {job.t}
           </div>
         ) : (
-          <div className={`${FADE} text-center text-[0.95rem] text-accent-text`}>ছয়টা কাজই ঠিক জায়গায়!</div>
+          <div className={`${FADE} text-center text-[0.95rem] text-accent-text`}>All six jobs in the right place!</div>
         )}
-        {miss !== null && !all && <Nope key={miss}>উঁহু। জিজ্ঞেস করুন, এখানে “বেশি” বা “বড়” হওয়াটা কি উত্তরের অংশ, নাকি শুধু গোলমাল?</Nope>}
+        {miss !== null && !all && <Nope key={miss}>No. Ask: is being “more” or “bigger” part of the answer here, or just noise?</Nope>}
       </div>
       <div className="mt-3 grid grid-cols-2 gap-2">
         {LENGTH_BINS.map((b, i) => (
@@ -336,12 +335,12 @@ export function LengthIsNews() {
           >
             <span className="text-sm font-semibold">{b.name}</span>
             <span className="text-xs text-muted">{b.sub}</span>
-            <span className="font-mono text-sm">{bn(LENGTH_JOBS.slice(0, done).filter((j) => j.bin === i).length)}টা</span>
+            <span className="font-mono text-sm">{LENGTH_JOBS.slice(0, done).filter((j) => j.bin === i).length}</span>
           </button>
         ))}
       </div>
       <Task done={all}>
-        প্রতিটা কাজ কোন মাপের, ঠিক করে tap করুন ({bn(done)}/{bn(LENGTH_JOBS.length)})।
+        Tap which measure each job needs ({done}/{LENGTH_JOBS.length}).
       </Task>
     </>
   );
@@ -354,9 +353,9 @@ export function LengthIsNews() {
 
 const UNIT = BOOKS.map((b) => ({ ...b, u: b.v.map((x) => x / len(b.v)) }));
 const RULERS = [
-  { name: "শুধু box", score: (u: number[]) => dot(QUERY, u), low: false },
+  { name: "just the box", score: (u: number[]) => dot(QUERY, u), low: false },
   { name: "cosine", score: (u: number[]) => cosQ(u), low: false },
-  { name: "দূরত্ব", score: (u: number[]) => len(u.map((x, i) => x - QUERY[i])), low: true },
+  { name: "distance", score: (u: number[]) => len(u.map((x, i) => x - QUERY[i])), low: true },
 ];
 
 export function OneRanking() {
@@ -368,13 +367,13 @@ export function OneRanking() {
     if (seen.includes(i)) return;
     const next = [...seen, i];
     setSeen(next);
-    if (next.length === RULERS.length) pass("একবার normalise, তিন মাপ একই ক্রম।");
+    if (next.length === RULERS.length) pass("Normalise once, and three measures give one order.");
   };
 
   return (
     <>
       <div className="mx-auto mt-2 grid max-w-sm gap-1 rounded-xl border border-border bg-surface px-3 py-2 text-sm">
-        <div className="text-xs text-muted">তাকে তোলার সময়েই প্রতিটা card-এর length 1 করে রাখা</div>
+        <div className="text-xs text-muted">each card made 1 long as it goes on the shelf</div>
         {UNIT.map((b) => (
           <div key={b.id} className="flex justify-between gap-2">
             <span>{b.name}</span>
@@ -398,37 +397,37 @@ export function OneRanking() {
                 <ol className={`${FADE} mt-1 grid gap-0.5 text-xs`}>
                   {order.map((b, k) => (
                     <li key={b.id}>
-                      {bn(k + 1)}. {b.id === "A" ? "চিঠি" : b.id === "B" ? "মোটা বই" : "নৌকা-ধান"} <span className="font-mono">{fix(r.score(b.u), 2)}</span>
+                      {k + 1}. {b.id === "A" ? "the note" : b.id === "B" ? "thick book" : "boats-and-paddy"} <span className="font-mono">{fix(r.score(b.u), 2)}</span>
                     </li>
                   ))}
                 </ol>
               ) : (
-                <div className="mt-1 text-xs text-cat-blue">ক্রম দেখুন</div>
+                <div className="mt-1 text-xs text-cat-blue">show the order</div>
               )}
             </button>
           );
         })}
       </div>
-      <Task done={all}>তিনটা মাপেই বইগুলোর ক্রম দেখুন।</Task>
+      <Task done={all}>Look at the books' order under all three measures.</Task>
     </>
   );
 }
 
 // ---------------------------------------------------------------------------
-// 7 · Attention in a toy. In "বিড়ালটা দুধ খেলো কারণ ওটার খিদে পেয়েছিল", the
-//     word ওটা sends a question (2, 0) and each word shows a key, with toy
-//     slots (প্রাণী-ভাব, খাবার-ভাব). The biggest box wins: বিড়ালটা. Then the
-//     ending changes to "…কারণ ওটা টাটকা ছিল", the question becomes (0, 2), and
-//     দুধ wins.
+// 7 · Attention in a toy. In "The cat drank milk because it was hungry", the
+//     word "it" sends a question (2, 0) and each word shows a key, with toy
+//     slots (animal, food). The biggest box wins: the cat. Then the ending
+//     changes to "…because it was fresh", the question becomes (0, 2), and
+//     milk wins.
 
 const WORDS = [
-  { w: "বিড়ালটা", key: [3, 1] },
-  { w: "দুধ", key: [0, 3] },
-  { w: "খেলো", key: [1, 1] },
+  { w: "cat", key: [3, 1] },
+  { w: "milk", key: [0, 3] },
+  { w: "drank", key: [1, 1] },
 ];
 const ROUNDS = [
-  { tail: "কারণ ওটার খিদে পেয়েছিল", q: [2, 0], ans: 0 },
-  { tail: "কারণ ওটা টাটকা ছিল", q: [0, 2], ans: 1 },
+  { tail: "because it was hungry", q: [2, 0], ans: 0 },
+  { tail: "because it was fresh", q: [0, 2], ans: 1 },
 ];
 
 export function WhoIsIt() {
@@ -441,18 +440,18 @@ export function WhoIsIt() {
 
   const run = () => {
     setRan(true);
-    if (round === 1) pass("“ওটা” তাকায় সবচেয়ে বড় box এর দিকে।");
+    if (round === 1) pass("“It” turns towards the biggest box.");
   };
 
   return (
     <>
       <div key={round} className={`${FADE} mx-auto mt-2 max-w-sm rounded-xl border border-border bg-surface px-3 py-2 text-center text-[0.95rem]`}>
-        বিড়ালটা দুধ খেলো {r.tail.split("ওটা")[0]}
-        <span className="rounded-sm bg-cat-violet/15 font-semibold text-cat-violet">ওটা</span>
-        {r.tail.split("ওটা")[1]}
+        The cat drank milk {r.tail.split("it")[0]}
+        <span className="rounded-sm bg-cat-violet/15 font-semibold text-cat-violet">it</span>
+        {r.tail.split("it")[1]}
       </div>
       <div className="mt-2 text-center text-sm">
-        “ওটা”-র প্রশ্ন <b className="font-mono">{tupN(r.q)}</b> <span className="text-xs text-muted">(প্রাণী-ভাব, খাবার-ভাব)</span>
+        “It”'s question <b className="font-mono">{tupN(r.q)}</b> <span className="text-xs text-muted">(animal, food)</span>
       </div>
       <div className="mx-auto mt-3 grid max-w-sm gap-1.5">
         {WORDS.map((x, i) => (
@@ -474,7 +473,7 @@ export function WhoIsIt() {
       <div className="mt-3 flex justify-center">
         {!ran ? (
           <button type="button" onClick={run} className={`${pill(false)} font-sans`}>
-            প্রশ্নটা প্রতিটা চাবির সাথে box এ  দিন
+            Run the question against every key
           </button>
         ) : round === 0 ? (
           <button
@@ -485,22 +484,22 @@ export function WhoIsIt() {
             }}
             className={`${pill(false)} font-sans`}
           >
-            বাক্যের শেষটা বদলান
+            Change the end of the sentence
           </button>
         ) : null}
       </div>
       {ran && (
         <div className={`${FADE} mt-2 text-center text-[0.95rem]`}>
-          “ওটা” মানে <b>{WORDS[r.ans].w}</b>
+          “It” means <b>{WORDS[r.ans].w}</b>
         </div>
       )}
       <Ticks
         items={[
-          ["খিদে পেয়েছিল", round === 1 || ran],
-          ["টাটকা ছিল", round === 1 && ran],
+          ["was hungry", round === 1 || ran],
+          ["was fresh", round === 1 && ran],
         ]}
       />
-      <Task done={round === 1 && ran}>“ওটা”-র প্রশ্ন প্রতিটা শব্দের সাথে box এ  দিন, তারপর বাক্যটা বদলে আবার দেখুন।</Task>
+      <Task done={round === 1 && ran}>Run the box between “it”'s question and every word, then change the sentence and look again.</Task>
     </>
   );
 }
@@ -510,13 +509,13 @@ export function WhoIsIt() {
 //     tries bounce.
 
 const TOOL_JOBS = [
-  { t: "Chatbot-কে প্রশ্ন করলে, কোন অনুচ্ছেদের মানে প্রশ্নের সবচেয়ে কাছে", bin: 1 },
-  { t: "দালালের knob দিয়ে একটা ছাগলের দাম", bin: 0 },
-  { t: "ডাক্তার আপার twin খেলা, standardise করার পর কে কার সবচেয়ে কাছে দাঁড়িয়ে", bin: 2 },
-  { t: "লম্বা-ছোট হাজারটা খবরের মধ্যে “বন্যা” নিয়ে খবর খোঁজা", bin: 1 },
-  { t: "ফাহিমের final number, নম্বর আর weight মিলিয়ে", bin: 0 },
+  { t: "You ask a chatbot — which paragraph's meaning is closest to the question", bin: 1 },
+  { t: "A goat's price from the dalal's knobs", bin: 0 },
+  { t: "The doctor apu's twin game: after standardising, who stands closest to whom", bin: 2 },
+  { t: "Among thousands of news pieces long and short, finding news about “floods”", bin: 1 },
+  { t: "Fahim's final number, marks and weights combined", bin: 0 },
 ];
-const TOOLS = ["box", "cosine", "দূরত্ব"];
+const TOOLS = ["box", "cosine", "distance"];
 
 export function PickTool() {
   const pass = useGate();
@@ -530,7 +529,7 @@ export function PickTool() {
     if (b !== job.bin) return setMiss((miss ?? 0) + 1);
     setMiss(null);
     setDone(done + 1);
-    if (done + 1 === TOOL_JOBS.length) pass("lengthে box, দিকে cosine, জায়গায় দূরত্ব।");
+    if (done + 1 === TOOL_JOBS.length) pass("Length: the box. Direction: cosine. Place: distance.");
   };
 
   return (
@@ -541,9 +540,9 @@ export function PickTool() {
             {job.t}
           </div>
         ) : (
-          <div className={`${FADE} text-center text-[0.95rem] text-accent-text`}>পাঁচটা কাজই ঠিক মাপে!</div>
+          <div className={`${FADE} text-center text-[0.95rem] text-accent-text`}>All five jobs on the right measure!</div>
         )}
-        {miss !== null && !all && <Nope key={miss}>উঁহু। এখানে কি lengthটাই information, নাকি শুধু দিক, নাকি জায়গাটা?</Nope>}
+        {miss !== null && !all && <Nope key={miss}>No. Is the length itself the information here, or only the direction, or the place?</Nope>}
       </div>
       <div className="mt-3 grid grid-cols-3 gap-2">
         {TOOLS.map((b, i) => (
@@ -555,23 +554,23 @@ export function PickTool() {
             className="flex cursor-pointer flex-col items-center gap-0.5 rounded-2xl border-2 border-border px-1 py-3 text-center transition-colors hover:border-cat-blue/60 motion-reduce:transition-none disabled:cursor-default"
           >
             <span className="text-sm font-semibold">{b}</span>
-            <span className="font-mono text-sm">{bn(TOOL_JOBS.slice(0, done).filter((j) => j.bin === i).length)}টা</span>
+            <span className="font-mono text-sm">{TOOL_JOBS.slice(0, done).filter((j) => j.bin === i).length}</span>
           </button>
         ))}
       </div>
       <Task done={all}>
-        প্রতিটা কাজের জন্য ঠিক মাপটা বেছে নিন ({bn(done)}/{bn(TOOL_JOBS.length)})।
+        Pick the right measure for each job ({done}/{TOOL_JOBS.length}).
       </Task>
     </>
   );
 }
 
 // ---------------------------------------------------------------------------
-// 8½ · Math for AI 4.8 opens here. সোম says the হাট's box is inside ChatGPT
+// 8½ · Math for AI 4.8 opens here. Som says the haat's box is inside ChatGPT
 //      too. The reader seals a bet on it, unmarked; OneRanking, ChordCos and
 //      WhoIsIt collect the evidence, and the check after WhoIsIt settles it.
 
-const BOX_BET = ["সত্যি, ভেতরে এই box-ই চলে", "না, ওটা একদম অন্য অঙ্ক", "box আছে, কিন্তু আসল কাজে না"];
+const BOX_BET = ["True — this box runs inside", "No, that's a completely different sum", "There's a box, but not for the real work"];
 
 export function BoxBet() {
   const pass = useGate();
@@ -579,19 +578,19 @@ export function BoxBet() {
 
   const seal = (i: number) => {
     setBet(i);
-    pass("বাজি সিল হলো। শুরু পাঠাগারের machine দিয়ে।");
+    pass("Bet sealed. We start from the library's machines.");
   };
 
   return (
     <>
       <div className="grid grid-cols-2 gap-2 text-center">
         <div className="rounded-2xl border-2 border-cat-amber/40 bg-cat-amber/5 px-2 py-2">
-          <div className="text-sm font-semibold">হাটের box</div>
+          <div className="text-sm font-semibold">The haat's box</div>
           <div className="font-mono text-[0.8rem]">2×60 + 1×180 + 12×12</div>
-          <div className="text-xs text-muted">ঘরে ঘরে গুণ করে যোগ</div>
+          <div className="text-xs text-muted">multiply the slots, then add</div>
         </div>
         <div className="grid place-content-center rounded-2xl border-2 border-dashed border-border px-2 py-2">
-          <div className="text-sm font-semibold">ChatGPT-র ভেতরে</div>
+          <div className="text-sm font-semibold">Inside ChatGPT</div>
           <div className="font-mono text-2xl text-muted">?</div>
         </div>
       </div>
@@ -603,7 +602,7 @@ export function BoxBet() {
           </Choice>
         ))}
       </div>
-      <Task done={bet !== null}>সোমের কথায় একটা বাজি ধরুন।</Task>
+      <Task done={bet !== null}>Bet on what Som said.</Task>
     </>
   );
 }
@@ -614,11 +613,11 @@ export function BoxBet() {
 //     it was learned. No gate: this is the send-off.
 
 const PIECES = [
-  { sym: "u, v", say: "দুইটা জিনিস, সংখ্যার list বানানো", where: "Article 1, representation" },
-  { sym: "arrow", say: "আবার সেই u আর v, এবার arrow হিসেবে: একটা দিক আর একটা length", where: "Article 2, vector-এর দুই চেহারা" },
-  { sym: "‖u‖ ‖v‖", say: "তাদের length: বর্গ, যোগ, root", where: "Article 3, ফিতা" },
-  { sym: "u · v", say: "ঘরে ঘরে গুণ করে যোগ, মানে length × length × কতটা একই দিকে", where: "৪.১ থেকে ৪.৪, হাট, ভ্যান, ছাদ" },
-  { sym: "cos θ", say: "শুধু কতটা একই দিকে, −1 থেকে 1", where: "৪.৫, TV-র সামনে" },
+  { sym: "u, v", say: "two things turned into lists of numbers", where: "Article 1, representation" },
+  { sym: "arrow", say: "the same u and v again, as arrows: a direction and a length", where: "Article 2, a vector's two faces" },
+  { sym: "‖u‖ ‖v‖", say: "their lengths: square, add, root", where: "Article 3, the tape" },
+  { sym: "u · v", say: "multiply the slots, then add — that is, length × length × how much the same direction", where: "4.1 to 4.4, the haat, the van, the roof" },
+  { sym: "cos θ", say: "only how much the same direction, −1 to 1", where: "4.5, in front of the TV" },
 ];
 
 export function Finale() {
@@ -664,7 +663,7 @@ export function Finale() {
       </div>
       {all && (
         <div className={`${FADE} mx-auto mt-3 max-w-sm rounded-2xl bg-cat-violet/5 px-4 py-3 text-center text-[0.95rem]`}>
-          দুইটা জিনিস কতটা এক রকম, জানতে হলে তাদের arrow বানাও, দেখো কতটা একই দিকে তাক করা, আর lengthটা ভাগ করে ফেলে দাও, যাতে শুধু দিকটা থাকে।
+          To know how alike two things are, make their arrows, see how much they point the same way, and divide the lengths away so only the direction is left.
         </div>
       )}
     </>
@@ -763,7 +762,7 @@ function L_Shelf({ x, y, w = 90, rows = 3 }: { x: number; y: number; w?: number;
   );
 }
 
-/** A desk with the library computer, desk's left edge at x, feet at y. Two windows, ক and খ. */
+/** A desk with the library computer, desk's left edge at x, feet at y. Two windows, A and B. */
 function L_Desk({ x, y, query = false, lit }: { x: number; y: number; query?: boolean; lit?: 0 | 1 }) {
   return (
     <g className="pointer-events-none">
@@ -772,7 +771,7 @@ function L_Desk({ x, y, query = false, lit }: { x: number; y: number; query?: bo
       <rect x={x + 73} y={y - 24} width={3} height={24} fill="#78350f" />
       <rect x={x + 36} y={y - 32} width={8} height={4} fill="#475569" />
       <rect x={x + 6} y={y - 68} width={68} height={37} rx={3} fill="#1e293b" />
-      {(["ক", "খ"] as const).map((m, i) => (
+      {(["A", "B"] as const).map((m, i) => (
         <g key={m}>
           <rect x={x + 10 + i * 31} y={y - 64} width={29} height={29} rx={2} fill="white" stroke={lit === i ? "#16a34a" : "none"} strokeWidth={2} />
           <text x={x + 24.5 + i * 31} y={y - 56} textAnchor="middle" fontSize={7} fontWeight={700} fill={L_INK}>
@@ -795,7 +794,7 @@ function L_Desk({ x, y, query = false, lit }: { x: number; y: number; query?: bo
   );
 }
 
-/** A small note, centred at (x, y): lines of Bangla, sans. */
+/** A small note, centred at (x, y): lines of text, sans. */
 function L_Note({ x, y, lines, tone = L_INK, fs = 7.5 }: { x: number; y: number; lines: string[]; tone?: string; fs?: number }) {
   const w = Math.max(...lines.map((l) => l.length)) * fs * 0.55 + 12;
   const h = lines.length * (fs + 4) + 6;
@@ -812,15 +811,15 @@ function L_Note({ x, y, lines, tone = L_INK, fs = 7.5 }: { x: number; y: number;
 }
 
 // ---------------------------------------------------------------------------
-// 1½ · A figure for screen 1's Check answer, no task: 4.5's ঘাট. The boat is
+// 1½ · A figure for screen 1's Check answer, no task: 4.6's ghat. The boat is
 //      3 m from the bank, the pull is 10. A 4 m rope comes in steep and sends
 //      6.6 forward; a 15 m rope comes in flat and sends 9.8.
 
 const X1_SAY = [
-  "৪.৬-এর ঘাট। পাড় থেকে নৌকা 3 মিটার দূরে, টান 10।",
-  "4 মিটার দড়ি: কোণ বড়, নদী বরাবর যায় 6.6।",
-  "15 মিটার দড়ি: কোণ ছোট, নদী বরাবর যায় 9.8।",
-  "লম্বা দড়ি, ছোট কোণ, ছায়া প্রায় পুরো টান।",
+  "4.6's ghat. The boat is 3 metres from the bank, the pull is 10.",
+  "A 4-metre rope: a big angle, 6.6 goes along the river.",
+  "A 15-metre rope: a small angle, 9.8 goes along the river.",
+  "Long rope, small angle, the shadow is nearly the whole pull.",
 ];
 const X1_M = 16.5; // px per metre
 const X1_BANK = 92;
@@ -839,14 +838,14 @@ export function RopeRecall() {
   const tipY = boatY + 10 * P * (3 / L);
   return (
     <Scene scene={s} caption={lsay(X1_SAY, k)}>
-      <svg viewBox="0 0 290 112" role="img" aria-label="নৌকা পাড় থেকে 3 মিটার দূরে; 4 মিটার দড়িতে সামনে 6.6, 15 মিটার দড়িতে 9.8" className="mx-auto block h-auto w-full max-w-[18rem]">
+      <svg viewBox="0 0 290 112" role="img" aria-label="The boat 3 metres from the bank; 6.6 forward with a 4-metre rope, 9.8 with 15 metres" className="mx-auto block h-auto w-full max-w-[18rem]">
         <rect x={1} y={1} width={288} height={110} rx={10} fill="#e0f2fe" stroke="#cbd5e1" />
         <rect x={1} y={X1_BANK} width={288} height={19} fill="#a3b18a" />
         <text x={282} y={X1_BANK + 13} textAnchor="end" fontSize={8} fill={L_INK}>
-          পাড়
+          bank
         </text>
         <text x={258} y={15} textAnchor="end" fontSize={8} fill="#0369a1">
-          নদী বরাবর সামনে
+          forward, along the river
         </text>
         <L_Arr x1={262} y1={12} x2={282} y2={12} color="#0369a1" w={1.4} />
         <path d={`M${X1_BOAT - 16} ${boatY - 2}h32l-5 8h-22Z`} fill="#92400e" />
@@ -876,25 +875,25 @@ export function RopeRecall() {
 
 // ---------------------------------------------------------------------------
 // 2a · A story scene for screen 2's setup, no task: the library in the
-//      evening. পাঠাগারের আপা (a new face, drawn in ammu's look with her own
+//      evening. The library apu (a new face, drawn in ammu's look with her own
 //      name) beside the new computer's two machines; a book becomes its list
-//      (মাছ, নৌকা, ধান); ফাহিম walks up and searches "মাছ" in both. No result.
+//      (fish, boats, paddy); Fahim walks up and searches "fish" in both. No result.
 
 export function LibraryEvening({}: Story) {
   const s = useScene(4, [600, 2400, 2200, 1500]);
   const k = s.k;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="room" label="সন্ধ্যায় পাঠাগার; আপা নতুন কম্পিউটারে দুইটা machine দেখান, একটা বই হয় (মাছ, নৌকা, ধান)-এর list, ফাহিম দুইটাতেই মাছ লিখে সার্চ দেয়">
+      <Stage backdrop="room" label="Evening at the library; Apu shows the two machines on her new computer, a book becomes the list (fish, boats, paddy), Fahim searches fish in both">
         <L_Shelf x={12} y={LG} w={96} />
         <L_Desk x={182} y={LG} query={k >= 4} />
         <Person who="ammu" x={288} y={LG} facing={-1} arm={k === 1 ? "point" : "down"} mood={k === 1 ? "happy" : "plain"} />
-        <L_Name x={288} text="আপা" />
-        {k === 1 && <Bubble x={288} y={LG - 66} side="left" lines={["দুইটা খোঁজার machine,", "দুইটাই ভাইয়ের বানানো।"]} />}
+        <L_Name x={288} text="Apu" />
+        {k === 1 && <Bubble x={288} y={LG - 66} side="left" lines={["Two search machines,", "both built by the bhai."]} />}
         {k >= 2 && (
           <>
             <rect x={52} y={40} width={9} height={20} fill="#1d4ed8" className={POP} />
-            <L_Note x={60} y={26} lines={["(মাছ, নৌকা, ধান)", "(3, 5, 4)"]} tone={L_AMBER} fs={8} />
+            <L_Note x={60} y={26} lines={["(fish, boats, paddy)", "(3, 5, 4)"]} tone={L_AMBER} fs={8} />
           </>
         )}
         <Person who="fahim" x={k >= 3 ? 160 : -30} y={LG} walking={k === 3} ms={1400} arm={k >= 4 ? "point" : "down"} label={k >= 3} />
@@ -909,13 +908,13 @@ export function LibraryEvening({}: Story) {
 //      third book, নৌকা-ধান, second for ক and last for খ. It stops at "কেন?".
 
 const X2_SAY = [
-  "তিনটা বই, প্রতিটার একই গোনা।",
-  "দুইটা machine-এর হাতে হুবহু একই তিনটা list।",
-  "তবু দুইটা আলাদা ক্রম বের হলো।",
-  "গরমিল তৃতীয় বইটা নিয়ে: ক-তে দুই নম্বরে, খ-তে তিন নম্বরে।",
-  "মাছ খুঁজতে গিয়ে নৌকা-ধানের বই দুই নম্বরে কেন?",
+  "Three books, the same counts for each.",
+  "Both machines are handed exactly the same three lists.",
+  "Yet two different orders come out.",
+  "The quarrel is about the third book: second on A, third on B.",
+  "Searching for fish, why is the boats-and-paddy book second?",
 ];
-const X2_SHORT: Record<string, string> = { A: "চিঠি", B: "মোটা বই", C: "নৌকা-ধান" };
+const X2_SHORT: Record<string, string> = { A: "the note", B: "thick book", C: "boats-and-paddy" };
 
 export function SameCounts() {
   const s = useScene(4, [600, 1800, 1800, 2400]);
@@ -941,7 +940,7 @@ export function SameCounts() {
                     <li key={b.id} className={`flex items-center justify-between gap-1 rounded-md px-1 ${b.id === "C" && k >= 3 ? "bg-cat-coral/15 font-semibold" : ""}`}>
                       {k >= 2 ? (
                         <span>
-                          {bn(i + 1)}. {X2_SHORT[b.id]}
+                          {i + 1}. {X2_SHORT[b.id]}
                         </span>
                       ) : (
                         <span className="font-mono text-[0.72rem]">{tupN(b.v)}</span>
@@ -965,12 +964,12 @@ export function SameCounts() {
 //      wipe the rest: 4. Last, the slip: adding the book's slots gives 13.
 
 const X3_SAY = [
-  "দুইটা list: (1, 0, 0) আর (4, 2, 7)।",
-  "প্রথম ঘর: 1 × 4 = 4।",
-  "দ্বিতীয় ঘরে 0, তাই গুণফল 0।",
-  "তৃতীয় ঘরেও 0।",
-  "যোগ করে 4। যে ঘরে 1, শুধু সেটাই বাঁচে।",
-  "গুণ না করে বইয়ের ঘরগুলো যোগ করলে আসে 13।",
+  "Two lists: (1, 0, 0) and (4, 2, 7).",
+  "First slot: 1 × 4 = 4.",
+  "The second slot has 0, so the product is 0.",
+  "The third slot too.",
+  "Add up: 4. Only the slot with the 1 survives.",
+  "Adding the book's slots without multiplying gives 13.",
 ];
 
 export function OneHotBox() {
@@ -1491,7 +1490,7 @@ export function MillionBooks({}: Story) {
         <L_Shelf x={90} y={LG} w={70} />
         <L_Desk x={170} y={LG} />
         <Person who="ammu" x={256} y={LG} facing={-1} mood={k === 2 ? "puzzled" : k >= 4 ? "happy" : "plain"} />
-        <L_Name x={256} text="আপা" />
+        <L_Name x={256} text="Apu" />
         {k >= 1 && k < 4 && <L_Note x={86} y={30} lines={["প্রতিটা বইয়ে: length, root, ভাগ", k >= 2 ? "প্রতিবার, দশ লাখ বইয়ে" : "প্রতিবার সার্চে"]} tone={L_CORAL} fs={8} />}
         {k === 2 && <Bubble x={256} y={LG - 66} side="left" lines={["বই দশ লাখ হলে?"]} />}
         <Person who="karim" x={k >= 3 ? 298 : 360} y={LG} facing={-1} walking={k === 3} ms={1300} arm={k === 3 ? "wave" : "down"} mood={k >= 3 ? "smug" : "plain"} />
@@ -1953,7 +1952,7 @@ export function ListHandover({}: Story) {
         <Building x={176} y={LG} w={132} h={96} color="#e7d7c1" label="পাঠাগার" />
         <rect x={272} y={LG - 44} width={24} height={44} fill="#78350f" />
         <Person who="ammu" x={210} y={LG} facing={-1} arm={k >= 1 && k < 3 ? "hold" : "down"} mood={k === 2 ? "smug" : "plain"} />
-        <L_Name x={210} text="আপা" />
+        <L_Name x={210} text="Apu" />
         <Person who="fahim" x={140} y={LG} arm={k >= 3 ? "hold" : "down"} mood={k >= 3 ? "puzzled" : "plain"} label />
         {k >= 1 && (
           <L_Carry x={k >= 3 ? 159 : 191} y={LG - 36} ms={900}>
@@ -2047,7 +2046,7 @@ export function KeepBoth({}: Story) {
         <L_Shelf x={10} y={LG} w={80} />
         <L_Desk x={150} y={LG} lit={k >= 1 ? 1 : undefined} />
         <Person who="ammu" x={262} y={LG} facing={-1} arm={k >= 1 ? "point" : "down"} mood={k >= 1 ? "happy" : "plain"} />
-        <L_Name x={262} text="আপা" />
+        <L_Name x={262} text="Apu" />
         {k === 1 && <Bubble x={262} y={LG - 66} side="left" lines={["মাছ খুঁজতে", "machine খ।"]} />}
         {k >= 2 && <L_Note x={222} y={50} lines={["মাছ খোঁজা"]} tone="#15803d" />}
         {k >= 3 && <L_Note x={140} y={50} lines={["দাম, মোট, জনপ্রিয়তা"]} tone={L_AMBER} />}
