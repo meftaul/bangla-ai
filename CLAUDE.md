@@ -44,7 +44,7 @@ Key patterns: activities **self-register** to `session_activities` on presenter 
 
 ## Conventions
 
-- Math for AI **journeys** (`src/content/articles/math_for_ai/`, `src/components/interactive/*-journey.tsx`): follow the `pathshala-journey` skill in `.claude/skills/`. To cut a source article into journeys first, use `pathshala-journey-plan`, which writes the `<nn>_journey_specs.md` that `pathshala-journey` then builds from. To animate a journey (story scenes before the widget, watch-only figures in `<Then>`), use `pathshala-animate`. Before handing a journey over, run its prose and screen text through `pathshala-voice` (the author's own editing pass).
+- Math for AI **journeys** (`src/content/articles/math_for_ai/`, `src/components/interactive/*-journey.tsx`): follow the `pathshala-journey` skill in `.claude/skills/`. New journeys are stories set in Bengali life, written in plain English, **11 steps at most**, with an animation or interaction on every step and visual exercises (journeys 1.x–4.x are older Bangla ones). To cut a source article into journeys first — as many as it holds, one "aha" each — use `pathshala-journey-plan`, which writes the `<nn>_journey_specs.md` that `pathshala-journey` then builds from. To animate a journey (story scenes before the widget, interactive animations, watch-only figures in `<Then>`), use `pathshala-animate`. Before handing a journey over, run its prose and screen text through `pathshala-voice` (the author's own editing pass).
 
 - `// ponytail:` comments mark **deliberate** simplifications with their upgrade path — respect them; don't "fix" them without reason.
 - PostgREST query builders are lazy: a bare `.update(...)` never runs — chain `.then(() => {})` to fire it.

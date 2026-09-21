@@ -1,9 +1,10 @@
 import re,glob,sys,unicodedata
 # One-line check for pass() notes and <Check praise>: prints any longer than LIM visible characters
-# (combining marks not counted). About 34 fits the footer at 375px. Run from the repo root.
+# (combining marks not counted). About 44 Latin characters fit the footer at 375px (34 for
+# the older Bangla notes). Run from the repo root.
 def vis(s):  # visible width proxy: drop combining marks / virama / ZWJ
     return sum(1 for c in s if unicodedata.category(c) not in ('Mn','Mc','Cf'))
-LIM=int(sys.argv[1]) if len(sys.argv)>1 else 34
+LIM=int(sys.argv[1]) if len(sys.argv)>1 else 44
 out=[]
 for f in sorted(glob.glob('src/components/interactive/*-journey.tsx')):
     src=open(f).read()

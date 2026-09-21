@@ -1,72 +1,64 @@
 export const metadata = {
-  title: "Math for AI 5.1 — Span, কোন remote কোথায় পৌঁছায়",
-  description: "বাসা বদলের দিন Shiku-র remote ভেঙে গেছে, আর দোকানে চার রকম দুই-button remote। দরজা থেকে আম্মুর চারটা দাগেই কোনগুলো পৌঁছাবে? নাসিব বলছে, দুই button থাকলেই সব জায়গা।",
+  title: "Math for AI 5.1 — Span, which remote reaches where",
+  description: "Moving day, and Shiku's remote is broken. The toy shop has four kinds of two-button remote. Which of them take Shiku from the door to all four of Ammu's chalk marks? Nasib says two buttons is always enough.",
   type: "article",
 };
 
 {/* Told as a Brilliant-style journey, like 1.1 and 2.3: screen 1 seals the
     reader's bet on which of the four remotes reach every chalk mark, and the
-    bet is not settled until the Finale, after PaintReach and YourRemotes have
-    shown that a remote's reach is fixed by the direction of its buttons, not
-    their number. Each screen opens by reacting to the last; the explanation
-    sits in <Then> and shows only once the task is done, about one phone screen
-    each, with the door rule following its own <Check> and the notation in a
-    <SideQuest>. The screens live in components/interactive/remote-journey.tsx.
-    The first of five "span, independence, basis" journeys (Article 5); it
-    opens Module 2. The plan is in 05_journey_specs.md. */}
+    bet is not settled until the Finale, ten screens later, after PaintReach
+    and YourRemotes have shown that a remote's reach is fixed by the direction
+    of its buttons, not their number. 11 steps: the sealed bet (with a
+    one-line callback to 4.x's library), one button, remote A, remote B and
+    why its two slots lock together, remote C, the paint that names span, the
+    door rule (a Check with a story figure above it), Your turn, a visual
+    Try it (pick the picture of a two-button remote's span), and the end.
+    Each screen opens by reacting to the last; the explanation sits in <Then>
+    and shows only once the task is done, one phone screen each, with a
+    watch-only figure in every <Then> and the notation in a <SideQuest>.
+    The screens live in components/interactive/remote-journey.tsx. The first
+    of five "span, independence, basis" journeys (Article 5); it opens
+    Module 2. The plan is in 05_journey_specs.md. */}
 
 import { Journey, Step, Check, Then, SideQuest } from "@/components/journey/journey";
 import {
   MovingDay,
   RemoteShelf,
+  ShelfFour,
   OneButton,
   LineNamed,
   OldRemote,
+  AlmirahBuild,
   TwinButtons,
   SameDirection,
   SlotsSame,
+  TwinSlots,
   MessyRemote,
   BackStep,
   PaintReach,
   ThreeSpans,
+  DoorEveryTime,
   DoorInside,
   YourRemotes,
+  DeadButton,
+  WallPick,
   WallLine,
   RemoteBought,
   Finale,
+  RuleLost,
 } from "@/components/interactive/remote-journey";
 
-<Journey title="Span · ৫.১">
+<Journey title="Span · 5.1">
 
 <Step>
 
-নতুন গল্প শুরুর আগে পাঠাগারের সেই দুইটা machine একবার মনে করি।
+Fahim still remembers the library machine: the thick book on boats and paddy jumped to number two in a search for fish, just because its arrow was long. But the holidays are over, and Fahim's family is moving house. In the new flat, it turns out this time the question isn't about measuring likeness at all.
 
-<Check
-  question="মাছ খুঁজতে গিয়ে নৌকা-ধানের মোটা বইটা কেন দুই নম্বরে উঠে গিয়েছিল?"
-  options={[
-    "বইটায় মাছও অনেকবার ছিল।",
-    "Machine-এ একটা ভুল ছিল।",
-    "বইটা লম্বা, তাই box-এর নম্বরও বড়।",
-  ]}
-  answer={2}
-  hint="Box কি মাপছিল বইটা কী নিয়ে লেখা, নাকি কত শব্দ লেখা হয়েছে?"
-  praise="লম্বা arrow-এর জোরে উঠেছিল।"
->
+The new flat is still empty. There's only the squares of the floor tiles and a few boxes. Ammu chalked four marks on the floor, for where each thing will go.
 
-ছুটি শেষ, আর ফাহিমদের বাসা বদল। নতুন এলাকার ফ্ল্যাটে গিয়ে দেখা গেল, এবারের প্রশ্নটা আর মিল মাপা নিয়ে না।
+Shiku's remote broke in the packing. The toy shop downstairs has four kinds of remote, each with two buttons, and Fahim has money for one. From the door corner, Shiku has to reach all four marks.
 
-</Check>
-
-</Step>
-
-<Step>
-
-নতুন ফ্ল্যাটটা এখনো খালি, মেঝেতে শুধু tile-এর ঘর আর কয়েকটা box। আম্মু চক দিয়ে চারটা দাগ দিলেন, কোন জিনিস কোথায় বসবে।
-
-প্যাকিংয়ে Shiku-র remote-টা ভেঙে গেছে। নিচের খেলনার দোকানে চার রকম remote, প্রত্যেকটায় দুইটা করে button, আর ফাহিমের হাতে একটা কেনার মতো টাকা। দরজার কোণ থেকে Shiku-কে চারটা দাগেই পৌঁছাতে হবে।
-
-নাসিব শুনে বললো, “দুই button থাকলেই সব জায়গায় যাওয়া যায়।” দোকান বন্ধ হবে মাগরিবে।
+Nasib heard and said, “With two buttons you can go anywhere.” The shop closes at Maghrib.
 
 <MovingDay story />
 
@@ -74,7 +66,9 @@ import {
 
 <Then>
 
-বাজি সিল হলো। চারটা remote দেখতে প্রায় এক, প্রত্যেকটায় দুইটা করে button। তফাত শুধু button-এর গায়ে লেখা সংখ্যায়। ওই সংখ্যাগুলোই ঠিক করে দেবে Shiku কোথায় কোথায় যেতে পারবে, আর কোথায় পারবে না।
+Bet sealed. The four remotes look almost the same, two buttons each. The only difference is the numbers written on the buttons. Those numbers will decide where Shiku can go, and where he can't.
+
+<ShelfFour />
 
 </Then>
 
@@ -82,15 +76,15 @@ import {
 
 <Step>
 
-দোকানের সবচেয়ে সস্তা remote-টায় button মাত্র একটা, $v = (1, 1)$। ফাহিম ভাবলো, আগে এটাই চালিয়ে দেখি। Button-টা সামনে চাপা যায়, পিছনেও চাপা যায়, আর মাঝামাঝি থামলে আধা চাপও হয়।
+The cheapest remote in the shop has only one button, $v = (1, 1)$. Fahim thought, let's try this one first. The button can be pressed forwards, and backwards too, and if you stop half-way, that's half a press.
 
 <OneButton />
 
 <Then>
 
-Shiku যেখানেই থামুক, dot-গুলো একটা সোজা লাইনে বসলো। ৩.২-এর শরবতের কথা মনে আছে? একটা card-কে যত দিয়েই গুণ করুন, মাথাটা ওই এক লাইনেই থাকে। এখানেও তাই, আর লাইনটা দরজা ছুঁয়েই গেছে।
+Wherever Shiku stopped, the dots sat on one straight line. Remember the sherbet in 3.2? Multiply a card by any number you like, and its tip stays on that one line. Same here, and the line passes right through the door.
 
-এক button দিয়ে যত জায়গায় পৌঁছানো যায়, সব মিলিয়ে ওই লাইনটা। এটার একটা নাম আছে: **span**। লিখতে হলে $\text{span}\{v\}$।
+Everywhere one button can take you, all together, is that line. It has a name: **span**. Written down, it's $\text{span}\{v\}$.
 
 <LineNamed />
 
@@ -100,15 +94,17 @@ Shiku যেখানেই থামুক, dot-গুলো একটা স�
 
 <Step>
 
-এবার remote ক, পুরানো ধাঁচের। একটা button পূর্বে এক ঘর, $e_1 = (1, 0)$, আরেকটা উত্তরে এক ঘর, $e_2 = (0, 1)$। ৩.৩-এ Shiku-র হাতে ঠিক এই remote-টাই ছিল।
+Now remote A, the old kind. One button goes one tile east, $e_1 = (1, 0)$, and the other one tile north, $e_2 = (0, 1)$. In 3.3, Shiku had exactly this remote.
 
 <OldRemote />
 
 <Then>
 
-খেয়াল করেছেন, প্রতিটা দাগে পৌঁছাতে যে দুইটা সংখ্যা চাপতে হলো, সেগুলো দাগটার নিজের সংখ্যা? আলমারি $(3, 5)$, তাই $e_1$ তিনবার আর $e_2$ পাঁচবার।
+Noticed? To reach each mark, the two numbers you pressed were the mark's own two numbers. The almirah is at $(3, 5)$, so $e_1$ three times and $e_2$ five times.
 
-মেঝের যেকোনো ঘর বলুন, ওই ঘরের সংখ্যা দুইটাই হবে চাপের হিসাব। তার মানে ক remote-এর span পুরো মেঝে। নাসিবের নিয়ম আপাতত টিকে আছে।
+<AlmirahBuild />
+
+Name any tile on the floor, and that tile's two numbers are the press counts. So remote A's span is the whole floor. Nasib's rule survives, for now.
 
 </Then>
 
@@ -116,15 +112,15 @@ Shiku যেখানেই থামুক, dot-গুলো একটা স�
 
 <Step>
 
-খ remote-এর দুইটা button: $u = (1, 1)$ আর $v = (2, 2)$। আলাদা দুইটা সংখ্যার জোড়া, তাই নাসিবের হিসাবে এটা দিয়েও সব জায়গায় যাওয়ার কথা।
+Remote B's two buttons: $u = (1, 1)$ and $v = (2, 2)$. Two different pairs of numbers, so by Nasib's count this one should go everywhere too.
 
 <TwinButtons />
 
 <Then>
 
-টেবিলে সহজেই পৌঁছে গেল, কিন্তু আলমারিতে যতবারই চেষ্টা করুন, Shiku নামে ওই এক তেরছা লাইনেই।
+The table came easily. But try the almirah as many times as you like, and Shiku lands on that one slanted line.
 
-কারণটা button দুইটার দিকে তাকালেই বোঝা যায়। $(2, 2)$ হলো $(1, 1)$-এরই দুই গুণ, মানে v একবার চাপা আর u দুইবার চাপা একই কথা। তার মানে button দুইটা, কিন্তু দিক একটাই।
+The reason is plain once you look at the two buttons. $(2, 2)$ is just $(1, 1)$ twice, so pressing v once is the same as pressing u twice. So there are two buttons, but only one direction.
 
 <SameDirection />
 
@@ -134,33 +130,19 @@ Shiku যেখানেই থামুক, dot-গুলো একটা স�
 
 <Step>
 
-আলমারিতে কেন যাওয়াই যায় না, সেটা সংখ্যা দিয়ে মিলিয়ে দেখবো। তার আগে ৩.১-এর গুপ্তধনের যোগটা একবার মনে করি।
+Let's check with numbers why the almirah can't be reached at all. It's the treasure sum from 3.1 again: first slot with first slot, second with second, each stays in its own slot.
 
-<Check
-  question="(1, 4) আর (2, 3) যোগ করলে কী পাওয়া যায়?"
-  options={[
-    "(3, 7)",
-    "(2, 12)",
-    "(3, 12)",
-  ]}
-  answer={0}
-  hint="প্রথম ঘরের সাথে প্রথম ঘর, দ্বিতীয়র সাথে দ্বিতীয়।"
-  praise="ঘরে ঘরে যোগ, যে যার ঘরে থাকে।"
-/>
-
-</Step>
-
-<Step>
-
-এবার α বার u আর β বার v চাপলে Shiku কোথায় দাঁড়ায়, ধাপে ধাপে লিখি। α আর β যা খুশি হতে পারে, minus-ও হতে পারে।
+Now let's write, step by step, where Shiku stands after α presses of u and β presses of v. α and β can be anything, even minus.
 
 <SlotsSame />
 
 <Then>
 
-দুই ঘরের হিসাব হুবহু এক দাঁড়ালো, $\alpha + 2\beta$। α আর β যা-ই বসান, প্রথম ঘরে যা থাকবে, দ্বিতীয় ঘরেও ঠিক তা।
+The two slots came out exactly the same, $\alpha + 2\beta$. Whatever α and β you put in, whatever is in the first slot is exactly what's in the second.
 
-আলমারি চায় প্রথম ঘরে 3 আর দ্বিতীয় ঘরে 5, দুইটা আলাদা সংখ্যা। অথচ এই remote দুই ঘরে আলাদা সংখ্যা বসাতেই পারে না। তার মানে আলমারি কঠিন না, আলমারি অসম্ভব। **নাসিবের নিয়ম প্রথমবার হারলো।**
+The almirah wants 3 in the first slot and 5 in the second, two different numbers. But this remote can't put different numbers in the two slots at all. So the almirah isn't hard. The almirah is impossible. **Nasib's rule loses for the first time.**
+
+<TwinSlots />
 
 </Then>
 
@@ -168,15 +150,15 @@ Shiku যেখানেই থামুক, dot-গুলো একটা স�
 
 <Step>
 
-তাকের তিন নম্বর remote, গ। Button দুইটা দেখতে সবচেয়ে অগোছালো: $u = (1, 2)$ আর $v = (2, 5)$। খ-এর মতো এটাও কি আটকে যাবে?
+The third remote on the shelf, C. Its two buttons look the messiest: $u = (1, 2)$ and $v = (2, 5)$. Will it get stuck like B?
 
 <MessyRemote />
 
 <Then>
 
-প্রথমে u পাঁচবার, Shiku উঠে গেল $(5, 10)$-এ, আলমারি অনেক নিচে পড়ে থাকলো। তারপর v একবার পিছনে, আর $(5, 10) - (2, 5) = (3, 5)$। ঠিক আলমারির ঘরে।
+First u five times, and Shiku went up to $(5, 10)$, with the almirah left far below. Then v once, backwards, and $(5, 10) - (2, 5) = (3, 5)$. Right on the almirah's tile.
 
-দেখতে অগোছালো হলেও u আর v দুই দিকে ঠেলে, একটা আরেকটার গুণ না। এটুকু হলেই চলে। একটু ছাড়িয়ে যেয়ে তারপর পিছিয়ে এসে যেকোনো ঘরেই নামা যায়।
+Messy to look at, but u and v push two different ways. Neither one is a multiple of the other. That's all it takes. Go a little past, then step back, and you can land on any tile.
 
 <BackStep />
 
@@ -186,33 +168,15 @@ Shiku যেখানেই থামুক, dot-গুলো একটা স�
 
 <Step>
 
-চারটার তিনটা দেখা হলো। শেষটায় যাওয়ার আগে ৩.৩-এর তেরছা remote-টা একবার মনে করি।
-
-<Check
-  question="৩.৩-এ a আর b button দিয়ে মাঠের একটা নির্দিষ্ট ঘরে যাওয়ার কয়টা উপায় ছিল?"
-  options={[
-    "অনেক উপায়ে যাওয়া যেত।",
-    "ঠিক একটা।",
-    "দুইটা।",
-  ]}
-  answer={1}
-  hint="ঘুরেফিরে একই ঘরে নামলে a আর b-এর জোড়াটা কি বদলাতো?"
-  praise="যে ঘরে যেই জোড়া, ঘুরেফিরে সেটাই।"
-/>
-
-</Step>
-
-<Step>
-
-মাগরিব হয়ে আসছে। দোকানি বললেন, প্রত্যেক remote-এ একটা toggle আছে। চাপলে মেঝেতে রং হয়ে ওঠে: ওই remote দিয়ে যত জায়গায় পৌঁছানো যায়, সব।
+Three of the four done, and Maghrib is coming. The shopkeeper said every remote has a toggle. Press it, and the floor lights up in colour: everywhere that remote can reach.
 
 <PaintReach />
 
 <Then>
 
-একটা remote-এর button-গুলো যত রকমভাবে চাপা যায়, সেই সব জায়গা একসাথে নিলে যা দাঁড়ায়, সেটাই ওই button-গুলোর **span**। দুইটা button-এর বেলায় লিখি $\text{span}\{u, v\}$।
+Take every way a remote's buttons can be pressed, and put all those spots together. That's the **span** of those buttons. For two buttons, we write $\text{span}\{u, v\}$.
 
-রং দেখে বোঝা গেল, span কখনো একটা লাইন, কখনো পুরো মেঝে। কোনটা হবে সেটা button কয়টা তা দিয়ে ঠিক হয় না, ঠিক হয় button-গুলো কোন দিকে ঠেলে তা দিয়ে।
+The paint showed it: a span is sometimes a line, sometimes the whole floor. Which one isn't decided by how many buttons there are. It's decided by which ways the buttons push.
 
 <ThreeSpans />
 
@@ -222,25 +186,27 @@ Shiku যেখানেই থামুক, dot-গুলো একটা স�
 
 <Step>
 
-রং করা চারটা ছবিতে একটা জিনিস কিন্তু এক রকমই ছিল। দরজার কোণটা প্রতিবারই রঙের ভেতরে পড়েছে।
+But one thing was the same in all four painted pictures. The door corner fell inside the paint every time.
+
+<DoorEveryTime story />
 
 <Check
-  question="যেকোনো একটা remote নিন। দরজাটা কি সবসময় তার span-এর ভেতরে থাকবে?"
+  question="Take any remote at all. Will the door always be inside its span?"
   options={[
-    "না, কোন button আছে তার ওপর নির্ভর করে।",
-    "শুধু দুইটা button হলে।",
-    "হ্যাঁ, সবসময়।",
+    "No, it depends on which buttons it has.",
+    "Only if it has two buttons.",
+    "Yes, always.",
   ]}
   answer={2}
-  hint="একটা button-ও না চাপলে Shiku কোথায় দাঁড়িয়ে থাকে?"
-  praise="কিছু না চেপেও একটা combination।"
+  hint="If you don't press a single button, where is Shiku standing?"
+  praise="Pressing nothing is a combination too."
 />
 
 <Then>
 
-সব button শূন্যবার চাপা, এটাও তো একটা combination: $0 \cdot u + 0 \cdot v = (0, 0)$। মানে দরজা। তাই button যেমনই হোক, দরজা কখনো span-এর বাইরে পড়ে না।
+Every button pressed zero times: that's a combination too, $0 \cdot u + 0 \cdot v = (0, 0)$. That's the door. So whatever the buttons are, the door never falls outside the span.
 
-তার মানে span কখনো খালি থাকে না। যত বাজে remote-ই হোক, অন্তত একটা জায়গায় সে পৌঁছায়, নিজের দরজায়।
+So a span is never empty. However bad the remote, it reaches at least one place: its own door.
 
 <DoorInside />
 
@@ -250,15 +216,17 @@ Shiku যেখানেই থামুক, dot-গুলো একটা স�
 
 <Step>
 
-দোকানি তাকের পিছন থেকে আরও চারটা remote নামালেন। এবার আপনার পালা: রং করার আগেই বলুন, কোনটার span একটা লাইন আর কোনটার পুরো মেঝে।
+The shopkeeper took four more remotes down from the back of the shelf. Now it's your turn: before any paint, say which one's span is a line and which one's is the whole floor.
 
 <YourRemotes />
 
 <Then>
 
-তিন নম্বরটায় একটা button ছিল $(0, 0)$। ওটা চাপলে Shiku এক চুলও নড়ে না, তাই ওটা থাকা আর না থাকা সমান। হাতে থাকে একটা button, মানে একটা লাইন।
+Remote 3 had a $(0, 0)$ button. Press it and Shiku doesn't move a hair, so having it and not having it are the same. That leaves one button in hand, which means one line.
 
-দেখলেন তো, button গুনে কিছুই বলা যায় না। দুইটা button-ও একটা লাইন দিতে পারে, আবার দুইটা button-ই পুরো মেঝে দিতে পারে।
+<DeadButton />
+
+See? Counting buttons tells you nothing. Two buttons can give a line, and two buttons can also give the whole floor.
 
 </Then>
 
@@ -266,27 +234,17 @@ Shiku যেখানেই থামুক, dot-গুলো একটা স�
 
 <Step>
 
-## একটু ঝালিয়ে নিন
+## Try it
 
-<Check
-  question="একটা remote-এ শুধু (2, 0) button। আরেকটায় (2, 0) আর (−5, 0), দুইটাই। দুইটার span কি এক?"
-  options={[
-    "না, দ্বিতীয়টার span পুরো মেঝে।",
-    "হ্যাঁ, দুইটাই দরজা বরাবর ওই একটা লাইন।",
-    "না, দ্বিতীয়টার span দুইটা লাইন।",
-  ]}
-  answer={1}
-  hint="(−5, 0) button-টা Shiku-কে কোন দিকে ঠেলে? নতুন কোনো দিকে?"
-  praise="Button বাড়লো, reach বাড়লো না।"
->
+One remote has only the $(2, 0)$ button. Another has both, $(2, 0)$ and $(-5, 0)$. Is their span the same?
 
-দুইটার span এক। $(-5, 0)$ হলো $(2, 0)$-এর $-2.5$ গুণ, মানে সেই একই দেয়াল বরাবর, শুধু উল্টো দিকে। আর উল্টো দিকটা তো প্রথম button-টা minus-এ চেপেই পাওয়া যেত।
-
-যারা “পুরো মেঝে” বেছেছিলেন, তারা button গুনেছেন। Button সত্যিই দুইটা, কিন্তু দিক একটাই। তাই span সবসময় পুরো মেঝে না, দুইটা button থাকলেও না।
-
-</Check>
+<WallPick />
 
 <Then>
+
+The two spans are the same. $(-5, 0)$ is $-2.5$ times $(2, 0)$, so it runs along that same wall, only the other way. And the other way, you could already get by pressing the first button in minus.
+
+Those who picked “the whole floor” counted the buttons. There really are two buttons, but only one direction. So a span isn't always the whole floor, not even with two buttons.
 
 <WallLine />
 
@@ -296,39 +254,41 @@ Shiku যেখানেই থামুক, dot-গুলো একটা স�
 
 <Step>
 
-## শেষ! ফাহিম কিনলো remote গ
+## The end! Fahim buys remote C
 
-মাগরিবের ঠিক আগে ফাহিম দোকান থেকে বেরোলো, হাতে সেই অগোছালো দেখতে remote গ। ক দিয়েও চলতো, কিন্তু গ ছিল সস্তা।
+Just before Maghrib, Fahim came out of the shop holding that messy-looking remote C. A would have worked too, but C was cheaper.
 
 <RemoteBought story />
 
-চারটা remote-এর ফল একটা একটা করে খুলে নিন, আর আপনার বাজিটা মিলিয়ে দেখুন।
+Open the four remotes' results one by one, and check them against your bet.
 
 <Finale />
 
 <Then>
 
-নাসিবের নিয়ম দুইবার হারলো। খ আর ঘ, দুইটাতেই button দুইটা করে, তবু দুইটাই আটকে গেল একটা লাইনে। যে নিয়মটা টিকলো: **button গুনে লাভ নাই, দেখতে হবে কতদূর পৌঁছায়।** আর “কতদূর পৌঁছায়”, সেটারই নাম span।
+Nasib's rule lost twice. B and D had two buttons each, yet both got stuck on one line. The rule that survived: **counting buttons gets you nothing; look at how far they reach.** And “how far they reach” is called span.
 
-কাল সকালে দালাল ভাই আসবেন ভাড়ার খাতা নিয়ে। তার app বললো একটা বাথরুমের দাম 3000 টাকা, তারপর খাতায় আর একটা ফ্ল্যাট যোগ করতেই বললো −2000। বাথরুম বাড়লে ভাড়া কমে কী করে?
+<RuleLost />
 
-<SideQuest title="বইপত্রে span কীভাবে লেখা থাকে">
+Tomorrow morning, Dalal Bhai the broker brings the rent ledger. His app priced one bathroom at 3000 taka. Then one more flat went into the ledger, and it said −2000. How can more bathrooms make the rent go down?
+
+<SideQuest title="How books write span">
 
 <Table
-  head={["দেখবেন", "মুখে বলবেন"]}
+  head={["You'll see", "Say it as"]}
   rows={[
-    ["span{v}", "v-এর span, মানে একটা লাইন (v শূন্য না হলে)"],
-    ["span{u, v}", "u আর v মিলে যত জায়গায় পৌঁছানো যায়"],
-    ["αu + βv", "u আর v-এর একটা combination, ৩.৩-এর recipe"],
-    ["span{v₁, …, vₙ}", "n-টা vector মিলে যত জায়গায় পৌঁছানো যায়"],
-    ["0 ∈ span{…}", "শূন্য vector সবসময় span-এর ভেতরে, মানে দরজা"],
+    ["span{v}", "the span of v, which is a line (if v isn't zero)"],
+    ["span{u, v}", "everywhere u and v can reach together"],
+    ["αu + βv", "a combination of u and v, 3.3's recipe"],
+    ["span{v₁, …, vₙ}", "everywhere n vectors can reach together"],
+    ["0 ∈ span{…}", "the zero vector is always in the span: the door"],
   ]}
 />
 
 </SideQuest>
 
-<LessonLink href="/dashboard/articles/math_for_ai/05b_extra_column" eyebrow="পরের পাঠ" title="The extra column, what a bathroom is worth">
-  কাল রেখে যাওয়া প্রশ্নটাই — বাথরুম বাড়লে ভাড়া কমে কী করে? উত্তরটা খাতার কলামগুলোর মধ্যেই লুকানো।
+<LessonLink href="/dashboard/articles/math_for_ai/05b_extra_column" eyebrow="Next lesson" title="The extra column, what a bathroom is worth">
+  The question we left for tomorrow: how can more bathrooms make the rent go down? The answer is hidden in the ledger's columns.
 </LessonLink>
 
 </Then>

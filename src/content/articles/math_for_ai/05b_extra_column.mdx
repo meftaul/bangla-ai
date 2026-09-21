@@ -5,62 +5,53 @@ export const metadata = {
   type: "article",
 };
 
-{/* Told as a Brilliant-style journey in English (the pathshala-journey-en twin
-    of 5.1): screen 1 seals the reader's bet on which of the app's two bathroom
-    prices means anything, and the bet is not settled until the Finale, after
-    AreaTwice, TotalColumn, TwoKnobSets, ZeroWalk, NoVisibleCopy, ThirdButton
-    and SpotTheExtra have shown what an extra column is, how it lets two
-    knob-sets fit the same rents, and how the zero test catches it. Each screen
-    opens by reacting to the last; explanations sit in <Then>, about one phone
-    screen each, with multicollinearity named once and the notation in a
-    <SideQuest>. The screens live in components/interactive/rent-journey.tsx;
-    the remote machine is 5.1's. Second of five "span, independence, basis"
-    journeys (Article 5). The plan is in 05_journey_specs.md. */}
+{/* Told as a Brilliant-style journey in English, like 1.1 and 2.3: screen 1
+    seals the reader's bet on which of the app's two bathroom prices means
+    anything, and the bet is not settled until the Finale, ten screens later,
+    after AreaTwice, TotalColumn, TwoKnobSets, YourShuffle, ZeroWalk,
+    NoVisibleCopy, ThirdButton, SpotTheExtra and the StretchReach exercise have
+    shown what an extra column is, how it lets two knob-sets fit the same rents,
+    and how the zero test catches it. 11 steps. Each screen opens by reacting to
+    the last; explanations sit in <Then>, one phone screen each with a
+    watch-only figure, and asides (multicollinearity, Article 8's single number,
+    nearly-copies, the notation) sit in <SideQuest> cards. The screens live in
+    components/interactive/rent-journey.tsx; the remote machine is 5.1's.
+    Second of five "span, independence, basis" journeys (Article 5). The plan
+    is in 05_journey_specs.md. */}
 
-import { Journey, Step, Check, Then, SideQuest } from "@/components/journey/journey";
+import { Journey, Step, Then, SideQuest } from "@/components/journey/journey";
 import {
   DalalArrives,
   TwoAnswers,
+  BothFit,
   AreaTwice,
+  ThreeFacts,
   TotalColumn,
+  BuiltRowByRow,
   TwoKnobSets,
   KnobShuffle,
   YourShuffle,
+  SlowSum,
   ZeroWalk,
   WalkHome,
   NoVisibleCopy,
+  SlotKill,
   ThirdButton,
+  ThirdHome,
   SpotTheExtra,
+  TrapPage,
+  StretchReach,
   TwoArrowsTest,
   AbbuSigns,
   RerunApp,
+  NoRoomToShuffle,
 } from "@/components/interactive/rent-journey";
 
 <Journey title="The extra column · 5.2">
 
 <Step>
 
-Moving week, day two. Yesterday's four remotes are still on the table, and before anyone says a word about rent — a quick one from yesterday.
-
-<Check
-  question="The twin remote: buttons u = (1, 1) and v = (2, 2). Press either, as much as you like. Where on the floor can Shiku end up?"
-  options={[
-    "Anywhere on the floor",
-    "On one slanted line through the door",
-    "Only at the four chalk marks",
-  ]}
-  answer={1}
-  hint="Draw both buttons from the door. u goes 1 right, 1 up. Now v — which way does it point?"
-  praise="Two buttons, one direction: a single line."
->
-
-Both buttons push along the same slanted line, so one line is the whole floor it can cover. Keep that in mind about directions — because today the dalal is coming back, and this time he's carrying the rent khata.
-
-</Check>
-
-</Step>
-
-<Step>
+Moving week, day two. Yesterday's four remotes are still on the table, the twin remote among them. Both buttons push along the same slanted line, so one line is the whole floor it can cover. Keep that in mind about directions — because today the dalal is coming back, and this time he's carrying the rent khata.
 
 Fahim's family is flat-hunting, and it's down to two. Same size, same floor, same side of town — but flat B has one extra bathroom, and it costs 4000 taka more a month. So exactly one question matters now: what is one bathroom worth?
 
@@ -76,33 +67,15 @@ Abbu signs tonight. Nobody has time to watch the app change its mind a third tim
 
 Let's be fair to the app before we judge it: it wasn't lying either time. Each price really did fit every flat in the ledger at that hour, to the taka. Two perfect answers to one question. The trouble is hiding somewhere in the khata itself, and there's one way out: read the thing, column by column. By the last screen you'll know which sealed answer wins — and why.
 
+<BothFit />
+
 </Then>
 
 </Step>
 
 <Step>
 
-Before the khata opens — a small memory test, from an old trap with scales. Back in 3.7 a weight got written two ways, and it mattered which one you trusted.
-
-<Check
-  question="In 3.7, the same bag weighed 1200 in grams and 1.2 in kilograms. Which line knows more about the bag?"
-  options={[
-    "The grams one — it's the bigger number",
-    "The kilograms one — it's the tidier number",
-    "Neither — same fact, different coat",
-  ]}
-  answer={2}
-  hint="Multiply by 1000, divide by 1000. What changed — the bag, or the writing?"
-  praise="Grams or kilograms: same fact, new coat."
->
-
-Keep that in your pocket. The khata's very first page has two columns of exactly that kind — and they're the gentlest of its tricks.
-
-</Check>
-
-</Step>
-
-<Step>
+Back in 3.7 the same bag weighed 1200 grams and 1.2 kilograms — same fact, new coat. Keep that in your pocket.
 
 The khata opens innocently. Page one: each flat's area, written twice — once in square feet, once in square metres. Two columns, side by side, both looking busy and important.
 
@@ -111,6 +84,8 @@ The khata opens innocently. Page one: each flat's area, written twice — once i
 <Then>
 
 Six numbers on that page, and only three facts. Whatever the sq m column could tell Abbu, the sq ft column had already told him — divide by 10.76 and you can rebuild the new column exactly, row after row. A column like that is just an old column in a new coat. But page two's trick is subtler.
+
+<ThreeFacts />
 
 </Then>
 
@@ -126,33 +101,15 @@ Page two is the flats themselves: beds, baths, total rooms, rent. Samin squints 
 
 Total = bed + bath, on every single row. Not a copy — but built out of the other two, to the last room. That's a subtler coat than page one's: this column does change, it does look busy. Still, ask it one question and it has no answer of its own — whatever it says, bed and bath had already decided. From here on, a column like this gets its name: an **extra column**.
 
+<BuiltRowByRow />
+
 </Then>
 
 </Step>
 
 <Step>
 
-One more memory test before the app itself — this one from the kitchen, 3.3's tiffin recipe. It had exactly two moves, and today's app runs on both.
-
-<Check
-  question="In 3.3, what were the recipe's two moves for vectors?"
-  options={[
-    "Stretch them, and turn them",
-    "Stretch by a number, and add vectors",
-    "Add them, and subtract them",
-  ]}
-  answer={1}
-  hint="One move changes how far a push goes. The other joins two pushes end to end."
-  praise="Stretch, then add: still the only recipe."
->
-
-Now then: the rent app. Every knob it owns is one of those two moves in plain sight.
-
-</Check>
-
-</Step>
-
-<Step>
+Back in 3.3, the tiffin recipe had exactly two moves: stretch by a number, and add. Now then: the rent app. Every knob it owns is one of those two moves in plain sight.
 
 So how does the app price a bathroom? It turns the columns into knobs. Morning knobs: 5 per bed, 3 per bath, 0 for total — thousands of taka. By evening it had quietly moved to a different set. Run both on every flat in the ledger, and keep your eyes on the rent.
 
@@ -162,7 +119,13 @@ So how does the app price a bathroom? It turns the columns into knobs. Morning k
 
 <KnobShuffle />
 
-The app can shuffle credit between the knobs — take $c$ off the bed and bath knobs, pile the same $c$ onto the total knob — and not one flat's rent moves. The total column spends only borrowed money: whatever credit it gets, it hands straight back. Two knob-sets, both fitting every flat perfectly, and no data can ever choose between them. Statisticians call this **multicollinearity**, and they're blunt about it: a serious app would refuse to quote a price, or quietly pick one set and hope. The dalal's app picked. Morning: 3000. Evening: −2000.
+The app can shuffle credit between the knobs — take $c$ off the bed and bath knobs, pile the same $c$ onto the total knob — and not one flat's rent moves. The total column spends only borrowed money: whatever credit it gets, it hands straight back. Two knob-sets, both fitting every flat perfectly, and no data can ever choose between them.
+
+<SideQuest title="Multicollinearity: what statisticians call it">
+
+Statisticians call this **multicollinearity**, and they're blunt about it: a serious app would refuse to quote a price, or quietly pick one set and hope. The dalal's app picked. Morning: 3000. Evening: −2000.
+
+</SideQuest>
 
 </Then>
 
@@ -176,7 +139,9 @@ That was the app shuffling by itself. Now the knobs are in your hand: flat 1, mo
 
 <Then>
 
-The slow sum: −1 per bed on a two-bed flat takes 2 off; −1 per bath, 1 more. Three taka gone. The total knob pays per room, and flat 1 has 3 rooms — 1 per room hands all three straight back. Your set (4, 2, 1) prices flat 1 at 13, to the taka.
+The slow sum:
+
+<SlowSum />
 
 Notice where you landed: that's the morning set with $c = 1$, one more member of the family the figure was sliding through. It fits every flat, same reason. The app had two sets; you've just built a third by hand, and nothing in the khata can tell you apart.
 
@@ -186,15 +151,15 @@ Notice where you landed: that's the morning set with $c = 1$, one more member of
 
 <Step>
 
-Enough of khatas for a moment — back to yesterday's remotes, and a test that splits buttons into the needed and the extra. Each button pushes Shiku some direction. The question: can he press real amounts and still end exactly at the door? Try the twin remote first, then the old faithful one.
+Enough of khatas for a moment — back to yesterday's remotes, and a test that splits buttons into the needed and the extra. Each button pushes Shiku some direction. The question: can he press real amounts and still end exactly at the door? Try the twin remote first, then the old one.
 
 <ZeroWalk />
 
 <Then>
 
-<WalkHome />
+On the twin remote, yes: $2u - v = (0, 0)$ — twice forward along u, once back along v, home without a wasted step. A set of buttons that can do that is called **linearly dependent**; there's an extra button in it. The old remote's e₁ and e₂ can't manage it, whatever you press. Those are **linearly independent**. And notice: it's a property of the pair, not of any single button.
 
-On the twin remote, yes: $2u - v = (0, 0)$ — twice forward along u, once back along v, home without a wasted step. A set of buttons that can do that is called **linearly dependent**; there's an extra button in it. The old remote's e₁ and e₂ can't manage it, whatever you press. Those are **linearly independent**. And notice: it's a property of the pair, not of any single button. u on its own never looked extra. It took v arriving on the same line to make it one.
+<WalkHome />
 
 </Then>
 
@@ -208,7 +173,15 @@ The dalal's own remote, then — the untidy one from the shop: u = (1, 2), v = (
 
 <Then>
 
-Slot by slot, the machine proved what your fingers couldn't: $\alpha + 2\beta = 0$ forces $\alpha = -2\beta$, and then slot 2 kills it — $\beta = 0$, so $\alpha = 0$ too. Only the do-nothing presses land home. Independent. And notice what did the work: two lines of algebra, no hunting. When the ledgers grow — and in AI they grow enormous — this sum is the whole test, run by a machine. There's even a single number that settles it in one go. Article 8 will hand it to you.
+Slot by slot, the machine proved what your fingers couldn't: $\alpha + 2\beta = 0$ forces $\alpha = -2\beta$, and then slot 2 kills it — $\beta = 0$, so $\alpha = 0$ too. Only the do-nothing presses land home. Independent. And notice what did the work: two lines of algebra, no hunting. When the ledgers grow — and in AI they grow enormous — this sum is the whole test, run by a machine.
+
+<SlotKill />
+
+<SideQuest title="One number that settles it">
+
+There's even a single number that settles it in one go. Article 8 will hand it to you.
+
+</SideQuest>
 
 </Then>
 
@@ -224,6 +197,8 @@ Nasib, passing through with a stack of moving boxes, has an objection: “Fine f
 
 However you drop the third button, the machine answers before it lands: press (−x, −y, 1) — e₁ and e₂ give back w's whole push, and Shiku walks home. On a floor with two slots, at most two buttons can ever be needed; from three on, one is always extra. And a floor with n slots holds at most n. Never more, however grand the remote looks.
 
+<ThirdHome />
+
 </Then>
 
 </Step>
@@ -238,37 +213,27 @@ Samin has the dalal's bag open now — five loose pages, each a tiny table from 
 
 The trap was the last page: bed and floor have no rule between them — two honest facts, neither one extra. Every other page had a column quietly reading the others' news. And that's the whole skill, worth keeping: before you trust a table, check whether one of its columns is only reading the others' news.
 
+<TrapPage />
+
 </Then>
 
 </Step>
 
 <Step>
 
-## A quick recap
+## Try it
 
 One last question from the dalal's own remote, before Abbu's pen comes out. The pair in question: u = (1, 3) and v = (2, 7). Extra button hiding in there, or two honest buttons?
 
-<Check
-  question="u = (1, 3), v = (2, 7). Is one of them extra?"
-  options={[
-    "Yes — v is just u stretched",
-    "Yes — both sit on one line",
-    "No — the two are independent",
-  ]}
-  answer={2}
-  hint="Slot 1 says α = −2β. Feed that into slot 2 and see what survives."
-  praise="Only do-nothing presses: independent."
->
-
-Slot by slot: $\alpha + 2\beta = 0$ forces $\alpha = -2\beta$; then slot 2 says $3 \cdot (-2\beta) + 7\beta = \beta$, and β dies — so α dies with it. Only (0, 0). And you couldn't have eyeballed it: 2u lands at (2, 6), one slot short of v. “Looks like a copy” isn't a test. The sum is.
-
-</Check>
+<StretchReach />
 
 <Then>
 
+Slot by slot: $\alpha + 2\beta = 0$ forces $\alpha = -2\beta$; then slot 2 says $3 \cdot (-2\beta) + 7\beta = \beta$, and β dies — so α dies with it. Only (0, 0). “Looks like a copy” isn't a test. The sum is.
+
 <TwoArrowsTest />
 
-The arrows agree with the sum — they always do. A set is dependent exactly when one arrow lives on the line of the others. Here no stretch of u reaches v, and no stretch of v reaches u. Two directions, genuinely two.
+The arrows agree with the sum — they always do. A set is dependent exactly when one arrow lives on the line of the others. Two directions, genuinely two.
 
 </Then>
 
@@ -286,11 +251,15 @@ Evening. The pen is out, the dalal is smiling, Abbu is smiling wider — because
 
 <Then>
 
-With the total column gone, the knobs have nowhere to shuffle credit. The app finds (5, 3) every time: a bathroom is worth exactly 3000. The bet: neither number meant anything. Both knob-sets fit; the app was only picking. That answer wins.
+<NoRoomToShuffle />
 
-The rule to keep: **a column the others can rebuild adds nothing — it only swings the knobs.** A nearly-copy (bed + bath plus a nudge) doesn't swing the price; it wobbles it.
+The bet: neither number meant anything. Both knob-sets fit; the app was only picking. That answer wins.
 
-<SideQuest title="How the books write it">
+The rule to keep: **a column the others can rebuild adds nothing — it only swings the knobs.**
+
+<SideQuest title="Nearly-copies, and how the books write it">
+
+A nearly-copy (bed + bath plus a nudge) doesn't swing the price; it wobbles it.
 
 <Table
   head={["What we said", "How the books say it"]}

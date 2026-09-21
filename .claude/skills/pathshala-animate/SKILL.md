@@ -1,23 +1,27 @@
 ---
 name: pathshala-animate
-description: Add animated content to Pathshala journey lessons, in two kinds. Story scenes are small cartoons of the setup's narrative, with the cast walking in, talking and holding up cards, placed before the widget. Explanation figures are watch-only animations inside the <Then> that act out what each paragraph says. Use whenever asked to animate, "beautify", add scenes, pictures or motion to a journey (src/content/articles/math_for_ai/*.mdx, src/components/interactive/*-journey.tsx), whenever the author leaves an inline note asking for one ("(ekhane animation add koro …)"), and when building a new journey (every new journey should get both kinds). Pairs with the pathshala-journey skill, which covers the voice and the screen kit.
+description: Add animated content to Pathshala journey lessons. Story scenes are small cartoons of the setup's story (set in Bengali life), with the cast walking in, talking and holding up cards, placed before the widget. Explanation figures are watch-only animations inside the <Then> that act out what each paragraph says. Interactive animations and visual exercises are widgets whose every tap plays out as motion, including the feedback on a wrong answer. Use whenever asked to animate, "beautify", add scenes, pictures or motion to a journey (src/content/articles/math_for_ai/*.mdx, src/components/interactive/*-journey.tsx), whenever the author leaves an inline note asking for one ("(ekhane animation add koro …)", "(add an animation here …)"), and when building a new journey (every step of every new journey moves). Pairs with the pathshala-journey skill, which covers the voice and the screen kit.
 ---
 
 # Pathshala animations
 
-The author wants the lessons to **show what the words say, in motion**. That covers two
-places in every step of a journey:
+The goal is a concept the reader can grasp by **watching it happen and making it happen**.
+The author wants the lessons to **show what the words say, in motion**. That covers
+every step of a journey, in three places:
 
 | kind | where | what it does | frame |
 | --- | --- | --- | --- |
 | **Story scene** | the setup words, before the widget | acts out the story: the cast arrives, someone makes a claim, a problem turns up | `StoryFrame` + `Stage` (cast.tsx) |
-| **Explanation figure** | inside `<Then>` (and a `<Check>`'s children), right after the paragraph it shows | shows the paragraph: the pattern, the why, a formula built up, a callback, a real-world example | `Scene` (kit) or `StoryFrame` |
+| **Interactive animation** | the widget, and the visual exercise | the reader drives it; every tap plays out as motion, and a wrong answer animates what it would mean (§2½) | the screen itself (`usePlay`, `useTween`, `Draw`) |
+| **Explanation figure** | inside `<Then>`, right after the paragraph it shows | shows the paragraph: the pattern, the why, a formula built up, a callback, a real-world example | `Scene` (kit) or `StoryFrame` |
 
-Both are **watch-only**, driven by the reader: each waits on its first frame with two
-buttons, **একবারে দেখুন** (every beat on a timer) and **step by step** (আগের / পরের, one beat per
-tap). Nothing else in the figure is a control. Both are **relevant**: they use the same characters, cards and numbers as the
-words, with nothing decorative. Read the `pathshala-journey` skill for the voice (§2–3) and
-the build rules (§7). This page is only about the animation.
+Story scenes and figures are **watch-only**, driven by the reader: each waits on its
+first frame with two buttons, *play all* (every beat on a timer; the chrome label is
+currently the Bangla **একবারে দেখুন**) and **step by step** (back / next, one beat per
+tap). Nothing else in the figure is a control. All three are **relevant**: they use the
+same characters, cards and numbers as the words, with nothing decorative. Read the
+`pathshala-journey` skill for the voice (§2–3), visual exercises (§3.2) and the build
+rules (§7). This page is only about the animation.
 
 Models to copy (grep by name):
 - **Story scenes:** `FinalistsArrive`, `SomOnRoof`, `LostCard` (norm-journey), `SherbetQueue`, `HealthBoard` (sherbet-journey), `LostGentleman` (crowking-journey), `MamaGoesHome` (unit-journey), `TwinStall` (yardstick-journey).
@@ -32,27 +36,29 @@ these words say. If it could, and nothing next to it already shows it, add one.
 
 **Story scenes.** One per step whose setup describes a *scene*: a character acts, a place
 appears, a claim or objection is made, a problem arrives. Skip setups that are only an
-instruction ("knob ছাড়া মাথা খাটিয়ে…"), notation talk, or a review question. A closing
-`## শেষ!` step gets one if it describes a moment ("মামা ছবি নিয়ে বাড়ি গেলেন").
+instruction ("work it out without the knob…"), notation talk, or a review question. The
+closing `## The end!` step gets one when it describes a moment ("Mama goes home with the
+photo"). The scenes are Bengali life: a haat, a tea stall, a school field, a rickshaw, a
+launch ghat — draw what the story names.
 
-**Explanation figures.** Aim for every `<Then>` to have at least one, and **never more than
-2**: a `<Then>` is budgeted at one phone screen (pathshala-journey §3.1). If the words
-would earn a third, that `<Then>` holds two ideas and should be split with a follow-up
-`<Check>` step. Give each half its own figure. A figure for a side story or a table
+**Explanation figures.** Every `<Then>` has at least one, and **never more than 2**: a
+`<Then>` is budgeted at one phone screen (pathshala-journey §3.1). If the words would earn
+a third, that `<Then>` holds two ideas — move one into its own step if the journey is
+under 11 steps, or into the next journey. A figure for a side story or a table
 (`MarsMiss`, `PandaGibbon`, `ColorSixteen`, `DataBasis`) goes inside that `<SideQuest>`,
 right after its paragraph. The sheet renders it like anywhere else. A watch-only figure
 that *poses* a question can move into a step's setup as a `story` scene (3.7's
 `WhichTwin`; give the component the `({}: Story)` signature). Good sources, straight from
 the words:
-- **the thing the paragraph points at** ("খেয়াল করেছেন…", "Table-টা দেখুন…"): the pattern the reader just produced, replayed calmly as a summary. It is *not* the widget again.
+- **the thing the paragraph points at** ("Notice how…", "Look at the table…"): the pattern the reader just produced, replayed calmly as a summary. It is *not* the widget again.
 - **the everyday why**, acted out: walking, pouring, stacking, sliding, tiles.
 - **the formula, built**: term by term, numbers flowing slot by slot, the bold name landing last (`NormBuild`, `HatOn`).
-- **callbacks** to an earlier lesson or character, as a mini replay, often with the cast (`WalkVsCrow` is 2.5's ball; `RoofBox` is the বারান্দার মশা).
-- **real-world or ML examples** named in the text, as a tiny scene (a shop, a photo cut to ১৬ রং, a GPU).
+- **callbacks** to an earlier lesson or character, as a mini replay, often with the cast (`WalkVsCrow` is 2.5's ball; `RoofBox` is the mosquito on the veranda).
+- **real-world or ML examples** named in the text, as a tiny scene (a shop, a photo cut to 16 colours, a GPU).
 - **the open question** at the end: set it up visually and stop at "?".
 
 **Never:**
-- **Spoil.** A story scene sets up the widget's question and must not show its answer: not the 5 on ফাহিম's tape, not where the tea stalls go, not the winner. An open question stays open.
+- **Spoil.** A story scene sets up the widget's question and must not show its answer: not the 5 on Fahim's tape, not where the tea stalls go, not the winner. An open question stays open.
 - **Re-run the widget** the reader just played. Add the angle the widget didn't have.
 - **Invent** numbers or dialogue the prose doesn't imply. If a scene truly needs one, keep it small, and list it in your report so the author can check it.
 - **Add decoration.** Every element on screen must be something the words mention.
@@ -72,7 +78,7 @@ const k = s.k;                                   // beats shown so far: 0 … st
 <Scene scene={s} caption={<span key={k} className={FADE}>{SAY[k]}</span>}> … </Scene>
 ```
 
-- **The reader starts it.** It never plays on its own. `Scene` and `StoryFrame` draw the controls (`SceneControls`): **একবারে দেখুন** plays every beat on the timer, then becomes **আবার দেখুন**. **step by step** switches to **← আগের · ২ / ৫ · পরের →**, and tapping it mid-play takes over from that beat. Never add your own play or replay button.
+- **The reader starts it.** It never plays on its own. `Scene` and `StoryFrame` draw the controls (`SceneControls`): *play all* (**একবারে দেখুন**) plays every beat on the timer, then becomes *replay* (**আবার দেখুন**). **step by step** switches to *← back · 2 / 5 · next →* (**আগের / পরের**), and tapping it mid-play takes over from that beat. Never add your own play or replay button. (These labels are Bangla chrome until kit.tsx is localized; see pathshala-journey §6.)
 - **Every beat must stand alone.** The reader can stop on any beat for as long as they like, and step *backwards*. So draw each beat purely from `k`: whatever exists at beat k is mounted, and whatever doesn't is not. Give each beat its own caption (`SAY[k]`), including beat 0, the resting first frame, which should already show the setting. Don't rely on timers inside a beat, or on something that only makes sense mid-glide.
 - **Walking stops on arrival.** Cast `Person`/`Robot` legs swing only while they glide to a new spot (for `ms`), then stop, even if the beat stays. A local walker of your own should use cast's `Loop` (`<Loop on run={`${x},${y}`} ms type values dur />`), not `repeatCount="indefinite"`. Hovering (a drone, rotors) may loop forever.
 - **Settled when still.** Reduced motion opens on the last beat, and so does a `shot` preview, unless a fixture seeds `k`. Seed `stepping: true` as well to shoot the step controls.
@@ -89,7 +95,7 @@ export function FinalistsArrive() {
       <Stage backdrop="fair" label="…a11y description…">
         <Gate x={34} y={150} />
         <Person who="fahim" x={78} y={150} arm={k === 1 ? "wave" : "down"} mood="happy" label />
-        {k === 1 && <Bubble x={78} y={84} side="right" lines={["Gate থেকে যে সবচেয়ে দূরে,", "পুরস্কার তার!"]} />}
+        {k === 1 && <Bubble x={78} y={84} side="right" lines={["Whoever ends up", "farthest wins!"]} />}
         <Person who="som" x={k >= 2 ? 140 : 370} y={150} facing={-1} walking={k === 2} label={k >= 3} />
         {k >= 3 && <Card x={140} y={74} text="(2, 3, 6)" tone="amber" />}
       </Stage>
@@ -102,7 +108,8 @@ export function FinalistsArrive() {
 - **`Person`** is the recurring cast: `fahim samin som nasib ammu apa mama rina karim`.
   - Feet sit at `(x, y)`, about 62 units tall. Change `x` and they glide over `ms`. Set `walking` during that beat so the legs swing.
   - Other props: `facing` −1 turns them left; `mood` is `plain | happy | puzzled | smug | sad | shout`; `arm` is `down | wave | hold | point`; `label` puts the name under their feet.
-  - সামিন is a boy (the prose says "সামিন তো কাজের ছেলে").
+  - Samin is a boy.
+  - The `label` name under their feet is drawn in Bangla (`CAST[who].name`) until cast.tsx is localized; in English journeys leave `label` off and name people in the caption or a bubble.
 - **`Robot`** is Shiku.
 - **`Bubble`**: 1–2 lines of about 22 characters each, with the tail at a head (y − 66). Use `side` near an edge and `tone="think"` for thoughts.
 - **Props:** `Card` (a clue card, tuple in Latin digits, "?" for a lost one), `Gate`, `Stall`, `Tree`, `Building` (`roof`), `Chest` (`open`).
@@ -115,7 +122,7 @@ written with `story` is treated as part of the setup words instead, so it flows 
 story screens with the paragraphs:
 
 ```mdx
-শুনতে সোজা। কিন্তু চারজন finalist যখন এসে দাঁড়ালো, দেখা গেল চারজনের card চার ধাঁচের।
+Sounds simple. But when the four finalists arrived, their four cards looked nothing alike.
 
 <FinalistsArrive story />
 
@@ -129,9 +136,41 @@ boolean }`, because `(_: …)` trips ESLint's no-unused-vars. Explanation figure
 
 ---
 
+## 2½ · Interactive animations and visual exercises
+
+The widget is where the reader *makes* the idea happen, so it animates too. The
+difference from a scene: the reader's own action starts each play, and what plays
+depends on what they did.
+
+- **Every tap plays out.** Don't just swap a number: Shiku walks the card, the sherbet
+  pours, the dot glides to its new place, the bar fills (`usePlay` for stepped motion,
+  `useTween` for a glide, `Draw` / `<Arrow draw>` for a line appearing). The readout
+  updates when the motion lands, not before.
+- **Short plays.** Under ~2s, so the reader can try again at once. A tap mid-play
+  restarts from the new input rather than queueing.
+- **A wrong answer animates what it means.** In an exercise, the reader's wrong pick
+  plays out honestly — the arrow walks Nasib to the wrong stall, the scale tips the other
+  way — and a `Nope` line says what to look at. That picture teaches more than "✕ wrong".
+  The right answer plays the confirming motion, then `pass()` fires from the play's
+  `done`.
+- **Choices can be pictures.** `Choice` takes any children: put a small SVG in it (an
+  arrow, a bar pair, a mini grid) instead of a string. Keep each at ≤ ~90px tall so three
+  fit in a row or a column under the main visual.
+- **Same rules as scenes:** relevant, no decoration, fixed ink for "paper", motion-reduce
+  respected (under reduced motion, jump to the end state), and everything a tap changes
+  in view (pathshala-journey §7).
+- **Seed the state that drives the motion** (`useSeed`), so `shot` can show the
+  wrong-pick and right-pick end states.
+
+Models: `TilePour`, `SugarCube` (predict → the reader's tap plays it), `ShikuTape`,
+`RuleVsTape` (drag and watch), `KnobStep` (step a machine), `PrizeGiven` (wrong tries
+bounce).
+
+---
+
 ## 3 · Craft
 
-- **Beats.** Use 3–6 per figure. Timings are for একবারে দেখুন, with 500–700ms before the first beat. Give plain beats 900–1600ms and a beat that puts text on screen at least 2200ms, so it can be read. Something must move in every one.
+- **Beats.** Use 3–6 per figure. Timings are for *play all*, with 500–700ms before the first beat. Give plain beats 900–1600ms and a beat that puts text on screen at least 2200ms, so it can be read. Something must move in every one.
 - **Size: draw for the phone, and let the frame grow it.** Design every figure at phone size: **≤ ~260px tall** including the caption and controls (a phone `shot` of ≤ ~320 means you're there), leaving a paragraph room on the ~460px screen. A story scene is its 320×180 stage, about 190px on a phone. Bigger screens are handled by the frames, never by the figure:
 
   | screen (width **and** height) | explanation drawing (`GROW`, CSS zoom) | story frame (`GROW_WIDE`) |
@@ -155,7 +194,7 @@ boolean }`, because `(_: …)` trips ESLint's no-unused-vars. Explanation figure
 - **Keeping it small:** readouts go *beside* the sheet, not under it. Use SVG sheets of `max-w-[12rem]`–`[16rem]` and captions of 1–2 lines. Swap content in place per beat rather than stacking.
 - **Spacing on the stage:** keep people 50–70 units apart, cards above heads at about y − 76, bubbles inside the 320 width, and nothing over the top-right corner (the replay chip).
 - **Colour.** Chrome uses theme tokens (`text-muted`, `bg-accent/10`, `fill-cat-blue` on the page). Drawn "paper" uses fixed ink (`fill-[#0f1b2d]`, white sheets), and small labels on a white sheet need a fixed dark ink so they don't pale in dark mode.
-- **Text.** Captions, labels and bubbles are short spoken Bangla in the author's voice, full sentences ending in `।`. English technical words stay in Latin; tuples and numbers in Latin digits; counts in Bangla sentences go through `bn()`. No emojis.
+- **Text.** Captions, labels and bubbles are short, plain spoken English in the author's voice (pathshala-journey §2), full sentences ending in a period. Numbers and tuples in ASCII digits; money in taka. No `bn()`, no emojis. A bubble line is ≤ ~22 characters, so pick short words.
 - **Placement in the MDX.** Put the figure right after the paragraph it shows. You may split a paragraph at a sentence boundary so a figure sits after the exact sentence, but never change the wording. Keep imports in the MDX's import block.
 
 ---
@@ -163,7 +202,7 @@ boolean }`, because `(_: …)` trips ESLint's no-unused-vars. Explanation figure
 ## 4 · Gotchas (each one bit us once)
 
 - **Plane width:** `<Plane>` always has `w-full my-5 mx-auto`. To size it, wrap it in a sized div and pass `className="my-0! max-w-none"`. Plain `my-0` loses to `my-5`.
-- **Bangla in monospace:** `font-mono` or SVG `fontFamily="ui-monospace"` must never hold Bangla. For mixed lines, pick the font per line (`/[ঀ-৿]/.test(l)`).
+- **Monospace is for numbers only:** `font-mono` or SVG `fontFamily="ui-monospace"` holds tuples and formulas, never a sentence. (In the older Bangla journeys it must never hold Bangla; pick the font per line with `/[ঀ-৿]/.test(l)`.)
 - **Emoji glyphs:** ◀ ▶ ↗ ↖ ✓-style glyphs render as emoji on Linux. Draw arrows and ticks as paths.
 - **Keyframes:** no CSS keyframes (there's no global CSS). For looping motion (legs, rotors, a bob), use SVG `<animateTransform>` and skip it under reduced motion (cast.tsx's `useCalm`, or a local copy of it).
 - **Refs and lint:** the React Compiler lint treats any object holding a ref as a ref. That is why `useScene` returns a state callback-ref named `mount`, and why `Scene` destructures it. Don't reach into `s.mount`.
@@ -215,6 +254,7 @@ author edits MDX files by hand too, so re-read a file right before editing it, a
 insert tags, imports and paragraph splits.
 
 Ask each agent to report:
-- a table of figure, step and sentence, what it shows, and shot height;
+- a table of figure / widget, step and sentence, what it shows, and shot height;
+- any step with no motion at all, and why;
 - the `<Then>`s or setups left bare, and why;
 - any invented number or line, to pass on to the author.

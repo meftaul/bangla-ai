@@ -4,6 +4,7 @@ import {
   Choice,
   FADE,
   Nope,
+  POP,
   Scene,
   Stepper,
   Ticks,
@@ -18,11 +19,12 @@ import {
 import { Bubble, Card as CastCard, Person as CastPerson, Stage, StoryFrame } from "@/components/journey/cast";
 import { Arrow, Dot, Label, Plane, Star, makeFrame, same, sg, snap, tup, type Frame, type XY } from "@/components/journey/plane";
 import { ButtonRemote, Chains, Recipe, SHELF, land, type Key } from "./remote-journey";
+import { useState } from "react";
 import { Shiku } from "./arrow-journey";
 import { Task, useGate } from "@/components/journey/journey";
 
 // Screens for "Math for AI 5.2 — The extra column, what a bathroom is worth",
-// told as a Journey, in English (the pathshala-journey-en twin of 5.1).
+// told as a Journey in plain English, 11 steps (the pathshala-journey skill).
 //
 // Day two of moving week. Two flats left on the dalal's list, one extra
 // bathroom and 4000 taka apart, so Abbu asks the only question that matters:
@@ -32,16 +34,23 @@ import { Task, useGate } from "@/components/journey/journey";
 // that is just another column in a new unit (sq ft / sq m), a column that
 // isn't a copy but is built from the other two (total = bed + bath), two
 // knob-sets that price all six flats identically — and, back on 5.1's remotes,
-// the zero test that tells an extra button from a needed one. The finale
-// deletes the total column, reruns the app, and settles the bet.
+// the zero test that tells an extra button from a needed one. A visual
+// exercise (StretchReach: can any stretch of u land on v?) comes before the
+// finale, which deletes the total column, reruns the app, and settles the bet.
 //
 // The remote machine is 5.1's (remote-journey.tsx), so the remote looks the
 // same as yesterday; this file draws its own door mark with an English label.
+// Cast name labels are Bangla chrome, so names are drawn here (NameTag).
 //
-// Watch-only figures: the credit shuffling between knobs while no rent moves
-// (KnobShuffle), the twin remote's walk home (WalkHome), and the recap pair no
-// multiple can reach (TwoArrowsTest). Story scenes: the dalal's two readings
-// (DalalArrives) and Abbu's pen (AbbuSigns).
+// Watch-only figures, one in every <Then>: both prices fitting every flat
+// (BothFit), six numbers and three facts (ThreeFacts), total built row by row
+// (BuiltRowByRow), the credit shuffling while no rent moves (KnobShuffle), the
+// slow sum as taka blocks (SlowSum), the twin remote's walk home (WalkHome),
+// the untidy remote's slot-by-slot proof on the floor (SlotKill), the third
+// button's walk home (ThirdHome), the trap page's floor column (TrapPage), the
+// exercise pair no multiple can reach (TwoArrowsTest) and the knobs with no
+// room left to shuffle (NoRoomToShuffle). Story scenes: the dalal's two
+// readings (DalalArrives) and Abbu's pen (AbbuSigns).
 //
 // Tailwind only; the sheets are journey/plane. Ink on white sheets is fixed.
 
@@ -97,7 +106,7 @@ const knobLine = (knobs: number[], i: number) =>
   `${term(knobs[0], FLATS[i].bed)} + ${term(knobs[1], FLATS[i].bath)} + ${term(knobs[2], FLATS[i].total)} = ${knobRent(knobs, i)}`;
 
 // ---------------------------------------------------------------------------
-// 0a · A story scene for screen 1's setup, no task: the dalal's app speaks
+// 1a · A story scene for screen 1's setup, no task: the dalal's app speaks
 //      twice. Morning, six flats: one bathroom, +3000. Evening, one more flat
 //      in the ledger: −2000. Abbu smells trouble; the widget seals the bet.
 
@@ -196,6 +205,66 @@ export function TwoAnswers() {
 }
 
 // ---------------------------------------------------------------------------
+// 1½ · A figure for screen 1's explanation, no task: each price is checked
+//      against the ledger of its hour, and every flat comes out right — six in
+//      the morning, seven by evening. Two perfect answers, so the trouble is in
+//      the khata itself, whose columns are still a "?".
+
+const S1F_SAY = [
+  "Each price was checked against every flat in the ledger at that hour.",
+  "Morning: +3000 per bathroom fits all six flats, to the taka.",
+  "Evening: −2000 fits all seven, to the taka.",
+  "Two perfect answers. So the trouble is in the khata — column by column.",
+];
+
+export function BothFit() {
+  const s = useScene(3, [700, 2200, 2200]);
+  const k = s.k;
+
+  return (
+    <Scene scene={s} caption={<span key={k} className={FADE}>{S1F_SAY[k]}</span>}>
+      <div className="mx-auto grid max-w-[17rem] grid-cols-2 gap-2">
+        {[
+          { when: "morning", says: "+3000", n: 6, on: k >= 1, tone: "border-cat-blue/30 bg-cat-blue/5 text-cat-blue" },
+          { when: "evening", says: "−2000", n: 7, on: k >= 2, tone: "border-cat-coral/30 bg-cat-coral/5 text-cat-coral" },
+        ].map((c) => (
+          <div key={c.when} className={`rounded-xl border-2 px-2 py-1.5 text-center ${c.tone}`}>
+            <div className="text-[0.7rem] font-semibold leading-tight text-muted">{c.when}</div>
+            <div className="font-mono text-sm font-semibold leading-tight">{c.says}</div>
+            <div className="mt-1 flex flex-wrap justify-center gap-0.5">
+              {Array.from({ length: c.n }, (_, i) => (
+                <span
+                  key={i}
+                  className={`grid size-4 place-items-center rounded font-mono text-[0.6rem] leading-none transition-colors duration-300 motion-reduce:transition-none ${
+                    c.on ? "bg-accent text-accent-foreground" : "bg-foreground/10 text-muted"
+                  }`}
+                  style={{ transitionDelay: c.on ? `${i * 120}ms` : "0ms" }}
+                >
+                  {i + 1}
+                </span>
+              ))}
+            </div>
+            <div className="mt-0.5 text-[0.65rem] leading-tight text-muted">{c.on ? "every flat fits" : "flats in the ledger"}</div>
+          </div>
+        ))}
+      </div>
+      {k >= 3 ? (
+        <div className={`${POP} mx-auto mt-2 w-[9rem] rounded-lg border border-[#c9b98f] bg-[#fbf6e9] px-2 py-1.5`}>
+          <div className="text-center text-[0.65rem] font-semibold leading-tight text-[#5a4a2a]">the khata</div>
+          <div className="mt-1 grid grid-cols-4 gap-1">
+            {[0, 1, 2, 3].map((i) => (
+              <span key={i} className="rounded bg-[#ece2c6] text-center font-mono text-[0.7rem] font-semibold leading-snug text-[#5a4a2a]">
+                ?
+              </span>
+            ))}
+          </div>
+        </div>
+      ) : null}
+    </Scene>
+  );
+}
+
+// ---------------------------------------------------------------------------
 // 2 · The khata's first page: each flat's area, written twice — square feet
 //     and square metres. Row 1 by hand (which cell could it possibly be?),
 //     then the machine fills the rest, and never needs to look at a flat
@@ -287,6 +356,63 @@ export function AreaTwice() {
 }
 
 // ---------------------------------------------------------------------------
+// 2½ · A figure for screen 2's explanation, no task: six numbers on the page,
+//      but each row is one fact about one flat — three facts. Cover the sq m
+//      column and the sq ft column rebuilds it, ÷ 10.76, row after row.
+
+const S2F_SAY = [
+  "Six numbers on page one.",
+  "But each row says one thing about one flat: its size. Three facts.",
+  "Cover the sq m column. Divide the sq ft column by 10.76, and it comes back exactly.",
+  "Nothing new in it. The old column, in a new coat.",
+];
+
+export function ThreeFacts() {
+  const s = useScene(3, [700, 2000, 2400]);
+  const k = s.k;
+
+  return (
+    <Scene scene={s} caption={<span key={k} className={FADE}>{S2F_SAY[k]}</span>}>
+      <div className="mx-auto w-full max-w-[15rem]">
+        <div className="grid grid-cols-[2.6rem_1fr_3.2rem_1fr] items-center gap-1 text-[0.7rem] font-semibold text-muted">
+          <span />
+          <span className="text-center">sq ft</span>
+          <span />
+          <span className="text-center">{k >= 3 ? <span className={`${FADE} text-accent-text`}>new coat</span> : "sq m"}</span>
+        </div>
+        {AREA_FT.map((ft, i) => (
+          <div
+            key={ft}
+            className={`mt-1 grid grid-cols-[2.6rem_1fr_3.2rem_1fr] items-center gap-1 rounded-lg transition-colors duration-300 motion-reduce:transition-none ${
+              k >= 1 ? "bg-cat-blue/10" : ""
+            }`}
+          >
+            <span className="text-center text-[0.65rem] font-semibold leading-none text-cat-blue">{k >= 1 ? <span className={FADE}>fact {i + 1}</span> : ""}</span>
+            <span className="py-1 text-center font-mono text-sm">{ft}</span>
+            <span className="whitespace-nowrap text-center font-mono text-[0.65rem] leading-none text-muted">
+              {k >= 2 ? (
+                <span className={FADE} style={{ transitionDelay: `${i * 300}ms` }}>
+                  ÷ 10.76
+                </span>
+              ) : (
+                ""
+              )}
+            </span>
+            <span
+              className={`py-1 text-center font-mono text-sm transition-opacity duration-300 motion-reduce:transition-none ${
+                k === 2 ? "opacity-40" : ""
+              } ${k >= 3 ? "font-semibold text-accent-text" : ""}`}
+            >
+              {SQM(ft).toFixed(1)}
+            </span>
+          </div>
+        ))}
+      </div>
+    </Scene>
+  );
+}
+
+// ---------------------------------------------------------------------------
 // 3 · Page two: the flats. Bed, bath, total rooms — and total isn't a copy of
 //     anything. Four rule cards; the reader picks one and the machine checks
 //     it on every row, stopping at the first flat that breaks it.
@@ -371,6 +497,56 @@ export function TotalColumn() {
       ) : null}
       <Task done={done}>Find the rule the total column follows, and check it on every row.</Task>
     </>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 3½ · A figure for screen 3's explanation, no task: bed and bath on their
+//      own, the total column blank; then bed + bath fills it, three rows at a
+//      time, and the name "extra column" lands on it last.
+
+const S3F_SAY = [
+  "Bed and bath for all six flats. Leave the total column blank.",
+  "Bed + bath, row by row: 3, 5, 4 …",
+  "… 4, 6, 2. Every total, rebuilt without looking at a single flat.",
+  "A column the others can rebuild. From here on: an extra column.",
+];
+
+export function BuiltRowByRow() {
+  const s = useScene(3, [700, 1800, 1800]);
+  const k = s.k;
+
+  return (
+    <Scene scene={s} caption={<span key={k} className={FADE}>{S3F_SAY[k]}</span>}>
+      <div className="mx-auto w-full max-w-[14rem]">
+        <div className="grid grid-cols-[1fr_1fr_2.6fr] gap-1 text-[0.7rem] font-semibold leading-none text-muted">
+          <span className="text-center">bed</span>
+          <span className="text-center">bath</span>
+          <span className="text-center">
+            {k >= 3 ? <span className={`${POP} inline-block rounded-full bg-accent px-2 py-0.5 text-accent-foreground`}>extra column</span> : "total"}
+          </span>
+        </div>
+        {FLATS.map((f, i) => {
+          const on = k >= (i < 3 ? 1 : 2);
+          return (
+            <div key={i} className="mt-0.5 grid grid-cols-[1fr_1fr_2.6fr] items-center gap-1">
+              <span className="rounded bg-foreground/[0.04] text-center font-mono text-[0.8rem] leading-snug">{f.bed}</span>
+              <span className="rounded bg-foreground/[0.04] text-center font-mono text-[0.8rem] leading-snug">{f.bath}</span>
+              {on ? (
+                <span
+                  className={`${FADE} rounded bg-accent/10 text-center font-mono text-[0.8rem] leading-snug text-accent-text`}
+                  style={{ transitionDelay: `${(i % 3) * 250}ms` }}
+                >
+                  {f.bed} + {f.bath} = <b>{f.total}</b>
+                </span>
+              ) : (
+                <span className="rounded border border-dashed border-muted/40 text-center font-mono text-[0.8rem] leading-snug text-muted">?</span>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </Scene>
   );
 }
 
@@ -566,6 +742,67 @@ export function YourShuffle() {
 }
 
 // ---------------------------------------------------------------------------
+// 5½ · A figure for screen 5's explanation, no task: the slow sum as blocks of
+//      a thousand taka. Flat 1's 13 by the morning knobs; −1 per bed takes 2
+//      blocks, −1 per bath 1 more; the total knob pays 1 per room, 3 rooms, 3
+//      blocks back. The captions are the author's slow sum, beat by beat.
+
+const S5F_SAY = [
+  "Flat 1 on the morning knobs: 10 for 2 beds, 3 for 1 bath, 0 for total. Rent 13.",
+  "−1 per bed on a two-bed flat takes 2 off;",
+  "−1 per bath, 1 more. Three taka gone.",
+  "The total knob pays per room, and flat 1 has 3 rooms — 1 per room hands all three straight back.",
+  "Your set (4, 2, 1) prices flat 1 at 13, to the taka.",
+];
+
+/** one row of blocks: `have` shown, `gone` of them struck off at the end, `add` new ones popping in */
+function BlockRow({ label, sum, have, gone, add, tone }: { label: string; sum: string; have: number; gone: number; add: number; tone: string }) {
+  return (
+    <div className="flex items-center gap-2">
+      <span className="w-9 shrink-0 text-right text-[0.7rem] font-semibold text-muted">{label}</span>
+      <div className="flex min-h-3 flex-1 gap-0.5">
+        {Array.from({ length: have }, (_, i) => (
+          <span
+            key={i}
+            className={`size-3 rounded-sm transition-all duration-500 motion-reduce:transition-none ${
+              i >= have - gone ? "border border-dashed border-danger/60 bg-transparent opacity-50" : tone
+            }`}
+          />
+        ))}
+        {Array.from({ length: add }, (_, i) => (
+          <span key={`a${i}`} className={`${POP} size-3 rounded-sm bg-accent`} style={{ transitionDelay: `${i * 200}ms` }} />
+        ))}
+      </div>
+      <span className="w-16 shrink-0 whitespace-nowrap font-mono text-[0.75rem]">{sum}</span>
+    </div>
+  );
+}
+
+export function SlowSum() {
+  const s = useScene(4, [700, 1800, 2000, 2600, 2000]);
+  const k = s.k;
+  const knobs = [k >= 1 ? 4 : 5, k >= 2 ? 2 : 3, k >= 3 ? 1 : 0];
+  const rent = knobRent(knobs, 0);
+
+  return (
+    <Scene scene={s} caption={<span key={k} className={FADE}>{S5F_SAY[k]}</span>}>
+      <div className="mx-auto grid w-full max-w-[17rem] gap-1.5">
+        <BlockRow label="bed" sum={`${knobs[0]}·2 = ${knobs[0] * 2}`} have={10} gone={k >= 1 ? 2 : 0} add={0} tone="bg-cat-blue" />
+        <BlockRow label="bath" sum={`${knobs[1]}·1 = ${knobs[1]}`} have={3} gone={k >= 2 ? 1 : 0} add={0} tone="bg-cat-coral" />
+        <BlockRow label="total" sum={`${knobs[2]}·3 = ${knobs[2] * 3}`} have={0} gone={0} add={k >= 3 ? 3 : 0} tone="bg-accent" />
+      </div>
+      <div className="mt-2 text-center font-mono text-sm">
+        rent{" "}
+        <b key={rent} className={`${POP} inline-block ${rent === 13 ? "text-accent-text" : "text-danger"}`}>
+          {rent}
+        </b>
+        {k >= 4 ? <span className={`${FADE} ml-2 text-muted`}>knobs (4, 2, 1)</span> : null}
+      </div>
+    </Scene>
+  );
+}
+
+// ---------------------------------------------------------------------------
 // 6 · Back to 5.1's remotes, and the zero test. Can Shiku press non-zero
 //     amounts and still end at the door? The twin remote can; the old one
 //     cannot, except by pressing nothing.
@@ -645,35 +882,34 @@ export function ZeroWalk() {
 }
 
 // ---------------------------------------------------------------------------
-// 6½ · A figure for screen 6's explanation, no task: the twin remote's walk
-//      home, drawn out — u twice forward, then v once back to the door.
+// 6½ · A figure for screen 6's explanation, no task: u alone looks fine; v
+//      arrives on the same line; then the twin remote's walk home, drawn out —
+//      u twice forward, then v once back to the door. The first two captions
+//      are the explanation's own closing sentences.
+
+const WH_SAY = [
+  "The twin remote’s u = (1, 1). u on its own never looked extra.",
+  "It took v arriving on the same line to make it one.",
+  "Press u twice: (1, 1), then (2, 2) — exactly where v arrives.",
+  "Now v once, backwards: 2·u − 1·v = (0, 0). Home, and the presses weren’t nothing.",
+];
 
 export function WalkHome() {
-  const s = useScene(3, [700, 2000, 2200]);
+  const s = useScene(3, [700, 2200, 2000, 2200]);
   const k = s.k;
 
   return (
-    <Scene
-      scene={s}
-      caption={
-        k === 0 ? (
-          "The twin remote's buttons: u = (1, 1) and v = (2, 2)."
-        ) : k < 3 ? (
-          "Press u twice: (1, 1), then (2, 2) — exactly where v arrives."
-        ) : (
-          <span className={FADE}>Now v once, backwards: 2·u − 1·v = (0, 0). Home, and the presses weren’t nothing.</span>
-        )
-      }
-    >
+    <Scene scene={s} caption={<span key={k} className={FADE}>{WH_SAY[k]}</span>}>
       <div className="mx-auto w-[8rem]">
         <Plane f={WB_F} grid={1} axes={false} label="the twin remote walks home on non-zero presses" className="my-0! max-w-none">
+          {k >= 1 && k < 3 && <Arrow f={WB_F} from={O} to={[2, 2]} tone="coral" w={2.4} draw={k === 1} faint={k === 2} />}
           {k >= 3 && <Arrow f={WB_F} from={[2, 2]} to={O} tone="coral" w={2.4} draw />}
           <Arrow f={WB_F} from={O} to={[1, 1]} tone="blue" w={2.4} draw={k === 0} />
           {k >= 2 && <Arrow f={WB_F} from={[1, 1]} to={[2, 2]} tone="blue" w={2.4} draw dashed />}
           <Label f={WB_F} at={[1, 1]} dx={-10} dy={-2} size={9} className="fill-cat-blue font-mono">
             u
           </Label>
-          {k >= 2 && (
+          {k >= 1 && (
             <Label f={WB_F} at={[2, 2]} dx={9} dy={4} size={9} className="fill-cat-coral font-mono">
               v
             </Label>
@@ -790,6 +1026,67 @@ export function NoVisibleCopy() {
 }
 
 // ---------------------------------------------------------------------------
+// 7½ · A figure for screen 7's explanation, no task: the slot-by-slot proof
+//      acted out on the floor. Presses with α = −2β always bring slot 1 back
+//      to 0, so Shiku stops straight above or below the door — exactly β
+//      squares off. Home needs β = 0, and then α = 0 too.
+
+const SK_F = makeFrame(-2.5, 2.5, -4.5, 3.5, 14, 10);
+const SK_U: XY = [1, 2];
+const SK_V: XY = [2, 5];
+const SK_SAY = [
+  "The untidy remote: u = (1, 2), v = (2, 5). Try presses with α = −2β: say α = −2, β = 1.",
+  "−2u, then v: slot 1 comes back to 0, as α = −2β promised. Slot 2 stops at 1 — that’s β.",
+  "Any β you like: Shiku stops β squares straight above or below the door.",
+  "β = 0, so α = 0 too. Only the do-nothing presses land home.",
+];
+
+export function SlotKill() {
+  const s = useScene(3, [700, 2600, 2400, 2000]);
+  const k = s.k;
+  const low: XY = [-2 * SK_U[0], -2 * SK_U[1]];
+
+  return (
+    <Scene scene={s} caption={<span key={k} className={FADE}>{SK_SAY[k]}</span>}>
+      <div className="mx-auto w-[5.6rem]">
+        <Plane f={SK_F} grid={1} axes={false} label="presses with alpha = −2 beta land straight above or below the door" className="my-0! max-w-none">
+          {k >= 2 && (
+            <path
+              d={`M${SK_F.sx(0)} ${SK_F.sy(-4.5)}V${SK_F.sy(3.5)}`}
+              strokeWidth={1.4}
+              strokeDasharray="3 3"
+              className={`${FADE} fill-none stroke-cat-violet/60`}
+            />
+          )}
+          {k === 0 && <Arrow f={SK_F} from={O} to={SK_U} tone="blue" w={2.2} />}
+          {k === 0 && <Arrow f={SK_F} from={O} to={SK_V} tone="coral" w={2.2} />}
+          {k === 1 && <Arrow f={SK_F} from={O} to={low} tone="blue" w={2.2} draw dashed />}
+          {k === 1 && <Arrow f={SK_F} from={low} to={[0, 1]} tone="coral" w={2.2} draw delay={700} />}
+          {k >= 1 && k < 3 && <Dot f={SK_F} at={[0, 1]} r={3} className="fill-cat-violet" pop />}
+          {k === 2 &&
+            ([2, -1] as const).map((b) => (
+              <g key={b}>
+                <Dot f={SK_F} at={[0, b]} r={3} className="fill-cat-violet/70" pop />
+                <Label f={SK_F} at={[0, b]} dx={8} dy={3} anchor="start" size={8} className="fill-[#5a6b7d] font-mono">
+                  {`β = ${sg(b)}`}
+                </Label>
+              </g>
+            ))}
+          {k === 2 && (
+            <Label f={SK_F} at={[0, 1]} dx={8} dy={3} anchor="start" size={8} className="fill-[#5a6b7d] font-mono">
+              β = 1
+            </Label>
+          )}
+          <Star f={SK_F} at={O} done={k >= 3} />
+          <DoorMark f={SK_F} />
+          {k >= 3 && <Shiku f={SK_F} at={O} />}
+        </Plane>
+      </div>
+    </Scene>
+  );
+}
+
+// ---------------------------------------------------------------------------
 // 8 · Nasib's idea: add a third button, maybe you get lucky. First find the
 //     walk home for w = (2, 3); then drop your own third button anywhere and
 //     watch the machine answer instantly, every time. It cannot be won.
@@ -877,6 +1174,44 @@ export function ThirdButton() {
         {phase === 1 ? "Find presses for all three buttons that land Shiku back on the door." : "Drop your own third button three times — anywhere at all."}
       </Task>
     </>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 8½ · A figure for screen 8's explanation, no task: (−x, −y, 1) walking home.
+//      w = (2, 3) once, then e₁ back 2 and e₂ back 3 — Shiku is at the door.
+
+const TH2_SAY = [
+  "Three buttons on a two-slot floor: e₁, e₂ and w = (2, 3).",
+  "Press w once: Shiku is at (2, 3).",
+  "Press e₁ −2 times: 2 squares back. Now (0, 3).",
+  "Press e₂ −3 times: home. The presses were (−2, −3, 1) — that’s (−x, −y, 1).",
+];
+
+export function ThirdHome() {
+  const s = useScene(3, [700, 1600, 1800, 1800]);
+  const k = s.k;
+  const w: XY = [2, 3];
+  const at: XY = k === 0 ? O : k === 1 ? w : k === 2 ? [0, 3] : O;
+
+  return (
+    <Scene scene={s} caption={<span key={k} className={FADE}>{TH2_SAY[k]}</span>}>
+      <div className="mx-auto w-[7rem]">
+        <Plane f={TH_F} grid={1} axes={false} label="w once, e1 back 2, e2 back 3: home" className="my-0! max-w-none">
+          <Arrow f={TH_F} from={O} to={[1, 0]} tone="blue" w={2.2} faint={k >= 1} />
+          <Arrow f={TH_F} from={O} to={[0, 1]} tone="coral" w={2.2} faint={k >= 1} />
+          <Arrow f={TH_F} from={O} to={w} tone="teal" w={2.2} draw={k === 1} />
+          <Label f={TH_F} at={w} dx={9} dy={3} size={9} className="fill-cat-teal font-mono">
+            w
+          </Label>
+          {k >= 2 && <Arrow f={TH_F} from={w} to={[0, 3]} tone="blue" w={2.2} draw />}
+          {k >= 3 && <Arrow f={TH_F} from={[0, 3]} to={O} tone="coral" w={2.2} draw />}
+          <Star f={TH_F} at={O} done={k >= 3} />
+          <DoorMark f={TH_F} />
+          <Shiku f={TH_F} at={at} />
+        </Plane>
+      </div>
+    </Scene>
   );
 }
 
@@ -1038,10 +1373,188 @@ export function SpotTheExtra() {
 }
 
 // ---------------------------------------------------------------------------
-// 9½ · A figure for the recap Check's explanation, no task: (1, 3) and (2, 7).
-//      Doubling u lands one slot short of v, and no other multiple does better.
+// 9½ · A figure for screen 9's explanation, no task: the trap page beside the
+//      dalal's page. On the dalal's page, total minus (bed + bath) is 0 on
+//      every row — it never surprises you. On the last page, floor minus bed
+//      jumps about: 1, −2, 3. Two honest facts.
 
-const TA_F = makeFrame(-1, 3, -1, 8, 15, 12);
+const TP9_SAY = [
+  "The dalal’s page and the last page, side by side.",
+  "Dalal’s page: total minus (bed + bath) is 0, 0, 0. That column never surprises you.",
+  "Last page: floor minus bed is 1, then −2, then 3. It jumps about.",
+  "No rule between bed and floor. Two honest facts, neither one extra.",
+];
+
+function MiniPage({ head, rows, test, on, good }: { head: string[]; rows: number[][]; test: (r: number[]) => number; on: boolean; good: boolean }) {
+  return (
+    <div className="min-w-0 flex-1 rounded-lg border border-border bg-surface p-1.5">
+      <div className="flex gap-0.5 text-[0.6rem] font-semibold leading-tight text-muted">
+        {head.map((h) => (
+          <span key={h} className="min-w-0 flex-1 truncate text-center">
+            {h}
+          </span>
+        ))}
+        <span className="w-6 shrink-0 text-center">gap</span>
+      </div>
+      {rows.map((r, i) => (
+        <div key={i} className="mt-0.5 flex gap-0.5">
+          {r.map((v, j) => (
+            <span key={j} className="min-w-0 flex-1 rounded bg-foreground/[0.04] text-center font-mono text-[0.75rem] leading-snug">
+              {v}
+            </span>
+          ))}
+          <span
+            className={`w-6 shrink-0 rounded text-center font-mono text-[0.75rem] leading-snug ${on ? `${FADE} ${good ? "bg-accent/10 text-accent-text" : "bg-cat-amber/15 text-[#8a5a00]"}` : ""}`}
+            style={on ? { transitionDelay: `${i * 250}ms` } : undefined}
+          >
+            {on ? sg(test(r)) : ""}
+          </span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+export function TrapPage() {
+  const s = useScene(3, [700, 2400, 2400, 2000]);
+  const k = s.k;
+
+  return (
+    <Scene scene={s} caption={<span key={k} className={FADE}>{TP9_SAY[k]}</span>}>
+      <div className="mx-auto flex w-full max-w-[18rem] gap-2">
+        <MiniPage head={PAGES[1].head.map((h) => h.replace(" rooms", ""))} rows={PAGES[1].rows} test={(r) => r[2] - r[0] - r[1]} on={k >= 1} good />
+        <div className={`min-w-0 flex-1 rounded-lg transition-shadow duration-300 motion-reduce:transition-none ${k >= 3 ? "ring-2 ring-accent" : ""}`}>
+          <MiniPage head={PAGES[4].head} rows={PAGES[4].rows} test={(r) => r[1] - r[0]} on={k >= 2} good={false} />
+        </div>
+      </div>
+    </Scene>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 10 · Try it: u = (1, 3), v = (2, 7). Which stretch of u lands on v? Three
+//      pictures: × 2 (fixes slot 1, lands one short), × 2⅓ (fixes slot 2,
+//      overshoots slot 1), or none reaches. A wrong pick stretches u on the
+//      big floor to where that stretch really goes; the right one sweeps u
+//      along its whole line past v, never touching it.
+
+const X10_F = makeFrame(-1, 3.5, -1, 8.5, 17, 12);
+const X10_U: XY = [1, 3];
+const X10_V: XY = [2, 7];
+const X10_PICKS: { t: number | null; label: string }[] = [
+  { t: 2, label: "× 2" },
+  { t: 7 / 3, label: "× 2⅓" },
+  { t: null, label: "none reaches" },
+];
+const X10_RIGHT = 2;
+const X10_NOPE = [
+  "Slot 1 is right — but slot 2 is one short of v’s 7.",
+  "Slot 2 is right — but slot 1 overshoots v’s 2.",
+];
+/** a stretch as it would be said: 2, or 2⅓ */
+const x10Say = (t: number) => (Math.abs(t - 7 / 3) < 0.01 ? "2⅓" : `${r1(t)}`);
+
+/** a small picture of one choice: v, and u stretched by t (or u's whole line for "none") */
+function X10Pic({ t }: { t: number | null }) {
+  const sx = (x: number) => 10 + x * 9;
+  const sy = (y: number) => 66 - y * 8;
+  const tip: XY = t === null ? X10_U : [X10_U[0] * t, X10_U[1] * t];
+  return (
+    <svg viewBox="0 0 44 72" className="h-12 w-auto shrink-0" aria-hidden="true">
+      {[0, 1, 2, 3].map((x) => (
+        <path key={`x${x}`} d={`M${sx(x)} ${sy(-0.5)}V${sy(8)}`} strokeWidth={0.5} className="stroke-cat-blue/25" />
+      ))}
+      {[0, 1, 2, 3, 4, 5, 6, 7, 8].map((y) => (
+        <path key={`y${y}`} d={`M${sx(-0.5)} ${sy(y)}H${sx(3.5)}`} strokeWidth={0.5} className="stroke-cat-blue/25" />
+      ))}
+      {t === null && <path d={`M${sx(-0.2)} ${sy(-0.6)}L${sx(2.8)} ${sy(8.4)}`} strokeWidth={1} strokeDasharray="2 2" className="stroke-cat-blue/70" />}
+      <path d={`M${sx(0)} ${sy(0)}L${sx(X10_V[0])} ${sy(X10_V[1])}`} strokeWidth={2} strokeLinecap="round" className="stroke-cat-coral" />
+      <circle cx={sx(X10_V[0])} cy={sy(X10_V[1])} r={2.2} className="fill-cat-coral" />
+      <path d={`M${sx(0)} ${sy(0)}L${sx(tip[0])} ${sy(tip[1])}`} strokeWidth={2} strokeLinecap="round" className="stroke-cat-blue" />
+      <circle cx={sx(tip[0])} cy={sy(tip[1])} r={2.2} className="fill-cat-blue" />
+    </svg>
+  );
+}
+
+export function StretchReach() {
+  const pass = useGate();
+  const [pick, setPick] = useSeed<number | null>("pick", null);
+  const [miss, setMiss] = useState(0);
+  const right = pick === X10_RIGHT;
+  const want = pick === null ? 1 : right ? 8 / 3 : (X10_PICKS[pick].t ?? 1);
+  const [t] = useTween([want], right ? 1600 : 900);
+  const tip: XY = [X10_U[0] * t, X10_U[1] * t];
+
+  const choose = (i: number) => {
+    if (right) return;
+    setPick(i);
+    if (i === X10_RIGHT) pass("No stretch of u reaches v: independent.");
+    else setMiss((m) => m + 1);
+  };
+
+  return (
+    <>
+      <div className="text-center text-sm font-medium text-muted">
+        <div>
+          <span className="font-mono text-cat-blue">u = (1, 3)</span> and <span className="font-mono text-cat-coral">v = (2, 7)</span>
+        </div>
+        <div>Which stretch of u lands exactly on v?</div>
+      </div>
+      <div className="mt-2 flex items-center justify-center gap-3">
+        <div className="w-[6.2rem] shrink-0">
+          <Plane f={X10_F} grid={1} axes={false} label={`u = (1, 3) stretched to (${r1(tip[0])}, ${r1(tip[1])}); v = (2, 7)`} className="my-0! max-w-none">
+            {right && (
+              <path
+                d={`M${X10_F.sx(-1 / 3)} ${X10_F.sy(-1)}L${X10_F.sx(8.5 / 3)} ${X10_F.sy(8.5)}`}
+                strokeWidth={1.4}
+                strokeDasharray="4 4"
+                className={`${FADE} fill-none stroke-cat-blue/50`}
+              />
+            )}
+            <Arrow f={X10_F} from={O} to={X10_V} tone="coral" w={2.4} />
+            <Label f={X10_F} at={X10_V} dx={-8} dy={-2} size={9} className="fill-cat-coral font-mono">
+              v
+            </Label>
+            {pick !== null && <Arrow f={X10_F} from={O} to={tip} tone="blue" w={2} dashed />}
+            <Arrow f={X10_F} from={O} to={X10_U} tone="blue" w={2.4} />
+            <Label f={X10_F} at={X10_U} dx={-8} dy={0} size={9} className="fill-cat-blue font-mono">
+              u
+            </Label>
+            {pick !== null && <Dot f={X10_F} at={tip} r={2.6} className="fill-cat-blue" />}
+            <DoorMark f={X10_F} />
+          </Plane>
+        </div>
+        <div className="grid min-w-0 flex-1 gap-1.5">
+          {X10_PICKS.map((p, i) => (
+            <Choice key={p.label} n={i} look={pick === i ? (i === X10_RIGHT ? "right" : "wrong") : "idle"} disabled={right} onClick={() => choose(i)}>
+              <span className="flex items-center gap-2">
+                <X10Pic t={p.t} />
+                <span className="font-mono text-[0.8rem] leading-tight">{p.label}</span>
+              </span>
+            </Choice>
+          ))}
+        </div>
+      </div>
+      {pick !== null && !right ? (
+        <Nope key={miss}>
+          u × {x10Say(X10_PICKS[pick].t ?? 1)} lands at ({x10Say(X10_U[0] * (X10_PICKS[pick].t ?? 1))}, {r1(X10_U[1] * (X10_PICKS[pick].t ?? 1))}). {X10_NOPE[pick]}
+        </Nope>
+      ) : null}
+      {right ? (
+        <div className={`${FADE} mx-auto mt-2 max-w-sm rounded-2xl bg-accent/10 px-3 py-1.5 text-center text-[0.85rem] leading-snug text-accent-text`}>
+          Slot 1 needs × 2, slot 2 needs × 2⅓. No single stretch does both — u’s line runs right past v.
+        </div>
+      ) : null}
+      <Task done={right}>Pick the stretch of u that lands on v — or “none reaches”.</Task>
+    </>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 10½ · A figure for the exercise's explanation, no task: (1, 3) and (2, 7).
+//       Doubling u lands one slot short of v, and no other multiple does better.
+
+const TA_F = makeFrame(-1, 3, -1, 8, 13, 12);
 
 export function TwoArrowsTest() {
   const s = useScene(3, [700, 2000, 2200]);
@@ -1054,13 +1567,13 @@ export function TwoArrowsTest() {
         k === 0 ? (
           "The pair in question: u = (1, 3) and v = (2, 7)."
         ) : k < 3 ? (
-          "Double u: (2, 6) — one slot short of v. Halving, tripling: no better."
+          "And you couldn't have eyeballed it: 2u lands at (2, 6), one slot short of v."
         ) : (
-          <span className={FADE}>No multiple of u lands on v — just what the zero test said: only (0, 0) works.</span>
+          <span className={FADE}>Here no stretch of u reaches v, and no stretch of v reaches u.</span>
         )
       }
     >
-      <div className="mx-auto w-[5.5rem]">
+      <div className="mx-auto w-[4.8rem]">
         <Plane f={TA_F} grid={1} axes={false} label="no multiple of u lands on v" className="my-0! max-w-none">
           {k >= 2 && <Dot f={TA_F} at={[2, 6]} r={2.6} className="fill-cat-blue/60" />}
           <Arrow f={TA_F} from={O} to={[1, 3]} tone="blue" w={2.4} draw />
@@ -1080,7 +1593,7 @@ export function TwoArrowsTest() {
 }
 
 // ---------------------------------------------------------------------------
-// 10a · A story scene for the finale's setup, no task: evening, the pen is out,
+// 11a · A story scene for the finale's setup, no task: evening, the pen is out,
 //      the dalal waits — and Abbu wants one column crossed off first.
 
 export function AbbuSigns({}: Story) {
@@ -1105,7 +1618,7 @@ export function AbbuSigns({}: Story) {
 }
 
 // ---------------------------------------------------------------------------
-// 10 · The finale. Delete the total-rooms column, rerun the app, watch 3000
+// 11 · The finale. Delete the total-rooms column, rerun the app, watch 3000
 //     come out every time — then settle the sealed bet and Abbu's choice.
 
 export function RerunApp() {
@@ -1192,22 +1705,80 @@ export function RerunApp() {
 }
 
 // ---------------------------------------------------------------------------
+// 11½ · A figure for the finale's explanation, no task: KnobShuffle again, with
+//       the total knob gone. Take 1 off bed and bath and flat 1 falls to 10 —
+//       nothing pays it back — so the knobs slide home to (5, 3).
+
+const S11F_SAY = [
+  "With the total column gone, the knobs have nowhere to shuffle credit.",
+  "Take 1 off bed and bath, and flat 1 drops to 10. No total knob pays it back.",
+  "The app finds (5, 3) every time: a bathroom is worth exactly 3000.",
+];
+
+export function NoRoomToShuffle() {
+  const s = useScene(2, [700, 2400]);
+  const k = s.k;
+  const v = useTween(k === 1 ? [4, 2] : [5, 3], 1200);
+  const r = v.map(Math.round);
+  const rent = r[0] * 2 + r[1] * 1;
+
+  return (
+    <Scene scene={s} caption={<span key={k} className={FADE}>{S11F_SAY[k]}</span>}>
+      <div className="mx-auto flex max-w-[16rem] items-start justify-center gap-5">
+        {["bed", "bath"].map((lab, i) => (
+          <div key={lab} className="text-center">
+            <div className="text-xs font-semibold text-muted">{lab}</div>
+            <div className="relative mx-auto mt-1.5 h-1.5 w-14 rounded-full bg-foreground/10">
+              <span aria-hidden="true" className="absolute top-1/2 left-1/2 h-3 w-px -translate-y-1/2 bg-foreground/25" />
+              <span
+                aria-hidden="true"
+                className="absolute top-1/2 size-3.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-cat-blue ring-2 ring-white"
+                style={{ left: `${((v[i] + 2) / 7) * 100}%` }}
+              />
+            </div>
+            <div className="mt-1.5 font-mono text-sm font-semibold">{r[i]}</div>
+          </div>
+        ))}
+        <div className="text-center opacity-40">
+          <div className="text-xs font-semibold text-muted line-through">total</div>
+          <div className="mx-auto mt-1.5 h-1.5 w-14 rounded-full border border-dashed border-muted/60" />
+          <div className="mt-1.5 text-xs text-muted">gone</div>
+        </div>
+      </div>
+      <div className="mt-3 text-center font-mono text-sm">
+        {term(r[0], 2)} + {term(r[1], 1)} = <b className={rent === 13 ? "text-accent-text" : "text-danger"}>{rent}</b>
+        {rent !== 13 ? <span className="ml-1 text-danger">(khata: 13)</span> : null}
+      </div>
+    </Scene>
+  );
+}
+
+// ---------------------------------------------------------------------------
 // States for `npm run shot` (keys are the useSeed names).
 
 export const fixtures: Fixtures = {
   DalalArrives: { morning: { k: 1 }, evening: { k: 2 }, end: {} },
   TwoAnswers: { start: {}, sealed: { bet: 3, sealed: true } },
+  BothFit: { start: { k: 0 }, morning: { k: 1 }, evening: { k: 2 }, end: {} },
   AreaTwice: { start: {}, one: { filled: [0] }, done: { filled: [0, 1, 2] } },
+  ThreeFacts: { start: { k: 0 }, facts: { k: 1 }, rebuild: { k: 2 }, end: {} },
   TotalColumn: { start: {}, wrong: { rule: 0 }, right: { rule: 1 } },
+  BuiltRowByRow: { start: { k: 0 }, half: { k: 1 }, full: { k: 2 }, end: {} },
   TwoKnobSets: { start: {}, mid: { at: 2 }, done: { at: 5, done: true } },
   KnobShuffle: { mid: { k: 1 }, end: {} },
   YourShuffle: { start: {}, ran: { ran: true }, mid: { ran: true, knobs: [4, 2, 0] }, done: { ran: true, knobs: [4, 2, 1], done: true } },
+  SlowSum: { start: { k: 0 }, bed: { k: 1 }, bath: { k: 2 }, back: { k: 3 }, end: {} },
   ZeroWalk: { start: {}, twin: { rm: 0, amt: [[2, -1], [0, 0]], dots: [["1,1", "0,0", "2,2"], []], tick: [true, false] }, done: { rm: 1, amt: [[2, -1], [1, 0]], dots: [["1,1", "0,0"], ["1,0", "0,1", "1,1"]], tick: [true, true] } },
-  WalkHome: { mid: { k: 2 }, end: {} },
+  WalkHome: { alone: { k: 0 }, vArrives: { k: 1 }, mid: { k: 2 }, end: {} },
+  SlotKill: { start: { k: 0 }, walk: { k: 1 }, many: { k: 2 }, end: {} },
+  ThirdHome: { start: { k: 0 }, w: { k: 1 }, back: { k: 2 }, end: {} },
+  TrapPage: { start: { k: 0 }, dalal: { k: 1 }, last: { k: 2 }, end: {} },
+  StretchReach: { start: {}, twice: { pick: 0 }, third: { pick: 1 }, right: { pick: 2 } },
   NoVisibleCopy: { hunt: { tries: ["1,2", "2,4", "-1,-2"] }, sum: { phase: "sum", k: 0 }, mid: { phase: "sum", k: 2 }, end: { phase: "sum", k: 4 } },
   ThirdButton: { start: {}, found: { phase: 2, amt: [2, 3, -1] }, own: { phase: 2, wAt: [3, 1], placed: ["3,1"], lastLine: "w = (3, 1): presses (−3, −1, 1) — home." }, done: { phase: 2, wAt: [0, 0], placed: ["3,1", "0,0", "-2,2"], lastLine: "w = (0, 0): the zero button. Press it once — home, without going anywhere." } },
   SpotTheExtra: { start: {}, page2: { at: 1, miss: 0 }, trap: { at: 4 }, done: { at: 4, shown: true, done: true } },
   TwoArrowsTest: { mid: { k: 2 }, end: {} },
   AbbuSigns: { mid: { k: 1 }, end: {} },
+  NoRoomToShuffle: { start: { k: 0 }, drop: { k: 1 }, end: {} },
   RerunApp: { start: {}, runs: { del: true, runs: 1 }, ready: { del: true, runs: 3 }, done: { del: true, runs: 3, settled: true } },
 };

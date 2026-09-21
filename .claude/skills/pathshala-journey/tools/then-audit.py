@@ -7,7 +7,9 @@ Run from the repo root:
 
 Per step it prints paragraphs / words / figures / tables in the <Then> (text inside a
 <SideQuest> doesn't count, it lives in a sheet). OVER marks a <Then> past the budget:
-more than ~100 words beside a figure (~110 with none), 3+ figures, or a <Table>. Older
+more than ~80 words beside a figure (~100 with none), 3+ figures, or a <Table>.
+TOO LONG marks a journey past the 11-step cap. The older Bangla journeys predate both
+budgets; judge only the journey you touched. Older
 journeys without <Then> are measured on the paragraphs after the step's last widget.
 """
 import glob
@@ -37,7 +39,7 @@ for f in files:
         words = sum(len(p.split()) for p in paras)
         if not blocks:
             continue
-        over = words > (100 if figs else 110) or len(figs) >= 3 or tables
+        over = words > (80 if figs else 100) or len(figs) >= 3 or tables
         rows.append(f"  step {i:>2}: {len(paras)}p {words:>3}w {len(figs)}fig {tables}table{'  OVER' if over else ''}")
-    print(f"{f}  ({len(steps)} steps)")
+    print(f"{f}  ({len(steps)} steps){'  TOO LONG (cap 11)' if len(steps) > 11 else ''}")
     print("\n".join(rows))

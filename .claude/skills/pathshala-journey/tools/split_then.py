@@ -1,18 +1,19 @@
 """Split an overlong <Then> into a follow-up task, or fold an aside into a <SideQuest>,
-without retyping a word of the author's text (SKILL.md §3.1).
+without retyping a word of the author's text (SKILL.md §3.1). A split adds a step:
+only split when the journey stays at 11 steps or fewer.
 
 Use from the repo root as a module:
 
     PYTHONPATH=.claude/skills/pathshala-journey/tools python3 - <<'EOF'
     from split_then import split, side
     f = "03e_crow_king.mdx"
-    split(f, "Stall-টা যদি পশ্চিমে হতো,",          # first words of the block that starts the 2nd half
-          "এবার stall-টা অন্য দিকে সরিয়ে দেখি।",       # setup line of the new step
-          "Stall-টা পশ্চিমে হলে, card (−3, 4)। সামিনকে মোট কত হাঁটতে হবে?",
+    split(f, "What if the stall were to the west,",   # first words of the block that starts the 2nd half
+          "Now let's move the stall the other way.",  # setup line of the new step
+          "If the stall is west, the card is (−3, 4). How far does Samin walk in all?",
           ["7", "1", "5"], 0,                         # options, index of the right one
-          "পশ্চিমে 3 ঘর হাঁটতে কয় ঘর হাঁটতে হয়?",       # hint, after a wrong pick
-          "পশ্চিমে 3 ঘরও 3 ঘর হাঁটা। তাই minus বাদ দিয়ে যোগ: 3 + 4 = 7।")  # praise = pass note
-    side(f, "এটা শুধু মেলার খেলা না।", "<PandaGibbon />", "পান্ডা না gibbon? Model-কে বোকা বানানো")
+          "How many squares is walking 3 squares west?",  # hint, after a wrong pick
+          "3 west is still 3 squares walked: 3 + 4 = 7.")  # praise = pass note
+    side(f, "This isn't just a fair game.", "<PandaGibbon />", "Panda or gibbon? Fooling a model")
     EOF
 
 split() closes the <Then> and <Step> just before `at`, and opens a new <Step> with the

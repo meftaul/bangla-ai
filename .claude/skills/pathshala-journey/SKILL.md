@@ -1,6 +1,6 @@
 ---
 name: pathshala-journey
-description: Build or revise a Pathshala "journey" lesson — Brilliant-style, one screen at a time (Math for AI 1.x–3.x) — and write its words in the author's voice (conversational Bangla mixed with English, told as a story). Covers the spine a journey needs, keeping each explanation to one screen (follow-up <Check> tasks, <SideQuest> cards), the screen components, the kit API, wiring and verification. Self-contained: use whenever the task touches src/content/articles/math_for_ai/*.mdx journeys or src/components/interactive/*-journey.tsx, including writing, rewriting, shortening or splitting the prose and the <Then> explanations, or the short words inside screens (captions, tasks, feedback, speech bubbles, pass notes). For the same journeys delivered in English, use pathshala-journey-en instead.
+description: Build or revise a Pathshala "journey" lesson — Brilliant-style, one screen at a time, at most 11 steps (Math for AI 1.x onward). Each journey is a story set in everyday Bengali life, told in plain English, and carried by three kinds of motion — animated story scenes, interactive animations the reader drives, and exercises the reader answers by acting on a picture. Covers the spine a journey needs, the 11-step budget, the voice, the screen components, the kit API, wiring and verification. Use whenever a task touches src/content/articles/math_for_ai/*.mdx journeys or src/components/interactive/*-journey.tsx, including writing, rewriting, shortening, splitting or porting an older Bangla journey, the <Then> explanations, and the short words inside screens (captions, tasks, feedback, speech bubbles, pass notes).
 ---
 
 # Pathshala journeys
@@ -9,9 +9,32 @@ A journey is an MDX article whose body is `<Journey><Step>…</Step>…</Journey
 screen at a time, each with one interactive screen component and one thing to do; the
 Continue arrow stays locked until the screen calls `pass()`.
 
+**The goal is that the concept becomes easy to grasp.** Everything below serves that: a
+story the reader cares about, motion that shows what the words say, and hands-on play
+that lets the reader find the idea before it is named.
+
+**What every journey is:**
+
+- **A story set in Bengali life, told in plain English.** The readers are Bengali. The
+  scenes are theirs: a school in a Bangladeshi town, the haat, a tea stall, a rickshaw
+  ride, cricket on the field, load-shedding, Pohela Boishakh, a launch on the river. The
+  language is English, simple enough for a Bengali twelve-year-old reading in their
+  second language (§2).
+- **Backed by three kinds of motion** (§1.1): an animated **story scene** that acts out
+  the setup, an **interactive animation** the reader drives to discover the idea, and a
+  **watch-only figure** in the explanation. Exercises are **visual** too: the reader
+  answers by tapping, dragging or picking a picture, not by reading a list of text
+  options (§3.2).
+- **At most 11 steps. Hard cap.** Every `<Step>` counts: the recall at the door, checks,
+  the exercise and the ending. When a journey wants a twelfth step, it is two journeys.
+  Planning an article means cutting it into **as many journeys as it honestly holds**,
+  one "aha" each (`pathshala-journey-plan`).
+
 **The model journeys** are **1.1** (`01c_image_numbers.mdx` + `image-journey.tsx`) and
-**2.3** (`02c_king_queen.mdx` + `word-journey.tsx`) — the author's own pick. Read one of
-them before writing. 3.1 (`03a_treasure_add.mdx` + `treasure-journey.tsx`) is a good
+**2.3** (`02c_king_queen.mdx` + `word-journey.tsx`) — the author's own pick. Their words
+are Bangla (the course was Bangla until now): read one for **structure, pacing and
+screen craft** (what each screen asks, when the reveal lands, how short the prose runs),
+never for wording. 3.1 (`03a_treasure_add.mdx` + `treasure-journey.tsx`) is a good
 reference for *screen* craft, but its original shape was a tour of errands rather than a
 journey with a spine (§0).
 
@@ -31,213 +54,230 @@ only at the end.**
   queen` and withholds the answer for eight screens; 1.1 opens with a task that can fail
   (Rafi's drawing must match *exactly*, over a voice-only phone). **Never let the first
   `<Then>` resolve the hook** — that is the single most common way a journey goes flat.
-  If the hook dies on screen 1, screens 2–8 have nothing pulling them.
+  If the hook dies on screen 1, the rest has nothing pulling it.
 - **Seal the reader's guess.** A prediction screen that locks a bet in and refuses to
   mark it (`NasibBet`, `PrizeRow`) buys real suspense. `pass()` says the bet is sealed
-  and the answer comes later: `বাজি ধরা হলো। ছয়টা কাজ একটা একটা করে চেষ্টা করবো, আর শেষে
-  আপনার বাজিটা মিলিয়ে দেখবো।`
-- **Predict-first is rationed: 2–3 screens per journey, the sealed bet included.** A guess
-  only works when the reader commits to something that *might be wrong*. When every
-  screen opens with `আগে একটা guess করুন`, it costs nothing, the widget moves on either
-  way, and by the third one it's just a tap. (3.7 once had six of nine; 2.7 had seven.)
-  Spend the guesses where the result truly surprises, where the obvious answer is wrong:
-  the opening hook, the moment a pattern flips (3.7 `Yardstick`: 18 cm turns out to be
-  the *big* gap), the one reveal per idea that the rest build on (2.7 keeps one per
-  surprise: `DiceMany`, `CoinMany`, `SugarCube`). **Every other screen goes straight to
-  doing**: the controls show at once, and the `Task` says what to do and what to watch
-  (`চারটা unit-এই ওজন লিখে দেখুন, twin কে হয়।`). Don't put a guess on:
-  - a calculation whose answer is easy to see coming (`(3, 4)`-কে কত দিয়ে গুণ করলে 1?);
-  - the second or third case of a pattern already shown (10D after 3D; weights after heights);
-  - a question the reader can settle by just pressing the buttons (`e₁` কীভাবে চাপবেন?);
-  - the simplest case done by hand (step 2's grocery bill).
+  and the answer comes later: *"Bet sealed. We'll check it at the end."*
+- **Predict-first is rationed: 2 screens per journey, the sealed bet included** (3 at
+  most in an 11-step journey). A guess only works when the reader commits to something
+  that *might be wrong*. When every screen opens with "take a guess first", it costs
+  nothing and by the third one it's just a tap. Spend the guesses where the obvious
+  answer is wrong: the opening hook, or the moment a pattern flips (3.7 `Yardstick`:
+  18 cm turns out to be the *big* gap). **Every other screen goes straight to doing**:
+  the controls show at once, and the `Task` says what to do and what to watch (*"Write
+  the weight in all four units and see which one is the twin."*). Don't put a guess on:
+  - a calculation whose answer is easy to see coming;
+  - the second case of a pattern already shown;
+  - a question the reader can settle by just pressing the buttons;
+  - the simplest case done by hand.
 
-  A wrong option that teaches something (`1.4` is the walker's length, `3,780` is add-then-
-  multiply) needn't be lost: say it as one plain sentence in the result line or the
-  `<Then>` (`ঘর দুইটা সরাসরি যোগ করলে আসতো 1.4, কিন্তু সেটা সামিনের হাঁটার মাপ।`). A question
-  asked *after* the reader has done the thing (`BigSpender`, `TiltedField`'s “আর কোনো
-  উপায় আছে?”) or an open question in the setup text doesn't count against the budget.
+  A wrong option that teaches something needn't be lost: say it as one plain sentence in
+  the result line or the `<Then>` (*"Add the two slots straight and you'd get 1.4 — but
+  that's how far Samin walked."*).
 - **Every middle screen earns a piece of the answer**, and its opening line says which
-  piece: `বাজির তিন নম্বর কাজ।` · `প্রমাণ জমানো শুরু হোক সামিনের 7 দিয়ে।` · `তিনজন হয়ে গেল,
-  এখন নাসিবের পালা।` Objections from the cast are the cheapest way to turn a dry rule
-  into a beat — each of 3.4's three rules of length is somebody refusing to accept the
-  verdict.
-- **The old way fails first.** 1.1's `JustWords` (describing it aloud), 2.3's `ListGuess`
-  (300 meaningless numbers). Let the reader feel the need before the tool arrives.
+  piece: *"Job three of the bet."* · *"Three down — now it's Nasib's turn."* Objections
+  from the cast are the cheapest way to turn a dry rule into a beat.
+- **The old way fails first.** 1.1's `JustWords` (describing it aloud), 2.3's
+  `ListGuess` (300 meaningless numbers). Let the reader feel the need before the tool
+  arrives.
 - **Mischief, and an honest limit.** 1.1 breaks the reading order on purpose to expose a
-  hidden assumption; 2.3 owns up to its own `≈` and to the words it quietly excludes;
-  3.6's `BigSpender` shows the journey's own trick being the wrong move. Admitting the
-  seam builds more trust than hiding it.
-- **`এবার আপনার পালা`:** one late screen with no scaffolding, where the reader answers the
-  journey's question themselves (2.3's `FindPair`, 3.4's `PrizeGiven`, 3.5's `PickTape`).
-  Wrong tries bounce, so the numbers actually get read.
-- **The last step closes the loop it opened**, by name: `## শেষ! বাজির ফলাফল` ·
-  `## শেষ! সোমের ধাঁধা মিটলো` · `## শেষ! মামা ছবি নিয়ে বাড়ি গেলেন`. Then a short recap and
-  one memorable rule (`list হিসেবে রাখুন, arrow হিসেবে ভাবুন`), then the bridge — and the
-  bridge teases the *next* journey's question, not its topic.
+  hidden assumption; 2.3 owns up to its own `≈`. Admitting the seam builds trust.
+- **"Your turn":** one late screen with no scaffolding, where the reader answers the
+  journey's question themselves (2.3's `FindPair`, 3.4's `PrizeGiven`). Wrong tries
+  bounce, so the numbers actually get read.
+- **The last step closes the loop it opened**, by name: `## The end! The bet is settled` ·
+  `## The end! Mama goes home with the photo`. Then a short recap, one memorable rule,
+  and the bridge — which teases the *next* journey's question, not its topic.
 
-**The usual skeleton** (8–11 widget steps, plus the follow-up `<Check>` steps that §3.1
-adds when an explanation outgrows one screen; past ~16 steps in all, split it into two
-journeys):
+**The skeleton — 11 steps at most:**
 
-| step | what is on it |
-| --- | --- |
-| 0 | a recall `<Check>` on the previous journey's idea, tied to the story's first callback (§0.1) |
-| 1 | the scene, the stake, the question. A prediction, sealed unmarked. |
-| 2 | the obvious way, and it fails — or the simplest case, done by hand |
-| 3…n−3 | one piece of the answer each, often a named character's objection |
-| (after any of these) | a follow-up `<Check>` step: one question on the explanation's second idea, then that half of the explanation (§3.1) |
-| n−2 | `এবার আপনার পালা` — unaided; the reader answers the journey's question |
-| (2 of these, mid-journey) | a retrieval `<Check>` on an idea from an *earlier* journey, placed where the story calls back to it (§0.1) |
-| n−1 | `## একটু ঝালিয়ে নিন` + `<Check>` |
-| n | `## শেষ! <the loop closed by name>` — recap, one rule, `<LessonLink>` |
+| step | what is on it | motion |
+| --- | --- | --- |
+| 1 | the scene, the stake, the question; a prediction, sealed unmarked. May open with a one-line recall of the last journey (§0.1). | story scene + the bet |
+| 2 | the obvious way, and it fails — or the simplest case, done by hand | interactive animation |
+| 3…7 | one piece of the answer each, often a named character's objection | story scene (if the setup is a scene) + interactive animation + figure in `<Then>` |
+| 8 | **Your turn** — unaided; the reader answers the journey's question | interactive, wrong tries bounce |
+| 9 | **Try it** — a visual exercise on a new case (§3.2) | the reader acts on a picture |
+| 10 | `## The end! <the loop closed by name>` — recap, one rule, `<LessonLink>` | a closing story scene |
+
+That is 10; the 11th slot is spare — a second middle piece, or one retrieval exercise
+(§0.1). A journey can be shorter (7–8 steps is fine) as long as it still has a question,
+a failed old way, the pieces, *Your turn* and the ending. **A journey that needs more
+than 11 steps is carrying two ideas: split it** (and update the spec). Don't squeeze by
+cramming two ideas into one step or one `<Then>` — that just moves the overload.
 
 ---
 
-### 0.1 · Practice: recall at the door, retrieval in the middle
+### 0.1 · Practice inside the budget
 
-A journey that checks only once, at the end, never finds out whether last week's idea stuck.
-So every journey also gets:
+A journey that checks only once, at the end, never finds out whether last week's idea
+stuck. But practice spends steps, so it is lean:
 
-- **An opening recall step**, before the hook: one line of setup, then a `<Check>` on the
-  *previous* journey's main idea (`(1, 1) থেকে (4, 2)-এ থামা arrow কোন vector?`). Tie it to
-  the story's first callback where there is one (04c opens on ফাহিমের box → ask for a box).
-  The child paragraph (1–2 sentences) turns from the old idea to today's scene, and must
-  not hint at today's answer.
-- **Two mid-journey retrieval checks** (one in a journey already past ~17 steps), each on
-  an idea from an *earlier* journey, spaced across the course, not just the last one.
-  Place each right before the screen whose setup already calls back
-  (`২.৭-এ নাসিবের coin…`, `রাফিকে ফোনে পাখির ছবি…`): the callback becomes something the
-  reader answers instead of reads. Setup line: `<screen>-এর আগে <old scene> একবার মনে করি।`
-- Never place one where its answer gives away the next screen's prediction or the
-  journey's question. Three options, right answer spread over A/B/C, a one-line `praise`,
-  a `hint` that points back at the old scene.
+- **Recall at the door, folded into step 1.** One line of setup that calls back the
+  previous journey inside today's scene (*"Fahim still has last week's box…"*), or — if
+  the budget allows — a single visual recall exercise as step 1 with the hook on step 2.
+  It must not hint at today's answer.
+- **At most one retrieval exercise mid-journey**, on an idea from an *earlier* journey,
+  placed right before the screen whose setup already calls back to it. Only if a step is
+  free under the cap.
+- **The "Try it" exercise near the end is required** (§3.2): a new case of today's idea,
+  answered by acting on a picture.
+- Never place practice where its answer gives away the next screen's prediction or the
+  journey's question.
 
 ## 1 · Design rules (the author's standing feedback)
 
 - Reader is **twelve and knows no school math.** Nothing is named before it is felt.
 - Every idea follows: **tiny question → plays a small, countable case by hand → spots
-  the pattern → reveal.** The eureka comes from what they did, not from text. A tapped
-  prediction before the play is a spice, not a step: 2–3 per journey (§0).
-- **Minimal prose; the story is told by the interaction.** Words around the widget: set
-  up before, explain after. One or two lines of story before the widget — the scene and
-  the question, never the answer. After it, `<Then>` holds the explanation, and it shows
-  only once the screen is cleared, so it never spoils the task. Every step gets one, and
-  it fits **about one phone screen** (§3.1): a second screen of reading is a second task.
+  the pattern → reveal.** The eureka comes from what they did, not from text.
+- **Minimal prose; the story is told by the animation and the interaction.** One or two
+  lines of story before the widget — the scene and the question, never the answer. After
+  it, `<Then>` holds the explanation, and it shows only once the screen is cleared, so it
+  never spoils the task. It fits **about one phone screen** (§3.1).
 - Feel the need before the tool (a sum too long to write → Σ). Teach notation on an
-  everyday example first (roll numbers, আম্মুর বাজারের list).
-- Everyday games for "why": dice totals, coin flips, peeling tiles, a radio knob.
-- **Recurring cast:** Shiku (the class robot, walks the chalk grid), সামিন, সোম, ফাহিম,
-  নাসিব, আম্মু, ডাক্তার আপা. Concrete local names, never "Object A / Object B".
-- Widget text is spoken Bangla, never formula shorthand (§3).
+  everyday example first (roll numbers, Ammu's bazaar list).
+- Everyday games for "why": dice totals, coin flips, peeling tiles, a radio knob, a
+  carrom striker, a kite string.
+- **Recurring cast:** Shiku (the class robot, walks the chalk grid), Samin, Som, Fahim,
+  Nasib, Ammu, Dr. Apa, Mama, Rina, Karim. Concrete Bengali names, never "Object A /
+  Object B", never swapped for Western names.
+- Widget text is spoken English, never formula shorthand (§3).
 - **The reader sees the action and its effect at the same time.** Whatever a tap changes
   must be on screen, next to the button, when the tap lands, with no scrolling. The author
   has had to ask for this more than once. Lay out every widget by §7 "Action and effect
   in one view".
+
+### 1.1 · Every step moves
+
+A step is not done until something on it moves. For each step, fill these three slots,
+in this order of priority:
+
+| slot | where | what it is | how |
+| --- | --- | --- | --- |
+| **Interactive animation** | the widget | the reader drives it: drags, taps, steps a machine, pours, walks Shiku — and watches the result animate. The discovery happens here. | the screen component (§5, §6) |
+| **Story scene** | the setup, before the widget | a small cartoon of the setup: the cast walks in, someone makes a claim, the problem turns up. Watch-only. | `StoryFrame` + `Stage`, written with `story` (`pathshala-animate`) |
+| **Explanation figure** | inside `<Then>` | acts out the explanation: the pattern replayed calmly, the formula built slot by slot, a callback. Watch-only. | `Scene` (`pathshala-animate`) |
+
+Every step has an interactive animation. Every step whose setup describes a scene gets a
+story scene. Every `<Then>` gets a figure (at most two). A step with only text and a
+multiple-choice list is a sign the idea hasn't been turned into something to *do* yet.
+How to build scenes and figures is in the **pathshala-animate** skill.
 
 ---
 
 ## 2 · The voice
 
 Prose that sounds like one person explaining something to a friend over tea. Not a
-translated textbook, not a chatbot.
+textbook, not a chatbot, not a corporate e-learning script. The readers are Bengali and
+read English as a second language, so the English is **plain**.
 
 ### 2.1 · Core feel
 
-- **Talk to the reader as `আপনি`**, in relaxed spoken চলিত: `ধরেন`, `চলেন`, `দেখুন`,
-  `খেয়াল করেছেন?`, `বলুন তো`.
-- **Everyday spoken forms show up now and then:** `নাই` alongside `নেই`, and `যেয়ে`,
-  `যেগুলা`, `দেই`, `করতেছে`, `গাধা কিসিমের`, `কেচালটা বাধলো`, `সুন্দর মতো`. Sprinkle them
-  in; too many turns it into a caricature.
-- **Short sentences, one idea per paragraph.** Paragraphs run 2–6 sentences. Punchy
-  fragments are fine: `তবে সেটা অনুভূতির মাধ্যমে না। সংখ্যার মাধ্যমে।`
-- **Light, dry humour, never forced:** `কম্পিউটার আসলে খুবই গাধা কিসিমের।`
-- **Honest and understated.** No hype: `আমরা just measure করেছি। এতটুকুই।`
+- **Talk to the reader as "you"**, relaxed and spoken: *"say"*, *"let's"*, *"look"*,
+  *"notice that?"*, *"have a go"*.
+- **Short sentences, one idea per paragraph.** Aim for sentences under ~15 words.
+  Paragraphs run 2–5 sentences. Punchy fragments are fine: *"But not through feelings.
+  Through numbers."*
+- **Contractions:** *it's*, *that's*, *doesn't*, *we'll*. Written-out forms sound like a
+  textbook.
+- **Light, dry humour, never forced:** *"The computer, truth be told, is a bit of a
+  donkey."*
+- **Honest and understated.** No hype: *"We just measured it. That's all."*
 
-### 2.2 · How Bangla and English mix
+### 2.2 · Plain English for a Bengali reader
 
-Bangla carries the grammar (verbs, particles, sentence flow). English fills in the nouns
-and technical terms, the way Bangladeshi tech people actually talk.
+- **Common words only.** If a class-seven student in Dhaka wouldn't know the word, use a
+  simpler one: *use*, not *utilize*; *work out*, not *compute*; *about*, not
+  *approximately*; *so*, not *therefore*.
+- **No Western idioms or culture.** No *ballpark*, *touchdown*, *piece of cake*, *hit it
+  out of the park*, Thanksgiving, snow days, dollars, miles, lemonade stands. Use taka,
+  kilometres, cricket, sherbet, the monsoon.
+- **Few phrasal verbs and no slang.** *Find*, not *figure out*; *give up*, *line up* are
+  fine; *suss out*, *gonna*, *kinda* are not.
+- **Spelling is British** (maths, colour, centimetres, metres), as Bangladeshi schools
+  teach it, and consistent within a journey.
+- **Technical terms stay plain English:** vector, pixel, dimension, grid, channel,
+  representation, binary, order, element. Never coin a cute synonym. On first appearance,
+  give the plain sense in a few words: *"**pixel** (short for picture element)"*.
 
-- **Technical terms stay in English (Latin script).** Never coin Bangla for them:
-  vector, feature, dimension, pixel, grid, channel, representation, machine learning,
-  binary, order, element. Never `যন্ত্র শিক্ষণ` or `মাত্রা`.
-- **Never glue a translated adjective onto a noun.** English says "the average student",
-  but `গড় ছাত্র`, `গড় customer`, `গড় মানুষ` are not phrases anyone says. Keep the English
-  word and rebuild the sentence, usually with `average-এ` as an adverb: `আমাদের student-রা
-  average-এ কেমন গড়নের`, `average গড়নের একজন`. Same for typical, standard, ideal. Test by
-  ear. (`গড়` alone as noun or verb is fine: `উচ্চতাগুলোর গড়`, `দলের গড়ে সরান`.)
-- **Casual English words also stay Latin:** guess, balance, data, just, example,
-  classroom, height, weight, express, measure, count, pick, add, matter.
-- **Fully naturalized loanwords go in Bangla script:** ফোন, কম্পিউটার, সার্চ, মেসেজ, বাল্ব,
-  ক্লাস, কারেন্ট, লোডশেডিং.
-- **Bangla suffixes attach to English words.** Hyphen in polished text, space in looser
-  text; stay consistent within one piece: `lamp-টা`, `data-ও`, `pixel-এর`, `Order-টাই`.
-- **English verbs become noun + করা/হওয়া/দেওয়া:** `express করা`, `count করতে পারবো`,
-  `order matter করে`.
-- **Capitalize an English word that opens a sentence:** `Binary-র আসল মজাটা…`,
-  `Grid-টা আপনার কাছে একটা ছবি…`
-- **Sometimes a whole English line lands the punch:** `Thirty-six million numbers!!!`
-- **On a term's first appearance, give English + its Bangla sense:**
-  `**pixel** (picture element-এর ছোট রূপ)`, `learn করতে হচ্ছে বা শিখতে হচ্ছে`.
+### 2.3 · The world is Bengali
 
-**Numbers.** Bangla numerals for everyday counting in the story (`৫টা`, `৮টা row`,
-`১ কোটি ২০ লাখ`); ASCII digits for machine values, data and anything inside a formula or
-tuple (`0`, `255`, `(180, 78)`, `12 megapixel`). Counts inside Bangla screen text go
-through `bn()`. Restate big results in Bangla words for impact:
-`একটা ছবি মানে তিন কোটি ষাট লাখ সংখ্যা।`
+- **Names in Latin script:** Shiku, Samin, Som, Fahim, Nasib, Ammu, Dr. Apa, Mama. Never
+  translate a name into a role ("Auntie", "the doctor"). Family words stay (*Ammu*,
+  *Mama*, *Apa*, *Bhaiya*); gloss once only if the scene doesn't make it clear.
+- **Local everyday words stay local:** sherbet, tiffin, the bazaar, the haat, fuchka,
+  rickshaw, CNG, launch, load-shedding, Pohela Boishakh. Use them freely; gloss in three
+  words at first use only if context doesn't carry it. Don't turn the sherbet stall into
+  a lemonade stand.
+- **Stakes the reader has lived:** a class prize, a cricket match, sharing a tiffin box,
+  a bill at the tea stall, a power cut during exams, a shopkeeper who won't give change.
+- **Numbers are ASCII digits everywhere** (*5 rows*, *36 million*, *(180, 78)*). Money is
+  in taka (*৳40* or *40 taka*). Never call `bn()` in a new screen. Restate big results in
+  words for impact: *"One picture: thirty-six million numbers."*
+- **Punctuation.** Sentences end in a period. Curly quotes `“ ”` for dialogue. `???` and
+  `!!!` only at the one or two peak moments of a piece.
 
-**Punctuation.** End sentences with `।`. Bangla curly quotes `“ ”` for dialogue. `???`
-and `!!!` only at the one or two peak moments of a piece.
+### 2.4 · Transitions (instead of "Next, we will discuss")
 
-### 2.3 · Transitions (instead of "Next, we will discuss")
+*"So now the question is…"* · *"Alright, now…"* · *"That settles the pictures."* ·
+*"Everything was going nicely… and then trouble."* · *"Let's do the sum now."* · *"Let me
+break it down a bit more."* · *"Time to meet another word."*
 
-`তাহলে প্রশ্ন দাঁড়ালো…` · `এবার…` · `আচ্ছা চলুন…` · `ছবির ব্যাপারটা তো বোঝা গেল।` ·
-`এতক্ষণ তো খুব সুন্দর মতো… কিন্তু কেচালটা বাধলো…` · `এবার হিসাবটা করে ফেলা যাক।` ·
-`আরেকটু ভেঙে বলি।` · `এখন আরেকটা শব্দের সাথে পরিচয় করিয়ে দেই।`
+### 2.5 · What makes it sound robotic (avoid)
 
-### 2.4 · What makes it sound robotic (avoid)
-
-- সাধু or officialese Bangla: `নিম্নলিখিত`, `উক্ত`, `প্রদান করা হলো`, `পরিলক্ষিত হয়`,
-  `এই নিবন্ধে আমরা শিখব…`.
-- English sentence structure translated word-for-word into Bangla.
-- Coined Bangla terms for technical words; or the inverse, English-heavy sentences where
-  Bangla is just glue.
+- Formal English: *"It can be observed that"*, *"the following example"*, *"In this
+  article, we will learn…"*, *"utilize"*, *"in order to"*.
 - Opening with a definition, or naming a concept before the reader has felt the problem.
-- Bullet lists doing the explaining. Prose explains; bullets are rare, and a short recap
-  list belongs only at the very end.
-- A "সারসংক্ষেপ" after every section, or perfectly symmetrical sections.
-- Over-explaining. Trust the reader and leave a puzzle: `কেন ঘর ছোট আর বেশি হলে ছবি
-  পরিষ্কার হবে, নিজেরা ভেবে বের করবেন।`
-- Emojis, hype (`অসাধারণ বিপ্লব!`), exclamation marks on ordinary sentences.
+- Bullet lists doing the explaining. Prose explains; a short recap list belongs only at
+  the very end.
+- A summary after every section, or perfectly symmetrical sections.
+- Over-explaining. Trust the reader and leave a puzzle: *"Why smaller squares mean a
+  clearer picture — work that one out yourself."*
+- Emojis, hype (*"an amazing revolution!"*), exclamation marks on ordinary sentences.
 - Formula shorthand standing in for a sentence. `=`, `→`, `·` live inside formulas only.
 - Explaining before the reader has played. The explanation goes after the screen, in
   `<Then>`.
 
-### 2.5 · Before / after
+### 2.6 · Before / after
 
 Robotic:
-> ভেক্টর হলো সংখ্যার একটি ক্রমযুক্ত তালিকা। নিম্নে একটি উদাহরণ প্রদান করা হলো।
+> A vector is an ordered list of numbers. An example is provided below.
 
 The author's voice:
-> ছবির ব্যাপারটা তো বোঝা গেল। এখন চলেন একটা classroom এর example দেওয়া যাক। ধরেন একটা
-> classroom এর প্রত্যেকটা student এর height আমরা centimeter আর weight kg তে মাপবো। …
-> এই representation টার কিন্তু একটা নাম আছে। নামটা হলো vector।
+> So the picture part is settled. Now let's take a classroom. Say we measure every
+> student's height in centimetres and weight in kilograms. … This list has a name, by
+> the way. It's called a **vector**.
 
 | Robotic | Spoken |
 | --- | --- |
-| `শেষ address = দুই হাঁটা জোড়া।` | `Card ১ হেঁটে Shiku যেখানে থামলো, card ২ শুরু হলো সেখান থেকেই। দুই হাঁটা জুড়ে শেষ address (4, 5)।` |
-| `জোড়া ১/৩ · প্রথম card-কে বলি u` | `জোড়া ১/৩। নাম ছোট রাখতে প্রথম card-টাকে ডাকি u, দ্বিতীয়টাকে v।` |
-| `u + v = (u₁ + v₁, u₂ + v₂)। ঘরে ঘরে যোগ।` | `প্রথম ঘরের সাথে প্রথম ঘর, দ্বিতীয়র সাথে দ্বিতীয়। Vector যোগ বলতে এতটুকুই।` |
-| `150 cm + 12 বছর = ? সেন্টিমিটারের সাথে বছর যোগ হয় না।` | `150 cm-এর সাথে 12 বছর? উচ্চতার সাথে বয়স যোগ করে যে সংখ্যা আসবে, তার মানে কেউ জানে না।` |
-| `✕ guess মেলেনি` | `✕ উল্টোটা হয়েছে` |
-
----
+| `Final position = sum of the two walks.` | `Shiku stopped where card 1 ended — and that's exactly where card 2 begins. Two walks joined, final address (4, 5).` |
+| `Pair 1/3 · call the first card u` | `Pair 1 of 3. To keep the names short, let's call the first card u and the second v.` |
+| `u + v = (u₁ + v₁, u₂ + v₂). Addition is component-wise.` | `First slot with first slot, second with second. That's all vector addition means.` |
+| `150 cm + 12 years = ? Units cannot be added.` | `150 cm plus 12 years? Nobody knows what that number means. Not even the calculator.` |
+| `✕ guess did not match` | `✕ the other way round` |
 
 **Then the author's pass.** Voice rules alone don't stop a rewrite. Before a journey is
-done, run every line through the **pathshala-voice** skill, which lists what the author
-actually changes in AI drafts: plain English words people say, no assumed steps, the
-story's own logic filled in, filler cut. Romanized Banglish typed into a file is the
-author's own edit: convert it, don't rewrite it.
+done, run every line through the **pathshala-voice** skill: the edits the author actually
+makes to AI drafts — words people say, no assumed steps, the story's own logic filled
+in, filler cut.
+
+### 2.7 · Porting an older Bangla journey
+
+Journeys 1.x–4.x were written in Bangla. Porting one means two jobs:
+
+- **Translate the author's sentences, don't rewrite them.** Every beat, wrong option and
+  pass note carries across. Translate the feel, not the words: a spoken Bangla idiom
+  becomes the plain English a kid would use (*কেচালটা বাধলো* → "and then trouble").
+- **Mechanics:** `।` → `.`; `bn()` → ASCII digits; Bangla-script loanwords (ফোন,
+  কম্পিউটার) → phone, computer; names to Latin script. Keep the world: sherbet stays
+  sherbet, Ammu stays Ammu.
+- **Fit the cap.** If the old journey has more than 11 steps, don't cram: propose a
+  split into two journeys (each with its own question) and get the author's OK.
+- **Add the motion it lacks** (§1.1): old journeys often have text-only checks; turn the
+  end check into a visual exercise (§3.2).
+- Then run `pathshala-voice` over the result as you would a fresh journey.
+
+---
 
 ## 3 · Where each piece of text goes
 
@@ -245,94 +285,94 @@ Each slot has one job, all of it in the §2 voice: someone sitting beside the re
 
 | Where | Its job | Example |
 | --- | --- | --- |
-| Setup (MDX, before the widget) | the scene + the question, 1–2 lines | `Shiku-র হাতে এমন দুইটা card। ও হাঁটা শুরু করার আগে বলুন তো, গুপ্তধন কোথায়?` |
-| Caption (in the widget) | what to look at, or how to read it | `কাগজে পূর্ব মানে ডানে, উত্তর মানে ওপরে। আর card ২ পড়া শুরু হবে card ১ যেখানে থামে, সেখান থেকে।` |
-| `Task` | the one thing to do, as a polite request; on most screens that's the doing itself, plus what to watch (a guess only on the 2–3 predict screens, §0) | `চারটা unit-ই ঘুরিয়ে দুই পাশের দূরত্ব মিলিয়ে দেখুন।` · predict screen: `আগে কাগজে tap করে একটা guess করুন, তারপর Shiku-কে হাঁটতে পাঠান।` |
-| Result line / `Nope` | react to what *they* did; nudge toward the pattern, don't hand over the rule | `উঁহু, Shiku গিয়ে থামলো (6, 4)-এ, আর আপনার উত্তর ছিল (5, 4)। Card দুইটার সংখ্যাগুলোর দিকে আরেকবার তাকান তো।` |
-| `Speech` | the character in their own voice | নাসিব: `আমার এই দুইটা card-ও একটু যোগ করে দাও না!` |
-| `pass()` note | **one line** (≤ ~34 visible characters): the thing the reader will remember, not a retelling. A long note eats the widget's screen and turns the ending's recap into a wall | `u + v = v + u, আগে-পরে লাগে না।` · `Unit বদলালে twin বদলায়।` |
-| `<Then>` (MDX, after the widget) | the explanation, as story: 1–2 short paragraphs and at most 2 figures, one phone screen (§3.1) | below |
-| `Check` children | why the right answer is right, and what the tempting wrong one did | `যারা (6, 4) বেছেছিলেন, তারা minus চিহ্নগুলো বাদ দিয়ে ফেলেছিলেন।` |
-| Follow-up step setup | one line reacting to the last screen and pointing at the next idea | `সব dot তো একটা লাইনে বসলো। এবার নাসিবের শরবত।` |
-| Follow-up `Check` | a question the reader can answer from what they just did; its answer is what the second half explains | `নাসিবের শরবতে লেবু আগের মতোই, শুধু চিনি ডাবল। ওর dot কোথায় বসবে?` |
-| Follow-up `praise` | the eureka as a one-line pass note (it goes into the ending's recap), never `ঠিক ধরেছেন!` | `এক ঘর একা বাড়ালে dot লাইন ছাড়ে।` |
-| `SideQuest` title | what's inside, as a short noun phrase | `Mars Climate Orbiter: সংখ্যা ঠিক, unit ভুল` |
+| Setup (MDX, before the widget) | the scene + the question, 1–2 lines | `Shiku has two cards like this. Before he starts walking — where's the treasure?` |
+| Caption (in the widget) | what to look at, or how to read it | `On paper, east means right and north means up. And card 2 starts wherever card 1 stops.` |
+| `Task` | the one thing to do, as a friendly request, plus what to watch | `Turn all four units and match the two distances.` · predict screen: `Tap a guess on the paper first, then send Shiku walking.` |
+| Result line / `Nope` | react to what *they* did; nudge toward the pattern, don't hand over the rule | `Nope — Shiku stopped at (6, 4), and you said (5, 4). Look at the numbers on the two cards once more.` |
+| `Speech` | the character in their own voice | Nasib: `Add these two cards of mine too, will you!` |
+| `pass()` note | **one line** (≤ ~44 visible characters): the thing the reader will remember, not a retelling | `u + v = v + u — order doesn't matter.` · `Change the unit, change the twin.` |
+| `<Then>` (MDX, after the widget) | the explanation, as story: 1–2 short paragraphs and 1–2 figures, one phone screen (§3.1) | below |
+| Exercise feedback | why the right answer is right, and what the tempting wrong one did | `Those who picked (6, 4) dropped the minus signs.` |
+| `SideQuest` title | what's inside, as a short noun phrase | `Mars Climate Orbiter: right numbers, wrong unit` |
 
-**The `<Then>` explanation** points at what the reader just saw (`খেয়াল করেছেন, …?`,
-`Table-টার দিকে একবার তাকান।`), says *why* in everyday terms, names the idea last in
-**bold**, and only then gives the formula. Good ingredients: a callback to an earlier
-lesson or character (`২.২-এ … End − Start করতেন, সেটা আসলে এই বিয়োগই ছিল।`), where it
-shows up in real ML, comfort for a common wrong guess (`যারা (4, 3) বেছেছিলেন, তারা একা
-নন।`), a line that ticks off the journey's spine (`তার মানে দুই নম্বর কাজও শেষ`), and now
-and then one question left open (`u − v আর v − u কি এক? নিজেই ভেবে দেখুন।`). Don't recount
-the clicks or restate what the screen already shows.
+**The `<Then>` explanation** points at what the reader just saw (*"Notice how…"*),
+says *why* in everyday terms, names the idea last in **bold**, and only then gives the
+formula. Good ingredients: a callback to an earlier lesson or character, where it shows
+up in real ML, comfort for a common wrong guess (with the reason it was tempting), a line
+that ticks off the journey's spine (*"so that's job two done"*), and now and then one
+question left open. Don't recount the clicks or restate what the screen already shows.
 
 **Rules of thumb for text inside a screen:**
-- Full sentences ending in `।`.
-- `আপনি` with polite imperatives: দেখান, দিন, মিলিয়ে নিন, tap করুন.
-- Names over labels: `সামিনের card`, not `card v`.
-- Tuple and card values stay Latin; counts in Bangla sentences go through `bn()`.
+- Full sentences ending in a period.
+- "You" with friendly imperatives: look, try it, match them, tap.
+- Names over labels: `Samin's card`, not `card v`.
+- Values and tuples in ASCII digits.
 
 ### 3.1 · One screen per explanation
 
 Attention peaks right after the reader solves something and drops fast. A `<Then>` that
-runs for several screens puts the most reading where attention is lowest. (3.7's slider
-step once had one task and then ~350 words and 3 figures.) So:
+runs for several screens puts the most reading where attention is lowest. So:
 
-**The budget.** A `<Then>` is about one phone screen: **1–2 short paragraphs, ≤ ~100 words
-of Bangla, and at most 2 figures.** With no figure, up to ~110 words or three short
-paragraphs is fine. No `<Table>` in a `<Then>`. `tools/then-audit.py` measures this (§9).
+**The budget.** A `<Then>` is about one phone screen: **1–2 short paragraphs, ≤ ~80
+words, and 1–2 figures.** With no figure, up to ~100 words. No `<Table>` in a `<Then>`.
+`tools/then-audit.py` measures this (§9).
 
-**Over budget → a second task, not a second screen.** Find where the explanation turns
-to its *second idea* (usually a new paragraph: a new case, a callback, a "কেন?"). Close
-the step there and start a new `<Step>`:
+**Over budget → move it, in this order:**
 
-1. a **setup line** reacting to the last screen (`নিয়মটা তো পাওয়া গেল। কিন্তু কেন খাটে?`);
-2. a self-closing **`<Check>`** whose answer is exactly what the second half explains, but
-   which the reader can work out from what they just did. Good kinds: the next case by
-   hand (`(1, 2, 5)-কে 3 দিয়ে গুণ করলে কী পাবো?`), a callback (`বর্গ করে যোগ, তারপর
-   root। এই হিসাবটা আগে কোথায় করেছি?`), a "why" choice (`১ চাপলে কয়েকজন মানুষ দল বদলালো।
-   কেন?`), a judgment call (`ডাক্তার আপা ওজনকে বাড়তি দাম দিতে চান। এটা কি চলে?`), or a
-   `ভেতরে না বাইরে?`. Never ask for a name the reader hasn't met yet. The name comes in
-   the `<Then>`, after they've felt the idea.
-3. a **`<Then>`** carrying on with the original words, unchanged.
+1. **Let the figure say it.** A paragraph that describes a pattern can often become a
+   beat of the explanation figure, with its sentence as the beat's caption.
+2. **Side quest.** Anything the step's idea doesn't need goes in a `<SideQuest>` card
+   (below).
+3. **A follow-up step** — only if a step is free under the 11 cap: a setup line reacting
+   to the last screen, a visual exercise (§3.2) or a self-closing `<Check>` whose answer
+   is the second idea, then a `<Then>` carrying on with the original words.
+4. **Otherwise it is a second journey's idea.** Put it in the spec's next journey rather
+   than stretching this one.
 
-Rules for these follow-up `<Check>`s:
-- **3 options.** One right, and one that is the tempting slip (sum first, then multiply;
-  keep the minus; `kg-ই আসল unit`). The wrong options react the way the `Nope` line does.
-- **Vary where the right answer sits** (A, B or C). A journey where it's always A teaches
-  the reader to tap A.
-- `hint` nudges toward the pattern (a question back, a callback); it doesn't say the answer.
-- `praise` is the **eureka as a one-line pass note** (§3). It shows in the footer
-  and in the ending's recap, so never the default `ঠিক ধরেছেন!`.
-- No children: the explanation lives in the `<Then>`. (The last `একটু ঝালিয়ে নিন` check
-  keeps a short child paragraph; move its figures into its `<Then>`.)
-- **Don't let a follow-up answer the journey's question early** (§0), and don't turn a
-  deliberately open question (`নিজেই ভেবে দেখুন`) into a check. When the spine question
-  finally comes back, it can be the `## এবার আপনার পালা` check (3.7: `Machine-এর উত্তর
-  তাহলে বিশ্বাস করবো কোন ভরসায়?`).
-- A paragraph that *poses* the question may move out of the `<Then>` to become the new
-  step's setup (3.5's `কোণার দিকে কে কতদূর পৌঁছাবে?`), and a watch-only figure that sets
-  up the question can go with it as a `story` scene (3.7's `WhichTwin story`).
+Rules for a follow-up question: 3 options, one of them the tempting slip; vary where the
+right answer sits; `hint` nudges (a question back, a callback), it doesn't answer;
+`praise` is the eureka as a one-line pass note, never *"That's correct!"*; never ask for
+a name the reader hasn't met; never let it answer the journey's question early.
 
 **Side quests go in a `<SideQuest>` card, not in the explanation.** A side quest is
-anything the step's idea doesn't need in order to be understood:
-- a real-world story (Mars Climate Orbiter, panda → gibbon);
-- a reference table (the three norms, row vs column normalise, the notation table at the
-  end of an article);
-- a look-ahead the text itself calls later (`এখন সেটা নিয়ে মাথা ঘামানোর দরকার নাই`: PCA, the
-  neuron);
-- a code gotcha or a bracketed aside (NumPy `u * v` vs `u @ v`, cross product);
-- a list of more uses (`এই কৌশল আর কোথায় লাগে`).
-
-Keep in the `<Then>`: the name, the formula, the callback, the one ML sighting that pays
-off the step, and the line that ticks off the spine. In a `<Then>` the card is one line
-(`Side quest` + title → a sheet); its children keep their figures. End-of-journey
-reference tables go in a card at the very end of the last step.
+anything the step's idea doesn't need in order to be understood: a real-world story
+(Mars Climate Orbiter), a reference table, a look-ahead (*"no need to worry about that
+yet"*), a code gotcha (NumPy `u * v` vs `u @ v`), a list of more uses. Keep in the
+`<Then>`: the name, the formula, the callback, the one ML sighting that pays off the
+step, and the line that ticks off the spine.
 
 **Revising an existing journey: move, never lose.** When you split or fold, the author's
-words are moved, not rewritten. Only the new setup lines and check text are yours. Back up
-the MDX first and diff after (§9), and use `tools/split_then.py` so no text gets retyped.
+words are moved, not rewritten. Only the new setup lines and question text are yours.
+Back up the MDX first and diff after (§9), and use `tools/split_then.py` so no text gets
+retyped.
+
+### 3.2 · Exercises are visual
+
+An exercise is where the reader proves the idea to themselves, so it should look like
+the idea, not like a quiz form. The reader **answers by acting on a picture**:
+
+| kind | the reader… | example |
+| --- | --- | --- |
+| **tap the picture** | taps the right dot, arrow, bar or cell on a drawing | tap the stall the two arrows point to |
+| **drag to answer** | drags a dot, an arrow tip or a slider until it matches | drag Shiku's arrow so it ends at the treasure |
+| **pick a picture** | chooses between 3 small drawings (not 3 strings) | which of these three arrows is `2 × v`? |
+| **build it** | sets numbers with `Stepper`s and watches the drawing follow, until it matches a target | make the sherbet dot land on the line |
+| **spot the mistake** | taps the step where a character's worked sum goes wrong | Nasib's bill: which line is wrong? |
+
+Rules:
+- **The feedback is visual too.** A wrong try animates what the reader's answer *would*
+  mean (the arrow goes to the wrong stall), with a `Nope` line; the right one plays the
+  confirming animation and calls `pass()`.
+- **A new case, not a replay.** Different numbers, often a different corner of the same
+  story. Same idea.
+- **Wrong tries bounce, never lock.** The reader tries again until right.
+- **3 choices** when choosing; the right one not always first; one choice is the
+  tempting slip.
+- The text-only `<Check>` is kept for a pure *why* question, and even then put a small
+  figure (a `story` scene) above it so there's a picture to reason from.
+
+Build an exercise as a screen component like any widget (§5). A picture-choice uses
+`Choice` with an SVG as its children.
 
 ---
 
@@ -340,63 +380,36 @@ the MDX first and diff after (§9), and use `tools/split_then.py` so no text get
 
 ```mdx
 export const metadata = {
-  title: "Math for AI 2.9 — <Bangla title>",
+  title: "Math for AI 2.9 — <English title>",
   description: "<the journey's question, not its topic — one or two sentences>",
   type: "article",
 };
 
 {/* Told as a Brilliant-style journey, like 1.1 and 2.3: screen 1 asks
     <the question> and it is not answered until <Screen>, N screens later.
-    Each screen opens by reacting to the last; the explanation sits in <Then>
-    and shows only once the task is done, about one phone screen each: where it
-    runs longer, its second half follows its own <Check>, and side quests sit in
-    <SideQuest> cards. The screens live in
-    components/interactive/<topic>-journey.tsx. */}
+    <N ≤ 11> steps. Each screen opens by reacting to the last; the explanation
+    sits in <Then> and shows only once the task is done, one phone screen
+    each. The screens live in components/interactive/<topic>-journey.tsx. */}
 
 import { Journey, Step, Check, Then, SideQuest } from "@/components/journey/journey";
-import { ScreenA, ScreenB, FigA, FigB } from "@/components/interactive/<topic>-journey";
+import { ArriveScene, ScreenA, FigA, TryIt } from "@/components/interactive/<topic>-journey";
 
-<Journey title="Vector-এর দুই চেহারা · ২.৯">
+<Journey title="Two faces of a vector · 2.9">
 
 <Step>
 
 One or two lines of story: the scene, the stake, and the question this screen asks.
 
+<ArriveScene story />
+
 <ScreenA />
 
 <Then>
 
-What the reader just found, told as story: point at the pattern, say why. One idea,
-one screen.
+What the reader just found, told as story: point at the pattern, say why. Name it last
+in **bold**, then the formula ($…$). One idea, one screen.
 
 <FigA />
-
-</Then>
-
-</Step>
-
-<Step>
-
-One line reacting to the last screen and turning to the second idea.
-
-<Check
-  question="A question whose answer is the second idea, worked out from what they just did"
-  options={[
-    "the tempting slip",
-    "the right answer",
-    "another wrong one",
-  ]}
-  answer={1}
-  hint="a nudge back to the pattern, not the answer"
-  praise="The eureka as a spoken pass note, one or two sentences."
-/>
-
-<Then>
-
-The second idea: name it last in **bold**, then the formula ($…$). A callback; maybe
-one open question.
-
-<FigB />
 
 <SideQuest title="A short noun phrase for what's inside">
 
@@ -410,23 +423,29 @@ A real-world story, a reference table or a look-ahead, with its figure if it has
 
 <Step>
 
-## একটু ঝালিয়ে নিন
+## Try it
 
-<Check question="…" options={["…", "…", "…"]} answer={0} hint="…">
+One line of story setting up the new case.
+
+<TryIt />
+
+<Then>
 
 Why the right answer is right, and what the tempting wrong one did.
 
-</Check>
+</Then>
 
 </Step>
 
 <Step>
 
-## শেষ! <the opening loop closed by name>
+## The end! <the opening loop closed by name>
+
+<ClosingScene story />
 
 The recap, and one memorable rule. Then the bridge: the *next* journey's question.
 
-<LessonLink href="/dashboard/articles/math_for_ai/<next-slug>" eyebrow="পরের পাঠ" title="…">
+<LessonLink href="/dashboard/articles/math_for_ai/<next-slug>" eyebrow="Next lesson" title="…">
   One line on why to go.
 </LessonLink>
 
@@ -438,15 +457,17 @@ The recap, and one memorable rule. Then the bridge: the *next* journey's questio
 MDX gotchas: blank lines around every `<Step>`, `<Check>`/`<Then>` child and component;
 math is `$…$` / `$$…$$` (remark-math + KaTeX); a bare `{` in prose is a JS expression —
 keep braces inside math; `LessonLink` and `Table` are global (no import); pipe tables
-don't render, use `<Table head rows note />`; comments are `{/* */}`.
+don't render, use `<Table head rows note />`; comments are `{/* */}`. In a `<Step>`, the
+first component *without* `story` is the widget.
 
 ---
 
-## 5 · Screen template
+## 5 · Screen templates
 
-This template is a **predict screen**, one of the journey's 2–3 (§0). For every other
-screen, leave out `GUESS`/`guess`/`Choice`: show the controls from the start
-(`{!peeled && <button …>}`) and let the `Task` name what to do and what to watch.
+### A predict screen (one of the journey's 2)
+
+For every other screen, leave out `GUESS`/`guess`/`Choice`: show the controls from the
+start and let the `Task` name what to do and what to watch.
 
 ```tsx
 // ---------------------------------------------------------------------------
@@ -462,13 +483,16 @@ export function PeelFloor() {
 
   const peel = () => {
     setPeeled(true);
-    pass("খোসায় পড়লো 36টা tile, আর ভেতরে রয়ে গেল 8 × 8 = 64টা।"); // the eureka, spoken; shown by Continue
+    pass("36 tiles came off — 8 × 8 = 64 stayed."); // the eureka, spoken; shown by Continue
   };
 
   return (
     <>
-      {/* the visual: SVG or divs, Tailwind only */}
-      <div className="mt-4 text-sm font-medium text-muted">খোসায় কয়টা tile পড়বে, আন্দাজ করুন তো?</div>
+      {/* the visual first: SVG or divs, Tailwind only; it animates when peeled */}
+      {guess !== null && !peeled && (
+        <button type="button" onClick={peel} className={`${primaryBtn} ${FADE}`}>Peel it off</button>
+      )}
+      <div className="mt-4 text-sm font-medium text-muted">How many tiles will come off?</div>
       <div className="mt-2 grid gap-2">
         {GUESS.map((o, i) => (
           <Choice key={o} n={i} look={predictLook(i, guess, peeled, RIGHT)} disabled={guess !== null} onClick={() => setGuess(i)}>
@@ -476,22 +500,11 @@ export function PeelFloor() {
           </Choice>
         ))}
       </div>
-      {guess !== null && !peeled && (
-        <button type="button" onClick={peel} className={`${primaryBtn} ${FADE}`}>খোসা ছাড়ান</button>
-      )}
-      <Task done={peeled}>আগে একটা guess করুন, তারপর খোসাটা ছাড়িয়ে দেখুন।</Task>
+      <Task done={peeled}>Guess first, then peel it and see.</Task>
     </>
   );
 }
-
-// at the bottom of the file: states for `npm run shot` (keys = useSeed names)
-export const fixtures: Fixtures = {
-  PeelFloor: { start: {}, peeled: { guess: 1, peeled: true } },
-};
 ```
-
-Use `useSeed` (not `useState`) for any state worth previewing; `usePlay`/`useTween` state
-can't be seeded, so seed the state that drives them.
 
 **A sealed prediction** (§0) is the one screen that must *not* mark the answer — use a
 plain look instead of `predictLook`:
@@ -500,63 +513,109 @@ plain look instead of `predictLook`:
 look={bet === i ? "picked" : bet !== null ? "dim" : "idle"}
 ```
 
+### A visual exercise (§3.2)
+
+```tsx
+// ---------------------------------------------------------------------------
+// 9 · Try it: which arrow is 2 × v? Picked as a picture; a wrong pick walks
+// Shiku along it so the reader sees where it really goes.
+
+const X9_ARROWS: [number, number][] = [[4, 2], [2, 4], [4, 4]];
+const X9_RIGHT = 0;
+
+export function TryDouble() {
+  const pass = useGate();
+  const [pick, setPick] = useSeed<number | null>("pick", null);
+  const [miss, setMiss] = useState(0);
+  const choose = (i: number) => {
+    setPick(i);
+    if (i === X9_RIGHT) pass("Double v: both slots double.");
+    else setMiss((m) => m + 1);
+  };
+  return (
+    <>
+      {/* the plane shows v, and the picked arrow drawn (and walked) on top of it */}
+      <div className="mt-3 grid grid-cols-3 gap-2">
+        {X9_ARROWS.map((a, i) => (
+          <Choice key={i} n={i} look={pick === i ? (i === X9_RIGHT ? "right" : "wrong") : "idle"} onClick={() => choose(i)}>
+            {/* a small SVG of arrow a, not a string */}
+          </Choice>
+        ))}
+      </div>
+      {pick !== null && pick !== X9_RIGHT && <Nope key={miss}>That one goes to ({tup(X9_ARROWS[pick])}). Is each slot twice v's?</Nope>}
+      <Task done={pick === X9_RIGHT}>Pick the arrow that is twice Samin's.</Task>
+    </>
+  );
+}
+
+// at the bottom of the file: states for `npm run shot` (keys = useSeed names)
+export const fixtures: Fixtures = {
+  PeelFloor: { start: {}, peeled: { guess: 1, peeled: true } },
+  TryDouble: { start: {}, wrong: { pick: 1 }, right: { pick: 0 } },
+};
+```
+
+Use `useSeed` (not `useState`) for any state worth previewing; `usePlay`/`useTween` state
+can't be seeded, so seed the state that drives them. Check the `Choice` look names in
+kit.tsx before copying.
+
 ---
 
 ## 6 · The kit
 
 `@/components/journey/journey` — `Journey({title})`, `Step`, `Task({done})` (the one thing
 to do, ticked when done; pinned in the top bar wherever the screen puts it), `useGate()`
-→ `pass(note?)`, `Check({question, options, answer, hint, praise})`, `Then` (the
-explanation; in a Journey it gets its own screens after the task, outside one it shows
-inline), `SideQuest({title})` (a one-line card inside a `<Then>`; a tap opens its
-children in a `<dialog>` sheet on `document.body`, outside the Journey's split and zoom,
-so it never lengthens an explanation. Children are ordinary MDX: paragraphs, `<Table>`,
-figures. Use it only inside a `<Then>`, because in a step's main part it would be taken
-for the widget). `<Check>` is also the usual follow-up task when a `<Then>` outgrows one
-screen (§3.1).
+→ `pass(note?)`, `Check({question, options, answer, hint, praise})` (text options only —
+for visual exercises write a screen, §3.2), `Then` (the explanation; in a Journey it gets
+its own screens after the task, outside one it shows inline), `SideQuest({title})` (a
+one-line card inside a `<Then>`; a tap opens its children in a `<dialog>` sheet, so it
+never lengthens an explanation. Use it only inside a `<Then>`).
 
 **The frame is one phone screen, fixed height** (the article page gives it the viewport):
 top bar (× to library, progress, the pinned `Task`), the screen, bottom bar (pass note,
-←, Continue). Progress is kept per browser in localStorage: the step and screen, whether
-the task in hand was done, and every step's pass note, so a reload lands on the same
-screen with Continue as it was. A locked Continue still answers a tap: it says what to
-do and shakes the `Task`, so every gated screen needs a `Task`. After the last screen,
-"শেষ করুন ✓" opens the frame's own ending: ✓, the pass notes as a recap (text notes only,
-so keep `pass()` notes plain strings), and the next lesson in the course from
-`courses.ts`. The MDX's last step still closes the loop in words (§0).
+←, Continue). Progress is kept per browser in localStorage, so a reload lands on the same
+screen. A locked Continue still answers a tap: it says what to do and shakes the `Task`,
+so every gated screen needs a `Task`. After the last screen, the frame's own ending
+opens: ✓, the pass notes as a recap (text notes only, so keep `pass()` notes plain
+strings), and the next lesson in the course from `courses.ts`. The MDX's last step still
+closes the loop in words (§0).
+
+**Known gap — the frame's chrome is Bangla.** The Continue labels ("ব্যাখ্যাটা দেখুন",
+"শেষ করুন"), the locked-Continue message, the ending screen, the `Scene` controls
+("একবারে দেখুন" / "আগের" / "পরের"), `Check`'s default praise and the cast's under-feet
+name labels (`CAST[who].name` in `cast.tsx`) are hardcoded Bangla. Until those take
+English labels, an English journey ships with a few Bangla buttons. Work with it:
+`Speech` takes any `who` string — pass "Nasib" — and leave `<Person label>` off, naming
+characters in the caption instead. **Say so to the user when handing over a journey**;
+localizing the chrome is a separate code task, never a silent one.
 
 **Words are never trimmed to fit — a step becomes as many screens as it needs**, measured
 on arrival:
 
 | screens | what is on them |
 | --- | --- |
-| story | the setup paragraphs, if they don't fit beside the widget (the widget keeps the last ones that do). Centered, no `Task`, never locked. |
+| story | the setup paragraphs and `story` scenes, if they don't fit beside the widget. Centered, no `Task`, never locked. |
 | widget | the widget, `Task` pinned in the top bar. The only screen that can lock Continue. |
-| explanation | `<Then>`, once the task is done. Continue reads "ব্যাখ্যাটা দেখুন"; "← screen-টা আবার দেখুন" goes back to the widget, which keeps its state. |
+| explanation | `<Then>`, once the task is done; the back arrow returns to the widget, which keeps its state. |
 
 Breaks fall between paragraphs; a heading stays with what follows, a `$$…$$` block with
-what precedes. So write the story and the explanation at the length they need: what must
-fit a phone is the **widget itself** (§7). Screens never scroll by design: when a screen
-grows after arrival (a guess reveals a figure), the story words kept beside the widget
-move to their own screen, and an explanation screen's overflow starts a new screen. What
-can't be split (one widget, one figure) is zoomed down to fit, to ×0.7 at most; past that
-it scrolls, so still design the widget to fit. `Plane` never draws taller than 44svh.
+what precedes. What must fit a phone is the **widget itself** (§7). What can't be split
+(one widget, one figure) is zoomed down to fit, to ×0.7 at most; past that it scrolls,
+so still design the widget to fit. `Plane` never draws taller than 44svh.
 
 `@/components/journey/kit` —
 - motion: `POP` (pop in), `FADE` (fade in) — class strings, animate on mount (key an
   element to replay); `Draw({d, delay, ms, strokeWidth, className})` self-drawing path.
 - timing: `usePlay(ms)` → `{k, running, play(end, done?, from?)}` (counter stepped by a
   timer; `done` fires from the timer, safe for `pass`); `useCountUp(max, ms, on)`;
-  `useTween(numbers[], ms, start?)` eased glide (a moving dot, a camera).
+  `useTween(numbers[], ms, start?)` eased glide (a moving dot, a camera). These are what
+  make a widget an *interactive animation*: the reader's tap starts a play or a glide.
 - chrome: `Choice({n, look, disabled, onClick})` + `predictLook(i, guess, over, answer)`;
   `Ticks({items: [label, done][]})` sub-goals; `Speech({who, initial, tint, tone})`
   character bubble; `Nope` (key it per miss); `Stepper({value, onChange, min, max,
   label})`; `primaryBtn`, `quietBtn`, `pill(on)` class strings; `Laptop`/`Out`.
-- scenes: `useScene(steps, ms | ms[])` → `{k, steps, done, playing, stepping, play,
-  step, byHand}`, beats 0…steps; `<Scene scene caption>` (or cast's `<StoryFrame>`) draws
-  the controls, একবারে দেখুন and step by step (আগের / পরের). It never starts on its own. Draw it
-  phone-sized; the frame grows it on tablets and laptops (`GROW` / `GROW_WIDE`). See the
-  pathshala-animate skill.
+- scenes: `useScene(steps, ms | ms[])` + `<Scene scene caption>` (or cast's
+  `<StoryFrame>`) for watch-only story scenes and figures. See `pathshala-animate`.
 - previews: `useSeed(key, initial)`, `Fixtures`, `SeedProvider`.
 
 `@/components/journey/plane` — graph paper in data units: `makeFrame(x0, x1, y0, y1, u,
@@ -565,14 +624,12 @@ drag={{down, move, up}} onKey className>`; `Arrow({f, from, to, tone, w, draw, d
 faint})`, `Label`, `Dot`, `Star`; helpers `snap`, `clamp`, `same`, `plus`, `minus`, `mix`,
 `dist`, `sg` (real minus sign), `tup`, `INK`.
 
-`./figure-kit` — `bn(n)` Bangla digits (for counts in Bangla text; keep math numbers
-Latin). `./arrow-journey` — `Shiku`, `Trail`, `route`, `useWalk` (Shiku walking the grid).
+`./figure-kit` — `bn(n)` Bangla digits: only in the older Bangla journeys; new screens use
+ASCII digits. `./arrow-journey` — `Shiku`, `Trail`, `route`, `useWalk` (Shiku walking the
+grid).
 
-**Animation.** Every journey gets animated story scenes in its setups and watch-only
-figures in its `<Then>`s. How to make them (`useScene`/`Scene`, `cast.tsx`, the `story`
-prop, sizes, gotchas) is in the **pathshala-animate** skill.
-
-**Reference screens** (grep them by name for a pattern to copy):
+**Reference screens** (grep them by name for a pattern to copy — their inner text is
+Bangla; copy the interaction, write English words):
 sealed prediction that opens a journey: `NasibBet`, `PrizeRow` · the reader's own verdict,
 wrong tries bounce: `PrizeGiven`, `PickTape` · predict → act → reveal: `TilePour`,
 `SugarCube`, `DiceMany`, `TwoClues` · discover a rule into a table: `CoinArrows`,
@@ -588,13 +645,15 @@ predict per item, then reveal: `StallMoney` · 3D pinhole view: `RoomCorner` · 
 
 ## 7 · Build rules and gotchas
 
-- **Design the widget for a 375×667 phone, and only for it.** On a tablet or laptop the Journey zooms the widget for you (`GROW_WIDGET`: up to ×1.45, height-aware; see pathshala-animate §3). So don't add `sm:`/`lg:` size classes, and keep pointer maths as ratios of `getBoundingClientRect()`.
-- **Phone size.** The widget's screen has ~460px (less the
-  pinned Task, and a pass note once done), so a widget's visual + controls should fit in
-  about 400px. Story paragraphs don't count: the frame moves them to their own screen.
-  Put the visual first and its controls right under it, so what a tap changes is in view;
-  prefer swapping a stage in place (guess → play → result) over stacking a new block
-  under the old one. A screen that can't fit is two screens.
+- **Design the widget for a 375×667 phone, and only for it.** On a tablet or laptop the
+  Journey zooms the widget for you (`GROW_WIDGET`: up to ×1.45, height-aware; see
+  pathshala-animate §3). So don't add `sm:`/`lg:` size classes, and keep pointer maths as
+  ratios of `getBoundingClientRect()`.
+- **Phone size.** The widget's screen has ~460px (less the pinned Task, and a pass note
+  once done), so a widget's visual + controls should fit in about 400px. Put the visual
+  first and its controls right under it; prefer swapping a stage in place (guess → play →
+  result) over stacking a new block under the old one. A screen that can't fit is two
+  screens — and under the 11 cap, possibly two journeys.
 - **Action and effect in one view.** Before writing the JSX, list what each button
   changes (a dot, a dial, a number, a bar, a card). All of it must be visible, next to
   the button, on a 375px phone. The order that works:
@@ -611,36 +670,33 @@ predict per item, then reveal: `StallMoney` · 3D pinhole view: `RoomCorner` · 
   The traps, all found in real journeys:
   - **Two visuals split by the graph.** Dials above the Plane and the step button below
     it: pressing the button moves both, and one of them is off screen (`KnobStep` was
-    like this). Put secondary visuals (dials, a radio, a meter) *in the same row* as
-    their buttons, under the main visual, with the readout between them.
-  - **Run button under the guess list.** Predict → reveal screens used to put the
-    "চালান / হাঁটান / ঢালুন" button after the `<Choice>` list, so the animation plays
-    ~200px above the thumb. Render the button right under the visual, *before* the
-    question, gated on `guess !== null`. The choices stay below and show the verdict.
-  - **A block that grows between them.** Stage formulas, a chip per step, result lines:
-    each press pushes the button further from the picture. Put the stage buttons right
-    under the visual and let the growing block pile up *below* them.
-  - **A finished stage left in place.** Once a sub-task is done (the compass in
-    `GradientFeel`), swap its controls out so the next question moves up under the visual.
-  - **`sm:flex-row` rescues.** Side by side on a laptop but stacked on a phone puts the
-    visual and its buttons far apart. Design the phone layout; the frame zooms it up.
+    like this). Put secondary visuals *in the same row* as their buttons, under the main
+    visual, with the readout between them.
+  - **Run button under the guess list.** Render the run button right under the visual,
+    *before* the question, gated on `guess !== null`.
+  - **A block that grows between them.** Put the stage buttons right under the visual and
+    let the growing block pile up *below* them.
+  - **A finished stage left in place.** Once a sub-task is done, swap its controls out so
+    the next question moves up under the visual.
+  - **`sm:flex-row` rescues.** Design the phone layout; the frame zooms it up.
 
-  Reference layouts: `KnobStep` (dials, error and button in one row under the map),
-  `OneKnob` (radio beside its buttons), `SugarCube` / `HowFar` / `LoudFilm` (run button
-  under the visual, guess below), `GapNames` / `RoomCorner` (stage button above the
-  growing formulas).
+  Reference layouts: `KnobStep`, `OneKnob`, `SugarCube` / `HowFar` / `LoudFilm`,
+  `GapNames` / `RoomCorner`.
+- **Make the tap animate.** A widget whose result just appears is a form. Let the effect
+  play: Shiku walks, the bar fills, the dot glides (`usePlay`, `useTween`, `Draw`). Keep
+  plays short (under ~2s) so the reader can try again quickly.
 - Tailwind only, no global CSS; class names must be literal strings (map a key to a full
   class, never build `bg-cat-${x}`). Tailwind v4: `bg-linear-to-t`, `starting:`.
 - Colours: theme tokens (`text-muted`, `bg-accent/10`, `text-cat-blue` …) for chrome;
   **fixed ink** (`fill-[#0f1b2d]`, white sheets) for drawn objects that are "paper".
 - The Journey renders inside `.article`, whose `p`/`h1`/`h2` rules win — use `div`/`span`
   in screens.
-- Monospace is for Latin numbers and formulas. Never set Bangla text in `font-mono`.
+- Monospace is for numbers, formulas and code — never prose.
 - ◀ ▶ and similar glyphs render as emoji on Linux: use − / + / → text.
 - SVG labels near an edge: anchor inward (`textAnchor="end"` on the right) or clamp x.
 - Add `motion-reduce:transition-none` to anything with a transition.
 - Call `pass()` from handlers or `usePlay`'s `done`, never inside a state updater.
-- Keep a label and its number together with `&nbsp;` (`card&nbsp;১`) where a caption wraps.
+- Keep a label and its number together with `&nbsp;` (`card&nbsp;2`) where a caption wraps.
 - Watch for name collisions: one `*-journey.tsx` file holds every screen, so module-level
   consts are shared (`MOVES` already taken → `TWO_MOVES`).
 
@@ -648,42 +704,47 @@ predict per item, then reveal: `StallMoney` · 3D pinhole view: `RoomCorner` · 
 
 ## 8 · Files and wiring checklist
 
-- [ ] Lesson: `src/content/articles/math_for_ai/<nn><letter>_<slug>.mdx` (filename = slug).
+- [ ] Lesson: `src/content/articles/math_for_ai/<nn><letter>_<slug>.mdx` (filename = slug),
+      all in English.
 - [ ] Screens: `src/components/interactive/<topic>-journey.tsx`, `"use client"`, one file
-      per journey (new journeys get a new file). Number the section comments (`// 3 · …`)
-      in journey order; renumber if you insert one.
+      per journey. Number the section comments (`// 3 · …`) in journey order.
+- [ ] **11 steps or fewer** (`grep -c '<Step>' <file>`). More → split the journey.
 - [ ] Screen 1 asks the journey's question and does not answer it (§0).
-- [ ] Every step has a setup line or two, its screen, and a `<Then>` explanation.
-- [ ] Predict-first on only 2–3 screens, the sealed bet included, each one where the
-      obvious answer is wrong (§0). Count: `grep -c predictLook <file>` plus the bet.
-      No `<Then>` or result line still says `যারা X বেছেছিলেন` about a guess that's gone.
-- [ ] Every `<Then>` fits one screen (`tools/then-audit.py` shows no OVER). Longer ones
-      are split into follow-up `<Check>` steps, and side quests sit in `<SideQuest>` (§3.1).
-- [ ] Follow-up checks: right answer not always A, `praise` is a spoken eureka, and none
-      of them answers the journey's question early.
-- [ ] Revising: nothing the author wrote was lost (diff against a backup, §9).
+- [ ] Every step has an interactive animation; scenes get a story scene; every `<Then>`
+      has a figure (§1.1).
+- [ ] A visual "Try it" exercise near the end; no text-only check without a picture (§3.2).
+- [ ] Predict-first on only 2 screens (3 at most), the sealed bet included (§0).
+- [ ] Every `<Then>` fits one screen (`tools/then-audit.py` shows no OVER); side quests
+      sit in `<SideQuest>` (§3.1).
+- [ ] The world is Bengali (names, places, money in taka); the English is plain; no
+      Western idioms; ASCII digits; British spelling (§2).
+- [ ] Revising/porting: nothing the author wrote was lost (diff against a backup, §9).
 - [ ] Add the slug to `math_for_ai.items` in `src/content/courses.ts`, in order.
 - [ ] Previous journey's last step ends with a `<LessonLink>` to this one; this one's last
-      step links to the next (or the series finale says "সাতটা lesson…"). Don't link a
-      slug that doesn't exist yet: bridge in words and say so to the user.
-- [ ] Tell the user: a new slug is **draft** in the DB until they publish it.
+      step links to the next. Don't link a slug that doesn't exist yet: bridge in words
+      and say so to the user.
+- [ ] Tell the user: a new slug is **draft** in the DB until they publish it, and the
+      frame's chrome is still Bangla (§6).
 - [ ] Every widget: each button, and everything it changes, visible together on a 375px
-      phone. No graph, guess list or growing block between a control and its effect (§7).
-- [ ] Verify (§9): every MDX compiles, tsc and ESLint pass, the Then audit is clean.
+      phone (§7).
+- [ ] Verify (§9): every MDX compiles, tsc and ESLint pass, the audits are clean.
 
 ---
 
 ## 9 · Verify (cheaply)
 
-These work on every branch (run from the repo root):
+Run from the repo root:
 
 ```
 node .claude/skills/pathshala-journey/tools/mdx-check.mjs     # every MDX compiles (or pass files)
-python3 .claude/skills/pathshala-journey/tools/then-audit.py  # each <Then> vs the one-screen budget
-python3 .claude/skills/pathshala-journey/tools/notes-audit.py 34  # pass notes + praise longer than one line
+python3 .claude/skills/pathshala-journey/tools/then-audit.py  # steps ≤ 11, each <Then> vs the one-screen budget
+python3 .claude/skills/pathshala-journey/tools/notes-audit.py # pass notes + praise longer than one line (44 chars)
 npx tsc --noEmit -p .                                         # types
 npx eslint <changed .tsx files>                               # lint
 ```
+
+The audits scan the older Bangla journeys too; only judge the journey you touched (pass
+its file to `then-audit.py`).
 
 When revising, copy the MDX to the scratchpad first, then confirm no original line went
 missing. Every non-blank line from `<Journey` on must still appear somewhere in the new
@@ -696,8 +757,10 @@ print([l.strip() for l in b[b.index("<Journey"):].splitlines() if l.strip() and 
 EOF
 ```
 
-If this branch has the `check`/`shot` npm scripts (look in `package.json`; they are not
-always there), use them too:
+When *porting* a Bangla journey, lines change wholesale — check instead that every beat,
+pass note and exercise survived.
+
+If this branch has the `check`/`shot` npm scripts (look in `package.json`), use them too:
 
 ```
 npm run check                                   # tsc + ESLint on changed files + every MDX compiles
@@ -718,11 +781,16 @@ every state is shown settled. It renders the screen component alone, so the MDX 
 ```
 2.9 — <title>
 Question: <the one thing screen 1 asks and the last screen answers, with its stake>
-Story:    <who, where, what's at stake>
+Story:    <who, where in Bengali life, what's at stake>
+Steps:    <n ≤ 11>
 1. <Screen> — question → what the reader does → eureka (the pass note, spoken)
-   Then: <what the explanation adds: the name, the formula, a callback, an open question>
-   + Check: <follow-up question> → Then: <the second idea>   (only if one Then can't hold it, §3.1)
+   Scene: <the story scene, if the setup is a scene>
+   Then: <what the explanation adds> · Fig: <what the figure acts out>
    Side quest: <story / table / look-ahead, if any>
 2. …
-n. <Screen> — এবার আপনার পালা: the reader answers the question unaided
+n−2. <Screen> — Your turn: the reader answers the question unaided
+n−1. <TryIt> — visual exercise: <the new case> → <how they answer on the picture>
+n. The end! <loop closed>
 ```
+
+When cutting a source article into journeys first, use `pathshala-journey-plan`.
