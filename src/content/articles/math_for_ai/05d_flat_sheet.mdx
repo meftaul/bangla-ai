@@ -1,0 +1,257 @@
+export const metadata = {
+  title: "Math for AI 5.4 — The flat sheet, where the khata really lives",
+  description:
+    "Three columns in the dalal's khata: beds, baths and total rooms. Nasib says the six flats spread out in three directions. Samin says they sit on one flat sheet, and two directions are enough. The loser carries the last box up the stairs.",
+  type: "article",
+};
+
+{/* Told as a Brilliant-style journey in English, like 1.1 and 2.3: screen 1
+    seals the reader's bet on how many directions the khata's six flats really
+    need (Nasib: 3, Samin: 2, or 1), and the bet is not opened until
+    BetSettled, seven screens later, after FloorInRoom (every span holds the
+    door corner: subspace), CantFallOut (a set you can't fall out of: vector
+    space), FlatSheet (the six dots go edge-on), SheetFromButtons (two buttons
+    paint them), YourCloud (Your turn) and the TryNearlyFlat exercise (real
+    data sits near a sheet: the pancake, rank). 8 steps. Each screen opens by
+    reacting to the last; the explanation sits in <Then>, one phone screen
+    each with a watch-only figure, and the eight rules and the notation sit in
+    <SideQuest> cards. The screens live in
+    components/interactive/sheet-journey.tsx. Fourth of six "span,
+    independence, basis" journeys (Article 5). The plan is in
+    05_journey_specs.md. */}
+
+import { Journey, Step, Then, SideQuest } from "@/components/journey/journey";
+import {
+  StairsBet,
+  SheetBet,
+  SixDots,
+  ThreeBoards,
+  FloorInRoom,
+  FourKinds,
+  CantFallOut,
+  FloorClub,
+  FlatSheet,
+  SheetThrough,
+  SheetFromButtons,
+  TwoButtonsPaint,
+  YourCloud,
+  ThreePages,
+  TryNearlyFlat,
+  Pancake,
+  LastBox,
+  BetSettled,
+  ColumnsNotDirections,
+} from "@/components/interactive/sheet-journey";
+
+<Journey title="The flat sheet · 5.4">
+
+<Step>
+
+Evening of moving day. The truck has gone, and the flat is full of boxes. One last box is still at the foot of the stairs.
+
+Samin is sitting on the stairs with the dalal's khata from yesterday. It has six flats, and three columns for each one: beds, baths and total rooms.
+
+Nasib looks over his shoulder. “Three columns. So the flats spread out in three directions.” Samin shakes his head. “They all sit on one flat sheet. Two directions are enough.” Whoever loses carries the last box up.
+
+<StairsBet story />
+
+<SheetBet />
+
+<Then>
+
+Bet sealed. But what does “direction” mean for a khata? This morning the room took three buttons: two for the floor, and one going up. So let's build a room out of the khata. One direction is beds, one is baths, and up is total rooms. Each flat becomes one dot.
+
+<SixDots />
+
+Six dots, in a room with three directions. Do they need all three? That's what we'll find out.
+
+</Then>
+
+</Step>
+
+<Step>
+
+Before opening the khata, Samin wants to be sure what a flat sheet in a room is. Fahim's new room has three flat things: the floor, a plank Abbu leaned against the wall with its bottom end at the door corner, and a shelf on the wall, 1.5 metres up.
+
+<ThreeBoards story />
+
+Each board has an arrow from the door corner, with its tip on the board. Stretch each arrow and see if the tip stays on its board.
+
+<FloorInRoom />
+
+<Then>
+
+The floor and the plank passed every stretch, × 0 too. Both run through the door corner. The shelf is flat as well. But × 0 pulls every arrow back to the door corner, and the shelf isn't there. In 5.1 we saw that every span holds the door. So the shelf can't be a span. **Nasib's shelf is out.**
+
+A span that lives inside a bigger room is called a **subspace**. A room holds only four kinds.
+
+<FourKinds />
+
+</Then>
+
+</Step>
+
+<Step>
+
+Nasib has one more worry. “Say the flats do sit on a sheet. Add two flats together, and maybe you fall off it.”
+
+Samin draws four clubs on the floor with Ammu's chalk. Each club is a set of arrows. You may add two members, or stretch one by any number. If the answer isn't a member, you've fallen out. Try to fall out of each club.
+
+<CantFallOut />
+
+<Then>
+
+Only the whole floor held. Add any two of its arrows, or stretch one by any number, and you're still on the floor. A set you can't fall out of like this is called a **vector space**. The floor is one, and so is the room. Every subspace is one too: that's the “sub”, a smaller vector space inside a bigger one.
+
+<FloorClub />
+
+The rules behind it are ones you already use without thinking.
+
+<SideQuest title="The eight rules, and other vector spaces">
+
+Books list eight rules for a vector space. You've used every one of them already.
+
+<Table
+  head={["The rule", "In symbols", "In plain words"]}
+  rows={[
+    ["Order doesn't matter", "v + w = w + v", "add two arrows either way round, same arrow"],
+    ["Brackets don't matter", "v + (w + t) = (v + w) + t", "add three arrows in any grouping"],
+    ["There's a zero", "v + 0 = v", "a “stay put” arrow exists"],
+    ["Every arrow can be undone", "v + (−v) = 0", "walk it, walk it back, you're home"],
+    ["Stretch a sum", "c(v + w) = cv + cw", "stretch then add, or add then stretch"],
+    ["Stretch by a sum", "(c + d)v = cv + dv", "3 presses and 2 presses make 5 presses"],
+    ["Stretch twice", "(cd)v = c(dv)", "double it, then triple it: × 6"],
+    ["× 1 does nothing", "1v = v", "the arrow stays as it is"],
+  ]}
+/>
+
+These rules are what let us multiply things out like ordinary algebra. In 4.3, breaking $v \cdot w$ into four pieces, one pair of axes each, was allowed because of them.
+
+Anything that follows the rules is a vector space, even if it looks nothing like arrows: polynomials, 28 × 28 pictures, all the weight settings of a neural network. That's why one body of maths works for all of them.
+
+One warning. You'll hear that “embeddings live on the unit sphere”. The ring from 3.6 already fell out of its club: $(1, 0) + (0, 1)$ is 1.41 long. So the sphere is a surface, not a vector space.
+
+</SideQuest>
+
+</Then>
+
+</Step>
+
+<Step>
+
+Now the khata. Nasib says the six dots fill the room. Samin says they sit on one sheet. There's a simple way to check. A sheet seen from the side, edge-on, looks like a line.
+
+<FlatSheet />
+
+<Then>
+
+Why a sheet? Remember 5.2's total column: total = bed + bath, on every row. So once you know a flat's beds and baths, its height in the room is already decided. The dot can't float above the sheet or sink below it.
+
+<SheetThrough />
+
+5.2's extra column and this flat sheet are the same fact. One is written in numbers, the other is drawn.
+
+</Then>
+
+</Step>
+
+<Step>
+
+A sheet through the door corner should be the span of two buttons. So which two buttons paint this one? Each button is one step in the room: (bed, bath, total).
+
+<SheetFromButtons />
+
+<Then>
+
+Every flat is a mix of the two buttons: bed presses of $(1, 0, 1)$ and bath presses of $(0, 1, 1)$. Flat 2 has 3 beds and 2 baths, so $(3, 0, 3) + (0, 2, 2) = (3, 2, 5)$.
+
+<TwoButtonsPaint />
+
+So the khata lives in the span of two buttons: a **2-dimensional subspace** of a 3-dimensional room. And Nasib's worry? Two flats added are another mix of the same buttons. So the sum lands on the sheet too.
+
+</Then>
+
+</Step>
+
+<Step>
+
+Your turn. The dalal's bag has three more pages, each with three columns. For each page, turn the cloud and say how much of the room it really uses.
+
+<YourCloud />
+
+<Then>
+
+The columns were three every time. But the dots used one, two and three directions. Rent, advance and yearly rent are one fact said three ways, so they make a line. Bulbs come from beds and baths, so a sheet. The floor number has nothing to do with the rooms, so it needs the whole room.
+
+<ThreePages />
+
+</Then>
+
+</Step>
+
+<Step>
+
+## Try it
+
+Another dalal's khata, eight flats: beds, baths, and area in square feet. Bigger flats have more rooms. But kitchens and verandas come in all sizes. Turn the cloud, then pick the honest picture.
+
+<TryNearlyFlat />
+
+<Then>
+
+Real data is almost never exactly on a sheet. But it often sits close to one, like a thin pancake.
+
+<Pancake />
+
+A real table can have 300 columns, and maybe only 20 real directions. That true count has a name, **rank**, and Module 3 is about finding it. So how many directions does your data really need? Count them. Don't trust the number of columns.
+
+</Then>
+
+</Step>
+
+<Step>
+
+## The end! Nasib carries the box
+
+Samin was right, and Nasib knows it. He picks up the last box.
+
+<LastBox story />
+
+Open the three claims one by one, and check them against your bet.
+
+<BetSettled />
+
+<Then>
+
+Nasib counted columns: three. Samin looked at where the dots sit: one flat sheet, two directions. The total column added a number to every row, but no new direction.
+
+<ColumnsNotDirections />
+
+The rule to keep: **count the directions the data uses, not the columns it has.**
+
+<SideQuest title="How books write it">
+
+<Table
+  head={["You'll see", "Say it as"]}
+  rows={[
+    ["V is a vector space", "a set you can't leave by adding or stretching"],
+    ["W ⊆ V, a subspace", "a smaller vector space inside V; it holds the door corner"],
+    ["span{u, w}", "everywhere u and w reach: here, the khata's sheet"],
+    ["dim W = 2", "W takes two directions"],
+    ["rank", "how many real directions a table of data uses (Module 3)"],
+  ]}
+/>
+
+</SideQuest>
+
+Tomorrow is the first day at the new school. But the new neighbourhood has no road that goes north. So how will Fahim tell the rickshaw mama where the school is?
+
+<LessonLink href="/dashboard/articles/math_for_ai/05e_school_lanes" eyebrow="Next lesson" title="Same arrow, new numbers, the road to school">
+  The map says the school is 2 east and 3 north. With no road going north, what numbers do you give the rickshaw mama?
+</LessonLink>
+
+</Then>
+
+</Step>
+
+</Journey>

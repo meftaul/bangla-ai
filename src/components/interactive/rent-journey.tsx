@@ -63,7 +63,7 @@ const term = (k: number, v: number) => `${k < 0 ? "−" : ""}${Math.abs(k)}·${v
 /** A story scene takes `story` and ignores it (see journey.tsx). */
 type Story = { story?: boolean };
 
-/** The door corner, labelled in English — 5.1's Door says দরজা. */
+/** The door corner, labelled "door" (5.1 has its own Door with the same look). */
 function DoorMark({ f }: { f: Frame }) {
   return (
     <g className="pointer-events-none">

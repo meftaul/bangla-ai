@@ -1,0 +1,234 @@
+export const metadata = {
+  title: "Math for AI 5.3 — Basis and dimension, the fewest buttons",
+  description:
+    "Moving day. Every remote button costs 50 taka. Shiku needs a remote for the floor, and the robotics club's drone needs one that reaches the ceiling fan. What is the fewest buttons for each, and is that number the same whoever builds the remote?",
+  type: "article",
+};
+
+{/* Told as a Brilliant-style journey in English, like 1.1 and 2.3: screen 1
+    seals the reader's bet on the fewest buttons for the floor and for the
+    room, and on Som's claim that the count is the same whoever builds it.
+    The bet is not settled until ThreeVerdicts, seven screens later, after
+    DropOne (basis), ShopShelf (the two ways to fail), AnyPairTwo (the floor's
+    dimension), FanOnCeiling (the room's), ShopOrder (Your turn) and the
+    TryTwoInRoom exercise. 8 steps. Each screen opens by reacting to the last;
+    explanations sit in <Then>, one phone screen each with a watch-only
+    figure; the notation sits in a <SideQuest>. The screens live in
+    components/interactive/moving-journey.tsx; the floor machine is 5.1's.
+    Third of six "span, independence, basis" journeys (Article 5). The plan is
+    in 05_journey_specs.md. */}
+
+import { Journey, Step, Then, SideQuest } from "@/components/journey/journey";
+import {
+  TruckDay,
+  FewestButtons,
+  ThreeCards,
+  DropOne,
+  TwoJobs,
+  ShopShelf,
+  TwoFails,
+  AnyPairTwo,
+  ThreeDesigners,
+  DroneUnderFan,
+  FanOnCeiling,
+  SheetLift,
+  AbbuOrders,
+  ShopOrder,
+  CartOfThree,
+  TryTwoInRoom,
+  LongArrows,
+  FanDusted,
+  ThreeVerdicts,
+  TwoAndThree,
+} from "@/components/interactive/moving-journey";
+
+<Journey title="Basis · 5.3">
+
+<Step>
+
+Moving day. The truck is at the gate, and the boxes are going up the stairs one by one. Remote C from two days ago is in Fahim's pocket, still working.
+
+The robotics club has lent its drone for the day, to dust the ceiling fan in the new flat. But the drone's remote is packed in some box, and nobody knows which. So it's back to the toy shop. There they build a remote to order: you choose the buttons, and each button costs 50 taka.
+
+Three people, three claims.
+
+<TruckDay story />
+
+So what is the fewest buttons for Shiku to reach anywhere on the floor? And for the drone, anywhere in the room, the fan included? Seal your bet before anyone pays.
+
+<FewestButtons />
+
+<Then>
+
+Bet sealed. Why count so carefully? Because every button is 50 taka. One button too many, and that's money thrown away. One too few, and some spot stays out of reach.
+
+The shopkeeper, Nasib and Som can't all be right. By evening, we'll know who is.
+
+<ThreeCards />
+
+</Then>
+
+</Step>
+
+<Step>
+
+Start with the three-button remote Nasib wanted yesterday: $e_1 = (1, 0)$, $e_2 = (0, 1)$ and $w = (2, 3)$. Ammu's chalk marks are still on the floor. Take the buttons off one at a time, and watch the paint.
+
+<DropOne />
+
+<Then>
+
+With three buttons, one was extra. You dropped it, and the paint didn't move. With one button, the paint shrank to a line. Two was just right: nothing extra, and every tile reached.
+
+A set of buttons that does both jobs has a name: a **basis**. You met the word in 3.3, where a and b reached every spot exactly one way. What's new today is the count.
+
+<TwoJobs />
+
+</Then>
+
+</Step>
+
+<Step>
+
+The shopkeeper puts five ready-made remotes on the counter. The paint is already on. File each one: a basis, one with an extra button, or one that misses spots.
+
+<ShopShelf />
+
+<Then>
+
+So a remote can fail in two ways, and they're opposites. Too many buttons: one of them can be built from the others, so you pay for nothing. Too few, or two pushing the same way: the paint leaves spots bare. The twin remote managed both at once.
+
+A basis sits exactly between. There's nothing to drop, and nothing is missing.
+
+<TwoFails />
+
+</Then>
+
+</Step>
+
+<Step>
+
+Now Som's claim: however you build it, the count comes out the same. Test it yourself. Design your own floor remotes. Drag the button tips anywhere, and add a button or take one off.
+
+<AnyPairTwo />
+
+<Then>
+
+Your designs looked nothing alike. But every one that worked had exactly two buttons. One button always painted a line. Three always had an extra.
+
+So the count doesn't depend on who builds the remote. It belongs to the floor itself. That count has its own name: the **dimension**. The floor's dimension is 2. **Som's claim holds, for the floor at least.**
+
+<ThreeDesigners />
+
+</Then>
+
+</Step>
+
+<Step>
+
+Now the drone. The fan hangs from the middle of the ceiling, 3 steps up, thick with the old tenants' dust.
+
+<DroneUnderFan story />
+
+Two buttons were enough for the whole floor. Are two enough for the whole room, if you choose them well?
+
+<FanOnCeiling />
+
+<Then>
+
+Two buttons always paint a flat sheet: the floor, or a tilted plank. Tilt it any way you like. A sheet still can't fill a room.
+
+The up button lifts the sheet off the floor. Sheet on sheet, the room fills. A fourth button only repeats what the three can already do. So the room's dimension is 3. And a space with $n$ slots, $\mathbb{R}^n$, takes exactly $n$.
+
+<SheetLift />
+
+</Then>
+
+</Step>
+
+<Step>
+
+Your turn. Abbu wants one remote that does both jobs: Shiku anywhere on the floor, and the drone anywhere in the room, up to the fan. The shopkeeper has seven buttons on the shelf.
+
+<AbbuOrders story />
+
+Build the cheapest remote that does both. Test it before you pay.
+
+<ShopOrder />
+
+<Then>
+
+Every cart that worked had three buttons pushing three different ways. The traps were easy to fall into: $(2, 0, 0)$ is only $(1, 0, 0)$ twice. $(1, 1, 0)$ is east plus north, so it never leaves the floor. The zero button doesn't move anything.
+
+**The shopkeeper's rule lost.** More buttons never made the remote safer. They only made it dearer.
+
+<CartOfThree />
+
+</Then>
+
+</Step>
+
+<Step>
+
+## Try it
+
+Nasib has one more idea: “Make the two buttons really long. Then they'll reach everything.” His two buttons are $(4, 0, 2)$ and $(0, 4, 1)$. What do they paint?
+
+<TryTwoInRoom />
+
+<Then>
+
+Long only stretches a button. It doesn't give it a new direction. So two buttons, however long, still paint one tilted sheet, and the fan sits off it. Those who picked “the whole room” trusted the length.
+
+Four buttons in a room is the opposite problem. $(3, 0, 0)$ pushes the same way as $(1, 0, 0)$, so one of them is extra. In the room, two is always too few, and four is always one too many.
+
+<LongArrows />
+
+</Then>
+
+</Step>
+
+<Step>
+
+## The end! Two for the floor, three for the room
+
+By evening the drone had dusted the fan. Fahim paid for three buttons: 150 taka.
+
+<FanDusted story />
+
+Now open the three claims, and check them against your bet.
+
+<ThreeVerdicts />
+
+<Then>
+
+The shopkeeper lost: past three, every button was extra. Nasib lost: one button paints one line. Som won. The floor takes 2 and the room takes 3, whoever builds the remote.
+
+The rule to keep: **a basis has nothing extra and reaches everywhere. How many buttons it takes is the dimension.**
+
+<TwoAndThree />
+
+<SideQuest title="How books write basis and dimension">
+
+<Table
+  head={["You'll see", "Say it as"]}
+  rows={[
+    ["{e₁, e₂} is a basis of ℝ²", "east and north reach the whole floor, nothing extra"],
+    ["dim(ℝ²) = 2", "the floor takes two buttons"],
+    ["dim(ℝ³) = 3", "the room takes three"],
+    ["dim(V)", "how many buttons a basis of V has"],
+    ["V ⊆ ℝⁿ", "V lives inside the n-slot space"],
+  ]}
+/>
+
+</SideQuest>
+
+<LessonLink href="/dashboard/articles/math_for_ai/05d_flat_sheet" eyebrow="Next lesson" title="The flat sheet, where the khata really lives">
+  That evening, among the boxes, Samin opens the dalal's khata again. Three columns, but he says the six flats need only two directions.
+</LessonLink>
+
+</Then>
+
+</Step>
+
+</Journey>

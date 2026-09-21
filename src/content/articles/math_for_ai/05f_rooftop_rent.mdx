@@ -1,0 +1,264 @@
+export const metadata = {
+  title: "Math for AI 5.6 — The rooftop flat's rent, a new basis",
+  description:
+    "Chacha's new rooftop flat needs a rent before the tenant comes tonight. Fahim says he can rewrite the khata's two columns so the rent needs just one number. Nasib says no new information goes in, so nothing new can come out. Who wins the jilapi?",
+  type: "article",
+};
+
+{/* Told as a Brilliant-style journey in English, like 1.1 and 2.3: screen 1
+    seals the reader's bet on Fahim, Nasib or both, and the bet is not opened
+    until the Finale, nine screens later, after RentGrid (one column can't
+    price the flats), NewAxes (size and imbalance, a basis at right angles),
+    HouseInNewBasis and ReadTheNumbers ((3, 2) becomes (2.5, 0.5), and what
+    that says), OneNumberRent (one knob prices all 8 flats on Fahim's grid),
+    SpinTheGrid (the numbers are the grid's, the distances are real), Your
+    turn (the rooftop flat, 24000) and the TryConvertBack exercise (every card
+    converts back). 10 steps. Each screen opens by reacting to the last;
+    explanations sit in <Then>, one phone screen each with a watch-only
+    figure, and the notation table sits in a <SideQuest>. The screens live in
+    components/interactive/rooftop-journey.tsx. Sixth and last of the "span,
+    independence, basis" journeys (Article 5). The plan is in
+    05_journey_specs.md. */}
+
+import { Journey, Step, Then, SideQuest } from "@/components/journey/journey";
+import {
+  RooftopBet,
+  JilapiBet,
+  EightFlats,
+  RentGrid,
+  SlantClimb,
+  NewAxes,
+  TwoButtonsDo,
+  HouseInNewBasis,
+  TwoCards,
+  ReadTheNumbers,
+  ShrinkToOne,
+  OneNumberRent,
+  DotsSlide,
+  NasibDoubts,
+  SpinTheGrid,
+  SameArrows,
+  YourHouse,
+  SameSizeRow,
+  TryConvertBack,
+  BackAndForth,
+  FirstNight,
+  BetSettled,
+  PcaWords,
+} from "@/components/interactive/rooftop-journey";
+
+<Journey title="A new basis · 5.6">
+
+<Step>
+
+Yesterday the school never moved. Only its card changed: (2, 3) on the map, (−1, 3) on the rickshaw roads. Keep that in mind.
+
+Moving week, last day. Evening on the roof of the new building. Chacha, the landlord, has built one more flat up here: 4 bedrooms, 2 bathrooms. The tenant comes tonight, and Chacha still doesn't know what rent to ask. His khata has 8 flats, each written as (bed, bath), with its rent.
+
+<RooftopBet story />
+
+Fahim says he can rewrite the same two columns so the rent needs just one number. Nasib says no new information goes in, so nothing new can come out. They bet a cone of jilapi on it.
+
+<JilapiBet />
+
+<Then>
+
+Both of them sound right, and that's the trouble. Fahim adds no flat, no column, not one new fact. Everything has to come out of Chacha's 8 rows. But if his trick works, the rent will be easy to read. And the clock is running: the tenant climbs these stairs tonight, and Chacha needs one number to say.
+
+<EightFlats />
+
+</Then>
+
+</Step>
+
+<Step>
+
+First, the way Chacha would try it. Price a flat by one column: so much per bedroom. Or so much per bathroom. A flat fits the rule if the rule's price is within 1000 taka of its real rent.
+
+<RentGrid />
+
+<Then>
+
+Look at the three flats with 3 beds: 17, 20 and 25 thousand. A bed-only rule has to give all three one price, so at most one of them can fit. Bath alone has the same trouble. The rent doesn't climb along bed, or along bath. It climbs on the slant, where both grow together. **No single column can tell the rent.**
+
+<SlantClimb />
+
+</Then>
+
+</Step>
+
+<Step>
+
+That slant is exactly what Fahim was looking at. He draws two new buttons in the khata. **Size** = (1, 1): one more bed and one more bath together. **Imbalance** = (1, −1): one more bed, one less bath. Before we trust them, two checks.
+
+<NewAxes />
+
+<Then>
+
+Two buttons on different lines, on a sheet with two slots. 5.3 told us that's a basis: every flat can be written with them, in exactly one way. The box told us more. In 4.2, a box of 0 meant the two arrows stand at right angles. So Fahim's grid is still a square grid. It's only turned.
+
+<TwoButtonsDo />
+
+</Then>
+
+</Step>
+
+<Step>
+
+Now a flat from the khata: (3, 2), 3 beds and 2 baths, rent 20000. What's its card on Fahim's grid? No rickshaw this time. Work it out by hand.
+
+<HouseInNewBasis />
+
+<Then>
+
+Yesterday, one line had only one unknown, so it peeled off by itself. Today both lines have both unknowns. So we added them: $+m$ and $-m$ cancelled, and $s$ was left alone. Then $s$ went back in to give $m$.
+
+<TwoCards />
+
+Same flat, two cards: $(3, 2)$ in beds and baths, $(2.5, 0.5)$ in size and imbalance.
+
+</Then>
+
+</Step>
+
+<Step>
+
+A card of (2.5, 0.5) looks odd. Half a step? Tap each number and read out what it says about the flat.
+
+<ReadTheNumbers />
+
+<Then>
+
+One honest note. 2.5 counts size steps, not rooms, because each size step is two rooms. On paper that step is about 1.41 long, not 1. Shrink both buttons to length 1, like 3.6's unit vectors, and the card becomes $(3.54, 0.71)$. Steps at right angles and 1 long are called **orthonormal**. Then both numbers sit on one scale, the fairness 3.7 got from scaling.
+
+<ShrinkToOne />
+
+</Then>
+
+</Step>
+
+<Step>
+
+Now the real test of Fahim's claim. Turn all 8 flats onto his grid. Then price them with one knob: so much per size step.
+
+<OneNumberRent />
+
+<Then>
+
+Same 8 flats, same rents, not one new fact. But on Fahim's grid the rent climbs along one axis only, and the imbalance barely moves it. Picking coordinates in which a pattern is easy to see has a name in data work: **feature engineering**. It's a change of basis.
+
+<DotsSlide />
+
+Keep size, drop imbalance: that's 4.5's shadows again.
+
+<SideQuest title="More changes of basis you'll meet">
+
+A shop's income and cost, rewritten as profit (income − cost) and their sum. Two thermometers on one wall, rewritten as their average and their difference. Each time, the same facts go in. You're only choosing the grid where the pattern shows.
+
+</SideQuest>
+
+</Then>
+
+</Step>
+
+<Step>
+
+Nasib isn't done yet. “Pick any grid you like, and you get any numbers you like,” he says. So which numbers are the real ones?
+
+<NasibDoubts story />
+
+Fair question. Take the word map from 2.3, with king, queen, man and woman, and turn a square grid under it.
+
+<SpinTheGrid />
+
+<Then>
+
+Every slot number changed. The distance and the cosine didn't move, not even a little. They belong to the words themselves. The slot numbers belong to the grid.
+
+<SameArrows />
+
+That pays an old debt from 2.3: nobody knows what slot 137 of a word's numbers means. The model never picked a meaningful grid. **The numbers are the grid's. The distances are real.**
+
+</Then>
+
+</Step>
+
+<Step>
+
+## Your turn
+
+The tenant is on the stairs. The rooftop flat is (4, 2). Find its card on Fahim's grid, then price it with the one-knob rule.
+
+<YourHouse />
+
+<Then>
+
+$4 = s + m$ and $2 = s - m$. Add them: $6 = 2s$, so $s = 3$, and then $m = 1$. Three size steps make 6 rooms. One imbalance step makes 2 more beds than baths. Price: $8000 \times 3 = 24000$ taka.
+
+<SameSizeRow />
+
+Chacha checks the khata one last time. Flat (3, 3) has the same size and rents for 25000. Close enough. He writes 24000.
+
+</Then>
+
+</Step>
+
+<Step>
+
+## Try it
+
+Nasib has one more go. He writes a card on Fahim's grid, (2, 1), and asks which flat that is, in beds and baths.
+
+<TryConvertBack />
+
+<Then>
+
+Each size step adds a bed and a bath. The imbalance step adds a bed and takes a bath away. So beds = 2 + 1 = 3, and baths = 2 − 1 = 1. If you tapped (2, 1), you read the card in the old grid's slots. It's the same slip as reading the school's (−1, 3) on the map.
+
+<BackAndForth />
+
+</Then>
+
+</Step>
+
+<Step>
+
+## The end! The jilapi gets split
+
+Night. The tenant said yes to 24000, and Fahim's family switches on the lights for their first night in the new flat. Nasib still has the jilapi.
+
+<FirstNight story />
+
+<BetSettled />
+
+<Then>
+
+Both were right: no new facts went in, and one number now tells the rent. The rule to keep: **a new basis adds no facts, but it can make them easy to see.**
+
+<PcaWords />
+
+So far the grid moved and the arrows stayed. What if a machine moves the whole grid, every arrow at once? And Chacha's khata, one row per flat, is one object too. Both are called a **matrix**. That's Article 6.
+
+<SideQuest title="How books write this article">
+
+<Table
+  head={["You'll see", "Say it as"]}
+  rows={[
+    ["span{v, w}", "everywhere v and w can reach together"],
+    ["e₁, e₂ (books also write i, j)", "the plain grid's buttons, (1, 0) and (0, 1)"],
+    ["c₁v₁ + … + cₙvₙ = 0", "the zero test: only all-zero presses land home when nothing is extra"],
+    ["dim(V)", "the dimension of V: how many buttons any basis of it has"],
+    ["V ⊆ ℝⁿ", "V is a subspace of ℝⁿ: a flat sheet through 0 that + and stretching never leave"],
+    ["B = {w, z}", "a basis, given a name so you can say which grid you mean"],
+    ["[v]_B", "v's card in the basis B, like [school]_B = (−1, 3)"],
+    ["orthonormal", "buttons at right angles, each 1 long"],
+  ]}
+/>
+
+</SideQuest>
+
+</Then>
+
+</Step>
+
+</Journey>

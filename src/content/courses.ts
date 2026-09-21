@@ -71,6 +71,10 @@ export const COURSES: Course[] = [
       "math_for_ai/04f2_attention_box",
       "math_for_ai/05a_remote_span",
       "math_for_ai/05b_extra_column",
+      "math_for_ai/05c_moving_basis",
+      "math_for_ai/05d_flat_sheet",
+      "math_for_ai/05e_school_lanes",
+      "math_for_ai/05f_rooftop_rent",
     ],
   },
 ];
