@@ -569,3 +569,24 @@ and visual exercises instead of text-only checks. So:
 - **If six is too many:** fold 5.4 back into 5.3 as its last two steps (`FlatSheet` and
   `TryNearlyFlat`), with `FloorInRoom` and `CantFallOut` going into a `<SideQuest>`. That
   makes 5.3 exactly 10 steps, but the "subspace" idea would then be read, not played.
+
+### As built (2026-09-21): 5.3–5.6
+
+All six are in `courses.ts`, each linked to the next; 5.6 bridges to Article 6 in words.
+Where the builds left the plan:
+
+- **5.3:** Nasib's claim is "one button, aimed right, is enough" (one button aimed at the
+  fan really does reach it, so the goal is "anywhere in the room"). `ShopShelf` files by
+  tap into three bins (basis / has an extra / misses spots); `TryTwoInRoom` round 2 is "tap
+  the button you can drop". Room 4 × 4 × 3, fan at (2, 2, 3).
+- **5.4:** `TryNearlyFlat` turns the cloud (no sheet drag). `YourCloud`'s pages are rent /
+  advance / yearly rent (a line), bulbs = 2·bed + bath (a sheet), bed / bath / floor (the
+  room). Stretches in `FloorInRoom` are 0…2, no minus.
+- **5.5:** the road remote is a local copy of `ButtonRemote` (`L_Remote`) for the longer
+  labels; the orthonormal note is a `<SideQuest>` in `WrongTape`; [v]_B lands in the
+  finale (`NameTheCard`). The rickshaw puller is "the rickshaw mama", not cast Mama.
+- **5.6 (open question 6 settled):** rents ≈ 8000 per size step ± 1000, so one-axis rules
+  fit at most 3 of 8 and imbalance comes out near 0. Feature-engineering examples are
+  linear ones only (profit and sum; average and difference of two thermometers) —
+  margin and BMI aren't a change of basis. The PCA sentence is the finale figure
+  `PcaWords`.

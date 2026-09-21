@@ -1,0 +1,259 @@
+export const metadata = {
+  title: "Math for AI 5.5 — Same arrow, new numbers, the road to school",
+  description:
+    "Fahim's first day at the new school. The map says the school is (2, 3) from home, but the new neighbourhood has only a straight road and a slanting lane, and no road north. The rickshaw mama wants the trip as blocks straight and blocks slanting. Which card should Fahim give him?",
+  type: "article",
+};
+
+{/* Told as a Brilliant-style journey in English, like 1.1 and 2.3: screen 1
+    seals the reader's bet on the school's road card, and the bet is not
+    settled until BetOpened, eight screens later, after NoNorthRoad, WhyMinus,
+    PeelEquations, SameSchool, YourErrand, WrongTape and the TryWhichGrid
+    exercise have shown that the same arrow gets new numbers on a new grid,
+    why a minus turns up, and how to find the numbers by hand. 9 steps. Each
+    screen opens by reacting to the last; explanations sit in <Then>, one
+    phone screen each with a watch-only figure, and asides (the system of
+    equations, square roads, the notation) sit in <SideQuest> cards. The
+    screens live in components/interactive/lanes-journey.tsx. Fifth of six
+    "span, independence, basis" journeys (Article 5). The plan is in
+    05_journey_specs.md. */}
+
+import { Journey, Step, Then, SideQuest } from "@/components/journey/journey";
+import {
+  FirstDay,
+  SchoolBet,
+  TwoGrids,
+  NoNorthRoad,
+  CardFills,
+  WhyMinus,
+  LaneForced,
+  PeelEquations,
+  PeelOrder,
+  SameSchool,
+  AssemblyLines,
+  AmmuErrands,
+  YourErrand,
+  MosqueMinus,
+  TapeOut,
+  WrongTape,
+  TwoTapes,
+  ShadowRoads,
+  TryWhichGrid,
+  ReachPaint,
+  BellRings,
+  BetOpened,
+  NameTheCard,
+} from "@/components/interactive/lanes-journey";
+
+<Journey title="New numbers · 5.5">
+
+<Step>
+
+Last night the khata's six flats turned out to sit on one flat sheet, and Nasib carried the last box up the stairs. Today is Fahim's first day at the new school. Nobody wants to be late on the first day.
+
+The map on Ammu's phone says the school is (2, 3) from home: 2 blocks east, 3 blocks north. But this neighbourhood has only two kinds of road. The main roads run straight east. The lanes all slant north-east. No road goes north at all.
+
+<FirstDay story />
+
+The rickshaw mama at the gate doesn't read maps. He wants the trip as a card: how many blocks straight along the main road, and how many blocks up a slanting lane. Which card should Fahim give him?
+
+<SchoolBet />
+
+<Then>
+
+Here's the trouble in one picture. The map is drawn on square paper: east and north. The roads are not. One block straight is (1, 0). One block up a lane is (1, 1): east and north at the same time. North on its own isn't on the list.
+
+So what does Fahim tell Mama? Hold on to your bet. The ride will answer it.
+
+<TwoGrids />
+
+</Then>
+
+</Step>
+
+<Step>
+
+Fahim climbs in, and today you do the pedalling. Each press is one block, forward or back, along one kind of road.
+
+<NoNorthRoad />
+
+<Then>
+
+Look at the card you ended with: 3 blocks up the lane, and −1 on the main road. A minus on a road card isn't a mistake. It only means the other way: one block back, west. Mama turns back on the main road all the time.
+
+<CardFills />
+
+</Then>
+
+</Step>
+
+<Step>
+
+But why back? Nobody asked the rickshaw to go too far. Let's slow the trip down and watch the two numbers the map cares about: how far east, and how far north.
+
+<WhyMinus />
+
+<Then>
+
+Only the lane climbs north, so north alone decides the lane count. 2 blocks is one short, and no road can add the missing one. 4 is one too many. So it has to be 3.
+
+But every lane block also pushes one block east. 3 blocks push 3 east, and the school is only 2 east. So the main road takes one block back. That's where the minus comes from.
+
+<LaneForced />
+
+</Then>
+
+</Step>
+
+<Step>
+
+Tomorrow Mama might ask before Fahim is even in the seat. So let's get the card without driving: on paper, one slot at a time.
+
+<PeelEquations />
+
+<Then>
+
+Notice why the north slot went first. The main road never goes north, so the north line had only one unknown in it: slanting. That line answered straight away. Then the east line was left with one unknown too. Two lines, two unknowns, peeled off one at a time.
+
+<PeelOrder />
+
+<SideQuest title="Two lines, two unknowns: a system of equations">
+
+Lines like these, a few unknowns tied together by a few equations, are called a **system of linear equations**. Ours peeled easily, because one line had a single unknown. Article 10 shows how to solve them for any size.
+
+</SideQuest>
+
+</Then>
+
+</Step>
+
+<Step>
+
+Now a stranger question. The school has two cards: (2, 3) on the map, and (−1, 3) on the roads. Two different cards for one school. So did something move?
+
+<SameSchool />
+
+<Then>
+
+The arrow from home to school never moved. Only the grid under it changed, and the numbers changed with the grid. A pair of directions like our two roads is a **basis**, the word from 3.3. So a card means nothing on its own: it needs its arrow and its basis together.
+
+Fahim felt this at assembly this morning. At his old school he was the tallest in the line. Here he's in the middle.
+
+<AssemblyLines />
+
+</Then>
+
+</Step>
+
+<Step>
+
+Your turn, no help from us. At the gate this morning, Ammu gave Fahim her list for the afternoon: the bazaar at (4, 1), and the mosque at (0, 2). Both are counted from home on the map, like the school.
+
+<AmmuErrands story />
+
+Work out each card slot by slot, dial it in, and only then let Mama drive it.
+
+<YourErrand />
+
+<Then>
+
+The mosque is the odd one. It sits straight north of home, only 2 blocks away. But there's no north road. So the rickshaw climbs the lane 2 blocks, which also takes it 2 blocks east, and comes back 2 on the main road: (−2, 2). On these roads, any spot straight north of home costs a minus.
+
+<MosqueMinus />
+
+</Then>
+
+</Step>
+
+<Step>
+
+A few minutes before the bell, Fahim still has his tape from 3.4 in his bag. He wants to know how far the ride really was, in a straight line.
+
+<TapeOut story />
+
+Card (−1, 3), he thinks. So Pythagoras: square the two numbers, add, take the root.
+
+<WrongTape />
+
+<Then>
+
+Pythagoras only works on square roads: two roads at a right angle, and every block 1 long. These roads break both rules. The lane meets the main road at a slant, and one lane block is 1.41 long, not 1. So squaring the road card measures nothing real. The map card (2, 3) is on square paper, and √(2² + 3²) = 3.61, same as the tape.
+
+<TwoTapes />
+
+<SideQuest title="Square roads: no solving at all">
+
+When the roads are at right angles and every block is 1 long, you don't even need to solve. Each number on the card is a shadow, like 4.3's torches. Books call such a grid an **orthonormal basis**. On slanted roads the shadows don't give the card, so there you solve.
+
+<ShadowRoads />
+
+</SideQuest>
+
+</Then>
+
+</Step>
+
+<Step>
+
+## Try it
+
+Fahim wonders whether his new roads are just lucky. Here are three road maps. On which of them can a rickshaw get from home to anywhere at all?
+
+<TryWhichGrid />
+
+<Then>
+
+The roads don't have to meet at a right angle. They only have to go two different ways. The slanted roads do, and so do the square ones. The parallel roads both point the same way, so everything they reach sits on one line, and the school isn't on it. So a basis needn't be square. It only needs roads that aren't parallel.
+
+<ReachPaint />
+
+</Then>
+
+</Step>
+
+<Step>
+
+## The end! Fahim beats the bell
+
+Mama rings his bell at the school gate. Fahim jumps down and runs in just as the school bell goes.
+
+<BellRings story />
+
+Time to open the bet. Tap each card and let Mama drive it on the roads.
+
+<BetOpened />
+
+<Then>
+
+The bet is settled: (−1, 3) wins. “Can't get there” was the trap. No north road doesn't mean no way north: the lane goes north, and the main road takes back the extra east.
+
+The rule to keep: **the numbers belong to the arrow and the grid together.**
+
+<NameTheCard />
+
+<SideQuest title="How books write it">
+
+<Table
+  head={["What we said", "How the books say it"]}
+  rows={[
+    ["the two roads, straight and slanting", "a basis B = {w, z}, with w = (1, 0) and z = (1, 1)"],
+    ["the map card (2, 3)", "v = (2, 3), in the standard basis e₁, e₂"],
+    ["the road card (−1, 3)", "[v]_B = (−1, 3), v's coordinates in the basis B"],
+    ["one slot at a time, north first", "solving a system of linear equations"],
+    ["square roads, every block 1 long", "an orthonormal basis: the numbers are dot products"],
+  ]}
+/>
+
+</SideQuest>
+
+That evening, the landlord uncle is stuck. He has a new flat on the roof and no idea what rent to ask for it.
+
+<LessonLink href="/dashboard/articles/math_for_ai/05f_rooftop_rent" eyebrow="Next lesson" title="The rooftop flat's rent, a new basis">
+  The uncle has a khata full of numbers. Can a new grid turn them into one number that actually means something?
+</LessonLink>
+
+</Then>
+
+</Step>
+
+</Journey>
