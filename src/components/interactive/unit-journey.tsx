@@ -2279,7 +2279,7 @@ export function BigSpender() {
   };
   const choose = (i: number) => {
     setGuess(i);
-    pass("Normalise খরচের খবরটা মুছে দিলো।");
+    pass("Normalise খরচের informationটা মুছে দিলো।");
   };
 
   return (
@@ -2367,7 +2367,7 @@ export function TenTimesGone() {
         ) : k < 4 ? (
           <span key="c3" className={FADE}>Normalise করতেই দুইজনই হুবহু (0.89, 0.45)।</span>
         ) : (
-          <span key="c4" className={FADE}>একই দিকে সেটা বোঝা যাচ্ছে। কিন্তু দশ গুণের খবরটা আর কোথাও জমা নাই।</span>
+          <span key="c4" className={FADE}>একই দিকে সেটা বোঝা যাচ্ছে। কিন্তু দশ গুণের informationটা আর কোথাও জমা নাই।</span>
         )
       }
     >
@@ -2463,7 +2463,7 @@ export function NoiseOrNews() {
         <X7N_Panel
           title="সবচেয়ে বড় ক্রেতা কে?"
           on={k >= 3}
-          tag={k >= 4 ? <span className={`${FADE} font-semibold text-cat-blue`}>হাত দেবেন না</span> : k >= 3 ? <span className={`${FADE} text-cat-blue`}>lengthটাই খবর</span> : null}
+          tag={k >= 4 ? <span className={`${FADE} font-semibold text-cat-blue`}>হাত দেবেন না</span> : k >= 3 ? <span className={`${FADE} text-cat-blue`}>lengthটাই information</span> : null}
         >
           <Plane f={X7N_FR} grid={0} label="করিম (20, 10) and ডাক্তার আপা (200, 100) on one line; her arrow is ten times longer, and that length is the answer" className="my-1! max-w-none">
             {k >= 3 && <Arrow f={X7N_FR} from={O} to={SPEND[1].v} tone="blue" w={k >= 4 ? 3.6 : 2.4} draw />}

@@ -1,0 +1,255 @@
+export const metadata = {
+  title: "Math for AI 7.4 — হলুদ আগে না গোসল আগে, গুণের order",
+  description: "হলুদের রাত. লাইট ভাই lens দুইটা উল্টা করে লাগিয়েছেন. নাসিব বলে, দুইটাই তো লাগানো, আগে পরে কী আসে যায়. কাল বিয়ের রাতে আপার ছবি উঠবে হেলানো আর চওড়া lens দিয়ে. দুই matrix এর গুণে order লাগে কি না, দেয়ালে চালিয়ে দেখুন.",
+  type: "article",
+};
+
+{/* Told as a Brilliant-style journey, like 1.1 and 2.3: screen 1 seals the
+    reader's bet on what the other lens order does to the picture, and the bet
+    is opened only on the last screen (BetOpen). 9 steps. The screens live in
+    components/interactive/order-journey.tsx; the wall pieces come from
+    light-kit.tsx (read-only). The plan is block 7.4 of 07_journey_specs.md.
+    It answers 6.7's OrderQuestion (আগে হেলানো, তারপর দুইগুণ চওড়া, আর উল্টা)
+    with exactly that shear and that stretch. Opens where 7.3's bridge stops
+    (the লাইট ভাই has put Z and W back the other way); ZW is paid in step 2.
+    Ends on the বিয়ের দিন, 7.5's opening. */}
+
+import { Journey, Step, Then, SideQuest } from "@/components/journey/journey";
+import { OrderBet, SwapLenses, WhichFirst, TurnAndDouble, DarkWall, YourOrders, TryWhichWall, HelperFits, BetOpen } from "@/components/interactive/order-journey";
+import { HoludNight, ChalkOrder, SaminApp, NasibBox, BoxBottom, HelperWaits, BackFromGosol } from "@/components/interactive/order-journey";
+import { HoludGosol, RopesTwoWays, ZWOther, LightEnters, DoubleCommutes, LostDirections, ClearGlass, FlipOrder, MorningPandal } from "@/components/interactive/order-journey";
+
+<Journey title="হলুদ আগে না গোসল আগে · 7.4">
+
+<Step>
+
+হলুদের রাত. অনেক রাত. Show শেষ.
+
+দেয়ালের আলো নিভানো. লাইট ভাই 7.3 এর lens দুইটা ব্যাগে তুলতে গিয়েও তোলেন নাই. উল্টা করে লাগিয়েছেন. W খোপে, Z সামনে. Switch এখনো টেপেন নাই.
+
+উঠানে ফাহিম, নাসিব, রিনা. তিনজনের মুখে হলুদ. আম্মু বালতি হাতে এসে দাঁড়ালেন. বললেন, হলুদ মাখা শেষ. এবার গোসল.
+
+নাসিব বললো, গোসল আগে করলে কী হতো?
+
+কেউ উত্তর দিলো না.
+
+নাসিব যন্ত্রের দিকে তাকালো. বললো, দুইটা lens ই তো লাগানো. আগে পরে কী আসে যায়.
+
+লাইট ভাই কিছু বললেন না. ব্যাগ থেকে আরো দুইটা lens বের করলেন, S আর D. S সব কিছু হেলিয়ে দেয়. D সব কিছু দুইগুণ চওড়া করে. যন্ত্রের stand এ চক দিয়ে লেখা: আগে S, তারপর D. বিকালে সামিনের phone এ এই ছবি দেখে আপা বলেছে, বিয়ের রাতে এটাই চাই. কাল lens লাগাবে লাইট ভাইয়ের হেল্পার.
+
+<HoludNight story />
+
+Lens দুইটার order উল্টালে দেয়ালের ছবি কী হয়?
+
+<OrderBet />
+
+<Then>
+
+বাজি সিল হলো. শেষে খুলবো.
+
+নাসিবের প্রশ্ন আসলে দুইটা. গোসল আর হলুদের order. আর lens এর order. প্রথমটার উত্তর আম্মু জানেন. হলুদ মেখে গোসল করলে মুখ পরিষ্কার. গোসল করে হলুদ মাখলে হলুদ মুখেই ঘুমাতে হবে. একই দুইটা কাজ. Order আলাদা, ফল আলাদা.
+
+<HoludGosol />
+
+Lens এর বেলায়ও কি তাই? কাল হেল্পার S আর D লাগাবে. Order এ যদি কিছু আসে যায়, তাহলে ভুল order এ আপার ছবি আর উঠবে না.
+
+</Then>
+
+</Step>
+
+<Step>
+
+লাইট ভাই Z আর W খুলে রাখলেন. চকের লেখা মতো লাগালেন. S খোপে, bulb এর পাশে, তাই আলো আগে পায় S. D তার সামনে.
+
+যন্ত্রের সামনে একটা ফুলের stencil. Lens ছাড়া আলোর ফুল পড়ে (2, 3) এ, আপার জানালায়. 6.7 এর গাঁদা ফুলের মতো, একই (2, 3).
+
+<ChalkOrder story />
+
+যন্ত্র চালান. ফুলটা কোথায় থামে দেখুন. তারপর lens দুইটা অদলবদল করে আবার চালান.
+
+<SwapLenses />
+
+<Then>
+
+আগে হেলালে ফুল গেলো (5, 3) এ, তারপর (10, 3) এ. আগে চওড়া করলে (4, 3), তারপর (7, 3). একই দুই lens, দুই জায়গা. দড়ি দিয়ে দেখুন (6.3): e₂ একবার যায় (2, 1) এ, আরেকবার (1, 1) এ. দড়ির মাথা গুলোই lens এর column. তাই এক lens এ লিখলে দুইটা আলাদা matrix.
+
+<RopesTwoWays />
+
+লাইট ভাইয়ের উল্টা করা Z আর W ও তাই. আগে Z দিলে ছিল G. আগে W দিলে $ZW = \begin{bmatrix}1&0\\1&3\end{bmatrix}$. G না. তাই **$AB \neq BA$**, সাধারণত.
+
+<ZWOther />
+
+</Then>
+
+</Step>
+
+<Step>
+
+সামিন যন্ত্রের app খুললো. দুইটা lens এর কাজ একটা lens এ লিখে রাখলো, 7.3 এর মতো. App এ নাম উঠলো D S. D চওড়া, S হেলানো. বইয়েও এভাবেই লেখে.
+
+লাইট ভাই phone এর দিকে অনেকক্ষণ তাকিয়ে থাকলেন. বললেন, তাইলে আলো আগে ঢুকে D তে?
+
+<SaminApp story />
+
+App এর হিসাবে DS ফুলটাকে পাঠায় তারার জায়গায়. আলো আগে কোন lens এ ঢুকলে সেটা হয়? আগে guess দিন.
+
+<WhichFirst />
+
+<Then>
+
+আলো আগে ঢুকলো S এ, খোপের lens এ. লেখায় S থাকে ডানে, v এর পাশে. $(DS)v = D(Sv)$: আগে $Sv$, তারপর তার উপর D. পড়ি বাম থেকে, কিন্তু কাজ হয় ডান থেকে বামে. যন্ত্রেও তাই. দেয়াল বামে, bulb ডানে.
+
+Bracket এর জায়গা বদলানো যায়: $(AB)C = A(BC)$. দুইভাবেই আগে C, তারপর B, তারপর A. শুধু অক্ষরের order বদলানো যায় না.
+
+<LightEnters />
+
+</Then>
+
+</Step>
+
+<Step>
+
+নাসিব ডেকোরেটরের বাক্স থেকে আরো দুইটা lens বের করলো. একটা সব কিছু 90° ঘুরিয়ে দেয়, খুঁটির পেরেকের চারপাশে. আরেকটা সব কিছু দ্বিগুণ করে, দুই দিকেই.
+
+নাসিব বললো, এই দুইটা দিয়ে দেখাই. আগে পরে একই হবে.
+
+<NasibBox story />
+
+লাইট ভাই stencil টা নামিয়ে ফুলটা (2, 1) এ আনলেন. নাহলে দ্বিগুণ হয়ে ফুল দেয়ালের বাইরে চলে যায়. এবার দুই order এই চালান.
+
+<TurnAndDouble />
+
+<Then>
+
+দুই order এই ফুল থামলো (−2, 4) এ. Grid ও হুবহু এক. **এবার নাসিব ঠিক.** এক lens এ লিখলে দুইভাবেই $\begin{bmatrix}0&-2\\2&0\end{bmatrix}$.
+
+কেন? দ্বিগুণ lens সব দিক সমান বাড়ায়. ঘোরানোর আগে বাড়ান বা পরে, একই. যেকোনো lens এর সাথেই তাই. 6.4 এর I, মানে খালি কাঁচ, তার সাথেও order এ কিছু বদলায় না. তবে এগুলো ব্যতিক্রম. নিয়ম না.
+
+<DoubleCommutes />
+
+</Then>
+
+</Step>
+
+<Step>
+
+লাইট ভাই বাক্সের তলা থেকে আরো দুইটা ধুলা মাখা lens আনলেন. একটা 7.2 এর সেই বাড়তি lens. পাতে (1, 0) আর (0, 0). আরেকটার পাতে (0, 0) আর (0, 1).
+
+লাইট ভাই বললেন, একটাও তো ফাঁকা না. একসাথে দেই?
+
+<BoxBottom story />
+
+আগে একটা একটা করে লাগিয়ে দেখুন. তারপর দুইটা একসাথে.
+
+<DarkWall />
+
+<Then>
+
+বাড়তি 1 রাখে শুধু ডান-বাম, তাই সব আলো পেরেকের সারিতে. বাড়তি 2 রাখে শুধু উপর-নিচ, তাই সব আলো খুঁটিতে. একসাথে দিলে একটা যা রাখে, অন্যটা ঠিক সেটাই ফেলে দেয়. বাকি থাকে শুধু পেরেক.
+
+তাই দুইটা matrix, কোনোটাই শূন্য না, গুণ করলে শূন্য হতে পারে: **$AB = 0$, অথচ $A \neq 0$, $B \neq 0$.** এটা bug না. দুইজনই একটা করে দিক হারায়, 7.2 এর মতো.
+
+<LostDirections />
+
+</Then>
+
+</Step>
+
+<Step>
+
+## এবার আপনার পালা
+
+চারটা lens জোড়া. প্রতিটায় বলুন, order লাগে, নাকি লাগে না. তারপর যন্ত্র দুই order এই চালিয়ে দেখাবে.
+
+<YourOrders />
+
+</Step>
+
+<Step>
+
+## Try it
+
+সামিন app এ একটা lens লিখলো: S R. S হেলানো, R ঘোরানো. ফুল (2, 1) এ. দেয়ালে কোন ছবিটা উঠবে?
+
+<TryWhichWall />
+
+</Step>
+
+<Step>
+
+লাইট ভাই ঘুমাতে যাবেন. S আর D তুলে দিলেন হেল্পারের হাতে. বললেন, কাইল তুই লাগাবি.
+
+আপা এসে phone টা দেখালো. বিকালে তোলা দেয়ালের ছবি. বললো, কাল এইটাই চাই.
+
+হেল্পার চকের লেখাটা পড়লো. আগে S, তারপর D. বললো, আগে মানে কই? খোপে, না সামনে?
+
+<HelperWaits story />
+
+Lens দুইটা বসান, একটা খোপে, একটা সামনে, যাতে দেয়ালে আপার ছবিটা ওঠে. খেয়াল রাখুন, bulb ডানে.
+
+<HelperFits />
+
+</Step>
+
+<Step>
+
+## শেষ! Order এ আসে যায়
+
+ফাহিম, নাসিব, রিনা গোসল সেরে ফিরলো. মুখে আর হলুদ নাই. চুল থেকে পানি পড়ছে.
+
+হেল্পার শেষবারের মতো S আর D উল্টে দেখলো. দেয়ালের ছবি বদলে গেলো. আবার আগের মতো লাগালো. আগের ছবি ফিরে এলো.
+
+নাসিব অনেকক্ষণ দেয়ালের দিকে তাকিয়ে থাকলো. কিছু বললো না.
+
+<BackFromGosol story />
+
+এবার বাজি খুলুন.
+
+<BetOpen />
+
+<Then>
+
+নাসিবের "আগে পরে কী আসে যায়" টিকলো না. হেলানো আর চওড়া উল্টালে ফুল (10, 3) থেকে চলে যায় (7, 3) এ. তবে ঘোরানো আর দ্বিগুণে সে ঠিক ছিল. সেটা ওই জোড়ার গুণ. নিয়ম না.
+
+এক line এ: **$AB$ মানে আগে B, তারপর A. উল্টালে সাধারণত অন্য জিনিস.**
+
+<SideQuest title="গুণের নিয়ম, এক টেবিলে">
+
+<Table
+  head={["নিয়ম", "সবসময় খাটে?", "মানে"]}
+  rows={[
+    ["A(BC) = (AB)C", "হ্যাঁ", "bracket সরে, অক্ষরের order না"],
+    ["A(B + C) = AB + AC", "হ্যাঁ", "যোগের উপর গুণ ভাগ হয়ে যায়"],
+    ["AB = BA", "না", "উল্টালে সাধারণত অন্য ছবি"],
+    ["AI = IA = A", "হ্যাঁ", "খালি কাঁচ কিছুই বদলায় না"],
+    ["AB = 0 হলে A = 0 বা B = 0", "না", "দুইটা বাড়তি lens: কোনোটাই 0 না, গুণ 0"],
+  ]}
+/>
+
+<ClearGlass />
+
+</SideQuest>
+
+<SideQuest title="Transpose ও order উল্টায়">
+
+6.1 এ transpose দেখেছিলাম: row গুলো column হয়ে যায়. দুই matrix এর গুণকে transpose করলে order টাও উল্টে যায়: $(AB)^T = B^TA^T$.
+
+বইয়ের উদাহরণ: $A = \begin{bmatrix}1&2\\0&1\end{bmatrix}$, $B = \begin{bmatrix}1&0\\3&1\end{bmatrix}$. $AB = \begin{bmatrix}7&2\\3&1\end{bmatrix}$, তার transpose $\begin{bmatrix}7&3\\2&1\end{bmatrix}$. $B^TA^T$ ও তাই. কিন্তু $A^TB^T = \begin{bmatrix}1&3\\2&7\end{bmatrix}$. মেলে না.
+
+<FlipOrder />
+
+</SideQuest>
+
+পরদিন বিয়ে. দুপুরে দেয়ালের যন্ত্র বন্ধ. প্যান্ডেলের কোণায় ফটোগ্রাফার ভাই laptop খুলে বসলেন. হলুদের রাতের 300 টা ছবি. প্রতিটা যাবে 50 টা colour filter এর ভেতর দিয়ে, একটার পর একটা.
+
+<MorningPandal />
+
+<LessonLink href="/dashboard/articles/math_for_ai/07e_photo_album" eyebrow="পরের lesson" title="ফটোগ্রাফার ভাইয়ের পঞ্চাশটা filter">
+  পঞ্চাশটা filter পরপর চালালে কি পঞ্চাশ গুণ কাজ?
+</LessonLink>
+
+</Then>
+
+</Step>
+
+</Journey>

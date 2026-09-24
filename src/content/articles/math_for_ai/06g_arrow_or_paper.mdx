@@ -8,8 +8,8 @@ export const metadata = {
     reader's bet on which of two answers is wrong, and the bet is not opened
     until the last screen. 8 steps. The screens live in
     components/interactive/paper-journey.tsx. The plan is block 6.7 of
-    06_journey_specs.md. It closes Article 6; Article 7 isn't built yet, so
-    the ending bridges in words only. */}
+    06_journey_specs.md. It closes Article 6 and links on to 7.1
+    (07a_bazar_list). */}
 
 import { Journey, Step, Then, SideQuest } from "@/components/journey/journey";
 import { TwoAnswersBet, ReplaySchool, ShearTheFlower, PaperOrArrow, SameMatrixBack, YourStories, TryMoveOrRename, TwoFacesSort } from "@/components/interactive/paper-journey";
@@ -285,6 +285,10 @@ Article 6 থেকে নিয়ে যাওয়ার মতো পাঁ
 <OrderQuestion />
 
 </Then>
+
+<LessonLink href="/dashboard/articles/math_for_ai/07a_bazar_list" eyebrow="পরের lesson" title="বাজারের list, গুণ করার দুই রাস্তা">
+  বাবুর্চি গোনে ডেকচি ধরে, মামা গোনে জিনিস ধরে. দুইজনের list কি মিলবে?
+</LessonLink>
 
 </Step>
 
