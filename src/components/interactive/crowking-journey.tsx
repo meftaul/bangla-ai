@@ -1869,7 +1869,7 @@ export function TypoOrNews() {
   const k = s.k;
   const typo = k >= 2;
   return (
-    <Scene scene={s} caption={s.done ? <span className={FADE}>…তাহলে ওটাই আসল খবর। তখন L2-র চেঁচানোটাই কাজের।</span> : X6_SAY[k]}>
+    <Scene scene={s} caption={s.done ? <span className={FADE}>…তাহলে ওটাই আসল information। তখন L2-র চেঁচানোটাই কাজের।</span> : X6_SAY[k]}>
       <div className="mx-auto flex max-w-xs gap-2">
         <X6Panel
           title="সামিন আর সোম, দশ বিষয়"

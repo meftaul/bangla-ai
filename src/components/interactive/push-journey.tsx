@@ -786,7 +786,7 @@ function RightAngle({ f, to }: { f: Frame; to: XY }) {
 const X2T_SAY = [
   "পেছন থেকে ঠেললে (4, 3): box এ +25।",
   "সামনে থেকে সেই একই ধাক্কা (−4, −3): −25।",
-  "সংখ্যা একই। শুধু চিহ্ন উল্টা। দুইটা খবরই box দেয় একদম ঠিক।",
+  "সংখ্যা একই। শুধু চিহ্ন উল্টা। দুইটা informationই box দেয় একদম ঠিক।",
 ];
 const X2T_ROWS = [
   { head: "পেছন থেকে", tup: "(4, 3)", out: "+25", team: "ভ্যানের দলে", ink: "text-cat-blue", edge: "border-cat-blue/40", chip: "bg-cat-blue/10 text-cat-blue" },

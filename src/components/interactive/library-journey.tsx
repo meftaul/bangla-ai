@@ -538,7 +538,7 @@ const S7_PPL = [
   { who: "করিম", v: [20, 10], dy: 7 },
   { who: "ডাক্তার আপা", v: [200, 100], dy: 0 },
 ];
-const S7_OPTS = ["হ্যাঁ, normalise সবসময় ভালো", "না, length টাই এখানে আসল খবর", "হ্যাঁ, direction টাই আসল"];
+const S7_OPTS = ["হ্যাঁ, normalise সবসময় ভালো", "না, length টাই এখানে আসল information", "হ্যাঁ, direction টাই আসল"];
 const S7_RIGHT = 1;
 
 function S7_Pic({ i }: { i: number }) {
@@ -580,7 +580,7 @@ export function SpenderPick() {
 
   const choose = (i: number) => {
     setPick(i);
-    if (i === S7_RIGHT) p.play(1, () => pass("Length যখন খবর, normalise না."));
+    if (i === S7_RIGHT) p.play(1, () => pass("Length যখন information, normalise না."));
     else setMiss(miss + 1);
   };
 
@@ -634,7 +634,7 @@ export function SpenderPick() {
           </PicChoice>
         ))}
       </div>
-      {pick === 0 && <Nope key={miss}>Normalise করতেই দুইজন হুবহু এক. কে 10 গুণ বেশি খরচ করেন, সেই খবরটাই মুছে গেলো.</Nope>}
+      {pick === 0 && <Nope key={miss}>Normalise করতেই দুইজন হুবহু এক. কে 10 গুণ বেশি খরচ করেন, সেই informationটাই মুছে গেলো.</Nope>}
       {pick === 2 && <Nope key={miss}>দুইজন তো একই direction এ. Direction দিয়ে বড় ক্রেতা বের হয় না. আর normalise করলে টাকাটাই হারায়.</Nope>}
       <Task done={pick === S7_RIGHT && !p.running}>ছবি দেখে বেছে নিন: বড় ক্রেতা খুঁজতে normalise করবেন কি না.</Task>
     </>
@@ -756,7 +756,7 @@ const LENGTH_JOBS: Job[] = [
   { t: "যে ছবি সবাই দেখে, সেটা সবাইকে একটু বেশি দেখানো", bin: 0, why: "Cosine length ফেলে দেয়. অথচ এখানে জনপ্রিয় ছবির লম্বা arrow টাই কাজের." },
 ];
 const LENGTH_BINS = [
-  { name: "box", sub: "length ও খবর" },
+  { name: "box", sub: "length ও information" },
   { name: "cosine", sub: "শুধু direction, length হলো noise" },
 ];
 
@@ -765,7 +765,7 @@ export function LengthIsNews() {
     <SortJobs
       jobs={LENGTH_JOBS}
       bins={LENGTH_BINS}
-      note="আসল প্রশ্ন: length কি এখানে খবর?"
+      note="আসল প্রশ্ন: length কি এখানে information?"
       doneText="ছয়টা কাজই জায়গামতো বসলো."
       nope="“বেশি” বা “বড়” হওয়াটা কি এখানে উত্তরের অংশ, নাকি শুধু noise?"
       task="প্রতিটা কাজে কোন মাপ লাগবে, tap করুন."
@@ -781,7 +781,7 @@ const TOOL_JOBS: Job[] = [
   { t: "Chatbot কে প্রশ্ন করলেন: কোন paragraph এর মানে প্রশ্নের সবচেয়ে কাছে", bin: 1, why: "Box দিলে লম্বা paragraph শুধু লম্বা বলেই জিতে যাবে." },
   { t: "দালালের knob দিয়ে একটা ছাগলের দাম", bin: 0, why: "দামটা একটা পরিমাণ. Knob গুলা গুণ করে যোগ, মানে box." },
   { t: "ডাক্তার আপার twin খেলা: standardise করার পর কে কার সবচেয়ে কাছে দাঁড়িয়ে", bin: 2, why: "প্রশ্নটা জায়গা নিয়ে, কে কোথায় দাঁড়িয়ে." },
-  { t: "ছোট বড় হাজারটা খবরের মধ্যে “বন্যা” র খবর খোঁজা", bin: 1, why: "Box দিলে লম্বা খবর উপরে উঠবে, বন্যা নিয়ে না হলেও." },
+  { t: "ছোট বড় হাজারটা informationের মধ্যে “বন্যা” র information খোঁজা", bin: 1, why: "Box দিলে লম্বা information উপরে উঠবে, বন্যা নিয়ে না হলেও." },
   { t: "ফাহিমের final number: marks আর weight মিলিয়ে", bin: 0, why: "Marks বেশি হলে number ও বেশি হবে, এটাই তো চাওয়া." },
 ];
 const TOOL_BINS = [{ name: "box" }, { name: "cosine" }, { name: "distance" }];
@@ -793,7 +793,7 @@ export function PickTool() {
       bins={TOOL_BINS}
       note="Length: box. Direction: cosine. জায়গা: distance."
       doneText="পাঁচটা কাজই ঠিক মাপে বসলো."
-      nope="Length টাই কি খবর, নাকি শুধু direction, নাকি জায়গা?"
+      nope="Length টাই কি information, নাকি শুধু direction, নাকি জায়গা?"
       task="প্রতিটা কাজের জন্য ঠিক মাপটা বেছে নিন."
     />
   );
@@ -813,7 +813,7 @@ const N10_NEWS = [
   { id: "R", title: "আধা পাতা: ইলিশ ধরা বন্ধ কেন", v: [6, 1, 0] },
 ];
 const N10_WAYS = [
-  { name: "box", sub: "লম্বা খবরে বেশি থাকে", score: (v: readonly number[]) => v[0], d: 0 },
+  { name: "box", sub: "লম্বা informationে বেশি থাকে", score: (v: readonly number[]) => v[0], d: 0 },
   { name: "cosine", sub: "শুধু direction", score: (v: readonly number[]) => v[0] / len(v), d: 3 },
   { name: "length", sub: "লম্বাটা আগে", score: (v: readonly number[]) => len(v), d: 1 },
 ];
@@ -874,7 +874,7 @@ export function NewsSearch() {
           );
         })}
       </div>
-      <div className="mt-1 text-center text-xs text-muted">বারটা যত লম্বা, খবর তত লম্বা. নীল অংশটা ইলিশ.</div>
+      <div className="mt-1 text-center text-xs text-muted">বারটা যত লম্বা, information তত লম্বা. নীল অংশটা ইলিশ.</div>
       <div className="mt-3 grid grid-cols-3 gap-2">
         {N10_WAYS.map((w, i) => (
           <button
@@ -891,9 +891,9 @@ export function NewsSearch() {
           </button>
         ))}
       </div>
-      {pick === 0 && <Nope key={miss}>Box এ এক নম্বরে উঠে গেলো দশ পাতার বাজারের খবর. ইলিশ আছে 10 বার. কিন্তু খবরটা দাম নিয়ে. জিতলো লম্বা বলেই.</Nope>}
-      {pick === 2 && <Nope key={miss}>লম্বা খবর আগে দিয়ে কী লাভ? Search টা লম্বা খবর চায় নাই, ইলিশের খবর চেয়েছে.</Nope>}
-      <Task done={pick === N10_RIGHT && !p.running}>“ইলিশ” এর খবরগুলা কী দিয়ে সাজাবেন? একটা মাপ বেছে নিয়ে দেখুন.</Task>
+      {pick === 0 && <Nope key={miss}>Box এ এক নম্বরে উঠে গেলো দশ পাতার বাজারের information. ইলিশ আছে 10 বার. কিন্তু informationটা দাম নিয়ে. জিতলো লম্বা বলেই.</Nope>}
+      {pick === 2 && <Nope key={miss}>লম্বা information আগে দিয়ে কী লাভ? Search টা লম্বা information চায় নাই, ইলিশের information চেয়েছে.</Nope>}
+      <Task done={pick === N10_RIGHT && !p.running}>“ইলিশ” এর informationগুলা কী দিয়ে সাজাবেন? একটা মাপ বেছে নিয়ে দেখুন.</Task>
     </>
   );
 }
@@ -1777,10 +1777,10 @@ const X10N_NEWS = [
   { name: "দশ পাতা", v: [10, 60, 8] },
 ];
 const X10N_SAY = [
-  "তিনটা খবর, তিন সাইজের. নীল অংশটা ইলিশ.",
-  "Box গোনে শুধু নীল: দশ পাতার খবরে নীল সবচেয়ে বেশি, 10.",
-  "Length দিয়ে ভাগ দিলে তিনটা খবরই এক সাইজের.",
-  "এবার জেতে যে খবরের বেশিটা ইলিশ: 1.00, 0.99, আর দশ পাতা 0.16.",
+  "তিনটা information, তিন সাইজের. নীল অংশটা ইলিশ.",
+  "Box গোনে শুধু নীল: দশ পাতার informationে নীল সবচেয়ে বেশি, 10.",
+  "Length দিয়ে ভাগ দিলে তিনটা informationই এক সাইজের.",
+  "এবার জেতে যে informationের বেশিটা ইলিশ: 1.00, 0.99, আর দশ পাতা 0.16.",
 ];
 
 export function NewsShrink() {
@@ -1789,7 +1789,7 @@ export function NewsShrink() {
   const hs = useTween(X10N_NEWS.map((n) => (k >= 2 ? 64 : 12 + len(n.v) * 1.2)), 1100);
   return (
     <Scene scene={s} caption={lsay(X10N_SAY, k)}>
-      <svg viewBox="0 0 220 130" role="img" aria-label="তিনটা খবর, length অনুযায়ী সাইজ; length দিয়ে ভাগ দিলে সব এক সাইজ, আর দুই লাইনের খবর জেতে" className="mx-auto block h-auto w-full max-w-[15rem]">
+      <svg viewBox="0 0 220 130" role="img" aria-label="তিনটা information, length অনুযায়ী সাইজ; length দিয়ে ভাগ দিলে সব এক সাইজ, আর দুই লাইনের information জেতে" className="mx-auto block h-auto w-full max-w-[15rem]">
         <rect x={1} y={1} width={218} height={128} rx={10} fill="white" stroke="#cbd5e1" />
         {X10N_NEWS.map((n, i) => {
           const h = hs[i];
@@ -1876,7 +1876,7 @@ const X13_ITEMS = [
 ];
 const X13_SAY = [
   "তিনটা মাপ, তিনটা প্রশ্ন.",
-  "কত বড়: length ও যখন খবর, box.",
+  "কত বড়: length ও যখন information, box.",
   "কী ধরনের: শুধু direction জানতে চাইলে, cosine.",
   "কে কোথায় দাঁড়িয়ে: জায়গাটাই যখন প্রশ্ন, distance.",
 ];

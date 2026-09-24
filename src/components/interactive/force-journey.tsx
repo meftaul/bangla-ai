@@ -161,7 +161,7 @@ export function WindReport() {
         </MajhiSays>
       )}
       <Task done={tried.length === REPORTS.length}>
-        তিন রকম খবরই দিয়ে দেখুন ({bn(tried.length)}/{bn(REPORTS.length)})
+        তিন রকম informationই দিয়ে দেখুন ({bn(tried.length)}/{bn(REPORTS.length)})
       </Task>
     </>
   );
