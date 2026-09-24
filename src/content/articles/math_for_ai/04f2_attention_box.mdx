@@ -1,77 +1,55 @@
 export const metadata = {
-  title: "Math for AI 4.8 — The same box, inside ChatGPT",
-  description: "Som says that inside ChatGPT runs the haat's same box: multiply the slots, then add. True? We'll hunt it from the library's machines all the way to ChatGPT, and end by reading Module 1's formula out loud, piece by piece.",
+  title: "Math for AI 4.9 — The same box, inside ChatGPT",
+  description: "Som says the haat's box, multiply the slots and add, runs inside ChatGPT. True? Find out which word 'it' means in a sentence, and the box turns up. Then read Module 1's formula out loud, piece by piece.",
   type: "article",
 };
 
 {/* Told as a Brilliant-style journey, like 1.1 and 2.3: screen 1 seals the
-    reader's bet on Som's claim that ChatGPT runs the haat's box, and the bet
-    is not settled until the check after WhoIsIt (attention), after
-    OneRanking (search is a plain box once cards are 1 long) and ChordCos
-    (distance agrees). Each screen opens by reacting to the last; the
-    explanation sits in <Then> and shows only once the task is done. The
-    screens live in components/interactive/library-journey.tsx, beside
-    4.7's. The last of eight "Dot product" journeys (Article 4); it closes
-    Module 1. The plan is in 04_journey_specs.md. */}
+    reader's bet on সোম's claim that ChatGPT runs the হাট's box, and the bet is
+    not settled until the reader builds a query themselves (YourSentence) and
+    the ending says it by name. 11 steps. Each screen opens by reacting to the
+    last; the explanation sits in <Then> and shows only once the task is done,
+    one phone screen each.
 
-import { Journey, Step, Check, Then, SideQuest } from "@/components/journey/journey";
-import {
-  BoxBet,
-  OneRanking,
-  WhoIsIt,
-  Finale,
-  MillionBooks,
-  HatFormula,
-  StoreOnce,
-  ChordCos,
-  NightCall,
-  QueryKeys,
-  AllPairs,
-  DalalNeuron,
-  BusHome,
-  FourArticles,
-  FourSpellings,
-  SpanRecipe,
-  MatrixBoxes,
-} from "@/components/interactive/library-journey";
+    The spine: words are lists (2.3 recall, WordWalk) → a rule by position
+    fails (NearestRule) → the box between a query and each key finds "ওটা"
+    (WhoIsIt) → nobody writes those numbers, the machine learns them
+    (LearnQuery) → every word boxes every word, and that is attention
+    (EveryWord) → the neuron is 4.1's দালাল card plus a number and a bend
+    (NeuronRun) → এবার আপনার পালা (YourSentence) → Try it (CatMilk) → the
+    ending, Module 1 read out loud (Finale) → the look-ahead (MixW).
 
-<Journey title="Dot product · 4.8">
+    The "normalise once / a million books / distance agrees" half of the old
+    4.8 is its own journey now, 4.8 04f1_million_books. The last of the "Dot
+    product" journeys (Article 4); it closes Module 1. The screens live in
+    components/interactive/attention-journey.tsx. */}
+
+import { Journey, Step, Then, SideQuest } from "@/components/journey/journey";
+import { BoxBet, WordWalk, NearestRule, WhoIsIt, LearnQuery, EveryWord, NeuronRun, YourSentence, CatMilk, Finale, MixW } from "@/components/interactive/attention-journey";
+import { NightCall, SomRecalls, GoyalGhor, KhataCard, GoatLeaves, CatKitchen, BusHome } from "@/components/interactive/attention-journey";
+import { WordTimesWord, WordBox, EndingFlips, TwoSlots, QueryKeys, LongStrips, NameLands, ManyNeurons, SameBox, RightAngleZero, FourArticles, EverydayMatch, FourSpellings, SpanRecipe, MatrixBoxes } from "@/components/interactive/attention-journey";
+
+<Journey title="Dot product · 4.9">
 
 <Step>
 
-One question from the library evening, before the phone call to Som.
+রাতে ফাহিম সোমকে ফোন দিলো. লাইব্রেরির পুরা গল্পটা বললো. দুইটা machine, মাছের বই, box আর cosine.
 
-<Check
-  question="With the box, Hullabaloo (5, 5) won for both Mama and Mami. Why?"
-  options={[
-    "It matched both their tastes the most",
-    "Its arrow was the longest",
-    "Its direction was exactly in the middle",
-  ]}
-  answer={1}
-  hint="Under cosine, was Hullabaloo anyone's number one?"
-  praise="A long arrow wins at the box on its own."
->
+সোম চুপচাপ শুনলো. তারপর হালকা গলায় বললো, ChatGPT এর ভিতরেও তো এই box চলে. হাটের সেই box. ঘরে ঘরে গুণ, তারপর যোগ.
 
-Hullabaloo's length is about 7.07, the longest of the three films. A box number carries the length inside it, so it won for both. And because its direction sits in the middle, under cosine it wasn't anyone's number one — it was everyone's number two.
-
-</Check>
-
-</Step>
-
-<Step>
-
-At night Fahim phoned Som and told the whole story. Som laughed and said, “Inside ChatGPT there's this same box, you know.”
+ফাহিম কিছু বললো না. মুদি দোকানের হিসাব আর ChatGPT. এক জিনিস?
 
 <NightCall story />
-
-Fahim couldn't believe it. The haat shopkeeper's bill and ChatGPT — how can they be the same thing? What do you think?
 
 <BoxBet />
 
 <Then>
 
-Bet sealed. We'll start the hunt somewhere familiar, the library's machine B. Then, little by little, we'll walk all the way to ChatGPT, checking at every step whether the box is there.
+বাজি ধরা হয়ে গেলো. তবে সোমের কথায় একটা খটকা আছে. হাটের box চালাতে কী লাগে? দুইটা list of numbers. চাল, তেল, ডিম কতটুকু কেনা. আর কোনটার দাম কত. ChatGPT এর কাছে তো আসে শব্দ. শব্দের সাথে শব্দের গুণ হয় কেমনে?
+
+<WordTimesWord />
+
+আগে এই খটকাটা মিটাই. তারপর খুঁজবো box টা ChatGPT এর কোথায় বসে আছে.
 
 </Then>
 
@@ -79,25 +57,23 @@ Bet sealed. We'll start the hunt somewhere familiar, the library's machine B. Th
 
 <Step>
 
-Som's first question was about the library's machine B itself. Cosine has a cost. On every search, measure every book's length, take the root, divide. What if the library has a million books?
+সোম হাসলো. বললো, 2.3 মনে নাই? king − man + woman.
 
-Apu's brother had an idea. When a book goes on the shelf, make its card's length 1 once and for all, as in 3.6. Then run the three measures and see.
+<SomRecalls story />
 
-<MillionBooks story />
+Map এর উপরে হিসাবটা আরেকবার করে দেখুন.
 
-<OneRanking />
+<WordWalk />
 
 <Then>
 
-Three measures, one order. A card 1 unit long leaves nothing to divide — both lengths are 1. So the plain box is the cosine:
+খেয়াল করেছেন? map এ প্রতিটা শব্দ বসে আছে একটা জায়গায়. আর জায়গা মানেই দুইটা number. king মানে (2.6, 5.9). তাই machine এর চোখে শব্দ একটা list of numbers. মানে একটা **vector**. এজন্যই তো শব্দ থেকে শব্দ বিয়োগ করা গেছিল.
 
-$$\cos\theta = \hat{u} \cdot \hat{v} \qquad (\text{when both are 1 unit long})$$
+আর list হলে? box ও চলে.
 
-<HatFormula />
+খটকাটা মিটে গেলো.
 
-That is exactly what real search systems do. Every document is normalised once and stored; then each search runs only the box — the cheapest, fastest job a computer does. A GPU is really a machine for running millions upon millions of boxes at once.
-
-<StoreOnce />
+<WordBox />
 
 </Then>
 
@@ -105,44 +81,25 @@ That is exactly what real search systems do. Every document is normalised once a
 
 <Step>
 
-The third of the three measures, distance, gave the same order too. Why?
+ফাহিম জানালা দিয়ে তাকালো. উঠানের কোণায় মামার গোয়ালঘর. গরুটা দাঁড়িয়ে আছে. সামনে এক আঁটি খড়, ছোঁয়াও হয় নাই.
 
-<Check
-  question="The bigger the cosine of two arrows 1 unit long, the … the distance between their tips."
-  options={[
-    "bigger.",
-    "the same.",
-    "smaller.",
-  ]}
-  answer={2}
-  hint="Two 1-unit arrows pointing the same way — are their tips close together or far apart?"
-  praise="A bigger cosine means a smaller distance."
-/>
+সোম বললো, এটাই ধর. গরুটা খড় খেলো না, কারণ ওটার পেট ভরা ছিল. ওটা কে?
+
+<GoyalGhor story />
+
+আপনি এক পলকেই জানেন. গরু. Machine জানে না. ওকে বের করতে হবে. শুরু করি সহজ একটা নিয়ম দিয়ে.
+
+<NearestRule />
 
 <Then>
 
-Why did distance give the same order? For two arrows 1 unit long, distance and cosine are tied together:
+কী এসেছে? নিয়মটা একবার মিললো. একবার মিললো না. অথচ দুইটা বাক্যেই গরু আর খড় একই জায়গায় বসা. বদলেছে কী? শুধু শেষের কথাটা. পেট ভরা হয় প্রাণীর. পচা হয় খাবার.
 
-$$\|\hat{u} - \hat{v}\|^2 = 2 - 2\cos\theta$$
+<EndingFlips />
 
-<ChordCos />
+তাহলে জায়গা দেখে হবে না. machine কে দেখতে হবে মানে. খেলনা একটা version বানাই. প্রতিটা শব্দের মাত্র দুইটা slot. প্রাণী slot আর খাবার slot.
 
-The bigger the cosine, the smaller the distance. So after normalising, “closest” and “most the same direction” are the same sentence. That's why many libraries give a “cosine distance”, $1 - \cos\theta$, where 0 means exactly identical.
-
-<SideQuest title="The box, cosine and distance, one table">
-
-<Table
-  head={["", "box", "cosine", "distance"]}
-  rows={[
-    ["Formula", "u · v", "(u · v) ÷ (‖u‖ ‖v‖)", "‖u − v‖"],
-    ["A big number means", "more match", "more match", "less match"],
-    ["Range", "any number", "−1 to 1", "0 and up"],
-    ["Changes with length?", "yes", "no", "yes"],
-    ["Where it works", "price, totals, linear models", "what kind of thing", "who stands where"],
-  ]}
-/>
-
-</SideQuest>
+<TwoSlots />
 
 </Then>
 
@@ -150,37 +107,15 @@ The bigger the cosine, the smaller the distance. So after normalising, “closes
 
 <Step>
 
-Before Som's toy, let's recall the words from 2.3.
-
-<Check
-  question="In 2.3, how did the machine see the words king, queen, man, woman?"
-  options={[
-    "As lists of letters",
-    "As lists of numbers — vectors",
-    "As dictionary pages",
-  ]}
-  answer={1}
-  hint="How was the sum king − man + woman done?"
-  praise="A word is a vector too, a list of numbers."
->
-
-Each word was a list of numbers — a vector — and that's why king − man + woman could be worked out at all. Since words are vectors, you can run the box on two words. Those who picked lists of letters were thinking of spellings, but the machine sees meaning.
-
-</Check>
-
-</Step>
-
-<Step>
-
-Now it's time to test Som's claim. Which word does “it” mean in a sentence? The machine works that out with the box too.
-
-Look at a toy version. Here each word has just two slots: an animal slot and a food slot.
+এবার ওটা নিজেই খুঁজবে. ওর হাতেও দুই slot এর একটা list. বাক্যের প্রতিটা শব্দের সাথে ওটার list এর box চালান. যার সাথে box সবচেয়ে বড়, ওটা ঘুরবে তার দিকে.
 
 <WhoIsIt />
 
 <Then>
 
-“It” sends out a question: what kind of thing am I looking for? Each word shows a key: what kind of thing I am. Run the box between the question and each key, and “it” turns towards whoever scores biggest. Hunger belongs to the animal, so the question pointed the animal way, and the cat won. Freshness belongs to food, so the question swung the food way, and milk won.
+ওটা যেন একটা প্রশ্ন পাঠায়. আমি কেমন জিনিস খুঁজছি? এই list টার নাম **query**. মানে প্রশ্ন. প্রতিটা শব্দ দেখায় নিজের পরিচয়. আমি কেমন জিনিস. এটার নাম **key**. তারপর? query র সাথে যে key এর box সবচেয়ে বড়, ওটা ঘুরে তার দিকে.
+
+পেট ভরা হয় প্রাণীর. তাই query তাক করা ছিল প্রাণী slot এ. জিতলো গরু. পচা হয় খাবার. query ঘুরে গেলো খাবার slot এ. জিতলো খড়.
 
 <QueryKeys />
 
@@ -190,29 +125,19 @@ Look at a toy version. Here each word has just two slots: an animal slot and a f
 
 <Step>
 
-In the toy, we set the question and the keys by hand. In a real model?
+খেলনাটায় query আর key এর numbers আমি হাতে বসিয়েছি. আসল ChatGPT এ শব্দ লাখ লাখ. কেউ কি বসে বসে প্রতিটার numbers লিখে দেয়?
 
-<Check
-  question="In a real language model, who sets each word's question and key numbers?"
-  options={[
-    "A programmer writes them by hand for every word.",
-    "They come from a dictionary.",
-    "The machine learns them itself.",
-  ]}
-  answer={2}
-  hint="Remember who set the numbers of the word vectors in 3.3?"
-  praise="Running the box with everyone is called attention."
-/>
+না. শুরুতে ওটার query এলোমেলো থাকে. তারপর machine পড়তে থাকে.
+
+<LearnQuery />
 
 <Then>
 
-In a real language model there are hundreds of slots, the machine learns the questions and keys itself, and every word runs this box with every other word. The trick is called **attention**, and its full name in the books is scaled dot-product attention. The name is literal — there really is a dot product inside.
+Query টা একটু একটু করে ঘুরে চলে আসলো প্রাণী slot এর দিকে. কে ঘুরালো? কেউ না. ভুল হলে machine নিজেই নিজের numbers সরিয়ে নিয়েছে.
 
-<AllPairs />
+আসল model এ একেকটা শব্দের slot দুইটা না. শত শত. বড় model এ হাজার হাজার. কোন slot এর মানে কী? সেটাও machine নিজেই ঠিক করে. প্রাণী slot, খাবার slot, এমন নাম কেউ দিয়ে দেয় না.
 
-And the neuron? Remember the dalal's card in 4.1? A neuron does exactly $w \cdot x$, adds one number, then applies a small bend. A big part of today's AI is really this one box, millions upon millions of times.
-
-<DalalNeuron />
+<LongStrips />
 
 </Then>
 
@@ -220,27 +145,69 @@ And the neuron? Remember the dalal's card in 4.1? A neuron does exactly $w \cdot
 
 <Step>
 
-Som's claim checked out. Now one last sum, entirely on your own.
+খেলনায় প্রশ্ন করেছিল শুধু ওটা. আসলে বাক্যের প্রতিটা শব্দই প্রশ্ন করে. খড় জানতে চায়, কে আমাকে খেলো না? পেট জানতে চায়, কার পেট?
 
-Now it's your turn.
+<EveryWord />
 
-<Check
-  question="At the library, two cards were shelved 1 unit long: (0.6, 0.8) and (0.8, 0.6). What is their cosine?"
-  options={[
-    "1.4",
-    "0.96",
-    "Can't say until you divide by both lengths",
-  ]}
-  answer={1}
-  hint="Both cards are 1 unit long. So what would you divide by?"
-  praise="On cards 1 unit long, the box is the cosine."
->
+<Then>
 
-$0.6 \times 0.8 + 0.8 \times 0.6 = 0.48 + 0.48 = 0.96$. Both lengths are 1, so dividing changes nothing: 0.96 again. The box is the cosine.
+9 টা শব্দের ছোট একটা বাক্য. box চললো কতবার? 9 × 9 = 81 বার. প্রতিটা শব্দ বাকি সবার দিকে তাকায়. box চালায়. তারপর ঠিক করে কার দিকে বেশি মন দিবে. এই কায়দার নাম **attention**. মানে মনোযোগ.
 
-Those who picked 1.4 added the slots without multiplying. And those who thought of dividing — your reasoning was right; it's just that dividing by 1 changes nothing here.
+বইয়ে এর পুরা নাম scaled dot-product attention. নামটাই বলে দিচ্ছে. ভিতরে আছে dot product. হাটের সেই box.
 
-</Check>
+ChatGPT এর ভিতরে box পাওয়া গেলো. এক জায়গায়.
+
+<NameLands />
+
+</Then>
+
+</Step>
+
+<Step>
+
+সোম বললো, এটা তো গেলো attention. ChatGPT এর বাকি বড় অংশটা neuron দিয়ে ভরা. আর neuron তুই আগেই দেখছিস. গরুর হাটে.
+
+ফাহিম খাতা উল্টালো. 4.1 এর পাতায় দালালের card এর number গুলা এখনো লেখা.
+
+<KhataCard story />
+
+<NeuronRun />
+
+<Then>
+
+4.1 এর কথা মনে আছে তো? একটা neuron করে $w \cdot x$. তার সাথে একটা number যোগ করে. তারপর একটু বাঁকিয়ে দেয়. দালালের card টাই $w$. গাইয়ের list টা $x$. আর প্রথম কাজটা? হাটের box.
+
+বাঁকটা কীভাবে হয়? সেটা অনেক পরের গল্প. আজকের জন্য এইটুকুই যথেষ্ট. ChatGPT এ এরকম neuron আছে কোটি কোটি. প্রতিটার ভিতরে একটা করে box.
+
+<ManyNeurons />
+
+</Then>
+
+</Step>
+
+<Step>
+
+## এবার আপনার পালা
+
+মামা ছাগলটার সামনে এক গোছা কাঁঠাল পাতা রেখে গেলেন. ছাগলটা মুখ ফিরিয়ে নিলো.
+
+<GoatLeaves story />
+
+ছাগলটা পাতা খেলো না, কারণ ওটা শুকনা ছিল. এবার machine আপনি. ওটার query টা আপনি নিজে বানান.
+
+<YourSentence />
+
+<Then>
+
+শুকনা হয় কী? পাতা. তাই query তাক করতে হয় খাবার slot এ. তখন পাতার box সবচেয়ে বড়, 6.
+
+দুই দিকেই তাক করেছিলেন? তাহলে query র প্রাণী slot এও ছিল 1. ওটা গুণ হলো ছাগলের প্রাণী slot এর 3 এর সাথে. জিতে গেলো ছাগল.
+
+আর খেয়াল করুন. আপনি চালালেন কী? হাটের box ই. শুধু list দুইটা বদলেছে.
+
+<SameBox />
+
+</Then>
 
 </Step>
 
@@ -248,71 +215,79 @@ Those who picked 1.4 added the slots without multiplying. And those who thought 
 
 ## Try it
 
-<Check
-  question="In the toy, “it”'s question is (1, 0) — it's looking for an animal. Keys: cat (2, 0), milk (0, 3). Which way does “it” turn?"
-  options={[
-    "Milk, because its number is bigger",
-    "Both equally",
-    "The cat",
-  ]}
-  answer={2}
-  hint="Run the box between the question and each key."
->
+রাতে বিড়ালটা রান্নাঘরে ঢুকলো. সকালে দুধের বাটি খালি.
 
-Cat: $1 \times 2 + 0 \times 0 = 2$. Milk: $1 \times 0 + 0 \times 3 = 0$. The bigger box belongs to the cat, so “it” turns to the cat.
+<CatKitchen story />
 
-Those who picked milk only looked at the key's number. Milk's 3 sits in the food slot, but the question was hunting an animal. In that slot the question has 0, so multiplying gives 0.
+বিড়ালটা দুধ খেলো, কারণ ওটার খিদে পেয়েছিল. ওটার query $(1, 0)$. মানে ও প্রাণী খুঁজছে. বলুন তো, ওটা কার দিকে ঘুরবে?
 
-</Check>
+<CatMilk />
+
+<Then>
+
+বিড়াল: $1 \times 2 + 0 \times 0 = 2$. দুধ: $1 \times 0 + 0 \times 3 = 0$. বিড়ালের box বড়. তাই ওটা ঘুরে বিড়ালের দিকে.
+
+দুধ বেছেছিলেন? চোখ গেছে শুধু বড় number টায়. দুধের 3 বসে আছে খাবার slot এ. আর query র খাবার slot এ 0. গুণ করলে? 0. Arrow দুইটাও right angle এ. 4.2 এর ভ্যানের ধাক্কা মনে আছে? সেই রকম.
+
+<RightAngleZero />
+
+</Then>
 
 </Step>
 
 <Step>
 
-## The end! Som was right, Module 1 read out loud
+## শেষ! সোমের কথাই ঠিক, আর Module 1 এক নিঃশ্বাসে
 
-Som was right. Inside ChatGPT really is the haat's box, called attention. The library's search runs on the box, the distance sum runs on the box, the neuron runs on the box. If you bet on “true”, you won.
+সোমের কথাই ঠিক. ChatGPT এর ভিতরে সত্যিই হাটের box চলে. Attention এ query আর key এর box. neuron এ দালালের card এর box. প্রথমটার উপর বাজি ধরে থাকলে আপনি জিতেছেন.
 
-The holidays are over. On the bus home, Fahim opened his notebook and wrote out a formula. At the start of the series, a formula like this was a pile of unknown marks. Now every piece is known.
+ছুটি শেষ. ফেরার বাস. জানালার পাশে ফাহিম. সোমকে একটা message পাঠালো. তারপর খাতা খুলে একটা formula লিখলো. Series এর শুরুতে এটা ছিল কতগুলো অচেনা দাগ. এখন প্রতিটা টুকরা চেনা.
 
 <BusHome story />
 
-Tap the pieces one by one.
+টুকরাগুলোতে একটা একটা করে tap করুন.
 
 <Finale />
 
 <Then>
 
-Across four articles we picked up this formula's pieces one at a time. Turning a thing into a list of numbers, seeing that list as an arrow, measuring the arrow's length, and finally how much two arrows point the same way. The whole thing in one sentence:
+চারটা article এ এই formula র টুকরাগুলো হাতে এসেছে, একটা একটা করে. জিনিসকে list of numbers বানানো. সেই list কে arrow হিসাবে দেখা. arrow এর length মাপা. আর দুইটা arrow কতটা একই দিকে. পুরাটা এক line এ:
 
-**To know how alike two things are, make their arrows, see how much they point the same way, and divide the lengths away so only the direction is left.**
+**দুইটা জিনিস কতটা একরকম জানতে চাইলে ওদের arrow বানান, দেখুন কতটা একই দিকে, আর length ভাগ দিয়ে ফেলে দিন, যাতে থাকে শুধু direction.**
 
 <FourArticles />
 
-A search engine matches pages to your question this way. A film app finds films like the ones you like this way. A chatbot finds the paragraph that holds your answer this way. All three, you can now do by hand.
+<SideQuest title="এই formula রোজ কোথায় চলে">
 
-<SideQuest title="The books' marks, all in one place">
+Search engine আপনার প্রশ্নের সাথে page মিলায় এভাবে. Film এর app আপনার পছন্দের মতো আরো film খুঁজে দেয় এভাবে. Chatbot আপনার প্রশ্নের উত্তর কোন paragraph এ আছে, সেটা খুঁজে পায় এভাবে. তিনটাই আপনি এখন হাতে কলমে করতে পারেন.
 
-The marks the books use for this article's ideas, all in one place:
+<EverydayMatch />
+
+</SideQuest>
+
+<SideQuest title="বইয়ের চিহ্নগুলো, এক জায়গায়">
+
+এই article এর idea গুলো বই কোন কোন চিহ্ন দিয়ে লেখে, সব এক জায়গায়:
 
 <Table
-  head={["You'll see", "Say it as"]}
+  head={["যেটা দেখবেন", "যেভাবে বলবেন"]}
   rows={[
-    ["u · v", "u dot v: multiply the slots, then add"],
-    ["Σ uᵢvᵢ", "the same thing, written as a loop"],
-    ["uᵀv", "the same thing again, the papers' favourite (what ᵀ means comes in Module 2)"],
-    ["⟨u, v⟩", "the same again, called the inner product in the heavier books"],
-    ["θ", "theta, the angle between two arrows"],
-    ["cos θ", "how much the same direction, −1 to 1"],
+    ["u · v", "u dot v: ঘরে ঘরে গুণ, তারপর যোগ"],
+    ["Σ uᵢvᵢ", "একই জিনিস, loop হিসাবে লেখা"],
+    ["uᵀv", "আবার একই জিনিস, paper গুলোর প্রিয় লেখা (ᵀ এর মানে Module 2 এ)"],
+    ["⟨u, v⟩", "আবারও একই, ভারী বইয়ে এর নাম inner product"],
+    ["θ", "theta, দুইটা arrow এর মাঝের angle"],
+    ["cos θ", "কতটা একই দিকে, −1 থেকে 1"],
     ["(u · v) ÷ (‖u‖ ‖v‖)", "cosine similarity"],
-    ["u ⊥ v", "u and v at a right angle, meaning u · v = 0"],
-    ["v · v = ‖v‖²", "the box with itself is the length squared"],
-    ["((w · v) ÷ (v · v)) v", "w's shadow on v, as an arrow"],
-    ["û · v̂", "the box of two 1-unit cards, which is the cosine straight out"],
+    ["u ⊥ v", "u আর v right angle এ, মানে u · v = 0"],
+    ["v · v = ‖v‖²", "নিজের সাথে box মানে length এর বর্গ"],
+    ["((w · v) ÷ (v · v)) v", "v এর উপরে w এর shadow, arrow হিসাবে"],
+    ["û · v̂", "দুইটা 1 লম্বা card এর box, সোজা cosine"],
+    ["q · k", "query আর key এর box, attention এর ভিতরে"],
   ]}
 />
 
-The first four lines are really one job written four ways. In any paper, $x^\top w$, $\langle x, w \rangle$ or $x \cdot w$ means: multiply the slots, then add. There's no more mystery than that.
+প্রথম চারটা line আসলে একটাই কাজ. চারভাবে লেখা. যেকোনো paper এ $x^\top w$, $\langle x, w \rangle$ বা $x \cdot w$ দেখলে বুঝবেন: ঘরে ঘরে গুণ, তারপর যোগ. এর বেশি রহস্য নাই.
 
 <FourSpellings />
 
@@ -324,32 +299,26 @@ The first four lines are really one job written four ways. In any paper, $x^\top
 
 <Step>
 
-One question looking forward, before the bundle is tied shut.
+পোঁটলা বাঁধার আগে সামনের দিকে একটা প্রশ্ন. 3.3 এর রেসিপি মনে আছে? দুইটা উপকরণ মিশিয়ে নতুন কিছু বানানো.
 
-<Check
-  question="If one of a few ingredients can be mixed from the others, does it still need a spot of its own?"
-  options={[
-    "Yes, always needed.",
-    "There's no way to say.",
-    "No, it's extra.",
-  ]}
-  answer={2}
-  hint="Remember the recipe in 3.3. If a thing can be mixed from the others, what extra do you gain by keeping it apart?"
-  praise="What can be mixed is extra."
-/>
+এখানে তিনটা উপকরণ: u, v আর w. দেখুন তো, প্রথম দুইটা মিশিয়েই w বানানো যায় কি না.
+
+<MixW />
 
 <Then>
 
-Now let's look a little ahead. In Module 1 we worked with one or two vectors at a time. The next step asks bigger: what can a whole pile of vectors build together? Which places can a few ingredients reach (remember 3.3's recipe?), which ingredient is extra because the others can mix it themselves, and what is the fewest number of ingredients everything can be mixed from? Their names are span, independence and basis.
+u আর v মিশিয়েই w বানানো গেলো. তাহলে w কে আলাদা করে রাখার দরকার আছে? নাই. ও বাড়তি.
+
+সামনের প্রশ্নগুলো এরকমই. একগাদা vector মিলে কোথায় কোথায় পৌঁছাতে পারে? কোনটা বাড়তি? সবচেয়ে কম কয়টা দিয়ে সব বানানো যায়? এদের নাম span, independence আর basis.
 
 <SpanRecipe />
 
-From there begins the story of the matrix, which is really a pile of boxes run at once. And that is also where Fahim's question at the boat's ghat gets its perfect form: how many directions does my data really need?
+ওখান থেকেই শুরু matrix এর গল্প. Matrix মানে একসাথে একগাদা box.
 
 <MatrixBoxes />
 
-<LessonLink href="/dashboard/articles/math_for_ai/05a_remote_span" eyebrow="Next lesson" title="Span, which remote reaches where">
-  The holidays are over and Fahim's family is moving. In the empty flat Shiku's remote is broken, and the shop has four kinds of two-button remote.
+<LessonLink href="/dashboard/articles/math_for_ai/05a_remote_span" eyebrow="পরের lesson" title="Span, কোন remote কোথায় পৌঁছায়">
+  ছুটি শেষ, ফাহিমরা বাসা বদলাচ্ছে. খালি ফ্ল্যাটে Shiku এর remote নষ্ট, আর দোকানে চার রকম দুই-button এর remote.
 </LessonLink>
 
 </Then>

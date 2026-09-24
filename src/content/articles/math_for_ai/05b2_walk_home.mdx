@@ -1,0 +1,270 @@
+export const metadata = {
+  title: "Math for AI 5.2b — The walk home, catching an extra button",
+  description:
+    "Nasib brings home a three-button remote, 50 taka a button, and no button on it looks like a copy. Is the third button worth its 50 taka? How do you catch an extra button you can't see?",
+  type: "article",
+};
+
+{/* Told as a Brilliant-style journey, like 1.1 and 2.3, in the author's
+    Banglish (like 4.5 and 4.6): screen 1 seals the reader's bet on whether
+    the third button of Nasib's remote is worth its 50 taka, and the bet is
+    not opened until ThirdVerdict, six screens later, after ZeroWalk (the walk
+    home on remotes B and A), NoVisibleCopy (Fahim's remote C, by the sum),
+    NasibWalk (w walks home), AnyThird (Your turn: any third button walks
+    home) and StretchReach (Try it). 7 steps. Each screen opens by reacting to
+    the last; explanations sit in <Then>, one phone screen each with a
+    watch-only figure. The screens live in
+    components/interactive/homewalk-journey.tsx; the remote machine is 5.1's.
+
+    Split off from 5.2 (05b_extra_column), whose second half this was: 5.2
+    keeps the khata and the bathroom's price, this one keeps the zero test,
+    the untidy remote and the third button. Part of the "span, independence,
+    basis" journeys (Article 5); the plan is in 05_journey_specs.md. */}
+
+import { Journey, Step, Then, SideQuest } from "@/components/journey/journey";
+import {
+  NasibRemote,
+  ThirdBet,
+  NoLineHere,
+  ZeroWalk,
+  WalkHome,
+  NoVisibleCopy,
+  SlotKill,
+  NasibWalk,
+  ThirdHome,
+  AnyThird,
+  EveryThird,
+  CheapRemote,
+  StretchReach,
+  TwoArrowsTest,
+  NasibReturns,
+  ThirdVerdict,
+  FloorCount,
+  RemoteCStare,
+  BigTable,
+  OneNumber,
+  SameSpot,
+  NasibObjects,
+  FloorFull,
+  ShopSlots,
+  MovingDay,
+} from "@/components/interactive/homewalk-journey";
+
+<Journey title="বাড়তি button · 5.2b">
+
+<Step>
+
+খাতার বাড়তি column ধরা পড়েছিল, কারণ ওর নিয়মটা চোখে দেখা গেছে: মোট ঘর = bed + bath. আজ রাতের জিনিসটা অত সহজে ধরা দিবে না.
+
+দালাল ভাই চলে গেছেন. দরজায় নাসিব. হাতে নতুন একটা remote. তিন button-এর.
+
+কাল নাসিব বলেছিল, দুই button থাকলেই সব জায়গায় যাওয়া যায়. দুইবার হেরেছে. আজ তাই উল্টা পথ ধরেছে. খেলনার দোকান থেকে তিন button-এর remote নিয়ে এসেছে. প্রতি button 50 টাকা, মোট 150. দোকানদার চাচা বলেছেন, পছন্দ না হলে কাল সকালে ফেরত.
+
+নাসিব গম্ভীর গলায় বললো, দুই button-এ আর বিশ্বাস নাই. তিনটা!
+
+ফাহিম নিজের remote C টা দেখালো. দুইটাই button.
+
+<NasibRemote story />
+
+নাসিবের তিনটা button: $e_1 = (1, 0)$, $e_2 = (0, 1)$, আর $w = (2, 3)$. কোনোটা আরেকটার কপি না. কোনো দুইটা এক line-এও না.
+
+<ThirdBet />
+
+<Then>
+
+বাজি সিল হলো.
+
+কাল remote B-র বাড়তি button চোখেই ধরা পড়েছিল. কারণ, দুইটা button বসে ছিল একই line-এ. নাসিবের remote-এ সেই সুযোগ নাই. প্রতিটা button-এর নিজের আলাদা line.
+
+তাহলে বাড়তি button ধরবো কীভাবে? চোখে না দেখে? উত্তরটা লাগবে সকালে remote ফেরত দেওয়ার আগেই.
+
+<NoLineHere />
+
+</Then>
+
+</Step>
+
+<Step>
+
+চোখ ছাড়া একটা পরীক্ষা আছে. প্রশ্ন একটাই. কিছু না কিছু চেপে, মানে সব button 0 না রেখে, Shiku কি আবার ঠিক দরজায় ফিরতে পারে?
+
+আগে চালিয়ে দেখি কালকের চেনা দুইটা remote-এ. শুরু করুন যমজ remote B দিয়ে. তারপর পুরানো remote A.
+
+<ZeroWalk />
+
+<Then>
+
+Remote B পারলো? পারলো. $2u - v = (0, 0)$. দুইবার u বরাবর সামনে, একবার v বরাবর পিছনে. একটা পা-ও নষ্ট না করে দরজায়. যে button-গুলা এটা পারে, তাদের বলে **linearly dependent**. মানে, ওদের মধ্যে একটা button বাড়তি.
+
+Remote A? $e_1$ আর $e_2$ যত যা-ই চাপুক, পারে না. এরা **linearly independent**. মানে, কেউ বাড়তি না.
+
+আর খেয়াল করুন. এটা জোড়ার ব্যাপার. একা কোনো button-এর না. u একা থাকলে কখনো বাড়তি ছিল না.
+
+<WalkHome />
+
+</Then>
+
+</Step>
+
+<Step>
+
+ফাহিম চুপ করে নিজের remote C-র দিকে তাকিয়ে আছে. $u = (1, 2)$, $v = (2, 5)$. দেখতে এলোমেলো. কোনো কপি চোখে পড়ে না. দুইটা এক line-এও না.
+
+<RemoteCStare story />
+
+তাও, ওর ভিতরে কোনো বাড়তি button লুকিয়ে নাই তো? সৎ উপায়ে প্রমাণ করুন. আগে দরজায় ফেরার চেষ্টা, তারপর হিসাব.
+
+<NoVisibleCopy />
+
+<Then>
+
+আঙুল যা পারলো না, হিসাব সেটা প্রমাণ করে দিলো. slot ধরে ধরে.
+
+slot 1-এ $\alpha + 2\beta = 0$. তাই $\alpha = -2\beta$ হতেই হবে. তারপর slot 2 এসে ওটাকে শেষ করে দেয়: $\beta = 0$. তাই $\alpha = 0$-ও.
+
+কি দাঁড়ালো? দরজায় ফেরে শুধু কিছু-না-চাপা. তাই independent. ফাহিমের টাকা নষ্ট হয় নাই.
+
+<SlotKill />
+
+কাজটা করলো কে, খেয়াল করেছেন? দুই লাইন হিসাব. খোঁজাখুঁজি নাই. AI-এর table-গুলা বিশাল হয়. সেখানে এই হিসাবটাই পুরা পরীক্ষা. চালায় machine.
+
+<BigTable />
+
+<SideQuest title="এক সংখ্যায় পুরা পরীক্ষা">
+
+এক সংখ্যাতেই পুরা ব্যাপারটা মিটিয়ে ফেলার একটা উপায়ও আছে. Article 8 সেটা আপনার হাতে দিবে.
+
+<OneNumber />
+
+</SideQuest>
+
+</Then>
+
+</Step>
+
+<Step>
+
+এবার নাসিবের remote. তিনটা button, $e_1$, $e_2$ আর $w = (2, 3)$. একই পরীক্ষা: সব 0 না রেখে Shiku-কে দরজায় ফেরাতে পারবেন?
+
+<NasibWalk />
+
+<Then>
+
+$w$ একবার চাপলে Shiku যায় $(2, 3)$-এ. $e_1$ দিয়ে 2 ঘর পিছনে. $e_2$ দিয়ে 3 ঘর নিচে. আবার দরজা. চাপ $(-2, -3, 1)$. শূন্য না, তবু দরজা.
+
+তাই নাসিবের remote-এ একটা button বাড়তি.
+
+<ThirdHome />
+
+মানে? $w$ নতুন কোনো জায়গায় নেয় না. $e_1$ দুইবার আর $e_2$ তিনবার চাপলেই সেখানে পৌঁছানো যেতো. $w$ ছাড়াই.
+
+<SameSpot />
+
+</Then>
+
+</Step>
+
+<Step>
+
+নাসিব হাল ছাড়ার লোক না. বললো, ওই $w$ টাই খারাপ ছিল. অন্য কোনো button হলে দেখতে.
+
+<NasibObjects story />
+
+এবার আপনার পালা, নাসিবের হয়ে. $e_1$ আর $e_2$ থাকুক. তিন নম্বর button টা যেখানে খুশি বসান. এমন একটা খুঁজুন যেটা বাড়তি না.
+
+<AnyThird />
+
+<Then>
+
+পেলেন একটাও? পাওয়ার কথা না.
+
+যেখানেই বসান, machine উত্তর দেয় button নামার আগেই: $(-x, -y, 1)$ চাপুন. $e_1$ আর $e_2$ মিলে $w$-এর পুরা ধাক্কাটা ফেরত দেয়. Shiku দরজায়. আর $(0, 0)$ button? ওটা তো একবার চাপলেই কোথাও না গিয়ে দরজায়. সবসময় বাড়তি.
+
+<EveryThird />
+
+কাহিনী কি? দুই slot-এর floor-এ দরকারি button বড়জোর দুইটা. তিনটা হলেই একটা সবসময় বাড়তি.
+
+**নাসিবের দ্বিতীয় যুক্তিও টিকলো না.**
+
+<FloorFull />
+
+</Then>
+
+</Step>
+
+<Step>
+
+## Try it
+
+পরদিন সকাল. নাসিব আর ফাহিম remote ফেরত দিতে দোকানে. দোকানদার চাচা তাকের কোণা থেকে আরেকটা remote বের করলেন. Button দুইটা: $u = (1, 3)$ আর $v = (2, 7)$. দাম অর্ধেক.
+
+দোকানদার চাচা হাসিমুখে বললেন, এইটা নকল মাল. একটা বাটন আরেকটার কপি.
+
+<CheapRemote story />
+
+চাচার কথা কি ঠিক? কপি হলে একটা জিনিস হতো. u-কে কোনো একটা গুণে টানলেই পাওয়া যেতো v.
+
+<StretchReach />
+
+<Then>
+
+আবার slot ধরে ধরে. slot 1: $\alpha + 2\beta = 0$. তাই $\alpha = -2\beta$. তারপর slot 2: $3 \cdot (-2\beta) + 7\beta = \beta$. তাই $\beta$ শূন্য. সাথে $\alpha$-ও. দরজায় ফেরে শুধু $(0, 0)$.
+
+তাহলে চাচার remote নকল? না. দুইটা সৎ button. অর্ধেক দামে.
+
+<ShopSlots />
+
+“দেখতে কপির মতো” কোনো পরীক্ষা না. পরীক্ষা হিসাবটাই. আর ছবি? ছবিও সবসময় হিসাবের সাথে একমত. একটা arrow বাকিদের line-এ বসে থাকলেই set টা dependent. এখানে direction দুইটা আলাদা. সত্যিই দুইটা.
+
+<TwoArrowsTest />
+
+</Then>
+
+</Step>
+
+<Step>
+
+## The end! নাসিব remote ফেরত দিলো
+
+নাসিব তিন button-এর remote টা কাউন্টারে রাখলো. বললো, চাচা, তিন নম্বরটা লাগবে না.
+
+দোকানদার চাচা remote টা নিলেন. একটা দুই button-এর remote এগিয়ে দিলেন. ড্রয়ার খুলে টাকা গুনলেন. বললেন, বাড়তি বাটন, বাড়তি দাম. লও, পঞ্চাশ টাকা.
+
+<NasibReturns story />
+
+<ThirdVerdict />
+
+<Then>
+
+বাজির ফল? floor-এ তিন নম্বর button সবসময় বাড়তি. যে button-ই হোক. কারণ, $(-x, -y, 1)$ চেপে দরজায় ফেরা যায়. তাই নাসিবের 50 টাকা ফেরত পাওয়াই ঠিক.
+
+মনে রাখার নিয়ম: **সব 0 না রেখে দরজায় ফেরা গেলে, একটা button বাড়তি. আর n slot-এর জায়গায় n টার বেশি button মানেই বাড়তি.**
+
+<FloorCount />
+
+<SideQuest title="বইয়ে যেভাবে লেখে">
+
+<Table
+  head={["আমরা যা বললাম", "বইয়ে যেভাবে লেখে"]}
+  rows={[
+    ["বাড়তি button আছে", "linearly dependent: c₁v₁ + … + cₙvₙ = 0, সব c শূন্য না"],
+    ["কোনো button বাড়তি না", "linearly independent: শুধু সব-শূন্য চাপেই (0, 0)"],
+    ["n slot-এর জায়গায় বড়জোর n টা দরকারি button", "ℝⁿ-এ n-এর বেশি independent vector নাই"],
+  ]}
+/>
+
+</SideQuest>
+
+আজ বাসা বদল. ট্রাক গেটে. robotics club-এর drone-কে ফ্যানের ধুলা ঝাড়তে হবে. আর দোকানে প্রতি button 50 টাকা. এবার প্রশ্ন উল্টা: সবচেয়ে কম কয়টা button দিয়ে কাজ চলে?
+
+<MovingDay />
+
+<LessonLink href="/dashboard/articles/math_for_ai/05c_moving_basis" eyebrow="পরের lesson" title="Basis আর dimension, সবচেয়ে কম button">
+  বাসা বদলের দিন: Shiku-র remote আর drone-এর remote, কয়টা button-এ কাজ চলে?
+</LessonLink>
+
+</Then>
+
+</Step>
+
+</Journey>

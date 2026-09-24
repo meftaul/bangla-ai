@@ -1,0 +1,193 @@
+export const metadata = {
+  title: "Math for AI 4.3 — মামার card, দুইটা length আর একটা angle",
+  description: "মামার card এ দুইটা length আর একটা angle. কোনো slot নাই, grid নাই. মামা বলেন এটা দিয়েই তিনি box এর 7 বের করে দেবেন. কীভাবে? দেখিয়ে দেবে দুপুরের ছাদে একটা বাঁশের কঞ্চি.",
+  type: "article",
+};
+
+{/* The pieces-to-picture version of 4.3 (04c_noon_shadow stays as it is);
+    built with .claude/skills/pieces-to-picture, plan in 04c1_pieces_plan.md.
+    Screen 1 asks how Mama's card (two lengths, one angle) can give the box's
+    7, and it isn't answered until CardAlone, seven screens later. In between:
+    the box with v lying flat, where it is just v's length × w's shadow
+    (the familiar twin); two pieces that look unrelated (a stick's shadow
+    number for each tilt; longer poles, same number); the one rule change
+    (v tilted: the reader turns the paper); and the snap, where w becomes the
+    stick. 11 steps. Few words: the screens carry the story, and only the snap
+    and the use get a <Then>. Why the two recipes always agree is still 4.4's
+    question. The screens live in components/interactive/noon-journey.tsx. */}
+
+import { Journey, Step, Then } from "@/components/journey/journey";
+import {
+  NoonCard,
+  CardTries,
+  FlatFloor,
+  BehindFoot,
+  StickMarks,
+  MamiPoles,
+  ThreePoles,
+  TurnThePaper,
+  WIsTheStick,
+  CosName,
+  CardAlone,
+  RecipeLine,
+  SixtyCard,
+  LeanBack,
+  BothRecipes,
+  StickFound,
+  PoleToW,
+  MamaSaid,
+  NewCard,
+  MamiWantsProof,
+} from "@/components/interactive/noon-journey";
+
+<Journey title="Dot product · মামার card">
+
+<Step>
+
+দুপুরবেলা. নানুর বাসার ছাদ. মামা চক দিয়ে মেঝেতে দুইটা arrow আঁকলেন. ফাহিম সাথে সাথে ওগুলা box এ চালিয়ে দিলো.
+
+তারপর মামা একটা card তুলে ধরলেন.
+
+<NoonCard story />
+
+<CardTries />
+
+</Step>
+
+<Step>
+
+Card টা আপাতত একপাশে রাখেন. আগে একটা সহজ জোড়া দিয়ে শুরু করি. v এখানে মেঝের উপর শোয়ানো.
+
+<FlatFloor />
+
+</Step>
+
+<Step>
+
+v আগের মতোই শোয়ানো. এবার w পিছনের দিকে হেলে আছে.
+
+<BehindFoot />
+
+</Step>
+
+<Step>
+
+ছাদের কোণায় মামা একটা বাঁশের কঞ্চি পেলেন. 1 metre লম্বা. সূর্য ঠিক মাথার উপরে.
+
+<StickFound story />
+
+<StickMarks />
+
+</Step>
+
+<Step>
+
+মামি ছাদে উঠলেন. হাতে ভেজা কাপড়. সাথে তিনটা বাঁশ.
+
+<MamiPoles story />
+
+<ThreePoles />
+
+</Step>
+
+<Step>
+
+এবার চকের arrow এ ফেরা যাক. মামার আসল জোড়া: v = (2, 1) আর w = (2, 3). কিন্তু v এখানে হেলানো.
+
+<TurnThePaper />
+
+</Step>
+
+<Step>
+
+কাগজটা ঘুরানো হয়ে গেছে. এবার w এর দিকে আরেকবার তাকান.
+
+<WIsTheStick />
+
+<Then>
+
+আপনি w এর shadow মেপে পেয়েছিলেন 3.13. কঞ্চির নিয়মেও আসলো 3.13. কেন? ঘুরানো কাগজে w মেঝের উপর প্রায় 30° হেলে আছে. ঠিক কঞ্চির মতো. তাই ওর shadow ও চলে কঞ্চির নিয়মে: w এর length গুণ card এর number.
+
+<PoleToW />
+
+Card এর এই number, মানে shadow ÷ কঞ্চি, এর নাম **cos θ** (পড়বেন “cos theta”). θ হলো angle টা. আর এই shadow টার নাম **projection**. মানে v এর উপর right angle এ নামানো shadow. তাই v এর উপর w এর shadow হলো $\|w\| \cos\theta$.
+
+<CosName />
+
+</Then>
+
+</Step>
+
+<Step>
+
+এবার মামার challenge. চক নাই, grid নাই. শুধু card টা.
+
+<CardAlone />
+
+<Then>
+
+মামার recipe কী? v এর length গুণ v এর উপর w এর shadow. আর shadow টা আসে কোথা থেকে? w এর length আর angle থেকে, কঞ্চির card দিয়ে:
+
+$$v \cdot w = \|v\| \, \|w\| \cos\theta$$
+
+দুইটা length আর একটা angle. Slot ধরে ধরে একটা গুণও করা লাগলো না.
+
+মামা ঠিক যেমন বলেছিলেন.
+
+<RecipeLine />
+
+<MamaSaid />
+
+</Then>
+
+</Step>
+
+<Step>
+
+## Try it
+
+মামা নতুন একটা card লিখলেন.
+
+<NewCard story />
+
+<SixtyCard />
+
+</Step>
+
+<Step>
+
+## আরেকটা
+
+এই card এর angle 90° পার হয়ে গেছে.
+
+<LeanBack />
+
+</Step>
+
+<Step>
+
+## শেষ! মামার card থেকেও 7 আসলো
+
+মামা একটা card থেকেই box এর 7 বের করে ফেললেন. Box গুণ করে slot by slot. Card গুণ করে একটা length আর একটা shadow.
+
+কাজ আলাদা, number একই.
+
+<BothRecipes />
+
+এক line এ: **box এর number মানে একটা arrow এর length, গুণ তার উপর আরেকটা arrow এর shadow.**
+
+কিন্তু এটা কি প্রতিবারই মিলবে, নাকি এবার কপালগুণে মিলে গেছে? মামা বলেন সবসময় মিলবে. মামি proof চান.
+
+<MamiWantsProof story />
+
+<LessonLink
+  href="/dashboard/articles/math_for_ai/04c2_axis_shadow"
+  eyebrow="পরের lesson"
+  title="দুই recipe কেন সবসময় মেলে"
+>
+  মামি বলেন ভাগ্য. মামা বলেন সবসময় মিলবে. উত্তর লুকিয়ে আছে Shiku র পুরানো remote এ.
+</LessonLink>
+
+</Step>
+
+</Journey>

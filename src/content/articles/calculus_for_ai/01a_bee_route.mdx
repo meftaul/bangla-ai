@@ -1,0 +1,176 @@
+export const metadata = {
+  title: "Calculus for AI 1.1 — Two dots and a straight road",
+  description: "A bee flies straight out of Moumachi Nana's box and past the scarecrow. Nana wants a water dish where it crosses the far fence, off the edge of Samin's page. Two dots are all we have. Is that enough?",
+  type: "article",
+};
+
+{/* Told as a journey, like Math for AI 1.1 and 2.3: screen 1 seals a bet on
+    the row where the bee crosses the fence (column 9, off Samin's page), and it
+    is not settled until FenceTurn, five screens later. On the way: walk the grid
+    from box to scarecrow (2 across, 4 up), climb it one column at a time (always
+    2 up: the slope), Nasib's objection (any two dots give 2), and the second
+    guess (the up alone doesn't say steepness). Then Karim's pond, and the dish.
+    8 steps. Every step has an interactive animation, every setup that is a
+    scene has a story scene, and every <Then> has a figure. The plan is journey
+    1.1 in 00_book_journey_map.md; the screens live in
+    components/interactive/bee-route-journey.tsx. */}
+
+import { Journey, Step, Then } from "@/components/journey/journey";
+import {
+  BoxToFence,
+  FenceBet,
+  WalkToCrow,
+  OneColumn,
+  SlopeBuild,
+  AnyTwoDots,
+  SameShape,
+  TwoMoreBoxes,
+  WhichSteeper,
+  PerColumn,
+  FenceTurn,
+  FenceSum,
+  PondDishes,
+  TryPond,
+  PondSum,
+  DishOnFence,
+} from "@/components/interactive/bee-route-journey";
+
+<Journey title="Slope · two dots">
+
+<Step>
+
+It's winter, and the mustard fields near Sirajganj have gone yellow. Moumachi Nana has set his honey boxes along the edge of one. Fahim's class is here for a project: teach Shiku to tell a good hive from a bad one before the harvest. That's a long way off. Today's job is smaller.
+
+A bee flew out of Nana's box and went straight past the scarecrow. Samin marked both spots on his khata's graph paper. Bees need water too. So Nana wants a water dish right where this bee crosses the bamboo fence, on its way out to the far fields.
+
+<BoxToFence story />
+
+<FenceBet />
+
+</Step>
+
+<Step>
+
+Samin's page stops at column 6, so nobody can just draw the road out to the fence. First we need to know how this road climbs.
+
+Shiku can't fly. It can only walk along the grid lines: across, or up. Can it still follow the bee from the box to the scarecrow?
+
+<WalkToCrow />
+
+</Step>
+
+<Step>
+
+2 across and 4 up. But the fence isn't 2 columns away. It's 6 columns past the scarecrow. So what does the road do in just one column?
+
+<OneColumn />
+
+<Then>
+
+Each column Shiku stepped across, the road went up 2. Never 4, never 1. Always 2.
+
+So “4 up for 2 across” really meant two columns of 2 each. A straight road goes up the same amount for every one step across, and that amount has a name: the **slope**. It's up ÷ across, so here 4 ÷ 2 = 2.
+
+<SlopeBuild />
+
+</Then>
+
+</Step>
+
+<Step>
+
+Nasib doesn't believe it.
+
+<AnyTwoDots />
+
+<Then>
+
+Every pair gave 2. A far-apart pair made a big triangle and a close pair a small one, but they're all the same shape. Go twice as far across and you go twice as far up.
+
+So there's nothing special about the box and the scarecrow. Any two dots on a straight road give you its slope. **Nasib's objection didn't survive**, and Samin's two dots are enough for Nana's fence.
+
+<SameShape />
+
+</Then>
+
+</Step>
+
+<Step>
+
+Nana has two more boxes further down the field. Rina watched the bees at one, Karim at the other. Rina's bee went 4 up for 2 across. Karim's went 3 up for 1 across.
+
+<TwoMoreBoxes story />
+
+<WhichSteeper />
+
+<Then>
+
+4 is more than 3, so Nasib's call isn't silly. But Rina's bee needed 2 columns for its 4. In one column it climbed only 2, and Karim's climbed 3. So Karim's road is the steeper one. **That's Nasib's second miss.**
+
+That's why the slope is the up for *one* across, not just the up. A bigger slope means a steeper road.
+
+<PerColumn />
+
+</Then>
+
+</Step>
+
+<Step>
+
+## Your turn: Nana's fence
+
+Now the fence. It's at column 9, three columns past the edge of Samin's page. Nana is holding the dish. Which row does it go on?
+
+<FenceTurn />
+
+<Then>
+
+You never saw the fence on paper, and you didn't need to. Start from a dot you know, count the columns to where you're going, and climb 2 for each one.
+
+The bee's road does only one thing: 2 up for every 1 across. Know that one number and you can follow the road anywhere.
+
+<FenceSum />
+
+</Then>
+
+</Step>
+
+<Step>
+
+## Try it
+
+Karim's box stands by the pond. Samin saw one of its bees at (0, 1), and then at (1, 4). Nana has set three dishes along the pond's edge, at column 3.
+
+<PondDishes story />
+
+<TryPond />
+
+<Then>
+
+Two dots again, so the same two steps. From (0, 1) to (1, 4) is 1 across and 3 up, so this road's slope is 3.
+
+Then count from the dot you know. The second dot sits at column 1, and the pond's edge is at column 3. That's 2 columns, 3 up each, so 6 up on top of row 4. Anyone who tapped row 7 counted only one column.
+
+<PondSum />
+
+</Then>
+
+</Step>
+
+<Step>
+
+## The end! Nana's dish is on the fence
+
+<DishOnFence story />
+
+Row 17. The bee came straight to the dish. Nasib's row 9 would have missed it by 8 rows.
+
+It all came from two dots. From the box to the scarecrow was 2 across and 4 up, so the road climbs 2 for every 1 across. That's its **slope**, and with it you can follow a straight road right off the page.
+
+> Slope = up ÷ across. Any two dots on a straight road give the same answer.
+
+Next morning, three bees fly out side by side, perfectly parallel. All three roads have slope 2. Nasib says that makes them the same road. Samin's page shows three different roads. So what tells them apart? That's the next journey.
+
+</Step>
+
+</Journey>

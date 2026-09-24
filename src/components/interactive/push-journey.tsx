@@ -1,10 +1,11 @@
 "use client";
 
-import type { KeyboardEvent, ReactNode } from "react";
+import { useState, type KeyboardEvent, type ReactNode } from "react";
 
 import { Bubble, Card, Person, Stage, StoryFrame } from "@/components/journey/cast";
+import { BoxRun } from "@/components/journey/box";
 import { Task, useGate } from "@/components/journey/journey";
-import { Choice, Draw, FADE, Nope, POP, Scene, Ticks, pill, predictLook, primaryBtn, useScene, useSeed, useTween, type Fixtures } from "@/components/journey/kit";
+import { Choice, Draw, FADE, LOOK, Nope, POP, Scene, Ticks, pill, predictLook, primaryBtn, usePlay, useScene, useSeed, useTween, type Fixtures, type Look } from "@/components/journey/kit";
 import { Arrow, Dot, Label, Plane, makeFrame, type Frame, type Tone, type XY } from "@/components/journey/plane";
 import { bn } from "./figure-kit";
 import { DotBox, dot, num, tupN } from "./haat-journey";
@@ -171,7 +172,7 @@ export function StraightPush() {
   const runFront = () => {
     setSide(1);
     setFront(true);
-    pass("plus,minus sign বলবে ধাক্কা পক্ষে নাকি বিপক্ষে");
+    pass("plus, minus বলে দেয় পক্ষে নাকি বিপক্ষে।");
   };
 
   return (
@@ -189,7 +190,7 @@ export function StraightPush() {
         </div>
       ) : (
         <div className={FADE}>
-          <DotBox a={ROAD} b={push} k={3} names={DIRS} />
+          <DotBox a={ROAD} b={push} names={DIRS} />
           {!front && (
             <>
               <div className="mt-3 text-sm font-medium text-muted">এবার ফাহিম সামনে গিয়ে উল্টো দিকে ঠেলবে, (−4, −3)। box কী দেবে?</div>
@@ -211,7 +212,7 @@ export function StraightPush() {
           )}
           {front && (
             <div className={`${FADE} mt-3 text-center text-[0.95rem]`}>
-              {guess === 2 ? "ঠিক ধরেছেন।" : "উঁহু, −25।"} দুইটা ঘরেই গুণফল minus, তাই যোগফলও minus, আর ভ্যান পেছনে চাপ খেলো।
+              {guess === 2 ? "ঠিক ধরেছেন।" : "উঁহু, −25।"} দুইটা ঘরেই গুণফল minus। তাই যোগফলও minus। ভ্যান চাপ খেলো পেছনে।
             </div>
           )}
         </div>
@@ -222,7 +223,7 @@ export function StraightPush() {
           ["সামনে থেকে", front],
         ]}
       />
-      <Task done={front}>ফাহিমকে আগে পেছন থেকে ঠেলতে দিন। তারপর guess করুন সামনে থেকে ঠেললে box কী দেবে।</Task>
+      <Task done={front}>ফাহিমকে আগে পেছন থেকে ঠেলতে দিন। তারপর guess করুন, সামনে থেকে ঠেললে box কী দেবে।</Task>
     </>
   );
 }
@@ -342,10 +343,7 @@ export function PushRing() {
       <div className="-mt-2 text-center">
         {push ? (
           <span className="font-mono text-[0.95rem]">
-            (4, 3) · {tupN(push)} ={" "}
-            <b key={at} className={`${POP} inline-block text-lg`}>
-              {signed(score)}
-            </b>
+            {tupN(ROAD)} · {tupN(push)} = <BoxRun a={ROAD} b={push} inline live />
           </span>
         ) : (
           <span className="text-sm text-muted">বৃত্তের যেকোনো একটা জায়গায় tap করুন।</span>
@@ -391,7 +389,7 @@ export function StrongPush() {
 
   const run = () => {
     setRan(true);
-    pass("box এ  দিক আর জোর, দুইটাই মেশে।");
+    pass("box এ দিক আর জোর, দুইটাই মেশে।");
   };
 
   return (
@@ -419,7 +417,7 @@ export function StrongPush() {
               <div className="text-xs text-muted">{s.note}</div>
               {ran && (
                 <div className="mt-1">
-                  <DotBox a={ROAD} b={s.v} k={3} dense />
+                  <DotBox a={ROAD} b={s.v} dense />
                 </div>
               )}
             </div>
@@ -429,7 +427,7 @@ export function StrongPush() {
       {guess !== null && !ran && (
         <div className={`${FADE} mt-3 flex justify-center`}>
           <button type="button" onClick={run} className={primaryBtn}>
-            দুইজনকেই box এ  দিন
+            দুইজনকেই box এ দিন
           </button>
         </div>
       )}
@@ -441,7 +439,7 @@ export function StrongPush() {
           </Choice>
         ))}
       </div>
-      <Task done={ran}>আগে guess করুন কার ধাক্কা বেশি কাজে লাগবে, তারপর দুইজনকেই রাস্তার সাথে box এ  দিন।</Task>
+      <Task done={ran}>আগে guess করুন, কার ধাক্কা বেশি কাজে লাগবে। তারপর দুইজনকেই রাস্তার সাথে box এ দিন।</Task>
     </>
   );
 }
@@ -520,7 +518,7 @@ export function CoinBox() {
           </div>
           {summed && (
             <div className={`${FADE} mt-2 text-center text-[0.95rem]`}>
-              দুইটা মিল, দুইটা অমিল: box এ  <b className="font-mono">0</b>
+              দুইটা মিল, দুইটা অমিল: box এ <b className="font-mono">0</b>
             </div>
           )}
           {!summed ? (
@@ -552,7 +550,7 @@ export function CoinBox() {
         </>
       ) : (
         <div className={FADE}>
-          <div className="mt-2 text-center text-sm text-accent-text">✓ চার ঘরে দুই মিল, দুই অমিল: box এ  0, কোণ 90°।</div>
+          <div className="mt-2 text-center text-sm text-accent-text">✓ চার ঘরে দুই মিল, দুই অমিল: box এ 0, কোণ 90°।</div>
           <div className="mx-auto mt-3 grid w-fit grid-cols-10 gap-1" aria-label={`একশো জোড়ার ${bn(MATCH100)}টা মিল`}>
             {BLUE100.map((v, i) => (
               <span key={i} className={`size-4 rounded-sm ${v === RED100[i] ? "bg-accent/70" : "bg-danger/60"}`} />
@@ -564,7 +562,7 @@ export function CoinBox() {
           </div>
         </div>
       )}
-      <Task done={hundred}>আগে চার জোড়া coin box এ  দিন, তারপর কোণটা বলুন, শেষে 100 বার toss করে দেখুন।</Task>
+      <Task done={hundred}>আগে চার জোড়া coin box এ দিন। তারপর কোণটা বলুন। শেষে 100 বার toss করে দেখুন।</Task>
     </>
   );
 }
@@ -616,7 +614,7 @@ export function FixTheCrew() {
         )}
         {miss !== null && !all && (
           <Nope key={miss}>
-            উঁহু। মনে মনে boxটা চালান: 4 গুণ প্রথম সংখ্যা, 3 গুণ দ্বিতীয় সংখ্যা, তারপর যোগ। উত্তর plus, শূন্য না minus?
+            উঁহু। মনে মনে boxটা চালান। 4 গুণ প্রথম সংখ্যা। 3 গুণ দ্বিতীয় সংখ্যা। তারপর যোগ। কী এলো? plus, শূন্য না minus?
           </Nope>
         )}
       </div>
@@ -640,9 +638,8 @@ export function FixTheCrew() {
           return (
             <div key={c.name} className={`${FADE} flex items-baseline justify-between gap-2 text-sm`}>
               <span className={`font-semibold ${TEXT[c.tone]}`}>{c.name}</span>
-              <span className="font-mono text-[0.8rem] text-muted">
-                4 × {num(c.v[0])} + 3 × {num(c.v[1])} ={" "}
-                <b className={s > 0 ? "text-foreground" : s < 0 ? "text-danger" : "text-cat-violet"}>{signed(s)}</b>
+              <span className={`font-mono text-[0.8rem] ${s > 0 ? "text-foreground" : s < 0 ? "text-danger" : "text-cat-violet"}`}>
+                <BoxRun a={ROAD} b={c.v} inline />
               </span>
             </div>
           );
@@ -673,7 +670,7 @@ export function FixTheCrew() {
         </div>
       )}
       <Task done={fixed}>
-        প্রতিজনের ধাক্কা রাস্তার সাথে মনে মনে box এ  দিয়ে বিচার করুন ({bn(done)}/{bn(CREW.length)})। তারপর ভ্যানটাকে কাদা থেকে তুলুন।
+        প্রতিজনের ধাক্কা রাস্তার সাথে মনে মনে box এ দিন। বিচার করুন ({bn(done)}/{bn(CREW.length)})। তারপর ভ্যানটাকে কাদা থেকে তুলুন।
       </Task>
     </>
   );
@@ -789,7 +786,7 @@ function RightAngle({ f, to }: { f: Frame; to: XY }) {
 const X2T_SAY = [
   "পেছন থেকে ঠেললে (4, 3): box এ +25।",
   "সামনে থেকে সেই একই ধাক্কা (−4, −3): −25।",
-  "সংখ্যা একই, শুধু চিহ্ন উল্টা — এই দুইটা খবরই box একদম ঠিক দেয়।",
+  "সংখ্যা একই। শুধু চিহ্ন উল্টা। দুইটা খবরই box দেয় একদম ঠিক।",
 ];
 const X2T_ROWS = [
   { head: "পেছন থেকে", tup: "(4, 3)", out: "+25", team: "ভ্যানের দলে", ink: "text-cat-blue", edge: "border-cat-blue/40", chip: "bg-cat-blue/10 text-cat-blue" },
@@ -888,9 +885,9 @@ const X3_SPOTS: { v: XY; n: string; tone: Tone; dx: number; dy: number; anchor: 
 ];
 const X3_SAY = [
   "রাস্তা বরাবর দাঁড়িয়ে ঠেললে নম্বর সবচেয়ে বড়: 25।",
-  "দিক রাস্তা থেকে সরতে থাকে, নম্বর ছোট হতে থাকে: 24, তারপর 20।",
+  "দিক রাস্তা থেকে সরে। নম্বর ছোট হয়: 24, তারপর 20।",
   "আরেকটু সরে 15।",
-  "ঠিক ৯০ degree কোণে নম্বর একদম 0 — ভ্যান শুধু পাশে চাপে।",
+  "ঠিক ৯০ degree কোণে? নম্বর একদম 0। ভ্যান শুধু পাশে চাপে।",
   "আর 90° পেরোলেই নম্বর minus: −7।",
 ];
 
@@ -1064,7 +1061,7 @@ export function BreakThePush() {
               <b className="font-mono text-sm text-cat-violet">{Math.round(across)}</b>
             </div>
           </div>
-          <div className="mt-2 text-center text-sm text-muted">ধাক্কাটা ধরে ঘুরিয়ে দেখুন — কখন রাস্তার টুকরো পুরো 10 হয়ে যায়, কখন শূন্য?</div>
+          <div className="mt-2 text-center text-sm text-muted">ধাক্কাটা ধরে ঘুরিয়ে দেখুন। রাস্তার টুকরো কখন পুরো 10? কখন শূন্য?</div>
         </>
       )}
       {!broke && <div className="mt-2 text-center text-sm text-muted">চাইলে ছবিতেই tap করে ধাক্কাটা অন্যদিকে ঘোরান।</div>}
@@ -1081,9 +1078,9 @@ export function BreakThePush() {
 const F4F = makeFrame(-0.6, 6.4, -0.6, 10.6, 13);
 const KULI_FOOT: XY = [4.8, 3.6];
 const X4_SAY = [
-  "ফাহিম (4, 3):ঠিক রাস্তা বরাবর, জোর 5। কুলি (0, 10):রাস্তার সাথে 53° angle করে, জোর 10।",
-  "কুলির ধাক্কার একটা অংশ রাস্তার কোনো কাজে লাগে না — ওই dot dot রেখাটা।",
-  "রাস্তা সেটার কত অংশ পেলো: 6। ফাহিমের পুরো ধাক্কাও 5",
+  "ফাহিম (4, 3): ঠিক রাস্তা বরাবর, জোর 5। কুলি (0, 10): রাস্তার সাথে 53° angle করে, জোর 10।",
+  "কুলির ধাক্কার একটা অংশ রাস্তার কোনো কাজে লাগে না। ওই dot dot রেখাটা।",
+  "রাস্তা সেটার কত অংশ পেলো? 6। ফাহিমের পুরো ধাক্কাও 5।",
 ];
 
 export function RoadShadow() {
@@ -1157,11 +1154,11 @@ const X5_PAIRS = [0, 1, 2, 3].map((i) => BLUE[i] * RED[i]);
 const X5_INK = { pos: "#0d9488", neg: "#e11d48" };
 const X5_SAY = [
   "নীল আর লাল coin-এর চার জোড়া: প্রতি জোড়া হয় মিল, নয় অমিল।",
-  "মিল হলে +1 — সেই জোড়া ডান দিকে টানে।",
-  "অমিল হলে −1 — ওরা বাঁ দিকে টানে।",
-  "দুই দিকের টান সমান, ফাঁস জায়গায়: box এ 0, কোণ ঠিক 90°।",
+  "মিল হলে +1। সেই জোড়া টানে ডান দিকে।",
+  "অমিল হলে −1। ওরা টানে বাঁ দিকে।",
+  "দুই দিকের টান সমান। ফাঁস জায়গায়। box এ 0, কোণ ঠিক 90°।",
   `এবার 100 জোড়া: মিল ${MATCH100}, অমিল ${100 - MATCH100}।`,
-  "টান প্রায় সমান, box এ 4 — তাই কোণ প্রায় 90°।",
+  "টান প্রায় সমান। box এ 4। তাই কোণ প্রায় 90°।",
 ];
 
 export function CoinTug() {
@@ -1239,10 +1236,10 @@ export function CoinTug() {
 
 const F9F = makeFrame(-1.5, 3.6, -0.5, 3.5, 26);
 const X9_SAY = [
-  "আঁকা যায় এমন দুইটা arrow-এ কোণটা চোখেই পড়ে — ৯০ degree কোণ।",
+  "আঁকা যায় এমন দুইটা arrow। কোণটা চোখেই পড়ে। ৯০ degree।",
   "নাসিবের চার ঘরের coin arrow আঁকা যায় না। কিন্তু box চলে: +1 − 1 − 1 + 1 = 0।",
-  "একশো ঘরের arrow-ও আঁকা যায় না, কিন্তু box তো চলেই। উত্তর 0 মানেই ৯০ degree কোণ।",
-  "এই পরীক্ষার নাম: u ⊥ v — u perpendicular to v।",
+  "একশো ঘরের arrow-ও আঁকা যায় না। কিন্তু box তো চলেই। উত্তর 0 মানেই ৯০ degree কোণ।",
+  "এই পরীক্ষার নাম? u ⊥ v। মানে u perpendicular to v।",
 ];
 const X9_PRODUCTS = ["+1", "−1", "−1", "+1"];
 
@@ -1303,8 +1300,8 @@ export function AnySize() {
 const F6F = makeFrame(-6, 5.2, -1.2, 5.6, 17);
 const X6_SAY = [
   "মামী ছিলেন ঠিক 90° কোণে: 4 × (−3) + 3 × 4 = 0।",
-  "ঘাম ঝরিয়েছেন ঠিকই, কিন্তু ভ্যানটাকে শুধু পাশে চেপেছেন।",
-  "রফিক 98°-এ: 90° পেরিয়ে গিয়ে একটু একটু পেছনে ঠেলছিল, −5।",
+  "ঘাম ঝরিয়েছেন ঠিকই। কিন্তু ভ্যানটাকে চেপেছেন শুধু পাশে।",
+  "রফিক 98°-এ। 90° পেরিয়ে গেছে। তাই একটু একটু পেছনে ঠেলছিল, −5।",
 ];
 
 export function SidePress() {
@@ -1370,11 +1367,11 @@ const X7_CHAIN: XY[] = (() => {
   return [O, ...CREW.map((c) => ((x += c.v[0]), (y += c.v[1]), [x, y] as XY))];
 })();
 const X7_SAY = [
-  "পাঁচজনের ধাক্কা প্রথমে একই বিন্দুতে লাগছে — দেখুন, সব অ্যারো একই জায়গায়।",
-  "এবার একটার ঘাড়ে আরেকটা বসিয়ে যোগ করুন (৩.১)। অ্যারোগুলো একটার পর একটা স্ট্যাক হচ্ছে।",
-  "শেষে পৌঁছানো গেল (3, 18)-এ। ফাইনাল অ্যারো হলো শুরু থেকে শেষ পর্যন্ত সব অ্যারোর যোগফল।",
+  "পাঁচজনের ধাক্কা প্রথমে লাগছে একই বিন্দুতে। দেখুন, সব arrow একই জায়গায়।",
+  "এবার যোগ, ৩.১-এর মতো। একটার ঘাড়ে আরেকটা বসাই। arrow-গুলো একটার পর একটা stack হচ্ছে।",
+  "শেষে পৌঁছানো গেল (3, 18)-এ। শুরু থেকে শেষ, এটাই final arrow। সব arrow-এর যোগফল।",
   "মোট arrow-টা রাস্তার সাথে box এ: 12 + 54 = 66।",
-  "আলাদা আলাদা নম্বরগুলোর যোগফলও 66 — আগে যোগ পরে box, উত্তর একই।",
+  "আলাদা আলাদা নম্বরগুলোর যোগফল? সেটাও 66। আগে যোগ পরে box, উত্তর একই।",
 ];
 
 export function SumThenBox() {
@@ -1384,7 +1381,7 @@ export function SumThenBox() {
     <Scene scene={s} caption={say(X7_SAY, k)}>
       <div className="flex items-center justify-center gap-3">
         <div className="w-[7.5rem] shrink-0">
-          <Plane f={F7F} label="একই বিন্দু থেকে অ্যারোগুলো একটার ঘাড়ে আরেকটা বসিয়ে যোগ, ফাইনাল অ্যারো (3, 18)" className="my-0! max-w-none" grid={0}>
+          <Plane f={F7F} label="একই বিন্দু থেকে arrow-গুলো একটার ঘাড়ে আরেকটা বসিয়ে যোগ, final arrow (3, 18)" className="my-0! max-w-none" grid={0}>
             <Road f={F7F} />
             <Van f={F7F} />
             {k === 0 && (
@@ -2022,6 +2019,781 @@ export function VanOut({}: Story) {
 }
 
 // ---------------------------------------------------------------------------
+// The review questions, rebuilt as visual exercises (each was a text <Check>):
+// 0 the warm-up box, 2b the table, 4b the coin needle, 5b the hundred-slot
+// arrows, 6b the three-slot arrows. Every pick plays out what it would mean,
+// a wrong one honestly, and the right one passes from the play's end. Each
+// has a figure for its <Then> beside it (0½, 2b½, 4b½, 6b½).
+
+/** a thing that drops into place when it mounts */
+const P_DROP = "inline-block transition duration-500 motion-reduce:transition-none starting:-translate-y-3 starting:opacity-0";
+const P_OK = "#0d9488";
+const P_BAD = "#e11d48";
+
+/**
+ * A pick that plays out in beats 1…end after the tap (at once under reduced
+ * motion). A preview seeded with `pick` opens on the last beat. `over` is true
+ * once the play has landed, which is when the verdict shows.
+ */
+function useP_Pick(end: number, ms: number) {
+  const [pick, setPick] = useSeed<number | null>("pick", null);
+  const [miss, setMiss] = useState(0);
+  const p = usePlay(ms);
+  const beat = p.running || p.k > 0 ? p.k : pick !== null ? end : 0;
+  const go = (i: number, right: number, win: () => void) => {
+    setPick(i);
+    const done = () => (i === right ? win() : setMiss((m) => m + 1));
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      p.play(end, undefined, end);
+      done();
+    } else p.play(end, done);
+  };
+  const look = (i: number, right: number): Look => (pick !== i ? "idle" : beat < end ? "picked" : i === right ? "right" : "wrong");
+  return { pick, beat, miss, over: pick !== null && beat >= end, go, look };
+}
+
+/** A compact picture/number option for a row of three (Choice's letter badge leaves no room there). */
+function P_Opt({ look, disabled, onClick, children }: { look: Look; disabled: boolean; onClick: () => void; children: ReactNode }) {
+  return (
+    <button
+      type="button"
+      disabled={disabled}
+      onClick={onClick}
+      className={`flex min-h-11 w-full cursor-pointer flex-col items-center justify-center rounded-xl border-2 px-1.5 py-1.5 text-center transition-[color,background-color,border-color,opacity] duration-200 disabled:cursor-default motion-reduce:transition-none ${LOOK[look]}`}
+    >
+      {children}
+    </button>
+  );
+}
+
+/** A question heading over an exercise, in the page's own size. */
+function P_Ask({ children }: { children: ReactNode }) {
+  return <div className="text-center text-lg leading-snug font-semibold text-balance">{children}</div>;
+}
+
+/** A plain arrow on a stage or sheet, from (x1, y1) to (x2, y2). */
+function P_Line({ x1, y1, x2, y2, ink, w = 2.4, dashed = false, className = "" }: { x1: number; y1: number; x2: number; y2: number; ink: string; w?: number; dashed?: boolean; className?: string }) {
+  const a = Math.atan2(y2 - y1, x2 - x1);
+  const h = 5 + w;
+  const p = (t: number) => `${x2 - h * Math.cos(a + t)} ${y2 - h * Math.sin(a + t)}`;
+  return (
+    <g className={`pointer-events-none ${className}`}>
+      <path d={`M${x1} ${y1}L${x2} ${y2}`} stroke={ink} strokeWidth={w} strokeLinecap="round" strokeDasharray={dashed ? "4 3" : undefined} />
+      <path d={`M${p(0.45)}L${x2} ${y2}L${p(-0.45)}`} fill="none" stroke={ink} strokeWidth={w} strokeLinecap="round" strokeLinejoin="round" />
+    </g>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 0 · The warm-up at the হাট, before the van: (1, 3) · (2, 2). The reader picks
+//     an answer and the box runs the way that answer would have it: slot by
+//     slot then add (8), slot by slot and stop ((2, 6)), or add first (16).
+
+const W0_A = [1, 3];
+const W0_B = [2, 2];
+const W0_OPTS = ["(2, 6)", "16", "8"];
+const W0_RIGHT = 2;
+type W0Mode = "right" | "stop" | "add";
+const W0_MODE: W0Mode[] = ["stop", "add", "right"];
+
+/** The warm-up box at beat k (0…3) of one way of running it. */
+function P_WarmBox({ mode, k }: { mode: W0Mode; k: number }) {
+  const add = mode === "add";
+  const on = (row: number, col: number) => (add ? k === row + 1 && k < 3 : k === col + 1 && k < 3);
+  const slot = (v: number, row: number, col: number) => (
+    <span
+      className={`grid h-8 place-items-center rounded-lg border-2 font-mono font-bold transition-[background-color,scale] duration-300 motion-reduce:transition-none ${
+        row === 0 ? "border-cat-blue/40 text-cat-blue" : "border-cat-coral/40 text-cat-coral"
+      } ${on(row, col) ? "scale-110 bg-cat-amber/30" : "bg-surface"}`}
+    >
+      {v}
+    </span>
+  );
+  const end = k >= 3;
+  const ring = !end ? "border-cat-amber/40 bg-cat-amber/5" : mode === "right" ? "border-accent bg-accent/10" : "border-danger/50 bg-danger/5";
+  return (
+    <div className={`mx-auto w-fit rounded-2xl border-2 px-3 py-2 transition-colors duration-300 motion-reduce:transition-none ${ring}`}>
+      <div className="grid grid-cols-[2.6rem_2.6rem_3rem] items-center gap-x-2 gap-y-1.5">
+        {slot(W0_A[0], 0, 0)}
+        {slot(W0_A[1], 0, 1)}
+        <span className="font-mono text-sm font-bold text-cat-blue">{add && k >= 1 && <span className={P_DROP}>= 4</span>}</span>
+        {slot(W0_B[0], 1, 0)}
+        {slot(W0_B[1], 1, 1)}
+        <span className="font-mono text-sm font-bold text-cat-coral">{add && k >= 2 && <span className={P_DROP}>= 4</span>}</span>
+        {[0, 1].map((c) => (
+          <span key={c} className="h-6 text-center font-mono font-bold">
+            {!add && k >= c + 1 && <span className={P_DROP}>{W0_A[c] * W0_B[c]}</span>}
+          </span>
+        ))}
+        <span className="text-[0.65rem] text-muted">{!add && k >= 1 && "গুণ"}</span>
+      </div>
+      <div className="mt-1 h-7 border-t border-current/15 pt-1 text-center font-mono font-bold">
+        {end && mode === "right" && <span className={`${POP} text-accent-text`}>2 + 6 = 8</span>}
+        {end && mode === "stop" && (
+          <span className={`${POP} text-danger`}>
+            (2, 6) <span className="font-sans text-xs font-semibold">যোগ বাকি</span>
+          </span>
+        )}
+        {end && mode === "add" && (
+          <span className={`${POP} text-danger`}>
+            4 × 4 = 16 <span className="font-sans text-xs font-semibold">আগে যোগ হলো</span>
+          </span>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export function BoxWarmup() {
+  const pass = useGate();
+  const s = useP_Pick(3, 650);
+  const won = s.over && s.pick === W0_RIGHT;
+  return (
+    <>
+      <P_Ask>
+        <span className="font-mono">(1, 3) · (2, 2) = ?</span>
+      </P_Ask>
+      <div className="mt-3">
+        <P_WarmBox mode={s.pick === null ? "right" : W0_MODE[s.pick]} k={s.beat} />
+      </div>
+      <div className="mt-3 grid grid-cols-3 gap-2">
+        {W0_OPTS.map((o, i) => (
+          <P_Opt key={o} look={s.look(i, W0_RIGHT)} disabled={won} onClick={() => s.go(i, W0_RIGHT, () => pass("ঘরে ঘরে গুণ, তারপর যোগ: 8।"))}>
+            <span className="font-mono text-lg font-semibold">{o}</span>
+          </P_Opt>
+        ))}
+      </div>
+      {s.over && s.pick === 0 && <Nope key={s.miss}>উঁহু, box গুণ করে থেমে গেল। ঘরে ঘরে গুণ, তারপর যোগ।</Nope>}
+      {s.over && s.pick === 1 && <Nope key={s.miss}>উঁহু, এখানে আগে যোগ হলো, পরে গুণ। ঘরে ঘরে গুণ, তারপর যোগ।</Nope>}
+      <Task done={won}>একটা উত্তর tap করুন। box সেই উত্তরের নিয়মে চলবে। দেখুন কোনটা মেলে।</Task>
+    </>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 0½ · A figure for the warm-up's explanation: the three ways, in the order
+//      the paragraph tells them — slot by slot and add (8), stopping after
+//      the multiply ((2, 6)), and adding first (16).
+
+const X0_SAY = [
+  "হাটের box, দুইটা list: (1, 3) আর (2, 2)।",
+  "ঘরে ঘরে গুণ: 1 × 2 = 2, 3 × 2 = 6।",
+  "তারপর যোগ: 8।",
+  "(2, 6)? গুণ করে থেমে যাওয়া। যোগটা এখনো বাকি।",
+  "আর 16 হলো আগে যোগ, পরে গুণ। box এর নিয়ম মানে না ওটা।",
+];
+const X0_AT: [W0Mode, number][] = [
+  ["right", 0],
+  ["right", 2],
+  ["right", 3],
+  ["stop", 3],
+  ["add", 3],
+];
+
+export function WarmupWays() {
+  const s = useScene(4, [600, 1800, 1400, 2400, 2400]);
+  const [mode, k] = X0_AT[s.k];
+  return (
+    <Scene scene={s} caption={say(X0_SAY, s.k)}>
+      <P_WarmBox key={mode} mode={mode} k={k} />
+    </Scene>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 2b · The table: two people push it from opposite sides with the same
+//      strength. A pick plays out: দ্বিগুণ or একজনের সমান sends a dashed "what
+//      if" arrow out along the strip, but the table stays put; শূন্য joins the
+//      two pushes tip to tail, and they end where they began.
+
+const T2_OPTS = ["দ্বিগুণ", "শূন্য", "একজনের সমান"];
+const T2_RIGHT = 1;
+/** the strip above the table where pushes are laid tip to tail: 0 at x = 160, one push = 40 */
+const T2_Y = 58;
+
+/** A table seen from the side, its top centred at x. */
+function P_Table({ x }: { x: number }) {
+  return (
+    <g className="pointer-events-none">
+      <rect x={x - 30} y={PG - 30} width={60} height={5} rx={1} fill="#92400e" />
+      <path d={`M${x - 25} ${PG - 25}V${PG}M${x + 25} ${PG - 25}V${PG}`} stroke="#78350f" strokeWidth={3} />
+    </g>
+  );
+}
+
+/** The strip's zero mark, where the table stands. */
+function P_Zero() {
+  return (
+    <g className="pointer-events-none">
+      <path d={`M60 ${T2_Y + 8}H260`} stroke={P_INK} strokeOpacity={0.2} strokeDasharray="3 3" />
+      <path d={`M160 ${T2_Y + 3}v10`} stroke={P_INK} strokeOpacity={0.45} strokeWidth={1.2} />
+    </g>
+  );
+}
+
+/** Two people at the table, pushing once `push`; `som` stands at x (right side, facing left, unless moved round). */
+function P_TableCrew({ push, som = 220, somFacing = -1, walking = false, ms = 1200 }: { push: boolean; som?: number; somFacing?: 1 | -1; walking?: boolean; ms?: number }) {
+  return (
+    <>
+      <Person who="fahim" x={100} y={PG} mood={push ? "shout" : "plain"} arm={push ? "point" : "down"} />
+      {push && <P_Push x={100} facing={1} />}
+      <Person who="som" x={som} y={PG} facing={somFacing} walking={walking} ms={ms} mood={push ? "shout" : "plain"} arm={push ? "point" : "down"} />
+      {push && !walking && <P_Push x={som} facing={somFacing} />}
+    </>
+  );
+}
+
+export function TableTug() {
+  const pass = useGate();
+  const s = useP_Pick(3, 700);
+  const won = s.over && s.pick === T2_RIGHT;
+  const k = s.beat;
+  const ghost = s.pick === 0 ? 80 : 40;
+  return (
+    <>
+      <P_Ask>টেবিলের দুই পাশ থেকে দুইজন ঠেলছে, same শক্তি নিয়ে। কী হবে, বলুন তো?</P_Ask>
+      <div className="mx-auto mt-3 max-w-[20rem] overflow-hidden rounded-2xl ring-1 ring-black/10">
+        <Stage backdrop="room" label="টেবিলের দুই পাশ থেকে দুইজন সমান শক্তিতে ঠেলছে">
+          <P_Zero />
+          <P_Table x={160} />
+          <P_TableCrew push={k >= 1} />
+          {s.pick === T2_RIGHT && k >= 2 && <P_Line x1={160} y1={T2_Y} x2={200} y2={T2_Y} ink="#2563eb" className={FADE} />}
+          {s.pick === T2_RIGHT && k >= 3 && (
+            <>
+              <P_Line x1={200} y1={T2_Y + 8} x2={160} y2={T2_Y + 8} ink={P_BAD} className={FADE} />
+              <circle cx={160} cy={T2_Y + 8} r={3.5} fill="#7c3aed" className={POP} />
+              <Card x={160} y={T2_Y - 16} text="0" tone="teal" />
+            </>
+          )}
+          {s.pick !== null && s.pick !== T2_RIGHT && k >= 2 && (
+            <g className={`${FADE} transition-opacity duration-500 motion-reduce:transition-none`} opacity={k >= 3 ? 0.35 : 1}>
+              <P_Line x1={160} y1={T2_Y} x2={160 + ghost} y2={T2_Y} ink="#7c3aed" dashed />
+              <text x={160 + ghost / 2} y={T2_Y - 7} textAnchor="middle" fontSize={9} fontWeight={700} fill="#7c3aed">
+                {T2_OPTS[s.pick]}?
+              </text>
+            </g>
+          )}
+          {s.pick !== null && s.pick !== T2_RIGHT && k >= 3 && (
+            <>
+              <path d={`M${154 + ghost} ${T2_Y - 6}l12 12m0 -12l-12 12`} stroke={P_BAD} strokeWidth={2.2} strokeLinecap="round" className={POP} />
+              <path d={`M126 ${PG - 3}q-5 -7 -11 -6M194 ${PG - 3}q5 -7 11 -6`} fill="none" stroke="#6b4f2a" strokeWidth={2} strokeLinecap="round" className={FADE} />
+            </>
+          )}
+        </Stage>
+      </div>
+      <div className="mt-3 grid grid-cols-3 gap-2">
+        {T2_OPTS.map((o, i) => (
+          <P_Opt key={o} look={s.look(i, T2_RIGHT)} disabled={won} onClick={() => s.go(i, T2_RIGHT, () => pass("উল্টো দিকের সমান ধাক্কা মিলে শূন্য।"))}>
+            <span className="text-[0.95rem] font-semibold">{o}</span>
+          </P_Opt>
+        ))}
+      </div>
+      {s.over && s.pick !== T2_RIGHT && <Nope key={s.miss}>উঁহু, টেবিল তো নড়লোই না। দুইটা arrow ঠিক উল্টো দিকে।</Nope>}
+      <Task done={won}>একটা উত্তর tap করুন। তারপর দেখুন, দুইজন ঠেললে টেবিলের কী হয়।</Task>
+    </>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 2b½ · A figure for the table's explanation: equal and opposite, the two
+//       pushes laid tip to tail come back to the start — zero. Then one walks
+//       round to the other's side, same strength, and now they add: strength
+//       alone isn't enough, the direction matters too.
+
+const X2B_SAY = [
+  "দুইজন সমান শক্তিতে ঠেলছে। একে অপরের opposite-এ।",
+  "দুই ধাক্কা জোড়া দিলে? ফিরে আসে শুরুতেই। কাটাকাটি হয়ে শূন্য।",
+  "এবার সোম ঘুরে এসে ফাহিমের পাশে দাঁড়ালো। শক্তি সেই একই।",
+  "একই দিকে দুই ধাক্কা। টেবিল সরে গেল। শুধু জোর না, দিকটাও লাগে।",
+];
+
+export function TableCancel() {
+  const s = useScene(3, [600, 2200, 2000, 2200]);
+  const k = s.k;
+  const shift = k >= 3 ? 80 : 0;
+  return (
+    <Scene scene={s} caption={say(X2B_SAY, k)}>
+      <div className="mx-auto w-full max-w-[18rem] overflow-hidden rounded-xl ring-1 ring-black/10">
+        <Stage backdrop="room" label="সমান আর উল্টো দুই ধাক্কা মিলে শূন্য; একই দিকে হলে টেবিল সরে">
+          <P_Zero />
+          <P_Carry x={shift} y={0} ms={1400}>
+            <P_Table x={160} />
+          </P_Carry>
+          <P_Carry x={shift} y={0} ms={1400}>
+            <P_TableCrew push={k !== 2} som={k >= 2 ? 62 : 220} somFacing={k >= 2 ? 1 : -1} walking={k === 2} ms={1600} />
+          </P_Carry>
+          {k === 1 && (
+            <>
+              <P_Line x1={160} y1={T2_Y} x2={200} y2={T2_Y} ink="#2563eb" className={FADE} />
+              <P_Line x1={200} y1={T2_Y + 8} x2={160} y2={T2_Y + 8} ink={P_BAD} className={FADE} />
+              <Card x={160} y={T2_Y - 16} text="0" tone="teal" />
+            </>
+          )}
+          {k >= 3 && (
+            <>
+              <P_Line x1={160} y1={T2_Y} x2={200} y2={T2_Y} ink="#2563eb" className={FADE} />
+              <P_Line x1={200} y1={T2_Y} x2={240} y2={T2_Y} ink="#2563eb" className={FADE} />
+            </>
+          )}
+        </Stage>
+      </div>
+    </Scene>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 4b · The coin needle, from 2.7. A pick tosses নাসিবের two coins ten times
+//      (the first ten of 5's seeded hundred), marks each pair মিল or অমিল and
+//      swings the needle. 0° or 180° swings it there and lights the pairs that
+//      would have to change; near 90° lands where the ten tosses really put it.
+
+const C4_A = BLUE100.slice(0, 10);
+const C4_B = RED100.slice(0, 10);
+const C4_MATCH = C4_A.filter((x, i) => x === C4_B[i]).length;
+/** the angle of two ±1 arrows: all মিল 0°, half 90°, none 180° */
+const coinDeg = (m: number, n: number) => Math.round((Math.acos((2 * m - n) / n) * 180) / Math.PI);
+const C4_OPTS = ["90°-এর কাছে", "0°-এর কাছে", "180°-এর কাছে"];
+const C4_DEG = [coinDeg(C4_MATCH, 10), 0, 180];
+const C4_RIGHT = 0;
+
+/** A half dial at (cx, cy): 0° to the right, 90° up, 180° to the left. */
+function P_Dial({ cx, cy, r, labels = true }: { cx: number; cy: number; r: number; labels?: boolean }) {
+  return (
+    <g className="pointer-events-none">
+      <path d={`M${cx - r} ${cy}A${r} ${r} 0 0 1 ${cx + r} ${cy}Z`} fill="#e0f2fe" stroke="#0369a1" strokeWidth={1} />
+      {[0, 45, 90, 135, 180].map((t) => {
+        const a = (t * Math.PI) / 180;
+        return <line key={t} x1={cx + r * Math.cos(a)} y1={cy - r * Math.sin(a)} x2={cx + (r - 4) * Math.cos(a)} y2={cy - (r - 4) * Math.sin(a)} stroke="#0369a1" strokeWidth={1} />;
+      })}
+      {labels && (
+        <g fontSize={7.5} fontWeight={600} fill="#0369a1" fontFamily="ui-monospace, monospace">
+          <text x={cx + r + 2} y={cy + 9} textAnchor="middle">
+            0°
+          </text>
+          <text x={cx} y={cy - r - 3} textAnchor="middle">
+            90°
+          </text>
+          <text x={cx - r - 2} y={cy + 9} textAnchor="middle">
+            180°
+          </text>
+        </g>
+      )}
+    </g>
+  );
+}
+
+/** The dial's needle at `deg`. */
+function P_Needle({ cx, cy, r, deg, ink = P_INK, opacity = 1 }: { cx: number; cy: number; r: number; deg: number; ink?: string; opacity?: number }) {
+  const a = (deg * Math.PI) / 180;
+  return (
+    <g className="pointer-events-none" opacity={opacity}>
+      <line x1={cx} y1={cy} x2={cx + (r - 3) * Math.cos(a)} y2={cy - (r - 3) * Math.sin(a)} stroke={ink} strokeWidth={2.2} strokeLinecap="round" />
+      <circle cx={cx} cy={cy} r={2.6} fill={ink} />
+    </g>
+  );
+}
+
+/** Ten toss pairs, blue over red, from x0: face down until `up`, then মিল/অমিল marks once `marked`; `flag` rings the pairs that are (true) or aren't (false) a match. */
+function P_Tosses({ a, b, x0, up, marked, flag }: { a: readonly number[]; b: readonly number[]; x0: number; up: boolean; marked: boolean; flag?: boolean }) {
+  return (
+    <g className="pointer-events-none">
+      {a.map((v, i) => {
+        const x = x0 + i * 15;
+        const same = v === b[i];
+        return (
+          <g key={i}>
+            {[v, b[i]].map((c, j) => (
+              <g key={j}>
+                <circle cx={x} cy={24 + j * 17} r={6.5} fill={!up ? "#cbd5e1" : j === 0 ? "#2563eb" : P_BAD} className="transition-[fill] duration-300 motion-reduce:transition-none" style={{ transitionDelay: `${i * 50}ms` }} />
+                {up && (
+                  <text x={x} y={26.5 + j * 17} textAnchor="middle" fontSize={6.5} fontWeight={700} fill="white" fontFamily="ui-monospace, monospace" className={FADE}>
+                    {c > 0 ? "+1" : "−1"}
+                  </text>
+                )}
+              </g>
+            ))}
+            {marked && (
+              <rect x={x - 3.5} y={54} width={7} height={7} rx={1.5} fill={same ? P_OK : P_BAD} className={FADE} style={{ transitionDelay: `${i * 40}ms` }} />
+            )}
+            {flag !== undefined && same === flag && <rect x={x - 8.5} y={15} width={17} height={50} rx={5} fill="none" stroke={P_BAD} strokeWidth={1.6} className={POP} />}
+          </g>
+        );
+      })}
+    </g>
+  );
+}
+
+export function CoinNeedle() {
+  const pass = useGate();
+  const s = useP_Pick(3, 700);
+  const won = s.over && s.pick === C4_RIGHT;
+  const k = s.beat;
+  const target = s.pick === null ? 90 : C4_DEG[s.pick];
+  const rest = target > 90 ? 0 : 180;
+  const [deg] = useTween([k >= 3 ? target : rest], 700);
+  const flag = s.over && s.pick === 1 ? false : s.over && s.pick === 2 ? true : undefined;
+  return (
+    <>
+      <P_Ask>দুইটা random coin-এর arrow-এর কোণ বারবার কোথায় গিয়ে থামছিল?</P_Ask>
+      <svg viewBox="0 0 300 112" role="img" aria-label="নাসিবের দুইটা coin দশবার toss, মিল আর অমিল, আর কোণের কাঁটা" className="mx-auto mt-2 block h-auto w-full max-w-[20rem] rounded-xl bg-white ring-1 ring-black/10">
+        <P_Tosses a={C4_A} b={C4_B} x0={16} up={k >= 1} marked={k >= 2} flag={flag} />
+        {k >= 2 && (
+          <text x={83} y={80} textAnchor="middle" fontSize={9} fontWeight={700} fill={P_INK} className={FADE}>
+            মিল {C4_MATCH}, অমিল {10 - C4_MATCH}
+          </text>
+        )}
+        {s.over && s.pick !== C4_RIGHT && (
+          <text x={83} y={98} textAnchor="middle" fontSize={8.5} fontWeight={600} fill={P_BAD} className={FADE}>
+            {s.pick === 1 ? "0° হলে সব জোড়া মিলতো" : "180° হলে সব জোড়া অমিল হতো"}
+          </text>
+        )}
+        <P_Dial cx={236} cy={80} r={44} />
+        {k >= 3 ? <P_Needle cx={236} cy={80} r={44} deg={deg} ink={s.pick === C4_RIGHT ? P_OK : P_BAD} /> : (
+          <text x={236} y={70} textAnchor="middle" fontSize={16} fontWeight={800} fill={P_INK}>
+            ?
+          </text>
+        )}
+        {won && (
+          <text x={236} y={100} textAnchor="middle" fontSize={9} fontWeight={700} fill={P_OK} fontFamily="ui-monospace, monospace" className={FADE}>
+            {C4_DEG[0]}°
+          </text>
+        )}
+      </svg>
+      <div className="mt-3 grid grid-cols-3 gap-1.5">
+        {C4_OPTS.map((o, i) => (
+          <P_Opt key={o} look={s.look(i, C4_RIGHT)} disabled={won} onClick={() => s.go(i, C4_RIGHT, () => pass("Random দুই arrow থামে 90°-এর কাছে।"))}>
+            <svg viewBox="0 0 60 34" aria-hidden="true" className="h-auto w-14">
+              <P_Dial cx={30} cy={30} r={26} labels={false} />
+              <P_Needle cx={30} cy={30} r={26} deg={[90, 0, 180][i]} />
+            </svg>
+            <span className="text-xs leading-tight font-semibold">{o}</span>
+          </P_Opt>
+        ))}
+      </div>
+      {s.over && s.pick !== C4_RIGHT && <Nope key={s.miss}>উঁহু, লাল দাগের জোড়াগুলো মেলেনি। Head আর tail প্রায় সমান সমান পড়ে।</Nope>}
+      <Task done={won}>একটা কাঁটা বেছে নিন। coin দুইটা toss হবে। দেখুন কাঁটা আসলে কোথায় থামে।</Task>
+    </>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 4b½ · A figure for the coin needle's explanation: toss the two coins ten
+//       times, again and again. মিল and অমিল come out nearly half and half
+//       each round, so the needle keeps landing round 90° (102°, 78°, 90°).
+
+const X4B_ROUNDS = (() => {
+  const r = rng(28);
+  return [0, 1, 2].map(() => {
+    const a: number[] = [];
+    const b: number[] = [];
+    for (let i = 0; i < 10; i++) {
+      a.push(r() < 0.5 ? 1 : -1);
+      b.push(r() < 0.5 ? 1 : -1);
+    }
+    const m = a.filter((x, i) => x === b[i]).length;
+    return { a, b, m, deg: coinDeg(m, 10) };
+  });
+})();
+const X4B_SAY = [
+  "নাসিবের দুইটা coin, দশবার করে toss।",
+  ...X4B_ROUNDS.map((r, i) => `${i === 0 ? "প্রথমবার" : "আবার"}: মিল ${r.m}, অমিল ${10 - r.m}। কাঁটা ${r.deg}°।`),
+  "হেড আর টেল প্রায় সমান সমান পড়ে। তাই কাঁটা বারবার থামে 90°-এর আশেপাশে।",
+];
+
+export function CoinRounds() {
+  const s = useScene(4, [600, 1800, 1800, 1800, 2400]);
+  const k = s.k;
+  const round = X4B_ROUNDS[Math.min(2, Math.max(0, k - 1))];
+  const [deg] = useTween([k >= 1 ? X4B_ROUNDS[Math.min(2, k - 1)].deg : 180], 700);
+  return (
+    <Scene scene={s} caption={say(X4B_SAY, k)}>
+      <svg viewBox="0 0 300 100" aria-label="দুইটা coin বারবার toss করলে কাঁটা থামে 90°-এর আশেপাশে" className="mx-auto block h-auto w-full max-w-[18rem] rounded-xl bg-white ring-1 ring-black/10">
+        <g key={Math.min(k, 3)} className={FADE}>
+          <P_Tosses a={round.a} b={round.b} x0={16} up={k >= 1} marked={k >= 1} />
+        </g>
+        {k >= 1 && k <= 3 && (
+          <text key={k} x={83} y={80} textAnchor="middle" fontSize={9} fontWeight={700} fill={P_INK} className={FADE}>
+            মিল {round.m}, অমিল {10 - round.m}
+          </text>
+        )}
+        <P_Dial cx={236} cy={80} r={44} />
+        {k >= 4 && <path d={`M236 80L${236 + 41 * Math.cos((105 * Math.PI) / 180)} ${80 - 41 * Math.sin((105 * Math.PI) / 180)}A41 41 0 0 1 ${236 + 41 * Math.cos((75 * Math.PI) / 180)} ${80 - 41 * Math.sin((75 * Math.PI) / 180)}Z`} fill={P_OK} fillOpacity={0.2} className={FADE} />}
+        {X4B_ROUNDS.slice(0, Math.max(0, k - 1)).map((r, i) => (
+          <P_Needle key={i} cx={236} cy={80} r={44} deg={r.deg} opacity={0.3} />
+        ))}
+        {k >= 1 && k <= 3 && <P_Needle cx={236} cy={80} r={44} deg={deg} />}
+        {k >= 4 && <P_Needle cx={236} cy={80} r={44} deg={X4B_ROUNDS[2].deg} opacity={0.3} />}
+      </svg>
+    </Scene>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 5b · A hundred slots, nothing to draw. Two ±1 arrows of 100 slots (the first
+//      is 5's blue hundred; the second is seeded to match it in exactly 50).
+//      A pick plays out: the box scans both and lands on 0, the right angle;
+//      "no way to tell" tries a sheet of paper and runs out of room at slot 3;
+//      matching lengths finds 10 and 10, and two equal arrows swing to any angle.
+
+const D5_A = BLUE100;
+const D5_B = (() => {
+  const r = rng(8);
+  return D5_A.map(() => (r() < 0.5 ? 1 : -1));
+})();
+const D5_OPTS = ["box চালিয়ে, উত্তর 0 হলে ৯০ degree কোণে।", "আঁকতে না পারলে বোঝার উপায় নাই।", "দুইটার length মিলিয়ে।"];
+const D5_RIGHT = 0;
+const D5_MATCH = D5_A.filter((x, i) => x === D5_B[i]).length;
+
+/** Two 100-slot strips, blue over red; `prod` adds the slot-by-slot products under them. */
+function P_Strips({ prod = false, scan }: { prod?: boolean; scan?: number }) {
+  const x = (i: number) => 20 + i * 2.6;
+  return (
+    <g className="pointer-events-none">
+      {D5_A.map((v, i) => (
+        <rect key={`a${i}`} x={x(i)} y={8} width={2.1} height={9} fill="#2563eb" fillOpacity={v > 0 ? 1 : 0.35} />
+      ))}
+      {D5_B.map((v, i) => (
+        <rect key={`b${i}`} x={x(i)} y={20} width={2.1} height={9} fill={P_BAD} fillOpacity={v > 0 ? 1 : 0.35} />
+      ))}
+      <text x={20} y={39} fontSize={7} fill={P_INK} fillOpacity={0.6}>
+        ঘর 1
+      </text>
+      <text x={280} y={39} textAnchor="end" fontSize={7} fill={P_INK} fillOpacity={0.6}>
+        ঘর 100
+      </text>
+      {prod &&
+        D5_A.map((v, i) =>
+          scan === undefined || x(i) <= scan ? <rect key={`p${i}`} x={x(i)} y={44} width={2.1} height={9} fill={v === D5_B[i] ? P_OK : P_BAD} /> : null,
+        )}
+      {scan !== undefined && scan < 279 && <rect x={scan - 1} y={5} width={4} height={50} rx={1} fill="#f59e0b" fillOpacity={0.5} />}
+    </g>
+  );
+}
+
+/** A sheet with room for two slots only, at beat k (1 sheet, 2 the extra slots have nowhere to go, 3 stamped). */
+function P_NoRoom({ k, extra, y0 = 44 }: { k: number; extra: string[]; y0?: number }) {
+  if (k < 1) return null;
+  const ox = 224;
+  const oy = y0 + 56;
+  return (
+    <g className="pointer-events-none">
+      <g className={FADE}>
+        <rect x={190} y={y0} width={100} height={66} rx={3} fill="white" stroke={P_INK} strokeOpacity={0.35} />
+        <path d={`M${ox} ${oy}H282M${ox} ${oy}V${y0 + 6}`} stroke={P_INK} strokeOpacity={0.5} strokeWidth={1} />
+        <text x={280} y={oy - 3} textAnchor="end" fontSize={6.5} fill={P_INK} fillOpacity={0.6}>
+          ঘর 1
+        </text>
+        <text x={ox + 3} y={y0 + 12} fontSize={6.5} fill={P_INK} fillOpacity={0.6}>
+          ঘর 2
+        </text>
+        <P_Line x1={ox} y1={oy} x2={ox + 30} y2={oy - 26} ink="#2563eb" w={1.8} />
+      </g>
+      {k >= 2 &&
+        extra.map((t, i) => (
+          <g key={t} className={POP} style={{ transitionDelay: `${i * 120}ms` }}>
+            <rect x={140} y={y0 + 4 + i * 20} width={42} height={15} rx={7.5} fill="white" stroke={P_BAD} strokeWidth={1.2} />
+            <text x={161} y={y0 + 14.5 + i * 20} textAnchor="middle" fontSize={7.5} fontWeight={700} fill={P_BAD}>
+              {t}
+            </text>
+          </g>
+        ))}
+      {k >= 3 && (
+        <g className={POP}>
+          <g transform={`rotate(-12 240 ${y0 + 33})`}>
+            <rect x={200} y={y0 + 24} width={80} height={18} rx={3} fill="white" fillOpacity={0.85} stroke={P_BAD} strokeWidth={1.6} />
+            <text x={240} y={y0 + 36.5} textAnchor="middle" fontSize={9} fontWeight={800} fill={P_BAD}>
+              আঁকা গেল না
+            </text>
+          </g>
+        </g>
+      )}
+    </g>
+  );
+}
+
+export function HundredSlots() {
+  const pass = useGate();
+  const s = useP_Pick(3, 750);
+  const won = s.over && s.pick === D5_RIGHT;
+  const k = s.beat;
+  const [scan] = useTween([s.pick === D5_RIGHT && k >= 1 ? 280 : 20], 700);
+  const [swing] = useTween([s.pick === 2 && k >= 3 ? 150 : 60], 800);
+  const sw = (swing * Math.PI) / 180;
+  return (
+    <>
+      <P_Ask>একশো ঘরের দুইটা arrow। কাগজে আঁকার উপায় নাই। ওরা ৯০ degree কোণে কিনা, বুঝবেন কীভাবে?</P_Ask>
+      <svg viewBox="0 0 300 116" role="img" aria-label="একশো ঘরের দুইটা arrow, নীল আর লাল" className="mx-auto mt-2 block h-auto w-full max-w-[20rem] rounded-xl bg-white ring-1 ring-black/10">
+        <P_Strips prod={s.pick === D5_RIGHT && k >= 1} scan={s.pick === D5_RIGHT && k >= 1 ? scan : undefined} />
+        {s.pick === D5_RIGHT && k >= 2 && (
+          <text x={150} y={70} textAnchor="middle" fontSize={9} fontWeight={700} fill={P_INK} className={FADE}>
+            মিল {D5_MATCH}, অমিল {100 - D5_MATCH}
+          </text>
+        )}
+        {s.pick === D5_RIGHT && k >= 3 && (
+          <g className={POP}>
+            <rect x={96} y={80} width={108} height={22} rx={11} fill="white" stroke={P_OK} strokeWidth={1.6} />
+            <text x={150} y={94.5} textAnchor="middle" fontSize={10} fontWeight={800} fill={P_OK}>
+              box এ 0, ৯০ degree
+            </text>
+          </g>
+        )}
+        {s.pick === 1 && <P_NoRoom k={k} extra={["ঘর 3?", "ঘর 4?", "… 100?"]} />}
+        {s.pick === 2 && k >= 1 && (
+          <g className={FADE}>
+            {[0, 1].map((j) => (
+              <g key={j}>
+                <rect x={20} y={48 + j * 13} width={100} height={8} rx={4} fill={j === 0 ? "#2563eb" : P_BAD} fillOpacity={0.7} />
+                <text x={126} y={55 + j * 13} fontSize={8} fontWeight={700} fill={P_INK} fontFamily="ui-monospace, monospace">
+                  10
+                </text>
+              </g>
+            ))}
+            <text x={20} y={90} fontSize={8.5} fontWeight={600} fill={P_INK}>
+              দুইটারই length 10
+            </text>
+          </g>
+        )}
+        {s.pick === 2 && k >= 2 && (
+          <g className={FADE}>
+            <P_Line x1={210} y1={104} x2={210 + 40 * Math.cos((20 * Math.PI) / 180)} y2={104 - 40 * Math.sin((20 * Math.PI) / 180)} ink="#2563eb" />
+            <P_Line x1={210} y1={104} x2={210 + 40 * Math.cos(sw)} y2={104 - 40 * Math.sin(sw)} ink={P_BAD} />
+            {k >= 3 && (
+              <text x={20} y={104} fontSize={8.5} fontWeight={700} fill={P_BAD} className={FADE}>
+                length একই, কোণ যা খুশি
+              </text>
+            )}
+          </g>
+        )}
+      </svg>
+      <div className="mt-3 grid gap-1.5">
+        {D5_OPTS.map((o, i) => (
+          <Choice key={o} n={i} look={s.look(i, D5_RIGHT)} disabled={won} onClick={() => s.go(i, D5_RIGHT, () => pass("box এ 0 মানে ৯০ degree কোণ, যত ঘরেই।"))}>
+            <span className="text-[0.95rem] leading-snug">{o}</span>
+          </Choice>
+        ))}
+      </div>
+      {s.over && s.pick !== D5_RIGHT && <Nope key={s.miss}>Coin-এর বেলায় ছবি ছাড়াই কোণটা কে বলে দিলো? মিল আর অমিল সমান হলে box এ কত আসে?</Nope>}
+      <Task done={won}>একটা উপায় বেছে নিন। দেখুন সেটা দিয়ে কোণটা ধরা যায় কিনা।</Task>
+    </>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 6b · একটু ঝালিয়ে নিন: (3, −2, 5) and (4, 1, −2). A pick plays out: the box
+//      runs slot by slot to 12 − 2 − 10 = 0; "20" runs it with the minus
+//      signs falling off; "can't tell without drawing" tries the sheet and
+//      runs out of room at the third slot.
+
+const E6_A = [3, -2, 5];
+const E6_B = [4, 1, -2];
+const E6_OPTS = ["হ্যাঁ, box এ 0", "না, box এ 20", "আঁকা ছাড়া বলা যায় না"];
+const E6_RIGHT = 0;
+
+/** The three-slot box at beat k (0…4): a product per beat, the sum at 4. `drop` lets the minus signs fall off. */
+function P_ThreeBox({ k, drop = false }: { k: number; drop?: boolean }) {
+  const end = k >= 4;
+  const ring = !end ? "border-cat-amber/40 bg-cat-amber/5" : drop ? "border-danger/50 bg-danger/5" : "border-accent bg-accent/10";
+  const slot = (v: number, row: number, col: number) => (
+    <span
+      key={`${row}-${col}`}
+      className={`grid h-8 place-items-center rounded-lg border-2 font-mono font-bold transition-[background-color,scale] duration-300 motion-reduce:transition-none ${
+        row === 0 ? "border-cat-blue/40 text-cat-blue" : "border-cat-coral/40 text-cat-coral"
+      } ${k === col + 1 ? "scale-110 bg-cat-amber/30" : "bg-surface"}`}
+    >
+      {num(v)}
+    </span>
+  );
+  return (
+    <div className={`mx-auto w-fit rounded-2xl border-2 px-3 py-2 transition-colors duration-300 motion-reduce:transition-none ${ring}`}>
+      <div className="grid grid-cols-[2.8rem_2.8rem_2.8rem] gap-x-2 gap-y-1.5">
+        {E6_A.map((v, c) => slot(v, 0, c))}
+        {E6_B.map((v, c) => slot(v, 1, c))}
+        {E6_A.map((v, c) => {
+          const p = v * E6_B[c];
+          return (
+            <span key={c} className="h-6 text-center font-mono font-bold">
+              {k >= c + 1 && (
+                <span className={P_DROP}>
+                  {p < 0 && (
+                    <span className={`inline-block text-danger transition duration-700 motion-reduce:transition-none ${drop && end ? "translate-y-4 rotate-45 opacity-0" : ""}`}>−</span>
+                  )}
+                  {Math.abs(p)}
+                </span>
+              )}
+            </span>
+          );
+        })}
+      </div>
+      <div className="mt-1 h-7 border-t border-current/15 pt-1 text-center font-mono font-bold">
+        {end && !drop && <span className={`${POP} text-accent-text`}>12 − 2 − 10 = 0</span>}
+        {end && drop && <span className={`${POP} text-danger`}>12 + 2 + 10 = 20</span>}
+      </div>
+    </div>
+  );
+}
+
+export function ThreeSlots() {
+  const pass = useGate();
+  const s = useP_Pick(4, 600);
+  const won = s.over && s.pick === E6_RIGHT;
+  const k = s.beat;
+  return (
+    <>
+      <P_Ask>(3, −2, 5) আর (4, 1, −2): এই দুইটা arrow কি লম্বালম্বি ভাবে আছে?</P_Ask>
+      <div className="mt-3 flex min-h-[8.5rem] items-center justify-center">
+        {s.pick === 2 ? (
+          <svg viewBox="130 40 170 76" role="img" aria-label="কাগজে দুইটা ঘরের জায়গা আছে, তিন নম্বর ঘরের জায়গা নাই" className="block h-auto w-full max-w-[15rem] rounded-xl bg-white ring-1 ring-black/10">
+            <P_NoRoom k={k >= 4 ? 3 : k >= 2 ? 2 : k >= 1 ? 1 : 0} extra={["ঘর 3?"]} />
+          </svg>
+        ) : (
+          <P_ThreeBox k={s.pick === null ? 0 : k} drop={s.pick === 1} />
+        )}
+      </div>
+      <div className="mt-3 grid gap-1.5">
+        {E6_OPTS.map((o, i) => (
+          <Choice key={o} n={i} look={s.look(i, E6_RIGHT)} disabled={won} onClick={() => s.go(i, E6_RIGHT, () => pass(<>ঠিক ধরেছেন!</>))}>
+            <span className="text-[0.95rem]">{o}</span>
+          </Choice>
+        ))}
+      </div>
+      {s.over && s.pick === 1 && <Nope key={s.miss}>উঁহু, minus-গুলো পড়ে গেল। ঘরে ঘরে গুণ করে যোগ করুন। minus-গুলো সাবধানে।</Nope>}
+      {s.over && s.pick === 2 && <Nope key={s.miss}>তিন ঘরের arrow আঁকা যায় না, ঠিক। কিন্তু box তো চলে।</Nope>}
+      <Task done={won}>একটা উত্তর tap করুন। box বা কাগজ, যেটা বেছে নেন সেটাই চলবে।</Task>
+    </>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 6b½ · A figure for 6b's explanation: the careful run to 0, the same run
+//       with the minus signs dropped to 20, and then the protractor set
+//       aside — the box alone said ৯০ degree.
+
+const X6B_SAY = [
+  "(3 × 4) + (−2 × 1) + (5 × −2)।",
+  "ঘরে ঘরে গুণ করে যোগ: 12 − 2 − 10 = 0।",
+  "minus-গুলো বাদ দিলে হয়ে যায় 12 + 2 + 10 = 20।",
+  "box এ 0 মানে ৯০ degree কোণ। কোণ মাপতে চাঁদা লাগে না। boxই যথেষ্ট।",
+];
+
+export function MinusCare() {
+  const s = useScene(3, [600, 2200, 2400, 2600]);
+  const k = s.k;
+  return (
+    <Scene scene={s} caption={say(X6B_SAY, k)}>
+      <div className="flex items-center justify-center gap-3">
+        <P_ThreeBox k={k === 0 ? 0 : 4} drop={k === 2} />
+        {k >= 3 && (
+          <svg viewBox="-14 -14 28 20" aria-hidden="true" className={`${POP} h-auto w-14`}>
+            <P_Protractor />
+            <path d="M-11 -11L11 4M11 -11L-11 4" stroke={P_BAD} strokeWidth={1.8} strokeLinecap="round" />
+          </svg>
+        )}
+      </div>
+    </Scene>
+  );
+}
+
+// ---------------------------------------------------------------------------
 // States for `npm run shot` (keys are the useSeed names).
 
 export const fixtures: Fixtures = {
@@ -2050,4 +2822,14 @@ export const fixtures: Fixtures = {
   CoinMemory: { start: { k: 0 }, coins: { k: 1 }, cards: { k: 2 }, done: {} },
   EightyNeeded: { start: { k: 0 }, storm: { k: 1 }, need: { k: 2 }, done: {} },
   VanOut: { start: { k: 0 }, round: { k: 1 }, out: { k: 2 }, done: {} },
+  // the review exercises (were text <Check>s) and their figures
+  BoxWarmup: { start: {}, stop: { pick: 0 }, add: { pick: 1 }, right: { pick: 2 } },
+  WarmupWays: { start: { k: 0 }, each: { k: 1 }, stop: { k: 3 }, done: {} },
+  TableTug: { start: {}, double: { pick: 0 }, right: { pick: 1 }, one: { pick: 2 } },
+  TableCancel: { start: { k: 0 }, zero: { k: 1 }, round: { k: 2 }, done: {} },
+  CoinNeedle: { start: {}, right: { pick: 0 }, zero: { pick: 1 }, flat: { pick: 2 } },
+  CoinRounds: { start: { k: 0 }, first: { k: 1 }, third: { k: 3 }, done: {} },
+  HundredSlots: { start: {}, box: { pick: 0 }, draw: { pick: 1 }, length: { pick: 2 } },
+  ThreeSlots: { start: {}, right: { pick: 0 }, dropped: { pick: 1 }, draw: { pick: 2 } },
+  MinusCare: { start: { k: 0 }, care: { k: 1 }, drop: { k: 2 }, done: {} },
 };

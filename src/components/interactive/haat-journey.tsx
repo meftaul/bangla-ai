@@ -1,12 +1,14 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 
 import { Bubble, Card as CastCard, Person, Robot, Stage, Stall, StoryFrame, Tree } from "@/components/journey/cast";
+import { DotBox, dot, num, tupN } from "@/components/journey/box";
+import { BoxRun } from "@/components/journey/box";
 import { Task, useGate } from "@/components/journey/journey";
-import { Choice, Draw, FADE, Nope, POP, Scene, Speech, Ticks, pill, predictLook, primaryBtn, usePlay, useScene, useSeed, useTween, type Fixtures } from "@/components/journey/kit";
+import { Choice, Draw, FADE, Nope, POP, Scene, Speech, Ticks, pill, predictLook, primaryBtn, usePlay, useScene, useSeed, useTween, type Fixtures, type Look } from "@/components/journey/kit";
 import { Arrow, Plane, makeFrame, type XY } from "@/components/journey/plane";
-import { Shiku } from "./arrow-journey";
+import { Shiku, Trail } from "./arrow-journey";
 import { Tape } from "./dimension-journey";
 import { bn } from "./figure-kit";
 
@@ -34,76 +36,10 @@ import { bn } from "./figure-kit";
 //
 // Tailwind only; the sheet is journey/plane. Ink on the white sheet is fixed.
 
-/** the box: multiply slot by slot, then add */
-export const dot = (a: readonly number[], b: readonly number[]) => a.reduce((s, x, i) => s + x * b[i], 0);
-/** a machine number: at most two decimals, lakh-style commas, a real minus */
-export const num = (n: number) => {
-  const r = Math.round(n * 100) / 100 || 0;
-  const s = Math.abs(r).toLocaleString("en-IN", { maximumFractionDigits: 2 });
-  return r < 0 ? `−${s}` : s;
-};
-export const tupN = (v: readonly number[]) => `(${v.map(num).join(", ")})`;
-
-/**
- * The box, opened: row i pairs slot i of each list and multiplies them; the
- * sum comes once `k` passes the last row. `k` rows are shown, so a screen can
- * step through it. A slot with no partner jams the box and no sum appears.
- * `dense` drops the row names for a half-width card.
- */
-export function DotBox({
-  a,
-  b,
-  k,
-  names,
-  unit = "",
-  dense = false,
-}: {
-  a: readonly number[];
-  b: readonly number[];
-  k: number;
-  names?: readonly string[];
-  unit?: string;
-  dense?: boolean;
-}) {
-  const n = Math.max(a.length, b.length);
-  const jam = a.length !== b.length;
-  const rows = Array.from({ length: Math.min(k, n) }, (_, i) => i);
-  return (
-    <div
-      className={`mx-auto w-full rounded-2xl border-2 border-cat-amber/40 bg-cat-amber/5 font-mono ${
-        dense ? "px-2 py-1.5 text-[0.78rem]" : "max-w-xs px-3 py-2 text-sm"
-      }`}
-    >
-      {rows.length === 0 && <div className="py-1 text-center font-sans text-xs text-muted">box তৈরি</div>}
-      {rows.map((i) => {
-        const lone = a[i] === undefined || b[i] === undefined;
-        return (
-          <div key={i} className={`${FADE} flex items-baseline justify-between gap-2 leading-relaxed`}>
-            {names && !dense && <span className="font-sans text-xs text-muted">{names[i]}</span>}
-            {lone ? (
-              <span className="text-danger">
-                {num(a[i] ?? b[i])} × ? <span className="font-sans text-xs">জোড়া নাই</span>
-              </span>
-            ) : (
-              <span className={dense ? "ml-auto" : ""}>
-                {num(a[i])} × {num(b[i])} = <b>{num(a[i] * b[i])}</b>
-              </span>
-            )}
-          </div>
-        );
-      })}
-      {k > n && !jam && (
-        <div className={`${FADE} mt-1 flex items-baseline justify-between gap-2 border-t border-cat-amber/40 pt-1 ${dense ? "" : "text-base"}`}>
-          <span className="font-sans text-xs text-muted">সব যোগ</span>
-          <b key={dot(a, b)} className={`${POP} inline-block`}>
-            {num(dot(a, b))}
-            {unit}
-          </b>
-        </div>
-      )}
-    </div>
-  );
-}
+// The box itself — `dot`, the machine's number format and the amber `DotBox`
+// card — now lives in journey/box.tsx, where it plays itself out slot by slot
+// for the whole app. Re-exported here because 4.2 to 4.7 import it from 4.1.
+export { DotBox, dot, num, tupN } from "@/components/journey/box";
 
 /** What the box does, in one line: the reader's reminder on the opening screen. */
 export function BoxBadge() {
@@ -179,7 +115,7 @@ export function HaatBet() {
       ) : (
         <div className={`${FADE} mt-3 text-center text-[0.95rem] text-muted`}>বাজি সিল করা হলো। হাট শেষে মিলিয়ে দেখবো।</div>
       )}
-      <Task done={sealed}>যে কাজগুলো box দিয়ে হবে বলে মনে হয়, সেগুলো বেছে বাজিটা সিল করুন।</Task>
+      <Task done={sealed}>box দিয়ে কোনগুলো হবে? বেছে নিন। তারপর বাজিটা সিল করুন।</Task>
     </>
   );
 }
@@ -220,7 +156,7 @@ export function GroceryBill() {
           </button>
         </div>
       )}
-      <Task done={over}>boxটা এক জোড়া এক জোড়া করে চালান, দেখুন বিল কত আসে।</Task>
+      <Task done={over}>boxটা চালান, এক জোড়া এক জোড়া করে। দেখুন বিল কত আসে।</Task>
     </>
   );
 }
@@ -262,7 +198,7 @@ export function NoPartner() {
             </div>
           ) : (
             <div className={`${FADE} mt-3`}>
-              <DotBox a={PRICE} b={QTY} k={4} names={GROCERY} unit=" টাকা" />
+              <DotBox a={PRICE} b={QTY} names={GROCERY} unit=" টাকা" />
               <div className="mt-3 flex justify-center">
                 <button type="button" onClick={() => setRound(2)} className={primaryBtn}>
                   পরের খদ্দের
@@ -277,18 +213,18 @@ export function NoPartner() {
           <Lists
             rows={[
               ["ফর্দ: চাল, তেল, ডিম, পেঁয়াজ", QTY4],
-              ["দোকানদার র দামের card", PRICE],
+              ["দোকানদারের দামের card", PRICE],
             ]}
           />
           {!jammed ? (
             <div className="mt-3 flex justify-center">
               <button type="button" onClick={jam} className={primaryBtn}>
-                box এ  দিন
+                box এ দিন
               </button>
             </div>
           ) : (
             <div className={`${FADE} mt-3`}>
-              <DotBox a={QTY4} b={PRICE} k={5} names={[...GROCERY, "পেঁয়াজ"]} />
+              <DotBox a={QTY4} b={PRICE} names={[...GROCERY, "পেঁয়াজ"]} />
               <div className="mt-2 text-center text-[0.95rem] text-danger">box আটকে গেল। পেঁয়াজের 3-কে কার সাথে গুণ করবো?</div>
             </div>
           )}
@@ -300,7 +236,7 @@ export function NoPartner() {
           ["চার জিনিস, তিন দাম", jammed],
         ]}
       />
-      <Task done={jammed}>আগে উল্টো দিক থেকে box চালান, তারপর পরের খদ্দেরের ফর্দটা box এ  দিন।</Task>
+      <Task done={jammed}>আগে উল্টো দিক থেকে box চালান। তারপর পরের খদ্দেরের ফর্দটা box এ দিন।</Task>
     </>
   );
 }
@@ -371,7 +307,7 @@ export function ReportCard() {
       />
       {!ran ? (
         <>
-          <div className="mt-3 text-sm font-medium text-muted">তিনটা নম্বরের সাধারণ average 76.7। ফাহিমের final number কত হবে?</div>
+          <div className="mt-3 text-sm font-medium text-muted">তিনটা নম্বরের সাধারণ average 76.7। বলুন তো, ফাহিমের final number কত হবে?</div>
           <div className="mt-2 grid gap-2">
             {GRADE_GUESS.map((o, i) => (
               <Choice key={o} n={i} look={predictLook(i, guess, false, 0)} disabled={guess !== null} onClick={() => setGuess(i)}>
@@ -393,7 +329,7 @@ export function ReportCard() {
             <div className="mt-2 text-center text-[0.95rem]">{guess === 0 ? "ঠিক ধরেছেন, 79।" : "উঁহু, 79, মানে average-এর চেয়ে বেশি।"} সবচেয়ে বড় weight-টা পড়েছে ফাহিমের সবচেয়ে ভালো পরীক্ষায়।</div>
           )}
           <MarkLine final={dot(MARKS, w)} />
-          <DotBox a={MARKS} b={w} k={4} names={EXAMS} />
+          <DotBox a={MARKS} b={w} names={EXAMS} />
           <div className="mt-3 flex justify-center gap-2">
             {W_CARDS.map((c, i) => (
               <button key={c.name} type="button" onClick={() => flip(i)} className={`${pill(card === i)} font-sans`}>
@@ -470,7 +406,7 @@ export function CowPrice() {
           {guess !== null && (
             <div className={`${FADE} mt-3 flex justify-center`}>
               <button type="button" onClick={run} className={primaryBtn}>
-                দুইটাই box এ  দিন
+                দুইটাই box এ দিন
               </button>
             </div>
           )}
@@ -482,7 +418,7 @@ export function CowPrice() {
           </div>
         )
       )}
-      <Task done={ran && !running}>আগে guess করুন কোন গাইয়ের দাম বেশি, তারপর দুইটাকেই দালালের card-এর সাথে box এ  দিন।</Task>
+      <Task done={ran && !running}>আগে guess করুন, কোন গাইয়ের দাম বেশি। তারপর দুইটাকেই দালালের card-এর সাথে box এ দিন।</Task>
     </>
   );
 }
@@ -537,13 +473,13 @@ export function TwoSacks() {
       {!boxed ? (
         <div className="mt-4 flex justify-center">
           <button type="button" onClick={() => setBoxed(true)} className={primaryBtn}>
-            box এ  দিন
+            box এ দিন
           </button>
         </div>
       ) : (
         <div className={FADE}>
           <div className="mt-3">
-            <DotBox a={SACKS[0]} b={SACKS[1]} k={3} names={["চাল", "ডাল"]} />
+            <DotBox a={SACKS[0]} b={SACKS[1]} names={["চাল", "ডাল"]} />
           </div>
           <Speech who="মামী" initial="মী" tint="teal">
             56 কী? নতুন বস্তায় চাল কত কেজি, ডাল কত কেজি?
@@ -574,7 +510,7 @@ export function TwoSacks() {
           ["বস্তা ভরা", filled],
         ]}
       />
-      <Task done={filled}>আগে দুই বস্তা box এ  দিয়ে দেখুন। তারপর যে চালে বস্তাটা ভরে, সেটা খুঁজে বের করুন।</Task>
+      <Task done={filled}>আগে দুই বস্তা box এ দিয়ে দেখুন। তারপর খুঁজুন, কোন চালে বস্তাটা ভরে।</Task>
     </>
   );
 }
@@ -628,13 +564,13 @@ export function SelfDot() {
           {!ran ? (
             <div className="mt-3 flex justify-center">
               <button type="button" onClick={() => setRan(true)} className={primaryBtn}>
-                box এ  দিন
+                box এ দিন
               </button>
             </div>
           ) : (
             <div className={FADE}>
               <div className="mt-3">
-                <DotBox a={SHIKU} b={SHIKU} k={3} />
+                <DotBox a={SHIKU} b={SHIKU} />
               </div>
               <div className="mt-3 text-sm font-medium text-muted">ফিতা বলছে 5, box বলছে 25। সম্পর্কটা কী?</div>
               <div className="mt-2 flex flex-wrap justify-center gap-2">
@@ -649,7 +585,7 @@ export function SelfDot() {
         </>
       ) : (
         <div className={FADE}>
-          <div className="mt-2 text-center text-sm text-accent-text">✓ 25 = 5 × 5, মানে box দিয়েছে length এর  বর্গ।</div>
+          <div className="mt-2 text-center text-sm text-accent-text">✓ 25 = 5 × 5। মানে box দিয়েছে length এর বর্গ।</div>
           <div className="mt-2 text-center text-[0.95rem]">এবার মেলার ছাদের সেই 3-ঘরের clue। এটা কাগজে আঁকা যায় না, ফিতাও ধরা যায় না।</div>
           <Lists
             rows={[
@@ -660,13 +596,13 @@ export function SelfDot() {
           {!ran3 ? (
             <div className="mt-3 flex justify-center">
               <button type="button" onClick={() => setRan3(true)} className={primaryBtn}>
-                box এ  দিন
+                box এ দিন
               </button>
             </div>
           ) : (
             <div className={FADE}>
               <div className="mt-3">
-                <DotBox a={BOX3} b={BOX3} k={4} />
+                <DotBox a={BOX3} b={BOX3} />
               </div>
               <div className="mt-3 text-sm font-medium text-muted">তাহলে arrow-টা কত লম্বা?</div>
               <div className="mt-2 flex justify-center gap-2">
@@ -691,7 +627,7 @@ export function SelfDot() {
           ["3-ঘরের clue", got],
         ]}
       />
-      <Task done={got}>Arrow-টাকে box এর দুই দিকেই দিন, তারপর box এর উত্তর আর ফিতার মাপ মিলিয়ে নিন।</Task>
+      <Task done={got}>Arrow-টাকে box এর দুই দিকেই দিন। তারপর মিলিয়ে নিন, box এর উত্তর আর ফিতার মাপ।</Task>
     </>
   );
 }
@@ -706,7 +642,7 @@ const NEW_JOBS = [
   { t: "সকালে কেনা (চাল, ডাল) = (3, 1), বিকেলে আরও (2, 1)। সারাদিনে মোট কী কী কেনা হলো?", yes: false, why: "উত্তরটা একটা list, (5, 2)। এটা পুরানো যোগের কাজ।" },
   { t: "ফাহিম মারলো 3টা চার, 2টা ছক্কা আর 10টা single। মোট কত রান?", yes: true, why: "(3, 2, 10) · (4, 6, 1) = 12 + 12 + 10 = 34 রান।" },
   { t: "Class-এর সবার (উচ্চতা, ওজন) card দ্বিগুণ করে দেখা।", yes: false, why: "এটা stretch, উত্তর আবার একটা card। box দেয় একটা সংখ্যা।" },
-  { t: "ফর্দে (চাল, ডাল, তেল), কিন্তু দোকানদার র card-এ দাম আছে শুধু (চাল, ডাল)-এর।", yes: false, why: "তেলের জোড়া নাই। দুই list-এ ঘর সমান না হলে box চলে না।" },
+  { t: "ফর্দে (চাল, ডাল, তেল)। কিন্তু দোকানদারের card-এ দাম আছে শুধু (চাল, ডাল)-এর।", yes: false, why: "তেলের জোড়া নাই। দুই list-এ ঘর সমান না হলে box চলে না।" },
 ];
 const JOB_BINS = ["box এর কাজ", "box এর কাজ না"];
 
@@ -1111,7 +1047,7 @@ export function PairsNotAll() {
 //      for n slots, folded into a Σ, and last the dot in the middle, u · v.
 
 const X3_SAY = [
-  "Check-এর দুইটা list, u আর v।",
+  "একটু আগের দুইটা list, u আর v।",
   "ঘরে ঘরে গুণ, তারপর যোগ: হাতে একটা সংখ্যা, 11।",
   "ঘর যতগুলোই হোক, একই নিয়ম, n নম্বর ঘর পর্যন্ত।",
   "Σ দিয়ে ছোট করে লেখা: i এক থেকে n, সব যোগ।",
@@ -1130,7 +1066,7 @@ export function DotName() {
         </div>
         {k >= 1 && (
           <div className={FADE}>
-            1 × 3 + 2 × 4 = <b>11</b>
+            <BoxRun a={[1, 2]} b={[3, 4]} inline />
           </div>
         )}
         {k >= 2 && (
@@ -1635,7 +1571,7 @@ export function SackNeedsTwo() {
         </div>
       </div>
       <div className="mt-2 min-h-[1.4rem] text-center font-mono text-sm">
-        {k === 1 && <span className={FADE}>10 × 5 + 2 × 3 = 56</span>}
+        {k === 1 && <BoxRun a={[10, 2]} b={[5, 3]} inline />}
         {k === 2 && <span className={FADE}>10 + 5 = 15</span>}
         {k >= 3 && <span className={FADE}>(10, 2) + (5, 3) = (15, 5)</span>}
       </div>
@@ -1810,16 +1746,17 @@ export function SignQuestion() {
         </div>
         {k >= 1 && (
           <div className={`${FADE} flex items-center justify-between gap-2 px-2`}>
-            <span>(−3, 4) · (−3, 4) = 9 + 16</span>
-            <b className="flex items-center gap-1 text-accent-text">
-              25 <H_Mark ok />
-            </b>
+            <span className="text-accent-text">
+              <BoxRun a={[-3, 4]} b={[-3, 4]} inline />
+            </span>
+            <H_Mark ok />
           </div>
         )}
         {k >= 2 && (
           <div className={`${FADE} flex items-center justify-between gap-2 px-2`}>
-            <span>(3, 4) · (−4, 1) = −12 + 4</span>
-            <b className="text-danger">−8</b>
+            <span className="text-danger">
+              <BoxRun a={[3, 4]} b={[-4, 1]} inline />
+            </span>
           </div>
         )}
         {k >= 3 && <div className={`${POP} text-center font-sans text-base font-bold text-cat-amber`}>কবে?</div>}
@@ -2005,6 +1942,742 @@ export function VanInMud({}: Story) {
 }
 
 // ---------------------------------------------------------------------------
+// The review questions, as visual exercises. Each was a text-only Check; now
+// the reader's pick plays out on a picture, a wrong one shows what it would
+// mean (the kg that won't stay, the minus that falls off, Shiku walking the
+// 7), and the right one plays the confirming motion, then pass(). Same
+// question, same answer, same hint and praise as the Check it replaces.
+
+/** reduced motion: a play jumps straight to its end */
+const H_calm = () => typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/**
+ * One pick-and-play question: `pick` is seeded (so `shot` can show a wrong or
+ * a right end state), `at` is the beat of the play the pick started, 0…end.
+ * A wrong pick bounces; the right one passes from the play's done.
+ */
+function useHaatPick(right: number, end: number, ms: number, note?: string) {
+  const pass = useGate();
+  const [pick, setPick] = useSeed<number | null>("pick", null);
+  const [miss, setMiss] = useState(0);
+  const { k, running, play } = usePlay(ms);
+  const at = pick === null ? 0 : running ? k : end;
+  const won = pick === right && !running;
+  const choose = (i: number) => {
+    if (won) return;
+    setPick(i);
+    if (i !== right) setMiss((m) => m + 1);
+    const done = i === right ? () => pass(note) : undefined;
+    if (H_calm()) {
+      play(end, undefined, end);
+      done?.();
+      return;
+    }
+    play(end, done);
+  };
+  const look = (i: number): Look =>
+    pick === i ? (running ? "picked" : i === right ? "right" : "wrong") : won ? "dim" : "idle";
+  return { pick, at, running, won, miss, choose, look };
+}
+
+/** The question itself, as the Check asked it. */
+function H_Ask({ children }: { children: ReactNode }) {
+  return <div className="text-base leading-snug font-semibold text-balance">{children}</div>;
+}
+
+/** Something that slides and scales under a CSS transition, in SVG. */
+const H_MOVE = "transition-[transform,opacity] duration-500 ease-in-out motion-reduce:transition-none";
+
+// ---------------------------------------------------------------------------
+// 0 · The door's recall, from 3.7: C's 10 kg difference laid against the
+//     weight scale of 12 kg. The right pick strikes both kg and lands 0.83
+//     bare, just short of one scale; "0.83 kg" lands the number but its kg
+//     has nowhere to come from; "120 kg" stretches the bar twelve times, off
+//     the ruler: that's 10 × 12, not a division.
+
+const E0_Q = "A আর C-এর ওজনের পার্থক্য 10 kg, আর ওজনের scale  12 kg। 10 kg ÷ 12 kg কত?";
+const E0_OPTS = ["0.83 kg", "0.83, পাশে কোনো unit নেই", "120 kg"];
+const E0_X = 30;
+/** one scale, 12 kg, in px */
+const E0_STEP = 108;
+const E0_BAR = (E0_STEP * 10) / 12;
+
+export function ScaleSteps() {
+  const { pick, at, won, miss, choose, look } = useHaatPick(1, 3, 650, "kg দিয়ে kg ভাগ, kg কেটে গেল!");
+  const laid = at >= 1;
+  const stretch = pick === 2 && at >= 2;
+  const strike = pick !== 2 && pick !== null && at >= 2;
+  const land = pick !== 2 && pick !== null && at >= 3;
+  return (
+    <>
+      <H_Ask>{E0_Q}</H_Ask>
+      <svg viewBox="0 0 300 104" role="img" aria-label="10 kg-এর পার্থক্য 12 kg-এর scale-এর পাশে: এক scale-এর চেয়ে একটু কম" className="mx-auto mt-2 block h-auto w-full max-w-[18rem]">
+        <rect x={1} y={1} width={298} height={102} rx={10} fill="white" stroke="#cbd5e1" />
+        <text x={E0_X} y={16} fontSize={8.5} fill="#475569">
+          A আর C-এর পার্থক্য
+        </text>
+        {/* the ruler: the weight scale, one block per 12 kg */}
+        {[0, 1].map((i) => (
+          <rect key={i} x={E0_X + i * E0_STEP} y={70} width={E0_STEP} height={14} fill={i ? "#e0f2fe" : "#bae6fd"} stroke="#0369a1" strokeWidth={0.8} />
+        ))}
+        <text x={E0_X + E0_STEP / 2 - 3} y={80.5} textAnchor="end" fontSize={10} fontWeight={700} fontFamily="ui-monospace, monospace" fill={H_INK}>
+          12
+        </text>
+        <text x={E0_X + E0_STEP / 2 + 1} y={80.5} fontSize={10} fontWeight={700} fontFamily="ui-monospace, monospace" fill={H_INK}>
+          kg
+        </text>
+        {strike && <Draw d={`M${E0_X + E0_STEP / 2} 77.5h14`} strokeWidth={1.6} className="stroke-[#dc2626]" />}
+        {[0, 1, 2].map((i) => (
+          <text key={i} x={E0_X + i * E0_STEP} y={96} textAnchor={i ? "middle" : "start"} fontSize={8.5} fill="#475569">
+            {i ? `${i} scale` : "0"}
+          </text>
+        ))}
+        {/* the difference: slides down onto the ruler, or stretches off it */}
+        {/* a nested sheet: the stretched bar is cut at the card's edge */}
+        <svg x={2} y={2} width={296} height={100} viewBox="2 2 296 100" overflow="hidden">
+          <g style={{ transform: `translateY(${laid ? 28 : 0}px)` }} className={H_MOVE}>
+            <g style={{ transformOrigin: `${E0_X}px 0px`, transform: `scaleX(${stretch ? 12 : 1})` }} className="transition-transform duration-1000 ease-in motion-reduce:transition-none">
+              <rect x={E0_X} y={22} width={E0_BAR} height={14} fill="#fb923c" stroke="#c2410c" strokeWidth={0.8} />
+            </g>
+            {!stretch && (
+              <>
+                <text x={E0_X + E0_BAR / 2 - 3} y={32.5} textAnchor="end" fontSize={10} fontWeight={700} fontFamily="ui-monospace, monospace" fill="white">
+                  10
+                </text>
+                <text x={E0_X + E0_BAR / 2 + 1} y={32.5} fontSize={10} fontWeight={700} fontFamily="ui-monospace, monospace" fill="white">
+                  kg
+                </text>
+                {strike && <Draw d={`M${E0_X + E0_BAR / 2} 29.5h14`} strokeWidth={1.6} className="stroke-[#7f1d1d]" />}
+              </>
+            )}
+          </g>
+        </svg>
+        {land && (
+          <g key={pick} className={POP}>
+            <path d={`M${E0_X + E0_BAR} 64v20`} stroke={H_INK} strokeWidth={1.2} strokeDasharray="2 2" />
+            <text x={E0_X + E0_BAR} y={44} textAnchor="middle" fontSize={13} fontWeight={800} fontFamily="ui-monospace, monospace" fill={pick === 1 ? "#15803d" : H_INK}>
+              0.83
+              {pick === 0 && <tspan fill="#dc2626"> kg?</tspan>}
+            </text>
+          </g>
+        )}
+        {stretch && at >= 3 && (
+          <text x={290} y={44} textAnchor="end" fontSize={11} fontWeight={800} fontFamily="ui-monospace, monospace" fill="#b91c1c" className={FADE}>
+            10 × 12 = 120 →
+          </text>
+        )}
+      </svg>
+      <div className="mt-2 grid gap-1.5">
+        {E0_OPTS.map((o, i) => (
+          <Choice key={o} n={i} look={look(i)} disabled={won} onClick={() => choose(i)}>
+            {o}
+          </Choice>
+        ))}
+      </div>
+      {pick !== null && pick !== 1 && at >= 3 && (
+        <Nope key={miss}>
+          {pick === 0
+            ? "kg-টা থাকলো কোথায়? ওপরেও kg, নিচেও kg। একই জিনিস দিয়ে ভাগ করলে সেটা কি থাকে?"
+            : "এটা তো 10 × 12, গুণ। ভাগ মানে 10 kg-এ কয়টা 12 kg-এর scale আঁটে। ওপরেও kg, নিচেও kg। সেটা কি থাকে?"}
+        </Nope>
+      )}
+      <Task done={won}>একটা উত্তর tap করুন। দেখুন, পার্থক্যটা scale-এর পাশে কতটুকু।</Task>
+    </>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 2¾ · The দোকানদার's technique, run by hand: (1, 2) against (3, 4). The
+//      right pick draws the two straight pairs, 3 and 8, and adds them, 11.
+//      21 adds each list first and multiplies across, every line crossing;
+//      (3, 8) multiplies and stops, a list with no sum.
+
+const E2_Q = "পরিমাণ (1, 2), দাম (3, 4)। দোকানদারের technique-এ বিল কত আসে?";
+const E2_OPTS = ["21", "11", "(3, 8)"];
+const E2_A = [1, 2];
+const E2_B = [3, 4];
+const E2_X = [84, 150];
+
+export function TinyBill() {
+  const { pick, at, won, miss, choose, look } = useHaatPick(1, 3, 700, "দুই list ঢুকলো, বের হলো এক সংখ্যা।");
+  const straight = pick === 1 || pick === 2;
+  const added = pick === 0;
+  return (
+    <>
+      <H_Ask>{E2_Q}</H_Ask>
+      <svg viewBox="0 0 300 108" role="img" aria-label="পরিমাণ (1, 2) আর দাম (3, 4): ঘরে ঘরে গুণ 3 আর 8, যোগ 11" className="mx-auto mt-2 block h-auto w-full max-w-[18rem]">
+        <rect x={1} y={1} width={298} height={106} rx={10} fill="white" stroke="#cbd5e1" />
+        <text x={12} y={29} fontSize={9} fill="#475569">
+          পরিমাণ
+        </text>
+        <text x={12} y={87} fontSize={9} fill="#475569">
+          দাম
+        </text>
+        {straight &&
+          E2_X.map(
+            (x, i) =>
+              at > i && (
+                <g key={`s${i}`}>
+                  <Draw d={`M${x} 35V73`} strokeWidth={2.4} className="stroke-[#2563eb]" />
+                  <text x={x + 6} y={58} fontSize={11} fontWeight={700} fontFamily="ui-monospace, monospace" fill="#1d4ed8" className={FADE}>
+                    {E2_A[i] * E2_B[i]}
+                  </text>
+                </g>
+              ),
+          )}
+        {added && at >= 2 &&
+          E2_X.flatMap((x, i) => E2_X.map((xb, j) => <Draw key={`c${i}${j}`} d={`M${x} 35L${xb} 73`} strokeWidth={1.3} delay={(i * 2 + j) * 90} className="stroke-[#f87171]" />))}
+        {E2_X.map((x, i) => (
+          <X2_Chip key={`a${i}`} x={x} y={25} text={`${E2_A[i]}`} tone="#b45309" />
+        ))}
+        {E2_X.map((x, i) => (
+          <X2_Chip key={`b${i}`} x={x} y={83} text={`${E2_B[i]}`} tone="#1d4ed8" />
+        ))}
+        {added && at >= 1 && (
+          <g className={FADE} fontSize={10} fontFamily="ui-monospace, monospace" fill="#b91c1c">
+            <text x={246} y={29} textAnchor="middle">
+              1 + 2 = 3
+            </text>
+            <text x={246} y={87} textAnchor="middle">
+              3 + 4 = 7
+            </text>
+          </g>
+        )}
+        {added && at >= 3 && (
+          <text x={246} y={62} textAnchor="middle" fontSize={14} fontWeight={800} fontFamily="ui-monospace, monospace" fill="#b91c1c" className={POP}>
+            3 × 7 = 21
+          </text>
+        )}
+        {straight && at >= 3 && (
+          <g key={pick} className={POP}>
+            {pick === 1 ? (
+              <>
+                <text x={246} y={46} textAnchor="middle" fontSize={10} fontFamily="ui-monospace, monospace" fill={H_INK}>
+                  3 + 8
+                </text>
+                <text x={246} y={68} textAnchor="middle" fontSize={18} fontWeight={800} fontFamily="ui-monospace, monospace" fill="#15803d">
+                  11
+                </text>
+              </>
+            ) : (
+              <>
+                <text x={246} y={58} textAnchor="middle" fontSize={15} fontWeight={800} fontFamily="ui-monospace, monospace" fill="#b91c1c">
+                  (3, 8)
+                </text>
+                <text x={246} y={76} textAnchor="middle" fontSize={9} fill="#b91c1c">
+                  যোগ কোথায়?
+                </text>
+              </>
+            )}
+          </g>
+        )}
+      </svg>
+      <div className="mt-2 grid grid-cols-3 gap-1.5">
+        {E2_OPTS.map((o, i) => (
+          <Choice key={o} n={i} look={look(i)} disabled={won} onClick={() => choose(i)}>
+            <span className="font-mono font-semibold">{o}</span>
+          </Choice>
+        ))}
+      </div>
+      {pick !== null && pick !== 1 && at >= 3 && (
+        <Nope key={miss}>
+          {pick === 0
+            ? "এটা আগে যোগ, পরে গুণ। দেখুন, সব line আড়াআড়ি চলে গেল। প্রথম ঘর গুণ প্রথম ঘর। দ্বিতীয় গুণ দ্বিতীয়। তারপর যোগ।"
+            : "গুণ হলো, যোগটা বাকি রয়ে গেল। আর উত্তরটা কি একটা list, নাকি একটা সংখ্যা?"}
+        </Nope>
+      )}
+      <Task done={won}>একটা বিল tap করুন। দোকানদারের technique-টা চলবে চোখের সামনে।</Task>
+    </>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 4¾ · The poster's recall, before the report card: three exams, equal
+//      weight. The right pick stacks the three bars into one tall column,
+//      then shrinks it to a third, landing one level across all three. The
+//      biggest-mark pick keeps the tallest bar and loses the other two; the
+//      multiply pick sends the column through the roof. No marks are named:
+//      ফাহিমের নম্বর come on the next screen.
+
+const E4_Q = "তিনটা পরীক্ষার weight সমান হলে final number কীভাবে বের করতাম?";
+const E4_OPTS = ["সবচেয়ে বড় নম্বরটা নিতাম", "সব যোগ করে 1/3 দিয়ে stretch করতাম", "সব নম্বর গুণ করতাম"];
+const E4_BASE = 104;
+const E4_H = [32, 24, 36];
+const E4_BX = [44, 88, 132];
+const E4_W = 26;
+const E4_COL = 232;
+const E4_SUM = E4_H.reduce((s, h) => s + h, 0);
+
+/** three exam bars, standing (for 4¾ and its figure 5½) */
+function E4_Ghosts() {
+  return (
+    <>
+      {E4_BX.map((x, i) => (
+        <rect key={i} x={x} y={E4_BASE - E4_H[i]} width={E4_W} height={E4_H[i]} fill="#94a3b8" opacity={0.25} />
+      ))}
+    </>
+  );
+}
+
+export function EqualShare() {
+  const { pick, at, won, miss, choose, look } = useHaatPick(1, 3, 750, "সমান দাম মানে প্রত্যেকে ⅓ করে।");
+  const stack = (pick === 1 || pick === 2) && at >= 1;
+  const squeeze = pick === 1 && at >= 2 ? 1 / 3 : pick === 2 && at >= 2 ? 3 : 1;
+  const maxOnly = pick === 0;
+  const level = pick === 1 && at >= 3 ? E4_BASE - E4_SUM / 3 : maxOnly && at >= 3 ? E4_BASE - E4_H[2] : null;
+  return (
+    <>
+      <H_Ask>{E4_Q}</H_Ask>
+      <svg viewBox="0 0 300 118" role="img" aria-label="তিনটা পরীক্ষার bar: সব যোগ করে এক লম্বা bar, তারপর তিন ভাগের এক ভাগ" className="mx-auto mt-2 block h-auto w-full max-w-[18rem]">
+        <rect x={1} y={1} width={298} height={116} rx={10} fill="white" stroke="#cbd5e1" />
+        <path d={`M20 ${E4_BASE}H280`} stroke="#94a3b8" strokeWidth={1} />
+        <text x={E4_BX[1] + E4_W / 2} y={114} textAnchor="middle" fontSize={8.5} fill="#475569">
+          তিনটা পরীক্ষা
+        </text>
+        {stack && <E4_Ghosts />}
+        <g style={{ transformOrigin: `0px ${E4_BASE}px`, transform: `scaleY(${squeeze})` }} className="transition-transform duration-700 ease-in-out motion-reduce:transition-none">
+          {E4_BX.map((x, i) => {
+            const below = E4_H.slice(0, i).reduce((s, h) => s + h, 0);
+            const dx = stack ? E4_COL - x : 0;
+            const dy = stack ? -below : 0;
+            const faded = maxOnly && i !== 2 && at >= 2;
+            return (
+              <g key={i} style={{ transform: `translate(${dx}px, ${dy}px)`, opacity: faded ? 0.12 : 1, transitionDelay: stack ? `${i * 120}ms` : "0ms" }} className={H_MOVE}>
+                <rect x={x} y={E4_BASE - E4_H[i]} width={E4_W} height={E4_H[i]} fill={["#fbbf24", "#fb7185", "#a78bfa"][i]} stroke={maxOnly && i === 2 && at >= 1 ? "#b45309" : "white"} strokeWidth={maxOnly && i === 2 && at >= 1 ? 2 : 1} />
+              </g>
+            );
+          })}
+        </g>
+        {pick === 1 && at >= 2 && (
+          <text x={E4_COL + E4_W + 8} y={E4_BASE - 12} fontSize={12} fontWeight={800} fontFamily="ui-monospace, monospace" fill="#15803d" className={FADE}>
+            ⅓
+          </text>
+        )}
+        {level !== null && (
+          <g key={pick} className={FADE}>
+            <path d={`M30 ${level}H${E4_COL + E4_W + 4}`} stroke={pick === 1 ? "#15803d" : "#b45309"} strokeWidth={1.6} strokeDasharray="4 3" />
+          </g>
+        )}
+        {pick === 2 && at >= 3 && (
+          <text x={E4_COL - 8} y={20} textAnchor="end" fontSize={16} fontWeight={800} fill="#b91c1c" className={POP}>
+            ?
+          </text>
+        )}
+      </svg>
+      <div className="mt-2 grid gap-1.5">
+        {E4_OPTS.map((o, i) => (
+          <Choice key={o} n={i} look={look(i)} disabled={won} onClick={() => choose(i)}>
+            {o}
+          </Choice>
+        ))}
+      </div>
+      {pick !== null && pick !== 1 && at >= 3 && (
+        <Nope key={miss}>
+          {pick === 0
+            ? "বাকি দুইটা পরীক্ষা হারিয়েই গেল। Poster-এর average-টা কীভাবে পেয়েছিলেন?"
+            : "গুণ করলে? সংখ্যাটা ছাদ ফুঁড়ে উঠে যায়। কোনো নম্বরের ধারেকাছেও থাকে না। Poster-এর average-টা কীভাবে পেয়েছিলেন?"}
+        </Nope>
+      )}
+      <Task done={won}>একটা উপায় tap করুন। তিনটা নম্বর দিয়ে সেটা করে দেখানো হবে।</Task>
+    </>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 7¾ · The দালাল's card again: turn the milk knob 4,000 → 6,000 and watch
+//      the big old cow (250, 6, 10). Every pick plays the same truth: the
+//      knob turns, the cow's 6 litres stay 6, and her price rolls from
+//      74,000 to 86,000. The pick is ringed, so a wrong one sees its own
+//      claim fail. (8½'s figure turns the same knob on the small cow.)
+
+const E7_Q = "দালাল যদি card-এ দুধের 4,000 বদলে 6,000 করে দেন, কী বদলাবে?";
+const E7_OPTS = ["একই গাইয়ের দাম।", "গাইয়ের দুধের পরিমাণ।", "কিছুই না।"];
+const E7_COW = COWS[0].v;
+
+export function KnobTurn() {
+  const { pick, at, won, miss, choose, look } = useHaatPick(0, 3, 800, "Card-এর knob-গুলোই model-এর weights।");
+  const turned = at >= 1;
+  const w = turned ? [400, 6000, -5000] : KNOBS;
+  const price = useTween([dot(at >= 3 ? [400, 6000, -5000] : KNOBS, E7_COW)], 700);
+  const ring = (i: number) => (pick === i && at >= 2 ? "ring-2 ring-cat-blue ring-offset-1 ring-offset-surface" : "");
+  return (
+    <>
+      <H_Ask>{E7_Q}</H_Ask>
+      <div className="mx-auto mt-2 grid max-w-xs grid-cols-3 gap-1.5 rounded-xl border-2 border-cat-violet/40 bg-cat-violet/5 px-2 py-1 text-center">
+        {w.map((v, i) => (
+          <div key={KNOB_NAMES[i]} className={`rounded transition-colors duration-500 motion-reduce:transition-none ${i === 1 && turned ? "bg-cat-violet/20" : ""}`}>
+            <div className="text-[0.68rem] leading-tight text-muted">{KNOB_NAMES[i]}</div>
+            <div key={v} className={`${i === 1 ? POP : ""} inline-block font-mono text-sm font-bold ${v < 0 ? "text-danger" : ""}`}>
+              {v > 0 ? `+${num(v)}` : num(v)}
+            </div>
+          </div>
+        ))}
+      </div>
+      <div className={`mx-auto mt-2 flex max-w-xs items-center gap-2 rounded-xl border-2 border-border bg-surface px-2 py-1.5 transition-shadow motion-reduce:transition-none ${ring(2)}`}>
+        <svg viewBox="-36 -44 70 48" aria-hidden="true" className="h-12 w-auto shrink-0">
+          <H_Cow x={0} y={0} old />
+        </svg>
+        <div className="min-w-0 flex-1 text-sm">
+          <div className="font-semibold">{COWS[0].name}</div>
+          <div className="text-xs whitespace-nowrap text-muted">
+            ওজন <span className="font-mono">250</span>, <span className={`rounded px-0.5 ${ring(1)}`}>দুধ <span className="font-mono">6</span></span>, বয়স <span className="font-mono">10</span>
+          </div>
+        </div>
+        <div className={`shrink-0 rounded-lg border border-cat-amber/50 bg-cat-amber/10 px-2 py-1 text-center ${ring(0)}`}>
+          <div className="text-[0.62rem] leading-tight text-muted">দাম</div>
+          <b className={`font-mono text-sm ${at >= 3 ? "text-accent-text" : ""}`}>{num(Math.round(price[0] / 100) * 100)}</b>
+        </div>
+      </div>
+      <div className="mt-2 grid grid-cols-3 gap-1.5 text-sm">
+        {E7_OPTS.map((o, i) => (
+          <Choice key={o} n={i} look={look(i)} disabled={won} onClick={() => choose(i)}>
+            {o}
+          </Choice>
+        ))}
+      </div>
+      {pick !== null && pick !== 0 && at >= 3 && (
+        <Nope key={miss}>
+          {pick === 1
+            ? "গাই তো একই আছে, দুধ সেই 6 লিটারই। বদলালো দামটা। Card-এর সংখ্যাগুলো কি গাইয়ের তথ্য, নাকি দাম কতটা ওঠে-নামে তার হিসাব?"
+            : "দামটা কিন্তু বদলে গেল। Card-এর সংখ্যাগুলো কি গাইয়ের তথ্য, নাকি দাম কতটা ওঠে-নামে তার হিসাব?"}
+        </Nope>
+      )}
+      <Task done={won}>একটা উত্তর tap করুন। দালাল knob-টা ঘোরাবেন। দেখুন কী বদলায়।</Task>
+    </>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 9¼ · The ফিতা's recall, before the উঠান: how long is Shiku's (3, 4)? The
+//      right pick unrolls the tape along the arrow, 9 + 16 = 25, √25 = 5. 7
+//      sends Shiku on his walk, 3 then 4, and lays the tape after him: the
+//      straight tape is shorter. 12 fills the 3-by-4 block: that's cells,
+//      not a length.
+
+const E9_Q = "Shiku-র arrow (3, 4) কত লম্বা?";
+const E9_OPTS = ["5", "7", "12"];
+const E9_WALK: XY[] = [[0, 0], [3, 0], [3, 4]];
+
+export function ShikuTapeCheck() {
+  const { pick, at, won, miss, choose, look } = useHaatPick(0, 3, 650, "বর্গ, যোগ, root: √25 = 5।");
+  const tape = (pick === 0 && at >= 1) || (pick === 1 && at >= 3);
+  const t = useTween([tape ? 1 : 0], 900);
+  const walking = pick === 1 && at < 3;
+  const bot: XY = walking ? E9_WALK[Math.min(at, 2)] : SHIKU;
+  const say =
+    pick === 0 ? (at >= 3 ? "√25 = 5" : at >= 2 ? "3² + 4² = 9 + 16 = 25" : "") : pick === 1 ? (at >= 3 ? "হাঁটা 7, ফিতা 5" : at >= 2 ? "3 + 4 = 7, হাঁটার মাপ" : "") : pick === 2 && at >= 2 ? "3 × 4 = 12টা ঘর" : "";
+  return (
+    <>
+      <H_Ask>{E9_Q}</H_Ask>
+      <div className="mt-1 flex items-center justify-center gap-3">
+        <div className="w-full max-w-[9rem]">
+          <Plane f={FA} ticks={1} label="Shiku-র arrow (3, 4)" className="my-0! max-w-none">
+            {pick === 2 &&
+              at >= 1 &&
+              Array.from({ length: 12 }, (_, i) => (
+                <rect key={i} x={FA.sx(i % 3) + 1} y={FA.sy(Math.floor(i / 3) + 1) + 1} width={FA.u - 2} height={FA.u - 2} rx={2} fill="#fbbf24" opacity={0.45} className={FADE} style={{ transitionDelay: `${i * 40}ms` }} />
+              ))}
+            {pick === 1 && at >= 1 && <Trail f={FA} cells={E9_WALK.slice(0, Math.min(at, 2) + 1)} faint={at >= 3} />}
+            {t[0] > 0.01 && <Tape f={FA} from={[0, 0]} to={[3 * t[0], 4 * t[0]]} />}
+            <Arrow f={FA} from={[0, 0]} to={SHIKU} tone="violet" w={2.4} />
+            <Shiku f={FA} at={bot} />
+          </Plane>
+        </div>
+        <div className="min-h-12 w-32 text-center text-sm">
+          {say && (
+            <span key={say} className={`${POP} inline-block font-bold ${pick === 0 ? "text-accent-text" : "text-danger"}`}>
+              {say}
+            </span>
+          )}
+        </div>
+      </div>
+      <div className="mt-2 grid grid-cols-3 gap-1.5">
+        {E9_OPTS.map((o, i) => (
+          <Choice key={o} n={i} look={look(i)} disabled={won} onClick={() => choose(i)}>
+            <span className="font-mono font-semibold">{o}</span>
+          </Choice>
+        ))}
+      </div>
+      {pick !== null && pick !== 0 && at >= 3 && (
+        <Nope key={miss}>
+          {pick === 1
+            ? "7 হলো Shiku-র হাঁটার মাপ। আগে 3 ঘর, পরে 4 ঘর। ফিতা যায় সোজা। বর্গ, যোগ, root।"
+            : "12 হলো এই চৌকোটায় কয়টা ঘর, length না। বর্গ, যোগ, root।"}
+        </Nope>
+      )}
+      <Task done={won}>একটা মাপ tap করুন। Shiku-র কাগজে সেটা মেপে দেখানো হবে।</Task>
+    </>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 12¾ · The last review: (2, −1, 4) · (3, 5, 1). The right pick pairs slot
+//       by slot, 6, −5, 4, and adds them, 5. 15 lets the middle minus fall
+//       off and adds 6 + 5 + 4; (6, −5, 4) multiplies and stops, the sum
+//       never comes.
+
+const E12_Q = "(2, −1, 4) · (3, 5, 1) = ?";
+const E12_OPTS = ["5", "15", "(6, −5, 4)"];
+const E12_A = [2, -1, 4];
+const E12_B = [3, 5, 1];
+const E12_X = [56, 116, 176];
+
+export function MinusStays() {
+  const { pick, at, won, miss, choose, look } = useHaatPick(0, 5, 600);
+  const drop = pick === 1 && at >= 3;
+  return (
+    <>
+      <H_Ask>
+        <span className="font-mono">{E12_Q}</span>
+      </H_Ask>
+      <svg viewBox="0 0 300 112" role="img" aria-label="(2, −1, 4) আর (3, 5, 1): ঘরে ঘরে গুণ 6, −5, 4, যোগ 5" className="mx-auto mt-2 block h-auto w-full max-w-[18rem]">
+        <rect x={1} y={1} width={298} height={110} rx={10} fill="white" stroke="#cbd5e1" />
+        {pick !== null &&
+          E12_X.map((x, i) => {
+            if (at <= i) return null;
+            const p = E12_A[i] * E12_B[i];
+            return (
+              <g key={`l${i}`}>
+                <Draw d={`M${x} 34V74`} strokeWidth={2.2} className="stroke-[#2563eb]" />
+                {p < 0 && (
+                  <g style={{ transform: `translateY(${drop ? 30 : 0}px)`, opacity: drop ? 0 : 1 }} className={H_MOVE}>
+                    <text x={x + 7} y={58} fontSize={12} fontWeight={800} fontFamily="ui-monospace, monospace" fill="#dc2626">
+                      −
+                    </text>
+                  </g>
+                )}
+                <text x={x + 15} y={58} fontSize={12} fontWeight={700} fontFamily="ui-monospace, monospace" fill="#1d4ed8" className={FADE}>
+                  {Math.abs(p)}
+                </text>
+              </g>
+            );
+          })}
+        {E12_X.map((x, i) => (
+          <X2_Chip key={`a${i}`} x={x} y={24} text={num(E12_A[i])} tone="#b45309" />
+        ))}
+        {E12_X.map((x, i) => (
+          <X2_Chip key={`b${i}`} x={x} y={84} text={num(E12_B[i])} tone="#1d4ed8" />
+        ))}
+        {pick !== null && at >= 4 && (
+          <g key={pick} className={FADE}>
+            <text x={254} y={46} textAnchor="middle" fontSize={10.5} fontFamily="ui-monospace, monospace" fill={pick === 0 ? H_INK : "#b91c1c"}>
+              {pick === 0 ? "6 − 5 + 4" : pick === 1 ? "6 + 5 + 4" : "(6, −5, 4)"}
+            </text>
+          </g>
+        )}
+        {pick !== null && at >= 5 && (
+          <text key={`r${pick}`} x={254} y={72} textAnchor="middle" fontSize={18} fontWeight={800} fontFamily="ui-monospace, monospace" fill={pick === 0 ? "#15803d" : "#b91c1c"} className={POP}>
+            {pick === 0 ? "5" : pick === 1 ? "15" : "?"}
+          </text>
+        )}
+      </svg>
+      <div className="mt-2 grid grid-cols-[1fr_1fr_1.7fr] gap-1.5">
+        {E12_OPTS.map((o, i) => (
+          <Choice key={o} n={i} look={look(i)} disabled={won} onClick={() => choose(i)}>
+            <span className="font-mono font-semibold whitespace-nowrap">{o}</span>
+          </Choice>
+        ))}
+      </div>
+      {pick !== null && pick !== 0 && at >= 5 && (
+        <Nope key={miss}>
+          {pick === 1
+            ? "মাঝের minus-টা পড়ে গেল। ঘরে ঘরে গুণ, তারপর সব যোগ। দ্বিতীয় ঘরের minus-টা যেন হারিয়ে না যায়।"
+            : "গুণ করে থেমে গেলেন, যোগটা বাকি। ঘরে ঘরে গুণ, তারপর সব যোগ।"}
+        </Nope>
+      )}
+      <Task done={won}>একটা উত্তর tap করুন। box-টা চলবে ঘরে ঘরে।</Task>
+    </>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 0½ · A figure for the door's explanation, no task: the same division in
+//      gram. 10 kg ÷ 12 kg with the kg struck, 0.83; then 10,000 g ÷
+//      12,000 g, the g struck, the same 0.83.
+
+const F0_SAY = [
+  "ওপরে kg, নিচেও kg।",
+  "ভাগ করলে kg কেটে যায়। থাকে শুধু 0.83।",
+  "ওজন gram-এ লিখলেও একই হতো।",
+  "gram কেটে গিয়ে সেই 0.83। twin এক চুলও নড়ে না।",
+];
+
+function F0_Line({ top, bot, unit, cut, out }: { top: string; bot: string; unit: string; cut: boolean; out: boolean }) {
+  const u = <span className={`transition-colors duration-500 motion-reduce:transition-none ${cut ? "text-danger line-through decoration-2" : ""}`}>{unit}</span>;
+  return (
+    <div className="flex items-baseline justify-center gap-1.5 font-mono text-[0.95rem]">
+      <span>
+        {top} {u}
+      </span>
+      <span className="text-muted">÷</span>
+      <span>
+        {bot} {u}
+      </span>
+      {out && <b className={`${POP} inline-block text-accent-text`}>= 0.83</b>}
+    </div>
+  );
+}
+
+export function GramToo() {
+  const s = useScene(3, [600, 2000, 1800, 2400]);
+  const k = s.k;
+  return (
+    <Scene scene={s} caption={say(F0_SAY, k)}>
+      <div className="mx-auto w-full max-w-xs space-y-2 rounded-xl border border-border bg-surface px-3 py-2.5">
+        <F0_Line top="10" bot="12" unit="kg" cut={k >= 1} out={k >= 1} />
+        <div className={`min-h-[1.5rem] ${k >= 2 ? "" : "invisible"}`}>
+          {k >= 2 && (
+            <div className={FADE}>
+              <F0_Line top="10,000" bot="12,000" unit="g" cut={k >= 3} out={k >= 3} />
+            </div>
+          )}
+        </div>
+      </div>
+    </Scene>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 5½ · A figure for screen 5's explanation, no task: "প্রত্যেকটা থেকে ⅓".
+//      Each exam bar is cut in three; one third of each slides over and
+//      stacks, the same height the whole stack squeezed to a third gave.
+//      Last, a "?" for weights that aren't equal: the next screen's job.
+
+const F5_SAY = [
+  "তিনটা পরীক্ষা, দাম সমান।",
+  "প্রত্যেকটাকে তিন ভাগ করি।",
+  "প্রত্যেকটা থেকে ⅓ করে নিলাম। সব যোগ করে 1/3 দিয়ে stretch-এর সমান।",
+  "দাম সমান না হলে কী হয়?",
+];
+
+export function ThirdEach() {
+  const s = useScene(3, [600, 1600, 2400, 1800]);
+  const k = s.k;
+  return (
+    <Scene scene={s} caption={say(F5_SAY, k)}>
+      <svg viewBox="0 0 300 112" role="img" aria-label="তিনটা পরীক্ষার bar, প্রত্যেকটা থেকে তিন ভাগের এক ভাগ নিয়ে জোড়া" className="mx-auto block h-auto w-full max-w-[17rem]">
+        <rect x={1} y={1} width={298} height={110} rx={10} fill="white" stroke="#cbd5e1" />
+        <path d={`M20 ${E4_BASE}H280`} stroke="#94a3b8" strokeWidth={1} />
+        {E4_BX.map((x, i) => {
+          const h = E4_H[i];
+          const third = h / 3;
+          const below = E4_H.slice(0, i).reduce((a, b) => a + b / 3, 0);
+          const moved = k >= 2;
+          return (
+            <g key={i}>
+              {/* the two thirds that stay */}
+              <rect x={x} y={E4_BASE - h + third} width={E4_W} height={h - third} fill={["#fbbf24", "#fb7185", "#a78bfa"][i]} opacity={moved ? 0.35 : 1} className="transition-opacity duration-500 motion-reduce:transition-none" />
+              {k >= 1 && (
+                <g className={FADE}>
+                  <path d={`M${x - 2} ${E4_BASE - third}h${E4_W + 4}M${x - 2} ${E4_BASE - 2 * third}h${E4_W + 4}`} stroke="white" strokeWidth={1.4} />
+                </g>
+              )}
+              {/* the top third, which slides over */}
+              <g style={{ transform: moved ? `translate(${E4_COL - x}px, ${h - third - below}px)` : "none", transitionDelay: `${i * 150}ms` }} className={H_MOVE}>
+                <rect x={x} y={E4_BASE - h} width={E4_W} height={third} fill={["#fbbf24", "#fb7185", "#a78bfa"][i]} stroke="white" strokeWidth={1} />
+              </g>
+            </g>
+          );
+        })}
+        {k >= 2 && (
+          <text x={E4_COL + E4_W / 2} y={E4_BASE - E4_SUM / 3 - 6} textAnchor="middle" fontSize={10} fontWeight={700} fontFamily="ui-monospace, monospace" fill="#15803d" className={FADE}>
+            ⅓ + ⅓ + ⅓
+          </text>
+        )}
+        {k >= 3 && (
+          <text x={E4_COL + E4_W / 2} y={30} textAnchor="middle" fontSize={20} fontWeight={800} fill="#b45309" className={POP}>
+            ?
+          </text>
+        )}
+      </svg>
+    </Scene>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 8¾ · A figure for the neuron side quest, no task: the box w · x, a number
+//      b joins it, the result drawn is a straight line, and a bent one waits
+//      behind a "?": how it bends is a later story.
+
+const F8_SAY = [
+  "neuron-কে একটা box এর মত কল্পনা করুন: w · x।",
+  "তার সাথে একটা সংখ্যা যোগ: w · x + b।",
+  "কিন্তু এটা একটা straight line।",
+  "box এর মাঝে এটাকে বাঁকাতে হবে। কিভাবে, সেটা অনেক পরের গল্প।",
+];
+
+export function NeuronLine() {
+  const s = useScene(3, [600, 1600, 1800, 2400]);
+  const k = s.k;
+  return (
+    <Scene scene={s} caption={say(F8_SAY, k)}>
+      <svg viewBox="0 0 300 100" role="img" aria-label="neuron: w · x + b, একটা straight line, বাঁকানোর প্রশ্ন" className="mx-auto block h-auto w-full max-w-[17rem]">
+        <rect x={1} y={1} width={298} height={98} rx={10} fill="white" stroke="#cbd5e1" />
+        <rect x={16} y={34} width={112} height={32} rx={8} fill="#fef3c7" stroke="#d97706" strokeWidth={1.4} />
+        <g style={{ transform: `translateX(${k >= 1 ? -24 : 0}px)` }} className={H_MOVE}>
+          <text x={72} y={55} textAnchor="middle" fontSize={13} fontWeight={800} fontFamily="ui-monospace, monospace" fill={H_INK}>
+            w · x
+          </text>
+        </g>
+        {k >= 1 && (
+          <text x={100} y={55} textAnchor="middle" fontSize={13} fontWeight={800} fontFamily="ui-monospace, monospace" fill="#7c3aed" className={POP}>
+            + b
+          </text>
+        )}
+        {/* a small graph */}
+        <path d="M168 84H284M172 88V14" stroke="#94a3b8" strokeWidth={1} />
+        {k >= 2 && <Draw d="M176 78L280 22" strokeWidth={2.4} className="stroke-[#2563eb]" />}
+        {k >= 3 && (
+          <g className={FADE}>
+            <path d="M176 76C212 76 222 30 246 26S272 24 280 24" fill="none" stroke="#7c3aed" strokeWidth={1.8} strokeDasharray="4 3" />
+            <text x={216} y={34} textAnchor="middle" fontSize={18} fontWeight={800} fill="#7c3aed">
+              ?
+            </text>
+          </g>
+        )}
+        {k >= 2 && <path d="M130 50h26m-5 -4l5 4l-5 4" fill="none" stroke="#475569" strokeWidth={1.4} className={FADE} />}
+      </svg>
+    </Scene>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 9½ · A figure for the ফিতা recall's explanation, no task: the walk and the
+//      tape side by side. Shiku's walk, 3 then 4, is 7; the tape, straight,
+//      is 5; then the box beside them, with a "?": what will it do here?
+
+const F9_SAY = [
+  "Shiku-র arrow (3, 4)।",
+  "7 হলো Shiku-র হাঁটার মাপ: আগে 3, পরে 4।",
+  "length মাপে ফিতা, সোজা: 5।",
+  "length মাপা তো ফিতার কাজ। তাহলে box এখানে কী করবে?",
+];
+
+export function WalkOrTape() {
+  const s = useScene(3, [600, 1800, 1800, 2400]);
+  const k = s.k;
+  return (
+    <Scene scene={s} caption={say(F9_SAY, k)}>
+      <div className="flex items-center justify-center gap-3">
+        <div className="w-full max-w-[8rem]">
+          <Plane f={FA} ticks={1} label="Shiku-র হাঁটা 7, ফিতা 5" className="my-0! max-w-none">
+            {k >= 1 && <Trail f={FA} cells={E9_WALK} faint={k >= 2} />}
+            {k >= 2 && <Tape f={FA} from={[0, 0]} to={SHIKU} />}
+            <Arrow f={FA} from={[0, 0]} to={SHIKU} tone="violet" w={2.4} />
+            <Shiku f={FA} at={SHIKU} />
+          </Plane>
+        </div>
+        <div className="w-28 space-y-1 text-center text-sm">
+          {k >= 1 && <div className={`${FADE} text-muted`}>হাঁটা 7</div>}
+          {k >= 2 && <div className={`${FADE} font-bold text-accent-text`}>ফিতা 5</div>}
+          {k >= 3 && <div className={`${POP} mx-auto inline-block rounded-lg border-2 border-cat-amber/50 bg-cat-amber/10 px-3 py-0.5 font-bold`}>box ?</div>}
+        </div>
+      </div>
+    </Scene>
+  );
+}
+
+// ---------------------------------------------------------------------------
 // States for `npm run shot` (keys are the useSeed names).
 
 export const fixtures: Fixtures = {
@@ -2040,4 +2713,15 @@ export const fixtures: Fixtures = {
   TwoQuestions: { van: { k: 2 }, done: {} },
   JilapiPaid: { plate: { k: 2 }, done: {} },
   VanInMud: { shout: { k: 3 }, done: {} },
+  // the review questions rebuilt as exercises: `pick` is the reader's tap, shown at the end of its play
+  ScaleSteps: { start: {}, wrongKg: { pick: 0 }, wrongTimes: { pick: 2 }, right: { pick: 1 } },
+  TinyBill: { start: {}, added: { pick: 0 }, list: { pick: 2 }, right: { pick: 1 } },
+  EqualShare: { start: {}, biggest: { pick: 0 }, times: { pick: 2 }, right: { pick: 1 } },
+  KnobTurn: { start: {}, milk: { pick: 1 }, nothing: { pick: 2 }, right: { pick: 0 } },
+  ShikuTapeCheck: { start: {}, walk: { pick: 1 }, cells: { pick: 2 }, right: { pick: 0 } },
+  MinusStays: { start: {}, dropped: { pick: 1 }, list: { pick: 2 }, right: { pick: 0 } },
+  GramToo: { start: { k: 0 }, kg: { k: 1 }, done: {} },
+  ThirdEach: { cut: { k: 1 }, moved: { k: 2 }, done: {} },
+  NeuronLine: { plus: { k: 1 }, done: {} },
+  WalkOrTape: { walk: { k: 1 }, done: {} },
 };

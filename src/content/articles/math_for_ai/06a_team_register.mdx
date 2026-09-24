@@ -1,0 +1,290 @@
+export const metadata = {
+  title: "Math for AI 6.1 — The team register, a table that is one thing",
+  description: "Club এর app জানতে চায় register এর shape কত. চারজন চার রকম উত্তর দিলো. কোনটা নেবে app? Slip গাদা করে table বানান, row আর column চিনুন, আর দেখুন matrix এ কেন শুধু number থাকে.",
+  type: "article",
+};
+
+{/* Told as a Brilliant-style journey, like 1.1 and 2.3: screen 1 seals the
+    reader's bet on the register's shape, and the bet is not settled until
+    the last screen. 10 steps. The screens live in
+    components/interactive/register-journey.tsx. The plan is block 6.1 of
+    06_journey_specs.md; one change from it: the trials had 8 students, not
+    30, so the whole register fits on a phone (8 × 3, and Nasib's 3 × 8).
+
+    The first of the "Matrices" journeys (Article 6). The ending links to 6.2, 06b_road_alpana. */}
+
+import { Journey, Step, Then, SideQuest } from "@/components/journey/journey";
+import { ShapeBet, LooseCards, RowOrColumn, CallTheCell, CountTheShape, YesNoColumn, FlipSideways, YourTables, TryIsItAMatrix } from "@/components/interactive/register-journey";
+import { TeachersRoom, CardsSpill, SirCalls, SomsColumn, NasibsBoard, ThreePapers, EightsNote, BellRings, ArtSirRoad } from "@/components/interactive/register-journey";
+import { TwoFaces, SmallVBigX, HeightColumn, RowThenColumn, ShapeZoom, XAndY, DiagonalFlip, SymmetricFlip, ArrayNoMeaning, BetSettled } from "@/components/interactive/register-journey";
+
+<Journey title="Matrix · 6.1">
+
+<Step>
+
+নতুন স্কুলে ফাহিমের প্রথম পহেলা বৈশাখ. আর তিন দিন বাকি. এই স্কুলে প্রতি বছর দুইটা জিনিস হয়. ক্লাস এইটের সাথে দড়ি টানাটানি. আর গেটের সামনের রাস্তায় আলপনা.
+
+টিফিনের আগের period. টিচার্স কমনরুম. সিলিং ফ্যান ঘুরছে. বাতাস নাই.
+
+খেলার স্যার ঘরে ঢুকলেন. হাতে নীল মলাটের একটা register. গলায় বাঁশি. বাঁশিটা তিনি কোনোদিন বাজান না. Register টা টেবিলে রেখে বললেন, ট্রায়ালে আটজন আসছিল. সবার height, weight, এক মিনিটে কয়টা বুকডন — লেখা আছে. লিস্ট দিয়া দাও. যন্ত্র বাকিটা বুঝবো.
+
+যন্ত্র মানে computer club এর ল্যাপটপ. সামিন ল্যাপটপ খুললো. App এর নাম team-picker. খুলতেই প্রথম প্রশ্ন: shape = ?
+
+নাসিব বললো, 3 × 8.
+
+সোম বললো, 8 × 4. হ্যাঁ/না সহ.
+
+সামিন কিছু বললো না. স্ক্রিনের দিকে তাকিয়ে থাকলো. তারপর বললো, 8 × 3.
+
+করিম বললো, যেটাই দাও. App বুঝে নিবে.
+
+স্কুলের ছেলেরা একমত হয় শুধু টিফিনের ঘণ্টার ব্যাপারে.
+
+<TeachersRoom story />
+
+<ShapeBet />
+
+<Then>
+
+বাজি ধরা হয়ে গেলো. টিফিনের ঘণ্টা পড়তে বিশ মিনিট. তার আগে জানতে হবে দুইটা জিনিস. shape জিনিসটা কী? আর app নেবে কোনটা?
+
+একটা কথা মনে করিয়ে দেই. 2.1 আর 2.2 মনে আছে তো? vector এর দুইটা চেহারা. একটা list, একটা arrow. আজ দেখা হবে number এর একটা table এর সাথে. তারও দুইটা চেহারা. এই journey প্রথমটার.
+
+<TwoFaces />
+
+</Then>
+
+</Step>
+
+<Step>
+
+সামিন register খুললো. খাতা না আসলে. আটটা কাগজের slip, একটা clip দিয়ে আটকানো. প্রত্যেক slip এ একজনের নাম আর তিনটা number. Clip খুলতেই slip গুলো টেবিলে ছড়িয়ে গেলো.
+
+করিম ঝুঁকে এলো.
+
+কার weight সবচেয়ে বেশি?
+
+দেখতেছি.
+
+দড়ি টানাটানিতে ওজনটাই আসল. বাকি সব ফালতু.
+
+<CardsSpill story />
+
+প্রত্যেকটা slip একেকটা vector: একজন মানুষ, তিনটা number. কিন্তু সবার weight একসাথে দেখতে হলে?
+
+<LooseCards />
+
+<Then>
+
+Slip গুলো রাখলাম একটার নিচে একটা. ব্যাপারটা বদলে গেলো. আটটা আলাদা vector আর থাকলো না. হয়ে গেলো একটা জিনিস. number এর একটা চারকোনা table, row আর column এ সাজানো. এর নাম **matrix**.
+
+Vector এর নাম লিখতাম ছোট হাতের অক্ষরে. যেমন v. Matrix এর নাম? বড় হাতের অক্ষরে. X, A, G. দেখেই বোঝা যায় কোনটা কী.
+
+<SmallVBigX />
+
+</Then>
+
+</Step>
+
+<Step>
+
+Table টা পড়া যায় দুই দিকে. পাশাপাশি. আর উপর-নিচে. 2.1 এ বলা হয়েছিল, একদিন row আর column আলাদা আচরণ করবে. সেই দিনটা আজকে.
+
+<RowOrColumn />
+
+<Then>
+
+একটা **row** মানে একটা জিনিস. এখানে একজন মানুষ. অন্য data তে? একটা বাসা, একটা email, একজন রোগী. আর একটা **column** মানে একটা feature. সবার জন্য মাপা.
+
+3.7 এ উচ্চতার spread মেপেছিলেন, মনে আছে? Standard deviation, 10 cm. ওটা ছিল এরকমই একটা table এর একটা column. table টা তখন দেখানো হয়নি. এই সেই table.
+
+<HeightColumn />
+
+</Then>
+
+</Step>
+
+<Step>
+
+খেলার স্যার চশমা নামালেন. Table টার দিকে তাকিয়ে থাকলেন অনেকক্ষণ. তারপর নিচু গলায় বললেন, row 2, column 3. ওইটা কত?
+
+নাসিব আঙুল রাখলো. সামিনও রাখলো. দুইজনের আঙুল দুই জায়গায়.
+
+খেলার স্যার দুইটা আঙুলের দিকেই তাকালেন. কিছু বললেন না.
+
+<SirCalls story />
+
+<CallTheCell />
+
+<Then>
+
+আগে row, তারপর column. সবসময়. নাসিব কী করেছিল? আগে column গুনেছিল. তাই পৌঁছে গেছে রিনার weight এ. 41.
+
+মনে রাখার একটা সহজ উপায় আছে. Alphabet এ R আসে C এর আগে. **R**ow আগে, **C**olumn পরে. তাই বইয়ে প্রতিটা ঘরের নাম দুইটা ছোট number দিয়ে. $a_{23}$ মানে row 2, column 3. Table এর নাম A হলে ঘরের নাম ছোট a.
+
+<RowThenColumn />
+
+</Then>
+
+</Step>
+
+<Step>
+
+App আবার জিজ্ঞেস করছে, shape কত? এবার আপনি বলুন. Table এর উপরে একটা frame বসান. ঠিক সবগুলো number যেন ঢেকে যায়.
+
+<CountTheShape />
+
+<Then>
+
+আটজন মানুষ, তিনটা feature. **8 × 3**. Shape বলার নিয়মও ওই একটাই. আগে row, পরে column. 8 × 3 মানে লম্বা আর সরু. 3 × 8 হলে? চওড়া আর বেঁটে.
+
+Data যখন table হয়, shape সবসময় দাঁড়ায় এভাবে. কয়টা জিনিস × কয়টা feature. 10,000 টা email. প্রত্যেকটার 300 টা feature. matrix টা তাহলে 10000 × 300. Code এ এটাকে বলে (n_samples, n_features).
+
+কখনো program বলবে shape mismatch. মানে দুইটা চারকোনা মিলছে না. কারণ? দশবারে নয়বার একটাই. কোথাও row আর column উল্টে গেছে.
+
+<ShapeZoom />
+
+</Then>
+
+</Step>
+
+<Step>
+
+সোম এতক্ষণ চুপ ছিল. এবার register এর শেষ পাতাটা উল্টালো. ট্রায়ালের দিন খেলার স্যার প্রত্যেকের নামের পাশে লিখে রেখেছিলেন, দলে নেওয়া হবে কি-না. না. হ্যাঁ. না. হ্যাঁ. হ্যাঁ.
+
+সোম বললো, এই column টাও দিতে হবে.
+
+কেন?
+
+App শিখবে কাকে নেওয়া হয়.
+
+<SomsColumn story />
+
+<YesNoColumn />
+
+<Then>
+
+Matrix এ থাকে শুধু number. হ্যাঁ কি কোনো number? না. তাই app ওটার average করতে পারে না. সমাধান 1.2 এর মতই. সেখানে প্রতিটা হ্যাঁ/না ছিল একটা bit. হ্যাঁ মানে 1, না মানে 0.
+
+তারপরও column টা আলাদা থাকে. কারণ, ওটার কাজ আলাদা. বাকি তিনটা column দেখে app. এদের একসাথে নাম **X**. আর এই শেষ column টা app কে বের করতে হবে. এর নাম **y**. App X দেখে শেখে, y কীভাবে আসে.
+
+<XAndY />
+
+</Then>
+
+</Step>
+
+<Step>
+
+নাসিব এখনো নিজের উত্তর ছাড়েনি. সে উঠে গিয়ে দেয়ালের notice board এর সামনে দাঁড়ালো. ক্লাস রুটিন. পরীক্ষার seat plan. সবখানে নাম পাশাপাশি, উপরে, এক লাইনে.
+
+নাসিব বললো, স্কুলের সব লিস্ট এইরকম. আমি ওইভাবেই গুনেছি. 3 × 8.
+
+<NasibsBoard story />
+
+<FlipSideways />
+
+<Then>
+
+নাসিবের table এ একটা number ও ভুল নাই. শুধু কাত করা. প্রথম row টা হয়ে গেছে প্রথম column. প্রথম column টা প্রথম row. কোনাকুনি diagonal বরাবর উল্টে দিলে এটা হয়. এর নাম **transpose**. লেখা হয় উপরে ছোট একটা T দিয়ে: $X^T$. Shape ও উল্টে যায়. 8 × 3 এর transpose 3 × 8. যেকোনো 2 × 3 এর transpose 3 × 2.
+
+কিন্তু app এর কাছে row মানে মানুষ. কাত করা table দিলে? ও ধরে নেয় তিনজন মানুষ. প্রত্যেকের আটটা feature.
+
+<DiagonalFlip />
+
+<SideQuest title="Transpose আবার কোথায় দেখা যাবে">
+
+**$u^T v$.** Paper এ dot product প্রায়ই এভাবে লেখা হয়. 4.8 এ বলেছিলাম, $^T$ এর মানে Module 2 তে আসবে. এই সেই মানে. u কে কাত করে শুইয়ে দেওয়া. তারপর v এর সাথে গুণ. গুণের নিয়মটা Article 7 এ. উত্তরটা ঠিক 4.x এর box: $u_1 v_1 + u_2 v_2 + \dots$
+
+**Square আর symmetric.** Row আর column এর সংখ্যা সমান হলে matrix টা square. আর কোনো square matrix কাত করলেও যদি একই থাকে? মানে নিজের transpose এর সমান? তাহলে ওটা symmetric. সামনে দেখবেন, অনেক কাজের matrix এই রকম.
+
+<SymmetricFlip />
+
+**Code এ X @ W.** বইয়ে vector থাকে খাড়া. তাই লেখা হয় W x. কিন্তু data table এ একজন মানুষ মানে একটা শোয়ানো row. তাই code এ দেখবেন উল্টা. X @ W. একই কাজ, দুই পাশই কাত করা.
+
+</SideQuest>
+
+</Then>
+
+</Step>
+
+<Step>
+
+## এবার আপনার পালা
+
+ঘণ্টা পড়তে আর দশ মিনিট. দরজায় ক্লাস সেভেনের আরেকজন এসে দাঁড়ালো. হাতে তিনটা কাগজ. বৈশাখী মেলার stall এর হিসাব. অঙ্ক স্যারের দেওয়া একটা খালি 4 × 7 ছক. আর কাবাডি team.
+
+<ThreePapers story />
+
+<YourTables />
+
+</Step>
+
+<Step>
+
+## Try it
+
+ক্লাস এইটও নিজেদের team এর register পাঠিয়েছে. সাথে একটা চিরকুট: আমাদেরটাও app এ দিও. সামিন কাগজটা একবার দেখলো. তারপর মাথা নাড়লো.
+
+<EightsNote story />
+
+<TryIsItAMatrix />
+
+<Then>
+
+সব table matrix না. নাম, হ্যাঁ/না, তারিখ, এসব মিশে থাকলে? ওটা শুধু table. আগে সবকিছু number বানাতে হয়. কীভাবে বানাবেন? ওটা আসলে একটা সিদ্ধান্ত. নিছক নিয়ম না.
+
+উল্টাটাও সত্য. Code এ number এর যেকোনো দুই দিকের সাজানো, computer গুণ করে দেবে. মানে থাকুক বা না থাকুক. Row আর column এর মানে ঠিক করে দিলে? তবেই সাজানোটা matrix.
+
+<ArrayNoMeaning />
+
+</Then>
+
+</Step>
+
+<Step>
+
+## শেষ! App নিলো 8 × 3, সাথে y
+
+ঘণ্টা পড়লো. App কয়েক সেকেন্ড ঘুরলো. তারপর আটজনের পাশে বসিয়ে দিলো নতুন হ্যাঁ আর না. করিম লিস্ট টা হাতে নিলো. এক নম্বরে তার নিজের নাম. সে লিস্ট টা ভাঁজ করে বুক পকেটে রাখলো.
+
+<BellRings story />
+
+এবার বাজির হিসাব. সামিন জিতেছে. 8 × 3. সোম অর্ধেক ঠিক. হ্যাঁ/না column লাগে, কিন্তু আলাদা করে, y হয়ে. নাসিবের table ঠিকই ছিল. শুধু কাত করা. আর করিমের app বুঝে নিবে? app কিছুই বুঝে নেয় না. যেভাবে দেবেন, সেভাবেই পড়বে.
+
+<BetSettled />
+
+এক line এ: **Row মানে জিনিস, column মানে feature. আর matrix এ থাকে শুধু number.**
+
+<Table
+  head={["যেটা দেখবেন", "যেভাবে বলবেন"]}
+  rows={[
+    ["A, X (বড় হাতের)", "একটা matrix; v, u (ছোট হাতের) হলো vector"],
+    ["m × n, যেমন 8 × 3", "m টা row, n টা column; আগে row"],
+    ["aᵢⱼ, যেমন a₂₃", "row i, column j এর ঘর"],
+    ["X আর y", "app যা দেখে, আর app যা বের করতে চায়"],
+    ["Aᵀ", "A কাত করা: row হয়ে যায় column"],
+  ]}
+/>
+
+ছুটির পর ফাহিম গেটের বাইরে এসে দাঁড়ালো. রোদ পড়ে এসেছে. আর্ট স্যার রাস্তায় উবু হয়ে বসে chalk দিয়ে ঘর কাটছেন. সমান সমান ঘর. পাশে রিনা, হাতে ছোট একটা graph paper. তাতে একটা মাছ আর একটা পদ্ম.
+
+ফাহিম জিজ্ঞেস করলো, স্যার, এগুলো কী?
+
+আর্ট স্যার মুখ না তুলেই বললেন, এই ঘর দিয়াই পুরা আলপনা তুইল্যা নিমু.
+
+<ArtSirRoad story />
+
+ঘরগুলো তো একটা table এর মতই দেখতে. Table আবার কিছু তুলে নেয় কীভাবে? Matrix এর দ্বিতীয় চেহারা ওটাই. শুধু জমা রাখা না. কিছু একটা করা.
+
+<LessonLink
+  href="/dashboard/articles/math_for_ai/06b_road_alpana"
+  eyebrow="পরের lesson"
+  title="রাস্তার আলপনা. সব point একসাথে সরে"
+>
+  আর্ট স্যারের নিয়মে চারটা উপায়ের একটা কখনো হয় না. কোনটা?
+</LessonLink>
+
+</Step>
+
+</Journey>

@@ -4,47 +4,50 @@ export const metadata = {
   type: "article",
 };
 
-{/* Told as a Brilliant-style journey, like 1.1 and 2.3: screen 1 seals the
+{/* Told as a Brilliant-style journey, like 1.1 and 2.3: screen 2 seals the
     reader's bet on Majhi chacha's claim about rope length, and the bet is not
-    settled until LongRope, five screens later, from the reader's own slider.
-    Each screen opens by reacting to the last; the explanation sits in <Then>
-    and shows only once the task is done. The screens live in
-    components/interactive/towrope-journey.tsx. The sixth of eight "Dot
-    product" journeys (Article 4); the plan is in 04_journey_specs.md. */}
+    settled until LongRope, three screens later, from the reader's own slider.
+    8 steps. Each screen opens by reacting to the last; the explanation sits in
+    <Then> and shows only once the task is done, one figure each. The screens
+    live in components/interactive/towrope-journey.tsx.
 
-import { Journey, Step, Check, Then } from "@/components/journey/journey";
-import { RopeBet, SplitPull, FindFoot, ShadowRecipe, SidePull, LongRope, KeepShadows, YourShadow } from "@/components/interactive/towrope-journey";
-import { GunTana, SlantRope, ShadowDrop, EastEasy, RiverBend, SevenThirteen, WhySeven, RecipeAloud, AnyRiver, RudderMan, RudderHolds, ZeroNotMinus, RopeFan, SagRope, FahimIdea, OnePoint, FewNumbers, GhatRiddle, DabTreat, LibraryTwo } from "@/components/interactive/towrope-journey";
+    Screen 1 is the recall at the door: 4.5's cosine, asked on a picture rather
+    than as a sum, and on unit arrows so the shadow's length *is* the cosine —
+    the tool the rest of the journey runs on.
+
+    The river here is always straight, so every shadow can be read straight off
+    a slot — no projection sum is needed. "East is easy" (EastEasy) therefore
+    sits on the last screen, where the words about the bend are, instead of in
+    the middle: it is the bridge, not a lesson of its own. The bent river, and
+    the sum that goes with it, is its own journey: 04e2_bent_river. The sixth
+    of the "Dot product" journeys (Article 4); the plan is in
+    04_journey_specs.md. */}
+
+import { Journey, Step, Then, SideQuest } from "@/components/journey/journey";
+import { CosRecall, RopeBet, SplitPull, SidePull, LongRope, PickRope, MamiPick } from "@/components/interactive/towrope-journey";
+import { RaateKhata, GunTana, SlantRope, ShadowDrop, RudderMan, RudderHolds, MamiSays, ZeroNotMinus, RopeFan, SagRope, HalfWaste, NoonBend, EastEasy, GunHisab } from "@/components/interactive/towrope-journey";
 
 <Journey title="Dot product · 4.6">
 
 <Step>
 
-Before we board the boat, let's recall last night's cosine.
+কালরাতে cosine এর কথা হচ্ছিল. খাওয়ার পর ফাহিম খাতা নিয়ে বসলো. তিনটা জোড়া আঁকলো. তিনটা তিন রকম angle এ, কিন্তু প্রতিটা arrow ঠিক এক ঘর লম্বা.
 
-<Check
-  question="A cosine of 0.5 means the angle between the two arrows is what?"
-  options={[
-    "60°",
-    "30°",
-    "50°",
-  ]}
-  answer={0}
-  hint="0.9 doesn't mean a 90% match, remember? Cosine speaks in angles."
-  praise="A cosine of 0.5 means a 60° angle."
->
+এক ঘর লম্বা রাখাটা ফাহিম ইচ্ছা করেই করেছে. 4.3 এ দেখেছিলেন, ছায়ার length হলো arrow এর length গুণ cos θ. Arrow এক ঘর হলে ছায়াটাই তাই cos θ.
 
-0.5 isn't a 50% match; it's a 60° angle. Cosine always talks about an angle: 1 means the same direction, 0 means a right angle.
+<RaateKhata story />
 
-</Check>
+<CosRecall />
 
 </Step>
 
 <Step>
 
-Next morning, the rest of the haat's goods — sacks of paddy and new pots and pans — were loaded onto the boat. The river's current runs the wrong way, and there's no wind, so the sail is no use. Majhi chacha and his brother stepped onto the bank, tied a long rope to the boat's mast, and started walking along the bank, pulling. This is called towing.
+সকালবেলা হাটের বাকি মালপত্র নৌকায় তোলা হলো. ধানের বস্তা, নতুন হাঁড়িপাতিল. নদীর স্রোত উল্টা দিকে, বাতাসও নাই. পাল খাটিয়ে কোনো লাভ নাই.
 
-Fahim saw the rope was long, some twenty arm-lengths. He asked, and Majhi chacha said, “The longer the rope, the less of the pull is wasted.” They must reach the ghat before evening; there's no time to waste pull.
+মাঝি চাচা আর তার ভাই পাড়ে নেমে গেলেন. নৌকার মাস্তুলের মাথায় বাঁধা লম্বা একটা দড়ি. দড়ি কাঁধে নিয়ে দুইজন পাড় ধরে হাঁটা শুরু করলেন. এটাকেই বলে গুন টানা.
+
+ফাহিম দেখলো দড়িটা বেশ লম্বা, হাত বিশেক হবে. জিজ্ঞেস করতেই মাঝি চাচা শান্ত গলায় বললেন, দড়ি লম্বা যত বেশি হইবো, টানা তত কম লাগবো. সন্ধ্যার আগে ঘাটে পৌঁছাইতে হইবো. টান নষ্ট করার সময় নাই.
 
 <GunTana story />
 
@@ -52,7 +55,9 @@ Fahim saw the rope was long, some twenty arm-lengths. He asked, and Majhi chacha
 
 <Then>
 
-Bet sealed. Notice: the boatmen walk on the bank, and the boat moves in the river. So the rope runs slantwise. Majhi chacha says part of the pull is “wasted”. There's only one pull — how can part of it be wasted? Let's understand that first.
+বাজি ধরা হয়ে গেলো. এবার একটা জিনিস খেয়াল করুন. মাঝিরা হাঁটছে পাড় দিয়ে, আর নৌকা চলছে নদীতে. তাই দড়িটা যাচ্ছে বাঁকা হয়ে.
+
+মাঝি চাচা বলছেন টানের একটা part নাকি নষ্ট হয়. টান তো একটাই. ওটার আবার একটা part নষ্ট হয় কেমনে? আগে ওটাই বুঝে নেই.
 
 <SlantRope />
 
@@ -62,103 +67,31 @@ Bet sealed. Notice: the boatmen walk on the bank, and the boat moves in the rive
 
 <Step>
 
-Say the river runs straight east. Any pull on the boat can be split into two parts. One goes forward along the river, and one at a right angle to the river, towards the bank.
+নদীটা এখানে সোজা, east দিকে গেছে. আর টান যাচ্ছে দড়ি বরাবর, কোনাকুনি.
 
-Drag the pull around and watch how the two parts change.
+দড়ির মাথাটা ধরে এদিক ওদিক ঘুরান. দেখুন কখন নৌকা পুরা টানটা সামনে পায়, আর কখন একটুও পায় না.
 
 <SplitPull />
 
 <Then>
 
-The green part is the pull's shadow on the river — 4.3's projection. The yellow part is what's left over, at a right angle to the river. Join the two and the whole pull comes back:
+খেয়াল করেছেন, প্রতিবারই দুইটা number বসে আছে? একটা নদী বরাবর সামনে, আরেকটা পাড়ের দিকে, নদীর সাথে right angle এ.
+
+সবুজ part টা হলো নদীর উপরে টানের **shadow** — 4.3 এর সেই projection. হলুদ part টা যেটুকু বাকি থেকে গেলো. দুইটা জোড়া লাগালে পুরা টানটা আবার ফেরত আসে:
 
 $$w = (\text{the shadow along the river}) + (\text{the rest, at a right angle})$$
 
 <ShadowDrop />
 
-With the river going east, it's easy. The shadow is the pull's first number, the rest the second. In 4.4 you saw it: a shadow on an axis is that slot's number. But a river doesn't always run east.
-
-<EastEasy />
-
 </Then>
 
 </Step>
 
 <Step>
 
-Soon the river will bend, and finding the shadow's head will take a test. Try the test once first.
+তাহলে হলুদ part টা যায় কোথায়?
 
-<Check
-  question="What is (2, 1) · (−1, 2), and what does it mean?"
-  options={[
-    "4 — the same direction",
-    "−4 — opposite directions",
-    "0 — a right angle",
-  ]}
-  answer={2}
-  hint="2 × (−1) + 1 × 2."
-  praise="−2 + 2 = 0, a right angle."
->
-
-2 × (−1) + 1 × 2 = −2 + 2 = 0. With the box, 0 means a right angle, however many dimensions.
-
-</Check>
-
-</Step>
-
-<Step>
-
-Ahead, the river has taken a bend and now runs along $v = (2, 3)$. The rope's pull is $w = (2, 1)$. Where is the shadow's head?
-
-Slide a point along the river and find the spot where the line down from the rope's tip meets the river at a right angle. You remember what a right angle means for the box? 0.
-
-<RiverBend story />
-
-<FindFoot />
-
-<Then>
-
-The shadow's head landed exactly 7/13 of the way along the river's arrow. 7 and 13 — do those two numbers look familiar? $w \cdot v = 4 + 3 = 7$, and $v \cdot v = 4 + 9 = 13$. No coincidence.
-
-<SevenThirteen />
-
-From 4.3 we know the shadow's length is $\|w\| \cos\theta$, and the box is $w \cdot v = \|v\| \, \|w\| \cos\theta$. So the shadow's length is $w \cdot v \div \|v\|$. To find what share of the river's arrow that is, divide by $\|v\|$ once more: $w \cdot v \div \|v\|^2$. And in 4.1 you saw $\|v\|^2 = v \cdot v$. So the share is $7 \div 13$.
-
-<WhySeven />
-
-</Then>
-
-</Step>
-
-<Step>
-
-So the whole sum can be laid out as one machine. Run it one step at a time.
-
-<ShadowRecipe />
-
-<Then>
-
-Written as an arrow, the shadow is:
-
-$$\text{shadow} = \frac{w \cdot v}{v \cdot v} \, v$$
-
-Say it out loud: two boxes, one division, then stretch the river's arrow by that share. No root needed, and no protractor either.
-
-<RecipeAloud />
-
-And the last line is the real one. Run the box between the leftover and the river and you get 0 — a perfect right angle. Not just for this rope: for any pull and any river. So any vector can be split into two pieces with respect to any direction:
-
-$$w = \underbrace{\text{the shadow}}_{\text{along } v} + \underbrace{\text{the rest}}_{\text{at a right angle to } v}$$
-
-<AnyRiver />
-
-</Then>
-
-</Step>
-
-<Step>
-
-The river is straight again. But where does the rest go — the pull towards the bank? At the stern sits the helmsman, hand on the tiller. What happens if he lets go?
+নৌকার পিছনে হাল ধরে বসে আছে আরেকজন মাঝি. সারাক্ষণ হাল ধরা. একবারও ছাড়ে না.
 
 <RudderMan story />
 
@@ -166,15 +99,11 @@ The river is straight again. But where does the rest go — the pull towards the
 
 <Then>
 
-The moment the tiller was let go, the boat began to drift towards the bank. The yellow part doesn't move the boat forward one step; it only pulls sideways, and the helmsman holds it off with the tiller the whole time. That is the “wasted pull” Majhi chacha was talking about.
+হাল ছাড়ার সাথে সাথে নৌকা পাড়ের দিকে ভেসে যেতে শুরু করলো. হলুদ part টা নৌকাকে এক পা-ও সামনে নেয় না. শুধু পাশের দিকে টানে, আর হালের মাঝি সারাক্ষণ ওটাকে ঠেকিয়ে রাখে.
+
+মাঝি চাচা এই টানটার কথাই বলছিলেন. **নষ্ট হওয়া টান.**
 
 <RudderHolds />
-
-Remember Mami in 4.2? She pushed at a right angle, and the van didn't move a hair. A box of 0 means exactly this: **there is nothing of one in the direction of the other.** However far one goes, it tells you nothing about the other.
-
-<ZeroNotMinus />
-
-So a cosine of 0 means “no match”, not “opposite”. Opposite means −1, and being opposite is a strong relationship too. If someone always says the opposite of what you say, you can say your opinion for them just by hearing theirs. 0 means there is no relationship at all.
 
 </Then>
 
@@ -182,65 +111,27 @@ So a cosine of 0 means “no match”, not “opposite”. Opposite means −1, 
 
 <Step>
 
-Now the bet is settled. The bank is 3 metres from the boat. The boatmen pull with a total strength of about 10, short rope or long.
+এবার বাজির মীমাংসা. নৌকা থেকে পাড় 3 metre দূরে. দড়ি ছোট হোক বা লম্বা, মাঝিরা টানে সমান জোরে — মোট 10.
 
-Make the rope shorter and longer, and watch how much of that 10 goes forward.
+দড়িটা ছোট বড় করুন, আর দেখুন ওই 10 এর কতটুকু সামনের দিকে যায়.
 
 <LongRope />
 
 <Then>
 
-With a short rope the boatmen stand almost level with the boat, the rope stands steep, and a big share of the pull goes towards the bank. With a long rope they are far ahead, the angle shrinks, and $\cos\theta$ comes close to 1. Then almost the whole pull goes forward. **Majhi chacha was right.**
+দড়ি ছোট হলে? মাঝিরা প্রায় নৌকার বরাবর দাঁড়ায়. দড়িটা খাড়া হয়ে যায়. টানের বড় একটা অংশ চলে যায় পাড়ের দিকে. দড়ি লম্বা হলে ওরা থাকে অনেক সামনে. angle ছোট হয়ে আসে, আর $\cos\theta$ চলে আসে 1 এর কাছাকাছি.
+
+তাহলে সামনে যায় ঠিক **10 × cos θ**. কালরাতের খাতায় arrow ছিল এক ঘর, ছায়া ছিল cos θ. এখানে টান 10, ছায়াও তাই 10 গুণ. **মাঝি চাচা ঠিকই বলেছিলেন.**
 
 <RopeFan />
 
-One honest limit, though. A very long rope is heavy, sags into the water, and is hard to handle at the bend. So the boatmen pick a middle length, and tie the rope at the top of the mast so it doesn't snag on the bank's bushes. The maths says: longer is better. How long — that, reality decides.
+<SideQuest title="তাহলে দড়ি যত লম্বা তত ভালো?">
+
+খুব লম্বা দড়ি ভারি, পানিতে ঝুলে পড়ে, বাঁকের মুখে সামলানো কঠিন. তাই মাঝিরা মাঝামাঝি একটা length বেছে নেয়, আর দড়িটা বাঁধে মাস্তুলের মাথায়, যাতে পাড়ের ঝোপঝাড়ে আটকে না যায়. Maths বলছে, লম্বা হলে ভালো. কত লম্বা, সেটা ঠিক করে বাস্তবতা.
 
 <SagRope />
 
-</Then>
-
-</Step>
-
-<Step>
-
-Majhi chacha was right. Before Fahim's idea, let's recall a shadow from the noon roof.
-
-<Check
-  question="How long is the shadow of (2, 3) on the east axis?"
-  options={[
-    "3",
-    "2",
-    "√13",
-  ]}
-  answer={1}
-  hint="If the sun shines from straight above, how far east does it fall?"
-  praise="On the east axis, the shadow is just the first number."
->
-
-On the east axis the shadow falls exactly up to 2 — the first number. Each number of a vector is really its shadow on one axis. Those who picked √13 said the whole arrow's length.
-
-</Check>
-
-</Step>
-
-<Step>
-
-Before landing at the ghat, an idea struck Fahim. Taking a shadow turns an arrow into one number: how far along the river. What if a whole pile of points lies roughly along one line? Take everyone's shadow on that line — what do you lose?
-
-<FahimIdea story />
-
-<KeepShadows />
-
-<Then>
-
-Taking shadows on the line of the spread, each point came down from two numbers to one, and lost only a small leftover, at most 0.4. But taking shadows on the line at a right angle, they all piled into one tiny spot, and lost almost everything.
-
-<OnePoint />
-
-This is the heart of a famous trick called **PCA** (principal component analysis). Say each point of your data is 300 numbers, but really it spreads along only a few directions. Take shadows on those few directions and throw the rest away. The work of 300 numbers gets done by a few, and only small leftovers are lost. How to find the best directions is much further ahead in this series.
-
-<FewNumbers />
+</SideQuest>
 
 </Then>
 
@@ -248,19 +139,21 @@ This is the heart of a famous trick called **PCA** (principal component analysis
 
 <Step>
 
-At the ghat the boat is being tied up. Majhi chacha, laughing, set a riddle. The rope's pull is $(4, 2)$, and the ghat's stairs climb along $(1, 1)$. How much of the pull is along the stairs, and how much is left?
+সন্ধ্যায় বাড়ি ফিরে ফাহিম সারাদিনের গল্প করলো. মামি চুপচাপ শুনলেন. তারপর শান্ত গলায় একটা কথা বলে বসলেন.
 
-<GhatRiddle story />
+<MamiSays story />
 
-Now it's your turn.
-
-<YourShadow />
+<MamiPick />
 
 <Then>
 
-$(4, 2) = (3, 3) + (1, -1)$. One piece along the stairs, the other at a right angle to it — and you checked with the box that they really are at a right angle. Pleased, Majhi chacha treated Fahim to a green coconut.
+$\cos 90^\circ = 0$, মানে right angle. মামি নিজেই 4.2 এ ভ্যানটাকে right angle এ ধাক্কা দিয়েছিলেন. ভ্যান এক চুলও নড়ে নাই — সামনেও না, পিছনেও না. একটার direction এ আরেকটার কিছুই নাই. একটা যতদূরই যাক, ওটা আরেকটার ব্যাপারে কিছুই বলে না. কোনো relationship নাই.
 
-<DabTreat />
+উল্টা হলো $\cos 180^\circ = -1$. আর ওটা কিন্তু strong একটা relationship. 4.2 এ রফিক 90° থেকে একটু পিছনে হেলে ছিল. তাই ওর ধাক্কার সামান্য একটু পিছন দিকে যাচ্ছিল, −5. ভ্যানের ক্ষতি ওইটুকুই করছিল.
+
+মামি 0 আর −1 গুলিয়ে ফেলেছেন.
+
+<ZeroNotMinus />
 
 </Then>
 
@@ -270,51 +163,56 @@ $(4, 2) = (3, 3) + (1, -1)$. One piece along the stairs, the other at a right an
 
 ## Try it
 
-<Check
-  question="Mami said, “A cosine of 0 means the two point exactly opposite.” Is she right?"
-  options={["Yes, 0 means opposite", "No, 0 means a right angle, no relationship at all; opposite is −1", "No, 0 means the same direction"]}
-  answer={1}
-  hint="When the helmsman let go of the tiller, did the bankwards pull take the boat backwards, or did it do nothing forwards or backwards?"
->
+ঘাটে বাঁধা তিনটা নৌকা. তিনটারই পাড় 3 metre দূরে, তিনজন মাঝিই সমান জোরে টানে. শুধু দড়ির length আলাদা.
 
-$\cos 90^\circ = 0$: a right angle. The bankwards pull took the boat neither forward nor backward. Nothing of one is in the direction of the other — no relationship.
+<PickRope />
 
-Opposite is $\cos 180^\circ = -1$, and that is a strong relationship. In 4.2, Rafik was hurting the van precisely because he pushed leaning backwards. Mami has mixed up 0 and −1.
+<Then>
 
-</Check>
+লম্বা দড়িতে মাঝি থাকে অনেক সামনে. দড়ি শুয়ে পড়ে, angle ছোট. ছোট angle মানে cos θ প্রায় 1. মানে টানের প্রায় পুরাটাই সামনে. ছোট দড়িতে? উল্টাটা. দড়ি খাড়া, হলুদ বারটা বড়. আর ওই পুরোটা মাঝিকে হাল দিয়ে সারাক্ষণ ঠেকিয়ে রাখতে হয়.
+
+নষ্টটুকু গুনেও দেখতে পারেন. দড়ি দ্বিগুণ লম্বা করলে নষ্ট ঠিক অর্ধেক হয়ে যায়.
+
+<HalfWaste />
+
+</Then>
 
 </Step>
 
 <Step>
 
-## The end! The boat reached the ghat
+## শেষ! গুনের হিসাব মিলে গেলো
 
-Majhi chacha said: the longer the rope, the less pull is wasted. The claim held. A long rope makes a small angle, and at a small angle the shadow is nearly the whole pull. If you bet on the first one, you won. And we found where the wasted pull goes: at a right angle to the river, towards the bank.
+মাঝি চাচা বলেছিলেন, দড়ি যত লম্বা, টান তত কম নষ্ট হয়. কথাটা টিকে গেলো. লম্বা দড়ি মানে ছোট angle, আর ছোট angle এ shadow প্রায় পুরা টানটাই. প্রথমটার উপরে বাজি ধরে থাকলে আপনি জিতেছেন. আর নষ্ট হওয়া টান কোথায় যায় সেটাও পাওয়া গেলো: নদীর সাথে right angle এ, পাড়ের দিকে.
 
-In one line: **any arrow can be split into two pieces with respect to any direction — its shadow along that direction, and the rest at a right angle.**
+<GunHisab story />
+
+এক line এ: **যেকোনো টান দুই টুকরা হয় — নদী বরাবর shadow, আর বাকিটা right angle এ. সামনে নেয় শুধু shadow টুকু.**
 
 <Table
-  head={["You'll see", "Say it as"]}
+  head={["যেটা দেখবেন", "যেভাবে বলবেন"]}
   rows={[
-    ["((w · v) ÷ (v · v)) v", "w's shadow on v, as an arrow"],
-    ["w − shadow", "the rest, at a right angle to v"],
-    ["(w − shadow) · v = 0", "the rest is always at a right angle"],
-    ["cos θ = 0", "no relationship, not opposite"],
+    ["নদী বরাবর part", "টানের shadow, এইটুকুই নৌকাকে সামনে নেয়"],
+    ["Right angle এর part", "নষ্ট টান, হাল দিয়ে ঠেকিয়ে রাখতে হয়"],
+    ["cos θ = 0", "কোনো relationship নাই, উল্টা না"],
+    ["cos θ 1 এর কাছে", "লম্বা দড়ি, ছোট angle, টান কাজে লাগছে"],
   ]}
 />
 
-In the evening Fahim went to the village library. The librarian, Apu, has a new computer with two search machines on it. Fahim typed “fish” and searched.
+দুপুর গড়িয়ে গেলো. নৌকা চলছে. সামনে নদী বাঁক নিয়েছে.
 
-One machine put a thick book on top — a book that is really about boats and paddy, and mentions fish only three times. The other showed a short note written about fish. Same books, same words, two different answers. Which machine should Apu keep?
+<NoonBend story />
 
-<LibraryTwo story />
+এতক্ষণ নদী ছিল সোজা east দিকে. তাই shadow টা চোখেই দেখা যাচ্ছিল — টানের first number. 4.4 এ দেখেছিলেন, axis এর উপরে shadow মানেই ওই slot এর number. এখন নদী গেছে কোনাকুনি. দড়ির টানের shadow এর মাথা এখন কোথায় পড়বে? চোখে দেখে আর বলা যায় না.
+
+<EastEasy />
 
 <LessonLink
-  href="/dashboard/articles/math_for_ai/04f_library_search"
-  eyebrow="Next lesson"
-  title="The library search, the box or cosine"
+  href="/dashboard/articles/math_for_ai/04e2_bent_river"
+  eyebrow="পরের lesson"
+  title="বাঁকা নদী. Shadow এর মাথা কোথায় পড়ে"
 >
-  Two search machines, two different answers. Which to keep, and when you need the other one.
+  নদী বাঁকা হলে হিসাবটা চোখে দেখা যায় না. দুইটা box, একটা ভাগ — এইটুকু দিয়েই বের করে ফেলবো.
 </LessonLink>
 
 </Step>

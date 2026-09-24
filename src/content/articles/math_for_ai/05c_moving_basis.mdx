@@ -1,20 +1,26 @@
 export const metadata = {
   title: "Math for AI 5.3 — Basis and dimension, the fewest buttons",
   description:
-    "Moving day. Every remote button costs 50 taka. Shiku needs a remote for the floor, and the robotics club's drone needs one that reaches the ceiling fan. What is the fewest buttons for each, and is that number the same whoever builds the remote?",
+    "Moving day. Every remote button costs 50 taka. Shiku needs a remote for the floor, and the robotics club's drone needs one that reaches every dusty spot in the room, the ceiling fan included. What is the fewest buttons for each, and is that number the same whoever builds the remote?",
   type: "article",
 };
 
-{/* Told as a Brilliant-style journey in English, like 1.1 and 2.3: screen 1
-    seals the reader's bet on the fewest buttons for the floor and for the
-    room, and on Som's claim that the count is the same whoever builds it.
-    The bet is not settled until ThreeVerdicts, seven screens later, after
-    DropOne (basis), ShopShelf (the two ways to fail), AnyPairTwo (the floor's
-    dimension), FanOnCeiling (the room's), ShopOrder (Your turn) and the
-    TryTwoInRoom exercise. 8 steps. Each screen opens by reacting to the last;
-    explanations sit in <Then>, one phone screen each with a watch-only
-    figure; the notation sits in a <SideQuest>. The screens live in
-    components/interactive/moving-journey.tsx; the floor machine is 5.1's.
+{/* Told as a Brilliant-style journey, like 1.1 and 2.3: screen 1 seals the
+    reader's bet on the fewest buttons for the floor and for the room, and on
+    Som's claim that the count is the same whoever builds it. The bet is not
+    settled until ThreeVerdicts, nine screens later. 10 steps.
+
+    The floor half: DropOne (basis), ShopShelf (the two ways to fail),
+    AnyPairTwo (the floor's dimension). The room half is played on Ammu's
+    dusty spots: Nasib's one aimed button reaches the fan and misses the
+    cobweb (OneAimed), two aimed buttons always paint one flat sheet
+    (TwoAimed, the second predict), and any three fill the room while a
+    fourth is extra (ThirdButton: dimension 3). Then ShopOrder (Your turn),
+    the TryTwoInRoom exercise, and the finale.
+
+    Each screen opens by reacting to the last; explanations sit in <Then>, one
+    phone screen each with a watch-only figure; the notation sits in a
+    <SideQuest>. The screens live in components/interactive/moving-journey.tsx.
     Third of six "span, independence, basis" journeys (Article 5). The plan is
     in 05_journey_specs.md. */}
 
@@ -23,20 +29,34 @@ import {
   TruckDay,
   FewestButtons,
   ThreeCards,
+  FiftyEach,
   DropOne,
   TwoJobs,
+  FiveOnCounter,
   ShopShelf,
   TwoFails,
+  BasisMiddle,
   AnyPairTwo,
   ThreeDesigners,
+  FloorsOwnNumber,
   DroneUnderFan,
-  FanOnCeiling,
+  OneAimed,
+  OneLine,
+  AmmuSpots,
+  TwoAimed,
+  SheetTilts,
+  SomThird,
+  ThirdButton,
   SheetLift,
+  SlotsCount,
   AbbuOrders,
   ShopOrder,
+  ThreeTraps,
   CartOfThree,
+  NasibStretches,
   TryTwoInRoom,
   LongArrows,
+  FourInRoom,
   FanDusted,
   ThreeVerdicts,
   TwoAndThree,
@@ -46,23 +66,29 @@ import {
 
 <Step>
 
-Moving day. The truck is at the gate, and the boxes are going up the stairs one by one. Remote C from two days ago is in Fahim's pocket, still working.
+বাসা বদলের দিন. গেটের সামনে ট্রাক দাঁড়িয়ে আছে. বাক্স উঠছে সিঁড়ি দিয়ে, একটা একটা করে. ফাহিমের পকেটে দুইদিন আগে কেনা সেই এলোমেলো দেখতে remote টা. এখনো চলছে.
 
-The robotics club has lent its drone for the day, to dust the ceiling fan in the new flat. But the drone's remote is packed in some box, and nobody knows which. So it's back to the toy shop. There they build a remote to order: you choose the buttons, and each button costs 50 taka.
+Robotics club একদিনের জন্য ওদের drone টা ধার দিয়েছে. নতুন ফ্ল্যাটের সিলিং ফ্যান ঝাড়তে হবে. ফ্যানে আগের ভাড়াটিয়াদের ধুলা, পুরু হয়ে জমে আছে. কিন্তু drone এর remote টা কোন বাক্সে ঢুকেছে, কেউ জানে না.
 
-Three people, three claims.
+তাই আবার গলির সেই খেলনার দোকান. এখানে remote অর্ডার দিয়ে বানানো যায়. Button বেছে দেন আপনি, প্রতিটা button 50 টাকা. দোকানদার একটা খোলা remote দিলেন. Button খাপে খাপে লাগানো যায়, খোলা যায়. দাম দিতে হবে শুধু যেগুলা রেখে দিবেন সেগুলার.
+
+দোকানে তিনজন তিন রকম কথা বললো.
 
 <TruckDay story />
 
-So what is the fewest buttons for Shiku to reach anywhere on the floor? And for the drone, anywhere in the room, the fan included? Seal your bet before anyone pays.
+তাহলে Shiku কে floor এর যেকোনো জায়গায় নিতে সবচেয়ে কম কয়টা button লাগে? আর drone কে ঘরের যেকোনো জায়গায়, ফ্যান সহ? টাকা দেয়ার আগে বাজি ধরে ফেলুন.
 
 <FewestButtons />
 
 <Then>
 
-Bet sealed. Why count so carefully? Because every button is 50 taka. One button too many, and that's money thrown away. One too few, and some spot stays out of reach.
+বাজি ধরা হয়ে গেলো.
 
-The shopkeeper, Nasib and Som can't all be right. By evening, we'll know who is.
+এত হিসাব করে গুনছি কেন? কারণ, প্রতিটা button 50 টাকা. একটা বেশি হলে? ওই টাকাটা পানিতে গেলো. একটা কম হলে? কোনো একটা জায়গা থেকে যাবে নাগালের বাইরে.
+
+<FiftyEach />
+
+দোকানদার, নাসিব আর সোম. তিনজন একসাথে ঠিক হতে পারে না. কে ঠিক? জানা যাবে সন্ধ্যার মধ্যেই.
 
 <ThreeCards />
 
@@ -72,15 +98,15 @@ The shopkeeper, Nasib and Som can't all be right. By evening, we'll know who is.
 
 <Step>
 
-Start with the three-button remote Nasib wanted yesterday: $e_1 = (1, 0)$, $e_2 = (0, 1)$ and $w = (2, 3)$. Ammu's chalk marks are still on the floor. Take the buttons off one at a time, and watch the paint.
+শুরু করি নাসিবের কালকের সেই তিন button এর remote দিয়ে: $e_1 = (1, 0)$, $e_2 = (0, 1)$ আর $w = (2, 3)$. আম্মুর chalk এর দাগগুলা এখনো floor এ আছে. রং মানে remote টা Shiku কে যেসব জায়গায় নিতে পারে. একটা একটা করে button খুলুন. আর খেয়াল করুন রং টা.
 
 <DropOne />
 
 <Then>
 
-With three buttons, one was extra. You dropped it, and the paint didn't move. With one button, the paint shrank to a line. Two was just right: nothing extra, and every tile reached.
+কী দেখলেন? তিন button এ একটা ছিল বাড়তি. ওটা খুলে ফেললেন, রং একটুও নড়লো না. এক button এ? রং চুপসে একটা line. আর দুইটা? ঠিকঠাক. বাড়তি কিছু নাই. সব tile এ পৌঁছায়.
 
-A set of buttons that does both jobs has a name: a **basis**. You met the word in 3.3, where a and b reached every spot exactly one way. What's new today is the count.
+এই দুইটা কাজই করে যে button এর set, তার একটা নাম আছে. **basis**. শব্দটা 3.3 এ একবার শুনেছিলেন, মনে আছে তো? a আর b প্রতিটা জায়গায় পৌঁছাতো ঠিক এক উপায়ে. আজকে নতুন হলো গোনাটা.
 
 <TwoJobs />
 
@@ -90,17 +116,27 @@ A set of buttons that does both jobs has a name: a **basis**. You met the word i
 
 <Step>
 
-The shopkeeper puts five ready-made remotes on the counter. The paint is already on. File each one: a basis, one with an extra button, or one that misses spots.
+দোকানদার কাউন্টারে পাঁচটা বানানো remote রাখলেন. বললেন, সবগুলাই ভালো জিনিস. নিয়া যান.
+
+<FiveOnCounter story />
+
+রং আগে থেকেই লাগানো. প্রতিটাকে ঠিক ঘরে রাখুন: basis, বাড়তি button আছে, নাকি কোনো জায়গা বাদ পড়ে.
 
 <ShopShelf />
 
 <Then>
 
-So a remote can fail in two ways, and they're opposites. Too many buttons: one of them can be built from the others, so you pay for nothing. Too few, or two pushing the same way: the paint leaves spots bare. The twin remote managed both at once.
+তাহলে remote ফেল করে দুইভাবে. আর দুইটা একদম উল্টা.
 
-A basis sits exactly between. There's nothing to drop, and nothing is missing.
+Button বেশি হলে? একটাকে বাকিগুলা দিয়েই বানানো যায়. মানে ওটার 50 টাকা এমনি এমনি গেলো. Button কম হলে, বা দুইটা একই দিকে ঠেললে? রং কিছু জায়গা ফাঁকা রেখে দেয়.
+
+যমজ remote টা? দুইটা ভুল একসাথেই করেছে.
 
 <TwoFails />
+
+Basis বসে আছে ঠিক মাঝখানে. খোলার মতো কিছু নাই, আর বাকিও কিছু নাই.
+
+<BasisMiddle />
 
 </Then>
 
@@ -108,39 +144,49 @@ A basis sits exactly between. There's nothing to drop, and nothing is missing.
 
 <Step>
 
-Now Som's claim: however you build it, the count comes out the same. Test it yourself. Design your own floor remotes. Drag the button tips anywhere, and add a button or take one off.
+এবার সোমের কথা: যেভাবেই বানান, গুনলে সংখ্যা একই আসবে. নিজেই পরীক্ষা করে দেখুন. নিজের floor remote design করুন. Button এর মাথা যেখানে খুশি টেনে নিন, button যোগ করুন বা খুলে ফেলুন.
 
 <AnyPairTwo />
 
 <Then>
 
-Your designs looked nothing alike. But every one that worked had exactly two buttons. One button always painted a line. Three always had an extra.
-
-So the count doesn't depend on who builds the remote. It belongs to the floor itself. That count has its own name: the **dimension**. The floor's dimension is 2. **Som's claim holds, for the floor at least.**
+আপনার design গুলা একটা আরেকটার মতো দেখতে না. কিন্তু যেগুলা কাজ করেছে, গুনে দেখুন তো? প্রত্যেকটায় ঠিক দুইটা button. এক button সবসময় একটা line রং করেছে. তিন button এ সবসময় একটা বাড়তি.
 
 <ThreeDesigners />
 
+কাহিনী কি? remote কে বানালো, সংখ্যাটা তার উপর নির্ভর করে না. ওটা floor এর নিজের জিনিস. এই সংখ্যার নাম **dimension**. Floor এর dimension 2.
+
+**সোমের কথা টিকে গেলো, অন্তত floor এ.**
+
+<FloorsOwnNumber />
+
 </Then>
 
 </Step>
 
 <Step>
 
-Now the drone. The fan hangs from the middle of the ceiling, 3 steps up, thick with the old tenants' dust.
+এবার drone. ফ্যানটা ঝুলছে ছাদের মাঝখান থেকে, মেঝে থেকে 3 ধাপ উপরে.
+
+ফাহিম প্রথমে Shiku র floor remote টাই drone এ লাগালো. Drone মেঝে ঘেঁষে গিয়ে থামলো ফ্যানের ঠিক নিচে. উপরে আর ওঠে না. East আর north এ চাপ দিলে মেঝের উপরেই ঘোরাঘুরি. Up বলে কোনো button নাই.
+
+নাসিব হাসিমুখে বললো, এত button দিয়ে কী হবে? ফ্যানের দিকে তাক করা একটা button ই যথেষ্ট.
 
 <DroneUnderFan story />
 
-Two buttons were enough for the whole floor. Are two enough for the whole room, if you choose them well?
+নাসিবের একটাই button. ওটাকে একটা জায়গার দিকে তাক করুন, drone ওই দিক ধরে উড়বে.
 
-<FanOnCeiling />
+<OneAimed />
 
 <Then>
 
-Two buttons always paint a flat sheet: the floor, or a tilted plank. Tilt it any way you like. A sheet still can't fill a room.
+নাসিব অর্ধেক ঠিক. ফ্যানের দিকে তাক করা button drone কে সোজা ফ্যানে নিয়ে যায়. কিন্তু এক button যতবারই চাপুন, drone চলে একটাই line ধরে. সেই line এ ফ্যান আছে. ঝুল নাই. Button ঘুরিয়ে ঝুলের দিকে তাক করলে? উল্টাটা.
 
-The up button lifts the sheet off the floor. Sheet on sheet, the room fills. A fourth button only repeats what the three can already do. So the room's dimension is 3. And a space with $n$ slots, $\mathbb{R}^n$, takes exactly $n$.
+Floor এ এক button কী করেছিল, মনে আছে? একটা line. ঘরেও তাই.
 
-<SheetLift />
+**নাসিবের এক button এর কথা ঘরেও টিকলো না.**
+
+<OneLine />
 
 </Then>
 
@@ -148,19 +194,79 @@ The up button lifts the sheet off the floor. Sheet on sheet, the room fills. A f
 
 <Step>
 
-Your turn. Abbu wants one remote that does both jobs: Shiku anywhere on the floor, and the drone anywhere in the room, up to the fan. The shopkeeper has seven buttons on the shelf.
+আম্মু ঝাড়ু হাতে ঘরটা একবার ঘুরে দেখলেন. আলমারির মাথায় ধুলা. দেয়াল ঘড়ির মাথাতেও.
+
+নাসিব বললো, ঠিক আছে. দুইটা button. একটা এদিকে, একটা ওদিকে. Floor এ তো দুইটাতেই সব হয়েছিল.
+
+<AmmuSpots story />
+
+আম্মুর spot এখন চারটা: ফ্যান, ঝুল, আলমারি আর ঘড়ি. দুইটা button ঠিকমতো তাক করলে কি ঘরের সব জায়গায় পৌঁছানো যায়? আগে একটা guess দিন.
+
+<TwoAimed />
+
+<Then>
+
+কী রং হলো? যে দুইটাতেই তাক করেন, একটা flat sheet. দরজার কোনা থেকে শুরু হওয়া একটা হেলানো তক্তা. যে দুইটা spot এ তাক করেছেন, ওরা sheet এর উপরে. বাকি দুইটা? বাইরে, ঝুলে আছে.
+
+Sheet টা যেভাবে খুশি হেলান. Sheet তবু sheet. একটা পাতা দিয়ে একটা ঘর ভরে না.
+
+**নাসিবের দুই button ও টিকলো না.**
+
+<SheetTilts />
+
+</Then>
+
+</Step>
+
+<Step>
+
+সোম মাথা নাড়লো. শান্ত গলায় বললো, তিন নম্বর button লাগবে. আর যে তিনটাতেই তাক করো, সংখ্যা তিনই থাকবে.
+
+<SomThird story />
+
+দেখা যাক. ফ্যান আর ঝুলে দুইটা button তাক করা আছে. তিন নম্বরটা লাগান. তারপর আবার করুন, অন্য তিনটা দিয়ে. শেষে লাগিয়ে দেখুন চার নম্বর একটা.
+
+<ThirdButton />
+
+<Then>
+
+দুইটা button রং করে একটা sheet. তিন নম্বর button টা ওটাকে ঠেলে দেয় sheet এর বাইরে. এক চাপে পুরা sheet টা এক ধাপ সরে যায়. Sheet এর পরে sheet. ঘর ভরে যায়.
+
+চার নম্বর button? নতুন কিছু দেয় না. ওটার spot আগেই রং এর ভিতরে ছিল. বাড়তি 50 টাকা.
+
+<SheetLift />
+
+তাহলে ঘরের dimension 3. আর $n$ টা slot এর space, $\mathbb{R}^n$, নেয় ঠিক $n$ টা.
+
+**সোমের কথা ঘরেও টিকে গেলো.**
+
+<SlotsCount />
+
+</Then>
+
+</Step>
+
+<Step>
+
+এবার আপনার পালা. সন্ধ্যার আগে আব্বু নিজে দোকানে গেলেন. কাউন্টারে সাতটা button সাজানো. আব্বু শান্ত গলায় বললেন, একটাই remote. Shiku কে floor এর যেকোনো জায়গায় নিবে, আর drone কে ঘরের যেকোনো জায়গায়, ফ্যান পর্যন্ত. যত কমে হয়.
+
+দোকানদার বললেন, সাতটাই নিয়া যান. কোনো চিন্তা নাই.
 
 <AbbuOrders story />
 
-Build the cheapest remote that does both. Test it before you pay.
+সবচেয়ে সস্তা remote টা বানান যেটা দুইটা কাজই করে. টাকা দেয়ার আগে test করে নিন.
 
 <ShopOrder />
 
 <Then>
 
-Every cart that worked had three buttons pushing three different ways. The traps were easy to fall into: $(2, 0, 0)$ is only $(1, 0, 0)$ twice. $(1, 1, 0)$ is east plus north, so it never leaves the floor. The zero button doesn't move anything.
+যে cart গুলা কাজ করেছে, প্রত্যেকটায় তিনটা button. তিনটা ঠেলে তিন দিকে.
 
-**The shopkeeper's rule lost.** More buttons never made the remote safer. They only made it dearer.
+ফাঁদে পড়া সহজ ছিল, ঠিক তো? $(2, 0, 0)$ আসলে $(1, 0, 0)$ এরই দুইগুণ. $(1, 1, 0)$ হলো east যোগ north. তাই ওটা মেঝে ছেড়ে কখনো ওঠে না. আর zero button? কিছুই নড়ায় না.
+
+<ThreeTraps />
+
+**দোকানদারের নিয়ম হেরে গেলো.** বেশি button remote কে নিরাপদ করে নাই. শুধু দাম বাড়িয়েছে.
 
 <CartOfThree />
 
@@ -172,17 +278,21 @@ Every cart that worked had three buttons pushing three different ways. The traps
 
 ## Try it
 
-Nasib has one more idea: “Make the two buttons really long. Then they'll reach everything.” His two buttons are $(4, 0, 2)$ and $(0, 4, 1)$. What do they paint?
+নাসিবের মাথায় আরেকটা বুদ্ধি. বললো, button দুইটা অনেক লম্বা বানাই. তাহলেই সব জায়গায় পৌঁছাবে. ওর দুইটা button $(4, 0, 2)$ আর $(0, 4, 1)$. এরা কী রং করে?
+
+<NasibStretches story />
 
 <TryTwoInRoom />
 
 <Then>
 
-Long only stretches a button. It doesn't give it a new direction. So two buttons, however long, still paint one tilted sheet, and the fan sits off it. Those who picked “the whole room” trusted the length.
-
-Four buttons in a room is the opposite problem. $(3, 0, 0)$ pushes the same way as $(1, 0, 0)$, so one of them is extra. In the room, two is always too few, and four is always one too many.
+লম্বা করলে কী হয়? button শুধু টেনে লম্বা হয়. নতুন কোনো দিক পায় না. তাই দুইটা button, যত লম্বাই হোক, রং করে সেই একটাই হেলানো sheet. ফ্যান থাকে ওটার বাইরে. যারা “পুরা ঘর” বেছেছিলেন, তারা ভরসা করেছিলেন length এর উপর.
 
 <LongArrows />
+
+ঘরে চার button হলে সমস্যা উল্টা. $(3, 0, 0)$ আর $(1, 0, 0)$ একই দিকে ঠেলে. তাই একটা বাড়তি. ঘরে দুই সবসময় কম. চার সবসময় একটা বেশি.
+
+<FourInRoom />
 
 </Then>
 
@@ -190,41 +300,41 @@ Four buttons in a room is the opposite problem. $(3, 0, 0)$ pushes the same way 
 
 <Step>
 
-## The end! Two for the floor, three for the room
+## The end! Floor এ দুই, ঘরে তিন
 
-By evening the drone had dusted the fan. Fahim paid for three buttons: 150 taka.
+সন্ধ্যার মধ্যে drone ঘরের সব ধুলা ঝেড়ে ফেললো. ফ্যান, ঝুল, আলমারির মাথা, ঘড়ি. ধুলা পড়লো মেঝেতে. আম্মু ঝাড়ু হাতে দাঁড়িয়ে. ফাহিম তিন button এর দাম দিলো: 150 টাকা.
 
 <FanDusted story />
 
-Now open the three claims, and check them against your bet.
+এবার তিনটা দাবি খুলুন, আর আপনার বাজির সাথে মিলিয়ে দেখুন.
 
 <ThreeVerdicts />
 
 <Then>
 
-The shopkeeper lost: past three, every button was extra. Nasib lost: one button paints one line. Som won. The floor takes 2 and the room takes 3, whoever builds the remote.
+দোকানদার হারলো. তিনের পরে প্রতিটা button ছিল বাড়তি. নাসিব হারলো. এক button রং করে এক line, দুই button একটা sheet. আর সোম? জিতলো. Floor নেয় 2, ঘর নেয় 3. যে-ই remote বানাক.
 
-The rule to keep: **a basis has nothing extra and reaches everywhere. How many buttons it takes is the dimension.**
+মনে রাখার নিয়ম: **basis এ বাড়তি কিছু নাই, আর সব জায়গায় পৌঁছায়. কয়টা button লাগে, সেটাই dimension.**
 
 <TwoAndThree />
 
-<SideQuest title="How books write basis and dimension">
+<SideQuest title="বই এ basis আর dimension যেভাবে লেখে">
 
 <Table
-  head={["You'll see", "Say it as"]}
+  head={["যেটা দেখবেন", "যেভাবে বলবেন"]}
   rows={[
-    ["{e₁, e₂} is a basis of ℝ²", "east and north reach the whole floor, nothing extra"],
-    ["dim(ℝ²) = 2", "the floor takes two buttons"],
-    ["dim(ℝ³) = 3", "the room takes three"],
-    ["dim(V)", "how many buttons a basis of V has"],
-    ["V ⊆ ℝⁿ", "V lives inside the n-slot space"],
+    ["{e₁, e₂} is a basis of ℝ²", "east আর north পুরা floor এ পৌঁছায়, বাড়তি কিছু নাই"],
+    ["dim(ℝ²) = 2", "floor এ লাগে দুইটা button"],
+    ["dim(ℝ³) = 3", "ঘরে লাগে তিনটা"],
+    ["dim(V)", "V এর একটা basis এ কয়টা button"],
+    ["V ⊆ ℝⁿ", "V থাকে n slot এর space এর ভিতরে"],
   ]}
 />
 
 </SideQuest>
 
-<LessonLink href="/dashboard/articles/math_for_ai/05d_flat_sheet" eyebrow="Next lesson" title="The flat sheet, where the khata really lives">
-  That evening, among the boxes, Samin opens the dalal's khata again. Three columns, but he says the six flats need only two directions.
+<LessonLink href="/dashboard/articles/math_for_ai/05d_flat_sheet" eyebrow="পরের lesson" title="Flat sheet, খাতাটা আসলে থাকে কোথায়">
+  সেদিন রাতে, বাক্সের ভিড়ে বসে সামিন আবার দালালের খাতা খুললো. Column তিনটা. কিন্তু সে বলছে, ছয়টা flat এর লাগে মাত্র দুইটা দিক.
 </LessonLink>
 
 </Then>

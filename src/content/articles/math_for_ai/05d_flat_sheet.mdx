@@ -5,19 +5,20 @@ export const metadata = {
   type: "article",
 };
 
-{/* Told as a Brilliant-style journey in English, like 1.1 and 2.3: screen 1
-    seals the reader's bet on how many directions the khata's six flats really
-    need (Nasib: 3, Samin: 2, or 1), and the bet is not opened until
-    BetSettled, seven screens later, after FloorInRoom (every span holds the
-    door corner: subspace), CantFallOut (a set you can't fall out of: vector
-    space), FlatSheet (the six dots go edge-on), SheetFromButtons (two buttons
-    paint them), YourCloud (Your turn) and the TryNearlyFlat exercise (real
-    data sits near a sheet: the pancake, rank). 8 steps. Each screen opens by
-    reacting to the last; the explanation sits in <Then>, one phone screen
-    each with a watch-only figure, and the eight rules and the notation sit in
-    <SideQuest> cards. The screens live in
-    components/interactive/sheet-journey.tsx. Fourth of six "span,
-    independence, basis" journeys (Article 5). The plan is in
+{/* Told as a Brilliant-style journey in the author's Bangla-English, like 1.1
+    and 2.3: screen 1 seals the reader's bet on how many directions the
+    khata's six flats really need (Nasib: 3, Samin: 2, or 1), and the bet is
+    not opened until BetSettled, nine screens later, after FloorInRoom (every
+    span holds the door corner: subspace), EasyClubs and LastClubs (clubs you
+    can fall out of, and the one you can't: vector space), FlatSheet (the six
+    dots go edge-on), SheetFromButtons (two buttons paint them), AddFlats
+    (Nasib adds flats to fall off the sheet, and can't), YourCloud (Your turn)
+    and the TryNearlyFlat exercise (real data sits near a sheet: the pancake,
+    rank). 10 steps. Each screen opens by reacting to the last; the
+    explanation sits in <Then>, one phone screen each with a watch-only
+    figure, and the eight rules and the notation sit in <SideQuest> cards. The
+    screens live in components/interactive/sheet-journey.tsx. Fourth of six
+    "span, independence, basis" journeys (Article 5). The plan is in
     05_journey_specs.md. */}
 
 import { Journey, Step, Then, SideQuest } from "@/components/journey/journey";
@@ -28,12 +29,18 @@ import {
   ThreeBoards,
   FloorInRoom,
   FourKinds,
-  CantFallOut,
+  ChalkClubs,
+  EasyClubs,
+  SumWhere,
+  LastClubs,
   FloorClub,
   FlatSheet,
   SheetThrough,
   SheetFromButtons,
   TwoButtonsPaint,
+  NasibTries,
+  AddFlats,
+  PressesAdd,
   YourCloud,
   ThreePages,
   TryNearlyFlat,
@@ -41,17 +48,29 @@ import {
   LastBox,
   BetSettled,
   ColumnsNotDirections,
+  ZeroHome,
+  PotHole,
+  AlsoSpaces,
+  SphereOff,
+  EdgeOnKhata,
+  DalalBag,
+  RankCount,
+  NorthlessTease,
 } from "@/components/interactive/sheet-journey";
 
 <Journey title="The flat sheet · 5.4">
 
 <Step>
 
-Evening of moving day. The truck has gone, and the flat is full of boxes. One last box is still at the foot of the stairs.
+বাসা বদলের দিন, সন্ধ্যা. Truck চলে গেছে. ফ্ল্যাট ভর্তি বাক্স. সিঁড়ির গোড়ায় এখনো একটা বাক্স পড়ে আছে. আম্মুর হাঁড়িপাতিল. বেশ ভারী. বিল্ডিংয়ে লিফট নাই.
 
-Samin is sitting on the stairs with the dalal's khata from yesterday. It has six flats, and three columns for each one: beds, baths and total rooms.
+সামিন সিঁড়িতে বসে আছে. হাতে গতকালের দালালের খাতা. ছয়টা flat, প্রতিটার তিনটা column: bed, bath, আর মোট কয়টা room.
 
-Nasib looks over his shoulder. “Three columns. So the flats spread out in three directions.” Samin shakes his head. “They all sit on one flat sheet. Two directions are enough.” Whoever loses carries the last box up.
+নাসিব পেছন থেকে উঁকি দিলো. বললো, তিনটা column. তাহলে flat গুলা ছড়িয়ে আছে তিন direction এ.
+
+সামিন মাথা নাড়লো. সব একটা flat sheet এর উপরে বসে আছে. দুইটা direction এই হয়ে যায়.
+
+নাসিব বাক্সটার দিকে তাকালো. তারপর বললো, যে হারবে, বাক্স সে উপরে তুলবে.
 
 <StairsBet story />
 
@@ -59,11 +78,13 @@ Nasib looks over his shoulder. “Three columns. So the flats spread out in thre
 
 <Then>
 
-Bet sealed. But what does “direction” mean for a khata? This morning the room took three buttons: two for the floor, and one going up. So let's build a room out of the khata. One direction is beds, one is baths, and up is total rooms. Each flat becomes one dot.
+বাজি পাকা.
+
+কিন্তু খাতার আবার direction কী? আজ সকালের কথা মনে আছে তো? ঘরটা ধরতে তিনটা button লেগেছিল. মেঝের জন্য দুইটা. উপরে ওঠার জন্য একটা. তাহলে খাতা দিয়েই একটা ঘর বানাই. এক direction bed. এক direction bath. আর উপরের দিকটা total room. প্রতিটা flat হয়ে যাবে ঘরের ভিতরে একটা dot.
 
 <SixDots />
 
-Six dots, in a room with three directions. Do they need all three? That's what we'll find out.
+ছয়টা dot, তিন direction এর একটা ঘরে. তিনটা direction এরই কি দরকার আছে? সেটাই বের করবো.
 
 </Then>
 
@@ -71,19 +92,27 @@ Six dots, in a room with three directions. Do they need all three? That's what w
 
 <Step>
 
-Before opening the khata, Samin wants to be sure what a flat sheet in a room is. Fahim's new room has three flat things: the floor, a plank Abbu leaned against the wall with its bottom end at the door corner, and a shelf on the wall, 1.5 metres up.
+খাতা খোলার আগে সামিন একটা জিনিস নিশ্চিত হতে চায়. ঘরের ভিতরে flat sheet বলতে আসলে কী বোঝায়?
+
+ফাহিমের নতুন ঘরে তিনটা সমান জিনিস. মেঝে. একটা তক্তা, আব্বু দেয়ালে হেলান দিয়ে রেখেছেন, নিচের মাথাটা দরজার কোণায়. আর দেয়ালে একটা তাক, মেঝে থেকে 1.5 metre উপরে.
 
 <ThreeBoards story />
 
-Each board has an arrow from the door corner, with its tip on the board. Stretch each arrow and see if the tip stays on its board.
+প্রতিটার উপরে দরজার কোণা থেকে একটা arrow, মাথাটা ওই জিনিসের উপরে. প্রতিটা arrow কে stretch করুন. তারপর দেখুন, মাথাটা জায়গামত থাকে কিনা.
 
 <FloorInRoom />
 
 <Then>
 
-The floor and the plank passed every stretch, × 0 too. Both run through the door corner. The shelf is flat as well. But × 0 pulls every arrow back to the door corner, and the shelf isn't there. In 5.1 we saw that every span holds the door. So the shelf can't be a span. **Nasib's shelf is out.**
+মেঝে আর তক্তা টিকে গেলো. সব stretch এ. × 0 তেও. দুইটাই দরজার কোণা ছুঁয়ে গেছে.
 
-A span that lives inside a bigger room is called a **subspace**. A room holds only four kinds.
+তাকটাও তো সমান. তাহলে আটকালো কোথায়? × 0 এ. × 0 যেকোনো arrow কে টেনে নিয়ে আসে দরজার কোণায়. আর তাক তো ওখানে নাই. 5.1 এ দেখেছিলেন, যেকোনো span দরজা ছুঁয়ে থাকে. তাই তাক কোনো span হতে পারে না.
+
+**নাসিবের তাক বাদ.**
+
+<ZeroHome />
+
+বড় একটা ঘরের ভিতরে থাকা span কে বলে **subspace**. একটা ঘরে subspace হয় মাত্র চার রকম.
 
 <FourKinds />
 
@@ -93,43 +122,75 @@ A span that lives inside a bigger room is called a **subspace**. A room holds on
 
 <Step>
 
-Nasib has one more worry. “Say the flats do sit on a sheet. Add two flats together, and maybe you fall off it.”
+নাসিবের আরেকটা খটকা আছে. বললো, ধরলাম flat গুলা একটা sheet এর উপরেই বসে আছে. কিন্তু দুইটা flat যোগ করলে? হয়তো sheet থেকে পড়ে যাবে.
 
-Samin draws four clubs on the floor with Ammu's chalk. Each club is a set of arrows. You may add two members, or stretch one by any number. If the answer isn't a member, you've fallen out. Try to fall out of each club.
+সামিন আম্মুর chalk টা নিলো. মেঝেতে চারটা club আঁকলো. প্রতিটা club কিছু arrow এর একটা দল. নিয়ম দুইটা. দুইটা member কে যোগ করা যাবে. আর একটাকে যেকোনো সংখ্যা দিয়ে stretch করা যাবে. উত্তরটা member না হলে, আপনি club থেকে পড়ে গেলেন.
 
-<CantFallOut />
+<ChalkClubs story />
+
+সহজ দুইটা দিয়ে শুরু. একটা 3.6 এর সেই ring, যেখানে সব arrow ঠিক 1 লম্বা. আরেকটায় কোনো minus সংখ্যা নাই, word count এর মত. দুইটা থেকেই বের হওয়ার রাস্তা খুঁজুন.
+
+<EasyClubs />
 
 <Then>
 
-Only the whole floor held. Add any two of its arrows, or stretch one by any number, and you're still on the floor. A set you can't fall out of like this is called a **vector space**. The floor is one, and so is the room. Every subspace is one too: that's the “sub”, a smaller vector space inside a bigger one.
+দুইটা club থেকেই বের হওয়া গেলো. Ring এ $(1, 0) + (0, 1)$ হলো 1.41 লম্বা. ring এর বাইরে. আর minus নাই এমন club? × −1 দিলেই minus চলে আসে.
+
+তারমানে নাসিবের খটকা বাজে খটকা না. কিছু দল থেকে যোগ করেই বের হয়ে যাওয়া যায়. খাতার sheet টাও যদি এমন হয়? দুইটা flat যোগ করলে যোগফল গিয়ে পড়বে কোথায়?
+
+<SumWhere />
+
+</Then>
+
+</Step>
+
+<Step>
+
+বাকি দুইটা club. একটা পুরা মেঝে. আরেকটাও পুরা মেঝে, শুধু দরজার কোণাটা বাদ, কারণ ওখানে আম্মু একটা ফুলের টব রেখেছেন.
+
+<PotHole story />
+
+এই দুইটা থেকে বের হতে পারবেন? আগে একটা আন্দাজ করুন. তারপর চেষ্টা.
+
+<LastClubs />
+
+<Then>
+
+টিকলো কে? শুধু পুরা মেঝেটা. এর যেকোনো দুইটা arrow যোগ করুন. বা একটাকে যেকোনো সংখ্যা দিয়ে stretch করুন. আপনি মেঝের উপরেই থাকবেন.
+
+এভাবে যে দল থেকে বের হওয়া যায় না, তাকে বলে **vector space**. মেঝে একটা vector space. পুরা ঘরটাও. প্রতিটা subspace ও একেকটা vector space. “Sub” মানে এটাই. বড় একটা vector space এর ভিতরে ছোট একটা.
 
 <FloorClub />
 
-The rules behind it are ones you already use without thinking.
+এর পিছনের নিয়মগুলা আপনি এতদিন না ভেবেই ব্যবহার করে আসছেন.
 
-<SideQuest title="The eight rules, and other vector spaces">
+<SideQuest title="আটটা নিয়ম, আর অন্য সব vector space">
 
-Books list eight rules for a vector space. You've used every one of them already.
+বইয়ে vector space এর আটটা নিয়ম লেখা থাকে. প্রতিটাই আপনি এর মধ্যে ব্যবহার করে ফেলেছেন.
 
 <Table
-  head={["The rule", "In symbols", "In plain words"]}
+  head={["নিয়ম", "Symbol এ", "সহজ কথায়"]}
   rows={[
-    ["Order doesn't matter", "v + w = w + v", "add two arrows either way round, same arrow"],
-    ["Brackets don't matter", "v + (w + t) = (v + w) + t", "add three arrows in any grouping"],
-    ["There's a zero", "v + 0 = v", "a “stay put” arrow exists"],
-    ["Every arrow can be undone", "v + (−v) = 0", "walk it, walk it back, you're home"],
-    ["Stretch a sum", "c(v + w) = cv + cw", "stretch then add, or add then stretch"],
-    ["Stretch by a sum", "(c + d)v = cv + dv", "3 presses and 2 presses make 5 presses"],
-    ["Stretch twice", "(cd)v = c(dv)", "double it, then triple it: × 6"],
-    ["× 1 does nothing", "1v = v", "the arrow stays as it is"],
+    ["আগে পরে কিছু যায় আসে না", "v + w = w + v", "দুইটা arrow যেভাবেই যোগ করুন, একই arrow"],
+    ["Bracket এ কিছু যায় আসে না", "v + (w + t) = (v + w) + t", "তিনটা arrow যেকোনো জোড়ায় যোগ করুন"],
+    ["একটা zero আছে", "v + 0 = v", "“যেখানে আছো সেখানেই থাকো” arrow আছে"],
+    ["প্রতিটা arrow ফেরত নেওয়া যায়", "v + (−v) = 0", "হেঁটে যান, উল্টা হেঁটে আসুন, আবার বাসায়"],
+    ["যোগফলকে stretch", "c(v + w) = cv + cw", "আগে stretch পরে যোগ, বা আগে যোগ পরে stretch"],
+    ["যোগফল দিয়ে stretch", "(c + d)v = cv + dv", "3 বার চাপ আর 2 বার চাপ মিলে 5 বার"],
+    ["দুইবার stretch", "(cd)v = c(dv)", "আগে দ্বিগুণ, তারপর তিনগুণ: × 6"],
+    ["× 1 কিছুই করে না", "1v = v", "arrow যেমন ছিল তেমনই"],
   ]}
 />
 
-These rules are what let us multiply things out like ordinary algebra. In 4.3, breaking $v \cdot w$ into four pieces, one pair of axes each, was allowed because of them.
+লাভটা কী? গুণ ভেঙে ভেঙে করা যায়. সাধারণ algebra র মত. 4.3 এ $v \cdot w$ কে চার টুকরায় ভেঙেছিলাম, প্রতি জোড়া axis এর জন্য একটা. ওটা করা গেছে এই নিয়মগুলার জন্যই.
 
-Anything that follows the rules is a vector space, even if it looks nothing like arrows: polynomials, 28 × 28 pictures, all the weight settings of a neural network. That's why one body of maths works for all of them.
+নিয়মগুলা মানলেই সেটা একটা vector space. দেখতে arrow এর মত না হলেও. polynomial. 28 × 28 ছবি. একটা neural network এর সব weight. তাই একই maths খাটে সবগুলার উপরে.
 
-One warning. You'll hear that “embeddings live on the unit sphere”. The ring from 3.6 already fell out of its club: $(1, 0) + (0, 1)$ is 1.41 long. So the sphere is a surface, not a vector space.
+<AlsoSpaces />
+
+একটা সাবধানবাণী. শুনবেন, “embedding গুলা unit sphere এর উপরে থাকে”. 3.6 এর ring তো club থেকে পড়ে গেছে. $(1, 0) + (0, 1)$ হলো 1.41 লম্বা. তাই sphere হলো একটা surface. vector space না.
+
+<SphereOff />
 
 </SideQuest>
 
@@ -139,17 +200,19 @@ One warning. You'll hear that “embeddings live on the unit sphere”. The ring
 
 <Step>
 
-Now the khata. Nasib says the six dots fill the room. Samin says they sit on one sheet. There's a simple way to check. A sheet seen from the side, edge-on, looks like a line.
+এবার খাতা. নাসিব বলছে ছয়টা dot পুরা ঘর জুড়ে ছড়ানো. সামিন বলছে সব একটা sheet এর উপরে. Check করার একটা সহজ উপায় আছে. টেবিলের উপরে রাখা একটা খাতা চোখের লেভেলে এনে দেখুন. কী দেখা যায়? শুধু একটা দাগ. একটা sheet কে কিনারা বরাবর দেখলে সেটা একটা line এর মত দেখায়.
+
+<EdgeOnKhata story />
 
 <FlatSheet />
 
 <Then>
 
-Why a sheet? Remember 5.2's total column: total = bed + bath, on every row. So once you know a flat's beds and baths, its height in the room is already decided. The dot can't float above the sheet or sink below it.
+Sheet কেন? 5.2 এর total column টা মনে করুন. total = bed + bath. প্রতিটা row তে. তাই একটা flat এর bed আর bath জানা হয়ে গেলেই ঠিক হয়ে যায় ঘরের ভিতরে ওর height. Dot টা sheet এর উপরে ভাসতে পারে না. নিচে ডুবতেও পারে না.
 
 <SheetThrough />
 
-5.2's extra column and this flat sheet are the same fact. One is written in numbers, the other is drawn.
+5.2 এর বাড়তি column আর এই flat sheet আসলে একই কথা. একটা সংখ্যায় লেখা. আরেকটা ছবিতে আঁকা.
 
 </Then>
 
@@ -157,17 +220,17 @@ Why a sheet? Remember 5.2's total column: total = bed + bath, on every row. So o
 
 <Step>
 
-A sheet through the door corner should be the span of two buttons. So which two buttons paint this one? Each button is one step in the room: (bed, bath, total).
+Sheet টা দরজার কোণা দিয়ে যায়. তাহলে ওটা দুইটা button এর span হওয়ার কথা. কোন দুইটা button দিয়ে রং করা যায় এই sheet? প্রতিটা button ঘরের ভিতরে একটা ধাপ: (bed, bath, total).
 
 <SheetFromButtons />
 
 <Then>
 
-Every flat is a mix of the two buttons: bed presses of $(1, 0, 1)$ and bath presses of $(0, 1, 1)$. Flat 2 has 3 beds and 2 baths, so $(3, 0, 3) + (0, 2, 2) = (3, 2, 5)$.
+কী পেলেন? প্রতিটা flat এই দুইটা button এর একটা mix. কয়েকবার bed এর $(1, 0, 1)$. আর কয়েকবার bath এর $(0, 1, 1)$. Flat 2 এ 3 টা bed আর 2 টা bath. তাই $(3, 0, 3) + (0, 2, 2) = (3, 2, 5)$.
 
 <TwoButtonsPaint />
 
-So the khata lives in the span of two buttons: a **2-dimensional subspace** of a 3-dimensional room. And Nasib's worry? Two flats added are another mix of the same buttons. So the sum lands on the sheet too.
+তাহলে খাতাটা থাকে দুইটা button এর span এ: 3-dimensional একটা ঘরের ভিতরে একটা **2-dimensional subspace**.
 
 </Then>
 
@@ -175,13 +238,41 @@ So the khata lives in the span of two buttons: a **2-dimensional subspace** of a
 
 <Step>
 
-Your turn. The dalal's bag has three more pages, each with three columns. For each page, turn the cloud and say how much of the room it really uses.
+নাসিব এখনো হাল ছাড়ে নাই. বাক্সটা পা দিয়ে একটু ঠেলে সামিনের দিকে সরিয়ে দিলো. বললো, দুইটা flat যোগ করি. দেখি কী হয়.
+
+সামিন বললো, করো.
+
+<NasibTries story />
+
+নাসিবের হয়ে দুইটা করে flat বেছে যোগ করুন. যোগফল ঘরের কোথায় গিয়ে পড়ে, দেখুন.
+
+<AddFlats />
+
+<Then>
+
+তিনবার যোগ. তিনবারই sheet এর উপরে. কাহিনী কি? কারণটা button এ. Flat 1 হলো 2 বার bed আর 1 বার bath. Flat 2 হলো 3 বার bed আর 2 বার bath. দুইটা যোগ করলে? 5 বার bed আর 3 বার bath. এটাও তো ওই দুই button এরই একটা mix. তাই যোগফলও sheet এর উপরেই পড়ে.
+
+<PressesAdd />
+
+**নাসিবের খটকাটাও টিকলো না.** খাতার sheet মেঝের মতই একটা club. বের হওয়ার রাস্তা নাই.
+
+</Then>
+
+</Step>
+
+<Step>
+
+এবার আপনার পালা. দালাল ভাইয়ের ব্যাগে আরো তিনটা পাতা পাওয়া গেলো, প্রতিটায় তিনটা করে column.
+
+<DalalBag story />
+
+প্রতিটা পাতার dot গুলা ঘুরিয়ে দেখুন, আর বলুন ঘরের কতটুকু আসলে লাগছে.
 
 <YourCloud />
 
 <Then>
 
-The columns were three every time. But the dots used one, two and three directions. Rent, advance and yearly rent are one fact said three ways, so they make a line. Bulbs come from beds and baths, so a sheet. The floor number has nothing to do with the rooms, so it needs the whole room.
+Column প্রতিবার তিনটাই ছিল. কিন্তু dot গুলা লাগালো কখনো এক, কখনো দুই, কখনো তিন direction. কেন? ভাড়া, advance আর বছরের ভাড়া একই কথা, তিনভাবে বলা. তাই একটা line. Bulb আসে bed আর bath থেকে. তাই একটা sheet. আর flat কয়তলায়? room এর সাথে ওর কোনো সম্পর্ক নাই. তাই পুরা ঘর লাগে.
 
 <ThreePages />
 
@@ -193,17 +284,19 @@ The columns were three every time. But the dots used one, two and three directio
 
 ## Try it
 
-Another dalal's khata, eight flats: beds, baths, and area in square feet. Bigger flats have more rooms. But kitchens and verandas come in all sizes. Turn the cloud, then pick the honest picture.
+অন্য এক দালালের খাতা, আটটা flat: bed, bath, আর square feet এ area. বড় flat এ room বেশি. কিন্তু রান্নাঘর আর বারান্দা একেক বাসায় একেক সাইজের. Dot গুলা ঘুরিয়ে দেখুন, তারপর সৎ ছবিটা বাছুন.
 
 <TryNearlyFlat />
 
 <Then>
 
-Real data is almost never exactly on a sheet. But it often sits close to one, like a thin pancake.
+Real data একদম একটা sheet এর উপরে? প্রায় কখনোই না. কিন্তু sheet এর কাছাকাছি? প্রায়ই. পাতলা একটা রুটির মত.
 
 <Pancake />
 
-A real table can have 300 columns, and maybe only 20 real directions. That true count has a name, **rank**, and Module 3 is about finding it. So how many directions does your data really need? Count them. Don't trust the number of columns.
+একটা real table এ column থাকতে পারে 300 টা. আর real direction হয়তো মাত্র 20 টা. ওই আসল সংখ্যাটার একটা নাম আছে. **rank**. মানে, data আসলে কয়টা direction ব্যবহার করে. Module 3 পুরাটাই এটা খুঁজে বের করা নিয়ে. তাহলে আপনার data র আসলে কয়টা direction লাগে? গুনে দেখুন. Column এর সংখ্যা দেখে বিশ্বাস করবেন না.
+
+<RankCount />
 
 </Then>
 
@@ -211,43 +304,45 @@ A real table can have 300 columns, and maybe only 20 real directions. That true 
 
 <Step>
 
-## The end! Nasib carries the box
+## The end! শেষ বাক্সটা নাসিবের
 
-Samin was right, and Nasib knows it. He picks up the last box.
+সামিনই ঠিক. নাসিবও সেটা জানে. কিছু না বলে সে শেষ বাক্সটা তুললো.
 
 <LastBox story />
 
-Open the three claims one by one, and check them against your bet.
+তিনটা দাবি একটা একটা করে খুলুন, আর নিজের বাজির সাথে মিলিয়ে দেখুন.
 
 <BetSettled />
 
 <Then>
 
-Nasib counted columns: three. Samin looked at where the dots sit: one flat sheet, two directions. The total column added a number to every row, but no new direction.
+নাসিব গুনেছিল column. তিনটা. সামিন দেখেছিল dot গুলা কোথায় বসে. একটা flat sheet. দুইটা direction. Total column প্রতিটা row তে একটা করে সংখ্যা যোগ করেছে. কিন্তু নতুন direction? একটাও না.
 
 <ColumnsNotDirections />
 
-The rule to keep: **count the directions the data uses, not the columns it has.**
+মনে রাখার নিয়ম: **data র কয়টা column আছে সেটা না, data আসলে কয়টা direction ব্যবহার করে সেটা গুনুন.**
 
-<SideQuest title="How books write it">
+<SideQuest title="বইয়ে যেভাবে লেখে">
 
 <Table
-  head={["You'll see", "Say it as"]}
+  head={["যেটা দেখবেন", "যেভাবে বলবেন"]}
   rows={[
-    ["V is a vector space", "a set you can't leave by adding or stretching"],
-    ["W ⊆ V, a subspace", "a smaller vector space inside V; it holds the door corner"],
-    ["span{u, w}", "everywhere u and w reach: here, the khata's sheet"],
-    ["dim W = 2", "W takes two directions"],
-    ["rank", "how many real directions a table of data uses (Module 3)"],
+    ["V is a vector space", "এমন একটা দল, যোগ বা stretch করে যেখান থেকে বের হওয়া যায় না"],
+    ["W ⊆ V, a subspace", "V এর ভিতরে ছোট একটা vector space; দরজার কোণা ছুঁয়ে থাকে"],
+    ["span{u, w}", "u আর w যেখানে যেখানে পৌঁছায়: এখানে খাতার sheet"],
+    ["dim W = 2", "W তে দুইটা direction লাগে"],
+    ["rank", "একটা data table আসলে কয়টা direction ব্যবহার করে (Module 3)"],
   ]}
 />
 
 </SideQuest>
 
-Tomorrow is the first day at the new school. But the new neighbourhood has no road that goes north. So how will Fahim tell the rickshaw mama where the school is?
+কাল নতুন স্কুলে প্রথম দিন. কিন্তু নতুন এলাকায় north এ যায় এমন কোনো রাস্তাই নাই. তাহলে ফাহিম রিকশাওয়ালা মামাকে স্কুলটা কোথায় বলবে কীভাবে?
 
-<LessonLink href="/dashboard/articles/math_for_ai/05e_school_lanes" eyebrow="Next lesson" title="Same arrow, new numbers, the road to school">
-  The map says the school is 2 east and 3 north. With no road going north, what numbers do you give the rickshaw mama?
+<NorthlessTease />
+
+<LessonLink href="/dashboard/articles/math_for_ai/05e_school_lanes" eyebrow="পরের lesson" title="স্কুলের রাস্তা, রিকশাওয়ালা মামার card">
+  Map বলছে স্কুল 2 ঘর east আর 3 ঘর north এ. North এ কোনো রাস্তাই নাই, তাহলে রিকশাওয়ালা মামাকে কোন সংখ্যা দুইটা বলবেন?
 </LessonLink>
 
 </Then>

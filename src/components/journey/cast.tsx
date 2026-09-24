@@ -18,9 +18,10 @@ import { GROW_WIDE, POP, SceneControls, type SceneState } from "./kit";
 // feet, about 62 units tall on a 320 × 180 stage.
 
 // ---------------------------------------------------------------------------
-// The cast. মামী (ফাহিমের মামার স্ত্রী) came in with Article 4's হাট.
+// The cast. মামী (ফাহিমের মামার স্ত্রী) came in with Article 4's হাট; নানা (Moumachi
+// Nana, the beekeeper: white hair and beard, white panjabi) with Calculus for AI.
 
-export type Who = "fahim" | "samin" | "som" | "nasib" | "ammu" | "apa" | "mama" | "rina" | "karim" | "mami";
+export type Who = "fahim" | "samin" | "som" | "nasib" | "ammu" | "apa" | "mama" | "rina" | "karim" | "mami" | "nana";
 
 type Look = { name: string; shirt: string; pants: string; skin: string; hair: string };
 export const CAST: Record<Who, Look> = {
@@ -34,6 +35,7 @@ export const CAST: Record<Who, Look> = {
   rina: { name: "রিনা", shirt: "#db2777", pants: "#334155", skin: "#e8b88f", hair: "#1c1917" },
   karim: { name: "করিম", shirt: "#0891b2", pants: "#292524", skin: "#c68e5f", hair: "#1c1917" },
   mami: { name: "মামী", shirt: "#9d174d", pants: "#9d174d", skin: "#d8a47a", hair: "#1c1917" },
+  nana: { name: "নানা", shirt: "#f1f5f9", pants: "#4d7c0f", skin: "#c68e5f", hair: "#e5e7eb" },
 };
 
 const INK = "#0f1b2d";
@@ -177,6 +179,7 @@ export function Person({
             </g>
           )}
           {who === "mama" && <path d="M-4 -47.5q4 -2.5 8 0q-4 1.5 -8 0Z" fill="#3f3f46" />}
+          {who === "nana" && <path d="M-8 -50q1 11 8 12q7 -1 8 -12q-3 5 -8 5q-5 0 -8 -5Z" fill="#e5e7eb" stroke="#cbd5e1" strokeWidth={0.6} />}
           {who === "apa" && <path d="M-6 -40q-2 10 3 13M6 -40q2 10 -3 13" fill="none" stroke="#334155" strokeWidth={1.2} />}
           {/* face */}
           <circle cx={-3.4} cy={eyeY} r={1.2} fill={INK} />
