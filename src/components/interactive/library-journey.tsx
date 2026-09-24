@@ -4,30 +4,32 @@ import type { ReactNode } from "react";
 
 import { Bubble, Building, Card as CastCard, Person, Stage, StoryFrame, Tree } from "@/components/journey/cast";
 import { Task, useGate } from "@/components/journey/journey";
-import { Choice, FADE, Nope, POP, Scene, Ticks, pill, useScene, useSeed, useTween, type Fixtures } from "@/components/journey/kit";
-import { DotBox, dot, tupN } from "./haat-journey";
+import { Choice, Draw, FADE, LOOK, Nope, POP, Scene, Ticks, pill, usePlay, useScene, useSeed, useTween, type Fixtures, type Look } from "@/components/journey/kit";
+import { DotBox, dot } from "./haat-journey";
+import { Tup } from "@/components/journey/box";
 
-// Screens for two journeys, "Math for AI 4.7 — The library search, the box or cosine"
-// (TwoMachines to PickTool) and "Math for AI 4.8 — The same box, inside ChatGPT"
-// (BoxBet, OneRanking, WhoIsIt, Finale).
+// Screens for "Math for AI 4.7 — The library search, the box or cosine"
+// (04f_library_search), in the author's Banglish. 4.8 and 4.9 have their own
+// files (millionbooks-journey.tsx, attention-journey.tsx).
 //
-// The village library's new computer has two search machines, and for "fish"
-// they disagree: the box ranks a long book about boats and rice above a short
-// note about fish; cosine doesn't. The reader bets which to keep, then runs
-// both: 2, 20, 3 against 1.000, 0.999, 0.424. The loud film (5, 5) wins for
-// Mama and Mami alike under the box and for neither under cosine. Six jobs are
-// sorted by whether length is news. Normalising once makes the plain box the
-// cosine, and distance gives the same order. In a sentence, "it" finds its
-// word by the biggest box (attention), and a change of context changes the
-// answer. Five fresh jobs, unaided, into box / cosine / distance. The finale
-// reads Module 1's formula out loud, one tap per piece.
+// 4.7, step by step: (1) the recall at the door, 4.6's ropes on a picture;
+// (2) the village library's new computer has two search machines, and for
+// "মাছ" they disagree: the box ranks the boats-and-paddy book above a short
+// letter about fish. The reader bets which one লাইব্রেরির আপু keeps. (3) the
+// box once more, (1, 0, 0) · (4, 2, 7); (4, 5) both machines run by hand, bars
+// growing: 2, 20, 3 against 1.000, 0.999, 0.424; (6) the loud film হুলুস্থুল
+// (5, 5) wins for মামা and মামি alike under the box, for neither under
+// cosine; (7) 3.6's notebook: normalise to find the biggest spender?; (8) six
+// jobs sorted by whether length is news; (9) your turn, আপুর list, five jobs
+// into box / cosine / distance; (10) Try it, a newspaper search for "ইলিশ";
+// (11) আপু keeps machine B and machine A stays, then the district catalogue
+// freezes machine B (the bridge to 4.8, 04f1_million_books).
 //
-// Every setup that tells a scene gets a story scene (2a the library, 6a the
-// loud film at home, 9a a million books, 11a the night call, 13a the list,
-// 15a/15b Apu keeps both and the bus home), and every <Then> gets one or two
-// watch-only figures (2½, 4½, 4¾, 5½, 6½, 6¾, 8½, 8¾, 9½, 9¾, 10½, 11½, 12½,
-// 12¾, 13½, 15½, 15¾ in the side quest, 16½, 16¾), plus two Check answers
-// (1½ the rope, 3½ the box). They sit at the end of the file.
+// Story scenes for the setups (2a the library, 6a the film at home, 9a the
+// list, 11a আপু keeps both, 11b the catalogue freeze), and one or two
+// watch-only figures for every <Then> (1½, 2½, 3½, 4½, 4¾, 5½, 5¾, 6½, 6¾,
+// 7½, 8½, 8⅝, 8¾ in the side quest, 9½, 10½), and 10a the newspaper
+// cupboard. They sit at the end of the file.
 //
 // Tailwind only.
 
@@ -48,41 +50,154 @@ const cosQ = (v: readonly number[]) => dot(QUERY, v) / (len(QUERY) * len(v));
 const rankBy = (score: (v: readonly number[]) => number, low = false) =>
   [...BOOKS].sort((a, b) => (low ? score(a.v) - score(b.v) : score(b.v) - score(a.v)));
 
-function BookRow({ name, v, score, on, onClick, label }: { name: string; v: number[]; score: string; on: boolean; onClick: () => void; label: string }) {
+// ---------------------------------------------------------------------------
+// 4.7's names, in the lesson's own words. BOOKS, TASTES and FILMS keep their
+// English names in the data; 4.7 shows these.
+
+const BOOK_BN: Record<string, { full: string; short: string }> = {
+  A: { full: "মাছ নিয়ে ছোট একটা চিঠি", short: "চিঠি" },
+  B: { full: "মাছ নিয়ে মোটা একটা বই", short: "মোটা বই" },
+  C: { full: "নৌকা আর ধানের বই", short: "নৌকা-ধান" },
+};
+/** what each slot of a list counts, for Tup's hover */
+const BOOK_SLOTS = ["মাছ", "নৌকা", "ধান"];
+const FILM_SLOTS = ["কান্না", "হাসি"];
+const NEWS_SLOTS = ["ইলিশ", "দাম", "রাজনীতি"];
+const COW_SLOTS = ["ওজন", "দুধ", "বয়স"];
+const TEA_SLOTS = ["চা", "শরবত"];
+const WHO_BN: Record<string, string> = { Mama: "মামা", Mami: "মামি" };
+const FILM_BN: Record<string, string> = { Hullabaloo: "হুলুস্থুল" };
+const filmBn = (name: string) => FILM_BN[name] ?? name;
+
+/** A compact answer tile for a row of three: a picture (or a number) over a short label, in Choice's looks. */
+function PicChoice({ look, disabled, onClick, children }: { look: Look; disabled: boolean; onClick: () => void; children: ReactNode }) {
   return (
     <button
       type="button"
-      disabled={on}
+      disabled={disabled}
       onClick={onClick}
-      className={`flex w-full cursor-pointer items-center justify-between gap-2 rounded-xl border-2 px-3 py-2 text-left transition-colors motion-reduce:transition-none disabled:cursor-default ${
-        on ? "border-cat-blue/40 bg-cat-blue/5" : "border-border hover:border-cat-blue/60"
-      }`}
+      className={`flex w-full cursor-pointer flex-col items-center justify-center gap-1 rounded-xl border-2 px-1.5 py-2 text-center text-sm leading-snug transition-[color,background-color,border-color,opacity] duration-200 motion-reduce:transition-none disabled:cursor-default ${LOOK[look]}`}
     >
-      <span className="min-w-0">
-        <span className="block text-sm font-semibold">{name}</span>
-        <span className="font-mono text-xs text-muted">{tupN(v)}</span>
-      </span>
-      {on ? (
-        <b key={score} className={`${POP} inline-block font-mono text-lg`}>
-          {score}
-        </b>
-      ) : (
-        <span className="text-xs whitespace-nowrap text-cat-blue">{label}</span>
-      )}
+      {children}
     </button>
   );
 }
 
 // ---------------------------------------------------------------------------
-// 1 · Two machines, one query. Machine A ranks by the box, machine B by
-//     cosine, and they disagree about the fish note. The reader bets which the
-//     librarian should keep; LengthIsNews and PickTool settle it.
+// 1 · The recall at the door, on 4.6's ghat: the boat 3 metres off the bank,
+//     a pull of 10. Which rope sends more of it forward, 4 metres or 15, or
+//     both the same? Each pick draws its rope(s) and grows the forward share:
+//     6.6 on the short rope (the rest goes to the bank), 9.8 on the long.
+
+const R1_M = 16.5; // px per metre
+const R1_BANK = 96;
+const R1_BOAT = 30;
+const R1_ROPES = [4, 15];
+const R1_ALONG = R1_ROPES.map((L) => Math.sqrt(L * L - 9));
+const R1_FWD = R1_ROPES.map((L, i) => (10 * R1_ALONG[i]) / L); // 6.6, 9.8
+const R1_RIGHT = 1;
+const R1_OPTS = ["4 metre দড়ি", "15 metre দড়ি", "দুইটাতেই সমান"];
+const R1_TONE = ["#e11d48", "#0f766e"]; // the short rope coral, the long one teal (literals: the ink consts are declared further down)
+
+/** A thumbnail for a rope choice: the bank, the boat, and rope `i` (2 = both). */
+function R1_Pic({ i }: { i: number }) {
+  const ropes = i === 2 ? [0, 1] : [i];
+  return (
+    <svg viewBox="0 0 84 36" aria-hidden="true" className="block h-auto w-20 shrink-0">
+      <rect x={0.5} y={0.5} width={83} height={35} rx={5} fill="#e0f2fe" stroke="#cbd5e1" />
+      <rect x={0.5} y={27} width={83} height={8.5} fill="#a3b18a" />
+      <path d="M4 12h12l-2 3h-8Z" fill="#92400e" />
+      {ropes.map((r) => {
+        const x = 10 + R1_ALONG[r] * 4.7;
+        return (
+          <g key={r}>
+            <path d={`M10 12L${x} 27`} stroke={R1_TONE[r]} strokeWidth={1.6} />
+            <circle cx={x} cy={24} r={2.6} fill={R1_TONE[r]} />
+          </g>
+        );
+      })}
+    </svg>
+  );
+}
+
+export function RopeRecallPick() {
+  const pass = useGate();
+  const [pick, setPick] = useSeed<number | null>("pick", null);
+  const [miss, setMiss] = useSeed("miss", 0);
+  const p = usePlay(950);
+  const on = (r: number) => pick === r || pick === 2;
+  const [f0, f1] = useTween([on(0) ? R1_FWD[0] : 0, on(1) ? R1_FWD[1] : 0], 900);
+  const f = [f0, f1];
+  const boatY = R1_BANK - 3 * R1_M;
+
+  const choose = (i: number) => {
+    setPick(i);
+    if (i === R1_RIGHT) p.play(1, () => pass("লম্বা দড়ি, ছোট angle, টানের বেশিটা সামনে."));
+    else setMiss(miss + 1);
+  };
+
+  return (
+    <>
+      <div className="text-center text-sm text-muted">4.6 এর ঘাট. নৌকা পাড় থেকে 3 metre দূরে, মাঝিরা টানে মোট 10.</div>
+      <svg viewBox="0 0 290 116" role="img" aria-label="নৌকা পাড় থেকে 3 metre দূরে; বেছে নেয়া দড়িতে টানের কতটুকু সামনে যায়" className="mx-auto mt-1 block h-auto w-full max-w-[18rem]">
+        <rect x={1} y={1} width={288} height={114} rx={10} fill="#e0f2fe" stroke="#cbd5e1" />
+        <rect x={1} y={R1_BANK} width={288} height={19} fill="#a3b18a" />
+        <text x={8} y={R1_BANK + 13} fontSize={8} fill={L_INK}>
+          পাড়
+        </text>
+        <path d={`M${R1_BOAT - 16} ${boatY - 2}h32l-5 8h-22Z`} fill="#92400e" />
+        <path d={`M${R1_BOAT - 8} ${boatY + 12}V${R1_BANK - 2}`} stroke={L_INK} strokeOpacity={0.4} strokeDasharray="2 2" />
+        <text x={R1_BOAT - 5} y={(boatY + R1_BANK) / 2 + 6} fontSize={7.5} fontFamily="ui-monospace, monospace" fill={L_INK}>
+          3 m
+        </text>
+        <text x={R1_BOAT} y={14} fontSize={7.5} fill="#0f766e">
+          সামনে যায়, নদী বরাবর
+        </text>
+        {R1_ROPES.map((L, r) => {
+          if (!on(r)) return null;
+          const mx = R1_BOAT + R1_ALONG[r] * R1_M;
+          const y = 24 + r * 12;
+          return (
+            <g key={`${r}${pick}`} className={FADE}>
+              <Draw d={`M${R1_BOAT} ${boatY}L${mx} ${R1_BANK - 8}`} ms={600} strokeWidth={1.6} className="stroke-[#78350f]" />
+              <circle cx={mx} cy={R1_BANK - 8} r={4.5} fill={R1_TONE[r]} />
+              <text x={Math.min(mx, 262)} y={R1_BANK + 13} textAnchor="middle" fontSize={7.5} fontFamily="ui-monospace, monospace" fill={L_INK}>
+                {`${L} m`}
+              </text>
+              <path d={`M${R1_BOAT} ${y}H${R1_BOAT + f[r] * 14}`} stroke={R1_TONE[r]} strokeWidth={6} strokeLinecap="round" />
+              <text x={R1_BOAT + f[r] * 14 + 6} y={y + 3} fontSize={9} fontWeight={800} fontFamily="ui-monospace, monospace" fill={R1_TONE[r]}>
+                {`${fix(f[r], 1)} · ${L} m`}
+              </text>
+            </g>
+          );
+        })}
+      </svg>
+      <div className="mt-3 grid grid-cols-3 gap-2">
+        {R1_OPTS.map((o, i) => (
+          <PicChoice key={o} look={pick === i ? (i === R1_RIGHT ? "right" : "wrong") : "idle"} disabled={pick === R1_RIGHT} onClick={() => choose(i)}>
+            <R1_Pic i={i} />
+            <span>{o}</span>
+          </PicChoice>
+        ))}
+      </div>
+      {pick === 0 && <Nope key={miss}>4 metre দড়িতে সামনে যায় মোটে 6.6. কেন? দড়ি খাড়া, angle বড়. টানের বড় একটা অংশ চলে যায় পাড়ের দিকে.</Nope>}
+      {pick === 2 && <Nope key={miss}>সমান না: 6.6 আর 9.8. দড়ি লম্বা হলে angle ছোট হয়, না বড়?</Nope>}
+      <Task done={pick === R1_RIGHT && !p.running}>কোন দড়িতে মোট 10 এর বেশিটা নৌকাকে সামনে নেয়? ছবিতে tap করুন.</Task>
+    </>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 2 · Two machines, one query. Machine A ranks by the box, machine B by
+//     cosine, and they disagree about the boats-and-paddy book. The lists
+//     print row by row; the reader bets which the library apu should keep,
+//     and the bet is stamped on that machine, unmarked. The finale settles it.
 
 const MACHINES = [
   { name: "machine A", order: rankBy((v) => dot(QUERY, v)) },
   { name: "machine B", order: rankBy(cosQ) },
 ];
-const KEEP_BET = ["machine A — the thick book really is stuffed with fish", "machine B", "Both are fine, the answers are almost the same"];
+const KEEP_BET = ["machine A. মোটা বইটায় তো আসলেই মাছ ভর্তি", "machine B", "দুইটাই চলবে, উত্তর তো প্রায় একই"];
 
 export function TwoMachines() {
   const pass = useGate();
@@ -90,29 +205,33 @@ export function TwoMachines() {
 
   const seal = (i: number) => {
     setBet(i);
-    pass("Bet sealed. We'll compare at the end.");
+    pass("বাজি ধরা হলো. শেষে মিলিয়ে দেখবো.");
   };
 
   return (
     <>
       <div className="mx-auto mt-2 w-fit rounded-full border-2 border-border px-4 py-1 text-sm">
-        Search: <b>fish</b>
+        Search: <b>মাছ</b>
       </div>
       <div className="mt-3 grid grid-cols-2 gap-2">
-        {MACHINES.map((m) => (
-          <div key={m.name} className="rounded-xl border-2 border-border bg-surface px-2 py-2">
-            <div className="text-center text-sm font-semibold">{m.name}</div>
-            <ol className="mt-1 grid gap-1 text-[0.8rem] leading-snug">
-              {m.order.map((b, i) => (
-                <li key={b.id} className={`rounded-md px-1.5 py-0.5 ${b.id === "C" ? "bg-cat-coral/10" : ""}`}>
-                  {i + 1}. {b.name}
-                </li>
-              ))}
-            </ol>
-          </div>
-        ))}
+        {MACHINES.map((m, mi) => {
+          const mine = bet === mi || bet === 2;
+          return (
+            <div key={m.name} className={`relative rounded-xl border-2 bg-surface px-2 py-2 transition-colors motion-reduce:transition-none ${mine ? "border-cat-blue" : "border-border"}`}>
+              <div className="text-center text-sm font-semibold">{m.name}</div>
+              <ol className="mt-1 grid gap-1 text-[0.8rem] leading-snug">
+                {m.order.map((b, i) => (
+                  <li key={b.id} style={{ transitionDelay: `${300 + (mi * 3 + i) * 220}ms` }} className={`${FADE} rounded-md px-1.5 py-0.5 ${b.id === "C" ? "bg-cat-coral/10" : ""}`}>
+                    {i + 1}. {BOOK_BN[b.id].full}
+                  </li>
+                ))}
+              </ol>
+              {mine && <span className={`${POP} absolute -top-2.5 right-2 inline-block rounded-full bg-cat-blue px-2 text-xs font-semibold text-white`}>আপনার বাজি</span>}
+            </div>
+          );
+        })}
       </div>
-      <div className="mt-3 text-sm font-medium text-muted">For finding books on fish, which machine should Apu keep?</div>
+      <div className="mt-3 text-sm font-medium text-muted">মাছের বই খুঁজতে আপু কোন machine টা রাখবেন?</div>
       <div className="mt-2 grid gap-2">
         {KEEP_BET.map((o, i) => (
           <Choice key={o} n={i} look={bet === i ? "picked" : bet !== null ? "dim" : "idle"} disabled={bet !== null} onClick={() => seal(i)}>
@@ -120,14 +239,125 @@ export function TwoMachines() {
           </Choice>
         ))}
       </div>
-      <Task done={bet !== null}>Look at the two lists and bet on one.</Task>
+      <Task done={bet !== null}>দুইটা list দেখে একটার উপরে বাজি ধরুন.</Task>
     </>
   );
 }
 
 // ---------------------------------------------------------------------------
-// 2 · Machine ক, by hand. The query (1, 0, 0) into the box with each book:
-//     2, 20, 3. The boats-and-rice book beats the fish note.
+// 3 · The box, once more, before machine A runs: (1, 0, 0) · (4, 2, 7).
+//     Three answers to pick, and each one plays out: 4 multiplies slot by
+//     slot and adds; (4, 0, 0) multiplies but never adds; 13 ignores the
+//     query and adds the book's slots.
+
+const H3_Q = [1, 0, 0];
+const H3_B = [4, 2, 7];
+const H3_SLOTS = ["মাছ", "নৌকা", "ধান"];
+const H3_OPTS = ["(4, 0, 0)", "13", "4"];
+const H3_RIGHT = 2;
+
+export function OneHotPick() {
+  const pass = useGate();
+  const [pick, setPick] = useSeed<number | null>("pick", null);
+  const [miss, setMiss] = useSeed("miss", 0);
+  const p = usePlay(560);
+  const at = pick === null ? 0 : p.running ? p.k : 4;
+  const sum13 = pick === 1;
+
+  const choose = (i: number) => {
+    setPick(i);
+    p.play(4, i === H3_RIGHT ? () => pass("শুধু first slot টিকে থাকে: 4.") : undefined);
+    if (i !== H3_RIGHT) setMiss(miss + 1);
+  };
+
+  const cell = "grid h-9 place-items-center rounded-lg border font-mono text-base font-semibold transition-opacity duration-500 motion-reduce:transition-none";
+  return (
+    <>
+      <div className="mx-auto grid w-full max-w-xs grid-cols-[3.2rem_1fr_1fr_1fr] items-center gap-1.5">
+        <span />
+        {H3_SLOTS.map((s) => (
+          <span key={s} className="text-center text-xs text-muted">
+            {s}
+          </span>
+        ))}
+        <span className="text-xs font-semibold">query</span>
+        {H3_Q.map((q, i) => (
+          <span key={i} className={`${cell} border-cat-blue/40 bg-cat-blue/5 ${sum13 && at >= 1 ? "opacity-25" : ""}`}>
+            {q}
+          </span>
+        ))}
+        <span className="text-xs font-semibold">বই</span>
+        {H3_B.map((b, i) => (
+          <span key={i} className={`${cell} border-cat-amber/50 bg-cat-amber/10 ${!sum13 && at > i && H3_Q[i] === 0 ? "opacity-40" : ""}`}>
+            {b}
+          </span>
+        ))}
+        <span className="text-xs font-semibold">{sum13 ? "" : "গুণ"}</span>
+        {H3_B.map((b, i) =>
+          !sum13 && at > i ? (
+            <span key={i} className={`${POP} inline-block text-center font-mono text-sm ${H3_Q[i] === 0 ? "text-muted" : "font-bold text-cat-blue"}`}>
+              {`${H3_Q[i]} × ${b} = ${H3_Q[i] * b}`}
+            </span>
+          ) : (
+            <span key={i} />
+          ),
+        )}
+      </div>
+      <div className="mt-2 h-9 text-center">
+        {at >= 4 && pick === H3_RIGHT && <b className={`${POP} inline-block rounded-xl bg-accent px-3 py-1 font-mono text-lg text-accent-foreground`}>4 + 0 + 0 = 4</b>}
+        {at >= 4 && pick === 0 && <span className={`${FADE} inline-block rounded-xl border-2 border-dashed border-danger/50 px-3 py-1 font-mono text-lg text-danger`}>(4, 0, 0) … যোগ?</span>}
+        {sum13 && at >= 2 && <span className={`${FADE} inline-block rounded-xl border-2 border-dashed border-danger/50 px-3 py-1 font-mono text-lg text-danger`}>{at >= 4 ? "4 + 2 + 7 = 13" : "4 + 2 + 7"}</span>}
+      </div>
+      <div className="mt-3 text-sm font-medium text-muted">(1, 0, 0) · (4, 2, 7) কত?</div>
+      <div className="mt-2 grid grid-cols-3 gap-2">
+        {H3_OPTS.map((o, i) => (
+          <PicChoice key={o} look={pick === i && !p.running ? (i === H3_RIGHT ? "right" : "wrong") : pick === i ? "picked" : "idle"} disabled={pick === H3_RIGHT} onClick={() => choose(i)}>
+            <span className="font-mono text-base font-semibold whitespace-nowrap">{o}</span>
+          </PicChoice>
+        ))}
+      </div>
+      {pick === 0 && !p.running && <Nope key={miss}>গুণগুলা ঠিক আছে. কিন্তু box শেষে সব যোগ করে একটাই number দেয়, list না.</Nope>}
+      {pick === 1 && !p.running && <Nope key={miss}>এটা তো query বাদ দিয়ে বইয়ের সব slot যোগ. 0 দিয়ে গুণ করলে কী থাকে?</Nope>}
+      <Task done={pick === H3_RIGHT && !p.running}>(1, 0, 0) আর (4, 2, 7) এর box কত? একটা বেছে নিয়ে box খুলে দেখুন.</Task>
+    </>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 4 · Machine A, by hand. The query (1, 0, 0) into the box with each book;
+//     each run grows the book's bar to its score: 2, 20, 3. The
+//     boats-and-paddy book beats the fish letter.
+
+/** A book the reader runs: name and list on top, and under it a bar that grows to `frac` of the way. */
+function BookBar({ id, v, score, frac, on, onClick, label, tone }: { id: string; v: number[]; score: string; frac: number; on: boolean; onClick: () => void; label: string; tone: string }) {
+  return (
+    <button
+      type="button"
+      disabled={on}
+      onClick={onClick}
+      className={`w-full cursor-pointer rounded-xl border-2 px-3 py-1.5 text-left transition-colors motion-reduce:transition-none disabled:cursor-default ${
+        on ? "border-cat-blue/40 bg-cat-blue/5" : "border-border hover:border-cat-blue/60"
+      }`}
+    >
+      <span className="flex items-center justify-between gap-2">
+        <span className="min-w-0">
+          <span className={`block text-sm font-semibold ${id === "C" ? "text-cat-coral" : ""}`}>{BOOK_BN[id].full}</span>
+          <span className="font-mono text-xs text-muted"><Tup v={v} of={BOOK_SLOTS} /></span>
+        </span>
+        {on ? (
+          <b key={score} className={`${POP} inline-block font-mono text-lg`}>
+            {score}
+          </b>
+        ) : (
+          <span className="text-xs whitespace-nowrap text-cat-blue">{label}</span>
+        )}
+      </span>
+      <span className="mt-1 block h-2 rounded-full bg-foreground/10">
+        <span className={`block h-full rounded-full ${tone} transition-[width,background-color] duration-700 ease-out motion-reduce:transition-none`} style={{ width: `${Math.max(0, frac) * 100}%` }} />
+      </span>
+    </button>
+  );
+}
 
 export function DotRanking() {
   const pass = useGate();
@@ -138,33 +368,34 @@ export function DotRanking() {
     if (ran.includes(id)) return;
     const next = [...ran, id];
     setRan(next);
-    if (next.length === BOOKS.length) pass("The box lifts the long book, not the fitting one.");
+    if (next.length === BOOKS.length) pass("Box তুলে দিলো লম্বা বইটাকে.");
   };
 
   return (
     <>
       <div className="mx-auto mt-2 w-fit rounded-xl border border-border bg-surface px-3 py-1 text-center text-sm">
-        Query “fish” = <b className="font-mono">(1, 0, 0)</b>
-        <div className="text-xs text-muted">slots count (fish, boats, paddy)</div>
+        Query “মাছ” = <b className="font-mono">(1, 0, 0)</b>
+        <div className="text-xs text-muted">slot গুলা গোনে (মাছ, নৌকা, ধান)</div>
       </div>
       <div className="mt-3 grid gap-2">
         {BOOKS.map((b) => (
-          <BookRow key={b.id} name={b.name} v={b.v} score={String(dot(QUERY, b.v))} on={ran.includes(b.id)} onClick={() => run(b.id)} label="run the box" />
+          <BookBar key={b.id} id={b.id} v={b.v} score={String(dot(QUERY, b.v))} frac={ran.includes(b.id) ? dot(QUERY, b.v) / 20 : 0} on={ran.includes(b.id)} onClick={() => run(b.id)} label="box চালান" tone="bg-cat-amber" />
         ))}
       </div>
       {all && (
         <div className={`${FADE} mt-3 text-center text-[0.95rem]`}>
-          Order: <b>thick book</b> 20, <b className="text-cat-coral">boats-and-paddy</b> 3, <b>the note</b> 2
+          Order: <b>মোটা বই</b> 20, <b className="text-cat-coral">নৌকা-ধান</b> 3, <b>চিঠি</b> 2
         </div>
       )}
-      <Task done={all}>Run the query against every book with the box.</Task>
+      <Task done={all}>প্রতিটা বইয়ের সাথে query র box চালান.</Task>
     </>
   );
 }
 
 // ---------------------------------------------------------------------------
-// 3 · Machine খ, by hand. Divide each box by both lengths: 1.000, 0.999,
-//     0.424. The two fish books top the list; boats-and-rice falls last.
+// 5 · Machine B, by hand. Each bar starts at the box's number (grey, out of
+//     20) and, divided by the lengths, glides to cosine (teal, out of 1):
+//     1.000, 0.999, 0.424. The fish letter shoots up; boats-and-paddy stays last.
 
 export function CosRanking() {
   const pass = useGate();
@@ -175,35 +406,39 @@ export function CosRanking() {
     if (ran.includes(id)) return;
     const next = [...ran, id];
     setRan(next);
-    if (next.length === BOOKS.length) pass("Divide out the length and the fish books rise.");
+    if (next.length === BOOKS.length) pass("Length ভাগ দিলে মাছের বই উপরে ওঠে.");
   };
 
   return (
     <>
       <div className="mx-auto mt-2 w-fit rounded-xl border border-border bg-surface px-3 py-1 text-center text-sm">
-        The query's length is <b className="font-mono">1</b>
+        Query র length <b className="font-mono">1</b>
       </div>
       <div className="mt-3 grid gap-2">
-        {BOOKS.map((b) => (
-          <div key={b.id}>
-            <BookRow name={b.name} v={b.v} score={fix(cosQ(b.v), 3)} on={ran.includes(b.id)} onClick={() => run(b.id)} label="divide by length" />
-            {ran.includes(b.id) && (
-              <div className={`${FADE} mt-0.5 text-right font-mono text-xs text-muted`}>
-                {dot(QUERY, b.v)} ÷ (1 × {fix(len(b.v), 2)})
-              </div>
-            )}
-          </div>
-        ))}
+        {BOOKS.map((b) => {
+          const on = ran.includes(b.id);
+          return (
+            <div key={b.id}>
+              <BookBar id={b.id} v={b.v} score={fix(cosQ(b.v), 3)} frac={on ? cosQ(b.v) : dot(QUERY, b.v) / 20} on={on} onClick={() => run(b.id)} label="length দিয়ে ভাগ দিন" tone={on ? "bg-cat-teal" : "bg-foreground/25"} />
+              {on && (
+                <div className={`${FADE} mt-0.5 text-right font-mono text-xs text-muted`}>
+                  {dot(QUERY, b.v)} ÷ (1 × {fix(len(b.v), 2)})
+                </div>
+              )}
+            </div>
+          );
+        })}
       </div>
-      <Task done={all}>Divide each book's box number by both lengths.</Task>
+      <Task done={all}>প্রতিটা বইয়ের box এর number কে দুইটা length দিয়ে ভাগ দিন.</Task>
     </>
   );
 }
 
 // ---------------------------------------------------------------------------
-// 4 · The loud film. Hullabaloo (5, 5) is loud in both genres. Under the box it
-//     wins for Mama (35) and Mami (25) alike; under cosine each gets their own
-//     genre. The reader toggles both rules.
+// 6 · The loud film. হুলুস্থুল (5, 5) is loud in both genres. Under the box
+//     it wins for মামা (35) and মামি (25) alike; under cosine each gets their
+//     own genre. The reader toggles both rules; the numbers pop in afresh,
+//     each cell's bar glides to its new share and the winner's cell lights up.
 
 const TASTES = [
   { who: "Mama", v: [2, 5] },
@@ -228,13 +463,13 @@ export function LoudForBoth() {
     if (seen.includes(r)) return;
     const next = [...seen, r];
     setSeen(next);
-    if (next.length === 2) pass("Whoever wins for everyone wins by being long.");
+    if (next.length === 2) pass("সবার কাছে যে জেতে, সে জেতে লম্বা হয়ে.");
   };
 
   return (
     <>
       <div className="mx-auto mt-2 w-fit rounded-xl border-2 border-cat-coral/40 bg-cat-coral/5 px-3 py-1 text-center text-sm">
-        New film <b>Hullabaloo</b> <span className="font-mono">(5, 5)</span>: the most tears and the most laughs
+        নতুন ছবি <b>হুলুস্থুল</b> <span className="font-mono">(5, 5)</span>: কান্নাও সবচেয়ে বেশি, হাসিও
       </div>
       <div className="mt-3 flex justify-center gap-2">
         {["box", "cosine"].map((r, i) => (
@@ -247,23 +482,33 @@ export function LoudForBoth() {
         <span />
         {TASTES.map((t) => (
           <span key={t.who} className="text-center font-semibold">
-            {t.who}
+            {WHO_BN[t.who]}
           </span>
         ))}
         {FILMS.map((f) => (
           <div key={f.name} className="contents">
             <span>
-              {f.name} <span className="font-mono text-xs text-muted">{tupN(f.v)}</span>
+              {filmBn(f.name)} <span className="font-mono text-xs text-muted"><Tup v={f.v} of={FILM_SLOTS} /></span>
             </span>
             {TASTES.map((t) => {
               const top = rule !== null && FILMS.every((g) => score(t.v, g.v) <= score(t.v, f.v));
+              // the bar glides between the two rules: the box out of 35, cosine out of 1
+              const frac = rule === null ? 0 : rule === 1 ? score(t.v, f.v) : score(t.v, f.v) / 35;
               return (
-                <b
-                  key={t.who}
-                  className={`rounded-md px-1.5 text-center font-mono transition-colors motion-reduce:transition-none ${top ? "bg-accent text-accent-foreground" : ""}`}
-                >
-                  {rule === null ? "?" : rule === 1 ? fix(score(t.v, f.v), 2) : score(t.v, f.v)}
-                </b>
+                <span key={t.who} className="flex min-w-[3.2rem] flex-col items-center gap-0.5">
+                  <b
+                    key={`${t.who}${rule}`}
+                    className={`${rule === null ? "" : POP} inline-block rounded-md px-1.5 text-center font-mono transition-colors duration-500 motion-reduce:transition-none ${top ? "bg-accent text-accent-foreground" : ""}`}
+                  >
+                    {rule === null ? "?" : rule === 1 ? fix(score(t.v, f.v), 2) : score(t.v, f.v)}
+                  </b>
+                  <span className="block h-1.5 w-full rounded-full bg-foreground/10">
+                    <span
+                      className={`block h-full rounded-full transition-[width,background-color] duration-700 ease-out motion-reduce:transition-none ${top ? "bg-accent" : rule === 1 ? "bg-cat-teal/60" : "bg-cat-amber/60"}`}
+                      style={{ width: `${frac * 100}%` }}
+                    />
+                  </span>
+                </span>
               );
             })}
           </div>
@@ -271,411 +516,392 @@ export function LoudForBoth() {
       </div>
       <Ticks
         items={[
-          ["With the box", seen.includes(0)],
-          ["With cosine", seen.includes(1)],
+          ["box দিয়ে", seen.includes(0)],
+          ["cosine দিয়ে", seen.includes(1)],
         ]}
       />
-      <Task done={both}>Look under both rules: which film wins for Mama and Mami.</Task>
+      <Task done={both}>দুইটা নিয়মেই দেখুন, মামা আর মামির কাছে কোন ছবি জেতে.</Task>
     </>
   );
 }
 
 // ---------------------------------------------------------------------------
-// 5 · Is length news? Six jobs, one at a time, into the box (length matters)
-//     or cosine (only direction). Wrong tries bounce.
+// 7 · 3.6's notebook, as a picture: করিম (20, 10) and ডাক্তার আপা
+//     (200, 100) in taka on (চা, শরবত). Should সামিন normalise to find the
+//     biggest spender? A "yes" plays the normalising: both arrows shrink to
+//     the same (0.89, 0.45), and the crown has no one to go to. "No" crowns আপা.
 
-const LENGTH_JOBS = [
-  { t: "A cow's price from the dalal's card", bin: 0 },
-  { t: "Finding a book on fish, whether the book is long or short", bin: 1 },
-  { t: "Will the van come out of the mud — the total push along the road", bin: 0 },
-  { t: "How close in meaning two words are", bin: 1 },
-  { t: "“Show more films like this”, looking only at the film's type", bin: 1 },
-  { t: "The film everyone watches, shown to everyone a little more", bin: 0 },
+const S7_O = { x: 22, y: 106 };
+const S7_SC = 0.9; // px per taka
+const S7_R = 62; // the length 1, in px
+const S7_PPL = [
+  { who: "করিম", v: [20, 10], dy: 7 },
+  { who: "ডাক্তার আপা", v: [200, 100], dy: 0 },
 ];
-const LENGTH_BINS = [
-  { name: "box", sub: "length is news too" },
-  { name: "cosine", sub: "only direction; length is noise" },
-];
+const S7_OPTS = ["হ্যাঁ, normalise সবসময় ভালো", "না, length টাই এখানে আসল খবর", "হ্যাঁ, direction টাই আসল"];
+const S7_RIGHT = 1;
 
-export function LengthIsNews() {
+function S7_Pic({ i }: { i: number }) {
+  return (
+    <svg viewBox="0 0 64 34" aria-hidden="true" className="block h-auto w-16 shrink-0">
+      <rect x={0.5} y={0.5} width={63} height={33} rx={5} fill="white" stroke="#cbd5e1" />
+      {i === 0 && (
+        <>
+          <L_Arr x1={8} y1={28} x2={34} y2={15} color={L_BLUE} w={1.8} />
+          <L_Arr x1={8} y1={22} x2={34} y2={9} color={L_CORAL} w={1.8} />
+        </>
+      )}
+      {i === 1 && (
+        <>
+          <L_Arr x1={8} y1={28} x2={56} y2={6} color={L_CORAL} w={2} />
+          <L_Arr x1={8} y1={31} x2={18} y2={26} color={L_BLUE} w={1.6} />
+        </>
+      )}
+      {i === 2 && (
+        <>
+          <L_Arr x1={8} y1={28} x2={50} y2={24} color={L_BLUE} w={1.8} />
+          <L_Arr x1={8} y1={28} x2={30} y2={6} color={L_CORAL} w={1.8} />
+          <path d="M22 27A14 14 0 0 0 17 18" fill="none" stroke={L_AMBER} strokeWidth={1.4} />
+        </>
+      )}
+    </svg>
+  );
+}
+
+export function SpenderPick() {
+  const pass = useGate();
+  const [pick, setPick] = useSeed<number | null>("pick", null);
+  const [miss, setMiss] = useSeed("miss", 0);
+  const p = usePlay(950);
+  const normed = pick === 0 || pick === 2;
+  const [t] = useTween([normed ? 1 : 0], 900);
+  const { x: ox, y: oy } = S7_O;
+  const ang = Math.atan2(1, 2);
+
+  const choose = (i: number) => {
+    setPick(i);
+    if (i === S7_RIGHT) p.play(1, () => pass("Length যখন খবর, normalise না."));
+    else setMiss(miss + 1);
+  };
+
+  return (
+    <>
+      <div className="text-center text-sm text-muted">সামিনের খাতা: কে (চা, শরবত) এ কত টাকা খরচ করলো.</div>
+      <svg viewBox="0 0 240 116" role="img" aria-label="করিম (20, 10) আর ডাক্তার আপা (200, 100): দুইটা arrow একই দিকে, আপারটা 10 গুণ লম্বা" className="mx-auto mt-1 block h-auto w-full max-w-[15rem]">
+        <rect x={1} y={1} width={238} height={114} rx={10} fill="white" stroke="#cbd5e1" />
+        <path d={`M${ox} ${oy}H232M${ox} ${oy}V8`} stroke={L_INK} strokeOpacity={0.35} />
+        <text x={232} y={oy - 4} textAnchor="end" fontSize={8} fill="#475569">
+          চা
+        </text>
+        <text x={ox + 4} y={14} fontSize={8} fill="#475569">
+          শরবত
+        </text>
+        {normed && t > 0.5 && <path d={`M${ox + S7_R} ${oy}A${S7_R} ${S7_R} 0 0 0 ${ox} ${oy - S7_R}`} fill="none" stroke={L_INK} strokeOpacity={0.25} strokeDasharray="3 3" className={FADE} />}
+        {S7_PPL.map((c) => {
+          const full = len(c.v) * S7_SC;
+          const L = full + (S7_R - full) * t;
+          const x2 = ox + L * Math.cos(ang);
+          const y2 = oy - L * Math.sin(ang) + c.dy;
+          const big = c.v[0] === 200;
+          return (
+            <g key={c.who}>
+              <L_Arr x1={ox} y1={oy + c.dy} x2={x2} y2={y2} color={big ? L_CORAL : L_BLUE} w={big && pick === S7_RIGHT ? 3.4 : 2.4} />
+              <text x={x2 > 170 ? x2 - 6 : x2 + 4} y={x2 > 170 ? y2 - 4 : y2 + (big ? 0 : 9)} textAnchor={x2 > 170 ? "end" : "start"} fontSize={8} fontWeight={700} fill={big ? "#be123c" : "#1d4ed8"}>
+                {c.who}
+              </text>
+            </g>
+          );
+        })}
+      </svg>
+      <div className="mt-1 h-6 text-center text-sm">
+        {pick === S7_RIGHT && !p.running && (
+          <span className={FADE}>
+            সবচেয়ে বড় ক্রেতা <b className="text-cat-coral">ডাক্তার আপা</b>: length <span className="font-mono">224</span> আর <span className="font-mono">22</span>, 10 গুণ
+          </span>
+        )}
+        {normed && (
+          <span className={FADE}>
+            দুইজনই <span className="font-mono">(0.89, 0.45)</span>. বড় ক্রেতা কে? <b className="text-danger">?</b>
+          </span>
+        )}
+      </div>
+      <div className="mt-2 text-sm font-medium text-muted">সামিন খুঁজছে stall এর সবচেয়ে বড় ক্রেতা. Normalise করা কি ঠিক?</div>
+      <div className="mt-2 grid grid-cols-3 gap-2">
+        {S7_OPTS.map((o, i) => (
+          <PicChoice key={o} look={pick === i ? (i === S7_RIGHT ? "right" : "wrong") : "idle"} disabled={pick === S7_RIGHT} onClick={() => choose(i)}>
+            <S7_Pic i={i} />
+            <span>{o}</span>
+          </PicChoice>
+        ))}
+      </div>
+      {pick === 0 && <Nope key={miss}>Normalise করতেই দুইজন হুবহু এক. কে 10 গুণ বেশি খরচ করেন, সেই খবরটাই মুছে গেলো.</Nope>}
+      {pick === 2 && <Nope key={miss}>দুইজন তো একই direction এ. Direction দিয়ে বড় ক্রেতা বের হয় না. আর normalise করলে টাকাটাই হারায়.</Nope>}
+      <Task done={pick === S7_RIGHT && !p.running}>ছবি দেখে বেছে নিন: বড় ক্রেতা খুঁজতে normalise করবেন কি না.</Task>
+    </>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 8 and 9 sort jobs into measures, one card at a time: a right tap flies the
+// card into its bin and the bin's count pops; a wrong tap drops the card into
+// the wrong bin, which spits it back out (the card slides back up from that
+// bin, the bin shakes), and says what that measure would do to this job.
+// Wrong tries bounce.
+
+type Job = { t: string; bin: number; why: string };
+
+/** Fly-away classes for a card going into bin i of n (literal strings for Tailwind). */
+const FLY: Record<number, string[]> = {
+  2: ["-translate-x-1/4", "translate-x-1/4"],
+  3: ["-translate-x-1/3", "translate-x-0", "translate-x-1/3"],
+};
+/** Bounce-back classes: a wrong card starts down in bin i of n and slides back up (literal strings for Tailwind). */
+const SPIT: Record<number, string[]> = {
+  2: ["starting:-translate-x-1/4", "starting:translate-x-1/4"],
+  3: ["starting:-translate-x-1/3", "starting:translate-x-0", "starting:translate-x-1/3"],
+};
+
+function SortJobs({ jobs, bins, note, doneText, nope, task }: { jobs: Job[]; bins: { name: string; sub?: string }[]; note: string; doneText: string; nope: string; task: string }) {
   const pass = useGate();
   const [done, setDone] = useSeed("done", 0);
   const [miss, setMiss] = useSeed<number | null>("miss", null);
-  const all = done === LENGTH_JOBS.length;
-  const job = LENGTH_JOBS[done];
+  const [bin, setBin] = useSeed<number | null>("bin", null); // the wrong bin last tapped
+  const all = done === jobs.length;
+  const job = jobs[done];
+  const last = done > 0 ? jobs[done - 1] : null;
 
   const drop = (b: number) => {
     if (all) return;
-    if (b !== job.bin) return setMiss((miss ?? 0) + 1);
+    if (b !== job.bin) {
+      setBin(b);
+      return setMiss((miss ?? 0) + 1);
+    }
+    setBin(null);
     setMiss(null);
     setDone(done + 1);
-    if (done + 1 === LENGTH_JOBS.length) pass("The real question: is length the news here?");
+    if (done + 1 === jobs.length) pass(note);
   };
 
   return (
     <>
-      <div className="mt-4 min-h-20">
+      <div className="relative mt-4 min-h-24">
+        {last && (
+          <div
+            key={`fly${done}`}
+            aria-hidden="true"
+            className={`pointer-events-none absolute inset-x-0 top-0 mx-auto max-w-sm rounded-2xl border-2 border-accent/50 bg-surface px-4 py-3 text-center text-[0.95rem] transition duration-700 ease-in motion-reduce:hidden ${FLY[bins.length][last.bin]} translate-y-24 scale-50 opacity-0 starting:translate-x-0 starting:translate-y-0 starting:scale-100 starting:opacity-100`}
+          >
+            {last.t}
+          </div>
+        )}
         {!all ? (
-          <div key={done} className={`${POP} mx-auto max-w-sm rounded-2xl border-2 border-cat-violet/40 bg-surface px-4 py-3 text-center text-[0.95rem]`}>
+          <div
+            key={`${done}.${miss ?? 0}`}
+            className={`${
+              miss !== null && bin !== null
+                ? `transition duration-700 ease-out motion-reduce:transition-none ${SPIT[bins.length][bin]} starting:translate-y-24 starting:scale-50 starting:opacity-30 border-danger/50`
+                : `${POP} border-cat-violet/40`
+            } mx-auto max-w-sm rounded-2xl border-2 bg-surface px-4 py-3 text-center text-[0.95rem]`}
+          >
             {job.t}
           </div>
         ) : (
-          <div className={`${FADE} text-center text-[0.95rem] text-accent-text`}>All six jobs in the right place!</div>
+          <div className={`${FADE} text-center text-[0.95rem] text-accent-text`}>{doneText}</div>
         )}
-        {miss !== null && !all && <Nope key={miss}>No. Ask: is being “more” or “bigger” part of the answer here, or just noise?</Nope>}
       </div>
-      <div className="mt-3 grid grid-cols-2 gap-2">
-        {LENGTH_BINS.map((b, i) => (
-          <button
-            key={b.name}
-            type="button"
-            disabled={all}
-            onClick={() => drop(i)}
-            className="flex cursor-pointer flex-col items-center gap-0.5 rounded-2xl border-2 border-border px-2 py-3 text-center transition-colors hover:border-cat-blue/60 motion-reduce:transition-none disabled:cursor-default"
-          >
-            <span className="text-sm font-semibold">{b.name}</span>
-            <span className="text-xs text-muted">{b.sub}</span>
-            <span className="font-mono text-sm">{LENGTH_JOBS.slice(0, done).filter((j) => j.bin === i).length}</span>
-          </button>
-        ))}
-      </div>
-      <Task done={all}>
-        Tap which measure each job needs ({done}/{LENGTH_JOBS.length}).
-      </Task>
-    </>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// 6 · Normalise once. Every book card is stored 1 long. Then three rulers on
-//     the unit cards: the plain box, cosine, and distance (smaller is closer).
-//     All three give the same order.
-
-const UNIT = BOOKS.map((b) => ({ ...b, u: b.v.map((x) => x / len(b.v)) }));
-const RULERS = [
-  { name: "just the box", score: (u: number[]) => dot(QUERY, u), low: false },
-  { name: "cosine", score: (u: number[]) => cosQ(u), low: false },
-  { name: "distance", score: (u: number[]) => len(u.map((x, i) => x - QUERY[i])), low: true },
-];
-
-export function OneRanking() {
-  const pass = useGate();
-  const [seen, setSeen] = useSeed<number[]>("seen", []);
-  const all = seen.length === RULERS.length;
-
-  const show = (i: number) => {
-    if (seen.includes(i)) return;
-    const next = [...seen, i];
-    setSeen(next);
-    if (next.length === RULERS.length) pass("Normalise once, and three measures give one order.");
-  };
-
-  return (
-    <>
-      <div className="mx-auto mt-2 grid max-w-sm gap-1 rounded-xl border border-border bg-surface px-3 py-2 text-sm">
-        <div className="text-xs text-muted">each card made 1 long as it goes on the shelf</div>
-        {UNIT.map((b) => (
-          <div key={b.id} className="flex justify-between gap-2">
-            <span>{b.name}</span>
-            <span className="font-mono text-xs">{`(${b.u.map((x) => fix(x, 2)).join(", ")})`}</span>
-          </div>
-        ))}
-      </div>
-      <div className="mt-3 grid grid-cols-3 gap-2">
-        {RULERS.map((r, i) => {
-          const order = [...UNIT].sort((a, b) => (r.low ? r.score(a.u) - r.score(b.u) : r.score(b.u) - r.score(a.u)));
-          const on = seen.includes(i);
+      <div className={`mt-3 grid gap-2 ${bins.length === 3 ? "grid-cols-3" : "grid-cols-2"}`}>
+        {bins.map((b, i) => {
+          const n = jobs.slice(0, done).filter((j) => j.bin === i).length;
           return (
             <button
-              key={r.name}
+              key={bin === i && miss !== null ? `${b.name}${miss}` : b.name}
               type="button"
-              onClick={() => show(i)}
-              className={`cursor-pointer rounded-xl border-2 px-1.5 py-2 text-center transition-colors motion-reduce:transition-none ${on ? "border-cat-blue/40 bg-cat-blue/5" : "border-border hover:border-cat-blue/60"}`}
+              disabled={all}
+              onClick={() => drop(i)}
+              className={`flex cursor-pointer flex-col items-center gap-0.5 rounded-2xl border-2 px-1 py-3 text-center transition-colors hover:border-cat-blue/60 motion-reduce:transition-none disabled:cursor-default ${
+                bin === i && miss !== null && !all ? "nudge border-danger/50 bg-danger/5" : "border-border"
+              }`}
             >
-              <div className="text-sm font-semibold">{r.name}</div>
-              {on ? (
-                <ol className={`${FADE} mt-1 grid gap-0.5 text-xs`}>
-                  {order.map((b, k) => (
-                    <li key={b.id}>
-                      {k + 1}. {b.id === "A" ? "the note" : b.id === "B" ? "thick book" : "boats-and-paddy"} <span className="font-mono">{fix(r.score(b.u), 2)}</span>
-                    </li>
-                  ))}
-                </ol>
-              ) : (
-                <div className="mt-1 text-xs text-cat-blue">show the order</div>
-              )}
+              <span className="text-sm font-semibold">{b.name}</span>
+              {b.sub && <span className="text-xs text-muted">{b.sub}</span>}
+              <b key={n} className={`${n > 0 ? POP : ""} inline-block font-mono text-sm`}>
+                {n}
+              </b>
             </button>
           );
         })}
       </div>
-      <Task done={all}>Look at the books' order under all three measures.</Task>
-    </>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// 7 · Attention in a toy. In "The cat drank milk because it was hungry", the
-//     word "it" sends a question (2, 0) and each word shows a key, with toy
-//     slots (animal, food). The biggest box wins: the cat. Then the ending
-//     changes to "…because it was fresh", the question becomes (0, 2), and
-//     milk wins.
-
-const WORDS = [
-  { w: "cat", key: [3, 1] },
-  { w: "milk", key: [0, 3] },
-  { w: "drank", key: [1, 1] },
-];
-const ROUNDS = [
-  { tail: "because it was hungry", q: [2, 0], ans: 0 },
-  { tail: "because it was fresh", q: [0, 2], ans: 1 },
-];
-
-export function WhoIsIt() {
-  const pass = useGate();
-  const [round, setRound] = useSeed("round", 0);
-  const [ran, setRan] = useSeed("ran", false);
-  const r = ROUNDS[round];
-  const scores = WORDS.map((x) => dot(r.q, x.key));
-  const max = Math.max(...scores);
-
-  const run = () => {
-    setRan(true);
-    if (round === 1) pass("“It” turns towards the biggest box.");
-  };
-
-  return (
-    <>
-      <div key={round} className={`${FADE} mx-auto mt-2 max-w-sm rounded-xl border border-border bg-surface px-3 py-2 text-center text-[0.95rem]`}>
-        The cat drank milk {r.tail.split("it")[0]}
-        <span className="rounded-sm bg-cat-violet/15 font-semibold text-cat-violet">it</span>
-        {r.tail.split("it")[1]}
-      </div>
-      <div className="mt-2 text-center text-sm">
-        “It”'s question <b className="font-mono">{tupN(r.q)}</b> <span className="text-xs text-muted">(animal, food)</span>
-      </div>
-      <div className="mx-auto mt-3 grid max-w-sm gap-1.5">
-        {WORDS.map((x, i) => (
-          <div key={x.w} className="grid grid-cols-[4.5rem_4rem_1fr_2rem] items-center gap-2 text-sm">
-            <span className="font-semibold">{x.w}</span>
-            <span className="font-mono text-xs text-muted">{tupN(x.key)}</span>
-            <span className="h-3 rounded-full bg-foreground/10">
-              {ran && (
-                <span
-                  className={`block h-full rounded-full transition-[width] duration-500 motion-reduce:transition-none ${scores[i] === max ? "bg-accent" : "bg-cat-blue/50"}`}
-                  style={{ width: `${(scores[i] / 6) * 100}%` }}
-                />
-              )}
-            </span>
-            <b className="text-right font-mono">{ran ? scores[i] : "?"}</b>
-          </div>
-        ))}
-      </div>
-      <div className="mt-3 flex justify-center">
-        {!ran ? (
-          <button type="button" onClick={run} className={`${pill(false)} font-sans`}>
-            Run the question against every key
-          </button>
-        ) : round === 0 ? (
-          <button
-            type="button"
-            onClick={() => {
-              setRound(1);
-              setRan(false);
-            }}
-            className={`${pill(false)} font-sans`}
-          >
-            Change the end of the sentence
-          </button>
-        ) : null}
-      </div>
-      {ran && (
-        <div className={`${FADE} mt-2 text-center text-[0.95rem]`}>
-          “It” means <b>{WORDS[r.ans].w}</b>
-        </div>
+      {miss !== null && !all && (
+        <Nope key={miss}>
+          {job.why} {nope}
+        </Nope>
       )}
-      <Ticks
-        items={[
-          ["was hungry", round === 1 || ran],
-          ["was fresh", round === 1 && ran],
-        ]}
-      />
-      <Task done={round === 1 && ran}>Run the box between “it”'s question and every word, then change the sentence and look again.</Task>
-    </>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// 8 · এবার আপনার পালা. Five fresh jobs into box / cosine / distance. Wrong
-//     tries bounce.
-
-const TOOL_JOBS = [
-  { t: "You ask a chatbot — which paragraph's meaning is closest to the question", bin: 1 },
-  { t: "A goat's price from the dalal's knobs", bin: 0 },
-  { t: "The doctor apu's twin game: after standardising, who stands closest to whom", bin: 2 },
-  { t: "Among thousands of news pieces long and short, finding news about “floods”", bin: 1 },
-  { t: "Fahim's final number, marks and weights combined", bin: 0 },
-];
-const TOOLS = ["box", "cosine", "distance"];
-
-export function PickTool() {
-  const pass = useGate();
-  const [done, setDone] = useSeed("done", 0);
-  const [miss, setMiss] = useSeed<number | null>("miss", null);
-  const all = done === TOOL_JOBS.length;
-  const job = TOOL_JOBS[done];
-
-  const drop = (b: number) => {
-    if (all) return;
-    if (b !== job.bin) return setMiss((miss ?? 0) + 1);
-    setMiss(null);
-    setDone(done + 1);
-    if (done + 1 === TOOL_JOBS.length) pass("Length: the box. Direction: cosine. Place: distance.");
-  };
-
-  return (
-    <>
-      <div className="mt-4 min-h-24">
-        {!all ? (
-          <div key={done} className={`${POP} mx-auto max-w-sm rounded-2xl border-2 border-cat-violet/40 bg-surface px-4 py-3 text-center text-[0.95rem]`}>
-            {job.t}
-          </div>
-        ) : (
-          <div className={`${FADE} text-center text-[0.95rem] text-accent-text`}>All five jobs on the right measure!</div>
-        )}
-        {miss !== null && !all && <Nope key={miss}>No. Is the length itself the information here, or only the direction, or the place?</Nope>}
-      </div>
-      <div className="mt-3 grid grid-cols-3 gap-2">
-        {TOOLS.map((b, i) => (
-          <button
-            key={b}
-            type="button"
-            disabled={all}
-            onClick={() => drop(i)}
-            className="flex cursor-pointer flex-col items-center gap-0.5 rounded-2xl border-2 border-border px-1 py-3 text-center transition-colors hover:border-cat-blue/60 motion-reduce:transition-none disabled:cursor-default"
-          >
-            <span className="text-sm font-semibold">{b}</span>
-            <span className="font-mono text-sm">{TOOL_JOBS.slice(0, done).filter((j) => j.bin === i).length}</span>
-          </button>
-        ))}
-      </div>
       <Task done={all}>
-        Pick the right measure for each job ({done}/{TOOL_JOBS.length}).
+        {task} ({done}/{jobs.length})
       </Task>
     </>
   );
 }
 
 // ---------------------------------------------------------------------------
-// 8½ · Math for AI 4.8 opens here. Som says the haat's box is inside ChatGPT
-//      too. The reader seals a bet on it, unmarked; OneRanking, ChordCos and
-//      WhoIsIt collect the evidence, and the check after WhoIsIt settles it.
+// 8 · Is length news? Six jobs into the box (length matters) or cosine
+//     (only direction).
 
-const BOX_BET = ["True — this box runs inside", "No, that's a completely different sum", "There's a box, but not for the real work"];
+const LENGTH_JOBS: Job[] = [
+  { t: "দালালের card দিয়ে একটা গরুর দাম", bin: 0, why: "Cosine দিলে বড় গরু আর ছোট গরুর দাম প্রায় এক হয়ে যাবে. গরুর ওজনটাই তো দাম." },
+  { t: "মাছের বই খোঁজা, বই ছোট হোক বা মোটা", bin: 1, why: "Box দিলে মোটা বই শুধু মোটা বলেই উপরে উঠবে, নৌকা-ধানের বইয়ের মতো." },
+  { t: "ভ্যান কাদা থেকে উঠবে কি না: রাস্তা বরাবর মোট ধাক্কা", bin: 0, why: "Cosine শুধু বলবে ধাক্কা কোন দিকে. কত জোরে, সেটা হারিয়ে যাবে." },
+  { t: "দুইটা word মানের দিক থেকে কত কাছাকাছি", bin: 1, why: "Box দিলে লম্বা arrow এর word টা সবার সাথেই বড় number পাবে, হুলুস্থুলের মতো." },
+  { t: "“এরকম আরো ছবি দেখাও”, শুধু ছবির ধরন দেখে", bin: 1, why: "Box দিলে হুলুস্থুলের মতো লম্বা ছবিই সবাই পাবে, ধরন যাই হোক." },
+  { t: "যে ছবি সবাই দেখে, সেটা সবাইকে একটু বেশি দেখানো", bin: 0, why: "Cosine length ফেলে দেয়. অথচ এখানে জনপ্রিয় ছবির লম্বা arrow টাই কাজের." },
+];
+const LENGTH_BINS = [
+  { name: "box", sub: "length ও খবর" },
+  { name: "cosine", sub: "শুধু direction, length হলো noise" },
+];
 
-export function BoxBet() {
-  const pass = useGate();
-  const [bet, setBet] = useSeed<number | null>("bet", null);
-
-  const seal = (i: number) => {
-    setBet(i);
-    pass("Bet sealed. We start from the library's machines.");
-  };
-
+export function LengthIsNews() {
   return (
-    <>
-      <div className="grid grid-cols-2 gap-2 text-center">
-        <div className="rounded-2xl border-2 border-cat-amber/40 bg-cat-amber/5 px-2 py-2">
-          <div className="text-sm font-semibold">The haat's box</div>
-          <div className="font-mono text-[0.8rem]">2×60 + 1×180 + 12×12</div>
-          <div className="text-xs text-muted">multiply the slots, then add</div>
-        </div>
-        <div className="grid place-content-center rounded-2xl border-2 border-dashed border-border px-2 py-2">
-          <div className="text-sm font-semibold">Inside ChatGPT</div>
-          <div className="font-mono text-2xl text-muted">?</div>
-        </div>
-      </div>
-      <div className="mt-3 text-sm font-medium text-muted">সোমের কথাটা কি সত্যি?</div>
-      <div className="mt-2 grid gap-2">
-        {BOX_BET.map((o, i) => (
-          <Choice key={o} n={i} look={bet === i ? "picked" : bet !== null ? "dim" : "idle"} disabled={bet !== null} onClick={() => seal(i)}>
-            {o}
-          </Choice>
-        ))}
-      </div>
-      <Task done={bet !== null}>Bet on what Som said.</Task>
-    </>
+    <SortJobs
+      jobs={LENGTH_JOBS}
+      bins={LENGTH_BINS}
+      note="আসল প্রশ্ন: length কি এখানে খবর?"
+      doneText="ছয়টা কাজই জায়গামতো বসলো."
+      nope="“বেশি” বা “বড়” হওয়াটা কি এখানে উত্তরের অংশ, নাকি শুধু noise?"
+      task="প্রতিটা কাজে কোন মাপ লাগবে, tap করুন."
+    />
   );
 }
 
 // ---------------------------------------------------------------------------
-// 9 · Module 1, read out loud. The formula from the start of the series laid
-//     out as a fraction; each piece opens on a tap to say what it is and where
-//     it was learned. No gate: this is the send-off.
+// 9 · এবার আপনার পালা: আপুর list. Five fresh jobs into box / cosine /
+//     distance.
 
-const PIECES = [
-  { sym: "u, v", say: "two things turned into lists of numbers", where: "Article 1, representation" },
-  { sym: "arrow", say: "the same u and v again, as arrows: a direction and a length", where: "Article 2, a vector's two faces" },
-  { sym: "‖u‖ ‖v‖", say: "their lengths: square, add, root", where: "Article 3, the tape" },
-  { sym: "u · v", say: "multiply the slots, then add — that is, length × length × how much the same direction", where: "4.1 to 4.4, the haat, the van, the roof" },
-  { sym: "cos θ", say: "only how much the same direction, −1 to 1", where: "4.5, in front of the TV" },
+const TOOL_JOBS: Job[] = [
+  { t: "Chatbot কে প্রশ্ন করলেন: কোন paragraph এর মানে প্রশ্নের সবচেয়ে কাছে", bin: 1, why: "Box দিলে লম্বা paragraph শুধু লম্বা বলেই জিতে যাবে." },
+  { t: "দালালের knob দিয়ে একটা ছাগলের দাম", bin: 0, why: "দামটা একটা পরিমাণ. Knob গুলা গুণ করে যোগ, মানে box." },
+  { t: "ডাক্তার আপার twin খেলা: standardise করার পর কে কার সবচেয়ে কাছে দাঁড়িয়ে", bin: 2, why: "প্রশ্নটা জায়গা নিয়ে, কে কোথায় দাঁড়িয়ে." },
+  { t: "ছোট বড় হাজারটা খবরের মধ্যে “বন্যা” র খবর খোঁজা", bin: 1, why: "Box দিলে লম্বা খবর উপরে উঠবে, বন্যা নিয়ে না হলেও." },
+  { t: "ফাহিমের final number: marks আর weight মিলিয়ে", bin: 0, why: "Marks বেশি হলে number ও বেশি হবে, এটাই তো চাওয়া." },
 ];
+const TOOL_BINS = [{ name: "box" }, { name: "cosine" }, { name: "distance" }];
 
-export function Finale() {
-  const [open, setOpen] = useSeed<number[]>("open", []);
-  const all = open.length === PIECES.length;
-  const tap = (i: number) => !open.includes(i) && setOpen([...open, i]);
-  const chip = (i: number, body: string, cls = "") => (
-    <button
-      type="button"
-      onClick={() => tap(i)}
-      className={`cursor-pointer rounded-lg px-2 py-0.5 font-mono transition-colors motion-reduce:transition-none ${
-        open.includes(i) ? "bg-accent/15 text-accent-text" : "bg-cat-blue/10 text-cat-blue hover:bg-cat-blue/20"
-      } ${cls}`}
-    >
-      {body}
-    </button>
+export function PickTool() {
+  return (
+    <SortJobs
+      jobs={TOOL_JOBS}
+      bins={TOOL_BINS}
+      note="Length: box. Direction: cosine. জায়গা: distance."
+      doneText="পাঁচটা কাজই ঠিক মাপে বসলো."
+      nope="Length টাই কি খবর, নাকি শুধু direction, নাকি জায়গা?"
+      task="প্রতিটা কাজের জন্য ঠিক মাপটা বেছে নিন."
+    />
   );
+}
+
+// ---------------------------------------------------------------------------
+// 10 · Try it: the newspaper cupboard's search, a new case. Someone searches
+//      "ইলিশ" among a two-line item (3, 0, 0), a ten-page market report
+//      (10, 60, 8) and a half page on the fishing ban (6, 1, 0), slots
+//      (ইলিশ, দাম, রাজনীতি). Pick a measure and the clippings re-sort: the box
+//      and length both put the market report on top (it's not about ইলিশ);
+//      cosine puts the two ইলিশ items first.
+
+const N10_NEWS = [
+  { id: "P", title: "দুই লাইন: পদ্মায় ইলিশ", v: [3, 0, 0] },
+  { id: "Q", title: "দশ পাতা: বাজারে জিনিসের দাম", v: [10, 60, 8] },
+  { id: "R", title: "আধা পাতা: ইলিশ ধরা বন্ধ কেন", v: [6, 1, 0] },
+];
+const N10_WAYS = [
+  { name: "box", sub: "লম্বা খবরে বেশি থাকে", score: (v: readonly number[]) => v[0], d: 0 },
+  { name: "cosine", sub: "শুধু direction", score: (v: readonly number[]) => v[0] / len(v), d: 3 },
+  { name: "length", sub: "লম্বাটা আগে", score: (v: readonly number[]) => len(v), d: 1 },
+];
+const N10_RIGHT = 1;
+const N10_H = 50; // px per row
+const N10_MAX = len(N10_NEWS[1].v);
+
+export function NewsSearch() {
+  const pass = useGate();
+  const [pick, setPick] = useSeed<number | null>("pick", null);
+  const [miss, setMiss] = useSeed("miss", 0);
+  const p = usePlay(900);
+  const way = pick === null ? null : N10_WAYS[pick];
+  const order = way ? [...N10_NEWS].sort((a, b) => way.score(b.v) - way.score(a.v)).map((n) => n.id) : N10_NEWS.map((n) => n.id);
+
+  const choose = (i: number) => {
+    setPick(i);
+    if (i === N10_RIGHT) p.play(1, () => pass("লম্বা হয়ে কেউ জিতবে না: cosine."));
+    else setMiss(miss + 1);
+  };
 
   return (
     <>
-      <div className="mx-auto mt-3 flex w-fit items-center gap-3 text-xl">
-        {chip(4, "cos θ")}
-        <span className="font-mono">=</span>
-        <span className="grid justify-items-center gap-1">
-          {chip(3, "u · v")}
-          <span className="h-0.5 w-full bg-foreground/60" />
-          {chip(2, "‖u‖ ‖v‖")}
-        </span>
+      <div className="mx-auto w-fit rounded-full border-2 border-border px-4 py-1 text-sm">
+        পত্রিকার search: <b>ইলিশ</b> <span className="text-xs text-muted">(ইলিশ, দাম, রাজনীতি)</span>
       </div>
-      <div className="mt-2 flex justify-center gap-2 text-sm">
-        {chip(0, "u, v", "text-sm")}
-        {chip(1, "arrow", "text-sm")}
-      </div>
-      <div className="mx-auto mt-3 grid max-w-sm gap-1.5">
-        {PIECES.map((p, i) =>
-          open.includes(i) ? (
-            <div key={p.sym} className={`${FADE} rounded-xl border border-border bg-surface px-3 py-1.5 text-sm`}>
-              <b className="font-mono">{p.sym}</b> {p.say}
-              <div className="text-xs text-muted">{p.where}</div>
+      <div className="relative mx-auto mt-2 w-full max-w-sm" style={{ height: N10_H * 3 }}>
+        {N10_NEWS.map((n) => {
+          const rank = order.indexOf(n.id);
+          const top = way !== null && rank === 0;
+          const good = n.id !== "Q";
+          const L = len(n.v);
+          return (
+            <div
+              key={n.id}
+              className="absolute inset-x-0 top-0 px-0.5 transition-transform duration-700 ease-in-out motion-reduce:transition-none"
+              style={{ transform: `translateY(${rank * N10_H}px)` }}
+            >
+              <div className={`flex h-[2.85rem] items-center gap-2 rounded-xl border-2 bg-surface px-2.5 transition-colors motion-reduce:transition-none ${top ? (good ? "border-accent" : "border-danger/60") : "border-border"}`}>
+                <b className="w-4 shrink-0 font-mono text-sm text-muted">{way ? rank + 1 : ""}</b>
+                <span className="min-w-0 flex-1">
+                  <span className="block truncate text-sm font-semibold">{n.title}</span>
+                  <span className="mt-0.5 flex h-2 overflow-hidden rounded-full bg-foreground/10" style={{ width: `${14 + 86 * (L / N10_MAX)}%` }}>
+                    <span className="block h-full bg-cat-blue" style={{ width: `${(100 * n.v[0]) / (n.v[0] + n.v[1] + n.v[2])}%` }} />
+                    <span className="block h-full flex-1 bg-foreground/25" />
+                  </span>
+                </span>
+                <span className="shrink-0 text-right">
+                  <span className="block font-mono text-[0.7rem] text-muted"><Tup v={n.v} of={NEWS_SLOTS} /></span>
+                  {way && (
+                    <b key={`${pick}`} className={`${POP} inline-block font-mono text-sm`}>
+                      {fix(way.score(n.v), way.d)}
+                    </b>
+                  )}
+                </span>
+              </div>
             </div>
-          ) : null,
-        )}
+          );
+        })}
       </div>
-      {all && (
-        <div className={`${FADE} mx-auto mt-3 max-w-sm rounded-2xl bg-cat-violet/5 px-4 py-3 text-center text-[0.95rem]`}>
-          To know how alike two things are, make their arrows, see how much they point the same way, and divide the lengths away so only the direction is left.
-        </div>
-      )}
+      <div className="mt-1 text-center text-xs text-muted">বারটা যত লম্বা, খবর তত লম্বা. নীল অংশটা ইলিশ.</div>
+      <div className="mt-3 grid grid-cols-3 gap-2">
+        {N10_WAYS.map((w, i) => (
+          <button
+            key={w.name}
+            type="button"
+            disabled={pick === N10_RIGHT}
+            onClick={() => choose(i)}
+            className={`flex cursor-pointer flex-col items-center gap-0.5 rounded-2xl border-2 px-1 py-2.5 text-center transition-colors motion-reduce:transition-none disabled:cursor-default ${
+              pick === i ? (i === N10_RIGHT ? "border-accent bg-accent/10" : "nudge border-danger/50 bg-danger/5") : "border-border hover:border-cat-blue/60"
+            }`}
+          >
+            <span className="text-sm font-semibold">{w.name}</span>
+            <span className="text-xs text-muted">{w.sub}</span>
+          </button>
+        ))}
+      </div>
+      {pick === 0 && <Nope key={miss}>Box এ এক নম্বরে উঠে গেলো দশ পাতার বাজারের খবর. ইলিশ আছে 10 বার. কিন্তু খবরটা দাম নিয়ে. জিতলো লম্বা বলেই.</Nope>}
+      {pick === 2 && <Nope key={miss}>লম্বা খবর আগে দিয়ে কী লাভ? Search টা লম্বা খবর চায় নাই, ইলিশের খবর চেয়েছে.</Nope>}
+      <Task done={pick === N10_RIGHT && !p.running}>“ইলিশ” এর খবরগুলা কী দিয়ে সাজাবেন? একটা মাপ বেছে নিয়ে দেখুন.</Task>
     </>
   );
 }
 
 // ===========================================================================
-// Watch-only animations: story scenes for the setups (2a, 6a, 9a, 11a, 13a,
-// 15a, 15b) and explanation figures for the <Then>s and Check answers (1½,
-// 2½, 3½, 4½, 4¾, 5½, 6½, 6¾, 8½, 8¾, 9½, 9¾, 10½, 11½, 12½, 12¾, 13½, 15½,
-// 15¾, 16½, 16¾). Each waits on its first frame for the reader (kit's
-// useScene); every beat is drawn from `k` alone.
+// Watch-only animations: 4.7's story scenes and figures (numbered by 4.7's
+// steps, see the header). Each waits on its first frame for the reader (kit's useScene); every beat is
+// drawn from `k` alone.
 
 const L_INK = "#0f1b2d";
 /** the stage's ground */
@@ -705,16 +931,6 @@ function L_Carry({ x, y, ms = 1200, children }: { x: number; y: number; ms?: num
   );
 }
 
-/** The name under someone who isn't in the cast (or on a night stage, in light ink). */
-function L_Name({ x, y = LG, text, ms = 1200, light = false }: { x: number; y?: number; text: string; ms?: number; light?: boolean }) {
-  return (
-    <L_Carry x={x} y={y} ms={ms}>
-      <text y={11} textAnchor="middle" fontSize={8.5} fontWeight={700} fill={light ? "#e2e8f0" : L_INK}>
-        {text}
-      </text>
-    </L_Carry>
-  );
-}
 
 /** An arrow on a white sheet, pixel coordinates. */
 function L_Arr({ x1, y1, x2, y2, color, w = 2.4, dashed = false, op = 1 }: { x1: number; y1: number; x2: number; y2: number; color: string; w?: number; dashed?: boolean; op?: number }) {
@@ -811,15 +1027,16 @@ function L_Note({ x, y, lines, tone = L_INK, fs = 7.5 }: { x: number; y: number;
 }
 
 // ---------------------------------------------------------------------------
-// 1½ · A figure for screen 1's Check answer, no task: 4.6's ghat. The boat is
-//      3 m from the bank, the pull is 10. A 4 m rope comes in steep and sends
-//      6.6 forward; a 15 m rope comes in flat and sends 9.8.
+// 1½ · A figure for step 1's explanation, no task: 4.6's ghat. The boat is
+//      3 m from the bank, the pull is 10. The rope grows from 4 m, steep,
+//      sending 6.6 forward, to 15 m, flat, sending 9.8: the shadow (4.6's
+//      green) grows as the angle shrinks.
 
 const X1_SAY = [
-  "4.6's ghat. The boat is 3 metres from the bank, the pull is 10.",
-  "A 4-metre rope: a big angle, 6.6 goes along the river.",
-  "A 15-metre rope: a small angle, 9.8 goes along the river.",
-  "Long rope, small angle, the shadow is nearly the whole pull.",
+  "4.6 এর ঘাট. নৌকা পাড় থেকে 3 metre দূরে, টান 10.",
+  "4 metre দড়ি: angle বড়, নদী বরাবর যায় 6.6.",
+  "15 metre দড়ি: angle ছোট, নদী বরাবর যায় 9.8.",
+  "লম্বা দড়ি, ছোট angle. Shadow প্রায় পুরা টানটাই.",
 ];
 const X1_M = 16.5; // px per metre
 const X1_BANK = 92;
@@ -838,14 +1055,14 @@ export function RopeRecall() {
   const tipY = boatY + 10 * P * (3 / L);
   return (
     <Scene scene={s} caption={lsay(X1_SAY, k)}>
-      <svg viewBox="0 0 290 112" role="img" aria-label="The boat 3 metres from the bank; 6.6 forward with a 4-metre rope, 9.8 with 15 metres" className="mx-auto block h-auto w-full max-w-[18rem]">
+      <svg viewBox="0 0 290 112" role="img" aria-label="নৌকা পাড় থেকে 3 metre দূরে; 4 metre দড়িতে সামনে 6.6, 15 metre এ 9.8" className="mx-auto block h-auto w-full max-w-[18rem]">
         <rect x={1} y={1} width={288} height={110} rx={10} fill="#e0f2fe" stroke="#cbd5e1" />
         <rect x={1} y={X1_BANK} width={288} height={19} fill="#a3b18a" />
         <text x={282} y={X1_BANK + 13} textAnchor="end" fontSize={8} fill={L_INK}>
-          bank
+          পাড়
         </text>
         <text x={258} y={15} textAnchor="end" fontSize={8} fill="#0369a1">
-          forward, along the river
+          সামনে, নদী বরাবর
         </text>
         <L_Arr x1={262} y1={12} x2={282} y2={12} color="#0369a1" w={1.4} />
         <path d={`M${X1_BOAT - 16} ${boatY - 2}h32l-5 8h-22Z`} fill="#92400e" />
@@ -862,8 +1079,8 @@ export function RopeRecall() {
             </text>
             <L_Arr x1={X1_BOAT} y1={boatY} x2={tipX} y2={tipY} color={L_CORAL} w={2.2} />
             <path d={`M${tipX} ${tipY}V${boatY - 12}`} stroke={L_INK} strokeOpacity={0.35} strokeDasharray="2 2" />
-            <path d={`M${X1_BOAT} ${boatY - 12}H${tipX}`} stroke={L_AMBER} strokeWidth={4} strokeLinecap="round" opacity={0.85} />
-            <text x={tipX + 5} y={boatY - 9} fontSize={10} fontWeight={800} fontFamily="ui-monospace, monospace" fill="#b45309">
+            <path d={`M${X1_BOAT} ${boatY - 12}H${tipX}`} stroke={L_TEAL} strokeWidth={4} strokeLinecap="round" opacity={0.85} />
+            <text x={tipX + 5} y={boatY - 9} fontSize={10} fontWeight={800} fontFamily="ui-monospace, monospace" fill="#0f766e">
               {fix(10 * cos, 1)}
             </text>
           </g>
@@ -874,26 +1091,38 @@ export function RopeRecall() {
 }
 
 // ---------------------------------------------------------------------------
-// 2a · A story scene for screen 2's setup, no task: the library in the
-//      evening. The library apu (a new face, drawn in ammu's look with her own
-//      name) beside the new computer's two machines; a book becomes its list
-//      (fish, boats, paddy); Fahim walks up and searches "fish" in both. No result.
+// 2a · A story scene for step 2's setup, no task: the library in the
+//      evening. লাইব্রেরির আপু (Rina's look, as in 4.6's LibraryTwo, with her
+//      own name drawn) beside the new computer's two machines; a book comes off
+//      the shelf and becomes its list (মাছ, নৌকা, ধান); ফাহিম walks up and
+//      searches "মাছ" in both. No result.
+
+/** লাইব্রেরির আপু: Rina's look, her own name under her feet. */
+function L_Apu({ x, mood = "plain", arm = "down" }: { x: number; mood?: "plain" | "happy" | "puzzled" | "smug"; arm?: "down" | "point" | "hold" | "wave" }) {
+  return (
+    <>
+      <Person who="rina" x={x} y={LG} facing={-1} scale={0.9} mood={mood} arm={arm} />
+      <text x={Math.min(x, 284)} y={LG + 11} textAnchor="middle" fontSize={8} fontWeight={700} fill={L_INK}>
+        লাইব্রেরির আপু
+      </text>
+    </>
+  );
+}
 
 export function LibraryEvening({}: Story) {
   const s = useScene(4, [600, 2400, 2200, 1500]);
   const k = s.k;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="room" label="Evening at the library; Apu shows the two machines on her new computer, a book becomes the list (fish, boats, paddy), Fahim searches fish in both">
+      <Stage backdrop="room" label="সন্ধ্যায় লাইব্রেরি; আপু নতুন computer এর দুইটা machine দেখান, একটা বই হয়ে যায় (মাছ, নৌকা, ধান) list, ফাহিম দুইটাতেই মাছ লিখে search দেয়">
         <L_Shelf x={12} y={LG} w={96} />
         <L_Desk x={182} y={LG} query={k >= 4} />
-        <Person who="ammu" x={288} y={LG} facing={-1} arm={k === 1 ? "point" : "down"} mood={k === 1 ? "happy" : "plain"} />
-        <L_Name x={288} text="Apu" />
-        {k === 1 && <Bubble x={288} y={LG - 66} side="left" lines={["Two search machines,", "both built by the bhai."]} />}
+        <L_Apu x={282} arm={k === 1 ? "point" : "down"} mood={k === 1 ? "happy" : "plain"} />
+        {k === 1 && <Bubble x={282} y={LG - 60} side="left" lines={["দুইটা search machine.", "আমার ভাই বানাইছে."]} />}
         {k >= 2 && (
           <>
             <rect x={52} y={40} width={9} height={20} fill="#1d4ed8" className={POP} />
-            <L_Note x={60} y={26} lines={["(fish, boats, paddy)", "(3, 5, 4)"]} tone={L_AMBER} fs={8} />
+            <L_Note x={60} y={24} lines={["(মাছ, নৌকা, ধান)", "(3, 5, 4)"]} tone={L_AMBER} fs={8} />
           </>
         )}
         <Person who="fahim" x={k >= 3 ? 160 : -30} y={LG} walking={k === 3} ms={1400} arm={k >= 4 ? "point" : "down"} label={k >= 3} />
@@ -903,18 +1132,18 @@ export function LibraryEvening({}: Story) {
 }
 
 // ---------------------------------------------------------------------------
-// 2½ · A figure for screen 2's explanation, no task: both machines are handed
+// 2½ · A figure for step 2's explanation, no task: both machines are handed
 //      the same three lists; out come two orders, and the odd one out is the
-//      third book, নৌকা-ধান, second for ক and last for খ. It stops at "কেন?".
+//      third book, নৌকা-ধান, second for A and last for B. It stops at "কেন?".
 
 const X2_SAY = [
-  "Three books, the same counts for each.",
-  "Both machines are handed exactly the same three lists.",
-  "Yet two different orders come out.",
-  "The quarrel is about the third book: second on A, third on B.",
-  "Searching for fish, why is the boats-and-paddy book second?",
+  "তিনটা বই, প্রতিটার একই count.",
+  "দুইটা machine কেই দেয়া হলো হুবহু একই তিনটা list.",
+  "তবু বের হলো দুইরকম order.",
+  "ঝগড়া তিন নম্বর বইটা নিয়ে: A তে দুই নম্বরে, B তে তিন নম্বরে.",
+  "মাছ খুঁজতে গিয়ে নৌকা-ধানের বই দুই নম্বরে কেন?",
 ];
-const X2_SHORT: Record<string, string> = { A: "the note", B: "thick book", C: "boats-and-paddy" };
+const X2_SHORT: Record<string, string> = { A: BOOK_BN.A.short, B: BOOK_BN.B.short, C: BOOK_BN.C.short };
 
 export function SameCounts() {
   const s = useScene(4, [600, 1800, 1800, 2400]);
@@ -926,7 +1155,7 @@ export function SameCounts() {
           {BOOKS.map((b) => (
             <div key={b.id} className={`rounded-lg border px-1 py-1 ${b.id === "C" && k >= 3 ? "border-cat-coral/60 bg-cat-coral/10" : "border-border bg-surface"}`}>
               <div className="text-xs leading-tight font-semibold">{X2_SHORT[b.id]}</div>
-              <div className="font-mono text-[0.7rem] text-muted">{tupN(b.v)}</div>
+              <div className="font-mono text-[0.7rem] text-muted"><Tup v={b.v} of={BOOK_SLOTS} /></div>
             </div>
           ))}
         </div>
@@ -943,7 +1172,7 @@ export function SameCounts() {
                           {i + 1}. {X2_SHORT[b.id]}
                         </span>
                       ) : (
-                        <span className="font-mono text-[0.72rem]">{tupN(b.v)}</span>
+                        <span className="font-mono text-[0.72rem]"><Tup v={b.v} of={BOOK_SLOTS} /></span>
                       )}
                       {k >= 4 && mi === 0 && b.id === "C" && <b className={`${POP} inline-block text-cat-coral`}>?</b>}
                     </li>
@@ -959,17 +1188,17 @@ export function SameCounts() {
 }
 
 // ---------------------------------------------------------------------------
-// 3½ · A figure for screen 3's Check answer, no task: the box opened on
+// 3½ · A figure for step 3's explanation, no task: the box opened on
 //      (1, 0, 0) and (4, 2, 7), row by row. The 1 keeps the first slot, the 0s
 //      wipe the rest: 4. Last, the slip: adding the book's slots gives 13.
 
 const X3_SAY = [
-  "Two lists: (1, 0, 0) and (4, 2, 7).",
+  "দুইটা list: (1, 0, 0) আর (4, 2, 7).",
   "First slot: 1 × 4 = 4.",
-  "The second slot has 0, so the product is 0.",
-  "The third slot too.",
-  "Add up: 4. Only the slot with the 1 survives.",
-  "Adding the book's slots without multiplying gives 13.",
+  "Second slot এ 0, তাই গুণফল 0.",
+  "Third slot এও তাই.",
+  "যোগ: 4. টিকে থাকে শুধু 1 এর slot টা.",
+  "গুণ না করে বইয়ের slot গুলা যোগ করলে আসে 13.",
 ];
 
 export function OneHotBox() {
@@ -988,10 +1217,10 @@ export function OneHotBox() {
 }
 
 // ---------------------------------------------------------------------------
-// 4½ · A figure for screen 4's first paragraph, no task: the words as tiles.
-//      The note is 2 words, both মাছ; the boats-and-rice book is 12 words, 3
-//      of them মাছ. The box counts only মাছ tiles, 2 against 3, so the book
-//      wins, though the note is all fish and the book a quarter.
+// 4½ · A figure for step 4's first paragraph, no task: the words as tiles.
+//      The letter is 2 words, both মাছ; the boats-and-paddy book is 12 words,
+//      3 of them মাছ. The box counts only মাছ tiles, 2 against 3, so the book
+//      wins, though the letter is all fish and the book a quarter.
 
 const X4_KINDS = [
   { name: "মাছ", cls: "bg-cat-blue" },
@@ -999,14 +1228,14 @@ const X4_KINDS = [
   { name: "ধান", cls: "bg-cat-amber" },
 ];
 const X4_ROWS = [
-  { name: "চিঠি", v: BOOKS[0].v, share: "পুরোটাই মাছ" },
-  { name: "নৌকা-ধান", v: BOOKS[2].v, share: `${bn(12)}টার মাত্র ${bn(3)}টা মাছ` },
+  { name: "চিঠি", v: BOOKS[0].v, share: "পুরাটাই মাছ" },
+  { name: "নৌকা-ধান", v: BOOKS[2].v, share: "12 টার মাত্র 3 টা মাছ" },
 ];
 const X4_SAY = [
-  "প্রতিটা শব্দ একটা টুকরা: নীল মাছ, সবুজ নৌকা, হলুদ ধান।",
-  "box দেখে শুধু মাছের ঘর।",
-  "মাছের টুকরা গুনে চিঠি 2, বই 3। বই আগে।",
-  "অথচ চিঠি পুরোটাই মাছ, আর বইয়ে মাছ প্রায় কিছুই না।",
+  "প্রতিটা word একটা টুকরা: নীল মাছ, সবুজ নৌকা, হলুদ ধান.",
+  "Box দেখে শুধু মাছের ঘর.",
+  "মাছের টুকরা গুনে চিঠি 2, বই 3. বই আগে.",
+  "অথচ চিঠি পুরাটাই মাছ, আর বইয়ে মাছ প্রায় নাই বললেই চলে.",
 ];
 
 export function WordTiles() {
@@ -1044,18 +1273,18 @@ export function WordTiles() {
 }
 
 // ---------------------------------------------------------------------------
-// 4¾ · A figure for screen 4's second paragraph, no task: 4.2's van, with the
+// 4¾ · A figure for step 4's second paragraph, no task: 4.2's van, with the
 //      road laid flat. ফাহিম pushes along it (5); the কুলি pushes 53° off
 //      with 10, and his shadow on the road is 6. Then the same picture with
-//      the মাছ axis: the note (2) against the long, bent boats-and-rice book,
-//      whose shadow is 3.
+//      the মাছ axis: the letter (2) against the long, bent boats-and-paddy
+//      book, whose shadow is 3.
 
 const X4B_O = { x: 26, y: 104 };
 const X4B_SAY = [
-  "৪.২-এর ভ্যান। ফাহিম রাস্তা বরাবর ঠেলে, জোর 5। কুলি বাঁকা, জোর 10।",
-  "রাস্তা বরাবর ছায়া: ফাহিম 5, কুলি 6। বাঁকা হয়েও কুলি জিতলো।",
-  "বই দুইটাও তাই। মাছের দিক বরাবর ছায়া: চিঠি 2, নৌকা-ধান 3।",
-  "নৌকা-ধানের বই মাছ থেকে অনেক বাঁকা, কিন্তু লম্বা, 7.07। লম্বা বলেই জিতলো।",
+  "4.2 এর ভ্যান. ফাহিম রাস্তা বরাবর ঠেলে, জোর 5. কুলি ঠেলে বাঁকা হয়ে, জোর 10.",
+  "রাস্তা বরাবর shadow: ফাহিম 5, কুলি 6. বাঁকা হয়েও কুলি জিতলো.",
+  "বই দুইটাও তাই. মাছের দিক বরাবর shadow: চিঠি 2, নৌকা-ধান 3.",
+  "নৌকা-ধানের বই মাছ থেকে অনেক বাঁকা, কিন্তু লম্বা, 7.07. লম্বা বলেই জিতলো.",
 ];
 
 export function SlantWins() {
@@ -1069,7 +1298,7 @@ export function SlantWins() {
   return (
     <Scene scene={s} caption={lsay(X4B_SAY, k)}>
       <div className="mx-auto flex w-full max-w-xs items-center gap-3">
-        <svg viewBox="0 0 150 124" role="img" aria-label="সোজা ছোট arrow আর বাঁকা লম্বা arrow; বাঁকাটার ছায়া বেশি" className="block h-auto w-full max-w-[10rem] shrink-0">
+        <svg viewBox="0 0 150 124" role="img" aria-label="সোজা ছোট arrow আর বাঁকা লম্বা arrow; বাঁকাটার shadow বেশি" className="block h-auto w-full max-w-[10rem] shrink-0">
           <rect x={1} y={1} width={148} height={122} rx={8} fill="white" stroke="#cbd5e1" />
           <path d={`M${ox - 12} ${oy}H144`} stroke={L_INK} strokeOpacity={0.5} />
           <text x={144} y={oy - 4} textAnchor="end" fontSize={8} fill="#475569">
@@ -1087,7 +1316,7 @@ export function SlantWins() {
           </text>
         </svg>
         <div className="grid gap-1 text-sm">
-          <div className="text-xs text-muted">{books ? "মাছের দিকে ছায়া" : "রাস্তা বরাবর ছায়া"}</div>
+          <div className="text-xs text-muted">{books ? "মাছের দিকে shadow" : "রাস্তা বরাবর shadow"}</div>
           {names.map((n, i) => (
             <div key={n} className="flex items-baseline justify-between gap-2">
               <span className={i === 0 ? "text-cat-blue" : "text-cat-coral"}>{n}</span>
@@ -1108,7 +1337,7 @@ export function SlantWins() {
 }
 
 // ---------------------------------------------------------------------------
-// 5½ · A figure for screen 5's first paragraph, no task: the three books as
+// 5½ · A figure for step 5's first paragraph, no task: the three books as
 //      arrows off the মাছ axis, drawn to scale (the fat book runs long), with
 //      their angles 0°, 3° and 65°. Then every one shrunk to the same length:
 //      what's left is direction, and the two fish books sit on the axis.
@@ -1123,11 +1352,11 @@ const X5_ARROWS = BOOKS.map((b) => {
 });
 const X5_TONE: Record<string, string> = { A: L_BLUE, B: L_TEAL, C: L_CORAL };
 const X5_SAY = [
-  "প্রশ্ন “মাছ” তাক করা মাছের দিক বরাবর।",
-  "চিঠি: ছোট, কিন্তু একদম মাছের দিকে।",
-  "মোটা বই: অনেক লম্বা, প্রায় একই দিকে, মাত্র 3° সরে।",
-  "নৌকা-ধানের বই: প্রায় 65° দূরে।",
-  "length দিয়ে ভাগ করলে সবাই সমান লম্বা। থাকে শুধু দিক।",
+  "Query “মাছ” তাক করা মাছের দিক বরাবর.",
+  "চিঠি: ছোট, কিন্তু একদম মাছের দিকে.",
+  "মোটা বই: অনেক লম্বা, প্রায় একই দিকে, মাত্র 3° সরে.",
+  "নৌকা-ধানের বই: প্রায় 65° দূরে.",
+  "Length দিয়ে ভাগ দিলে সবাই সমান লম্বা. থাকে শুধু direction.",
 ];
 
 export function UnitFan() {
@@ -1146,7 +1375,7 @@ export function UnitFan() {
   const [cx, cy] = tip(cArr);
   return (
     <Scene scene={s} caption={lsay(X5_SAY, k)}>
-      <svg viewBox="0 0 230 124" role="img" aria-label="তিনটা বই arrow হিসেবে: চিঠি আর মোটা বই মাছের দিকে, নৌকা-ধান 65° দূরে; length ভাগ করলে সবাই সমান লম্বা" className="mx-auto block h-auto w-full max-w-[17rem]">
+      <svg viewBox="0 0 230 124" role="img" aria-label="তিনটা বই arrow হিসাবে: চিঠি আর মোটা বই মাছের দিকে, নৌকা-ধান 65° দূরে; length দিয়ে ভাগ দিলে সবাই সমান লম্বা" className="mx-auto block h-auto w-full max-w-[17rem]">
         <rect x={1} y={1} width={228} height={122} rx={10} fill="white" stroke="#cbd5e1" />
         <path d={`M${ox} ${oy}H222M${ox} ${oy}V10`} stroke={L_INK} strokeOpacity={0.35} />
         <text x={222} y={oy - 4} textAnchor="end" fontSize={8} fill="#475569">
@@ -1187,9 +1416,10 @@ export function UnitFan() {
 }
 
 // ---------------------------------------------------------------------------
-// 6a · A story scene for screen 6's setup, no task: home. ফাহিম walks in; the
-//      TV shows the new film হইচই; মামী is taken by the crying, মামা by the
-//      laughing, and its card (5, 5) comes up. Who it wins for is not said.
+// 6a · A story scene for step 6's setup, no task: home, at night. ফাহিম
+//      walks in; the TV shows the new film হুলুস্থুল; মামি is taken by the
+//      crying, মামা by the laughing, and its card (5, 5) comes up. Who it wins
+//      for is not said.
 
 function L_TV({ x, y, text }: { x: number; y: number; text: string }) {
   return (
@@ -1209,13 +1439,13 @@ export function LoudFilmHome({}: Story) {
   const k = s.k;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="room" label="বাড়িতে মামা-মামী নতুন ছবি হইচই নিয়ে হইচই করছেন; ছবির score (5, 5), কান্নাও বেশি, হাসিও বেশি">
-        <L_TV x={24} y={LG} text="হইচই" />
+      <Stage backdrop="room" label="বাসায় মামা-মামি নতুন ছবি হুলুস্থুল নিয়ে হুলুস্থুল বাধিয়েছেন; ছবির score (5, 5), কান্নাও বেশি, হাসিও বেশি">
+        <L_TV x={24} y={LG} text="হুলুস্থুল" />
         <Person who="mami" x={170} y={LG} facing={-1} mood={k >= 2 ? "happy" : "plain"} arm={k === 2 ? "wave" : "down"} label />
         <Person who="mama" x={226} y={LG} facing={-1} mood={k >= 3 ? "happy" : "plain"} arm={k === 3 ? "wave" : "down"} label />
         <Person who="fahim" x={k >= 1 ? 286 : 350} y={LG} facing={-1} walking={k === 1} ms={1300} mood={k >= 4 ? "puzzled" : "plain"} label={k >= 1} />
-        {k === 2 && <Bubble x={170} y={LG - 66} lines={["কান্না সবচেয়ে বেশি!"]} />}
-        {k === 3 && <Bubble x={226} y={LG - 66} side="left" lines={["হাসিও সবচেয়ে বেশি!"]} />}
+        {k === 2 && <Bubble x={170} y={LG - 66} lines={["এত কান্না আর", "কোনো ছবিতে নাই."]} />}
+        {k === 3 && <Bubble x={226} y={LG - 66} side="left" lines={["এত হাসিও নাই."]} />}
         {k >= 4 && (
           <>
             <CastCard x={69} y={52} text="(5, 5)" tone="coral" />
@@ -1230,18 +1460,19 @@ export function LoudFilmHome({}: Story) {
 }
 
 // ---------------------------------------------------------------------------
-// 6½ · A figure for screen 6's first paragraph, no task: the three films as
-//      arrows on (কান্না, হাসি). হইচই's is the longest, 7.07. Then মামা's and
-//      মামী's tastes point two ways, and the box still crowns হইচই for both.
+// 6½ · A figure for step 6's first paragraph, no task: the three films as
+//      arrows on (কান্না, হাসি). হুলুস্থুল's is the longest, 7.07. Then মামা's
+//      and মামি's tastes point two ways, and the box still crowns হুলুস্থুল
+//      for both.
 
 const X6_O = { x: 26, y: 116 };
 const X6_SC = 17;
 const X6_FILM_TONE = [L_BLUE, L_TEAL, L_CORAL];
 const X6_SAY = [
-  "তিনটা ছবি, arrow হিসেবে: (কান্না, হাসি)।",
-  "হইচই-এর arrow সবচেয়ে লম্বা, 7.07।",
-  "মামা আর মামী তাকান দুই দিকে।",
-  "তবু box এ দুইজনের কাছেই জেতে হইচই, লম্বা বলে।",
+  "তিনটা ছবি, arrow হিসাবে: (কান্না, হাসি).",
+  "হুলুস্থুল এর arrow সবচেয়ে লম্বা, 7.07.",
+  "মামা আর মামি তাকান দুই দিকে.",
+  "তবু box এ দুইজনের কাছেই জেতে হুলুস্থুল, লম্বা বলে.",
 ];
 
 export function LongestArrow() {
@@ -1252,7 +1483,7 @@ export function LongestArrow() {
   return (
     <Scene scene={s} caption={lsay(X6_SAY, k)}>
       <div className="mx-auto flex w-full max-w-xs items-center gap-3">
-        <svg viewBox="0 0 132 126" role="img" aria-label="Titanic (5, 2), Mr. Bean (1, 4), হইচই (5, 5); হইচই-এর arrow সবচেয়ে লম্বা" className="block h-auto w-full max-w-[9.5rem] shrink-0">
+        <svg viewBox="0 0 132 126" role="img" aria-label="Titanic (5, 2), Mr. Bean (1, 4), হুলুস্থুল (5, 5); হুলুস্থুল এর arrow সবচেয়ে লম্বা" className="block h-auto w-full max-w-[9.5rem] shrink-0">
           <rect x={1} y={1} width={130} height={124} rx={8} fill="white" stroke="#cbd5e1" />
           <path d={`M${ox} ${oy}H126M${ox} ${oy}V6`} stroke={L_INK} strokeOpacity={0.35} />
           <text x={126} y={oy + 8} textAnchor="end" fontSize={7} fill="#475569">
@@ -1275,7 +1506,7 @@ export function LongestArrow() {
               const [x2, y2] = at(t.v);
               return (
                 <text key={t.who} x={x2 + (t.v[0] > t.v[1] ? 2 : -3)} y={y2 + (t.v[0] > t.v[1] ? 10 : -3)} textAnchor={t.v[0] > t.v[1] ? "start" : "end"} fontSize={7} fontWeight={700} fill="#475569" className={FADE}>
-                  {t.who}
+                  {WHO_BN[t.who]}
                 </text>
               );
             })}
@@ -1283,7 +1514,7 @@ export function LongestArrow() {
         <div className="grid gap-1 text-sm">
           {FILMS.map((f, i) => (
             <div key={f.name} className={`flex items-baseline justify-between gap-2 rounded-md px-1 ${i === 2 && k >= 3 ? "bg-accent/15" : ""}`}>
-              <span className={["text-cat-blue", "text-cat-teal", "text-cat-coral"][i]}>{f.name}</span>
+              <span className={["text-cat-blue", "text-cat-teal", "text-cat-coral"][i]}>{filmBn(f.name)}</span>
               {k >= 1 && <b className={`${FADE} font-mono text-xs`}>{fix(len(f.v), 2)}</b>}
             </div>
           ))}
@@ -1294,18 +1525,18 @@ export function LongestArrow() {
 }
 
 // ---------------------------------------------------------------------------
-// 6¾ · A figure for screen 6's second paragraph, no task: direction only.
-//      Every arrow the same length. মামী's taste sits next to Titanic, মামা's
-//      next to Mr. Bean, and হইচই at 45°, right between the two.
+// 6¾ · A figure for step 6's second paragraph, no task: direction only.
+//      Every arrow the same length. মামি's taste sits next to Titanic, মামা's
+//      next to Mr. Bean, and হুলুস্থুল at 45°, right between the two.
 
 const X6B_O = { x: 22, y: 116 };
 const X6B_R = 90;
 const deg = (v: readonly number[]) => (Math.atan2(v[1], v[0]) * 180) / Math.PI;
 const X6B_SAY = [
-  "length ফেলে দিলে থাকে শুধু দিক।",
-  "মামীর দিকের সবচেয়ে কাছে Titanic।",
-  "মামার দিকের সবচেয়ে কাছে Mr. Bean।",
-  "হইচই ঠিক মাঝখানে, 45°-এ। তাই দুইজনের কাছেই দুই নম্বরে।",
+  "Length ফেলে দিলে থাকে শুধু direction.",
+  "মামির direction এর সবচেয়ে কাছে Titanic.",
+  "মামার direction এর সবচেয়ে কাছে Mr. Bean.",
+  "হুলুস্থুল ঠিক মাঝখানে, 45° তে. তাই দুইজনের কাছেই দুই নম্বরে.",
 ];
 
 export function MiddleDirection() {
@@ -1317,10 +1548,10 @@ export function MiddleDirection() {
     return [ox + r * Math.cos(a), oy - r * Math.sin(a)] as const;
   };
   const lit = (i: number) => (k === 1 && i === 0) || (k === 2 && i === 1) || (k >= 3 && i === 2);
-  const tasteOn = (who: string) => (who === "মামী" ? k === 1 || k >= 3 : k >= 2);
+  const tasteOn = (who: string) => (who === "Mami" ? k === 1 || k >= 3 : k >= 2);
   return (
     <Scene scene={s} caption={lsay(X6B_SAY, k)}>
-      <svg viewBox="0 0 200 124" role="img" aria-label="সব arrow সমান লম্বা: মামীর পাশে Titanic, মামার পাশে Mr. Bean, হইচই মাঝখানে 45°-এ" className="mx-auto block h-auto w-full max-w-[15rem]">
+      <svg viewBox="0 0 200 124" role="img" aria-label="সব arrow সমান লম্বা: মামির পাশে Titanic, মামার পাশে Mr. Bean, হুলুস্থুল মাঝখানে 45° তে" className="mx-auto block h-auto w-full max-w-[15rem]">
         <rect x={1} y={1} width={198} height={122} rx={10} fill="white" stroke="#cbd5e1" />
         <path d={`M${ox + X6B_R} ${oy}A${X6B_R} ${X6B_R} 0 0 0 ${ox} ${oy - X6B_R}`} fill="none" stroke={L_INK} strokeOpacity={0.2} strokeDasharray="3 3" />
         <path d={`M${ox} ${oy}H194M${ox} ${oy}V8`} stroke={L_INK} strokeOpacity={0.3} />
@@ -1331,21 +1562,21 @@ export function MiddleDirection() {
           return (
             <g key={t.who} className={FADE}>
               <path d={`M${ox} ${oy}L${x2} ${y2}`} stroke="#64748b" strokeWidth={1.3} strokeDasharray="3 2" />
-              <text x={lx + (t.who === "মামী" ? 2 : 0)} y={ly + (t.who === "মামী" ? 3 : -2)} textAnchor={t.who === "মামী" ? "start" : "middle"} fontSize={7.5} fontWeight={700} fill="#475569">
-                {t.who}
+              <text x={lx + (t.who === "Mami" ? 2 : 0)} y={ly + (t.who === "Mami" ? 3 : -2)} textAnchor={t.who === "Mami" ? "start" : "middle"} fontSize={7.5} fontWeight={700} fill="#475569">
+                {WHO_BN[t.who]}
               </text>
             </g>
           );
         })}
         {FILMS.map((f, i) => {
           const [x2, y2] = end(f.v);
-          const [lx, ly] = end(f.v, X6B_R - 16);
+          const [lx, ly] = i === 2 ? end(f.v, X6B_R + 2) : end(f.v, X6B_R - 16);
           return (
             <g key={f.name}>
               <L_Arr x1={ox} y1={oy} x2={x2} y2={y2} color={X6_FILM_TONE[i]} w={lit(i) ? 3.2 : 2} op={k === 0 || lit(i) ? 1 : 0.35} />
               {(k === 0 || lit(i)) && (
                 <text x={lx + (i === 1 ? -4 : 4)} y={ly + (i === 0 ? 11 : 0)} textAnchor={i === 1 ? "end" : "start"} fontSize={7.5} fontWeight={700} fill={X6_FILM_TONE[i]} className={FADE}>
-                  {f.name}
+                  {filmBn(f.name)}
                 </text>
               )}
             </g>
@@ -1357,7 +1588,7 @@ export function MiddleDirection() {
 }
 
 // ---------------------------------------------------------------------------
-// 8½ · A figure for screen 8's first paragraph, no task: the দালাল's card
+// 8½ · A figure for step 8's first paragraph, no task: the দালাল's card
 //      from 4.1 on the two cows. Their prices come out 74,000 and 85,000.
 //      Normalise the cows' lists first and both weigh "about 1": the box now
 //      says about 296 and 425, and the price is gone.
@@ -1368,10 +1599,10 @@ const X8_COWS = [
 ];
 const X8_KNOBS = [400, 4000, -5000];
 const X8_SAY = [
-  "৪.১-এর দুইটা গাই: (ওজন, দুধ, বয়স)।",
-  "দালালের card দিয়ে box: দাম 74,000 আর 85,000 টাকা।",
-  "এবার আগে length 1 করে নিই। দুইটা গাইয়েরই ওজন হয়ে গেল প্রায় 1।",
-  "box দিলো প্রায় 296 আর 425। গাইয়ের দামটাই হারিয়ে গেল।",
+  "4.1 এর দুইটা গাই: (ওজন, দুধ, বয়স).",
+  "দালালের card দিয়ে box: দাম 74,000 আর 85,000 টাকা.",
+  "এবার আগে length 1 করে নেই. দুইটা গাইয়েরই ওজন হয়ে গেলো প্রায় 1.",
+  "Box দিলো প্রায় 296 আর 425. গাইয়ের দামটাই হারিয়ে গেলো.",
 ];
 
 export function CowNews() {
@@ -1398,7 +1629,7 @@ export function CowNews() {
                 <span />
               )}
               <span key={unit ? "u" : "v"} className={`${FADE} font-mono text-xs text-muted`}>
-                {unit ? `(${u.map((x) => fix(x, 3)).join(", ")})` : tupN(c.v)}
+                {unit ? `(${u.map((x) => fix(x, 3)).join(", ")})` : <Tup v={c.v} of={COW_SLOTS} />}
               </span>
               <span className="text-right text-xs text-muted">{k >= 1 ? "টাকা" : ""}</span>
             </div>
@@ -1410,7 +1641,7 @@ export function CowNews() {
 }
 
 // ---------------------------------------------------------------------------
-// 8¾ · A figure for screen 8's second paragraph, no task: a streaming app's
+// 8¾ · A figure for step 8's side quest, no task: a streaming app's
 //      learned film arrows. The popular film's arrow is long, and the box
 //      pulls it up for every viewer, one after another. No numbers.
 
@@ -1422,10 +1653,10 @@ const X8B_FILMS = [
 ];
 const X8B_VIEWERS = [10, 82];
 const X8B_SAY = [
-  "App নিজে ছবির arrow শেখে। জনপ্রিয় ছবির arrow প্রায়ই লম্বা।",
-  "একজন দর্শকের পছন্দ একদিকে। তার দিকে সবচেয়ে লম্বা ছায়া জনপ্রিয় ছবির।",
-  "আরেকজনের পছন্দ আরেকদিকে। সেখানেও জনপ্রিয় ছবিই এগিয়ে।",
-  "জনপ্রিয় ছবি সবাইকে একটু বেশি দেখানো, জেনে-বুঝেই।",
+  "App নিজেই ছবির arrow শেখে. জনপ্রিয় ছবির arrow প্রায়ই লম্বা.",
+  "একজন দর্শকের পছন্দ একদিকে. তার দিকে সবচেয়ে লম্বা shadow জনপ্রিয় ছবির.",
+  "আরেকজনের পছন্দ আরেকদিকে. সেখানেও জনপ্রিয় ছবিটাই এগিয়ে.",
+  "জনপ্রিয় ছবি সবাইকে একটু বেশি দেখানো হলো, জেনে-বুঝেই.",
 ];
 
 export function PopularPull() {
@@ -1475,461 +1706,128 @@ export function PopularPull() {
 }
 
 // ---------------------------------------------------------------------------
-// 9a · A story scene for screen 9's setup, no task: every search, every book:
-//      length, root, ভাগ, and the books run to দশ লাখ. আপার ভাই (a new face,
-//      in karim's look) walks in with the fix: make each card 1 long once,
-//      when it goes on the shelf. The three rulers are not run.
+// 7½ · A figure for step 7's explanation, no task: সামিনের খাতা from 3.6.
+//      করিম (20, 10), ডাক্তার আপা (200, 100); their lengths 22 and 224, ten
+//      times apart. Normalise and both rows read (0.89, 0.45), length 1: the
+//      answer to "who spends most" has been rubbed out by our own hand.
 
-export function MillionBooks({}: Story) {
-  const s = useScene(4, [600, 2200, 1800, 2400]);
-  const k = s.k;
-  return (
-    <StoryFrame scene={s}>
-      <Stage backdrop="room" label="প্রতি সার্চে প্রতিটা বইয়ের length, root, ভাগ; বই দশ লাখ হলে? আপার ভাই বলেন, তাকে তোলার সময়েই length 1 করে রাখো">
-        <L_Shelf x={8} y={LG} w={78} />
-        <L_Shelf x={90} y={LG} w={70} />
-        <L_Desk x={170} y={LG} />
-        <Person who="ammu" x={256} y={LG} facing={-1} mood={k === 2 ? "puzzled" : k >= 4 ? "happy" : "plain"} />
-        <L_Name x={256} text="Apu" />
-        {k >= 1 && k < 4 && <L_Note x={86} y={30} lines={["প্রতিটা বইয়ে: length, root, ভাগ", k >= 2 ? "প্রতিবার, দশ লাখ বইয়ে" : "প্রতিবার সার্চে"]} tone={L_CORAL} fs={8} />}
-        {k === 2 && <Bubble x={256} y={LG - 66} side="left" lines={["বই দশ লাখ হলে?"]} />}
-        <Person who="karim" x={k >= 3 ? 298 : 360} y={LG} facing={-1} walking={k === 3} ms={1300} arm={k === 3 ? "wave" : "down"} mood={k >= 3 ? "smug" : "plain"} />
-        {k >= 3 && <L_Name x={298} text="আপার ভাই" />}
-        {k === 3 && <Bubble x={298} y={LG - 66} side="left" lines={["তাকে তোলার সময়েই", "length 1 করে রাখো!"]} />}
-        {k >= 4 && (
-          <>
-            <rect x={120} y={50} width={9} height={20} fill="#15803d" className={POP} />
-            <L_Note x={124} y={34} lines={["length 1"]} tone="#15803d" />
-          </>
-        )}
-      </Stage>
-    </StoryFrame>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// 9½ · A figure for screen 9's formula, no task: cosine as box ÷ lengths;
-//      hats on both, each length is 1, dividing by 1 × 1 does nothing, and
-//      what's left is the plain box: cos θ = û · v̂.
-
-const X9_SAY = [
-  "cosine: box, তারপর দুইটা length দিয়ে ভাগ।",
-  "card দুইটা আগেই 1 লম্বা করা, তাই দুইটা lengthই 1।",
-  "1 দিয়ে ভাগ করলে কিছুই বদলায় না।",
-  "তাই সাধারণ boxই cosine।",
+const X7_ROWS = [
+  { who: "করিম", v: [20, 10] },
+  { who: "ডাক্তার আপা", v: [200, 100] },
+];
+const X7_SAY = [
+  "সামিনের খাতা: কে (চা, শরবত) এ কত টাকা খরচ করলো.",
+  "Length: করিম 22, আপা 224. আপা 10 গুণ বড় ক্রেতা.",
+  "Normalise: দুইজনই (0.89, 0.45), length 1.",
+  "বড় ক্রেতা কে? খাতায় আর লেখা নাই. উত্তরটা নিজের হাতেই মোছা.",
 ];
 
-export function HatFormula() {
-  const s = useScene(3, [600, 2200, 1600]);
+export function SpenderErase() {
+  const s = useScene(3, [600, 2200, 2200]);
   const k = s.k;
-  const u = k >= 1 ? "û" : "u";
-  const v = k >= 1 ? "v̂" : "v";
+  const normed = k >= 2;
   return (
-    <Scene scene={s} caption={lsay(X9_SAY, k)}>
-      <div className="mx-auto flex w-fit items-center gap-2 font-mono text-lg">
-        <span>cos θ =</span>
-        {k >= 3 ? (
-          <b className={`${POP} inline-block rounded-lg bg-cat-amber/15 px-2 text-cat-amber`}>
-            {u} · {v}
-          </b>
-        ) : (
-          <span className="grid justify-items-center gap-0.5">
-            <span key={u}>
-              {u} · {v}
-            </span>
-            <span className={`h-0.5 w-full bg-foreground/60 transition-opacity duration-500 motion-reduce:transition-none ${k >= 2 ? "opacity-25" : ""}`} />
-            <span key={`d${k >= 1}`} className={`${FADE} transition-opacity duration-500 motion-reduce:transition-none ${k >= 2 ? "line-through opacity-40" : ""}`}>
-              {k >= 1 ? "1 × 1" : "‖u‖ ‖v‖"}
-            </span>
-          </span>
-        )}
+    <Scene scene={s} caption={lsay(X7_SAY, k)}>
+      <div className="mx-auto w-full max-w-xs rounded-xl border border-[#e7d7c1] bg-[#fffbeb] px-3 py-2 text-[#0f1b2d]">
+        <div className="text-center text-xs font-semibold text-[#92400e]">সামিনের খাতা</div>
+        <div className="mt-1 grid grid-cols-[1fr_auto_3.2rem] items-center gap-x-2 gap-y-1 text-sm">
+          <span />
+          <span className="text-center text-[0.7rem] text-[#64748b]">(চা, শরবত)</span>
+          <span className="text-right text-[0.7rem] text-[#64748b]">length</span>
+          {X7_ROWS.map((r) => {
+            const L = len(r.v);
+            return (
+              <div key={r.who} className="contents">
+                <span className={`font-semibold ${r.v[0] === 200 && k === 1 ? "text-[#be123c]" : ""}`}>{r.who}</span>
+                <span key={normed ? "u" : "v"} className={`${FADE} text-center font-mono text-xs`}>
+                  {normed ? "(0.89, 0.45)" : <Tup v={r.v} of={TEA_SLOTS} />}
+                </span>
+                <span className="text-right font-mono text-sm">
+                  {k >= 1 && !normed && <b className={`${POP} inline-block`}>{Math.round(L)}</b>}
+                  {normed && (
+                    <span className={FADE}>
+                      <span className="mr-1 text-xs text-[#94a3b8] line-through">{Math.round(L)}</span>
+                      <b>1</b>
+                    </span>
+                  )}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+        <div className="mt-1.5 h-6 text-center text-sm">
+          {k === 1 && <span className={`${FADE} font-semibold text-[#be123c]`}>10 গুণ</span>}
+          {k >= 3 && <b className={`${POP} inline-block rounded-full bg-[#fee2e2] px-2 text-[#be123c]`}>বড় ক্রেতা: ?</b>}
+        </div>
       </div>
     </Scene>
   );
 }
 
 // ---------------------------------------------------------------------------
-// 9¾ · A figure for screen 9's second paragraph, no task: shelving vs
-//      searching. Each document is normalised once as it's stored; a search
-//      runs only the box with each, one by one; then all at once on a GPU.
+// 10½ · A figure for step 10's explanation, no task: the three news items
+//       as papers, sized by length, the ইলিশ share in blue. The box counts
+//       only the blue: the market report has the most, 10. Divide by the
+//       length and all three are one size; now the one that is most ইলিশ
+//       wins: 1.00, 0.99, 0.16.
 
-const X9B_DOCS = [0, 1, 2, 3, 4, 5];
-const X9B_SAY = [
-  "জমা থাকা document।",
-  "জমা রাখার সময়েই প্রতিটা একবার normalise, length 1।",
-  "খোঁজার সময় প্রশ্নের সাথে শুধু box, একটার পর একটা।",
-  "GPU সব box একসাথে চালায়। আসল system-এ কোটি কোটি।",
+const X10N_NEWS = [
+  { name: "দুই লাইন", v: [3, 0, 0] },
+  { name: "আধা পাতা", v: [6, 1, 0] },
+  { name: "দশ পাতা", v: [10, 60, 8] },
+];
+const X10N_SAY = [
+  "তিনটা খবর, তিন সাইজের. নীল অংশটা ইলিশ.",
+  "Box গোনে শুধু নীল: দশ পাতার খবরে নীল সবচেয়ে বেশি, 10.",
+  "Length দিয়ে ভাগ দিলে তিনটা খবরই এক সাইজের.",
+  "এবার জেতে যে খবরের বেশিটা ইলিশ: 1.00, 0.99, আর দশ পাতা 0.16.",
 ];
 
-export function StoreOnce() {
-  const s = useScene(3, [600, 1800, 2200]);
+export function NewsShrink() {
+  const s = useScene(3, [600, 2200, 1800]);
   const k = s.k;
-  const dx = (i: number) => 22 + i * 40;
+  const hs = useTween(X10N_NEWS.map((n) => (k >= 2 ? 64 : 12 + len(n.v) * 1.2)), 1100);
   return (
-    <Scene scene={s} caption={lsay(X9B_SAY, k)}>
-      <svg viewBox="0 0 250 104" role="img" aria-label="document জমার সময় একবার normalise, খোঁজার সময় শুধু box, GPU-তে একসাথে" className="mx-auto block h-auto w-full max-w-[18rem]">
-        {k >= 3 && (
-          <g className={FADE}>
-            <rect x={6} y={44} width={238} height={56} rx={6} fill="#ede9fe" stroke={L_VIOLET} strokeWidth={1.2} />
-            <text x={11} y={55} fontSize={8} fontWeight={800} fill="#6d28d9">
-              GPU
-            </text>
-          </g>
-        )}
-        {k >= 2 && (
-          <g className={POP}>
-            <rect x={101} y={3} width={48} height={18} rx={9} fill="#b45309" />
-            <text x={125} y={15.5} textAnchor="middle" fontSize={9.5} fontWeight={700} fill="white">
-              প্রশ্ন
-            </text>
-          </g>
-        )}
-        {k >= 2 &&
-          X9B_DOCS.map((i) => (
-            <path
-              key={`l${i}${k >= 3}`}
-              d={`M125 20L${dx(i) + 11} 60`}
-              pathLength={1}
-              strokeDasharray="1 2"
-              style={{ transitionDelay: `${k >= 3 ? 0 : i * 260}ms` }}
-              className={`fill-none [stroke-dashoffset:0] transition-[stroke-dashoffset] duration-500 motion-reduce:transition-none starting:[stroke-dashoffset:1] ${k >= 3 ? "stroke-[#7c3aed] [stroke-width:2]" : "stroke-[#d97706] [stroke-width:1.2]"}`}
-            />
-          ))}
-        {X9B_DOCS.map((i) => (
-          <g key={i}>
-            <rect x={dx(i)} y={60} width={22} height={28} rx={2} fill="white" stroke="#94a3b8" />
-            {[0, 1, 2].map((r) => (
-              <path key={r} d={`M${dx(i) + 4} ${67 + r * 5}h14`} stroke="#cbd5e1" strokeWidth={1.4} />
-            ))}
-            {k >= 1 && (
-              <g className={POP}>
-                <circle cx={dx(i) + 20} cy={62} r={6} fill="#15803d" />
-                <text x={dx(i) + 20} y={65} textAnchor="middle" fontSize={8} fontWeight={800} fontFamily="ui-monospace, monospace" fill="white">
-                  1
+    <Scene scene={s} caption={lsay(X10N_SAY, k)}>
+      <svg viewBox="0 0 220 130" role="img" aria-label="তিনটা খবর, length অনুযায়ী সাইজ; length দিয়ে ভাগ দিলে সব এক সাইজ, আর দুই লাইনের খবর জেতে" className="mx-auto block h-auto w-full max-w-[15rem]">
+        <rect x={1} y={1} width={218} height={128} rx={10} fill="white" stroke="#cbd5e1" />
+        {X10N_NEWS.map((n, i) => {
+          const h = hs[i];
+          const w = Math.min(h * 0.72, 56);
+          const cx = 40 + i * 70;
+          const base = 104;
+          const share = n.v[0] / (n.v[0] + n.v[1] + n.v[2]);
+          const win = k >= 3 && i < 2;
+          return (
+            <g key={n.name}>
+              <rect x={cx - w / 2} y={base - h} width={w} height={h} rx={2} fill="#f8fafc" stroke={win ? "#16a34a" : "#94a3b8"} strokeWidth={win ? 2 : 1} />
+              <rect x={cx - w / 2} y={base - h * share} width={w} height={h * share} fill={L_BLUE} opacity={0.75} />
+              <text x={cx} y={base + 11} textAnchor="middle" fontSize={8} fontWeight={700} fill={L_INK}>
+                {n.name}
+              </text>
+              {k === 1 && (
+                <text x={cx} y={base + 22} textAnchor="middle" fontSize={8.5} fontWeight={800} fontFamily="ui-monospace, monospace" fill={i === 2 ? "#be123c" : L_INK} className={FADE}>
+                  {n.v[0]}
                 </text>
-              </g>
-            )}
-          </g>
-        ))}
+              )}
+              {k >= 3 && (
+                <text x={cx} y={base + 22} textAnchor="middle" fontSize={8.5} fontWeight={800} fontFamily="ui-monospace, monospace" fill={win ? "#15803d" : "#be123c"} className={FADE}>
+                  {fix(cosQ(n.v), 2)}
+                </text>
+              )}
+            </g>
+          );
+        })}
       </svg>
     </Scene>
   );
 }
 
 // ---------------------------------------------------------------------------
-// 10½ · A figure for screen 10's formula, no task: two arrows 1 long, the
-//       second swinging open, 0° → 60° → 90° → 180°. The gap between their
-//       tips reads 0, 1, 1.41, 2 while cos reads 1, 0.5, 0, −1; distance² is
-//       2 − 2 cos θ every time.
-
-const X10_ANG = [0, 60, 90, 180];
-const X10_SAY = [
-  "একই দিকে: cos 1, মাথার দূরত্ব 0।",
-  "60°: cos 0.5, দূরত্ব 1।",
-  "90°: cos 0, দূরত্ব 1.41।",
-  "উল্টো দিকে: cos −1, দূরত্ব 2।",
-  "প্রতিবার দূরত্ব² = 2 − 2 cos θ। cos যত বড়, দূরত্ব তত ছোট।",
-];
-
-export function ChordCos() {
-  const s = useScene(4, [600, 1800, 1800, 1800]);
-  const k = s.k;
-  const [a] = useTween([X10_ANG[Math.min(k, 3)]], 1100);
-  const r = (a * Math.PI) / 180;
-  const O = { x: 130, y: 94 };
-  const R = 70;
-  const ux = O.x + R;
-  const vx = O.x + R * Math.cos(r);
-  const vy = O.y - R * Math.sin(r);
-  const c = Math.cos(r);
-  const d = Math.sqrt(Math.max(0, 2 - 2 * c));
-  return (
-    <Scene scene={s} caption={lsay(X10_SAY, k)}>
-      <svg viewBox="0 0 250 104" role="img" aria-label="দুইটা 1 লম্বা arrow; কোণ বাড়লে cos কমে, মাথার দূরত্ব বাড়ে" className="mx-auto block h-auto w-full max-w-[18rem]">
-        <rect x={1} y={1} width={248} height={102} rx={10} fill="white" stroke="#cbd5e1" />
-        <path d={`M${O.x + R} ${O.y}A${R} ${R} 0 0 0 ${O.x - R} ${O.y}`} fill="none" stroke={L_INK} strokeOpacity={0.15} strokeDasharray="3 3" />
-        {d > 0.02 && <path d={`M${ux} ${O.y}L${vx} ${vy}`} stroke={L_CORAL} strokeWidth={2} strokeDasharray="3 2" />}
-        <L_Arr x1={O.x} y1={O.y} x2={ux} y2={O.y} color={L_BLUE} w={2.6} />
-        <L_Arr x1={O.x} y1={O.y} x2={vx} y2={vy} color={L_TEAL} w={2.6} />
-        <text x={8} y={14} fontSize={8.5} fontFamily="ui-monospace, monospace" fill={L_INK}>
-          {`cos θ = ${fix(c, 2)}`}
-        </text>
-        <text x={8} y={26} fontSize={8.5} fontFamily="ui-monospace, monospace" fill="#be123c">
-          {`‖û − v̂‖ = ${fix(d, 2)}`}
-        </text>
-        {k >= 4 && (
-          <g className={FADE}>
-            <text x={8} y={38} fontSize={8.5} fontFamily="ui-monospace, monospace" fill="#be123c">
-              {`‖û − v̂‖² = ${fix(d * d, 2)}`}
-            </text>
-            <text x={8} y={50} fontSize={8.5} fontFamily="ui-monospace, monospace" fill="#b45309">
-              {`2 − 2cos θ = ${fix(2 - 2 * c, 2)}`}
-            </text>
-          </g>
-        )}
-      </svg>
-    </Scene>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// 11a · A story scene for screen 11's setup, no task: night, a phone call.
-//       ফাহিম tells সোম the day; সোম laughs that ChatGPT runs this box; then
-//       the sentence with "ওটা" comes up with a question mark. Not answered.
-
-function L_Waves({ x, y }: { x: number; y: number }) {
-  return (
-    <g className={FADE} fill="none" stroke="#fde68a" strokeWidth={1.4} strokeLinecap="round">
-      {[6, 12, 18].map((r) => (
-        <path key={r} d={`M${x - r * 0.6} ${y - r}q${r * 0.9} ${r} 0 ${r * 2}`} transform={`rotate(-90 ${x} ${y})`} />
-      ))}
-    </g>
-  );
-}
-
-export function NightCall({}: Story) {
-  const s = useScene(3, [600, 1800, 2400]);
-  const k = s.k;
-  return (
-    <StoryFrame scene={s}>
-      <Stage backdrop="night" label="রাতে ফাহিম সোমকে ফোন করে; সোম বলে ChatGPT-র ভেতরেও এই box; তারপর একটা বাক্য, ওটা কাকে বোঝায়?">
-        <Building x={4} y={LG} w={66} h={72} color="#334155" />
-        <Building x={250} y={LG} w={66} h={72} color="#334155" />
-        <Person who="fahim" x={96} y={LG} arm="hold" mood={k === 1 ? "happy" : "plain"} />
-        <L_Name x={96} text="ফাহিম" light />
-        <Person who="som" x={224} y={LG} facing={-1} arm="hold" mood={k >= 2 ? "happy" : "plain"} />
-        <L_Name x={224} text="সোম" light />
-        {k >= 1 && k < 3 && (
-          <>
-            <L_Waves x={132} y={100} />
-            <L_Waves x={188} y={100} />
-          </>
-        )}
-        {k === 1 && <Bubble x={96} y={LG - 66} lines={["পাঠাগারের পুরো", "গল্পটা শোন…"]} />}
-        {k === 2 && <Bubble x={224} y={LG - 66} side="left" lines={["ChatGPT-র ভেতরেও", "তো এই box।"]} />}
-        {k >= 3 && (
-          <g className={FADE}>
-            <rect x={30} y={30} width={260} height={24} rx={6} fill="white" />
-            <text x={160} y={46} textAnchor="middle" fontSize={10} fontWeight={600} fill={L_INK}>
-              বিড়ালটা দুধ খেলো কারণ <tspan fill={L_VIOLET} fontWeight={800}>ওটা</tspan>র খিদে পেয়েছিল
-            </text>
-            <text x={160} y={72} textAnchor="middle" fontSize={11} fontWeight={800} fill="#fde68a">
-              “ওটা” কে?
-            </text>
-          </g>
-        )}
-      </Stage>
-    </StoryFrame>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// 11½ · A figure for screen 11's explanation, no task: the toy's keys as
-//       arrows on (প্রাণী-ভাব, খাবার-ভাব). "ওটা"'s question points to প্রাণী
-//       and the biggest box is বিড়ালটা (6); the question swings to খাবার and
-//       দুধ wins (6).
-
-const X11_O = { x: 20, y: 100 };
-const X11_SC = 24;
-const X11_TONE = [L_BLUE, L_TEAL, "#64748b"];
-const X11_SAY = [
-  "প্রতিটা শব্দের চাবি, একটা arrow: (প্রাণী-ভাব, খাবার-ভাব)।",
-  "খিদে পায় প্রাণীর। “ওটা”-র প্রশ্ন তাক করা প্রাণীর দিকে।",
-  "box সবচেয়ে বড় বিড়ালটার সাথে, 6। “ওটা” মানে বিড়াল।",
-  "টাটকা হয় খাবার। প্রশ্ন ঘুরে গেল খাবারের দিকে।",
-  "এবার box সবচেয়ে বড় দুধের সাথে। জিতলো দুধ।",
-];
-
-export function QueryKeys() {
-  const s = useScene(4, [600, 1800, 2000, 1800]);
-  const k = s.k;
-  const round = k >= 3 ? 1 : 0;
-  const q = ROUNDS[round].q;
-  const [qx, qy] = useTween(q, 1100);
-  const { x: ox, y: oy } = X11_O;
-  const scored = k === 2 || k >= 4;
-  const scores = WORDS.map((w) => dot(q, w.key));
-  const win = ROUNDS[round].ans;
-  return (
-    <Scene scene={s} caption={lsay(X11_SAY, k)}>
-      <div className="mx-auto flex w-full max-w-xs items-center gap-3">
-        <svg viewBox="0 0 120 110" role="img" aria-label="শব্দের চাবি arrow; ওটার প্রশ্ন প্রথমে প্রাণীর দিকে, বিড়ালটা জেতে; পরে খাবারের দিকে, দুধ জেতে" className="block h-auto w-full max-w-[9rem] shrink-0">
-          <rect x={1} y={1} width={118} height={108} rx={8} fill="white" stroke="#cbd5e1" />
-          <path d={`M${ox} ${oy}H116M${ox} ${oy}V6`} stroke={L_INK} strokeOpacity={0.35} />
-          <text x={116} y={oy + 8} textAnchor="end" fontSize={6.5} fill="#475569">
-            প্রাণী
-          </text>
-          <text x={ox + 3} y={12} fontSize={6.5} fill="#475569">
-            খাবার
-          </text>
-          {WORDS.map((w, i) => (
-            <L_Arr key={w.w} x1={ox} y1={oy} x2={ox + w.key[0] * X11_SC} y2={oy - w.key[1] * X11_SC} color={X11_TONE[i]} w={scored && i === win ? 3.2 : 2} op={scored && i !== win ? 0.4 : 1} />
-          ))}
-          {WORDS.map((w, i) => (
-            <text key={`t${w.w}`} x={ox + w.key[0] * X11_SC + (i === 1 ? 5 : 2)} y={oy - w.key[1] * X11_SC + (i === 1 ? 6 : -4)} fontSize={6.5} fontWeight={700} fill={X11_TONE[i]}>
-              {w.w}
-            </text>
-          ))}
-          {k >= 1 && <L_Arr x1={ox} y1={oy} x2={ox + qx * X11_SC} y2={oy - qy * X11_SC} color={L_VIOLET} w={2.6} dashed />}
-          {k >= 1 && (
-            <text x={ox + qx * X11_SC + (round ? -3 : 1)} y={oy - qy * X11_SC + (round ? 0 : -5)} textAnchor={round ? "end" : "start"} fontSize={6.5} fontWeight={800} fill={L_VIOLET}>
-              ওটা
-            </text>
-          )}
-        </svg>
-        <div className="grid gap-1 text-sm">
-          {k >= 1 && (
-            <div className={`${FADE} text-xs text-cat-violet`}>
-              “ওটা”-র প্রশ্ন <span className="font-mono">{tupN(q)}</span>
-            </div>
-          )}
-          {WORDS.map((w, i) => (
-            <div key={w.w} className={`flex items-baseline justify-between gap-3 rounded-md px-1 ${scored && i === win ? "bg-accent/15" : ""}`}>
-              <span style={{ color: X11_TONE[i] }}>{w.w}</span>
-              <b key={`${round}${scored}`} className={`${POP} inline-block font-mono`}>
-                {scored ? scores[i] : ""}
-              </b>
-            </div>
-          ))}
-        </div>
-      </div>
-    </Scene>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// 12½ · A figure for screen 12's first paragraph, no task: the sentence's
-//       words, each with a long strip of learned numbers; ওটার runs the box
-//       with every other word, then every word with every word; the name
-//       lands last: attention, and in full, scaled dot-product attention.
-
-const X12_WORDS = ["বিড়ালটা", "দুধ", "খেলো", "কারণ", "ওটার", "খিদে", "পেয়েছিল"];
-const X12_X = X12_WORDS.map((_, i) => 26 + i * 41);
-const X12_SAY = [
-  "আসল model-এ প্রতিটা শব্দের ঘর শত শত, সংখ্যাগুলো machine নিজেই শেখে।",
-  "“ওটার” box চালায় বাকি সব শব্দের সাথে।",
-  "শুধু “ওটার” না, প্রতিটা শব্দই বাকি সবার সাথে।",
-  "এই কৌশলের নাম attention।",
-  "পুরো নাম scaled dot-product attention। ভেতরে সত্যিই dot product।",
-];
-const x12arc = (i: number, j: number) => {
-  const a = X12_X[i];
-  const b = X12_X[j];
-  return `M${a} 72Q${(a + b) / 2} ${72 - Math.abs(a - b) * 0.52} ${b} 72`;
-};
-
-export function AllPairs() {
-  const s = useScene(4, [600, 1800, 1800, 1600]);
-  const k = s.k;
-  const pairs: [number, number][] = [];
-  if (k >= 2) for (let i = 0; i < 7; i++) for (let j = i + 1; j < 7; j++) pairs.push([i, j]);
-  return (
-    <Scene scene={s} caption={lsay(X12_SAY, k)}>
-      <svg viewBox="0 0 300 116" role="img" aria-label="বাক্যের প্রতিটা শব্দ বাকি সব শব্দের সাথে box চালায়; নাম attention" className="mx-auto block h-auto w-full max-w-[20rem]">
-        {pairs.map(([i, j]) => (
-          <path key={`${i}${j}`} d={x12arc(i, j)} fill="none" stroke={L_BLUE} strokeOpacity={0.35} strokeWidth={1} className={FADE} />
-        ))}
-        {k === 1 &&
-          X12_X.map((_, j) =>
-            j === 4 ? null : <path key={`o${j}`} d={x12arc(4, j)} fill="none" stroke={L_VIOLET} strokeWidth={1.6} className={FADE} />,
-          )}
-        {X12_WORDS.map((w, i) => (
-          <g key={w}>
-            <text x={X12_X[i]} y={84} textAnchor="middle" fontSize={10} fontWeight={i === 4 ? 800 : 600} fill={i === 4 && k === 1 ? L_VIOLET : L_INK}>
-              {w}
-            </text>
-            {Array.from({ length: 8 }, (_, c) => (
-              <rect key={c} x={X12_X[i] - 14 + c * 3.6} y={89} width={2.8} height={6} fill={["#93c5fd", "#fcd34d", "#86efac", "#f9a8d4"][(i + c) % 4]} />
-            ))}
-          </g>
-        ))}
-        {k >= 3 && (
-          <text key={k >= 4 ? "full" : "short"} x={150} y={111} textAnchor="middle" fontSize={10} fontWeight={800} fill={L_INK} className={FADE}>
-            {k >= 4 ? (
-              <>
-                scaled <tspan fill="#b45309">dot-product</tspan> attention
-              </>
-            ) : (
-              "attention"
-            )}
-          </text>
-        )}
-      </svg>
-    </Scene>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// 12¾ · A figure for screen 12's second paragraph, no task: 4.1's দালাল card
-//       as a neuron. The card is w, the cow's list is x, the box gives
-//       w · x = 85,000; then + a number, then a small bend; then many of them.
-
-const X12B_SAY = [
-  "৪.১-এর দালালের card। এটাই w।",
-  "গাইয়ের list x-এর সাথে box: w · x = 85,000।",
-  "তার সাথে একটা সংখ্যা যোগ।",
-  "তারপর ছোট্ট একটা বাঁক। এই পুরোটাই একটা neuron।",
-  "আজকের AI-এর বড় একটা অংশ: এই এক box, কোটি কোটিবার।",
-];
-
-function X12B_Bend() {
-  return (
-    <svg viewBox="0 0 24 16" aria-hidden="true" className="inline-block h-4 w-6">
-      <path d="M2 13H10Q14 13 16 8T22 3" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" />
-    </svg>
-  );
-}
-
-export function DalalNeuron() {
-  const s = useScene(4, [600, 2200, 1500, 2000]);
-  const k = s.k;
-  const unit = (key: string, cls: string, body: ReactNode) => (
-    <span key={key} className={`${POP} inline-flex items-center rounded-lg px-2 py-0.5 ${cls}`}>
-      {body}
-    </span>
-  );
-  const one = (
-    <div className="flex flex-wrap items-center justify-center gap-1 text-sm">
-      {unit("wx", "bg-cat-amber/15 font-mono", k >= 1 ? "w · x" : "w")}
-      {k >= 2 && <span className="text-muted">→</span>}
-      {k >= 2 && unit("b", "bg-cat-blue/10 font-mono", "+ b")}
-      {k >= 3 && <span className="text-muted">→</span>}
-      {k >= 3 && unit("bend", "bg-cat-violet/10 text-cat-violet", <X12B_Bend />)}
-    </div>
-  );
-  return (
-    <Scene scene={s} caption={lsay(X12B_SAY, k)}>
-      <div className="mx-auto grid w-full max-w-xs gap-1.5">
-        <div className="flex flex-wrap items-baseline justify-center gap-x-2 text-xs text-muted">
-          <span>
-            w = <span className="font-mono text-foreground">(400, 4000, −5000)</span>
-          </span>
-          {k >= 1 && (
-            <span className={FADE}>
-              x = <span className="font-mono text-foreground">(200, 5, 3)</span>
-            </span>
-          )}
-        </div>
-        {one}
-        {k === 1 && <div className={`${FADE} text-center font-mono text-sm font-semibold`}>85,000</div>}
-        {k >= 3 && <div className={`${FADE} text-center text-xs font-semibold text-cat-violet`}>neuron</div>}
-        {k >= 4 && (
-          <div className={`${FADE} flex justify-center gap-1`}>
-            {Array.from({ length: 9 }, (_, i) => (
-              <span key={i} className="inline-block size-3 rounded-full bg-cat-amber/40" />
-            ))}
-            <span className="text-xs text-muted">…</span>
-          </div>
-        )}
-      </div>
-    </Scene>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// 13a · A story scene for screen 13's setup, no task: closing time at the
-//       পাঠাগার. আপা hands ফাহিম a list: "কোন কাজে কোন মাপ, বলে যা তো।"
-//       ফাহিম wonders: box, cosine, না দূরত্ব? No job is sorted.
+// 9a · A story scene for step 9's setup, no task: the next afternoon, the
+//      library closing. লাইব্রেরির আপু hands ফাহিম a list: কোন কাজে কোন
+//      মাপ, লিখে দিয়ে যাও. ফাহিম wonders: box, cosine, না distance? No job
+//      is sorted.
 
 function L_Paper() {
   return (
@@ -1947,41 +1845,40 @@ export function ListHandover({}: Story) {
   const k = s.k;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="evening" label="পাঠাগার বন্ধের সময় আপা ফাহিমের হাতে একটা তালিকা দেন: কোন কাজে কোন মাপ, বলে যা তো">
+      <Stage backdrop="evening" label="লাইব্রেরি বন্ধের সময় আপু ফাহিমের হাতে একটা list দেন: কোন কাজে কোন মাপ, লিখে দিয়ে যাও">
         <Tree x={30} y={LG} s={0.9} />
-        <Building x={176} y={LG} w={132} h={96} color="#e7d7c1" label="পাঠাগার" />
+        <Building x={176} y={LG} w={132} h={96} color="#e7d7c1" label="লাইব্রেরি" />
         <rect x={272} y={LG - 44} width={24} height={44} fill="#78350f" />
-        <Person who="ammu" x={210} y={LG} facing={-1} arm={k >= 1 && k < 3 ? "hold" : "down"} mood={k === 2 ? "smug" : "plain"} />
-        <L_Name x={210} text="Apu" />
+        <L_Apu x={210} arm={k >= 1 && k < 3 ? "hold" : "down"} mood={k === 2 ? "smug" : "plain"} />
         <Person who="fahim" x={140} y={LG} arm={k >= 3 ? "hold" : "down"} mood={k >= 3 ? "puzzled" : "plain"} label />
         {k >= 1 && (
-          <L_Carry x={k >= 3 ? 159 : 191} y={LG - 36} ms={900}>
+          <L_Carry x={k >= 3 ? 159 : 192} y={LG - 34} ms={900}>
             <L_Paper />
           </L_Carry>
         )}
-        {k === 2 && <Bubble x={210} y={LG - 66} lines={["কোন কাজে কোন মাপ,", "বলে যা তো।"]} />}
-        {k >= 3 && <Bubble x={140} y={LG - 66} tone="think" lines={["box, cosine,", "না দূরত্ব?"]} />}
+        {k === 2 && <Bubble x={210} y={LG - 60} lines={["কোন কাজে কোন মাপ,", "লিখে দিয়ে যাও."]} />}
+        {k >= 3 && <Bubble x={140} y={LG - 66} tone="think" lines={["box, cosine,", "না distance?"]} />}
       </Stage>
     </StoryFrame>
   );
 }
 
 // ---------------------------------------------------------------------------
-// 13½ · A figure for screen 13's explanation, no task: three questions, three
-//       rulers. কত বড়: two arrows one way, one longer (box). কী ধরনের: two
-//       directions and the angle between (cosine). কে কোথায়: two spots and
-//       the gap (দূরত্ব).
+// 9½ · A figure for step 9's explanation, no task: three questions, three
+//      measures. কত বড়: two arrows one way, one longer (box). কী ধরনের: two
+//      directions and the angle between (cosine). কে কোথায়: two spots and
+//      the gap (distance).
 
 const X13_ITEMS = [
   { q: "কত বড়?", tool: "box" },
   { q: "কী ধরনের?", tool: "cosine" },
-  { q: "কে কোথায়?", tool: "দূরত্ব" },
+  { q: "কে কোথায়?", tool: "distance" },
 ];
 const X13_SAY = [
-  "তিনটা মাপ, তিনটা প্রশ্ন।",
-  "কত বড়, মানে lengthও খবর হলে box।",
-  "কী ধরনের, মানে শুধু দিক চাইলে cosine।",
-  "কে কোথায় দাঁড়িয়ে, মানে জায়গাটাই প্রশ্ন হলে দূরত্ব।",
+  "তিনটা মাপ, তিনটা প্রশ্ন.",
+  "কত বড়: length ও যখন খবর, box.",
+  "কী ধরনের: শুধু direction জানতে চাইলে, cosine.",
+  "কে কোথায় দাঁড়িয়ে: জায়গাটাই যখন প্রশ্ন, distance.",
 ];
 
 function X13_Pic({ i }: { i: number }) {
@@ -2033,8 +1930,8 @@ export function ThreeQuestions() {
 }
 
 // ---------------------------------------------------------------------------
-// 15a · A story scene for screen 15's first paragraph, no task: আপা keeps
-//       machine খ for finding fish, and machine ক stays too, for price, total
+// 11a · A story scene for step 11's first paragraph, no task: আপু keeps
+//       machine B for finding fish, and machine A stays too, for price, total
 //       and popularity.
 
 export function KeepBoth({}: Story) {
@@ -2042,12 +1939,11 @@ export function KeepBoth({}: Story) {
   const k = s.k;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="room" label="আপা মাছ খোঁজার জন্য machine খ রাখেন; machine ক-ও থাকে দাম, মোট আর জনপ্রিয়তার জন্য">
+      <Stage backdrop="room" label="আপু মাছ খোঁজার জন্য machine B রাখেন; machine A ও থাকে দাম, মোট আর জনপ্রিয়তার জন্য">
         <L_Shelf x={10} y={LG} w={80} />
         <L_Desk x={150} y={LG} lit={k >= 1 ? 1 : undefined} />
-        <Person who="ammu" x={262} y={LG} facing={-1} arm={k >= 1 ? "point" : "down"} mood={k >= 1 ? "happy" : "plain"} />
-        <L_Name x={262} text="Apu" />
-        {k === 1 && <Bubble x={262} y={LG - 66} side="left" lines={["মাছ খুঁজতে", "machine খ।"]} />}
+        <L_Apu x={272} arm={k >= 1 ? "point" : "down"} mood={k >= 1 ? "happy" : "plain"} />
+        {k === 1 && <Bubble x={272} y={LG - 60} side="left" lines={["মাছ খুঁজতে", "machine B."]} />}
         {k >= 2 && <L_Note x={222} y={50} lines={["মাছ খোঁজা"]} tone="#15803d" />}
         {k >= 3 && <L_Note x={140} y={50} lines={["দাম, মোট, জনপ্রিয়তা"]} tone={L_AMBER} />}
         {k >= 2 && <path d="M222 58L205 84" stroke="#15803d" strokeWidth={1} className={FADE} />}
@@ -2058,315 +1954,245 @@ export function KeepBoth({}: Story) {
 }
 
 // ---------------------------------------------------------------------------
-// 15b · A story scene for screen 15's second paragraph, no task: the bus home.
-//       ফাহিম writes the formula in his খাতা; first as the strange marks it
-//       was at the start of the series, then piece by piece, known.
+// 11b · A story scene for step 11's bridge, no task: a month later the
+//       district's catalogue arrives, lakhs of books. ফাহিম searches "মাছ";
+//       machine B takes a root and a division for every book, the screen
+//       hangs, আপু waits. ফাহিম wonders if cosine can be made as cheap as the
+//       box. The fix is not shown (that is 4.8).
 
-function L_Bus() {
+/** An hourglass, centred at (x, y). */
+function L_Hourglass({ x, y }: { x: number; y: number }) {
   return (
-    <g>
-      <rect x={0} y={-58} width={150} height={50} rx={8} fill="#16a34a" />
-      <rect x={0} y={-24} width={150} height={6} fill="#facc15" />
-      {[0, 1, 2, 3].map((i) => (
-        <rect key={i} x={10 + i * 34} y={-52} width={26} height={20} rx={2} fill="#e0f2fe" stroke="#14532d" strokeWidth={0.8} />
-      ))}
-      <circle cx={30} cy={-6} r={8} fill="#1f2937" />
-      <circle cx={120} cy={-6} r={8} fill="#1f2937" />
+    <g transform={`translate(${x} ${y})`} className={POP}>
+      <path d="M-5 -8h10l-5 8l5 8h-10l5 -8Z" fill="#fef3c7" stroke="#92400e" strokeWidth={1.2} />
+      <path d="M-2.5 5h5l-2.5 -3Z" fill="#d97706" />
     </g>
   );
 }
 
-const X15B_PIECES = [
-  { x: 222, y: 50, t: "cos θ =" },
-  { x: 282, y: 42, t: "u · v" },
-  { x: 282, y: 64, t: "‖u‖ ‖v‖" },
-];
-
-export function BusHome({}: Story) {
-  const s = useScene(3, [600, 1600, 2200]);
+export function CatalogueFreeze({}: Story) {
+  const s = useScene(4, [600, 2400, 2000, 1800, 2400]);
   const k = s.k;
-  const bx = k >= 1 ? 12 : -170;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="street" label="ফেরার বাসে ফাহিম খাতায় সূত্রটা লেখে; শুরুতে অচেনা চিহ্ন, এখন প্রতিটা টুকরা চেনা">
-        <L_Carry x={bx} y={LG} ms={1400}>
-          <L_Bus />
-          <g>
-            <circle cx={125} cy={-43} r={6.5} fill="#e0ac7e" />
-            <path d="M118.5 -44q0 -8 6.5 -8t6.5 8q-4 -4 -13 0Z" fill="#1f1a17" />
-            <rect x={119} y={-37} width={12} height={5} rx={1} fill="#2563eb" />
-          </g>
-        </L_Carry>
-        {k >= 2 && (
+      <Stage backdrop="room" label="জেলার catalogue আসে, লাখ লাখ বই; ফাহিম মাছ search দেয়, machine B প্রতিটা বইয়ে root আর ভাগ করে, screen আটকে যায়">
+        <L_Shelf x={8} y={LG} w={70} />
+        {k >= 1 && (
           <g className={FADE}>
-            <circle cx={172} cy={78} r={2.5} fill="white" stroke={L_INK} strokeOpacity={0.35} />
-            <circle cx={180} cy={70} r={3.5} fill="white" stroke={L_INK} strokeOpacity={0.35} />
-            <rect x={188} y={22} width={124} height={58} rx={4} fill="white" stroke={L_INK} strokeOpacity={0.35} />
-            {[34, 46, 58, 70].map((y) => (
-              <path key={y} d={`M192 ${y}H308`} stroke="#bfdbfe" strokeWidth={0.8} />
-            ))}
-            <path d="M258 53H306" stroke={L_INK} strokeWidth={1.2} />
-            {X15B_PIECES.map((p) =>
-              k >= 3 ? (
-                <text key={p.t} x={p.x} y={p.y + 3} textAnchor="middle" fontSize={10} fontWeight={700} fontFamily="ui-monospace, monospace" fill="#1d4ed8" className={POP}>
-                  {p.t}
-                </text>
-              ) : (
-                <text key={p.t} x={p.x} y={p.y + 3} textAnchor="middle" fontSize={10} fontWeight={700} fill="#94a3b8">
-                  ? ? ?
-                </text>
-              ),
-            )}
+            <L_Shelf x={80} y={LG} w={50} />
           </g>
         )}
+        <L_Desk x={150} y={LG} query={k >= 2} lit={k >= 2 ? 1 : undefined} />
+        {k >= 3 && (
+          <g>
+            <rect x={191} y={86} width={29} height={29} rx={2} fill="white" />
+            <L_Hourglass x={205.5} y={100} />
+          </g>
+        )}
+        <L_Apu x={276} mood={k >= 3 ? "puzzled" : "plain"} arm={k === 1 ? "hold" : "down"} />
+        {k === 1 && <Bubble x={276} y={LG - 60} side="left" lines={["জেলার সব বই", "এই computer এ উঠবে."]} />}
+        {k === 1 && <L_Note x={110} y={30} lines={["জেলার catalogue", "লাখ লাখ বই"]} tone={L_VIOLET} fs={8} />}
+        {(k === 2 || k === 3) && <L_Note x={96} y={30} lines={k === 2 ? ["প্রতিটা বইয়ে:", "root, তারপর ভাগ"] : ["এখনো চলছে ..."]} tone={L_CORAL} fs={8} />}
+        <Person who="fahim" x={k >= 2 ? 138 : -30} y={LG} walking={k === 2} ms={1300} arm={k === 2 ? "point" : "down"} mood={k >= 4 ? "puzzled" : "plain"} label={k >= 2} />
+        {k >= 4 && <Bubble x={138} y={LG - 66} tone="think" lines={["cosine কে box এর মতো", "সস্তা করা যায় না?"]} />}
       </Stage>
     </StoryFrame>
   );
 }
 
 // ---------------------------------------------------------------------------
-// 15½ · A figure for screen 15's explanation, no task: Module 1 in one run.
-//       Titanic and Mr. Bean become lists (Article 1), arrows (2), get their
-//       lengths (3), the angle between (4), and last the lengths are divided
-//       away so only direction is left: cos θ = 0.59.
+// 5¾ · A figure for step 5's second paragraph, no task: length is only how
+//      many words were written. The three books as rows of word tiles (blue
+//      মাছ, teal নৌকা, amber ধান), the fat book's row running long. Divide the
+//      length away and every row squeezes to one width: what's left is the mix
+//      of colours, what the book is about. No numbers.
 
-const X15_F = [FILMS[0], FILMS[1]];
-const X15_O = { x: 126, y: 108 };
-const X15_SC = 19;
-const X15_R = 70;
-const X15_COS = cosAB(X15_F[0].v, X15_F[1].v);
-const X15_SAY = [
-  "দুইটা জিনিস: Titanic আর Mr. Bean।",
-  "Article 1: জিনিসকে সংখ্যার list বানানো।",
-  "Article 2: সেই list-কে arrow হিসেবে দেখা।",
-  "Article 3: arrow-এর length মাপা।",
-  "Article 4: দুইটা arrow কতটা একই দিকে।",
-  `length ভাগ করে ফেলে দিলে থাকে শুধু দিক: cos θ = ${fix(X15_COS, 2)}।`,
+const X5W_ROWS = BOOKS.map((b) => ({ id: b.id, kinds: b.v.flatMap((n, kind) => Array.from({ length: n }, () => kind)) }));
+const X5W_FILL = [L_BLUE, L_TEAL, L_AMBER];
+const X5W_TW = 7.4; // a word tile, with its gap
+const X5W_X = 58;
+const X5W_W = 150; // the one width every row squeezes to
+const X5W_SAY = [
+  "তিনটা বই, প্রতিটা word একটা টুকরা: নীল মাছ, সবুজ নৌকা, হলুদ ধান.",
+  "মোটা বইয়ের সারি লম্বা. Length মানে শুধু কয়টা word লেখা হয়েছে.",
+  "Length ভাগ দিয়ে ফেলে দিলে, তিনটা সারিই এক মাপের.",
+  "থাকে শুধু রঙের মিশাল: বইটা কী নিয়ে.",
 ];
 
-export function FourArticles() {
-  const s = useScene(5, [600, 1600, 1600, 1600, 1800]);
+export function WordSqueeze() {
+  const s = useScene(3, [600, 2200, 1800]);
   const k = s.k;
-  const [p] = useTween([k >= 5 ? 1 : 0], 1200);
-  const { x: ox, y: oy } = X15_O;
-  const tip = (v: readonly number[]) => {
-    const a = Math.atan2(v[1], v[0]);
-    const tx = v[0] * X15_SC;
-    const ty = v[1] * X15_SC;
-    return [ox + tx + (X15_R * Math.cos(a) - tx) * p, oy - (ty + (X15_R * Math.sin(a) - ty) * p)] as const;
-  };
-  const a0 = Math.atan2(X15_F[0].v[1], X15_F[0].v[0]);
-  const a1 = Math.atan2(X15_F[1].v[1], X15_F[1].v[0]);
+  const sc = useTween(X5W_ROWS.map((r) => (k >= 2 ? X5W_W / (r.kinds.length * X5W_TW) : 1)), 1200);
   return (
-    <Scene scene={s} caption={lsay(X15_SAY, k)}>
-      <svg viewBox="0 0 240 116" role="img" aria-label="Titanic আর Mr. Bean: list, arrow, length, কোণ, শেষে শুধু দিক" className="mx-auto block h-auto w-full max-w-[18rem]">
-        {X15_F.map((f, i) => (
-          <g key={f.name}>
-            <text x={6} y={22 + i * 34} fontSize={9} fontWeight={700} fill={X6_FILM_TONE[i]}>
-              {f.name}
-            </text>
-            {k >= 1 && (
-              <text x={6} y={34 + i * 34} fontSize={8.5} fontFamily="ui-monospace, monospace" fill={L_INK} className={FADE}>
-                {tupN(f.v)}
-                {k >= 3 && k < 5 ? `  length ${fix(len(f.v), 2)}` : ""}
+    <Scene scene={s} caption={lsay(X5W_SAY, k)}>
+      <svg viewBox="0 0 220 88" role="img" aria-label="তিনটা বই word এর টুকরা হিসাবে; length ভাগ দিলে সব সারি এক মাপের, থাকে শুধু রঙের মিশাল" className="mx-auto block h-auto w-full max-w-[16rem]">
+        <rect x={1} y={1} width={218} height={86} rx={10} fill="white" stroke="#cbd5e1" />
+        {X5W_ROWS.map((r, ri) => {
+          const y = 12 + ri * 26;
+          const w = r.kinds.length * X5W_TW * sc[ri];
+          const tile = X5W_TW * sc[ri];
+          return (
+            <g key={r.id}>
+              <text x={X5W_X - 5} y={y + 10} textAnchor="end" fontSize={8} fontWeight={700} fill={r.id === "C" ? "#be123c" : L_INK}>
+                {BOOK_BN[r.id].short}
               </text>
-            )}
-          </g>
-        ))}
-        {k >= 2 && (
-          <g className={FADE}>
-            <rect x={112} y={4} width={124} height={110} rx={8} fill="white" stroke="#cbd5e1" />
-            <path d={`M${ox} ${oy}H232M${ox} ${oy}V10`} stroke={L_INK} strokeOpacity={0.3} />
-            {k >= 5 && <path d={`M${ox + X15_R} ${oy}A${X15_R} ${X15_R} 0 0 0 ${ox} ${oy - X15_R}`} fill="none" stroke={L_INK} strokeOpacity={0.2} strokeDasharray="3 3" />}
-            {X15_F.map((f, i) => {
-              const [x2, y2] = tip(f.v);
-              return <L_Arr key={f.name} x1={ox} y1={oy} x2={x2} y2={y2} color={X6_FILM_TONE[i]} w={k === 3 ? 3.4 : 2.4} />;
-            })}
-            {k >= 4 && (
-              <path
-                d={`M${ox + 30 * Math.cos(a0)} ${oy - 30 * Math.sin(a0)}A30 30 0 0 0 ${ox + 30 * Math.cos(a1)} ${oy - 30 * Math.sin(a1)}`}
-                fill="none"
-                stroke={L_AMBER}
-                strokeWidth={1.8}
-                className={FADE}
-              />
-            )}
-            {k >= 4 && (
-              <text x={ox + 34} y={oy - 36} fontSize={9} fontFamily="ui-monospace, monospace" fill="#b45309" className={FADE}>
-                θ
-              </text>
-            )}
-          </g>
-        )}
-        {k >= 5 && (
-          <text x={6} y={100} fontSize={9.5} fontWeight={700} fontFamily="ui-monospace, monospace" fill="#b45309" className={FADE}>
-            {`cos θ = ${fix(X15_COS, 2)}`}
-          </text>
-        )}
+              {r.kinds.map((kind, i) => (
+                <rect key={i} x={X5W_X + i * tile} y={y} width={Math.max(0.6, tile - 1.2)} height={14} rx={1.5} fill={X5W_FILL[kind]} opacity={k === 3 && kind !== 0 ? 0.55 : 1} />
+              ))}
+              {k === 1 && (
+                <path key={`len${ri}`} d={`M${X5W_X} ${y + 18}H${X5W_X + w}`} stroke={L_INK} strokeOpacity={0.5} strokeWidth={1} className={FADE} />
+              )}
+            </g>
+          );
+        })}
       </svg>
     </Scene>
   );
 }
 
 // ---------------------------------------------------------------------------
-// 15¾ · A figure for the finale's notation side quest, no task: 4.1's
-//       (1, 2) and (3, 4), and the four ways books write the same box. Each
-//       spelling lands on the same 11.
+// 8⅝ · A figure for step 8's second paragraph, no task: three jobs where
+//      length is noise, বই খোঁজা, word এর মানে, এরকম আরো দেখাও. Each has a
+//      long arrow and a short one pointing the same way; the long ones shrink
+//      to the short ones' size, and cosine lands under all three. No numbers.
 
-const X15S_SPELL = ["u · v", "Σ uᵢvᵢ", "uᵀv", "⟨u, v⟩"];
-const X15S_SAY = [
-  "৪.১-এর দুইটা list। ঘরে ঘরে গুণ করে যোগ: 11।",
-  "u · v: dot দিয়ে লেখা।",
-  "Σ uᵢvᵢ: লুপ হিসেবে লেখা।",
-  "uᵀv: paper-এর প্রিয় লেখা।",
-  "⟨u, v⟩: ভারী বইয়ে inner product। চার রকম লেখা, একই 11।",
+const X8N_JOBS = [
+  { t: "বই খোঁজা", a: 18 },
+  { t: "word এর মানে", a: 50 },
+  { t: "এরকম আরো দেখাও", a: 34 },
+];
+const X8N_SAY = [
+  "বই খোঁজা, word এর মানে মেলানো, এরকম আরো দেখাও.",
+  "এসবে length শুধু noise. ফেলে দিলে একই দিকের arrow গুলা এক.",
+  "তাই search আর chatbot এর খোঁজাখুঁজিতে প্রায় সবসময় cosine ই চলে.",
 ];
 
-export function FourSpellings() {
-  const s = useScene(4, [600, 1500, 1500, 1500]);
+export function NoiseJobs() {
+  const s = useScene(2, [600, 2400, 2400]);
   const k = s.k;
+  const [L] = useTween([k >= 1 ? 22 : 46], 1100);
   return (
-    <Scene scene={s} caption={lsay(X15S_SAY, k)}>
-      <div className="mx-auto grid w-full max-w-xs gap-1.5 font-mono text-sm">
-        <div className="text-center">
-          u = (1, 2)&nbsp;&nbsp; v = (3, 4)
-          <div className="text-muted">1 × 3 + 2 × 4 = 11</div>
-        </div>
-        <div className="grid grid-cols-2 gap-1.5">
-          {X15S_SPELL.map((t, i) =>
-            k >= i + 1 ? (
-              <div key={t} className={`${POP} flex justify-between rounded-lg px-2 py-0.5 ${k === i + 1 ? "bg-cat-amber/15" : "bg-foreground/[0.04]"}`}>
-                <span>{t}</span>
-                <b>= 11</b>
+    <Scene scene={s} caption={lsay(X8N_SAY, k)}>
+      <div className="mx-auto grid w-full max-w-xs grid-cols-3 gap-2 text-center">
+        {X8N_JOBS.map((j) => {
+          const r = (j.a * Math.PI) / 180;
+          const at = (len: number) => [8 + len * Math.cos(r), 42 - len * Math.sin(r)] as const;
+          const [lx, ly] = at(L);
+          const [sx, sy] = at(22);
+          return (
+            <div key={j.t}>
+              <div className="h-8 text-xs leading-tight font-semibold">{j.t}</div>
+              <svg viewBox="0 0 64 48" aria-hidden="true" className="mx-auto block h-auto w-full max-w-[4.5rem]">
+                <rect x={0.5} y={0.5} width={63} height={47} rx={6} fill="white" stroke="#cbd5e1" />
+                <L_Arr x1={8} y1={42} x2={lx} y2={ly} color={L_CORAL} w={2} />
+                <L_Arr x1={8 + 3 * Math.sin(r)} y1={42 + 3 * Math.cos(r)} x2={sx + 3 * Math.sin(r)} y2={sy + 3 * Math.cos(r)} color={L_BLUE} w={2} />
+              </svg>
+              <div className="mt-0.5 h-5">
+                {k >= 1 && <span className={`${FADE} text-xs text-muted`}>length: noise</span>}
               </div>
-            ) : (
-              <div key={t} className="rounded-lg border border-dashed border-border px-2 py-0.5 text-transparent">
-                .
-              </div>
-            ),
-          )}
-        </div>
+            </div>
+          );
+        })}
+      </div>
+      <div className="mt-1 h-6 text-center">
+        {k >= 2 && <b className={`${POP} inline-block rounded-full bg-cat-teal/15 px-3 text-sm`}>cosine</b>}
       </div>
     </Scene>
   );
 }
 
 // ---------------------------------------------------------------------------
-// 16½ · A figure for screen 16's first half, no task: 3.3's recipe as
-//       arrows. Two ingredients u and v; every mix of them lands on a grid of
-//       spots (span); a third, w = u + v, lands on a spot they already reach
-//       (বাড়তি); u and v alone are the fewest that reach everything (basis).
+// 10a · A story scene for step 10's setup, no task: আপুর পত্রিকার আলমারি.
+//       Out come a two-line slip and a ten-page bundle; then someone types
+//       "ইলিশ" into the search, and it waits on "?". No order is shown.
 
-const X16_O = { x: 60, y: 92 };
-const X16_U = [34, -10] as const;
-const X16_V = [12, -30] as const;
-const X16_DOTS = (() => {
-  const out: [number, number][] = [];
-  for (let a = -4; a <= 10; a++)
-    for (let b = -4; b <= 8; b++) {
-      const x = X16_O.x + (a / 2) * X16_U[0] + (b / 2) * X16_V[0];
-      const y = X16_O.y + (a / 2) * X16_U[1] + (b / 2) * X16_V[1];
-      if (x > 8 && x < 232 && y > 8 && y < 112) out.push([x, y]);
-    }
-  return out;
-})();
-const X16_SAY = [
-  "দুইটা উপকরণ, u আর v।",
-  "মিশিয়ে কোথায় কোথায় পৌঁছানো যায়? এই সবটার নাম span।",
-  "তৃতীয় উপকরণ w = u + v। বাকিরাই বানায়, তাই বাড়তি। এই প্রশ্নের নাম independence।",
-  "সবচেয়ে কম কয়টা লাগে? এখানে দুইটা, u আর v। এর নাম basis।",
-];
-
-export function SpanRecipe() {
-  const s = useScene(3, [600, 1800, 2600]);
-  const k = s.k;
-  const { x: ox, y: oy } = X16_O;
+/** আপুর পত্রিকার আলমারি, bottom-left at (x, y): shelves of folded papers, thin and thick. */
+function L_PaperCupboard({ x, y }: { x: number; y: number }) {
+  const stacks = [
+    [3, 9, 4, 14],
+    [6, 2, 12, 5],
+    [10, 3, 7, 2],
+  ];
   return (
-    <Scene scene={s} caption={lsay(X16_SAY, k)}>
-      <svg viewBox="0 0 240 120" role="img" aria-label="u আর v মিশিয়ে একগাদা জায়গা; w = u + v বাড়তি; u আর v-ই basis" className="mx-auto block h-auto w-full max-w-[18rem]">
-        <rect x={1} y={1} width={238} height={118} rx={10} fill="white" stroke="#cbd5e1" />
-        {k >= 1 && X16_DOTS.map(([x, y]) => <circle key={`${x},${y}`} cx={x} cy={y} r={1.4} fill={L_INK} opacity={0.3} className={FADE} />)}
-        {k === 2 && (
-          <g className={FADE}>
-            <path d={`M${ox + X16_U[0]} ${oy + X16_U[1]}l${X16_V[0]} ${X16_V[1]}`} stroke={L_TEAL} strokeWidth={1.4} strokeDasharray="3 2" />
-            <L_Arr x1={ox} y1={oy} x2={ox + X16_U[0] + X16_V[0]} y2={oy + X16_U[1] + X16_V[1]} color={L_AMBER} w={2.6} dashed />
-            <text x={ox + X16_U[0] + X16_V[0] + 4} y={oy + X16_U[1] + X16_V[1] - 3} fontSize={9} fontWeight={700} fontFamily="ui-monospace, monospace" fill="#b45309">
-              w
-            </text>
+    <g className="pointer-events-none">
+      <rect x={x} y={y - 96} width={92} height={96} fill="#7c4a1e" />
+      {stacks.map((row, r) => {
+        const base = y - 8 - r * 29;
+        let bx = x + 6;
+        return (
+          <g key={r}>
+            <rect x={x + 3} y={base - 25} width={86} height={25} fill="#fdf6ec" opacity={0.25} />
+            {row.map((h, i) => {
+              const w = 17;
+              const el = <rect key={i} x={bx} y={base - h - 2} width={w} height={h + 2} fill="#f8fafc" stroke="#94a3b8" strokeWidth={0.6} />;
+              bx += w + 3;
+              return el;
+            })}
           </g>
-        )}
-        <L_Arr x1={ox} y1={oy} x2={ox + X16_U[0]} y2={oy + X16_U[1]} color={L_BLUE} w={k >= 3 ? 3.2 : 2.4} />
-        <L_Arr x1={ox} y1={oy} x2={ox + X16_V[0]} y2={oy + X16_V[1]} color={L_TEAL} w={k >= 3 ? 3.2 : 2.4} />
-        <text x={ox + X16_U[0] + 3} y={oy + X16_U[1] + 10} fontSize={9} fontWeight={700} fontFamily="ui-monospace, monospace" fill="#1d4ed8">
-          u
-        </text>
-        <text x={ox + X16_V[0] - 9} y={oy + X16_V[1] + 2} fontSize={9} fontWeight={700} fontFamily="ui-monospace, monospace" fill="#0f766e">
-          v
-        </text>
-      </svg>
-    </Scene>
+        );
+      })}
+    </g>
   );
 }
 
-// ---------------------------------------------------------------------------
-// 16¾ · A figure for screen 16's second half, no task: one list against x is
-//       one box, one number; stack many lists and it's a matrix, many boxes at
-//       once. Last, the open question: a cloud of data with two slots that
-//       nearly lies on one line. How many directions does it need? No answer.
+/** A clipping lying on the floor, bottom-centre at (0, 0): `pages` sheets thick, its caption above it. */
+function L_Clip({ pages, text }: { pages: number; text: string }) {
+  const h = 3 + pages * 1.6;
+  return (
+    <g>
+      <rect x={-13} y={-h} width={26} height={h} fill="#f8fafc" stroke="#94a3b8" strokeWidth={0.8} />
+      {Array.from({ length: Math.min(pages, 2) }, (_, i) => (
+        <path key={i} d={`M-9 ${-h + 3 + i * 3}h18`} stroke="#94a3b8" strokeWidth={0.8} />
+      ))}
+      <text x={0} y={-h - 3} textAnchor="middle" fontSize={7.5} fontWeight={700} fill={L_INK}>
+        {text}
+      </text>
+    </g>
+  );
+}
 
-const X16B_ROWS = [0, 1, 2, 3];
-const X16B_CLOUD = [
-  [18, 92], [30, 84], [42, 79], [52, 70], [64, 66], [74, 57], [88, 52], [98, 43], [110, 38], [122, 30], [36, 76], [80, 61], [104, 46], [60, 72],
-] as const;
-const X16B_SAY = [
-  "একটা list আর x: একটা box, একটা সংখ্যা।",
-  "অনেকগুলো list একসাথে সাজালে matrix।",
-  "matrix মানে একসাথে একগাদা box, একগাদা সংখ্যা।",
-  "আর আমার data-র আসলে কয়টা দিক লাগে?",
-];
-
-export function MatrixBoxes() {
-  const s = useScene(3, [600, 1600, 2200]);
+export function NewsCupboard({}: Story) {
+  const s = useScene(3, [600, 1800, 1800]);
   const k = s.k;
   return (
-    <Scene scene={s} caption={lsay(X16B_SAY, k)}>
-      {k < 3 ? (
-        <div className="mx-auto flex w-fit items-center gap-2">
-          <div className={`grid gap-1 rounded-lg p-1 ${k >= 1 ? "ring-2 ring-cat-blue/40" : ""}`}>
-            {X16B_ROWS.filter((r) => r === 0 || k >= 1).map((r) => (
-              <div key={r} className={`${FADE} flex gap-0.5`}>
-                {[0, 1, 2].map((c) => (
-                  <span key={c} className="inline-block size-4 rounded-sm bg-cat-blue/30" />
-                ))}
-              </div>
-            ))}
-          </div>
-          <span className="font-mono text-muted">·</span>
-          <div className="grid gap-0.5">
-            {[0, 1, 2].map((c) => (
-              <span key={c} className="inline-block size-4 rounded-sm bg-cat-amber/40" />
-            ))}
-          </div>
-          <span className="font-mono text-muted">=</span>
-          <div className="grid gap-1 p-1">
-            {X16B_ROWS.filter((r) => r === 0 || k >= 2).map((r) => (
-              <span key={r} className={`${POP} inline-block size-4 rounded-full bg-accent/60`} />
-            ))}
-          </div>
-        </div>
-      ) : (
-        <svg viewBox="0 0 140 104" role="img" aria-label="দুই ঘরের data, প্রায় একটা লাইনে; কয়টা দিক লাগে?" className={`${FADE} mx-auto block h-auto w-full max-w-[10rem]`}>
-          <rect x={1} y={1} width={138} height={102} rx={8} fill="white" stroke="#cbd5e1" />
-          <path d="M10 96H134M10 96V6" stroke={L_INK} strokeOpacity={0.3} />
-          {X16B_CLOUD.map(([x, y]) => (
-            <circle key={`${x},${y}`} cx={x} cy={y} r={2.6} fill={L_BLUE} opacity={0.7} />
-          ))}
-          <text x={126} y={82} textAnchor="middle" fontSize={20} fontWeight={800} fill={L_CORAL}>
-            ?
-          </text>
-        </svg>
-      )}
-    </Scene>
+    <StoryFrame scene={s}>
+      <Stage backdrop="room" label="আপুর পত্রিকার আলমারি; দুই লাইনের খবর আর দশ পাতার খবর; কেউ search এ ইলিশ লেখে">
+        <L_PaperCupboard x={12} y={LG} />
+        {/* the desk and the computer's one search window */}
+        <rect x={150} y={LG - 28} width={80} height={4} fill="#92400e" />
+        <rect x={154} y={LG - 24} width={3} height={24} fill="#78350f" />
+        <rect x={223} y={LG - 24} width={3} height={24} fill="#78350f" />
+        <rect x={186} y={LG - 32} width={8} height={4} fill="#475569" />
+        <rect x={156} y={LG - 68} width={68} height={37} rx={3} fill="#1e293b" />
+        <rect x={160} y={LG - 64} width={60} height={29} rx={2} fill="white" />
+        <text x={190} y={LG - 56} textAnchor="middle" fontSize={6.5} fontWeight={700} fill={L_INK}>
+          পত্রিকার search
+        </text>
+        {k >= 3 && (
+          <g className={FADE}>
+            <rect x={166} y={LG - 52} width={48} height={10} rx={1.5} fill="#f1f5f9" stroke="#94a3b8" strokeWidth={0.6} />
+            <text x={190} y={LG - 44.5} textAnchor="middle" fontSize={7} fontWeight={700} fill={L_INK}>
+              ইলিশ
+            </text>
+            <text x={190} y={LG - 36} textAnchor="middle" fontSize={7} fontWeight={800} fill={L_CORAL}>
+              ?
+            </text>
+          </g>
+        )}
+        {/* the two clippings wait inside the cupboard and glide out onto the stage */}
+        <L_Carry x={k >= 1 ? 126 : 40} y={k >= 1 ? LG : 100} ms={900}>
+          <g className={`transition-opacity duration-500 motion-reduce:transition-none ${k >= 1 ? "opacity-100" : "opacity-0"}`}>
+            <L_Clip pages={1} text="দুই লাইন" />
+          </g>
+        </L_Carry>
+        <L_Carry x={k >= 2 ? 250 : 70} y={k >= 2 ? LG : 100} ms={900}>
+          <g className={`transition-opacity duration-500 motion-reduce:transition-none ${k >= 2 ? "opacity-100" : "opacity-0"}`}>
+            <L_Clip pages={10} text="দশ পাতা" />
+          </g>
+        </L_Carry>
+        <L_Apu x={282} arm={k === 1 || k === 2 ? "point" : "down"} />
+      </Stage>
+    </StoryFrame>
   );
 }
 
@@ -2374,16 +2200,16 @@ export function MatrixBoxes() {
 // States for `npm run shot` (keys are the useSeed names).
 
 export const fixtures: Fixtures = {
+  RopeRecallPick: { start: {}, short: { pick: 0, miss: 1 }, same: { pick: 2, miss: 1 }, right: { pick: 1 } },
   TwoMachines: { start: {}, bet: { bet: 1 } },
-  DotRanking: { start: {}, all: { ran: ["A", "B", "C"] } },
-  CosRanking: { start: {}, all: { ran: ["A", "B", "C"] } },
+  OneHotPick: { start: {}, tuple: { pick: 0, miss: 1 }, thirteen: { pick: 1, miss: 1 }, right: { pick: 2 } },
+  SpenderPick: { start: {}, normed: { pick: 0, miss: 1 }, dir: { pick: 2, miss: 1 }, right: { pick: 1 } },
+  NewsSearch: { start: {}, box: { pick: 0, miss: 1 }, length: { pick: 2, miss: 1 }, right: { pick: 1 } },
+  DotRanking: { start: {}, one: { ran: ["C"] }, all: { ran: ["A", "B", "C"] } },
+  CosRanking: { start: {}, one: { ran: ["A"] }, all: { ran: ["A", "B", "C"] } },
   LoudForBoth: { start: {}, box: { rule: 0, seen: [0] }, cos: { rule: 1, seen: [0, 1] } },
-  LengthIsNews: { start: {}, miss: { done: 2, miss: 1 }, all: { done: 6 } },
-  OneRanking: { start: {}, all: { seen: [0, 1, 2] } },
-  WhoIsIt: { start: {}, one: { ran: true }, two: { round: 1, ran: true } },
-  PickTool: { start: {}, miss: { done: 2, miss: 1 }, all: { done: 5 } },
-  BoxBet: { start: {}, bet: { bet: 0 } },
-  Finale: { start: {}, some: { open: [4, 3] }, all: { open: [0, 1, 2, 3, 4] } },
+  LengthIsNews: { start: {}, miss: { done: 2, miss: 1, bin: 1 }, all: { done: 6 } },
+  PickTool: { start: {}, miss: { done: 2, miss: 1, bin: 0 }, all: { done: 5 } },
   // the watch-only scenes: `k` beats shown; `stepping` shows the step controls
   RopeRecall: { start: { k: 0 }, short: { k: 1 }, done: {} },
   LibraryEvening: { start: { k: 0 }, apa: { k: 1 }, card: { k: 2, stepping: true }, done: {} },
@@ -2397,20 +2223,13 @@ export const fixtures: Fixtures = {
   MiddleDirection: { start: { k: 0 }, mami: { k: 1 }, mama: { k: 2 }, done: {} },
   CowNews: { start: { k: 0 }, price: { k: 1 }, unit: { k: 2 }, done: {} },
   PopularPull: { start: { k: 0 }, one: { k: 1 }, two: { k: 2 }, done: {} },
-  MillionBooks: { start: { k: 0 }, steps: { k: 1 }, ask: { k: 2 }, fix: { k: 3 }, done: {} },
-  HatFormula: { start: { k: 0 }, hats: { k: 1 }, one: { k: 2 }, done: {} },
-  StoreOnce: { start: { k: 0 }, stamp: { k: 1 }, search: { k: 2 }, done: {} },
-  ChordCos: { start: { k: 0 }, sixty: { k: 1 }, right: { k: 2 }, done: {} },
-  NightCall: { start: { k: 0 }, tell: { k: 1 }, som: { k: 2 }, done: {} },
-  QueryKeys: { start: { k: 0 }, q: { k: 1 }, cat: { k: 2 }, swing: { k: 3 }, done: {} },
-  AllPairs: { start: { k: 0 }, ota: { k: 1 }, all: { k: 2 }, name: { k: 3 }, done: {} },
-  DalalNeuron: { start: { k: 0 }, box: { k: 1 }, bend: { k: 3 }, done: {} },
+  SpenderErase: { start: { k: 0 }, len: { k: 1 }, normed: { k: 2 }, done: {} },
+  NewsShrink: { start: { k: 0 }, box: { k: 1 }, done: {} },
+  CatalogueFreeze: { start: { k: 0 }, letter: { k: 1 }, search: { k: 2 }, hang: { k: 3 }, done: {} },
   ListHandover: { start: { k: 0 }, hand: { k: 1 }, say: { k: 2 }, done: {} },
   ThreeQuestions: { start: { k: 0 }, box: { k: 1 }, done: {} },
   KeepBoth: { start: { k: 0 }, say: { k: 1 }, done: {} },
-  BusHome: { start: { k: 0 }, marks: { k: 2 }, done: {} },
-  FourArticles: { start: { k: 0 }, list: { k: 1 }, len: { k: 3 }, angle: { k: 4 }, done: {} },
-  FourSpellings: { start: { k: 0 }, two: { k: 2 }, done: {} },
-  SpanRecipe: { start: { k: 0 }, span: { k: 1 }, extra: { k: 2 }, done: {} },
-  MatrixBoxes: { start: { k: 0 }, matrix: { k: 2 }, done: {} },
+  WordSqueeze: { start: { k: 0 }, long: { k: 1 }, squeezed: { k: 2 }, done: {} },
+  NoiseJobs: { start: { k: 0 }, noise: { k: 1 }, done: {} },
+  NewsCupboard: { start: { k: 0 }, slip: { k: 1 }, bundle: { k: 2 }, done: {} },
 };

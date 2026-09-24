@@ -273,6 +273,11 @@ export type Fixtures = Record<string, Record<string, Seed>>;
 const SeedCtx = createContext<Seed | null>(null);
 export const SeedProvider = SeedCtx.Provider;
 
+/** Whether we are inside a preview (`npm run shot`), which renders without effects. */
+export function useSeeded() {
+  return useContext(SeedCtx) !== null;
+}
+
 /** useState whose starting value a preview can set, by `key`. */
 export function useSeed<T>(key: string, initial: T) {
   const seed = useContext(SeedCtx);

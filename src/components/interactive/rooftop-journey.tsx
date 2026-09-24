@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useState, type ReactNode } from "react";
+import { useState } from "react";
 
 import {
   Choice,
@@ -13,6 +13,7 @@ import {
   Ticks,
   pill,
   primaryBtn,
+  quietBtn,
   usePlay,
   useScene,
   useSeed,
@@ -20,11 +21,38 @@ import {
   type Fixtures,
 } from "@/components/journey/kit";
 import { Bubble, Card as CastCard, Person as CastPerson, Stage, StoryFrame } from "@/components/journey/cast";
-import { Arrow, Dot, Label, Plane, Star, clamp, makeFrame, same, sg, snap, tup, type Frame, type XY } from "@/components/journey/plane";
+import { Arrow, Dot, Plane, Star, makeFrame, same, snap, tup, type Frame, type XY } from "@/components/journey/plane";
 import { Task, useGate } from "@/components/journey/journey";
+import {
+  AxisName,
+  BedBath,
+  Chacha,
+  Clipped,
+  FLATS,
+  FlatDot,
+  GROUND,
+  Jilapi,
+  KF,
+  NameTag,
+  O,
+  R2,
+  ROOF,
+  RoofSet,
+  RightMark,
+  TiltGrid,
+  fits,
+  heat,
+  heatInk,
+  imbOf,
+  say,
+  sizeOf,
+  type Flat,
+  type Story,
+} from "./rooftop-parts";
 
 // Screens for "Math for AI 5.6 — The rooftop flat's rent, a new basis", told
-// as a Journey in plain English, 10 steps (the pathshala-journey skill).
+// as a Journey in the author's Bangla-English, 9 steps (the pathshala-journey
+// skill). The shared khata, Chacha and the jilapi live in rooftop-parts.tsx.
 //
 // Last day of moving week. Chacha, the landlord, has a new rooftop flat,
 // (4 bed, 2 bath), and the tenant comes tonight. His khata has 8 flats as
@@ -32,190 +60,28 @@ import { Task, useGate } from "@/components/journey/journey";
 // columns so the rent needs just one number; Nasib says no new information
 // goes in, so nothing new comes out. A jilapi rides on it (JilapiBet, sealed).
 // One-column rules fail (RentGrid); Fahim's two buttons, size (1, 1) and
-// imbalance (1, −1), are a basis at right angles (NewAxes); flat (3, 2)
-// becomes (2.5, 0.5) by hand (HouseInNewBasis) and the numbers get read out
-// (ReadTheNumbers); on the turned grid, one knob prices all 8 flats
-// (OneNumberRent); turning a grid under 2.3's word map changes every number
-// and no distance (SpinTheGrid); the rooftop flat is (3, 1), 24000 taka
-// (YourHouse); a card converts back (TryConvertBack); and the bet splits the
-// jilapi (BetSettled).
+// imbalance (1, −1), are pressed on a flat's rooms and meet at a right angle
+// (PressButtons); flat (3, 2) is reached by walking the buttons, half steps
+// and all (FindCard), and the card (2.5, 0.5) gets read out (ReadTheNumbers);
+// on the turned grid, one knob prices all 8 flats (OneNumberRent); the
+// rooftop flat is (3, 1), 24000 taka (YourHouse); a card converts back
+// (TryConvertBack); and the bet splits the jilapi (BetSettled). Nasib's next
+// objection ("any grid, any numbers") is the bridge to 5.6b, fairgrid-journey.
 //
-// The khata's rents are invented: about 8000 taka per size step, give or
-// take 1000, so a one-column rule fits at most 3 of 8 flats and the
-// imbalance barely matters (a least-squares fit gives about 7950 per size
-// step and about 180 per imbalance step). Rents are in thousand taka.
-//
-// Story scenes: RooftopBet, NasibDoubts, FirstNight. Watch-only figures, one
-// in every <Then>: EightFlats, SlantClimb, TwoButtonsDo, TwoCards,
-// ShrinkToOne, DotsSlide, SameArrows, SameSizeRow, BackAndForth, PcaWords.
-// Cast name labels are Bangla chrome, so names are drawn here (NameTag).
-// Chacha and the jilapi aren't in cast.tsx; they're drawn locally.
+// Story scenes: RooftopBet, ChachaTries, FahimDraws, TenantStairs, NasibCard,
+// FirstNight. Watch-only figures, one or two in every <Then>: EightFlats,
+// SlantClimb, SquareTurned, TwoCards, RoomsToCard, AddLines, DotsSlide
+// (OtherBases in its side quest), SameSizeRow, ChachaWrites, BackAndForth,
+// SchoolSlip, KhataTwice, NasibNotDone.
 //
 // Tailwind only; the sheets are journey/plane. Ink on white sheets is fixed.
 
-const O: XY = [0, 0];
-const R2 = Math.SQRT2;
-
-/** A story scene takes `story` and ignores it (see journey.tsx). */
-type Story = { story?: boolean };
-
-/** a number as it's said: 2.5, 3, −0.5 */
-const say = (n: number) => sg(Math.round(n * 100) / 100);
-
-// ---------------------------------------------------------------------------
-// The shared data: Chacha's khata. 8 flats, rent in thousand taka. About
-// 8 per size step ((bed + bath) / 2), give or take 1.
-
-type Flat = { bed: number; bath: number; rent: number };
-const FLATS: Flat[] = [
-  { bed: 1, bath: 1, rent: 7 },
-  { bed: 2, bath: 1, rent: 11 },
-  { bed: 2, bath: 2, rent: 16 },
-  { bed: 3, bath: 1, rent: 17 },
-  { bed: 3, bath: 2, rent: 20 },
-  { bed: 3, bath: 3, rent: 25 },
-  { bed: 4, bath: 3, rent: 27 },
-  { bed: 5, bath: 3, rent: 32 },
-];
-const sizeOf = (f: Flat) => (f.bed + f.bath) / 2;
-const imbOf = (f: Flat) => (f.bed - f.bath) / 2;
-const ROOF: XY = [4, 2];
-/** within 1000 taka counts as a fit */
-const fits = (guess: number, rent: number) => Math.abs(guess - rent) <= 1;
-
-/** a rent's colour: pale yellow when cheap, deep red when dear */
-const heat = (r: number) => {
-  const t = clamp((r - 6) / 28, 0, 1);
-  return `hsl(${Math.round(46 - 42 * t)} 85% ${Math.round(80 - 38 * t)}%)`;
-};
-const heatInk = (r: number) => (r >= 20 ? "#ffffff" : "#3b2a0a");
-
-/** one flat on a sheet: a dot in its rent's colour, the rent written on it */
-function FlatDot({ f, at, rent, ring = null, r = 10 }: { f: Frame; at: XY; rent: number; ring?: "fit" | "miss" | null; r?: number }) {
-  const x = f.sx(at[0]);
-  const y = f.sy(at[1]);
+/** a green tick, drawn (the ✓ glyph turns into an emoji on Linux) */
+function Tick() {
   return (
-    <g className="pointer-events-none">
-      {ring && (
-        <circle
-          cx={x}
-          cy={y}
-          r={r + 3.5}
-          fill="none"
-          strokeWidth={2.4}
-          stroke={ring === "fit" ? "#16a34a" : "#dc2626"}
-          className="transition-[stroke] duration-500 motion-reduce:transition-none"
-        />
-      )}
-      <circle cx={x} cy={y} r={r} style={{ fill: heat(rent) }} stroke="#0f1b2d" strokeOpacity={0.25} />
-      <text x={x} y={y + 3.2} textAnchor="middle" fontSize={r * 0.9} fontWeight={700} fill={heatInk(rent)} fontFamily="ui-monospace, monospace">
-        {rent}
-      </text>
-    </g>
-  );
-}
-
-/** an axis name in small grey ink */
-function AxisName({ x, y, anchor = "middle", children }: { x: number; y: number; anchor?: "start" | "middle" | "end"; children: ReactNode }) {
-  return (
-    <text x={x} y={y} textAnchor={anchor} fontSize={9} fontWeight={700} className="pointer-events-none fill-[#5a6b7d]">
-      {children}
-    </text>
-  );
-}
-
-/** Children clipped to the white sheet, for tilted grid lines. `name` keeps ids apart in a shot. */
-function Clipped({ f, name, children }: { f: Frame; name: string; children: ReactNode }) {
-  const id = `${name}${useId().replace(/[^a-zA-Z0-9]/g, "")}`;
-  return (
-    <>
-      <defs>
-        <clipPath id={id}>
-          <rect x={f.sx(f.x0)} y={f.sy(f.y1)} width={(f.x1 - f.x0) * f.u} height={(f.y1 - f.y0) * f.u} />
-        </clipPath>
-      </defs>
-      <g clipPath={`url(#${id})`}>{children}</g>
-    </>
-  );
-}
-
-/** Fahim's grid on the (bed, bath) sheet: lines of equal size and of equal imbalance, every half step. */
-function TiltGrid({ f, className = "stroke-cat-violet/40" }: { f: Frame; className?: string }) {
-  const seg = (a: XY, b: XY) => `M${f.sx(a[0])} ${f.sy(a[1])}L${f.sx(b[0])} ${f.sy(b[1])}`;
-  let d = "";
-  for (let s = -2; s <= 6; s += 0.5) d += seg([s - 8, s + 8], [s + 8, s - 8]);
-  for (let m = -4; m <= 4; m += 0.5) d += seg([m - 8, -m - 8], [m + 8, -m + 8]);
-  return <path d={d} strokeWidth={0.7} className={`pointer-events-none fill-none ${className}`} />;
-}
-
-/** A name under someone's feet — cast labels are Bangla, so English ones are drawn here. */
-function NameTag({ x, y, name }: { x: number; y: number; name: string }) {
-  return (
-    <text x={x} y={y} textAnchor="middle" fontSize={7} fontWeight={700} className="fill-[#5a6b7d]" pointerEvents="none">
-      {name}
-    </text>
-  );
-}
-
-/** Chacha, the landlord: white panjabi, white tupi, grey beard. Feet at (x, y), cast scale. */
-function Chacha({ x, y, facing = 1, arm = "down" }: { x: number; y: number; facing?: 1 | -1; arm?: "down" | "hold" | "point" }) {
-  const armR = arm === "hold" ? "M8 -37l9 -6" : arm === "point" ? "M8 -37l13 -3" : "M8 -38l3 14";
-  return (
-    <g style={{ transform: `translate(${x}px, ${y}px)` }} className="pointer-events-none">
-      <g transform={`scale(${facing} 1)`}>
-        <path d="M-3.5 -16V-1M3.5 -16V-1" strokeWidth={5} strokeLinecap="round" stroke="#e7e5e4" />
-        <path d="M-9 -40h18l2.5 27h-23Z" fill="#f8fafc" stroke="#cbd5e1" strokeWidth={0.8} />
-        <path d="M-8 -38l-3 14" strokeWidth={4} strokeLinecap="round" stroke="#b07a52" />
-        <path d={armR} strokeWidth={4} strokeLinecap="round" stroke="#b07a52" />
-        {arm === "hold" && <rect x={15} y={-52} width={11} height={14} rx={1} fill="#b91c1c" stroke="#7f1d1d" strokeWidth={0.6} />}
-        <circle cy={-51} r={9} fill="#b07a52" />
-        <path d="M-7.5 -49q1 11 7.5 12q6.5 -1 7.5 -12q-3 4 -7.5 4q-4.5 0 -7.5 -4Z" fill="#9ca3af" />
-        <path d="M-8.8 -55.5q8.8 -10 17.6 0Z" fill="#f8fafc" stroke="#cbd5e1" strokeWidth={0.6} />
-        <circle cx={-3.4} cy={-51} r={1.2} fill="#0f1b2d" />
-        <circle cx={3.4} cy={-51} r={1.2} fill="#0f1b2d" />
-      </g>
-    </g>
-  );
-}
-
-/** a paper cone of jilapi, the cone's tip at (x, y); `half` draws half the coils */
-function Jilapi({ x, y, s = 1, half = false }: { x: number; y: number; s?: number; half?: boolean }) {
-  return (
-    <g transform={`translate(${x} ${y}) scale(${s})`} className="pointer-events-none">
-      <path d="M-9 -16L0 4L9 -16Z" fill="#fef3c7" stroke="#a16207" strokeWidth={0.8} />
-      <circle cx={-3.5} cy={-19} r={3.4} fill="none" stroke="#f97316" strokeWidth={2.2} />
-      {!half && <circle cx={3.5} cy={-19.5} r={3.4} fill="none" stroke="#ea580c" strokeWidth={2.2} />}
-      {!half && <circle cx={0} cy={-24.5} r={3} fill="none" stroke="#f59e0b" strokeWidth={2.2} />}
-    </g>
-  );
-}
-
-/** the rooftop: a grey floor, the parapet behind, a water tank and the new rooftop flat */
-function RoofSet({ lit = false }: { lit?: boolean }) {
-  return (
-    <g className="pointer-events-none">
-      {[
-        [96, 36],
-        [128, 52],
-        [176, 30],
-        [214, 46],
-        [250, 38],
-      ].map(([x, h]) => (
-        <rect key={x} x={x} y={132 - h} width={30} height={h} fill="#94a3b8" opacity={0.45} />
-      ))}
-      <rect x={0} y={132} width={320} height={18} fill="#e7e5e4" stroke="#a8a29e" strokeWidth={0.8} />
-      <rect y={150} width={320} height={30} fill="#d6d3d1" />
-      <rect x={6} y={78} width={62} height={72} fill="#fde7c7" stroke="#a8a29e" strokeWidth={1} />
-      <rect x={2} y={74} width={70} height={6} fill="#a8a29e" />
-      <rect x={16} y={110} width={16} height={40} fill="#92400e" />
-      <rect x={42} y={96} width={18} height={14} fill={lit ? "#fde047" : "#93c5fd"} stroke="#64748b" strokeWidth={0.6} />
-      <text x={37} y={90} textAnchor="middle" fontSize={7} fontWeight={700} fill="#78350f">
-        (4, 2)
-      </text>
-      <rect x={284} y={96} width={26} height={30} rx={4} fill="#1f2937" />
-      <rect x={288} y={126} width={4} height={6} fill="#1f2937" />
-      <rect x={302} y={126} width={4} height={6} fill="#1f2937" />
-    </g>
+    <svg viewBox="0 0 12 12" className="inline-block size-3 align-[-1px]" aria-hidden="true">
+      <path d="M2 6.5l2.6 2.6L10 3" fill="none" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="stroke-accent-text" />
+    </svg>
   );
 }
 
@@ -223,8 +89,6 @@ function RoofSet({ lit = false }: { lit?: boolean }) {
 // 1a · A story scene for screen 1's setup, no task: the rooftop at dusk.
 //      Chacha with his khata and no rent for the new flat; Fahim's claim,
 //      Nasib's answer, and a cone of jilapi on the line.
-
-const S1_GROUND = 150;
 
 export function RooftopBet({}: Story) {
   const s = useScene(4, [700, 2400, 2600, 2600]);
@@ -234,21 +98,19 @@ export function RooftopBet({}: Story) {
     <StoryFrame scene={s}>
       <Stage backdrop="evening" label="on the rooftop, Chacha has no rent for the new flat; Fahim and Nasib bet a cone of jilapi on Fahim's claim">
         <RoofSet />
-        <Chacha x={98} y={S1_GROUND} arm="hold" />
-        <NameTag x={98} y={S1_GROUND + 13} name="Chacha" />
-        {k === 1 && <Bubble x={98} y={S1_GROUND - 68} side="mid" lines={["Tenant comes tonight.", "What rent do I ask?"]} />}
-        <CastPerson who="fahim" x={186} y={S1_GROUND} facing={-1} arm={k === 2 ? "point" : "down"} mood={k >= 2 ? "smug" : "plain"} />
-        <NameTag x={186} y={S1_GROUND + 13} name="Fahim" />
-        {k === 2 && <Bubble x={186} y={S1_GROUND - 68} side="mid" lines={["Same two columns,", "rent in ONE number."]} />}
-        <CastPerson who="nasib" x={250} y={S1_GROUND} facing={-1} arm={k >= 4 ? "hold" : "down"} mood={k === 3 ? "shout" : k >= 4 ? "smug" : "plain"} />
-        <NameTag x={250} y={S1_GROUND + 13} name="Nasib" />
-        {k === 3 && <Bubble x={250} y={S1_GROUND - 68} side="left" lines={["No new facts,", "nothing new comes out."]} />}
+        <Chacha x={98} y={GROUND} arm="hold" />
+        <NameTag x={98} y={GROUND + 13} name="চাচা" />
+        {k === 1 && <Bubble x={98} y={GROUND - 68} side="mid" lines={["রাইতেই ভাড়াটিয়া আইবো.", "ভাড়া কত চামু?"]} />}
+        <CastPerson who="fahim" x={186} y={GROUND} facing={-1} arm={k === 2 ? "point" : "down"} mood={k >= 2 ? "smug" : "plain"} label />
+        {k === 2 && <Bubble x={186} y={GROUND - 68} side="mid" lines={["দুইটা column নতুন করে", "লিখলে, ভাড়া এক সংখ্যায়."]} />}
+        <CastPerson who="nasib" x={250} y={GROUND} facing={-1} arm={k >= 4 ? "hold" : "down"} mood={k === 3 ? "shout" : k >= 4 ? "smug" : "plain"} label />
+        {k === 3 && <Bubble x={250} y={GROUND - 68} side="left" lines={["নতুন তথ্য নাই,", "নতুন কিছু বের হবে না."]} />}
         {k >= 4 && (
           <g className={POP}>
-            <Jilapi x={262} y={S1_GROUND - 34} s={0.9} />
+            <Jilapi x={262} y={GROUND - 34} s={0.9} />
           </g>
         )}
-        {k >= 4 && <CastCard x={218} y={S1_GROUND - 84} text="winner takes the jilapi" tone="amber" />}
+        {k >= 4 && <Bubble x={250} y={GROUND - 68} side="left" lines={["বাজি. এক ঠোঙা জিলাপি."]} />}
       </Stage>
     </StoryFrame>
   );
@@ -256,9 +118,9 @@ export function RooftopBet({}: Story) {
 
 // ---------------------------------------------------------------------------
 // 1 · The sealed bet. Fahim, Nasib, or both. The jilapi slides to whoever
-//     the reader backs, and nothing is marked: the Finale settles it.
+//     the reader backs, and nothing is marked: the finale settles it.
 
-const BET = ["Fahim is right", "Nasib is right", "both are right"];
+const BET = ["ফাহিম ঠিক", "নাসিব ঠিক", "দুইজনই ঠিক"];
 const BET_X = [44, 196, 120];
 
 export function JilapiBet() {
@@ -269,35 +131,35 @@ export function JilapiBet() {
 
   const seal = () => {
     setSealed(true);
-    pass("Bet sealed. Jilapi on the line.");
+    pass("বাজি সিল হলো. জিলাপি এখন দানে.");
   };
 
   return (
     <>
       <div className="mx-auto grid max-w-sm grid-cols-2 gap-2">
         <div className="rounded-xl border-2 border-cat-blue/30 bg-cat-blue/5 px-2.5 py-1.5">
-          <div className="text-xs font-semibold text-cat-blue">Fahim</div>
-          <div className="text-[0.8rem] leading-snug">“Let me rewrite the same two columns, and rent needs just one number.”</div>
+          <div className="text-xs font-semibold text-cat-blue">ফাহিম</div>
+          <div className="text-[0.8rem] leading-snug">খাতার দুইটা column ই নতুন করে লিখবো. তখন ভাড়া বলতে একটা সংখ্যাই লাগবে.</div>
         </div>
         <div className="rounded-xl border-2 border-cat-coral/30 bg-cat-coral/5 px-2.5 py-1.5">
-          <div className="text-xs font-semibold text-cat-coral">Nasib</div>
-          <div className="text-[0.8rem] leading-snug">“No new information goes in. So nothing new can come out.”</div>
+          <div className="text-xs font-semibold text-cat-coral">নাসিব</div>
+          <div className="text-[0.8rem] leading-snug">নতুন কোনো তথ্য তো ঢুকছে না. তাই নতুন কিছু বেরও হবে না.</div>
         </div>
       </div>
       <svg viewBox="0 0 240 52" className="mx-auto mt-1 block h-auto w-full max-w-[15rem]" aria-label="the cone of jilapi, sliding to whoever you back">
         <path d="M20 38H220" stroke="#a8a29e" strokeWidth={1.5} />
         <text x={44} y={50} textAnchor="middle" fontSize={9} fontWeight={700} className="fill-cat-blue">
-          Fahim
+          ফাহিম
         </text>
         <text x={196} y={50} textAnchor="middle" fontSize={9} fontWeight={700} className="fill-cat-coral">
-          Nasib
+          নাসিব
         </text>
         <text x={120} y={50} textAnchor="middle" fontSize={9} fontWeight={700} className="fill-[#5a6b7d]">
-          both
+          দুইজনই
         </text>
         <Jilapi x={jx} y={36} s={1.05} />
       </svg>
-      <div className="mt-1 text-sm font-medium text-muted">Who’s right?</div>
+      <div className="mt-1 text-sm font-medium text-muted">কে ঠিক?</div>
       <div className="mt-1.5 grid gap-1.5">
         {BET.map((o, i) => (
           <Choice key={o} n={i} look={bet === i ? "picked" : bet !== null ? "dim" : "idle"} disabled={bet !== null} onClick={() => setBet(i)}>
@@ -308,16 +170,16 @@ export function JilapiBet() {
       {bet !== null && !sealed ? (
         <div className="mt-2 flex justify-center">
           <button type="button" onClick={seal} className={`${primaryBtn} ${FADE}`}>
-            Seal the bet
+            বাজি সিল করুন
           </button>
         </div>
       ) : null}
       {sealed ? (
         <div className={`${FADE} mt-2 text-center text-[0.9rem] leading-snug text-muted`}>
-          Sealed. We’ll open it on the last screen, once Chacha has his rent.
+          সিল করা থাকলো. চাচা ভাড়া পেয়ে গেলে শেষ screen এ খুলবো.
         </div>
       ) : null}
-      <Task done={sealed}>Back Fahim, Nasib or both, and seal it. No marking until the end.</Task>
+      <Task done={sealed}>ফাহিম, নাসিব, নাকি দুইজনই? একটা বেছে নিয়ে বাজি সিল করুন. কে জিতলো, শেষের আগে কেউ বলবে না.</Task>
     </>
   );
 }
@@ -326,26 +188,19 @@ export function JilapiBet() {
 // 1½ · A figure for screen 1's explanation, no task: the khata's 8 flats land
 //      on the (bed, bath) sheet, then the rooftop flat, with a "?" for a rent.
 
-const KF = makeFrame(-0.4, 5.6, -0.4, 3.6, 38, 16);
-
 export function EightFlats() {
   const s = useScene(2, [700, 2200]);
   const k = s.k;
   const SAY = [
-    "Chacha's khata as a picture: beds along, baths up.",
-    "His 8 flats, each at its (bed, bath). The number is the rent, in thousand taka.",
-    "And the rooftop flat, (4, 2). Its rent is still a question mark.",
+    "চাচার খাতা, ছবি করে: bed ডানে, bath উপরে.",
+    "ওনার 8 টা flat, প্রতিটা নিজের (bed, bath) এ. গায়ে লেখা সংখ্যাটা ভাড়া, হাজার টাকায়.",
+    "আর ছাদের flat, (4, 2). ওর ভাড়ার জায়গায় এখনো একটা প্রশ্ন.",
   ];
 
   return (
     <Scene scene={s} caption={<span key={k} className={FADE}>{SAY[k]}</span>}>
       <Plane f={KF} ticks={1} label="Chacha's 8 flats on the bed and bath sheet, and the rooftop flat at (4, 2)" className="my-0! max-w-[13rem]">
-        <AxisName x={KF.sx(5.5)} y={KF.sy(0) - 5} anchor="end">
-          bed
-        </AxisName>
-        <AxisName x={KF.sx(0) + 5} y={KF.sy(3.45)} anchor="start">
-          bath
-        </AxisName>
+        <BedBath f={KF} />
         {k >= 1 &&
           FLATS.map((fl, i) => (
             <g key={i} className={POP} style={{ transitionDelay: `${i * 90}ms` }}>
@@ -362,6 +217,36 @@ export function EightFlats() {
         )}
       </Plane>
     </Scene>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 2a · A story scene for screen 2's setup, no task: Chacha's own way. He
+//      licks his pencil and prices by beds; Fahim looks at the khata.
+
+export function ChachaTries({}: Story) {
+  const s = useScene(3, [700, 2400, 2200]);
+  const k = s.k;
+
+  return (
+    <StoryFrame scene={s}>
+      <Stage backdrop="evening" label="Chacha wants to price every flat by its beds alone; Fahim looks at the khata">
+        <RoofSet />
+        <Chacha x={128} y={GROUND} arm={k >= 1 ? "point" : "hold"} />
+        <NameTag x={128} y={GROUND + 13} name="চাচা" />
+        {k >= 1 && (
+          <g className={POP}>
+            <rect x={146} y={GROUND - 58} width={30} height={20} rx={2} fill="white" stroke="#b91c1c" strokeWidth={1.2} />
+            <text x={161} y={GROUND - 45} textAnchor="middle" fontSize={7} fontWeight={700} fill="#0f1b2d">
+              bed × ?
+            </text>
+          </g>
+        )}
+        {k === 1 && <Bubble x={128} y={GROUND - 70} side="mid" lines={["bed প্রতি ছয় হাজার", "ধরলেই তো হইলো."]} />}
+        <CastPerson who="fahim" x={214} y={GROUND} facing={-1} mood={k >= 2 ? "puzzled" : "plain"} label />
+        {k >= 2 && <Bubble x={214} y={GROUND - 68} side="mid" tone="think" lines={["সবগুলা মিলবে?"]} />}
+      </Stage>
+    </StoryFrame>
   );
 }
 
@@ -387,7 +272,7 @@ export function RentGrid() {
     const next = [...seen, key];
     setSeen(next);
     const t = (b: Axis) => next.filter((x) => x.startsWith(b)).length >= 3;
-    if (!both && t("bed") && t("bath")) pass("Rent climbs on the slant, not on one axis.");
+    if (!both && t("bed") && t("bath")) pass("ভাড়া বাড়ে কোনাকুনি, এক axis বরাবর না.");
   };
   const pick = (a: Axis) => {
     setMode(a);
@@ -432,46 +317,41 @@ export function RentGrid() {
                 />
               ),
             )}
-        <AxisName x={KF.sx(5.5)} y={KF.sy(0) - 5} anchor="end">
-          bed
-        </AxisName>
-        <AxisName x={KF.sx(0) + 5} y={KF.sy(3.45)} anchor="start">
-          bath
-        </AxisName>
+        <BedBath f={KF} />
         {FLATS.map((fl, i) => (
           <FlatDot key={i} f={KF} at={[fl.bed, fl.bath]} rent={fl.rent} ring={mode ? (fits(guess(fl), fl.rent) ? "fit" : "miss") : null} />
         ))}
       </Plane>
       <div className="mt-2 flex items-center justify-center gap-2">
         <button type="button" onClick={() => pick("bed")} className={`${pill(mode === "bed")} font-sans`}>
-          by bed alone
+          শুধু bed দিয়ে
         </button>
         <button type="button" onClick={() => pick("bath")} className={`${pill(mode === "bath")} font-sans`}>
-          by bath alone
+          শুধু bath দিয়ে
         </button>
       </div>
       {mode ? (
         <div className="mt-2 flex items-center justify-center gap-2">
-          <Stepper value={knob} onChange={turn} min={3} max={12} label={`thousand taka per ${mode}`} />
-          <span className="text-sm text-muted">thousand taka a {mode}</span>
+          <Stepper value={knob} onChange={turn} min={3} max={12} label={`প্রতি ${mode} এ হাজার টাকা`} />
+          <span className="text-sm text-muted">হাজার টাকা, প্রতি {mode}</span>
         </div>
       ) : null}
       <div className="mt-1.5 min-h-6 text-center text-[0.9rem]">
         {mode ? (
           <span key={`${mode}${knob}`} className={FADE}>
-            <b className={`font-mono ${fit >= 8 ? "text-accent-text" : "text-danger"}`}>{fit}</b> of 8 flats fit, within 1000 taka.
+            8 টার মধ্যে <b className={`font-mono ${fit >= 8 ? "text-accent-text" : "text-danger"}`}>{fit}</b> টা flat মিললো, 1000 টাকার ভিতরে.
           </span>
         ) : (
-          <span className="text-muted">Pick a column to price by.</span>
+          <span className="text-muted">কোন column দিয়ে দাম ধরবেন, বেছে নিন.</span>
         )}
       </div>
       <Ticks
         items={[
-          ["bed alone", tried("bed")],
-          ["bath alone", tried("bath")],
+          ["শুধু bed", tried("bed")],
+          ["শুধু bath", tried("bath")],
         ]}
       />
-      <Task done={both}>Price by bed alone, then by bath alone. Turn each knob to three prices and count the green rings.</Task>
+      <Task done={both}>আগে শুধু bed দিয়ে, তারপর শুধু bath দিয়ে দাম ধরুন. প্রতিটায় knob টা তিনটা দামে ঘুরিয়ে সবুজ ring গুনুন.</Task>
     </>
   );
 }
@@ -485,10 +365,10 @@ export function SlantClimb() {
   const s = useScene(3, [700, 2200, 2200]);
   const k = s.k;
   const SAY = [
-    "The 8 flats again, coloured by rent.",
-    "Three flats with 3 beds: 17, 20 and 25. One column, three rents.",
-    "Flats on the same slanted line cost about the same.",
-    "So the rent climbs this way: more beds and more baths together.",
+    "আবার সেই 8 টা flat, ভাড়ার রঙে.",
+    "3 bed এর তিনটা flat: 17, 20 আর 25. একই column, তিন রকম ভাড়া.",
+    "একই কোনাকুনি line এর flat গুলার ভাড়া প্রায় সমান.",
+    "তাই ভাড়া বাড়ে এই দিকে: bed আর bath যখন একসাথে বাড়ে.",
   ];
   const diag = (c: number) => {
     const xa = Math.max(KF.x0, c - KF.y1);
@@ -511,81 +391,153 @@ export function SlantClimb() {
 }
 
 // ---------------------------------------------------------------------------
-// 3 · Fahim's two buttons. Size (1, 1) and imbalance (1, −1). Draw each
-//     button's line: two lines, so a basis (5.3). Then 4.2's box:
-//     1·1 + 1·(−1) = 0, and the right-angle mark lands.
+// 3a · A story scene for screen 3's setup, no task: Fahim draws two arrows on
+//      a clean page of the khata; Chacha leans in.
 
-const NA_F = makeFrame(-1.5, 2.5, -1.5, 2.5, 34, 12);
-const SIZE: XY = [1, 1];
-const IMB: XY = [1, -1];
-const BOX_ROWS = [
-  ["bed slots", "1 × 1 = 1"],
-  ["bath slots", "1 × (−1) = −1"],
-  ["the box", "1 + (−1) = 0"],
+export function FahimDraws({}: Story) {
+  const s = useScene(4, [700, 1600, 1600, 2400, 2400]);
+  const k = s.k;
+  const px = (x: number) => 156 + x * 17;
+  const py = (y: number) => 32 - y * 17;
+
+  return (
+    <StoryFrame scene={s}>
+      <Stage backdrop="evening" label="Fahim draws two new buttons on a page of the khata: size along the slant, imbalance across it; Chacha asks what they are">
+        <RoofSet />
+        <g className={k >= 1 ? POP : "opacity-0"}>
+          <rect x={112} y={4} width={96} height={56} rx={3} fill="white" stroke="#b91c1c" strokeWidth={1.2} />
+          <path d={`M${px(-1.6)} ${py(0)}H${px(1.7)}M${px(0)} ${py(-1.5)}V${py(1.5)}`} stroke="#94a3b8" strokeWidth={0.8} />
+        </g>
+        {k >= 1 && <Draw d={`M${px(0)} ${py(0)}L${px(1.2)} ${py(1.2)}`} strokeWidth={2.6} className="stroke-cat-blue" />}
+        {k >= 1 && (
+          <text x={px(1.4)} y={py(1.1)} textAnchor="start" fontSize={8} fontWeight={700} className={`${FADE} fill-cat-blue`}>
+            size
+          </text>
+        )}
+        {k >= 2 && <Draw d={`M${px(0)} ${py(0)}L${px(1.2)} ${py(-1.2)}`} strokeWidth={2.6} className="stroke-cat-coral" />}
+        {k >= 2 && (
+          <text x={px(1.4)} y={py(-1.1) + 3} textAnchor="start" fontSize={8} fontWeight={700} className={`${FADE} fill-cat-coral`}>
+            imbalance
+          </text>
+        )}
+        <CastPerson who="fahim" x={222} y={GROUND} facing={-1} arm={k >= 1 && k < 3 ? "point" : "down"} mood={k >= 4 ? "happy" : "plain"} label />
+        <Chacha x={k >= 3 ? 100 : 70} y={GROUND} arm="hold" />
+        <NameTag x={k >= 3 ? 100 : 70} y={GROUND + 13} name="চাচা" />
+        {k === 3 && <Bubble x={100} y={GROUND - 68} side="mid" lines={["এইগুলা আবার", "কী জিনিস?"]} />}
+        {k >= 4 && <Bubble x={222} y={GROUND - 68} side="left" lines={["দুইটা নতুন button,", "চাচা."]} />}
+      </Stage>
+    </StoryFrame>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 3 · Fahim's two buttons, pressed on a real flat. The flat (2, 2) sits on a
+//     small sheet with its rooms beside it. "+ size" adds a bed and a bath
+//     (the dot hops along the slant, two squares pop in); "+ imbalance" turns
+//     a bath into a bed (the dot hops across, a bath square leaves and a bed
+//     square comes). Once both are pressed, the two go into 4.2's box:
+//     1·1 + 1·(−1) = 0, and the right-angle mark lands on the sheet.
+
+const PB_F = makeFrame(-0.3, 5.4, -0.3, 4.4, 26, 10);
+const PB_START: XY = [2, 2];
+const PB_BOX = [
+  ["bed slot", "1 × 1 = 1"],
+  ["bath slot", "1 × (−1) = −1"],
+  ["box", "1 + (−1) = 0"],
 ];
 
-/** the little square at the origin where size and imbalance meet */
-function RightMark({ f, s = 0.22 }: { f: Frame; s?: number }) {
-  const p = (x: number, y: number) => `${f.sx(x)} ${f.sy(y)}`;
+/** a right-angle mark at `at`, for arrows along (1, 1) and (1, −1) from there */
+function CornerMark({ f, at, s = 0.28 }: { f: Frame; at: XY; s?: number }) {
+  const p = (x: number, y: number) => `${f.sx(at[0] + x)} ${f.sy(at[1] + y)}`;
   return <path d={`M${p(s, s)}L${p(2 * s, 0)}L${p(s, -s)}`} fill="none" strokeWidth={1.6} className={`${POP} stroke-[#0f1b2d]`} />;
 }
 
-export function NewAxes() {
+export function PressButtons() {
   const pass = useGate();
-  const [stage, setStage] = useSeed("stage", 0);
+  const [moves, setMoves] = useSeed<("s" | "m")[]>("moves", []);
+  const [boxed, setBoxed] = useSeed("boxed", false);
   const p = usePlay(900);
-  const rows = stage >= 2 ? 3 : p.k;
+  const at = moves.reduce<XY>((q, mv) => (mv === "s" ? [q[0] + 1, q[1] + 1] : [q[0] + 1, q[1] - 1]), PB_START);
+  const [tx, ty] = useTween([at[0], at[1]], 700);
+  const last = moves[moves.length - 1];
+  const pressedBoth = moves.includes("s") && moves.includes("m");
+  const rows = boxed ? 3 : p.k;
+  const canS = at[0] + 1 <= 5 && at[1] + 1 <= 4;
+  const canM = at[0] + 1 <= 5 && at[1] - 1 >= 1;
 
+  const press = (mv: "s" | "m") => setMoves([...moves, mv]);
   const box = () => {
     if (p.running) return;
     p.play(3, () => {
-      setStage(2);
-      pass("Size and imbalance meet at a right angle.");
+      setBoxed(true);
+      pass("Size আর imbalance, right angle এ.");
     });
   };
-  const line = (v: XY) => `M${NA_F.sx(-1.45 * v[0])} ${NA_F.sy(-1.45 * v[1])}L${NA_F.sx(2.45 * v[0])} ${NA_F.sy(2.45 * v[1])}`;
+  const SAY: Record<string, string> = {
+    none: "Flat (2, 2): 2 bed, 2 bath. একটা button চাপুন.",
+    s: "Size: এক bed আর এক bath একসাথে বাড়লো. Flat টা শুধু বড় হলো.",
+    m: "Imbalance: এক bath গেলো, এক bed আসলো. মোট room একই, ভাগটা বদলালো.",
+  };
 
   return (
     <>
       <div className="flex items-center justify-center gap-3">
-        <div className="w-[10rem] shrink-0">
-          <Plane f={NA_F} label="Fahim's two buttons: size (1, 1) and imbalance (1, −1)" className="my-0! max-w-none">
-            {stage >= 1 && (
-              <Clipped f={NA_F} name="na">
-                <Draw d={line(SIZE)} strokeWidth={1.2} className="stroke-cat-blue/50" />
-                <Draw d={line(IMB)} delay={300} strokeWidth={1.2} className="stroke-cat-coral/50" />
-              </Clipped>
+        <div className="w-[9.5rem] shrink-0">
+          <Plane f={PB_F} ticks={1} label="a flat on the bed and bath sheet, moved by Fahim's two buttons" className="my-0! max-w-none">
+            <BedBath f={PB_F} x={5.3} y={4.25} />
+            {moves.map((mv, i) => {
+              const from = moves.slice(0, i).reduce<XY>((q, v) => (v === "s" ? [q[0] + 1, q[1] + 1] : [q[0] + 1, q[1] - 1]), PB_START);
+              const to: XY = mv === "s" ? [from[0] + 1, from[1] + 1] : [from[0] + 1, from[1] - 1];
+              return <Arrow key={i} f={PB_F} from={from} to={to} tone={mv === "s" ? "blue" : "coral"} w={2.2} draw={i === moves.length - 1} />;
+            })}
+            {boxed && pressedBoth && (
+              <g className={FADE}>
+                <Arrow f={PB_F} from={at} to={[at[0] + 0.9, at[1] + 0.9]} tone="blue" w={1.6} dashed />
+                <Arrow f={PB_F} from={at} to={[at[0] + 0.9, at[1] - 0.9]} tone="coral" w={1.6} dashed />
+                <CornerMark f={PB_F} at={at} />
+              </g>
             )}
-            <Arrow f={NA_F} from={O} to={SIZE} tone="blue" />
-            <Arrow f={NA_F} from={O} to={IMB} tone="coral" />
-            <Label f={NA_F} at={SIZE} dx={-4} dy={-7} size={9} className="fill-cat-blue">
-              size
-            </Label>
-            <Label f={NA_F} at={IMB} dx={-2} dy={14} size={9} className="fill-cat-coral">
-              imbalance
-            </Label>
-            {rows >= 3 && <RightMark f={NA_F} />}
+            <circle cx={PB_F.sx(tx)} cy={PB_F.sy(ty)} r={6} className="pointer-events-none fill-[#b45309]" />
           </Plane>
         </div>
-        <div className="min-w-0 flex-1 text-[0.8rem] leading-snug">
-          <div className="font-mono">
-            <span className="text-cat-blue">size = (1, 1)</span>
-          </div>
-          <div className="text-muted">one more bed and one more bath</div>
-          <div className="mt-1 font-mono">
-            <span className="text-cat-coral">imbalance = (1, −1)</span>
-          </div>
-          <div className="text-muted">one more bed, one less bath</div>
+        <div className="min-w-0 flex-1">
+          {[
+            { n: at[0], name: "bed", tone: "bg-cat-blue/80" },
+            { n: at[1], name: "bath", tone: "bg-cat-teal/80" },
+          ].map((r) => (
+            <div key={r.name} className="mb-1.5 flex flex-wrap items-center gap-1">
+              <span className="w-8 text-xs font-semibold text-muted">{r.name}</span>
+              {Array.from({ length: r.n }, (_, i) => (
+                <span key={`${r.name}${i}`} className={`${POP} size-4 rounded-sm ${r.tone}`} />
+              ))}
+            </div>
+          ))}
+          <div className="font-mono text-sm font-bold text-[#b45309]">{tup(at)}</div>
         </div>
       </div>
-      {stage >= 1 ? (
-        <div className={`${FADE} mt-2 text-center text-[0.85rem] leading-snug`}>
-          Two different lines, crossing only at 0. Two directions on a two-slot sheet: that’s a basis, like 5.3’s.
+      {!boxed ? (
+        <div className="mt-2 flex items-center justify-center gap-2">
+          <button type="button" onClick={() => press("s")} disabled={!canS || p.running} className={`${pill(false)} font-sans text-cat-blue! disabled:opacity-40`}>
+            + size
+          </button>
+          <button type="button" onClick={() => press("m")} disabled={!canM || p.running} className={`${pill(false)} font-sans text-cat-coral! disabled:opacity-40`}>
+            + imbalance
+          </button>
+          {moves.length > 0 ? (
+            <button type="button" onClick={() => setMoves([])} disabled={p.running} className={quietBtn}>
+              আবার
+            </button>
+          ) : null}
         </div>
       ) : null}
-      {stage >= 1 && rows > 0 ? (
-        <div className="mx-auto mt-2 grid max-w-[16rem] grid-cols-[5.5rem_1fr] gap-x-2 gap-y-0.5 text-[0.85rem]">
-          {BOX_ROWS.slice(0, rows).map(([a, b], i) => (
+      <div className="mx-auto mt-1.5 min-h-10 max-w-sm text-center text-[0.85rem] leading-snug">
+        <span key={boxed ? "box" : moves.length} className={FADE}>
+          {boxed ? "বড় হওয়া আর ভাগ বদলানো. কেউ কারো কাজে নাক গলায় না. এটাই right angle." : SAY[last ?? "none"]}
+        </span>
+      </div>
+      {pressedBoth && rows > 0 ? (
+        <div className="mx-auto mt-1 grid max-w-[16rem] grid-cols-[5rem_1fr] gap-x-2 gap-y-0.5 text-[0.85rem]">
+          {PB_BOX.slice(0, rows).map(([a, b], i) => (
             <div key={a} className={`${FADE} contents`}>
               <span className="text-muted">{a}</span>
               <span className={`font-mono ${i === 2 ? "font-bold text-accent-text" : ""}`}>{b}</span>
@@ -593,142 +545,159 @@ export function NewAxes() {
           ))}
         </div>
       ) : null}
-      {stage === 0 ? (
-        <div className="mt-3 flex justify-center">
-          <button type="button" onClick={() => setStage(1)} className={primaryBtn}>
-            Draw each button’s line
-          </button>
-        </div>
-      ) : stage === 1 && !p.running && rows === 0 ? (
-        <div className="mt-3 flex justify-center">
-          <button type="button" onClick={box} className={primaryBtn}>
-            Put them in 4.2’s box
+      {pressedBoth && !boxed && !p.running ? (
+        <div className="mt-2 flex justify-center">
+          <button type="button" onClick={box} className={`${primaryBtn} ${FADE}`}>
+            দুইটা button কে 4.2 এর box এ ফেলুন
           </button>
         </div>
       ) : null}
-      <Task done={stage >= 2}>Draw each button’s line, then put the two buttons in 4.2’s box.</Task>
+      <Ticks
+        items={[
+          ["size চাপা", moves.includes("s")],
+          ["imbalance চাপা", moves.includes("m")],
+          ["box", boxed],
+        ]}
+      />
+      <Task done={boxed}>দুইটা button ই চেপে দেখুন flat এর কী বদলায়. তারপর দুইটাকে 4.2 এর box এ ফেলুন.</Task>
     </>
   );
 }
 
 // ---------------------------------------------------------------------------
-// 3½ · A figure for screen 3's explanation, no task: what each button does to
-//      a flat. Size adds a bed and a bath; imbalance turns a bath into a bed.
+// 3½ · A figure for screen 3's explanation, no task: the two buttons on the
+//      bed and bath sheet; their lines drawn every step make Fahim's grid, all
+//      small squares; then the whole sheet turns 45° and it is a plain square
+//      grid, only turned.
 
-const TB_STATES: [number, number][] = [
-  [2, 1],
-  [3, 2],
-  [4, 1],
-  [4, 1],
-];
+const ST_F = makeFrame(-2.2, 2.2, -2.2, 2.2, 26, 8);
 
-export function TwoButtonsDo() {
-  const s = useScene(3, [700, 2200, 2400]);
+export function SquareTurned() {
+  const s = useScene(2, [700, 2000]);
   const k = s.k;
-  const [bed, bath] = TB_STATES[k];
   const SAY = [
-    "A flat with 2 beds and 1 bath: (2, 1).",
-    "Press size: one more bed and one more bath. The flat just grows, (3, 2).",
-    "Press imbalance: one more bed, one less bath. Same 5 rooms, shared differently: (4, 1).",
-    "Growing and re-sharing don't get in each other's way. That's the right angle.",
+    "ফাহিমের দুইটা button, bed আর bath এর sheet এ.",
+    "প্রতিটা button বরাবর ধাপে ধাপে line টানলে ফাহিমের grid. ঘর গুলা সব square.",
+    "Sheet টা একটু ঘুরিয়ে দিলেই চেনা square grid. শুধু ঘুরানো.",
   ];
+  const turn = {
+    style: { transform: `rotate(${k >= 2 ? 45 : 0}deg)`, transformOrigin: `${ST_F.sx(0)}px ${ST_F.sy(0)}px` },
+    className: "transition-transform duration-1000 ease-in-out motion-reduce:transition-none",
+  };
 
   return (
     <Scene scene={s} caption={<span key={k} className={FADE}>{SAY[k]}</span>}>
-      <div className="mx-auto flex max-w-[17rem] items-center gap-3">
-        <div className="grid flex-1 gap-1.5">
-          {[
-            { n: bed, name: "bed", tone: "bg-cat-blue/80" },
-            { n: bath, name: "bath", tone: "bg-cat-teal/80" },
-          ].map((r) => (
-            <div key={r.name} className="flex items-center gap-1">
-              <span className="w-8 text-xs font-semibold text-muted">{r.name}</span>
-              {Array.from({ length: r.n }, (_, i) => (
-                <span key={i} className={`${POP} h-6 w-6 rounded ${r.tone}`} />
-              ))}
-            </div>
-          ))}
-        </div>
-        <div className="w-[4.5rem] shrink-0 text-center">
-          {k >= 3 ? (
-            <svg viewBox="0 0 60 60" className={`${FADE} mx-auto h-auto w-14`} aria-label="size and imbalance at a right angle">
-              <path d="M10 30L40 5" strokeWidth={2.4} className="stroke-cat-blue" />
-              <path d="M10 30L40 55" strokeWidth={2.4} className="stroke-cat-coral" />
-              <path d="M17 24.2L22.8 31L17 35.8" fill="none" strokeWidth={1.4} className="stroke-[#0f1b2d]" />
-            </svg>
-          ) : (
-            <span key={k} className={`${POP} inline-block rounded-lg border-2 border-[#b45309] px-1.5 py-0.5 font-mono text-sm font-bold text-[#b45309]`}>
-              {tup([bed, bath])}
-            </span>
+      <div className="mx-auto w-full max-w-[10rem]">
+        <Plane f={ST_F} grid={k >= 2 ? 0 : 1} axes={k < 2} label="Fahim's two buttons and their grid; the sheet turns and it is a square grid" className="my-0! max-w-none">
+          {k >= 1 && (
+            <g className={FADE}>
+              <Clipped f={ST_F} name="st">
+                <g {...turn}>
+                  <TiltGrid f={ST_F} step={1} className="stroke-cat-violet/50" />
+                </g>
+              </Clipped>
+            </g>
           )}
-        </div>
+          <g {...turn}>
+            <Arrow f={ST_F} from={O} to={[1, 1]} tone="blue" w={2.6} />
+            <Arrow f={ST_F} from={O} to={[1, -1]} tone="coral" w={2.6} />
+            <RightMark f={ST_F} />
+          </g>
+        </Plane>
       </div>
     </Scene>
   );
 }
 
 // ---------------------------------------------------------------------------
-// 4 · Flat (3, 2) in the new basis, by hand. beds = s + m, baths = s − m.
-//     Add the lines (m cancels), halve, put s back, then walk the card:
-//     2.5 size steps and 0.5 of imbalance land on the flat.
+// 4 · Flat (3, 2), found by walking. Two half-step dials, size and imbalance;
+//     "walk" draws the size steps along the slant, then the imbalance steps
+//     across. A wrong card lands where it really lands, in red. The right
+//     one needs half steps: 2.5 and 0.5.
 
-const HB_F = makeFrame(-0.5, 3.6, -0.6, 2.9, 36, 12);
-const HB_BTN = ["Add the two lines", "Halve both sides", "Put s back in the bed line", "Walk the card"];
+const FC_F = makeFrame(-0.4, 4.4, -0.6, 3.6, 34, 10);
+const FC_AT: XY = [3, 2];
 
-export function HouseInNewBasis() {
+/** a stepper that counts in halves: `value` is in halves, shown as value / 2 */
+function HalfStepper({ value, onChange, min, max, label }: { value: number; onChange: (v: number) => void; min: number; max: number; label: string }) {
+  const btn =
+    "grid size-8 cursor-pointer place-items-center rounded-full text-lg font-bold text-muted transition-colors hover:bg-foreground/10 hover:text-foreground disabled:cursor-default disabled:opacity-30 disabled:hover:bg-transparent motion-reduce:transition-none";
+  return (
+    <span className="inline-flex items-center rounded-full border border-border bg-surface p-0.5 font-mono">
+      <button type="button" aria-label={`${label} আধা কম`} className={btn} disabled={value <= min} onClick={() => onChange(value - 1)}>
+        −
+      </button>
+      <span className="w-10 text-center text-lg font-semibold tabular-nums">{say(value / 2)}</span>
+      <button type="button" aria-label={`${label} আধা বেশি`} className={btn} disabled={value >= max} onClick={() => onChange(value + 1)}>
+        +
+      </button>
+    </span>
+  );
+}
+
+export function FindCard() {
   const pass = useGate();
-  const [stage, setStage] = useSeed("stage", 0);
-  const go = () => {
-    const next = stage + 1;
-    setStage(next);
-    if (next === 4) pass("Same flat, new card: (2.5, 0.5).");
+  const [hs, setHs] = useSeed("hs", 2);
+  const [hm, setHm] = useSeed("hm", 0);
+  const [walked, setWalked] = useSeed<XY | null>("walked", null);
+  const [walks, setWalks] = useState(0);
+  const s = hs / 2;
+  const m = hm / 2;
+  const land = (c: XY): XY => [c[0] + c[1], c[0] - c[1]];
+  const end = walked ? land(walked) : null;
+  const right = end !== null && same(end, FC_AT);
+
+  const walk = () => {
+    const c: XY = [s, m];
+    setWalked(c);
+    setWalks((w) => w + 1);
+    if (same(land(c), FC_AT)) pass("একই flat, নতুন card: (2.5, 0.5).");
   };
-  const cut = stage >= 1 ? "text-danger line-through decoration-2" : "";
 
   return (
     <>
       <div className="text-center text-[0.85rem] leading-snug text-muted">
-        Each size step adds a bed and a bath. Each imbalance step adds a bed and takes a bath away. Say <b className="font-mono">s</b> size steps and <b className="font-mono">m</b> imbalance steps:
+        Flat <b className="font-mono text-[#b45309]">(3, 2)</b>: 3 bed, 2 bath, ভাড়া 20000.
       </div>
-      <div className="mt-2 flex items-center justify-center gap-3">
-        <div className="w-[8.5rem] shrink-0">
-          <Plane f={HB_F} ticks={1} label="flat (3, 2), and the card walked as size and imbalance steps" className="my-0! max-w-none">
-            <Star f={HB_F} at={[3, 2]} done={stage >= 4} />
-            {stage >= 4 && <Arrow key="s" f={HB_F} from={O} to={[2.5, 2.5]} tone="blue" draw />}
-            {stage >= 4 && <Arrow key="m" f={HB_F} from={[2.5, 2.5]} to={[3, 2]} tone="coral" draw delay={800} />}
-          </Plane>
-        </div>
-        <div className="min-w-0 flex-1 font-mono text-[0.9rem] leading-relaxed">
-          <div>
-            <span className="font-sans text-xs text-muted">beds </span>3 = s <span className={cut}>+ m</span>
+      <Plane f={FC_F} ticks={1} label="flat (3, 2), and where the card you dial walks on Fahim's grid" className="my-1! max-w-[13rem]">
+        <Clipped f={FC_F} name="fc">
+          <TiltGrid f={FC_F} className="stroke-cat-violet/25" />
+        </Clipped>
+        <BedBath f={FC_F} x={4.3} y={3.45} />
+        <Star f={FC_F} at={FC_AT} done={right} />
+        {walked && walked[0] !== 0 && <Arrow key={`s${walks}`} f={FC_F} from={O} to={[walked[0], walked[0]]} tone="blue" w={2.4} draw />}
+        {walked && walked[1] !== 0 && <Arrow key={`m${walks}`} f={FC_F} from={[walked[0], walked[0]]} to={land(walked)} tone="coral" w={2.4} draw delay={walked[0] !== 0 ? 700 : 0} />}
+        {end && !right && <Dot key={`e${walks}`} f={FC_F} at={end} r={4} className={`fill-danger ${POP}`} />}
+      </Plane>
+      {!right ? (
+        <>
+          <div className="flex items-center justify-center gap-3 text-xs font-semibold text-muted">
+            <span className="grid justify-items-center gap-0.5">
+              <HalfStepper value={hs} onChange={setHs} min={0} max={8} label="size" />
+              <span className="text-cat-blue">size এর ধাপ</span>
+            </span>
+            <span className="grid justify-items-center gap-0.5">
+              <HalfStepper value={hm} onChange={setHm} min={-4} max={4} label="imbalance" />
+              <span className="text-cat-coral">imbalance এর ধাপ</span>
+            </span>
           </div>
-          <div>
-            <span className="font-sans text-xs text-muted">baths </span>2 = s <span className={cut}>− m</span>
+          <div className="mt-2 flex justify-center">
+            <button type="button" onClick={walk} className={primaryBtn}>
+              Card টা হাঁটান
+            </button>
           </div>
-          {stage >= 1 && (
-            <div key="add" className={`${POP} border-t border-border`}>
-              5 = 2s{stage >= 2 ? <span className={FADE}>, s = 2.5</span> : null}
-            </div>
-          )}
-          {stage >= 3 && (
-            <div key="put" className={POP}>
-              3 = 2.5 + m, m = 0.5
-            </div>
-          )}
-        </div>
-      </div>
-      {stage >= 4 ? (
-        <div className={`${FADE} mx-auto mt-2 max-w-sm rounded-2xl bg-accent/10 px-3 py-1.5 text-center text-[0.85rem] leading-snug text-accent-text`}>
-          2.5 size steps reach (2.5, 2.5). Half an imbalance step lands on (3, 2).
-        </div>
+          {walked && end ? (
+            <Nope key={walks}>
+              Card {tup(walked)} গিয়ে থামলো {tup(end)} এ. Flat টা (3, 2) তে.{walks >= 2 ? " আধা ধাপও চলে." : ""}
+            </Nope>
+          ) : null}
+        </>
       ) : (
-        <div className="mt-3 flex justify-center">
-          <button type="button" onClick={go} className={primaryBtn}>
-            {HB_BTN[stage]}
-          </button>
+        <div className={`${FADE} mx-auto mt-2 max-w-sm rounded-2xl bg-accent/10 px-3 py-1.5 text-center text-[0.85rem] leading-snug text-accent-text`}>
+          Size এ 2.5 ধাপ গিয়ে (2.5, 2.5). আধা ধাপ imbalance এ গিয়ে (3, 2).
         </div>
       )}
-      <Task done={stage >= 4}>Solve the two lines one move at a time, then walk the card to check it.</Task>
+      <Task done={right}>Size আর imbalance এর ধাপ ঠিক করে card টা হাঁটান, যতক্ষণ না ওটা flat (3, 2) তে গিয়ে থামে.</Task>
     </>
   );
 }
@@ -744,9 +713,9 @@ export function TwoCards() {
   const s = useScene(2, [700, 2200]);
   const k = s.k;
   const SAY = [
-    "On the bed and bath grid, the flat's card is (3, 2).",
-    "Lay Fahim's grid over it: size lines one way, imbalance lines the other.",
-    "Same dot, new card: 2.5 along size, 0.5 along imbalance.",
+    "Bed আর bath এর grid এ flat টার card (3, 2).",
+    "উপরে ফাহিমের grid বসাই: এক দিকে size এর line, আরেক দিকে imbalance এর.",
+    "একই dot, নতুন card: size বরাবর 2.5, imbalance বরাবর 0.5.",
   ];
 
   return (
@@ -792,12 +761,12 @@ export function ReadTheNumbers() {
   const tapImb = () => {
     if (read !== 1) return;
     setRead(2);
-    pass("The new numbers tell the flat's story.");
+    pass("নতুন সংখ্যা গুলা flat এর গল্প বলে.");
   };
   const SAY = [
-    "Tap 2.5 first.",
-    "2.5 size steps. Each step is one bed and one bath: two rooms. So 2.5 steps make 5 rooms. Now tap 0.5.",
-    "Half a step of imbalance: half a bed more, half a bath less. So there's 1 more bed than bath: 3 beds, 2 baths. Flat (3, 2) again.",
+    "আগে 2.5 এ tap করুন.",
+    "2.5 ধাপ size. প্রতি ধাপে এক bed আর এক bath, মানে দুইটা room. তাই 2.5 ধাপে 5 টা room. এবার 0.5 এ tap করুন.",
+    "আধা ধাপ imbalance. আধা bed বেশি, আধা bath কম. তাই bath এর চেয়ে bed একটা বেশি. দাঁড়ালো কী? 3 bed, 2 bath. আবার সেই flat (3, 2).",
   ];
 
   return (
@@ -839,44 +808,127 @@ export function ReadTheNumbers() {
           {SAY[read]}
         </span>
       </div>
-      <Task done={read >= 2}>Tap 2.5, then 0.5, and watch what each one builds.</Task>
+      <Task done={read >= 2}>আগে 2.5, তারপর 0.5 এ tap করুন. দেখুন কোনটা কী বানায়.</Task>
     </>
   );
 }
 
 // ---------------------------------------------------------------------------
-// 5½ · A figure for screen 5's explanation, no task: Fahim's buttons are
-//      about 1.41 long. Shrink both to 1 (the unit ring, 3.6) and the card
-//      (2.5, 0.5) becomes (3.54, 0.71).
+// 5¼ · A figure for screen 5's explanation, no task: the card without the
+//      walk. Flat (3, 2)'s five rooms slide into one row and are cut in half:
+//      2.5, the size. Back in two rows, every bath pairs with a bed but one
+//      bed is left over; half of it is 0.5, the imbalance.
 
-const SO_F = makeFrame(-0.4, 1.7, -1.6, 1.6, 44, 10);
+const RC_STEP = 20;
+const rcX = (i: number) => 6 + i * RC_STEP;
 
-export function ShrinkToOne() {
-  const s = useScene(2, [700, 2200]);
+export function RoomsToCard() {
+  const s = useScene(3, [700, 2600, 2600]);
   const k = s.k;
-  const [len] = useTween([k >= 1 ? 1 / R2 : 1], 1200);
   const SAY = [
-    "Fahim's buttons are two-room steps, each about 1.41 long.",
-    "Divide each by 1.41: both land on the ring of length 1.",
-    "Shorter steps, so more of them: the card becomes (3.54, 0.71).",
+    "Flat (3, 2): 3 টা bed, 2 টা bath.",
+    "সব room এক সারিতে, মোট 5 টা. মাঝখান দিয়ে অর্ধেক করলে 2.5. এটাই size.",
+    "প্রতিটা bath এর জোড়া একটা bed. বাকি থাকে 1 টা bed, মানে ফারাক 1. ওটার অর্ধেক 0.5. এটাই imbalance.",
+    "হাঁটা ছাড়াই card: (2.5, 0.5).",
+  ];
+  const at = (j: number): XY => (k === 1 ? [rcX(j), 24] : j < 3 ? [rcX(j), 6] : [rcX(j - 3), 42]);
+
+  return (
+    <Scene scene={s} caption={<span key={k} className={FADE}>{SAY[k]}</span>}>
+      <div className="mx-auto flex max-w-[17rem] items-center justify-center gap-2">
+        <svg viewBox="0 0 108 64" className="h-auto w-[6.5rem] shrink-0" aria-label="flat (3, 2)'s five rooms, halved for the size, and the one extra bed halved for the imbalance">
+          {k >= 2 &&
+            [0, 1].map((j) => <path key={j} d={`M${rcX(j) + 8} 22V42`} strokeWidth={1} strokeDasharray="2 2" className={`${FADE} stroke-muted`} />)}
+          {[0, 1, 2, 3, 4].map((j) => {
+            const [x, y] = at(j);
+            return (
+              <g key={j} style={{ transform: `translate(${x}px, ${y}px)` }} className="transition-transform duration-700 ease-in-out motion-reduce:transition-none">
+                <rect width={16} height={16} rx={2} className={j < 3 ? "fill-cat-blue/80" : "fill-cat-teal/80"} />
+                {k >= 2 && j === 2 && (
+                  <g className={FADE}>
+                    <rect width={8} height={16} rx={2} className="fill-cat-coral" />
+                    <rect width={16} height={16} rx={2} fill="none" strokeWidth={1.6} className="stroke-cat-coral" />
+                  </g>
+                )}
+              </g>
+            );
+          })}
+          {k === 1 && (
+            <g className={FADE}>
+              <path d={`M${rcX(0) + 2.5 * RC_STEP - 2} 18V46`} strokeWidth={1.4} strokeDasharray="3 2" className="stroke-foreground" />
+              <text x={rcX(0) + 1.25 * RC_STEP - 2} y={56} textAnchor="middle" fontSize={8} fontWeight={700} fontFamily="ui-monospace, monospace" className="fill-foreground">
+                2.5
+              </text>
+              <text x={rcX(0) + 3.75 * RC_STEP - 2} y={56} textAnchor="middle" fontSize={8} fontWeight={700} fontFamily="ui-monospace, monospace" className="fill-foreground">
+                2.5
+              </text>
+            </g>
+          )}
+          {k >= 2 && (
+            <text x={rcX(2) + 20} y={17} textAnchor="start" fontSize={8} fontWeight={700} fontFamily="ui-monospace, monospace" className={`${FADE} fill-cat-coral`}>
+              0.5
+            </text>
+          )}
+        </svg>
+        <div className="min-w-0 text-[0.8rem] leading-snug">
+          {k >= 1 && (
+            <div key="s" className={FADE}>
+              <div className="text-[0.7rem] leading-none text-cat-blue">size</div>
+              <div className="whitespace-nowrap font-mono">(3 + 2) ÷ 2 = 2.5</div>
+            </div>
+          )}
+          {k >= 2 && (
+            <div key="m" className={`${FADE} mt-1`}>
+              <div className="text-[0.7rem] leading-none text-cat-coral">imbalance</div>
+              <div className="whitespace-nowrap font-mono">(3 − 2) ÷ 2 = 0.5</div>
+            </div>
+          )}
+          {k >= 3 && (
+            <span key="c" className={`${POP} mt-1 inline-block rounded-lg border-2 border-cat-violet px-1.5 py-0.5 font-mono text-sm font-bold text-cat-violet`}>
+              (2.5, 0.5)
+            </span>
+          )}
+        </div>
+      </div>
+    </Scene>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 5½ · A figure for screen 5's explanation, no task: the same card, by sums.
+//      beds = s + m, baths = s − m; add the lines and m cancels; halve; put
+//      s back. The shortcut the reader just read, written the book way.
+
+export function AddLines() {
+  const s = useScene(3, [700, 2200, 2000]);
+  const k = s.k;
+  const cut = k >= 1 ? "text-danger line-through decoration-2" : "";
+  const SAY = [
+    "s ধাপ size আর m ধাপ imbalance হলে bed হয় s + m, আর bath হয় s − m.",
+    "দুইটা line যোগ করি. +m আর −m কাটাকাটি, থাকে 5 = 2s.",
+    "অর্ধেক করলে s = 2.5. মোট room এর অর্ধেক.",
+    "s ফেরত বসাই bed এর line এ: 3 = 2.5 + m. তাই m = 0.5.",
   ];
 
   return (
     <Scene scene={s} caption={<span key={k} className={FADE}>{SAY[k]}</span>}>
-      <div className="mx-auto flex max-w-[15rem] items-center justify-center gap-3">
-        <div className="w-[6rem] shrink-0">
-          <Plane f={SO_F} label="the size and imbalance buttons shrinking to length 1" className="my-0! max-w-none">
-            <circle cx={SO_F.sx(0)} cy={SO_F.sy(0)} r={SO_F.u} fill="none" strokeWidth={1.2} strokeDasharray="3 3" className="stroke-[#5a6b7d]" />
-            <Arrow f={SO_F} from={O} to={[len, len]} tone="blue" w={2.4} />
-            <Arrow f={SO_F} from={O} to={[len, -len]} tone="coral" w={2.4} />
-            <Label f={SO_F} at={[len, len]} dx={4} dy={-4} anchor="start" size={9} className="fill-cat-blue font-mono">
-              {k >= 1 ? "1" : "1.41"}
-            </Label>
-          </Plane>
+      <div className="mx-auto w-fit font-mono text-[0.95rem] leading-relaxed">
+        <div>
+          <span className="font-sans text-xs text-muted">bed </span>3 = s <span className={cut}>+ m</span>
         </div>
-        <span key={k >= 2 ? "b" : "a"} className={`${POP} inline-block rounded-lg border-2 border-cat-violet px-1.5 py-0.5 font-mono text-sm font-bold whitespace-nowrap text-cat-violet`}>
-          {k >= 2 ? "(3.54, 0.71)" : "(2.5, 0.5)"}
-        </span>
+        <div>
+          <span className="font-sans text-xs text-muted">bath </span>2 = s <span className={cut}>− m</span>
+        </div>
+        {k >= 1 && (
+          <div key="add" className={`${POP} border-t border-border`}>
+            5 = 2s{k >= 2 ? <span className={FADE}>, s = 2.5</span> : null}
+          </div>
+        )}
+        {k >= 3 && (
+          <div key="put" className={POP}>
+            3 = 2.5 + m, m = 0.5
+          </div>
+        )}
       </div>
     </Scene>
   );
@@ -926,7 +978,7 @@ export function OneNumberRent() {
     const n = FLATS.filter((fl) => fits(v * sizeOf(fl), fl.rent)).length;
     if (n === 8 && !done) {
       setDone(true);
-      pass("Same facts, new grid: rent in one number.");
+      pass("একই তথ্য, নতুন grid: ভাড়া এক সংখ্যায়.");
     }
   };
   const sizeEnd = P([4.6, 4.6]);
@@ -953,14 +1005,7 @@ export function OneNumberRent() {
             ))}
         </Clipped>
         {t < 0.5 ? (
-          <>
-            <AxisName x={OR_F.sx(5.7)} y={OR_F.sy(0) - 5} anchor="end">
-              bed
-            </AxisName>
-            <AxisName x={OR_F.sx(0) + 5} y={OR_F.sy(3.45)} anchor="start">
-              bath
-            </AxisName>
-          </>
+          <BedBath f={OR_F} x={5.7} />
         ) : (
           <>
             <AxisName x={OR_F.sx(sizeEnd[0])} y={OR_F.sy(sizeEnd[1]) - 6} anchor="end">
@@ -985,28 +1030,28 @@ export function OneNumberRent() {
       {!turned ? (
         <div className="mt-3 flex justify-center">
           <button type="button" onClick={() => setTurned(true)} className={primaryBtn}>
-            Turn the sheet to Fahim’s grid
+            Sheet টা ফাহিমের grid এ ঘুরান
           </button>
         </div>
       ) : (
         <div className={FADE}>
           <div className="mt-2 flex items-center justify-center gap-2">
-            <Stepper value={knob} onChange={change} min={4} max={12} disabled={done} label="thousand taka per size step" />
-            <span className="text-sm text-muted">thousand taka a size step</span>
+            <Stepper value={knob} onChange={change} min={4} max={12} disabled={done} label="size এর প্রতি ধাপে হাজার টাকা" />
+            <span className="text-sm text-muted">হাজার টাকা, প্রতি size ধাপ</span>
           </div>
           <div className="mt-1.5 min-h-6 text-center text-[0.9rem]">
             <span key={knob} className={FADE}>
-              <b className={`font-mono ${fit === 8 ? "text-accent-text" : "text-danger"}`}>{fit}</b> of 8 flats fit, within 1000 taka.
+              8 টার মধ্যে <b className={`font-mono ${fit === 8 ? "text-accent-text" : "text-danger"}`}>{fit}</b> টা flat মিললো, 1000 টাকার ভিতরে.
             </span>
           </div>
           {done ? (
             <div className={`${FADE} mx-auto mt-1 max-w-sm text-center text-[0.85rem] leading-snug text-muted`}>
-              Look down each stripe: flats of one size cost about the same, whatever their imbalance.
+              প্রতিটা খাড়া পট্টি ধরে নিচে তাকান. এক size এর flat গুলার ভাড়া প্রায় সমান. imbalance যা-ই হোক.
             </div>
           ) : null}
         </div>
       )}
-      <Task done={done}>Turn the sheet, then find the one price per size step that fits all 8 flats.</Task>
+      <Task done={done}>Sheet টা ঘুরান. তারপর size এর প্রতি ধাপে এমন একটা দাম খুঁজুন, যেটা 8 টা flat এই মিলে.</Task>
     </>
   );
 }
@@ -1022,9 +1067,9 @@ export function DotsSlide() {
   const s = useScene(2, [700, 2200]);
   const k = s.k;
   const SAY = [
-    "The 8 flats on Fahim's grid: size along, imbalance down.",
-    "Drop the imbalance number. Each flat slides onto the size line, its shadow.",
-    "The rents still climb in order along one line. One number kept, very little lost.",
+    "ফাহিমের grid এ 8 টা flat: size ডানে, imbalance নিচে.",
+    "Imbalance এর সংখ্যাটা ফেলে দিন. প্রতিটা flat size এর line এ নেমে আসে, ওর shadow তে.",
+    "ভাড়া এখনো এক line বরাবর ধাপে ধাপে বাড়ে. একটা সংখ্যা রাখলাম, হারালাম খুব সামান্য.",
   ];
 
   return (
@@ -1054,201 +1099,186 @@ export function DotsSlide() {
 }
 
 // ---------------------------------------------------------------------------
-// 7a · A story scene for screen 7's setup, no task: Nasib's objection. If
-//      Fahim can pick any grid, which numbers are real?
+// 6¾ · A figure for screen 6's side quest, no task: two more basis changes,
+//      drawn without numbers. A shop's income and cost become the profit
+//      (the part of income above cost) and the two stacked; two thermometers
+//      on one wall become their average and their gap.
 
-export function NasibDoubts({}: Story) {
-  const s = useScene(2, [700, 2600]);
+const OB_BASE = 92;
+const OB_IN = 40;
+const OB_OUT = 24;
+const OB_T = [36, 64];
+
+export function OtherBases() {
+  const s = useScene(3, [700, 2600, 1800]);
+  const k = s.k;
+  const SAY = [
+    "দোকানের আয় আর খরচ, দুইটা column.",
+    "একই দুইটা, নতুন করে: লাভ, মানে আয়ের যে অংশ খরচের উপরে. আর দুইটার যোগফল.",
+    "এক দেয়ালে দুইটা thermometer.",
+    "নতুন করে: ওদের average আর ওদের ফারাক. প্রতিবার একই তথ্য, শুধু নতুন grid.",
+  ];
+  const dim = "transition-opacity duration-700 motion-reduce:transition-none";
+  const bar = (x: number, h: number, cls: string, y = OB_BASE - h) => <rect x={x} y={y} width={16} height={h} className={cls} />;
+  const label = (x: number, t: string) => (
+    <text x={x + 8} y={OB_BASE + 11} textAnchor="middle" fontSize={8} fontWeight={700} className="fill-foreground">
+      {t}
+    </text>
+  );
+
+  return (
+    <Scene scene={s} caption={<span key={k} className={FADE}>{SAY[k]}</span>}>
+      <svg viewBox="0 0 250 108" className="mx-auto block h-auto w-full max-w-[16rem]" aria-label="a shop's income and cost rewritten as profit and total; two thermometers rewritten as their average and their gap">
+        <g opacity={k >= 2 ? 0.35 : 1} className={dim}>
+          <text x={58} y={12} textAnchor="middle" fontSize={8.5} fontWeight={700} className="fill-muted">
+            দোকান
+          </text>
+          <path d={`M4 ${OB_BASE}H118`} strokeWidth={1} className="stroke-muted" />
+          {bar(8, OB_IN, "fill-cat-blue/70")}
+          {label(8, "আয়")}
+          {bar(30, OB_OUT, "fill-cat-teal/70")}
+          {label(30, "খরচ")}
+          {k >= 1 && (
+            <g className={FADE}>
+              <rect x={8} y={OB_BASE - OB_IN} width={16} height={OB_IN - OB_OUT} fill="none" strokeWidth={1.6} className="stroke-cat-coral" />
+              <path d={`M24 ${OB_BASE - OB_OUT}H66`} strokeWidth={1} strokeDasharray="2 2" className="stroke-muted" />
+            </g>
+          )}
+          {k >= 1 && (
+            <g className={POP}>
+              {bar(66, OB_IN - OB_OUT, "fill-cat-coral")}
+              {label(66, "লাভ")}
+            </g>
+          )}
+          {k >= 1 && (
+            <g className={POP} style={{ transitionDelay: "400ms" }}>
+              {bar(94, OB_OUT, "fill-cat-teal/70")}
+              {bar(94, OB_IN, "fill-cat-blue/70", OB_BASE - OB_OUT - OB_IN)}
+              {label(94, "যোগফল")}
+            </g>
+          )}
+        </g>
+        <g opacity={k >= 2 ? 1 : 0.35} className={dim}>
+          <text x={176} y={12} textAnchor="middle" fontSize={8.5} fontWeight={700} className="fill-muted">
+            thermometer
+          </text>
+          {[146, 172].map((x, i) => (
+            <g key={x}>
+              <rect x={x - 4} y={20} width={8} height={74} rx={4} fill="white" stroke="#94a3b8" strokeWidth={1} />
+              <rect x={x - 2} y={OB_T[i]} width={4} height={94 - OB_T[i]} className="fill-danger" />
+              <circle cx={x} cy={96} r={6.5} className="fill-danger" />
+            </g>
+          ))}
+          {k >= 3 && <Draw d={`M136 ${(OB_T[0] + OB_T[1]) / 2}H184`} strokeWidth={1.6} className="stroke-cat-violet" />}
+          {k >= 3 && (
+            <text x={202} y={(OB_T[0] + OB_T[1]) / 2 + 3} textAnchor="start" fontSize={8} fontWeight={700} className={`${FADE} fill-cat-violet`}>
+              average
+            </text>
+          )}
+          {k >= 3 && (
+            <g className={FADE}>
+              <path d={`M188 ${OB_T[0]}H194V${OB_T[1]}H188`} fill="none" strokeWidth={1.4} className="stroke-cat-coral" />
+              <text x={200} y={OB_T[0] + 3} textAnchor="start" fontSize={8} fontWeight={700} className="fill-cat-coral">
+                ফারাক
+              </text>
+            </g>
+          )}
+        </g>
+      </svg>
+    </Scene>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 7a · A story scene for screen 7's setup, no task: footsteps on the stairs.
+//      Chacha with his khata; the tenant's head comes up at the stair door;
+//      Fahim holds up the rooftop flat's card.
+
+function S7Tenant({ x, y }: { x: number; y: number }) {
+  return (
+    <g style={{ transform: `translate(${x}px, ${y}px)` }} className="pointer-events-none transition-transform duration-1000 ease-out motion-reduce:transition-none">
+      <path d="M-3.5 -22V-1M3.5 -22V-1" strokeWidth={5} strokeLinecap="round" stroke="#334155" />
+      <rect x={-9} y={-40} width={18} height={22} rx={5} fill="#64748b" />
+      <circle cy={-51} r={9} fill="#c68e5f" />
+      <path d="M-9.5 -52q0 -11 9.5 -11t9.5 11q-6 -6 -19 0Z" fill="#1c1917" />
+      <circle cx={-3.4} cy={-51} r={1.2} fill="#0f1b2d" />
+      <circle cx={3.4} cy={-51} r={1.2} fill="#0f1b2d" />
+    </g>
+  );
+}
+
+export function TenantStairs({}: Story) {
+  const s = useScene(3, [700, 2200, 2400]);
   const k = s.k;
 
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="evening" label="Nasib asks which grid's numbers are the real ones">
+      <Stage backdrop="evening" label="footsteps on the stairs: the tenant is coming up; Chacha checks his khata; Fahim holds up the rooftop flat's card (4, 2)">
         <RoofSet />
-        <CastPerson who="fahim" x={112} y={S1_GROUND} facing={1} mood={k >= 2 ? "puzzled" : "happy"} />
-        <NameTag x={112} y={S1_GROUND + 13} name="Fahim" />
-        <CastPerson who="nasib" x={206} y={S1_GROUND} facing={-1} arm={k >= 1 ? "point" : "down"} mood={k >= 1 ? "smug" : "plain"} />
-        <NameTag x={206} y={S1_GROUND + 13} name="Nasib" />
-        {k >= 1 && <Bubble x={206} y={S1_GROUND - 68} side="mid" lines={["Pick any grid you like,", "get any numbers you like."]} />}
-        {k >= 2 && <Bubble x={112} y={S1_GROUND - 68} side="left" tone="think" lines={["So which numbers", "are the real ones?"]} />}
+        {/* the stair head: a small room with its door open */}
+        <rect x={236} y={82} width={60} height={68} fill="#e7d7c1" stroke="#a8a29e" strokeWidth={1} />
+        <rect x={232} y={78} width={68} height={6} fill="#a8a29e" />
+        <rect x={252} y={104} width={24} height={46} fill="#1f2937" />
+        <S7Tenant x={264} y={k >= 2 ? 150 : 222} />
+        <rect x={236} y={150} width={60} height={30} fill="#d6d3d1" />
+        {k >= 2 && <NameTag x={264} y={GROUND + 13} name="ভাড়াটিয়া" />}
+        {k === 1 && (
+          <text x={266} y={98} textAnchor="middle" fontSize={8} fontWeight={700} fill="#78350f" className={FADE}>
+            ঠক ঠক ঠক
+          </text>
+        )}
+        <Chacha x={106} y={GROUND} arm="hold" facing={1} />
+        <NameTag x={106} y={GROUND + 13} name="চাচা" />
+        {k === 1 && <Bubble x={106} y={GROUND - 68} side="mid" lines={["উইঠা আসতেছে.", "দাম কী কমু?"]} />}
+        <CastPerson who="fahim" x={176} y={GROUND} facing={1} arm={k >= 2 ? "hold" : "down"} label />
+        {k >= 2 && <CastCard x={196} y={GROUND - 66} text="(4, 2) → ?" tone="amber" />}
       </Stage>
     </StoryFrame>
   );
 }
 
 // ---------------------------------------------------------------------------
-// 7 · 2.3's word map, and a square grid turned under it. The reader turns it
-//     15° at a time: every slot number glides, the king–queen distance and
-//     the cosine of man→king with woman→queen never move.
-
-const SG_F = makeFrame(-4, 4, -3.4, 3.4, 26, 10);
-const WORDS: { w: string; at: XY }[] = [
-  { w: "man", at: [-2.9, -2.1] },
-  { w: "woman", at: [1.1, -2.5] },
-  { w: "king", at: [-1.9, 2.4] },
-  { w: "queen", at: [2.4, 2.3] },
-];
-const W = (w: string) => WORDS.find((x) => x.w === w)!.at;
-const d2 = (p: XY, q: XY) => Math.hypot(p[0] - q[0], p[1] - q[1]);
-const cosOf = (u: XY, v: XY) => (u[0] * v[0] + u[1] * v[1]) / (Math.hypot(...u) * Math.hypot(...v));
-const KQ = d2(W("king"), W("queen"));
-const MK: XY = [W("king")[0] - W("man")[0], W("king")[1] - W("man")[1]];
-const WQ: XY = [W("queen")[0] - W("woman")[0], W("queen")[1] - W("woman")[1]];
-const COS = cosOf(MK, WQ);
-/** a word's slot numbers on a grid turned by `deg` */
-const slots = (p: XY, deg: number): XY => {
-  const a = (deg * Math.PI) / 180;
-  return [p[0] * Math.cos(a) + p[1] * Math.sin(a), -p[0] * Math.sin(a) + p[1] * Math.cos(a)];
-};
-const f1 = (n: number) => sg(Math.round(n * 10) / 10);
-const pair1 = (v: XY) => `(${f1(v[0])}, ${f1(v[1])})`;
-
-/**
- * A square grid turned by `deg` about the centre, clipped to the sheet, with
- * its two axes named near the middle (the words sit far out, so they never
- * clash). `spin` turns it further with a CSS transition, for a watch-only figure.
- */
-function TurnedGrid({ f, deg, name, spin = 0 }: { f: Frame; deg: number; name: string; spin?: number }) {
-  const a = (deg * Math.PI) / 180;
-  const e1: XY = [Math.cos(a), Math.sin(a)];
-  const e2: XY = [-Math.sin(a), Math.cos(a)];
-  const at = (i: number, j: number) => `${f.sx(i * e1[0] + j * e2[0])} ${f.sy(i * e1[1] + j * e2[1])}`;
-  let d = "";
-  for (let i = -6; i <= 6; i++) d += `M${at(i, -7)}L${at(i, 7)}M${at(-7, i)}L${at(7, i)}`;
-  const turning = {
-    style: { transform: `rotate(${-spin}deg)`, transformOrigin: `${f.sx(0)}px ${f.sy(0)}px` },
-    className: "transition-transform duration-1000 ease-in-out motion-reduce:transition-none",
-  };
-  return (
-    <>
-      <Clipped f={f} name={name}>
-        <g {...turning}>
-          <path d={d} strokeWidth={0.6} className="pointer-events-none fill-none stroke-cat-blue/30" />
-          <path d={`M${at(-7, 0)}L${at(7, 0)}M${at(0, -7)}L${at(0, 7)}`} strokeWidth={1.3} className="pointer-events-none fill-none stroke-[#0f1b2d]/50" />
-        </g>
-      </Clipped>
-      <g {...turning}>
-        <text x={f.sx(1.5 * e1[0] + 0.3 * e2[0])} y={f.sy(1.5 * e1[1] + 0.3 * e2[1])} textAnchor="middle" fontSize={7.5} fontWeight={700} className="pointer-events-none fill-[#5a6b7d]">
-          slot 1
-        </text>
-        <text x={f.sx(1.5 * e2[0] - 0.35 * e1[0])} y={f.sy(1.5 * e2[1] - 0.35 * e1[1])} textAnchor="middle" fontSize={7.5} fontWeight={700} className="pointer-events-none fill-[#5a6b7d]">
-          slot 2
-        </text>
-      </g>
-    </>
-  );
-}
-
-function WordDots({ f }: { f: Frame }) {
-  return (
-    <>
-      {WORDS.map((wd) => (
-        <g key={wd.w} className="pointer-events-none">
-          <circle cx={f.sx(wd.at[0])} cy={f.sy(wd.at[1])} r={4} className="fill-cat-violet" />
-          <text x={f.sx(wd.at[0])} y={f.sy(wd.at[1]) - 7} textAnchor="middle" fontSize={10} fontWeight={700} className="fill-[#0f1b2d]">
-            {wd.w}
-          </text>
-        </g>
-      ))}
-    </>
-  );
-}
-
-export function SpinTheGrid() {
-  const pass = useGate();
-  const [deg, setDeg] = useSeed("deg", 0);
-  const [seen, setSeen] = useSeed<number[]>("seen", [0]);
-  const [now] = useTween([deg], 700);
-  const enough = seen.length >= 4;
-
-  const spin = (d: number) => {
-    const next = clamp(deg + d, -90, 90);
-    setDeg(next);
-    if (seen.includes(next)) return;
-    const all = [...seen, next];
-    setSeen(all);
-    if (all.length === 4) pass("New grid, new numbers, same distances.");
-  };
-
-  return (
-    <>
-      <Plane f={SG_F} grid={0} axes={false} label="2.3's word map with a square grid turned under it" className="my-0! max-w-[15rem]">
-        <TurnedGrid f={SG_F} deg={now} name="sg" />
-        <WordDots f={SG_F} />
-      </Plane>
-      <div className="mt-2 flex items-center justify-center gap-2">
-        <button type="button" onClick={() => spin(-15)} disabled={deg <= -90} className={`${pill(false)} font-sans`}>
-          turn −15°
-        </button>
-        <span className="w-12 text-center font-mono text-sm tabular-nums">{sg(deg)}°</span>
-        <button type="button" onClick={() => spin(15)} disabled={deg >= 90} className={`${pill(false)} font-sans`}>
-          turn +15°
-        </button>
-      </div>
-      <div className="mx-auto mt-2 grid max-w-[19rem] grid-cols-2 gap-1.5 text-[0.8rem]">
-        <div className="rounded-xl border border-cat-coral/40 bg-cat-coral/5 px-2 py-1">
-          <div className="text-xs text-muted">king’s numbers</div>
-          <b className="font-mono tabular-nums">{pair1(slots(W("king"), now))}</b>
-        </div>
-        <div className="rounded-xl border border-cat-coral/40 bg-cat-coral/5 px-2 py-1">
-          <div className="text-xs text-muted">queen’s numbers</div>
-          <b className="font-mono tabular-nums">{pair1(slots(W("queen"), now))}</b>
-        </div>
-        <div className="rounded-xl border border-accent/40 bg-accent/5 px-2 py-1">
-          <div className="text-xs text-muted">king to queen</div>
-          <b className="font-mono">{KQ.toFixed(2)}</b>
-        </div>
-        <div className="rounded-xl border border-accent/40 bg-accent/5 px-2 py-1">
-          <div className="text-xs leading-tight text-muted">cosine, man→king and woman→queen</div>
-          <b className="font-mono">{COS.toFixed(2)}</b>
-        </div>
-      </div>
-      <Task done={enough}>Turn the grid three times. Watch which numbers move, and which never do.</Task>
-    </>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// 7½ · A figure for screen 7's explanation, no task: the man→king and
-//      woman→queen arrows on the map. The grid turns, every slot number
-//      changes, and the two arrows still match: 2.3's sum survives.
-
-const SA_ANG = [20, 20, 20, -40];
-
-export function SameArrows() {
-  const s = useScene(3, [700, 2200, 2200]);
-  const k = s.k;
-  const deg = SA_ANG[k];
-  const SAY = [
-    `Some grid the model happened to land in. King reads ${pair1(slots(W("king"), 20))}.`,
-    "The man-to-king arrow and the woman-to-queen arrow: the same shape.",
-    "Now turn the grid. Every slot number changes.",
-    `King now reads ${pair1(slots(W("king"), -40))}. The arrows still match: king − man + woman still lands on queen.`,
-  ];
-
-  return (
-    <Scene scene={s} caption={<span key={k} className={FADE}>{SAY[k]}</span>}>
-      <Plane f={SG_F} grid={0} axes={false} label="the grid turns under the word map; the two arrows stay the same" className="my-0! max-w-[11.5rem]">
-        <TurnedGrid f={SG_F} deg={20} spin={deg - 20} name="sa" />
-        {k >= 1 && <Arrow f={SG_F} from={W("man")} to={W("king")} tone="teal" w={2.2} draw />}
-        {k >= 1 && <Arrow f={SG_F} from={W("woman")} to={W("queen")} tone="teal" w={2.2} draw delay={300} />}
-        <WordDots f={SG_F} />
-      </Plane>
-    </Scene>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// 8 · Your turn. The rooftop flat, (4, 2). Dial a card, walk it; a wrong card
+// 7 · Your turn. The rooftop flat, (4, 2). Dial a card, walk it; a wrong card
 //     walks to where it really lands. Then price it: 8000 × 3 = 24000. The
-//     wrong prices are the two real slips (8000 × beds, 8000 × rooms).
+//     wrong prices are the two real slips (8000 × beds, 8000 × rooms), and
+//     each price plays out as what it counts: one 8000 chip per bed, per
+//     size step or per room, popping in one by one while the sum runs up.
 
 const YH_F = makeFrame(-1.3, 6.3, -2.3, 4.3, 24, 10);
 const YH_PRICES = [32000, 24000, 48000];
 const YH_RIGHT = 1;
+/** how many 8000s each price counts: 4 beds, 3 size steps, 6 rooms */
+const YH_COUNT = [4, 3, 6];
+const YH_SQ = "size-3 rounded-[2px]";
+
+/** one 8000 chip: what it counts (a bed, a size step's bed and bath, or one room), and 8000 under it */
+function YhChip({ kind, i }: { kind: number; i: number }) {
+  const bed = <span className={`${YH_SQ} bg-cat-blue/80`} />;
+  const bath = <span className={`${YH_SQ} bg-cat-teal/80`} />;
+  const name = kind === 0 ? "bed" : kind === 1 ? "size" : i < 4 ? "bed" : "bath";
+  return (
+    <span className={`${POP} grid justify-items-center gap-0.5`}>
+      <span className="flex gap-0.5">
+        {kind === 1 ? (
+          <>
+            {bed}
+            {bath}
+          </>
+        ) : kind === 2 && i >= 4 ? (
+          bath
+        ) : (
+          bed
+        )}
+      </span>
+      <span className="text-[0.6rem] leading-none text-muted">{name}</span>
+      <span className="font-mono text-[0.65rem] leading-none">8000</span>
+    </span>
+  );
+}
+
 const YH_NOPE: Record<number, string> = {
-  0: "That's 8000 × 4, the bed count. The rule counts size steps.",
-  2: "That's 8000 × 6 rooms. But one size step is two rooms.",
+  0: "এটা 8000 × 4. গুনলেন bed. কিন্তু rule গুনে size এর ধাপ.",
+  2: "এটা 8000 × 6 room. কিন্তু size এর এক ধাপে দুইটা room.",
 };
 
 export function YourHouse() {
@@ -1259,9 +1289,11 @@ export function YourHouse() {
   const [walks, setWalks] = useState(0);
   const [price, setPrice] = useSeed<number | null>("price", null);
   const [miss, setMiss] = useState(0);
+  const cp = usePlay(280);
   const land = (c: XY): XY => [c[0] + c[1], c[0] - c[1]];
   const cardOk = walked !== null && same(land(walked), ROOF);
-  const priced = price === YH_RIGHT;
+  const priced = price === YH_RIGHT && !cp.running;
+  const chips = price === null ? 0 : cp.running ? cp.k : YH_COUNT[price];
 
   const walk = () => {
     setWalked([s, m]);
@@ -1270,8 +1302,8 @@ export function YourHouse() {
   const choose = (i: number) => {
     if (priced) return;
     setPrice(i);
-    if (i === YH_RIGHT) pass("Card (3, 1): 3 size steps, 24000 taka.");
-    else setMiss((x) => x + 1);
+    setMiss((x) => x + 1);
+    cp.play(YH_COUNT[i], i === YH_RIGHT ? () => pass("Card (3, 1): 3 ধাপ size, 24000 টাকা.") : undefined);
   };
   const mid: XY | null = walked ? [walked[0], walked[0]] : null;
   const end: XY | null = walked ? land(walked) : null;
@@ -1291,11 +1323,11 @@ export function YourHouse() {
           </Plane>
         </div>
         <div className="min-w-0 flex-1 text-[0.85rem] leading-snug">
-          <div className="font-semibold">Rooftop flat</div>
+          <div className="font-semibold">ছাদের flat</div>
           <div className="font-mono">4 bed, 2 bath</div>
           {cardOk ? (
             <div className={`${FADE} mt-1 text-accent-text`}>
-              Card <b className="font-mono">(3, 1)</b>: 3 size steps, so 6 rooms. 1 imbalance step, so 2 more beds than baths.
+              Card <b className="font-mono">(3, 1)</b>: 3 ধাপ size, মানে 6 টা room. 1 ধাপ imbalance, মানে bath এর চেয়ে bed 2 টা বেশি.
             </div>
           ) : (
             <div className="mt-1 text-muted">
@@ -1308,28 +1340,28 @@ export function YourHouse() {
         <>
           <div className="mt-2 flex items-center justify-center gap-3 text-xs font-semibold text-muted">
             <span className="grid justify-items-center gap-0.5">
-              <Stepper value={s} onChange={setS} min={0} max={4} label="size steps" />
+              <Stepper value={s} onChange={setS} min={0} max={4} label="size এর ধাপ" />
               <span className="text-cat-blue">size</span>
             </span>
             <span className="grid justify-items-center gap-0.5">
-              <Stepper value={m} onChange={setM} min={-2} max={2} label="imbalance steps" />
+              <Stepper value={m} onChange={setM} min={-2} max={2} label="imbalance এর ধাপ" />
               <span className="text-cat-coral">imbalance</span>
             </span>
           </div>
           <div className="mt-2 flex justify-center">
             <button type="button" onClick={walk} className={primaryBtn}>
-              Walk the card
+              Card টা হাঁটান
             </button>
           </div>
           {walked && end ? (
             <Nope key={walks}>
-              Card {tup(walked)} lands at {tup(end)}. The rooftop flat is (4, 2).
+              Card {tup(walked)} গিয়ে থামলো {tup(end)} এ. ছাদের flat টা (4, 2) তে.
             </Nope>
           ) : null}
         </>
       ) : (
         <div className={FADE}>
-          <div className="mt-2 text-center text-sm font-medium text-muted">Now the rent, with 8000 taka a size step:</div>
+          <div className="mt-2 text-center text-sm font-medium text-muted">এবার ভাড়া, size এর প্রতি ধাপে 8000 টাকা ধরে:</div>
           <div className="mt-1.5 grid grid-cols-3 gap-1.5">
             {YH_PRICES.map((p, i) => (
               <button
@@ -1343,21 +1375,33 @@ export function YourHouse() {
               </button>
             ))}
           </div>
-          {price !== null && !priced ? <Nope key={miss}>{YH_NOPE[price]}</Nope> : null}
+          {price !== null ? (
+            <div className="mt-2">
+              <div className="flex min-h-10 flex-wrap items-end justify-center gap-1.5">
+                {Array.from({ length: chips }, (_, j) => (
+                  <YhChip key={`${miss}-${j}`} kind={price} i={j} />
+                ))}
+              </div>
+              <div className="mt-1 text-center font-mono text-sm">
+                8000 × {chips} = <b className={!cp.running && price !== YH_RIGHT ? "text-danger" : ""}>{8000 * chips}</b>
+              </div>
+            </div>
+          ) : null}
+          {price !== null && price !== YH_RIGHT && !cp.running ? <Nope key={miss}>{YH_NOPE[price]}</Nope> : null}
           {priced ? (
-            <div className={`${POP} mx-auto mt-2 w-fit rounded-lg border-2 border-[#b45309] bg-[#fbf6e9] px-3 py-1 font-mono text-sm font-bold text-[#b45309]`}>
-              rooftop flat: 24000 taka
+            <div className={`${POP} mx-auto mt-2 w-fit rounded-lg border-2 border-[#b45309] bg-[#fbf6e9] px-3 py-1 text-sm font-bold text-[#b45309]`}>
+              ছাদের flat: <span className="font-mono">24000</span> টাকা
             </div>
           ) : null}
         </div>
       )}
-      <Task done={priced}>Find the rooftop flat’s card and walk it. Then pick its rent.</Task>
+      <Task done={priced}>ছাদের flat এর card বের করে হাঁটান. তারপর ওর ভাড়া বেছে নিন.</Task>
     </>
   );
 }
 
 // ---------------------------------------------------------------------------
-// 8½ · A figure for screen 8's explanation, no task: the khata's flats on the
+// 7½ · A figure for screen 7's explanation, no task: the khata's flats on the
 //      size line, the rooftop flat landing at 3 steps, right beside flat
 //      (3, 3) at 25000. Its imbalance hardly mattered.
 
@@ -1366,9 +1410,9 @@ export function SameSizeRow() {
   const k = s.k;
   const sx = (v: number) => 16 + v * 58;
   const SAY = [
-    "The khata's flats by size alone.",
-    "The rooftop flat lands at 3 size steps: 24000.",
-    "Right beside flat (3, 3), same size, 25000. The imbalance hardly mattered.",
+    "খাতার flat গুলা, শুধু size দিয়ে সাজানো.",
+    "ছাদের flat বসলো size এর 3 ধাপে: 24000.",
+    "ঠিক পাশেই flat (3, 3), একই size, ভাড়া 25000. Imbalance প্রায় কিছুই বদলায় নাই.",
   ];
 
   return (
@@ -1397,7 +1441,7 @@ export function SameSizeRow() {
             <path d={`M${sx(3)} 44V30`} strokeWidth={1.2} className="stroke-[#b45309]" />
             <rect x={sx(3) - 34} y={10} width={68} height={20} rx={4} fill="#fbf6e9" stroke="#b45309" strokeWidth={1.4} />
             <text x={sx(3)} y={24} textAnchor="middle" fontSize={9} fontWeight={700} fill="#b45309">
-              rooftop: 24
+              ছাদ: 24
             </text>
           </g>
         )}
@@ -1407,7 +1451,99 @@ export function SameSizeRow() {
 }
 
 // ---------------------------------------------------------------------------
-// 9 · Try it: Nasib's card (2, 1) on Fahim's grid. Tap the flat's spot on the
+// 7¾ · A second figure for screen 7's explanation, no task: Chacha looks at
+//      his khata one last time. A page of it, the rows from FLATS; flat
+//      (3, 3) at 25000 is ringed, and he writes 24000 on the rooftop's row.
+
+const CW_ROWS: [string, string][] = [
+  ["(2, 2)", "16000"],
+  ["(3, 3)", "25000"],
+  ["(4, 3)", "27000"],
+];
+const CW_X = 142;
+const CW_Y = 30;
+
+export function ChachaWrites() {
+  const s = useScene(2, [700, 2200]);
+  const k = s.k;
+  const row = (i: number) => CW_Y + 14 + i * 15;
+
+  return (
+    <StoryFrame scene={s}>
+      <Stage backdrop="evening" label="Chacha looks at his khata one last time: flat (3, 3), the same size, is 25000; he writes 24000 for the rooftop flat">
+        <RoofSet />
+        <Chacha x={108} y={GROUND} arm={k >= 2 ? "point" : "hold"} />
+        <NameTag x={108} y={GROUND + 13} name="চাচা" />
+        <g className="pointer-events-none">
+          <rect x={CW_X - 8} y={CW_Y - 12} width={128} height={78} rx={2} fill="white" stroke="#b91c1c" strokeWidth={1.2} />
+          <path d={`M${CW_X + 2} ${CW_Y - 12}V${CW_Y + 66}`} stroke="#fca5a5" strokeWidth={0.8} />
+          <text x={CW_X + 8} y={CW_Y} fontSize={7.5} fontWeight={700} fill="#5a6b7d">
+            flat
+          </text>
+          <text x={CW_X + 112} y={CW_Y} textAnchor="end" fontSize={7.5} fontWeight={700} fill="#5a6b7d">
+            ভাড়া
+          </text>
+          {CW_ROWS.map(([f, r], i) => (
+            <g key={f}>
+              <text x={CW_X + 8} y={row(i)} fontSize={8.5} fontWeight={600} fill="#0f1b2d" fontFamily="ui-monospace, monospace">
+                {f}
+              </text>
+              <text x={CW_X + 112} y={row(i)} textAnchor="end" fontSize={8.5} fontWeight={600} fill="#0f1b2d" fontFamily="ui-monospace, monospace">
+                {r}
+              </text>
+            </g>
+          ))}
+          <text x={CW_X + 8} y={row(3)} fontSize={8.5} fontWeight={700} fill="#b45309">
+            ছাদ
+          </text>
+          <text x={CW_X + 26} y={row(3)} fontSize={8.5} fontWeight={700} fill="#b45309" fontFamily="ui-monospace, monospace">
+            (4, 2)
+          </text>
+          {k < 2 && <path d={`M${CW_X + 80} ${row(3) + 2}H${CW_X + 112}`} stroke="#a8a29e" strokeWidth={0.8} strokeDasharray="2 2" />}
+        </g>
+        {k >= 1 && <rect x={CW_X + 2} y={row(1) - 10} width={114} height={14} rx={4} fill="none" stroke="#b45309" strokeWidth={1.4} strokeDasharray="3 2" className={FADE} />}
+        {k >= 2 && (
+          <text x={CW_X + 112} y={row(3)} textAnchor="end" fontSize={8.5} fontWeight={800} fill="#b45309" fontFamily="ui-monospace, monospace" className={FADE}>
+            24000
+          </text>
+        )}
+        {k >= 2 && <Draw d={`M${CW_X + 82} ${row(3) + 3}H${CW_X + 112}`} strokeWidth={1.2} className="stroke-[#b45309]" />}
+      </Stage>
+    </StoryFrame>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 8a · A story scene for screen 8's setup, no task: Nasib writes a card on
+//      Fahim's grid, (2, 1), holds it up and asks which flat it is. The
+//      answer stays with the exercise.
+
+export function NasibCard({}: Story) {
+  const s = useScene(2, [700, 2000]);
+  const k = s.k;
+
+  return (
+    <StoryFrame scene={s}>
+      <Stage backdrop="evening" label="Nasib writes a card on Fahim's grid, (2, 1), and asks Fahim which flat it is in beds and baths">
+        <RoofSet />
+        <CastPerson who="nasib" x={150} y={GROUND} facing={1} arm={k >= 1 ? "hold" : "point"} label />
+        {k >= 1 && (
+          <g className={FADE}>
+            <text x={194} y={GROUND - 58} textAnchor="middle" fontSize={6.5} fontWeight={700} fill="#5a6b7d">
+              ফাহিমের grid
+            </text>
+          </g>
+        )}
+        {k >= 1 && <CastCard x={194} y={GROUND - 44} text="(2, 1)" tone="blue" />}
+        {k >= 2 && <Bubble x={150} y={GROUND - 68} side="mid" lines={["bed আর bath এ এটা", "কোন flat?"]} />}
+        <CastPerson who="fahim" x={240} y={GROUND} facing={-1} mood={k >= 2 ? "puzzled" : "plain"} label />
+      </Stage>
+    </StoryFrame>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 8 · Try it: Nasib's card (2, 1) on Fahim's grid. Tap the flat's spot on the
 //     (bed, bath) sheet; then the card walks, 2 size steps and 1 imbalance
 //     step, to (3, 1). A wrong tap stays where it was dropped, in red.
 
@@ -1433,23 +1569,18 @@ export function TryConvertBack() {
     setTries((t) => t + 1);
     p.play(2, () => {
       setWalked(true);
-      if (same(at, TCB_AT)) pass("Every card converts back. No new facts.");
+      if (same(at, TCB_AT)) pass("প্রতিটা card ফেরত যায়. নতুন তথ্য নাই.");
     });
   };
 
   return (
     <>
       <div className="mx-auto w-fit rounded-lg border-2 border-cat-violet px-3 py-1 text-center">
-        <div className="text-xs text-muted">Nasib’s card on Fahim’s grid</div>
+        <div className="text-xs text-muted">ফাহিমের grid এ নাসিবের card</div>
         <div className="font-mono font-bold text-cat-violet">size 2, imbalance 1</div>
       </div>
       <Plane f={TCB_F} ticks={1} drag={{ down }} label="tap the spot on the bed and bath sheet where the card (2, 1) really is" className="my-2! max-w-[16rem]">
-        <AxisName x={TCB_F.sx(5.4)} y={TCB_F.sy(0) - 5} anchor="end">
-          bed
-        </AxisName>
-        <AxisName x={TCB_F.sx(0) + 5} y={TCB_F.sy(3.45)} anchor="start">
-          bath
-        </AxisName>
+        <BedBath f={TCB_F} x={5.4} />
         {drop && step >= 1 && <Arrow key={`s${tries}`} f={TCB_F} from={O} to={TCB_MID} tone="blue" w={2.4} draw />}
         {drop && step >= 2 && <Arrow key={`m${tries}`} f={TCB_F} from={TCB_MID} to={TCB_AT} tone="coral" w={2.4} draw />}
         {drop && step >= 2 && <Dot f={TCB_F} at={TCB_AT} r={4} className={`fill-cat-violet ${POP}`} />}
@@ -1460,32 +1591,32 @@ export function TryConvertBack() {
       {drop && step >= 2 && !right ? (
         <Nope key={tries}>
           {same(drop, TCB_CARD)
-            ? "That reads the card as beds and baths. Watch it walk: 2 size steps reach (2, 2), then 1 imbalance step lands on (3, 1)."
-            : `The card walks to (3, 1), not ${tup(drop)}. Tap where it landed.`}
+            ? "card টাকে পড়লেন bed আর bath হিসাবে. হাঁটাটা দেখুন. 2 ধাপ size এ (2, 2). তারপর 1 ধাপ imbalance এ (3, 1)."
+            : `Card টা হেঁটে গেলো (3, 1) এ, ${tup(drop)} এ না. যেখানে থামলো, সেখানে tap করুন.`}
         </Nope>
       ) : null}
       {right && step >= 2 ? (
         <div className={`${FADE} mx-auto mt-1 max-w-sm rounded-2xl bg-accent/10 px-3 py-1.5 text-center text-[0.85rem] leading-snug text-accent-text`}>
-          Card (2, 1) is flat (3, 1): 3 beds, 1 bath.
+          Card (2, 1) মানে flat (3, 1): 3 bed, 1 bath.
         </div>
       ) : null}
-      <Task done={right && step >= 2}>Tap the spot where Nasib’s card really is, in beds and baths.</Task>
+      <Task done={right && step >= 2}>নাসিবের card টা bed আর bath এ আসলে কোথায়, সেই জায়গায় tap করুন.</Task>
     </>
   );
 }
 
 // ---------------------------------------------------------------------------
-// 9½ · A figure for the exercise's explanation, no task: two sums one way,
+// 8½ · A figure for the exercise's explanation, no task: two sums one way,
 //      two sums back. Nothing lost, nothing added.
 
 export function BackAndForth() {
-  const s = useScene(3, [700, 1800, 1800]);
+  const s = useScene(3, [700, 2000, 2000]);
   const k = s.k;
   const SAY = [
-    "Nasib's card, (2, 1): size 2, imbalance 1.",
-    "Beds: size plus imbalance, 2 + 1 = 3. Baths: size minus imbalance, 2 − 1 = 1.",
-    "And back again: size = (3 + 1) ÷ 2 = 2, imbalance = (3 − 1) ÷ 2 = 1.",
-    "Two sums each way. Nothing lost, nothing added.",
+    "নাসিবের card, (2, 1): size 2, imbalance 1.",
+    "Bed: size যোগ imbalance, 2 + 1 = 3. Bath: size বিয়োগ imbalance, 2 − 1 = 1.",
+    "আবার ফেরত: size = (3 + 1) ÷ 2 = 2, imbalance = (3 − 1) ÷ 2 = 1.",
+    "দুই দিকেই দুইটা করে হিসাব. কিছু হারায় না, কিছু যোগও হয় না.",
   ];
 
   return (
@@ -1495,18 +1626,10 @@ export function BackAndForth() {
           <div className="text-[0.65rem] text-muted">size, imbalance</div>
           <div className="font-mono font-bold text-cat-violet">(2, 1)</div>
         </div>
-        <div className="grid w-16 justify-items-center gap-0.5 font-mono text-xs">
-          {k >= 1 && k < 3 && (
-            <span key="to" className={`${FADE} ${k === 1 ? "text-foreground" : "text-muted"}`}>
-              — sums →
-            </span>
-          )}
-          {k >= 2 && (
-            <span key="back" className={`${FADE} ${k === 2 ? "text-foreground" : "text-muted"}`}>
-              ← sums —
-            </span>
-          )}
-        </div>
+        <svg viewBox="0 0 64 40" className="h-auto w-16" aria-hidden="true">
+          {k >= 1 && k < 3 && <Draw d="M4 13H56M50 8L57 13L50 18" strokeWidth={1.8} className={k === 1 ? "stroke-[#0f1b2d]" : "stroke-[#5a6b7d]/50"} />}
+          {k >= 2 && <Draw d="M60 28H8M14 23L7 28L14 33" strokeWidth={1.8} className={k === 2 ? "stroke-[#0f1b2d]" : "stroke-[#5a6b7d]/50"} />}
+        </svg>
         <div className="rounded-lg border-2 border-[#b45309] px-2 py-1 text-center">
           <div className="text-[0.65rem] text-muted">bed, bath</div>
           <div className="font-mono font-bold text-[#b45309]">{k >= 1 ? <span className={POP}>(3, 1)</span> : "(?, ?)"}</div>
@@ -1517,10 +1640,63 @@ export function BackAndForth() {
 }
 
 // ---------------------------------------------------------------------------
-// 10a · A story scene for the finale's setup, no task: night, the new
-//       flat's windows light up, and the jilapi comes apart in two.
+// 8¾ · A second figure for the exercise's explanation, no task: the same slip
+//      twice. Nasib's (2, 1) read as bed and bath lands on the wrong flat; 5.5's
+//      school card (−1, 3) read on the map lands off the road. Walked on their
+//      own grids (Fahim's buttons; the rickshaw lanes, (1, 0) and (1, 1)), both
+//      land home: flat (3, 1), the school at (2, 3).
 
-function S10House({ lit }: { lit: number }) {
+const SS_L = makeFrame(-0.4, 3.6, -1.4, 2.6, 20, 8);
+const SS_R = makeFrame(-1.6, 4.2, -0.4, 3.6, 20, 8);
+const SS_SCHOOL: XY = [2, 3];
+
+export function SchoolSlip() {
+  const s = useScene(2, [700, 2400]);
+  const k = s.k;
+  const SAY = [
+    "নাসিবের card (2, 1), আর কালকের স্কুলের রাস্তার card (−1, 3).",
+    "দুইটাকেই পুরানো grid এর slot হিসাবে পড়লাম. দুইটাই ভুল জায়গায় থামলো.",
+    "যার card, তার grid এ হাঁটলে: flat (3, 1), আর স্কুলের গেট.",
+  ];
+  const tag = (t: string, cls: string) => <div className={`text-center font-mono text-xs font-bold ${cls}`}>{t}</div>;
+
+  return (
+    <Scene scene={s} caption={<span key={k} className={FADE}>{SAY[k]}</span>}>
+      <div className="mx-auto flex max-w-[17rem] items-end justify-center gap-3">
+        <div className="w-[7.2rem] shrink-0">
+          {tag("(2, 1)", "text-cat-violet")}
+          <Plane f={SS_L} ticks={1} label="Nasib's card (2, 1): read as bed and bath it is the wrong flat; walked on Fahim's grid it is flat (3, 1)" className="my-0! max-w-none">
+            <BedBath f={SS_L} x={3.5} y={2.45} />
+            {k === 1 && <Dot f={SS_L} at={[2, 1]} r={4} className={`fill-danger ${POP}`} />}
+            {k >= 2 && <Arrow f={SS_L} from={O} to={[2, 2]} tone="blue" w={2} draw />}
+            {k >= 2 && <Arrow f={SS_L} from={[2, 2]} to={[3, 1]} tone="coral" w={2} draw delay={600} />}
+            {k >= 2 && <Dot f={SS_L} at={[3, 1]} r={4} className={`fill-cat-violet ${POP}`} />}
+          </Plane>
+        </div>
+        <div className="w-[7.2rem] shrink-0">
+          {tag("(−1, 3)", "text-cat-coral")}
+          <Plane f={SS_R} ticks={1} label="the school's road card (−1, 3): read on the map it is off in a field; walked on the rickshaw lanes it is the school gate" className="my-0! max-w-none">
+            <g className="pointer-events-none">
+              <path d={`M${SS_R.sx(SS_SCHOOL[0]) - 8} ${SS_R.sy(SS_SCHOOL[1]) + 6}V${SS_R.sy(SS_SCHOOL[1]) - 4}L${SS_R.sx(SS_SCHOOL[0])} ${SS_R.sy(SS_SCHOOL[1]) - 10}L${SS_R.sx(SS_SCHOOL[0]) + 8} ${SS_R.sy(SS_SCHOOL[1]) - 4}V${SS_R.sy(SS_SCHOOL[1]) + 6}Z`} fill="#fde7c7" stroke="#92400e" strokeWidth={1} />
+              <text x={SS_R.sx(SS_SCHOOL[0]) + 10} y={SS_R.sy(SS_SCHOOL[1]) + 3} textAnchor="start" fontSize={7} fontWeight={700} fill="#92400e">
+                স্কুল
+              </text>
+            </g>
+            {k === 1 && <Dot f={SS_R} at={[-1, 3]} r={4} className={`fill-danger ${POP}`} />}
+            {k >= 2 && <Arrow f={SS_R} from={O} to={[-1, 0]} tone="blue" w={2} draw />}
+            {k >= 2 && <Arrow f={SS_R} from={[-1, 0]} to={SS_SCHOOL} tone="coral" w={2} draw delay={600} />}
+          </Plane>
+        </div>
+      </div>
+    </Scene>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 9a · A story scene for the finale's setup, no task: night, the new
+//      flat's windows light up, and the jilapi comes apart in two.
+
+function S9House({ lit }: { lit: number }) {
   const wins: XY[] = [
     [34, 58],
     [62, 58],
@@ -1548,21 +1724,21 @@ export function FirstNight({}: Story) {
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="night" label="the first night in the new flat: the windows light up, and Fahim and Nasib split the jilapi">
-        <S10House lit={k >= 1 ? 6 : 0} />
-        <CastPerson who="fahim" x={k >= 3 ? 176 : 196} y={S1_GROUND} facing={1} arm={k >= 3 ? "hold" : "down"} mood={k >= 2 ? "happy" : "plain"} walking={k === 3} ms={900} />
-        <NameTag x={k >= 3 ? 176 : 196} y={S1_GROUND + 13} name="Fahim" />
-        <CastPerson who="nasib" x={k >= 3 ? 268 : 248} y={S1_GROUND} facing={-1} arm={k >= 2 ? "hold" : "down"} mood={k >= 2 ? "happy" : "plain"} walking={k === 3} ms={900} />
-        <NameTag x={k >= 3 ? 268 : 248} y={S1_GROUND + 13} name="Nasib" />
-        {k === 2 && <Jilapi x={258} y={S1_GROUND - 36} s={0.9} />}
+        <S9House lit={k >= 1 ? 6 : 0} />
+        <CastPerson who="fahim" x={k >= 3 ? 176 : 196} y={GROUND} facing={1} arm={k >= 3 ? "hold" : "down"} mood={k >= 2 ? "happy" : "plain"} walking={k === 3} ms={900} />
+        <NameTag x={k >= 3 ? 176 : 196} y={GROUND + 13} name="ফাহিম" night />
+        <CastPerson who="nasib" x={k >= 3 ? 268 : 248} y={GROUND} facing={-1} arm={k >= 2 ? "hold" : "down"} mood={k >= 2 ? "happy" : "plain"} walking={k === 3} ms={900} />
+        <NameTag x={k >= 3 ? 268 : 248} y={GROUND + 13} name="নাসিব" night />
+        {k === 2 && <Jilapi x={258} y={GROUND - 36} s={0.9} />}
         {k >= 3 && (
           <>
             <g className={POP}>
-              <Jilapi x={190} y={S1_GROUND - 28} s={0.8} half />
+              <Jilapi x={190} y={GROUND - 28} s={0.8} half />
             </g>
             <g className={POP}>
-              <Jilapi x={254} y={S1_GROUND - 28} s={0.8} half />
+              <Jilapi x={254} y={GROUND - 28} s={0.8} half />
             </g>
-            <Bubble x={222} y={S1_GROUND - 72} side="mid" lines={["Half each.", "We were both right."]} />
+            <Bubble x={222} y={GROUND - 72} side="mid" lines={["অর্ধেক অর্ধেক.", "দুইজনই ঠিক."]} />
           </>
         )}
       </Stage>
@@ -1571,37 +1747,19 @@ export function FirstNight({}: Story) {
 }
 
 // ---------------------------------------------------------------------------
-// 10 · The finale. Open the sealed bet: Nasib's half (the card converted
-//      back), Fahim's half (8000 × size fit all 8), and the jilapi splits.
-//      Then the five things to carry forward, one card per tap.
-
-const FIVE = [
-  ["Span", "Everything your buttons can reach. It always holds 0, and it can be smaller than you think."],
-  ["Independent", "No button is extra. The only way back to 0 is to press nothing at all."],
-  ["Basis", "Enough buttons to reach everywhere, none extra. Every basis has the same count: the dimension."],
-  ["Coordinates", "Numbers belong to a basis, not to the arrow. The school was (2, 3) and (−1, 3)."],
-  ["A good basis", "It makes the data say something: (3, 2) became (2.5, 0.5), and rent took one number."],
-];
+// 9 · The finale. Open the sealed bet: Nasib's half (the card converted
+//     back), Fahim's half (8000 × size fit all 8), and the jilapi splits.
 
 export function BetSettled() {
   const pass = useGate();
   const [open, setOpen] = useSeed("open", false);
-  const [seen, setSeen] = useSeed<number[]>("seen", []);
-  const [at, setAt] = useSeed<number | null>("at", null);
   const p = usePlay(900);
   const shown = open ? (p.running ? p.k : 3) : 0;
   const [gap] = useTween([shown >= 3 ? 1 : 0], 900);
 
-  const read = (i: number) => {
-    setAt(i);
-    if (seen.includes(i)) return;
-    const next = [...seen, i];
-    setSeen(next);
-    if (next.length === 5) pass("Same facts, better grid: both were right.");
-  };
   const unseal = () => {
     setOpen(true);
-    p.play(3);
+    p.play(3, () => pass("একই তথ্য, ভালো grid: দুইজনই ঠিক."));
   };
 
   return (
@@ -1609,19 +1767,19 @@ export function BetSettled() {
       {!open ? (
         <div className="flex justify-center">
           <button type="button" onClick={unseal} className={primaryBtn}>
-            Open the sealed bet
+            সিল করা বাজি খুলুন
           </button>
         </div>
       ) : (
         <div className="mx-auto grid max-w-sm gap-1.5">
           {shown >= 1 ? (
             <div className={`${FADE} rounded-xl border-2 border-accent/50 bg-accent/5 px-2.5 py-1 text-[0.8rem] leading-snug`}>
-              <b className="text-cat-coral">Nasib</b> ✓ No new facts: card (2, 1) turned straight back into flat (3, 1).
+              <b className="text-cat-coral">নাসিব</b> <Tick /> নতুন কোনো তথ্য নাই: card (2, 1) সোজা ফেরত গেলো flat (3, 1) এ.
             </div>
           ) : null}
           {shown >= 2 ? (
             <div className={`${FADE} rounded-xl border-2 border-accent/50 bg-accent/5 px-2.5 py-1 text-[0.8rem] leading-snug`}>
-              <b className="text-cat-blue">Fahim</b> ✓ One number tells the rent: 8000 a size step fit all 8 flats.
+              <b className="text-cat-blue">ফাহিম</b> <Tick /> ভাড়া এক সংখ্যায়: size এর প্রতি ধাপে 8000, আর 8 টা flat এই মিলে গেলো.
             </div>
           ) : null}
         </div>
@@ -1636,67 +1794,103 @@ export function BetSettled() {
           <Jilapi x={100} y={36} />
         )}
       </svg>
-      {shown >= 3 ? (
-        <div className={FADE}>
-          <div className="text-center text-sm font-semibold">Both were right. The jilapi gets split.</div>
-          <div className="mt-2 text-center text-xs text-muted">Five things to carry forward. Tap each.</div>
-          <div className="mt-1 flex justify-center gap-1.5">
-            {FIVE.map(([name], i) => (
-              <button key={name} type="button" onClick={() => read(i)} className={`${pill(at === i)} size-9 px-0! ${seen.includes(i) && at !== i ? "border-accent/60 text-accent-text" : ""}`}>
-                {i + 1}
-              </button>
-            ))}
-          </div>
-          <div className="mx-auto mt-2 min-h-16 max-w-sm rounded-2xl border border-border px-3 py-1.5 text-center text-[0.85rem] leading-snug">
-            {at === null ? (
-              <span className="text-muted">Start with 1.</span>
-            ) : (
-              <span key={at} className={FADE}>
-                <b>{FIVE[at][0]}.</b> {FIVE[at][1]}
-              </span>
-            )}
-          </div>
-        </div>
-      ) : null}
-      <Task done={seen.length === 5}>Open the bet, then tap all five things to carry forward.</Task>
+      {shown >= 3 ? <div className={`${FADE} text-center text-sm font-semibold`}>দুইজনই ঠিক. জিলাপি ভাগ হলো.</div> : null}
+      <Task done={shown >= 3}>সিল করা বাজিটা খুলুন.</Task>
     </>
   );
 }
 
 // ---------------------------------------------------------------------------
-// 10½ · A figure for the finale's explanation, no task: the PCA sentence,
-//       built one phrase at a time, each tagged with where it was learned.
+// 9¼ · A figure for the finale's explanation, no task: the khata twice. The
+//      same 8 rows and rents, first as (bed, bath), then the two columns
+//      rewritten as (size, imbalance); then size alone lines up with the rent
+//      and the imbalance column fades. No row, no column added.
 
-const PCA = [
-  ["PCA finds, from the data itself,", ""],
-  ["a basis", "5.3"],
-  ["at right angles, each step 1 long,", "4.2 · 3.6"],
-  ["whose first direction spreads the data the most, then the next,", "4.5"],
-  ["and keeps only the first few.", "today"],
-];
+const KT_ROW = 10.5;
 
-export function PcaWords() {
-  const s = useScene(4, [700, 1400, 1400, 1800, 1800]);
+export function KhataTwice() {
+  const s = useScene(2, [700, 2600]);
   const k = s.k;
   const SAY = [
-    "The big idea waiting at the end of this course, in one line.",
-    "A basis: enough buttons, none extra.",
-    "Square and 1 long: orthonormal, so every number is on one scale.",
-    "The direction the data spreads most goes first, like the rent's slant.",
-    "Keep the first few, drop the rest, like dropping imbalance. Every word is now yours.",
+    "চাচার খাতা: 8 টা flat, bed, bath আর ভাড়া.",
+    "একই 8 টা row, একই ভাড়া. শুধু দুইটা column নতুন করে লেখা: size আর imbalance.",
+    "এখন size পড়লেই ভাড়া বোঝা যায়. নতুন তথ্য নাই, শুধু দেখা সহজ.",
   ];
+  const cols: [string, (f: Flat) => number][] =
+    k >= 1
+      ? [
+          ["size", sizeOf],
+          ["imbalance", imbOf],
+        ]
+      : [
+          ["bed", (f) => f.bed],
+          ["bath", (f) => f.bath],
+        ];
+  const X = [40, 96, 164];
+  const ink = (c: number) => (k >= 2 ? (c === 0 ? "#6d28d9" : "#94a3b8") : "#0f1b2d");
 
   return (
     <Scene scene={s} caption={<span key={k} className={FADE}>{SAY[k]}</span>}>
-      <div className="mx-auto flex max-w-[17rem] flex-wrap items-baseline justify-center gap-x-1.5 gap-y-1 text-[0.9rem] leading-snug">
-        {PCA.slice(0, k + 1).map(([words, tag], i) => (
-          <span key={i} className={`${FADE} ${i === k && i > 0 ? "font-semibold" : ""}`}>
-            {words}
-            {tag ? <sup className="ml-0.5 rounded bg-cat-violet/10 px-1 text-[0.6rem] font-semibold text-cat-violet">{tag}</sup> : null}
-          </span>
+      <svg viewBox="0 0 200 104" className="mx-auto block h-auto w-full max-w-[13rem]" aria-label="the khata's 8 flats, as bed and bath, then as size and imbalance, with the same rents">
+        <rect x={2} y={1} width={196} height={102} rx={3} fill="white" stroke="#b91c1c" strokeWidth={1} />
+        {cols.map(([name], c) => (
+          <text key={`${k >= 1}${name}`} x={X[c]} y={12} textAnchor="middle" fontSize={8} fontWeight={700} fill={ink(c)} className={FADE}>
+            {name}
+          </text>
         ))}
-      </div>
+        <text x={X[2]} y={12} textAnchor="middle" fontSize={8} fontWeight={700} fill="#0f1b2d">
+          ভাড়া
+        </text>
+        <path d="M8 16H192" stroke="#e5e7eb" strokeWidth={1} />
+        {FLATS.map((fl, i) => {
+          const y = 25 + i * KT_ROW;
+          return (
+            <g key={i}>
+              {cols.map(([name, v], c) => (
+                <text key={`${k >= 1}${name}`} x={X[c]} y={y} textAnchor="middle" fontSize={8} fontWeight={c === 0 && k >= 2 ? 800 : 600} fill={ink(c)} fontFamily="ui-monospace, monospace" className={`${FADE} transition-[fill] duration-700 motion-reduce:transition-none`}>
+                  {say(v(fl))}
+                </text>
+              ))}
+              {k >= 2 && <rect x={X[2] - 22} y={y - 8} width={44} height={10} rx={2} style={{ fill: heat(fl.rent) }} opacity={0.6} className={FADE} />}
+              <text x={X[2]} y={y} textAnchor="middle" fontSize={8} fontWeight={600} fill="#0f1b2d" fontFamily="ui-monospace, monospace">
+                {fl.rent}000
+              </text>
+            </g>
+          );
+        })}
+      </svg>
     </Scene>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 9½ · A figure for the finale's explanation, no task: the open question.
+//      The rooftop flat's two cards; Nasib, half a jilapi in hand, isn't
+//      done: any grid, any numbers. Then which ones are real? It stops at "?".
+
+export function NasibNotDone() {
+  const s = useScene(3, [700, 1800, 2400]);
+  const k = s.k;
+
+  return (
+    <StoryFrame scene={s}>
+      <Stage backdrop="night" label="Nasib, half a jilapi in hand, says any grid gives any numbers; which ones are real?">
+        <CastPerson who="fahim" x={96} y={GROUND} facing={1} arm="hold" />
+        <NameTag x={96} y={GROUND + 13} name="ফাহিম" night />
+        <Jilapi x={110} y={GROUND - 28} s={0.8} half />
+        <CastPerson who="nasib" x={220} y={GROUND} facing={-1} arm={k >= 2 ? "point" : "hold"} mood={k >= 2 ? "smug" : "plain"} />
+        <NameTag x={220} y={GROUND + 13} name="নাসিব" night />
+        {k < 2 && <Jilapi x={206} y={GROUND - 28} s={0.8} half />}
+        {k >= 1 && <CastCard x={134} y={40} text="(4, 2)" tone="amber" />}
+        {k >= 1 && <CastCard x={186} y={40} text="(3, 1)" tone="blue" />}
+        {k >= 2 && <Bubble x={220} y={GROUND - 68} side="left" lines={["যেকোনো grid নিলে", "যেকোনো সংখ্যা."]} />}
+        {k >= 3 && (
+          <text x={158} y={112} textAnchor="middle" fontSize={22} fontWeight={800} fill="#fde047" className={POP}>
+            ?
+          </text>
+        )}
+      </Stage>
+    </StoryFrame>
   );
 }
 
@@ -1707,24 +1901,30 @@ export const fixtures: Fixtures = {
   RooftopBet: { start: { k: 0 }, chacha: { k: 1 }, fahim: { k: 2 }, nasib: { k: 3 }, end: {} },
   JilapiBet: { start: {}, fahim: { bet: 0 }, sealed: { bet: 2, sealed: true } },
   EightFlats: { start: { k: 0 }, flats: { k: 1 }, end: {} },
+  ChachaTries: { start: { k: 0 }, chacha: { k: 1 }, end: {} },
   RentGrid: { start: {}, bed: { mode: "bed", knob: 8, seen: ["bed:6", "bed:7", "bed:8"] }, done: { mode: "bath", knob: 9, seen: ["bed:6", "bed:7", "bed:8", "bath:6", "bath:8", "bath:9"] } },
   SlantClimb: { start: { k: 0 }, column: { k: 1 }, lines: { k: 2 }, end: {} },
-  NewAxes: { start: {}, lines: { stage: 1 }, done: { stage: 2 } },
-  TwoButtonsDo: { start: { k: 0 }, size: { k: 1 }, imb: { k: 2 }, end: {} },
-  HouseInNewBasis: { start: {}, add: { stage: 1 }, put: { stage: 3 }, done: { stage: 4 } },
+  FahimDraws: { start: { k: 0 }, both: { k: 2 }, ask: { k: 3 }, end: {} },
+  PressButtons: { start: {}, size: { moves: ["s"] }, both: { moves: ["s", "m"] }, done: { moves: ["s", "m"], boxed: true } },
+  SquareTurned: { start: { k: 0 }, grid: { k: 1 }, end: {} },
+  FindCard: { start: {}, wrong: { hs: 4, hm: 2, walked: [2, 1] }, done: { hs: 5, hm: 1, walked: [2.5, 0.5] } },
   TwoCards: { start: { k: 0 }, over: { k: 1 }, end: {} },
   ReadTheNumbers: { start: {}, size: { read: 1 }, done: { read: 2 } },
-  ShrinkToOne: { start: { k: 0 }, end: {} },
+  AddLines: { start: { k: 0 }, add: { k: 1 }, end: {} },
   OneNumberRent: { start: {}, turned: { turned: true, knob: 6 }, done: { turned: true, knob: 8, done: true } },
   DotsSlide: { start: { k: 0 }, end: {} },
-  NasibDoubts: { start: { k: 0 }, end: {} },
-  SpinTheGrid: { start: {}, turned: { deg: 45, seen: [0, 15, 30, 45] } },
-  SameArrows: { start: { k: 0 }, arrows: { k: 1 }, end: {} },
+  TenantStairs: { start: { k: 0 }, steps: { k: 1 }, end: {} },
   YourHouse: { start: {}, wrong: { s: 2, m: 1, walked: [2, 1] }, card: { s: 3, m: 1, walked: [3, 1] }, slip: { s: 3, m: 1, walked: [3, 1], price: 2 }, done: { s: 3, m: 1, walked: [3, 1], price: 1 } },
   SameSizeRow: { start: { k: 0 }, end: {} },
   TryConvertBack: { start: {}, wrong: { drop: [2, 1], walked: true }, right: { drop: [3, 1], walked: true } },
   BackAndForth: { start: { k: 0 }, there: { k: 1 }, end: {} },
   FirstNight: { start: { k: 0 }, lit: { k: 2 }, end: {} },
-  BetSettled: { start: {}, open: { open: true }, reading: { open: true, seen: [0, 1, 2], at: 2 }, done: { open: true, seen: [0, 1, 2, 3, 4], at: 4 } },
-  PcaWords: { start: { k: 0 }, mid: { k: 2 }, end: {} },
+  BetSettled: { start: {}, open: { open: true } },
+  NasibNotDone: { start: { k: 0 }, cards: { k: 1 }, end: {} },
+  RoomsToCard: { start: { k: 0 }, size: { k: 1 }, imb: { k: 2 }, end: {} },
+  OtherBases: { start: { k: 0 }, shop: { k: 1 }, thermo: { k: 2 }, end: {} },
+  ChachaWrites: { start: { k: 0 }, ring: { k: 1 }, end: {} },
+  NasibCard: { start: { k: 0 }, card: { k: 1 }, end: {} },
+  SchoolSlip: { start: { k: 0 }, slip: { k: 1 }, end: {} },
+  KhataTwice: { start: { k: 0 }, rewritten: { k: 1 }, end: {} },
 };

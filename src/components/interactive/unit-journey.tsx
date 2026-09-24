@@ -2,6 +2,7 @@
 
 import type { ReactNode } from "react";
 
+import { BoxRun } from "@/components/journey/box";
 import { Task, useGate } from "@/components/journey/journey";
 import { Choice, Draw, FADE, POP, Scene, Speech, Ticks, pill, predictLook, primaryBtn, usePlay, useScene, useSeed, useTween, type Fixtures } from "@/components/journey/kit";
 import { Arrow, Label, Plane, dist, makeFrame, mix, type XY } from "@/components/journey/plane";
@@ -1881,8 +1882,12 @@ export function FairFight() {
             </div>
           ))}
           <div className="pt-1 text-center font-mono text-sm text-muted">
-            <div>2 × 0.93 + 5 × 0.37 = 3.71</div>
-            <div>2 × 0.24 + 5 × 0.97 = 5.33</div>
+            <div>
+              <BoxRun a={[2, 5]} b={[0.93, 0.37]} inline />
+            </div>
+            <div>
+              <BoxRun a={[2, 5]} b={[0.24, 0.97]} inline />
+            </div>
           </div>
         </div>
       )}

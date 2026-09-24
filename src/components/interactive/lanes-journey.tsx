@@ -13,8 +13,6 @@ import {
   Scene,
   Stepper,
   Ticks,
-  pill,
-  predictLook,
   primaryBtn,
   usePlay,
   useScene,
@@ -22,327 +20,163 @@ import {
   type Fixtures,
   type Look,
 } from "@/components/journey/kit";
-import { Bubble, Building, Card as CastCard, Gate, Person, Stage, StoryFrame } from "@/components/journey/cast";
-import { Arrow, Label, Plane, clamp, dist, makeFrame, same, tup, type Frame, type XY } from "@/components/journey/plane";
-import { fitRange, land, type Key } from "./remote-journey";
+import { Bubble, Building, Gate, Person, Stage, StoryFrame } from "@/components/journey/cast";
+import { Arrow, Label, Plane, clamp, makeFrame, same, tup, type XY } from "@/components/journey/plane";
+import {
+  CARD,
+  L_BigRick,
+  L_Bell,
+  L_CardText,
+  L_Clock,
+  L_Home,
+  L_NamedCard,
+  L_Place,
+  L_Remote,
+  L_Rickshaw,
+  L_Roads,
+  L_Squares,
+  L_Trail,
+  O,
+  SCHOOL,
+  faceOf,
+  land,
+  on,
+  route,
+  type Story,
+} from "./lanes-kit";
 
-// Screens for "Math for AI 5.5 — Same arrow, new numbers, the road to school",
-// told as a Journey in plain English, 9 steps (the pathshala-journey skill).
+// Screens for "Math for AI 5.5 — The road to school, a card for the rickshaw
+// mama", told as a Journey in the author's Bangla-English, 7 steps (the
+// pathshala-journey skill).
 //
 // Fahim's first day at the new school. The map says the school is (2, 3) from
 // home: 2 east, 3 north. But the new neighbourhood has only two kinds of road,
 // the straight main road (1, 0) and the slanting lane (1, 1), and nothing goes
 // north. The rickshaw mama wants the trip as a card: blocks straight, blocks
-// slanting. The reader seals a bet on the card (SchoolBet), drives the rickshaw
-// there (NoNorthRoad: 3 up the lane, 1 back), sees why the lane forces a minus
-// (WhyMinus), gets the card on paper slot by slot (PeelEquations), flips the
-// grid under an arrow that never moves (SameSchool), does Ammu's two errands
-// unaided (YourErrand), catches Pythagoras failing on slanted roads
-// (WrongTape), picks the road maps that reach everywhere (TryWhichGrid), and
-// opens the bet at the school gate (BetOpened).
+// slanting. The reader seals a bet on the card (SchoolBet), watches the map's
+// own numbers overshoot and pedals the rickshaw to the gate (NoNorthRoad: 3 up
+// the lane, 1 back), sees why the lane forces a minus (WhyMinus), gets the card
+// on paper by matching two lines (PeelEquations), does Ammu's two errands
+// unaided (YourErrand), finds the slip in Nasib's card for the fuchka stall
+// (SpotTheSlip), and opens the bet at the school gate (BetOpened).
 //
-// Story scenes: FirstDay, AmmuErrands, TapeOut, BellRings. Every <Then> figure
-// is watch-only (useScene): the road grid laid over the map, the card filling
-// slot by slot, the lane count forced by north, the peel order, the assembly
-// lines, the mosque's minus, the two tapes, the shadows on square roads, the
-// three maps' reach, and the card named with its grid.
+// The second idea — the same arrow gets new numbers on a new grid, and
+// Pythagoras only works on square roads — is its own journey, 5.5b
+// (twocard-journey.tsx). The map pieces both use live in lanes-kit.tsx.
 //
-// The road buttons copy 5.1's ButtonRemote (L_Remote, a little wider). The
-// rickshaw and its mama are drawn here.
+// Story scenes: LastNight, FirstDay, FahimReads, WhyBack, AmmuErrands,
+// NasibCard, BellRings. Every <Then> figure is watch-only: the road grid laid
+// over the map, the card filling slot by slot, the lane count forced by north,
+// the peel order, the system's name (SystemBrace, in the side quest), the
+// mosque's minus, the fuchka card checked, the trap and the rule (NoWayTrap),
+// and the bridge to 5.5b at tiffin.
 // Tailwind only; the maps are journey/plane sheets, and ink on them is fixed.
-
-const O: XY = [0, 0];
-const SCHOOL: XY = [2, 3];
-/** the school's road card: (blocks straight, blocks slanting) */
-const CARD: XY = [-1, 3];
-
-/** A story scene takes `story` (it marks the scene as setup words for the Journey) and ignores it. */
-type Story = { story?: boolean };
-
-/** The two roads of the new neighbourhood, as buttons on 5.1's remote. */
-const ROADS: Key[] = [
-  { name: "straight", v: [1, 0], tone: "blue" },
-  { name: "slanting", v: [1, 1], tone: "coral" },
-];
-
-/** A card's drive, one block at a time: up (or down) the lane first, then along the main road. */
-function route(c: readonly number[]): XY[] {
-  const pts: XY[] = [O];
-  let p = O;
-  const sl = Math.sign(c[1]);
-  for (let i = 0; i < Math.abs(c[1]); i += 1) {
-    p = [p[0] + sl, p[1] + sl];
-    pts.push(p);
-  }
-  const st = Math.sign(c[0]);
-  for (let i = 0; i < Math.abs(c[0]); i += 1) {
-    p = [p[0] + st, p[1]];
-    pts.push(p);
-  }
-  return pts;
-}
 
 /** The neighbourhood map: home at (0, 0), one block per unit. */
 const M = makeFrame(-2, 5, -1, 4, 26, 12);
 
-const on = (f: Frame, [x, y]: XY) => x >= f.x0 - 1e-9 && x <= f.x1 + 1e-9 && y >= f.y0 - 1e-9 && y <= f.y1 + 1e-9;
-
 // ---------------------------------------------------------------------------
-// The map pieces: the roads, the plain square grid, home, the places, the
-// rickshaw, and a trip drawn block by block.
+// 1r · A story scene for screen 1's recall line, no task: last night, from
+//      5.4. The khata's six flats settle onto one flat sheet, and Nasib, who
+//      lost, carries the last box up the stairs.
 
-type RoadKind = "slant" | "square" | "twin";
+const LN_GR = 150;
+/** the khata's six flats, first loose on the page, then settled on the sheet */
+const LN_LOOSE: XY[] = [
+  [46, 56],
+  [74, 100],
+  [96, 50],
+  [116, 96],
+  [58, 80],
+  [120, 60],
+];
+const LN_SHEET: XY[] = [
+  [60, 88],
+  [77, 80],
+  [94, 72],
+  [77, 90],
+  [94, 82],
+  [109, 74],
+];
+const ln_step = (i: number): XY => [236 + 20 * i + 10, LN_GR - 14 * (i + 1)];
 
-/**
- * The roads on a map. "slant": main roads east (blue) and lanes north-east
- * (coral). "square": main roads east and roads north. "twin": two roads that
- * run side by side along one slanting line through home, and nothing else.
- */
-function L_Roads({ f, kind = "slant", show = true, lanes = true, w = 3.2 }: { f: Frame; kind?: RoadKind; show?: boolean; lanes?: boolean; w?: number }) {
-  const east: string[] = [];
-  const other: string[] = [];
-  if (kind !== "twin") for (let y = Math.ceil(f.y0); y <= Math.floor(f.y1); y += 1) east.push(`M${f.sx(f.x0)} ${f.sy(y)}H${f.sx(f.x1)}`);
-  if (kind === "square") for (let x = Math.ceil(f.x0); x <= Math.floor(f.x1); x += 1) other.push(`M${f.sx(x)} ${f.sy(f.y0)}V${f.sy(f.y1)}`);
-  if (kind === "slant" && lanes)
-    for (let c = Math.floor(f.x0 - f.y1); c <= Math.ceil(f.x1 - f.y0); c += 1) {
-      const ya = Math.max(f.y0, f.x0 - c);
-      const yb = Math.min(f.y1, f.x1 - c);
-      if (yb - ya > 0.05) other.push(`M${f.sx(ya + c)} ${f.sy(ya)}L${f.sx(yb + c)} ${f.sy(yb)}`);
-    }
-  const lo = Math.max(f.y0, f.x0);
-  const hi = Math.min(f.y1, f.x1);
-  const twin = `M${f.sx(lo)} ${f.sy(lo)}L${f.sx(hi)} ${f.sy(hi)}`;
+/** stairs going up to the right from x, each step 20 wide and 14 high */
+function LN_Stairs({ x, n = 4 }: { x: number; n?: number }) {
+  let d = `M${x} ${LN_GR}`;
+  for (let i = 0; i < n; i++) d += `V${LN_GR - 14 * (i + 1)}H${x + 20 * (i + 1)}`;
+  d += `V${LN_GR}Z`;
+  return <path d={d} fill="#d6c3a1" stroke="#8a6a48" strokeWidth={1.2} className="pointer-events-none" />;
+}
+
+/** a taped cardboard box, bottom-centre at (x, y); it glides to a new spot */
+function LN_Box({ x, y }: { x: number; y: number }) {
   return (
-    <g style={{ opacity: show ? 1 : 0 }} className="pointer-events-none transition-opacity duration-700 motion-reduce:transition-none">
-      {kind === "twin" ? (
-        <>
-          <g transform="translate(-2.2 -2.2)">
-            <path d={twin} strokeWidth={w} strokeLinecap="round" className="fill-none stroke-cat-blue/35" />
-          </g>
-          <g transform="translate(2.2 2.2)">
-            <path d={twin} strokeWidth={w} strokeLinecap="round" className="fill-none stroke-cat-coral/35" />
-          </g>
-        </>
-      ) : (
-        <>
-          <path d={other.join("")} strokeWidth={w} strokeLinecap="round" className={`fill-none ${kind === "square" ? "stroke-cat-teal/30" : "stroke-cat-coral/[0.17]"}`} />
-          <path d={east.join("")} strokeWidth={w} strokeLinecap="round" className="fill-none stroke-cat-blue/[0.22]" />
-        </>
-      )}
+    <g className="pointer-events-none transition-transform motion-reduce:transition-none" style={{ transform: `translate(${x}px, ${y}px)`, transitionDuration: "1600ms" }}>
+      <rect x={-15} y={-22} width={30} height={22} rx={1.5} fill="#c98f4f" stroke="#8a5a2b" strokeWidth={1} />
+      <rect x={-15} y={-22} width={30} height={4} fill="#b77c3e" />
+      <rect x={-3} y={-22} width={6} height={22} fill="#e8c48a" opacity={0.8} />
     </g>
   );
 }
 
-/** The map's own thin square grid: east and north, as the paper is printed. */
-function L_Squares({ f, show = true }: { f: Frame; show?: boolean }) {
-  let d = "";
-  for (let x = Math.ceil(f.x0); x <= Math.floor(f.x1); x += 1) d += `M${f.sx(x)} ${f.sy(f.y0)}V${f.sy(f.y1)}`;
-  for (let y = Math.ceil(f.y0); y <= Math.floor(f.y1); y += 1) d += `M${f.sx(f.x0)} ${f.sy(y)}H${f.sx(f.x1)}`;
-  return (
-    <path
-      d={d}
-      strokeWidth={0.9}
-      style={{ opacity: show ? 1 : 0 }}
-      className="pointer-events-none fill-none stroke-[#64748b]/45 transition-opacity duration-700 motion-reduce:transition-none"
-    />
-  );
-}
+export function LastNight({}: Story) {
+  const s = useScene(2, [600, 1800, 2200]);
+  const k = s.k;
+  const up = k >= 2;
+  const [nx, ny] = up ? ln_step(1) : [190, LN_GR];
 
-/** Home, a small house on the point, with its name under it. */
-function L_Home({ f, at = O, name = true }: { f: Frame; at?: XY; name?: boolean }) {
-  const x = f.sx(at[0]);
-  const y = f.sy(at[1]);
   return (
-    <g className="pointer-events-none">
-      <path d={`M${x - 6.5} ${y + 5}V${y - 1.5}L${x} ${y - 7.5}L${x + 6.5} ${y - 1.5}V${y + 5}Z`} fill="#fde68a" stroke="#92400e" strokeWidth={1.1} />
-      <rect x={x - 1.8} y={y + 0.5} width={3.6} height={4.5} fill="#92400e" />
-      {name && (
-        <text x={x} y={y + 15} textAnchor="middle" fontSize={8} fontWeight={700} fill="#5a6b7d">
-          home
+    <StoryFrame scene={s}>
+      <Stage backdrop="room" label="last night: the khata's six flats settle onto one flat sheet, and Nasib carries the last box up the stairs">
+        <rect x={30} y={36} width={104} height={80} rx={3} fill="white" stroke="#8a6a48" strokeWidth={1.2} />
+        <text x={82} y={30} textAnchor="middle" fontSize={9.5} fontWeight={700} fill="#0f1b2d">
+          খাতা
         </text>
-      )}
-    </g>
-  );
-}
-
-type PlaceKind = "school" | "bazaar" | "mosque";
-
-/** A place on the map, its icon on the point and its name above it; ringed when the rickshaw has arrived. */
-function L_Place({ f, at, kind, hit = false, name = true }: { f: Frame; at: XY; kind: PlaceKind; hit?: boolean; name?: boolean }) {
-  const x = f.sx(at[0]);
-  const y = f.sy(at[1]);
-  return (
-    <g className="pointer-events-none">
-      {hit && <circle cx={x} cy={y} r={12} strokeWidth={2.2} className={`${POP} fill-none stroke-accent`} />}
-      {kind === "school" && (
-        <>
-          <rect x={x - 7} y={y - 4} width={14} height={9} fill="#fecaca" stroke="#991b1b" strokeWidth={1} />
-          <path d={`M${x - 8.5} ${y - 4}L${x} ${y - 9}L${x + 8.5} ${y - 4}Z`} fill="#dc2626" />
-          <path d={`M${x} ${y - 9}V${y - 15}`} stroke="#334155" strokeWidth={0.9} />
-          <path d={`M${x} ${y - 15}h5l-1.5 1.6l1.5 1.6h-5Z`} fill="#16a34a" />
-          <rect x={x - 1.5} y={y + 0.5} width={3} height={4.5} fill="#991b1b" />
-        </>
-      )}
-      {kind === "bazaar" && (
-        <>
-          <rect x={x - 7} y={y - 2} width={14} height={7} fill="#b45309" />
-          <path d={`M${x - 8.5} ${y - 2}L${x - 6} ${y - 8}H${x + 6}L${x + 8.5} ${y - 2}Z`} fill="white" stroke="#b45309" strokeWidth={0.8} />
-          <path d={`M${x - 5} ${y - 8}l-1.5 6M${x} ${y - 8}v6M${x + 5} ${y - 8}l1.5 6`} stroke="#ef4444" strokeWidth={2} />
-        </>
-      )}
-      {kind === "mosque" && (
-        <>
-          <rect x={x - 6} y={y - 2} width={12} height={7} fill="#dcfce7" stroke="#166534" strokeWidth={0.9} />
-          <path d={`M${x - 5} ${y - 2}Q${x - 5} ${y - 9} ${x} ${y - 10}Q${x + 5} ${y - 9} ${x + 5} ${y - 2}Z`} fill="#16a34a" />
-          <path d={`M${x} ${y - 10}V${y - 13}M${x + 8} ${y + 5}V${y - 9}`} stroke="#166534" strokeWidth={1.4} />
-          <circle cx={x + 8} cy={y - 10} r={1.4} fill="#16a34a" />
-        </>
-      )}
-      {name && (
-        <text x={x} y={y - (kind === "school" ? 18 : 14)} textAnchor="middle" fontSize={8} fontWeight={700} fill="#5a6b7d">
-          {kind}
-        </text>
-      )}
-    </g>
-  );
-}
-
-/** The rickshaw on a map, centred on its point; it glides to a new point over `ms`. */
-function L_Rickshaw({ f, at, ms = 300, facing = 1, s = 1 }: { f: Frame; at: XY; ms?: number; facing?: 1 | -1; s?: number }) {
-  return (
-    <g
-      style={{ transform: `translate(${f.sx(at[0])}px, ${f.sy(at[1])}px)`, transitionDuration: `${ms}ms` }}
-      className="pointer-events-none transition-transform ease-linear motion-reduce:transition-none"
-    >
-      <g transform={`scale(${facing * s} ${s})`}>
-        <circle cx={-4} cy={3} r={3.6} fill="white" stroke="#0f1b2d" strokeWidth={1.3} />
-        <circle cx={8} cy={4} r={2.6} fill="white" stroke="#0f1b2d" strokeWidth={1.2} />
-        <path d="M-4 3L1 -3H6L8 4M6 -3L7.5 -8M6 -8H9.5" fill="none" stroke="#334155" strokeWidth={1.3} strokeLinejoin="round" strokeLinecap="round" />
-        <rect x={-10} y={-5} width={9} height={3.5} rx={1} fill="#1d4ed8" />
-        <path d="M-11 -4Q-11.5 -14 -4 -14Q-1 -14 -0.5 -9L-1 -4Z" fill="#dc2626" stroke="#7f1d1d" strokeWidth={0.6} />
-        <path d="M5 -3.5L6 -9" stroke="#16a34a" strokeWidth={3} strokeLinecap="round" />
-        <circle cx={6.3} cy={-11.8} r={2.2} fill="#c68e5f" />
-      </g>
-    </g>
-  );
-}
-
-/** A trip drawn block by block up to point `upto`: lane blocks coral, main-road blocks blue. */
-function L_Trail({ f, pts, upto, w = 2.2, draw = false }: { f: Frame; pts: XY[]; upto?: number; w?: number; draw?: boolean }) {
-  const n = Math.min(upto ?? pts.length - 1, pts.length - 1);
-  return (
-    <>
-      {pts.slice(1, n + 1).map((p, i) => (
-        <Arrow key={`${i}:${tup(pts[i])}>${tup(p)}`} f={f} from={pts[i]} to={p} tone={p[1] !== pts[i][1] ? "coral" : "blue"} w={w} draw={draw} />
-      ))}
-    </>
-  );
-}
-
-/** which way the rickshaw faces after the last block of a trip */
-const faceOf = (pts: XY[], k: number): 1 | -1 => (k > 0 && pts[k][0] < pts[k - 1][0] ? -1 : 1);
-
-/** A road card as two coloured slots: (straight, slanting). */
-function L_CardText({ c, hit = false }: { c: readonly (number | null)[]; hit?: boolean }) {
-  const s = (n: number | null) => (n === null ? "?" : n < 0 ? `−${-n}` : `${n}`);
-  return (
-    <span className={`font-mono font-bold ${hit ? "text-accent-text" : ""}`}>
-      (<span className="text-cat-blue">{s(c[0])}</span>, <span className="text-cat-coral">{s(c[1])}</span>)
-    </span>
-  );
-}
-
-/**
- * The two road buttons, as 5.1's remote: one row per road, − and + around its
- * count, and a button simply runs out before the rickshaw would leave the map.
- * (5.1's ButtonRemote, drawn a little wider so "slanting (1, 1)" fits on a line.)
- */
-function L_Remote({ amt, onAmt, f }: { amt: number[]; onAmt: (i: number, n: number) => void; f: Frame }) {
-  return (
-    <div className="mx-auto w-full max-w-[17rem] rounded-2xl border border-border bg-surface px-3 py-1.5">
-      {ROADS.map((key, i) => {
-        const [lo, hi] = fitRange(ROADS, amt, i, f, -4, 5);
-        return (
-          <div key={key.name} className="flex items-center justify-between gap-2 py-1">
-            <span className="text-sm whitespace-nowrap">
-              <b className={i ? "text-cat-coral" : "text-cat-blue"}>{key.name}</b> <span className="font-mono text-[0.9rem]">{tup(key.v)}</span>
-            </span>
-            <Stepper value={amt[i]} onChange={(n) => onAmt(i, n)} min={lo} max={hi} label={key.name} />
-          </div>
-        );
-      })}
-    </div>
+        {k >= 1 && <path d="M42 90L98 64L122 74L66 100Z" fill="#14b8a6" fillOpacity={0.22} stroke="#0f766e" strokeWidth={1.2} className={FADE} />}
+        {LN_LOOSE.map((p, i) => {
+          const [x, y] = k >= 1 ? LN_SHEET[i] : p;
+          return (
+            <circle
+              key={i}
+              r={3.2}
+              fill="#0f766e"
+              style={{ transform: `translate(${x}px, ${y}px)` }}
+              className="transition-transform duration-1000 ease-in-out motion-reduce:transition-none"
+            />
+          );
+        })}
+        <LN_Stairs x={236} />
+        {!up && <LN_Box x={214} y={LN_GR} />}
+        <Person who="nasib" x={nx} y={ny} walking={up} arm={up ? "hold" : "down"} ms={1600} label={!up} />
+        {up && <LN_Box x={nx + 16} y={ny - 22} />}
+      </Stage>
+    </StoryFrame>
   );
 }
 
 // ---------------------------------------------------------------------------
-// The big rickshaw for story scenes, wheels on the ground at (x, y), with the
-// rickshaw mama on the saddle. He isn't in the cast, so he is drawn here.
-
-function L_BigRick({ x, y, ms = 1600, rider = true }: { x: number; y: number; ms?: number; rider?: boolean }) {
-  return (
-    <g
-      style={{ transform: `translate(${x}px, ${y}px)`, transitionDuration: `${ms}ms` }}
-      className="pointer-events-none transition-transform ease-in-out motion-reduce:transition-none"
-    >
-      <circle cx={-16} cy={-12} r={12} fill="none" stroke="#1f2937" strokeWidth={2.4} />
-      <path d="M-16 -24V0M-28 -12H-4M-24.5 -20.5L-7.5 -3.5M-24.5 -3.5L-7.5 -20.5" stroke="#6b7280" strokeWidth={0.8} />
-      <circle cx={30} cy={-9} r={9} fill="none" stroke="#1f2937" strokeWidth={2.2} />
-      <path d="M30 -18V0M21 -9H39" stroke="#6b7280" strokeWidth={0.8} />
-      <path d="M-16 -12L0 -24H19L30 -9M19 -24L29 -42M25 -42H34" fill="none" stroke="#334155" strokeWidth={2.2} strokeLinejoin="round" strokeLinecap="round" />
-      <rect x={-31} y={-35} width={27} height={9} rx={2} fill="#1d4ed8" />
-      <path d="M-7 -26V-18H5" stroke="#334155" strokeWidth={2} fill="none" />
-      <path d="M-34 -33Q-35 -64 -13 -64Q-4 -64 -3 -46L-4 -33Z" fill="#dc2626" stroke="#7f1d1d" strokeWidth={1} />
-      <path d="M-31 -52Q-19 -58 -7 -52M-30 -43Q-19 -48 -6 -43" stroke="#fde047" strokeWidth={2} fill="none" />
-      <path d="M17 -27h8" stroke="#0f1b2d" strokeWidth={3} strokeLinecap="round" />
-      {rider && (
-        <g>
-          <path d="M19 -28L25 -14L22 -2" stroke="#6b21a8" strokeWidth={4.5} strokeLinecap="round" strokeLinejoin="round" fill="none" />
-          <path d="M18 -30L20 -48" stroke="#15803d" strokeWidth={9} strokeLinecap="round" />
-          <path d="M21 -45L30 -42" stroke="#a16207" strokeWidth={3.2} strokeLinecap="round" />
-          <circle cx={21} cy={-56} r={6.5} fill="#a16207" />
-          <path d="M14.5 -58Q21 -65 27.5 -58" stroke="#f8fafc" strokeWidth={3} fill="none" />
-          <path d="M16 -58h11" stroke="#ef4444" strokeWidth={1} strokeDasharray="2 2" />
-          <circle cx={23.5} cy={-56} r={0.9} fill="#0f1b2d" />
-          <path d="M21 -52.5q2.5 1.3 4 0" stroke="#0f1b2d" strokeWidth={0.9} fill="none" />
-        </g>
-      )}
-    </g>
-  );
-}
-
-/** Ammu's map card: the place's name over a card, both in fixed ink. */
-function L_NamedCard({ x, y, name, text, tone }: { x: number; y: number; name: string; text: string; tone: "teal" | "amber" | "blue" | "coral" }) {
-  return (
-    <g className={POP}>
-      <text x={x} y={y - 12} textAnchor="middle" fontSize={8} fontWeight={700} fill="#0f1b2d" stroke="white" strokeWidth={2.5} paintOrder="stroke">
-        {name}
-      </text>
-      <CastCard x={x} y={y} text={text} tone={tone} />
-    </g>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// 1a · A story scene for screen 1's setup, no task: the first morning. Fahim
-//      comes out in his school uniform, Ammu reads the map's card (2, 3), and
-//      the rickshaw mama at the gate asks for straight and slanting blocks.
-//      The answer card is not shown: that is the bet.
+// 1a · A story scene for screen 1's setup, no task: the first morning. The
+//      clock says 7:40, the bell is at 8. Fahim comes out in his uniform, Ammu
+//      reads the map's card (2, 3), and the rickshaw mama at the gate wants
+//      blocks straight and blocks slanting. The answer card is not shown:
+//      that is the bet.
 
 export function FirstDay({}: Story) {
-  const s = useScene(3, [600, 2400, 2400, 2600]);
+  const s = useScene(4, [600, 2200, 2200, 2400, 2600]);
   const k = s.k;
 
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="street" label="morning outside the new flat: Fahim in his school uniform, Ammu with the map's card (2, 3), and the rickshaw mama asking how many blocks straight and how many slanting">
+      <Stage backdrop="street" label="morning outside the new flat, 7:40 on the clock: Fahim in his school uniform, Ammu with the map's card (2, 3), and the rickshaw mama asking how many blocks straight and how many slanting">
         <Building x={4} y={150} w={60} h={112} color="#e7d7c1" />
-        <Person who="ammu" x={92} y={150} arm={k === 2 ? "wave" : "down"} mood="happy" />
-        {k === 1 && <Bubble x={92} y={84} side="right" lines={["First day. Don't", "be late!"]} />}
-        {k >= 2 && <L_NamedCard x={104} y={70} name="the map says" text="(2, 3)" tone="amber" />}
-        <Person who="fahim" x={k >= 1 ? 146 : 44} y={150} walking={k === 1} ms={1600} mood={k >= 3 ? "puzzled" : "happy"} />
-        <L_BigRick x={246} y={150} />
-        {k >= 3 && <Bubble x={266} y={86} side="left" lines={["Straight or slanting?", "How many blocks?"]} />}
+        <L_Clock x={34} y={62} h={7} m={40} />
+        <Person who="ammu" x={92} y={150} arm={k === 2 ? "hold" : k === 1 ? "wave" : "down"} mood="plain" />
+        {k === 1 && <Bubble x={92} y={84} side="right" lines={["আটটায় ঘণ্টা.", "দেরি করিস না."]} />}
+        {k >= 2 && <L_NamedCard x={112} y={70} name="map বলছে" text="(2, 3)" tone="amber" />}
+        <Person who="fahim" x={k >= 1 ? 150 : 44} y={150} walking={k === 1} ms={1600} mood={k >= 4 ? "puzzled" : "plain"} />
+        <L_BigRick x={250} y={150} />
+        {k === 3 && <Bubble x={270} y={86} side="left" lines={["ম্যাপ-ট্যাপ বুঝি না,", "মামা."]} />}
+        {k >= 4 && <Bubble x={270} y={86} side="left" lines={["কয় ব্লক সোজা যামু,", "কয় ব্লক বাঁকা?"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -351,9 +185,9 @@ export function FirstDay({}: Story) {
 // ---------------------------------------------------------------------------
 // 1 · The sealed bet. The map with its two roads and no north; four cards for
 //     Mama: (2, 3) · (2, 1) · (−1, 3) · "can't get there". Sealed unmarked:
-//     BetOpened, eight screens later, is what settles it.
+//     BetOpened, six screens later, is what settles it.
 
-const BET = ["(2, 3)", "(2, 1)", "(−1, 3)", "Can't get there"];
+const BET = ["(2, 3)", "(2, 1)", "(−1, 3)", "যাওয়াই যাবে না"];
 
 export function SchoolBet() {
   const pass = useGate();
@@ -362,7 +196,7 @@ export function SchoolBet() {
 
   const seal = () => {
     setSealed(true);
-    pass("Bet sealed. Let's get in the rickshaw.");
+    pass("বাজি ধরা হলো. চলেন রিকশায় উঠি.");
   };
 
   return (
@@ -372,28 +206,28 @@ export function SchoolBet() {
           <L_Roads f={M} />
           <path d={`M${M.sx(0)} ${M.sy(0.2)}V${M.sy(1.1)}`} strokeWidth={2} strokeDasharray="3 3" className="pointer-events-none stroke-[#94a3b8]" />
           <path d={`M${M.sx(0) - 5} ${M.sy(0.85) - 5}l10 10m0 -10l-10 10`} strokeWidth={2} className="pointer-events-none stroke-danger" />
-          <Label f={M} at={[0, 1.2]} dy={-3} size={7.5} className="fill-[#5a6b7d]">
-            no north road
+          <Label f={M} at={[0, 1.2]} dy={-3} size={8} className="fill-[#5a6b7d]">
+            north এ রাস্তা নাই
           </Label>
           <Arrow f={M} from={O} to={[1, 0]} tone="blue" w={2.6} />
           <Arrow f={M} from={O} to={[1, 1]} tone="coral" w={2.6} />
           <L_Home f={M} />
           <L_Place f={M} at={SCHOOL} kind="school" />
-          {sealed && bet !== null && (
-            <g className={POP}>
-              <rect x={M.sx(2.6)} y={M.sy(0.55)} width={62} height={20} rx={4} fill="white" stroke="#1d4ed8" strokeWidth={1.4} />
-              <circle cx={M.sx(2.6) + 62} cy={M.sy(0.55)} r={5} fill="#dc2626" />
+          {bet !== null && (
+            <g key={bet} className={POP}>
+              <rect x={M.sx(2.6)} y={M.sy(0.55)} width={62} height={20} rx={4} fill="white" stroke="#1d4ed8" strokeWidth={1.4} strokeDasharray={sealed ? undefined : "4 2"} />
+              {sealed && <circle cx={M.sx(2.6) + 62} cy={M.sy(0.55)} r={5} fill="#dc2626" className={POP} />}
               <text x={M.sx(2.6) + 31} y={M.sy(0.55) + 13.5} textAnchor="middle" fontSize={bet === 3 ? 7.5 : 10} fontWeight={700} fill="#1d4ed8" fontFamily={bet === 3 ? undefined : "ui-monospace, monospace"}>
-                {bet === 3 ? "can't get there" : BET[bet]}
+                {BET[bet]}
               </text>
             </g>
           )}
         </Plane>
       </div>
       <div className="mt-1 text-center text-xs text-muted">
-        A card is (<span className="text-cat-blue">blocks straight</span>, <span className="text-cat-coral">blocks slanting</span>). A minus means going the other way.
+        Card মানে (<span className="text-cat-blue">কয় block সোজা</span>, <span className="text-cat-coral">কয় block বাঁকা</span>). Minus মানে উল্টা দিকে.
       </div>
-      <div className="mt-2 text-sm font-medium text-muted">Which card should Fahim give Mama?</div>
+      <div className="mt-2 text-sm font-medium text-muted">ফাহিম মামাকে কোন card দিবে?</div>
       <div className="mt-1.5 grid grid-cols-2 gap-1.5">
         {BET.map((b, i) => (
           <Choice key={b} n={i} look={bet === i ? "picked" : sealed ? "dim" : "idle"} disabled={sealed} onClick={() => setBet(i)}>
@@ -405,14 +239,14 @@ export function SchoolBet() {
         bet !== null && (
           <div className={`${FADE} mt-2.5 flex justify-center`}>
             <button type="button" onClick={seal} className={primaryBtn}>
-              Seal the bet
+              বাজি ধরলাম
             </button>
           </div>
         )
       ) : (
-        <div className={`${FADE} mt-2.5 text-center text-[0.95rem] text-muted`}>Sealed. The ride will tell.</div>
+        <div className={`${FADE} mt-2.5 text-center text-[0.95rem] text-muted`}>বাজি ধরা হলো. উত্তর দিবে রিকশা নিজেই.</div>
       )}
-      <Task done={sealed}>Pick the card you would give Mama, then seal the bet.</Task>
+      <Task done={sealed}>আপনি হলে মামাকে কোন card দিতেন? বেছে নিয়ে বাজি ধরুন.</Task>
     </>
   );
 }
@@ -420,14 +254,14 @@ export function SchoolBet() {
 // ---------------------------------------------------------------------------
 // 1½ · A figure for screen 1's explanation, no task: the map's square grid
 //      and the school's map card (2, 3); then the main roads, then the lanes
-//      laid over it; the square grid fades, and the card is a "?".
+//      laid over it; the square grid fades, and the road card is a "?".
 
 const X1F = makeFrame(-1, 4, -1, 4, 22, 10);
 const X1_SAY = [
-  "On the map, the school is 2 blocks east and 3 north: (2, 3).",
-  "The main roads all run east. One block straight is (1, 0).",
-  "The lanes all slant north-east. One block up a lane is (1, 1).",
-  "And no road runs north. So on these roads, what is the school's card?",
+  "Map এ স্কুল 2 block east, 3 block north: (2, 3).",
+  "বড় রাস্তাগুলা সব east এ গেছে. সোজা এক block মানে (1, 0).",
+  "গলিগুলা সব বাঁকা, north-east এ. গলিতে এক block মানে (1, 1).",
+  "আর north এ কোনো রাস্তা নাই. তাহলে রাস্তায় স্কুলের card কী?",
 ];
 
 export function TwoGrids() {
@@ -449,15 +283,11 @@ export function TwoGrids() {
           </Plane>
         </div>
         <div className="min-w-0 text-center">
-          <div className="text-xs text-muted">map card</div>
+          <div className="text-xs text-muted">map এর card</div>
           <div className="font-mono text-lg font-bold">(2, 3)</div>
-          <div className="mt-2 text-xs text-muted">road card</div>
+          <div className="mt-2 text-xs text-muted">রাস্তার card</div>
           <div className="font-mono text-lg font-bold">
-            {k >= 3 ? (
-              <span className={`${POP} inline-block text-cat-violet`}>(?, ?)</span>
-            ) : (
-              <span className="text-muted/50">…</span>
-            )}
+            {k >= 3 ? <span className={`${POP} inline-block text-cat-violet`}>(?, ?)</span> : <span className="text-muted/50">…</span>}
           </div>
         </div>
       </div>
@@ -466,48 +296,99 @@ export function TwoGrids() {
 }
 
 // ---------------------------------------------------------------------------
-// 2 · In the rickshaw. The reader drives with 5.1's remote (L_Remote): straight ± and
-//     slanting ±, one block per press, and the rickshaw rolls there. The only
-//     way to the school is 3 up the lane and 1 back on the main road.
+// 2a · A story scene for screen 2's setup, no task: Fahim climbs in and reads
+//      Mama the map's two numbers, 2 straight and 3 slanting. Mama says
+//      nothing and pedals off. Where the rickshaw stops is the widget's job.
+
+export function FahimReads({}: Story) {
+  const s = useScene(3, [600, 1600, 2400, 1800]);
+  const k = s.k;
+  const rx = k >= 3 ? 256 : 170;
+
+  return (
+    <StoryFrame scene={s}>
+      <Stage backdrop="street" label="Fahim climbs into the rickshaw and reads out the map's numbers, 2 straight and 3 slanting; the rickshaw mama says nothing and pedals off">
+        <Building x={6} y={150} w={58} h={100} color="#e7d7c1" />
+        <path d="M0 162H320" stroke="white" strokeWidth={2} strokeDasharray="10 8" opacity={0.7} />
+        {k === 0 && <Person who="fahim" x={108} y={150} mood="plain" />}
+        {k >= 2 && <L_NamedCard x={98} y={58} name="map বলছে" text="(2, 3)" tone="amber" />}
+        <L_BigRick x={rx} y={150} ms={1600} riders={k >= 1 ? ["fahim"] : []} />
+        {k === 2 && <Bubble x={rx - 10} y={84} side="right" lines={["মামা, 2 সোজা,", "3 বাঁকা."]} />}
+      </Stage>
+    </StoryFrame>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 2 · In the rickshaw. First the obvious way: Fahim reads the map's numbers
+//     to Mama, 2 straight and 3 slanting, and the rickshaw rolls past the
+//     school to (5, 3). Then the pedals are the reader's, on 5.1's remote
+//     (L_Remote): straight ± and slanting ±, one block per press, starting
+//     from that wrong card. The only way to the gate is 3 up the lane and 1
+//     back on the main road.
+
+const MAP_CARD: XY = [2, 3];
 
 export function NoNorthRoad() {
   const pass = useGate();
-  const [amt, setAmt] = useSeed<number[]>("amt", [0, 0]);
+  const [tried, setTried] = useSeed("tried", false);
+  const [amt, setAmt] = useSeed<number[]>("amt", [2, 3]);
   const [done, setDone] = useSeed("done", false);
   const [face, setFace] = useState<1 | -1>(1);
-  const pos = land(ROADS, amt);
+  const play = usePlay(320);
+  const first = route(MAP_CARD);
+  const pos = tried ? land(amt) : first[play.running ? play.k : 0];
   const there = same(pos, SCHOOL);
-  const trip = route(amt);
+  const trip = tried ? route(amt) : first.slice(0, play.k + 1);
 
+  const tryMap = () => play.play(first.length - 1, () => setTried(true));
   const press = (i: number, n: number) => {
     const next = amt.map((a, j) => (j === i ? n : a));
-    const to = land(ROADS, next);
+    const to = land(next);
     if (to[0] !== pos[0]) setFace(to[0] < pos[0] ? -1 : 1);
     setAmt(next);
     if (!done && same(to, SCHOOL)) {
       setDone(true);
-      pass("No north road, but there's the school.");
+      pass("North এ রাস্তা নাই, তবু স্কুল পাওয়া গেলো.");
     }
   };
 
   return (
     <>
       <div className="mx-auto w-full max-w-[13rem]">
-        <Plane f={M} grid={0} axes={false} label={`the rickshaw at ${tup(pos)} on the map, card ${tup(amt)}`} className="my-0! max-w-none">
+        <Plane f={M} grid={0} axes={false} label={`the rickshaw at ${tup(pos)} on the map, card ${tup(tried ? amt : MAP_CARD)}`} className="my-0! max-w-none">
           <L_Roads f={M} />
           <L_Home f={M} />
           <L_Place f={M} at={SCHOOL} kind="school" hit={there} />
+          {tried && !same(amt as XY, MAP_CARD) && (
+            <g opacity={0.3}>
+              <L_Trail f={M} pts={first} w={1.6} />
+            </g>
+          )}
           <L_Trail f={M} pts={trip} />
-          <L_Rickshaw f={M} at={pos} facing={face} />
+          <L_Rickshaw f={M} at={pos} facing={tried ? face : 1} ms={tried ? 300 : 320} />
         </Plane>
       </div>
       <div className="mt-1 text-center text-[0.95rem]">
-        Card <L_CardText c={amt} hit={there} /> <span className="text-muted">· on the map</span> <span className="font-mono font-bold">{tup(pos)}</span>
+        Card <L_CardText c={tried ? amt : MAP_CARD} hit={there} /> <span className="text-muted">· map এ</span> <span className="font-mono font-bold">{tup(pos)}</span>
       </div>
-      <div className="mt-2">
-        <L_Remote amt={amt} onAmt={press} f={M} />
-      </div>
-      <Task done={done}>Press the road buttons until the rickshaw stops at the school.</Task>
+      {!tried ? (
+        <div className="mt-2.5 flex justify-center">
+          <button type="button" onClick={tryMap} disabled={play.running} className={primaryBtn}>
+            মামা, 2 সোজা, 3 বাঁকা
+          </button>
+        </div>
+      ) : (
+        <>
+          {same(amt as XY, MAP_CARD) && (
+            <div className={`${FADE} mt-1 text-center text-sm text-danger`}>মামা থামলেন (5, 3) এ. স্কুল ছাড়িয়ে আরো 3 block east এ.</div>
+          )}
+          <div className="mt-2">
+            <L_Remote amt={amt} onAmt={press} f={M} disabled={done} />
+          </div>
+        </>
+      )}
+      <Task done={done}>{tried ? "রাস্তার button চেপে চেপে রিকশাকে স্কুলের গেটে থামান." : "আগে ফাহিমের কথামতো মামাকে চালাতে দিন."}</Task>
     </>
   );
 }
@@ -519,10 +400,10 @@ export function NoNorthRoad() {
 
 const X2F = makeFrame(-1, 4, -1, 4, 20, 10);
 const X2_SAY = [
-  "Mama's card has two slots: straight first, slanting second.",
-  "3 blocks up the lane. So slot 2 is 3.",
-  "Then 1 block back along the main road. Back is written with a minus: −1.",
-  "(−1, 3). The minus is not a mistake. It only means “the other way”.",
+  "মামার card এ দুইটা slot: আগে সোজা, তারপর বাঁকা.",
+  "গলিতে 3 block. তাই slot 2 এ 3.",
+  "তারপর বড় রাস্তায় 1 block পিছনে. পিছনে যাওয়া লেখা হয় minus দিয়ে: −1.",
+  "(−1, 3). Minus টা ভুল না. এর মানে শুধু “উল্টা দিকে”.",
 ];
 
 export function CardFills() {
@@ -559,10 +440,34 @@ export function CardFills() {
 }
 
 // ---------------------------------------------------------------------------
+// 3a · A story scene for screen 3's setup, no task: in the rickshaw. It rolls
+//      east, then turns round and rolls back. Fahim asks why; Mama keeps
+//      pedalling and points him at the lane. The reason is not given: the
+//      widget is where the reader finds it.
+
+export function WhyBack({}: Story) {
+  const s = useScene(3, [600, 1600, 2400, 2600]);
+  const k = s.k;
+
+  return (
+    <StoryFrame scene={s}>
+      <Stage backdrop="street" label="Fahim in the rickshaw: it rolls ahead, then turns round and rolls back; Fahim asks why, and the rickshaw mama tells him to ask the lane">
+        <Building x={6} y={150} w={46} h={78} color="#d6d3d1" />
+        <Building x={262} y={150} w={52} h={92} color="#e7d7c1" />
+        <path d="M0 162H320" stroke="white" strokeWidth={2} strokeDasharray="10 8" opacity={0.7} />
+        <L_BigRick x={k === 0 ? 96 : k === 1 ? 214 : 150} y={150} ms={1400} facing={k >= 2 ? -1 : 1} riders={["fahim"]} />
+        {k === 2 && <Bubble x={162} y={92} side="right" lines={["মামা, পিছনে", "যাচ্ছেন কেন?"]} />}
+        {k >= 3 && <Bubble x={129} y={86} side="left" lines={["গলিরে জিগান,", "আমারে না."]} />}
+      </Stage>
+    </StoryFrame>
+  );
+}
+
+// ---------------------------------------------------------------------------
 // 3 · Why back? The reader sends the rickshaw 3 blocks up the lane and
 //     watches two bars: north and east, each against what the school needs.
 //     North lands exactly; east overshoots by 1. Then the reader drags the
-//     rickshaw back along the main road until east fits.
+//     rickshaw along the main road until east fits.
 
 const WM_Y = 3;
 
@@ -587,7 +492,7 @@ function L_Bars({ north, east }: { north: number; east: number }) {
             <rect
               x={X0}
               y={y}
-              width={Math.min(r.v, r.need) * U}
+              width={Math.max(0, Math.min(r.v, r.need)) * U}
               height={15}
               rx={3}
               className={`${r.fill} transition-[width] duration-300 motion-reduce:transition-none`}
@@ -601,7 +506,7 @@ function L_Bars({ north, east }: { north: number; east: number }) {
             />
             <path d={`M${X0 + r.need * U} ${y - 2}V${y + 17}`} strokeWidth={1.6} strokeDasharray="2 2" className="stroke-foreground/70" />
             <text x={X0 + 4 * U + 6} y={y + 11} fontSize={9.5} className={ok ? "fill-accent-text font-bold" : "fill-muted"}>
-              {r.v} · school {r.need}
+              {r.v} · স্কুল {r.need}
             </text>
           </g>
         );
@@ -627,7 +532,7 @@ export function WhyMinus() {
     setX(nx);
     if (nx === SCHOOL[0]) {
       setFixed(true);
-      pass("The lane pushes east too; −1 cuts it off.");
+      pass("গলি east এও ঠেলে. −1 সেটা কেটে দেয়.");
     }
   };
   const key = (e: KeyboardEvent<SVGSVGElement>) => {
@@ -662,17 +567,21 @@ export function WhyMinus() {
       {!driven && (
         <div className="mt-2 flex justify-center">
           <button type="button" onClick={drive} disabled={play.running} className={primaryBtn}>
-            Up the lane, 3 blocks
+            গলিতে 3 block
           </button>
         </div>
       )}
-      {driven && !fixed && <div className={`${FADE} mt-1.5 text-center text-[0.95rem]`}>North fits. East is 1 too far. Drag the rickshaw along the main road.</div>}
-      {fixed && (
+      {driven && !fixed && (
         <div className={`${FADE} mt-1.5 text-center text-[0.95rem]`}>
-          Card <L_CardText c={CARD} hit />: the lane for north, the minus for the extra east.
+          {x > SCHOOL[0] ? "North মিলে গেছে. East এ এখনো বেশি. রিকশাটা বড় রাস্তা ধরে টানুন." : "এবার east এ কম পড়ে গেছে. একটু ফেরত আনুন."}
         </div>
       )}
-      <Task done={fixed}>Send the rickshaw up the lane. Then drag it along the main road until east fits too.</Task>
+      {fixed && (
+        <div className={`${FADE} mt-1.5 text-center text-[0.95rem]`}>
+          Card <L_CardText c={CARD} hit />: north এর জন্য গলি, বাড়তি east কাটতে minus.
+        </div>
+      )}
+      <Task done={fixed}>রিকশাকে গলিতে পাঠান. তারপর বড় রাস্তা ধরে টানুন, যতক্ষণ না east-ও মিলে.</Task>
     </>
   );
 }
@@ -684,10 +593,10 @@ export function WhyMinus() {
 
 const X3F = makeFrame(-1, 5, -1, 5, 17, 8);
 const X3_SAY = [
-  "Only the lane climbs north. So how many lane blocks?",
-  "2 blocks: one short of north. And no road can add the missing one.",
-  "4 blocks: one too high.",
-  "3 blocks, exactly. Then −1 on the main road takes back the extra east.",
+  "শুধু গলিই north এ ওঠে. তাহলে গলিতে কয় block?",
+  "2 block: north এ এক কম. বাকি একটা আর কোনো রাস্তা দিয়ে যোগ করা যায় না.",
+  "4 block: এক বেশি উঁচুতে.",
+  "3 block, একদম ঠিক. তারপর বড় রাস্তায় −1 বাড়তি east টা ফেরত নেয়.",
 ];
 
 export function LaneForced() {
@@ -724,92 +633,116 @@ export function LaneForced() {
 }
 
 // ---------------------------------------------------------------------------
-// 4 · On paper, slot by slot: a four-stage machine. Split the card sum into
-//     an east line and a north line; the north line has only the lane in it,
-//     so slanting = 3; carry it into the east line, straight = −1; check.
-//     The small map draws each block as its number is found.
+// 4 · On paper, without driving: two lines to match. The reader turns the two
+//     numbers (straight, slanting) and the rickshaw on the small map follows
+//     at once; the north line and the east line each show their sum and tick
+//     when they match the school. Turning "straight" never moves the north
+//     line, so the north line is the one to settle first: slanting = 3; then
+//     the east line leaves straight = −1. Then the check.
 
-const PE_STAGE = ["Split it slot by slot", "Read the north slot", "Fill the east slot", "Check it"];
+function PE_Cell({ tone, v }: { tone: "blue" | "coral"; v: number }) {
+  return (
+    <span
+      key={v}
+      className={`${POP} inline-grid h-6 min-w-7 place-items-center rounded-md border-2 px-1 font-mono text-sm font-bold ${tone === "blue" ? "border-cat-blue text-cat-blue" : "border-cat-coral text-cat-coral"}`}
+    >
+      {v < 0 ? `−${-v}` : v}
+    </span>
+  );
+}
 
 export function PeelEquations() {
   const pass = useGate();
-  const [st, setSt] = useSeed("st", 0);
-  const card: XY = [st >= 3 ? -1 : 0, st >= 2 ? 3 : 0];
-  const trip = route(card);
+  const [amt, setAmt] = useSeed<number[]>("amt", [0, 0]);
+  const [done, setDone] = useSeed("done", false);
+  const [face, setFace] = useState<1 | -1>(1);
+  const [st, sl] = amt;
+  const pos = land(amt);
+  const northOk = sl === SCHOOL[1];
+  const eastOk = st + sl === SCHOOL[0];
+  const trip = route(amt);
 
-  const next = () => {
-    const n = st + 1;
-    setSt(n);
-    if (n === 4) pass("Slot 2 first, then fill slot 1.");
+  const turn = (i: number, n: number) => {
+    const next = amt.map((a, j) => (j === i ? n : a));
+    const to = land(next);
+    if (to[0] !== pos[0]) setFace(to[0] < pos[0] ? -1 : 1);
+    setAmt(next);
+    if (!done && next[1] === SCHOOL[1] && next[0] + next[1] === SCHOOL[0]) {
+      setDone(true);
+      pass("আগে north এর line, তারপর east.");
+    }
   };
-  const row = (on: boolean) => `rounded-lg px-2 py-0.5 transition-colors duration-300 motion-reduce:transition-none ${on ? "bg-cat-violet/10" : ""}`;
+  const sum = (n: number) => <span className="font-mono tabular-nums">{n < 0 ? `−${-n}` : n}</span>;
+  const row = (ok: boolean) => `rounded-lg px-1.5 py-0.5 transition-colors duration-300 motion-reduce:transition-none ${ok ? "bg-accent/10" : ""}`;
 
   return (
     <>
-      <div className="mx-auto w-full max-w-[10rem]">
-        <Plane f={M} grid={0} axes={false} label={`the card so far ${tup(card)} drawn on the map`} className="my-0! max-w-none">
+      <div className="mx-auto w-full max-w-[10.5rem]">
+        <Plane f={M} grid={0} axes={false} label={`the card ${tup(amt)} drawn on the map, ending at ${tup(pos)}`} className="my-0! max-w-none">
           <L_Roads f={M} />
           <L_Home f={M} />
-          <L_Place f={M} at={SCHOOL} kind="school" hit={st >= 4} />
-          <L_Trail f={M} pts={trip} draw />
+          <L_Place f={M} at={SCHOOL} kind="school" hit={done} />
+          {on(M, pos) && <L_Trail f={M} pts={trip} />}
+          {on(M, pos) && <L_Rickshaw f={M} at={pos} facing={face} />}
         </Plane>
       </div>
-      <div className="mt-2 space-y-0.5 text-center text-[0.95rem] tabular-nums">
-        <div>
-          (2, 3) = <span className="text-cat-blue">straight</span>·(1, 0) + <span className="text-cat-coral">slanting</span>·(1, 1)
-        </div>
-        {st >= 1 && (
-          <div className={`${FADE} mx-auto grid max-w-xs grid-cols-[4.5rem_1fr] items-baseline text-left`}>
-            <span className={`text-xs text-muted ${row(st === 3)}`}>east slot</span>
-            <span className={row(st === 3)}>
-              2 = <span className="text-cat-blue">straight</span> + <span className="text-cat-coral">{st >= 3 ? <b className={`${POP} inline-block`}>3</b> : "slanting"}</span>
-            </span>
-            <span className={`text-xs text-muted ${row(st === 2)}`}>north slot</span>
-            <span className={row(st === 2)}>
-              3 = <span className="text-cat-coral">slanting</span> <span className="text-xs text-muted">(straight adds no north)</span>
-            </span>
-          </div>
-        )}
-        {st >= 2 && (
-          <div className={FADE}>
-            <b className="text-cat-coral">slanting = 3</b>
-            {st >= 3 && (
-              <span className={FADE}>
-                {" "}
-                · <b className="text-cat-blue">straight = 2 − 3 = −1</b>
-              </span>
-            )}
-          </div>
-        )}
-        {st >= 4 && (
-          <div className={`${POP} font-semibold text-accent-text`}>
-            −1·(1, 0) + 3·(1, 1) = (−1, 0) + (3, 3) = (2, 3)
-          </div>
-        )}
+      <div className="mx-auto mt-1.5 grid w-fit grid-cols-[2.6rem_auto_auto] items-center gap-x-1.5 gap-y-1 text-[0.95rem]">
+        <span className={`text-xs text-muted ${row(northOk)}`}>north</span>
+        <span className={`flex items-center gap-1 ${row(northOk)}`}>
+          <span className="font-mono">3 =</span> <span className="font-mono text-xs text-muted">0 ×</span> <PE_Cell tone="blue" v={st} /> + <PE_Cell tone="coral" v={sl} />
+        </span>
+        <span className="flex w-12 items-center gap-1">
+          = {sum(sl)}
+          {northOk && (
+            <svg viewBox="-6 -6 12 12" className="h-3 w-3" aria-hidden="true">
+              <path d="M-4 0l3 3.5l6 -7" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round" className={`${POP} fill-none stroke-[#15803d]`} />
+            </svg>
+          )}
+        </span>
+        <span className={`text-xs text-muted ${row(eastOk)}`}>east</span>
+        <span className={`flex items-center gap-1 ${row(eastOk)}`}>
+          <span className="font-mono">2 =</span> <span className="font-mono text-xs text-muted">1 ×</span> <PE_Cell tone="blue" v={st} /> + <PE_Cell tone="coral" v={sl} />
+        </span>
+        <span className="flex w-12 items-center gap-1">
+          = {sum(st + sl)}
+          {eastOk && (
+            <svg viewBox="-6 -6 12 12" className="h-3 w-3" aria-hidden="true">
+              <path d="M-4 0l3 3.5l6 -7" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round" className={`${POP} fill-none stroke-[#15803d]`} />
+            </svg>
+          )}
+        </span>
       </div>
-      {st < 4 && (
-        <div className="mt-2.5 flex justify-center">
-          <button type="button" onClick={next} className={primaryBtn}>
-            {st + 1} · {PE_STAGE[st]}
-          </button>
+      {!done ? (
+        <div className="mt-2 flex items-center justify-center gap-3 text-sm">
+          <span className="flex flex-col items-center gap-0.5">
+            <Stepper value={st} onChange={(n) => turn(0, n)} min={-3} max={3} label="সোজা" />
+            <b className="text-cat-blue">সোজা</b>
+          </span>
+          <span className="flex flex-col items-center gap-0.5">
+            <Stepper value={sl} onChange={(n) => turn(1, n)} min={-1} max={4} label="বাঁকা" />
+            <b className="text-cat-coral">বাঁকা</b>
+          </span>
         </div>
+      ) : (
+        <div className={`${POP} mt-2 text-center font-mono text-sm font-semibold text-accent-text`}>−1 × (1, 0) + 3 × (1, 1) = (2, 3)</div>
       )}
-      <Task done={st >= 4}>Run the four steps and find the card without driving.</Task>
+      <Task done={done}>দুইটা সংখ্যা ঘুরিয়ে দুইটা line-ই মিলান. কোন line টা আগে মিলানো সহজ, খেয়াল করুন.</Task>
     </>
   );
 }
 
 // ---------------------------------------------------------------------------
-// 4½ · A figure for screen 4's explanation, no task: why slot 2 first. Both
-//      lines start with two unknowns; the main road's part of the north line
-//      is struck out (it never goes north); one unknown is left, slanting = 3;
-//      carried up, it leaves the east line one unknown too: straight = −1.
+// 4½ · A figure for screen 4's explanation, no task: why the north line
+//      first. Both lines start with two unknowns; the main road's part of the
+//      north line is struck out (it never goes north); one unknown is left,
+//      slanting = 3; carried up, it leaves the east line one unknown too:
+//      straight = −1.
 
 const X4_SAY = [
-  "Two lines, and two unknowns in each? Not quite.",
-  "The main road never goes north. So straight drops out of the north line.",
-  "One unknown left there: slanting = 3.",
-  "Carry the 3 up. Now the east line has one unknown too: straight = −1.",
+  "দুইটা line, প্রতিটায় দুইটা করে অজানা? আসলে না.",
+  "বড় রাস্তা কখনো north এ যায় না. তাই north এর line থেকে সোজা বাদ.",
+  "ওখানে অজানা বাকি একটাই: বাঁকা = 3.",
+  "3 টা উপরে নিয়ে যান. এবার east এর line এও অজানা একটা: সোজা = −1.",
 ];
 
 function L_Box({ tone, value }: { tone: "blue" | "coral"; value: string | null }) {
@@ -837,7 +770,7 @@ export function PeelOrder() {
         <span className="relative flex items-center gap-1.5">
           <span className="font-mono">3 =</span>
           <span className={`flex items-center gap-1.5 transition-opacity duration-500 motion-reduce:transition-none ${k >= 1 ? "opacity-30" : ""}`}>
-            <span className="font-mono text-sm">0·</span>
+            <span className="font-mono text-sm">0 ×</span>
             <L_Box tone="blue" value={null} /> +
           </span>
           <L_Box tone="coral" value={k >= 2 ? "3" : null} />
@@ -853,182 +786,98 @@ export function PeelOrder() {
 }
 
 // ---------------------------------------------------------------------------
-// 5 · Predict, then flip the grid. One arrow from home to the school; the
-//     reader guesses whether it moves when the grid changes, then switches
-//     between the map's square grid and the road grid. The grid cross-fades,
-//     the arrow never moves, and its card flips between (2, 3) and (−1, 3).
+// 4¾ · A figure for screen 4's side quest, no task: the two lines tied by a
+//      brace get their name, system of linear equations; the north line's
+//      one unknown is why ours opened easily; then a bigger system, all
+//      boxes empty, left for Article 10.
 
-const SS_GUESS = ["The arrow moves somewhere new", "The arrow stays; only its numbers change", "Nothing changes at all"];
-const SS_RIGHT = 1;
+const X4S_SAY = [
+  "দুইটা অজানা, সোজা আর বাঁকা. দুইটা equation দিয়ে বাঁধা.",
+  "একসাথে বাঁধা এমন equation গুলাকে বলে system of linear equations.",
+  "আমাদেরটা সহজে খুলে গেছে. North এর line এ অজানা ছিল একটাই.",
+  "যেকোনো size এর system কীভাবে solve করতে হয়, সেটা Article 10 এ.",
+];
 
-export function SameSchool() {
-  const pass = useGate();
-  const [guess, setGuess] = useSeed<number | null>("guess", null);
-  const [grid, setGrid] = useSeed<"map" | "roads">("grid", "map");
-  const [over, setOver] = useSeed("over", false);
-  const roads = grid === "roads";
-
-  const flip = (g: "map" | "roads") => {
-    setGrid(g);
-    if (g === "roads" && !over) {
-      setOver(true);
-      pass("The school didn't move. Only the grid did.");
-    }
-  };
-
+function X4S_Box({ tone, dim = false, small = false }: { tone: "blue" | "coral" | "violet"; dim?: boolean; small?: boolean }) {
+  const ink = { blue: "border-cat-blue", coral: "border-cat-coral", violet: "border-cat-violet" }[tone];
   return (
-    <>
-      <div className="mx-auto w-full max-w-[11rem]">
-        <Plane f={M} grid={0} axes={false} label={`the arrow from home to school, on the ${roads ? "road grid" : "map grid"}`} className="my-0! max-w-none">
-          <L_Squares f={M} show={!roads} />
-          <L_Roads f={M} show={roads} />
-          <g style={{ opacity: roads ? 0 : 1 }} className="transition-opacity duration-700 motion-reduce:transition-none">
-            <Arrow f={M} from={O} to={[1, 0]} tone="teal" w={2.4} />
-            <Arrow f={M} from={O} to={[0, 1]} tone="teal" w={2.4} />
-          </g>
-          <g style={{ opacity: roads ? 1 : 0 }} className="transition-opacity duration-700 motion-reduce:transition-none">
-            <Arrow f={M} from={O} to={[1, 0]} tone="blue" w={2.4} />
-            <Arrow f={M} from={O} to={[1, 1]} tone="coral" w={2.4} />
-          </g>
-          <Arrow f={M} from={O} to={SCHOOL} tone="violet" w={3} />
-          <L_Home f={M} />
-          <L_Place f={M} at={SCHOOL} kind="school" />
-        </Plane>
-      </div>
-      <div key={grid} className={`${FADE} mt-1 text-center text-[0.95rem]`}>
-        {roads ? (
-          <>
-            Road grid: <L_CardText c={CARD} /> <span className="text-xs text-muted">straight, slanting</span>
-          </>
-        ) : (
-          <>
-            Map grid: <span className="font-mono font-bold text-cat-teal">(2, 3)</span> <span className="text-xs text-muted">east, north</span>
-          </>
-        )}
-      </div>
-      {guess !== null && (
-        <div className={`${FADE} mt-2 flex justify-center gap-2`}>
-          <button type="button" onClick={() => flip("map")} className={`${pill(!roads)} font-sans`}>
-            Map grid
-          </button>
-          <button type="button" onClick={() => flip("roads")} className={`${pill(roads)} font-sans`}>
-            Road grid
-          </button>
-        </div>
-      )}
-      <div className="mt-2.5 text-sm font-medium text-muted">When the grid changes, what happens to the arrow?</div>
-      <div className="mt-1.5 grid gap-1.5">
-        {SS_GUESS.map((o, i) => (
-          <Choice key={o} n={i} look={predictLook(i, guess, over, SS_RIGHT)} disabled={guess !== null} onClick={() => setGuess(i)}>
-            <span className="text-[0.95rem]">{o}</span>
-          </Choice>
-        ))}
-      </div>
-      <Task done={over}>Guess first. Then switch to the road grid and watch the arrow.</Task>
-    </>
+    <span
+      className={`inline-block rounded-md border-2 ${ink} ${small ? "h-5 w-6" : "h-7 w-8"} transition-opacity duration-500 motion-reduce:transition-none ${dim ? "opacity-30" : ""}`}
+    />
   );
 }
 
-// ---------------------------------------------------------------------------
-// 5½ · A figure for screen 5's explanation, no task: Fahim at two assembly
-//      lines. Last year's line: he is the tallest, at the end. Today's line:
-//      he stands in the middle. A dashed line at his height runs across both.
-
-const X5_OLD: { who: "som" | "samin" | "rina" | "fahim"; x: number; s: number }[] = [
-  { who: "som", x: 22, s: 0.78 },
-  { who: "rina", x: 52, s: 0.84 },
-  { who: "samin", x: 82, s: 0.9 },
-  { who: "fahim", x: 114, s: 1 },
-];
-const X5_NEW: { who: "nasib" | "karim" | "fahim"; x: number; s: number }[] = [
-  { who: "nasib", x: 206, s: 0.93 },
-  { who: "fahim", x: 240, s: 1 },
-  { who: "karim", x: 276, s: 1.14 },
-];
-const X5_SAY = [
-  "Last year, at the old school's assembly, lined up by height. Fahim came last: the tallest.",
-  "This morning, at the new school. Same Fahim, and now he's in the middle.",
-  "His height didn't change. Not a hair. Only the line did.",
-];
-
-export function AssemblyLines() {
-  const s = useScene(2, [600, 2400, 2400]);
+export function SystemBrace() {
+  const s = useScene(3, [600, 2200, 2400, 2400]);
   const k = s.k;
-  const head = 150 - 63;
+  const big = k >= 3;
 
   return (
-    <Scene scene={s} caption={<span key={k} className={FADE}>{X5_SAY[k]}</span>}>
-      <div className="mx-auto max-w-[17rem] overflow-hidden rounded-xl">
-        <Stage backdrop="field" label="two assembly lines by height: in last year's line Fahim is the tallest; in the new school's line he is in the middle">
-          <text x={70} y={22} textAnchor="middle" fontSize={10} fontWeight={700} fill="#0f1b2d">
-            old school
-          </text>
-          <text x={242} y={22} textAnchor="middle" fontSize={10} fontWeight={700} fill="#0f1b2d">
-            new school
-          </text>
-          <path d="M160 34V150" stroke="white" strokeWidth={2} strokeDasharray="4 4" />
-          {X5_OLD.map((p) => (
-            <Person key={`o${p.who}`} who={p.who} x={p.x} y={150} scale={p.s} mood={p.who === "fahim" ? "happy" : "plain"} />
-          ))}
-          {k === 0 && (
-            <g className={POP}>
-              <path d={`M114 ${head - 16}v10`} stroke="#b45309" strokeWidth={2} />
-              <path d={`M110 ${head - 10}l4 5l4 -5`} fill="none" stroke="#b45309" strokeWidth={2} />
-              <text x={114} y={head - 19} textAnchor="middle" fontSize={8.5} fontWeight={700} fill="#b45309">
-                tallest
-              </text>
-            </g>
+    <Scene scene={s} caption={<span key={k} className={FADE}>{X4S_SAY[k]}</span>}>
+      <div className="mx-auto flex w-fit items-stretch gap-1.5">
+        <svg viewBox="0 0 12 100" preserveAspectRatio="none" className={`w-3 shrink-0 transition-opacity duration-500 motion-reduce:transition-none ${k >= 1 ? "opacity-100" : "opacity-0"}`} aria-hidden="true">
+          <path d="M11 2Q5 2 5 10V42Q5 50 1 50Q5 50 5 58V90Q5 98 11 98" fill="none" strokeWidth={1.6} className="stroke-cat-violet" />
+        </svg>
+        <div key={big ? "big" : "two"} className={`grid content-center gap-1.5 text-[1.05rem] ${big ? FADE : ""}`}>
+          {big ? (
+            [0, 1, 2].map((r) => (
+              <span key={r} className="flex items-center gap-1 font-mono text-sm">
+                <X4S_Box tone="blue" small /> + <X4S_Box tone="coral" small /> + <X4S_Box tone="violet" small />
+              </span>
+            ))
+          ) : (
+            <>
+              <span className="flex items-center gap-1.5 rounded-lg px-1">
+                <span className="font-mono">2 =</span> <X4S_Box tone="blue" /> + <X4S_Box tone="coral" />
+              </span>
+              <span className={`flex items-center gap-1.5 rounded-lg px-1 transition-colors duration-500 motion-reduce:transition-none ${k >= 2 ? "bg-accent/10" : ""}`}>
+                <span className="font-mono">3 =</span> <span className={`font-mono text-sm transition-opacity duration-500 motion-reduce:transition-none ${k >= 2 ? "opacity-30" : ""}`}>0 ×</span>
+                <X4S_Box tone="blue" dim={k >= 2} /> + <X4S_Box tone="coral" />
+              </span>
+            </>
           )}
-          {X5_NEW.map((p) => (
-            <Person key={`n${p.who}`} who={p.who} x={k >= 1 ? p.x : p.x + 150} y={150} scale={p.s} walking={k === 1} ms={1400} mood={p.who === "fahim" ? "puzzled" : "plain"} />
-          ))}
-          {k >= 1 && (
-            <text x={240} y={head - 8} textAnchor="middle" fontSize={8.5} fontWeight={700} fill="#1d4ed8" className={FADE}>
-              middle
-            </text>
-          )}
-          {k >= 2 && <Draw d={`M10 ${head}H310`} strokeWidth={1.6} ms={900} className="stroke-[#7c3aed] [stroke-dasharray:6_4]" />}
-        </Stage>
+        </div>
       </div>
+      <div className="mt-1.5 h-5 text-center text-sm font-bold text-cat-violet">{k >= 1 && <span className={`${POP} inline-block`}>system of linear equations</span>}</div>
     </Scene>
   );
 }
 
 // ---------------------------------------------------------------------------
-// 6a · A story scene for screen 6's setup, no task: back at the gate this
+// 5a · A story scene for screen 5's setup, no task: back at the gate this
 //      morning. Ammu holds up her afternoon list, the bazaar (4, 1) and the
 //      mosque (0, 2), and the rickshaw mama wants a card for each.
 
 export function AmmuErrands({}: Story) {
-  const s = useScene(3, [600, 2400, 2400, 2000]);
+  const s = useScene(3, [600, 2400, 2400, 2200]);
   const k = s.k;
 
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="street" label="Ammu at the gate with her afternoon list: the bazaar at (4, 1) and the mosque at (0, 2), and the rickshaw mama asking for two cards">
+      <Stage backdrop="street" label="Ammu at the gate with her afternoon list: the bazaar at (4, 1) and the mosque at (0, 2), and the rickshaw mama asking for a card for each">
         <Building x={4} y={150} w={56} h={112} color="#e7d7c1" />
-        <Person who="ammu" x={84} y={150} arm={k >= 1 ? "hold" : "down"} mood="happy" />
-        {k === 1 && <Bubble x={84} y={84} side="right" lines={["The bazaar for me,", "this afternoon."]} />}
-        {k === 2 && <Bubble x={84} y={84} side="right" lines={["And the mosque", "for Abbu, at Asr."]} />}
-        {k >= 1 && <L_NamedCard x={166} y={48} name="bazaar" text="(4, 1)" tone="amber" />}
-        {k >= 2 && <L_NamedCard x={166} y={82} name="mosque" text="(0, 2)" tone="teal" />}
+        <Person who="ammu" x={84} y={150} arm={k >= 1 ? "hold" : "down"} mood="plain" />
+        {k === 1 && <Bubble x={84} y={84} side="right" lines={["বিকালে আমি", "বাজারে যাবো."]} />}
+        {k === 2 && <Bubble x={84} y={84} side="right" lines={["আসরের সময় তোর", "আব্বু মসজিদে."]} />}
+        {k >= 1 && <L_NamedCard x={166} y={48} name="বাজার" text="(4, 1)" tone="amber" />}
+        {k >= 2 && <L_NamedCard x={166} y={84} name="মসজিদ" text="(0, 2)" tone="teal" />}
         <Person who="fahim" x={128} y={150} mood={k >= 3 ? "puzzled" : "plain"} />
         <L_BigRick x={250} y={150} />
-        {k >= 3 && <Bubble x={270} y={86} side="left" lines={["A road card", "for each, please!"]} />}
+        {k >= 3 && <Bubble x={270} y={86} side="left" lines={["দুইটারই কার্ড", "দেওন লাগবো."]} />}
       </Stage>
     </StoryFrame>
   );
 }
 
 // ---------------------------------------------------------------------------
-// 6 · Your turn. Ammu's two errands, both counted from home: the bazaar at
+// 5 · Your turn. Ammu's two errands, both counted from home: the bazaar at
 //     (4, 1) and the mosque at (0, 2). The reader dials a road card by hand,
 //     then Mama drives it block by block. A wrong card drives to the wrong
 //     corner and the Nope says which slot is off; wrong tries bounce.
 
-const ERRANDS: { at: XY; kind: "bazaar" | "mosque" }[] = [
-  { at: [4, 1], kind: "bazaar" },
-  { at: [0, 2], kind: "mosque" },
+const ERRANDS: { at: XY; kind: "bazaar" | "mosque"; name: string }[] = [
+  { at: [4, 1], kind: "bazaar", name: "বাজার" },
+  { at: [0, 2], kind: "mosque", name: "মসজিদ" },
 ];
 const EF = makeFrame(-3, 6, -1, 4, 22, 10);
 
@@ -1068,7 +917,7 @@ export function YourErrand() {
       }
       const s = solved.map((v, j) => v || j === at);
       setSolved(s);
-      if (s.every(Boolean)) pass("Bazaar (3, 1), mosque (−2, 2).");
+      if (s.every(Boolean)) pass("বাজার (3, 1), মসজিদ (−2, 2).");
     };
     if (t.pts.length > 1) play.play(t.pts.length - 1, finish);
     else finish();
@@ -1081,9 +930,9 @@ export function YourErrand() {
 
   const nope = () => {
     if (!trip || !end) return "";
-    if (trip.off) return "That card drives Mama off the map. Try smaller numbers.";
-    const where = `Mama stopped at ${tup(end)}. The ${goal.kind} is at ${tup(goal.at)}.`;
-    return end[1] !== goal.at[1] ? `${where} North is off, so fix the slanting slot first.` : `${where} North is right. Now fix the straight slot.`;
+    if (trip.off) return "এই card এ মামা map থেকেই বের হয়ে যান. ছোট সংখ্যা দিয়ে try করুন.";
+    const where = `মামা থামলেন ${tup(end)} এ. ${goal.name} ${tup(goal.at)} এ.`;
+    return end[1] !== goal.at[1] ? `${where} North মিলে নাই, তাই আগে বাঁকা slot টা ঠিক করুন.` : `${where} North ঠিক আছে. এবার সোজা slot টা ঠিক করুন.`;
   };
 
   return (
@@ -1102,30 +951,30 @@ export function YourErrand() {
         </Plane>
       </div>
       <div className="mt-1 text-center text-sm">
-        The {goal.kind} on the map: <b className="font-mono">{tup(goal.at)}</b>
+        Map এ {goal.name}: <b className="font-mono">{tup(goal.at)}</b>
       </div>
       {!solved[at] ? (
         <>
           <div className="mt-1.5 flex items-center justify-center gap-1 font-mono text-lg">
-            (<Stepper value={card[0]} onChange={(n) => dial(0, n)} min={-3} max={3} disabled={play.running} label="straight" />,
-            <Stepper value={card[1]} onChange={(n) => dial(1, n)} min={-1} max={3} disabled={play.running} label="slanting" />)
+            (<Stepper value={card[0]} onChange={(n) => dial(0, n)} min={-3} max={3} disabled={play.running} label="সোজা" />,
+            <Stepper value={card[1]} onChange={(n) => dial(1, n)} min={-1} max={3} disabled={play.running} label="বাঁকা" />)
           </div>
           <div className="mt-0.5 text-center text-xs">
-            <span className="text-cat-blue">straight</span>, <span className="text-cat-coral">slanting</span>
+            <span className="text-cat-blue">সোজা</span>, <span className="text-cat-coral">বাঁকা</span>
           </div>
           <div className="mt-2 flex justify-center">
             <button type="button" onClick={drive} disabled={play.running} className={primaryBtn}>
-              Mama, drive it
+              মামা, চালান
             </button>
           </div>
         </>
       ) : (
         <div className={`${FADE} mt-2 text-center text-[0.95rem]`}>
-          <L_CardText c={goal.at[1] === 1 ? [3, 1] : [-2, 2]} hit /> takes Mama to the {goal.kind}.
+          <L_CardText c={goal.at[1] === 1 ? [3, 1] : [-2, 2]} hit /> দিয়ে মামা পৌঁছে গেলেন {goal.name} এ.
           {at === 0 && (
             <div className="mt-2 flex justify-center">
               <button type="button" onClick={nextErrand} className={primaryBtn}>
-                Now the mosque
+                এবার মসজিদ
               </button>
             </div>
           )}
@@ -1134,25 +983,25 @@ export function YourErrand() {
       {end && !right && !play.running && <Nope key={miss}>{nope()}</Nope>}
       <Ticks
         items={[
-          ["bazaar", solved[0]],
-          ["mosque", solved[1]],
+          ["বাজার", solved[0]],
+          ["মসজিদ", solved[1]],
         ]}
       />
-      <Task done={solved.every(Boolean)}>Work out each card slot by slot, dial it in, then let Mama drive it.</Task>
+      <Task done={solved.every(Boolean)}>প্রতিটা card এক slot এক slot করে বের করুন, বসান, তারপর মামাকে চালাতে দিন.</Task>
     </>
   );
 }
 
 // ---------------------------------------------------------------------------
-// 6½ · A figure for screen 6's explanation, no task: the mosque is straight
+// 5½ · A figure for screen 5's explanation, no task: the mosque is straight
 //      north of home, 2 blocks. Up the lane 2 blocks lands 2 too far east;
 //      back 2 on the main road: card (−2, 2).
 
 const X6F = makeFrame(-1, 3, -1, 3, 22, 10);
 const X6_SAY = [
-  "The mosque is straight north of home, 2 blocks. But there's no north road.",
-  "Up the lane 2 blocks. North is right, but it's 2 blocks too far east.",
-  "Back 2 on the main road. Card (−2, 2).",
+  "মসজিদ বাসার ঠিক north এ, 2 block. কিন্তু north এ রাস্তা নাই.",
+  "গলিতে 2 block. North ঠিক, কিন্তু east এ 2 block বেশি.",
+  "বড় রাস্তায় 2 block ফেরত. Card (−2, 2).",
 ];
 
 export function MosqueMinus() {
@@ -1184,214 +1033,165 @@ export function MosqueMinus() {
 }
 
 // ---------------------------------------------------------------------------
-// 7a · A story scene for screen 7's setup, no task: at the school gate, a few
-//      minutes before the bell. Fahim pulls out 3.4's tape and wonders how far
-//      the ride really was; then he's sure Pythagoras on the card will do.
+// 6a · A story scene for the exercise's setup, no task: still in the
+//      rickshaw. Nasib, who has joined the same school, holds up the card he
+//      made for the fuchka stall, (3, 2). Mama glances at it over his
+//      shoulder. Which line is wrong is left to the reader.
 
-export function TapeOut({}: Story) {
-  const s = useScene(2, [600, 2400, 2400]);
+export function NasibCard({}: Story) {
+  const s = useScene(3, [600, 1800, 2400, 2600]);
   const k = s.k;
 
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="street" label="at the school gate, Fahim pulls out his measuring tape and thinks about the card (−1, 3)">
-        <Building x={20} y={150} w={136} h={96} color="#fecaca" />
-        <Gate x={96} y={150} text="School" />
-        <L_BigRick x={272} y={150} />
-        <Person who="fahim" x={196} y={150} arm={k >= 1 ? "hold" : "down"} mood={k >= 2 ? "smug" : "plain"} />
-        {k >= 1 && (
-          <g className={POP}>
-            <rect x={203} y={100} width={12} height={11} rx={2.5} fill="#facc15" stroke="#a16207" strokeWidth={1} />
-            <circle cx={209} cy={105.5} r={2.4} fill="#a16207" />
-            <Draw d="M215 108H246" strokeWidth={2.4} ms={900} className="stroke-[#eab308]" />
-          </g>
-        )}
-        {k === 1 && <Bubble x={196} y={84} side="mid" tone="think" lines={["How far was that", "ride, really?"]} />}
-        {k >= 2 && <Bubble x={196} y={84} side="mid" tone="think" lines={["Card (−1, 3).", "Pythagoras, easy!"]} />}
+      <Stage backdrop="street" label="Fahim and Nasib in the rickshaw; Nasib holds up the card he made for the fuchka stall, (3, 2), and the rickshaw mama looks back at it">
+        <Building x={250} y={150} w={64} h={84} color="#fef3c7" label="ফুচকা" />
+        <path d="M0 162H320" stroke="white" strokeWidth={2} strokeDasharray="10 8" opacity={0.7} />
+        <L_BigRick x={k >= 1 ? 150 : 60} y={150} ms={1400} riders={["fahim", "nasib"]} />
+        {k >= 2 && <L_NamedCard x={66} y={66} name="নাসিবের card" text="(3, 2)" tone="coral" />}
+        {k === 2 && <Bubble x={140} y={96} side="right" lines={["ছুটির পরে ফুচকা.", "Card বানিয়ে ফেলছি."]} />}
+        {k >= 3 && <Bubble x={171} y={92} side="right" lines={["এইডা দিয়া গেলে", "ফুচকা পাইবা না."]} />}
       </Stage>
     </StoryFrame>
   );
 }
 
 // ---------------------------------------------------------------------------
-// 7 · The trap. First Fahim's sum on the road card: √((−1)² + 3²) = 3.16,
-//     line by line. Then the reader pulls the real tape from home to the
-//     school on the map: 3.61. The two numbers don't agree.
+// 6 · Try it: spot the slip. Nasib's working for the fuchka stall at (1, 2)
+//     on the map, four lines, card (3, 2). First the reader lets Mama drive
+//     Nasib's card: it ends at (5, 2), past the stall. Then the reader taps
+//     the wrong line. Right lines bounce with a word on why they are right;
+//     the wrong one (straight = 1 + 2 = 3) turns into 1 − 2 = −1, and Mama
+//     drives (−1, 2) to the stall.
 
-const WT_SUM = ["√((−1)² + 3²)", "= √(1 + 9) = √10", "= 3.16 blocks"];
+const FUCHKA: XY = [1, 2];
+const NASIB: XY = [3, 2];
+const FIX: XY = [-1, 2];
+const SL_LINES = ["north:  2 = বাঁকা", "east:  1 = সোজা + 2", "সোজা = 1 + 2 = 3", "card:  (3, 2)"];
+const SL_FIXED = ["north:  2 = বাঁকা", "east:  1 = সোজা + 2", "সোজা = 1 − 2 = −1", "card:  (−1, 2)"];
+const SL_WRONG = 2;
+const SL_WHY = [
+  "এই line টা ঠিক. North এ শুধু গলিই ওঠে, তাই বাঁকা = 2.",
+  "এটাও ঠিক. গলির 2 block east এও 2 ঠেলে, বাকিটা সোজা.",
+  "",
+  "Card টা আগের line থেকেই এসেছে. ভুলটা তার আগে কোথাও.",
+];
 
-export function WrongTape() {
+export function SpotTheSlip() {
   const pass = useGate();
-  const [summed, setSummed] = useSeed("summed", false);
-  const [end, setEnd] = useSeed<XY>("end", O);
-  const [measured, setMeasured] = useSeed("measured", false);
-  const play = usePlay(650);
-  const lines = summed ? 3 : play.k;
-  const len = dist(O, end);
+  const [driven, setDriven] = useSeed("driven", false);
+  const [pick, setPick] = useSeed<number | null>("pick", null);
+  const [fixed, setFixed] = useSeed("fixed", false);
+  const [miss, setMiss] = useState(0);
+  const play = usePlay(300);
+  const card = fixed ? FIX : NASIB;
+  const trip = route(card);
+  const k = play.running ? play.k : driven ? trip.length - 1 : 0;
+  const pos = trip[k];
+  const settled = !play.running;
 
-  const sum = () => play.play(3, () => setSummed(true));
-  const pull = (p: XY) => {
-    if (!summed || measured) return;
-    const t: XY = [clamp(p[0], M.x0, M.x1), clamp(p[1], M.y0, M.y1)];
-    if (dist(t, SCHOOL) < 0.45) {
-      setEnd(SCHOOL);
-      setMeasured(true);
-      pass("Pythagoras needs square roads.");
-    } else setEnd(t);
+  const drive = () => play.play(route(NASIB).length - 1, () => setDriven(true));
+  const tap = (i: number) => {
+    if (!driven || fixed || play.running) return;
+    setPick(i);
+    if (i !== SL_WRONG) {
+      setMiss((m) => m + 1);
+      return;
+    }
+    setFixed(true);
+    play.play(route(FIX).length - 1, () => pass("1 থেকে 2 বাদ: সোজা = −1."));
   };
-  const key = () => pull(SCHOOL);
-  const trip = route(CARD);
+  const look = (i: number): Look => (pick !== i ? "idle" : i === SL_WRONG ? "right" : "wrong");
 
   return (
     <>
-      <div className="mx-auto w-full max-w-[12.5rem]">
-        <Plane
-          f={M}
-          grid={0}
-          axes={false}
-          label={`the tape from home, ${len.toFixed(2)} blocks long`}
-          drag={summed && !measured ? { down: pull, move: pull } : undefined}
-          onKey={summed && !measured ? key : undefined}
-          className="my-0! max-w-none"
-        >
+      <div className="mx-auto w-full max-w-[11rem]">
+        <Plane f={M} grid={0} axes={false} label={`the fuchka stall at (1, 2); the rickshaw at ${tup(pos)}`} className="my-0! max-w-none">
           <L_Roads f={M} />
-          <g opacity={0.45}>
-            <L_Trail f={M} pts={trip} w={1.8} />
-          </g>
           <L_Home f={M} />
-          <L_Place f={M} at={SCHOOL} kind="school" hit={measured} />
-          {len > 0.05 && (
-            <>
-              <path d={`M${M.sx(0)} ${M.sy(0)}L${M.sx(end[0])} ${M.sy(end[1])}`} strokeWidth={4.5} strokeLinecap="round" className="pointer-events-none stroke-[#eab308]" />
-              <path d={`M${M.sx(0)} ${M.sy(0)}L${M.sx(end[0])} ${M.sy(end[1])}`} strokeWidth={4.5} strokeDasharray="1.2 5" className="pointer-events-none stroke-[#a16207]" />
-              <circle cx={M.sx(end[0])} cy={M.sy(end[1])} r={4.5} className="pointer-events-none fill-[#facc15] stroke-[#a16207]" strokeWidth={1.2} />
-            </>
+          <L_Place f={M} at={FUCHKA} kind="fuchka" hit={fixed && settled} />
+          {fixed && (
+            <g opacity={0.3}>
+              <L_Trail f={M} pts={route(NASIB)} w={1.6} />
+            </g>
           )}
-          {summed && !measured && len < 0.05 && <circle cx={M.sx(0)} cy={M.sy(0)} r={11} strokeWidth={2} className={`${POP} pointer-events-none fill-none stroke-[#eab308]`} />}
+          {(driven || play.running) && <L_Trail f={M} pts={trip} upto={k} />}
+          <L_Rickshaw f={M} at={pos} facing={faceOf(trip, k)} />
         </Plane>
       </div>
-      <div className="mx-auto mt-2 grid max-w-xs grid-cols-2 gap-2 text-center">
-        <div className={`rounded-xl border px-2 py-1.5 ${measured ? "border-danger/50 bg-danger/5" : "border-border"}`}>
-          <div className="text-xs text-muted">Fahim&apos;s sum</div>
-          {WT_SUM.slice(0, lines).map((l, i) => (
-            <div key={l} className={`${FADE} font-mono text-sm ${i === 2 ? "font-bold" : ""}`}>
-              {l}
-            </div>
-          ))}
-          {lines === 0 && <div className="font-mono text-sm text-muted">?</div>}
-        </div>
-        <div className={`rounded-xl border px-2 py-1.5 ${measured ? "border-accent bg-accent/10" : "border-border"}`}>
-          <div className="text-xs text-muted">the real tape</div>
-          <div className={`font-mono text-lg font-bold ${measured ? "text-accent-text" : ""}`}>{summed ? `${len.toFixed(2)}` : "?"}</div>
-          <div className="text-xs text-muted">blocks</div>
-        </div>
-      </div>
-      {!summed && (
+      {!driven ? (
         <div className="mt-2 flex justify-center">
-          <button type="button" onClick={sum} disabled={play.running} className={primaryBtn}>
-            Work out Fahim&apos;s sum
+          <button type="button" onClick={drive} disabled={play.running} className={primaryBtn}>
+            নাসিবের card চালান
           </button>
         </div>
+      ) : (
+        !fixed && <div className={`${FADE} mt-1 text-center text-sm text-danger`}>মামা থামলেন (5, 2) এ. ফুচকা (1, 2) এ.</div>
       )}
-      {measured && <div className={`${FADE} mt-2 text-center text-[0.95rem]`}>3.16 and 3.61. Same ride, two answers. One of them is wrong.</div>}
-      <Task done={measured}>{summed ? "Now drag the tape from home to the school." : "Work out Fahim's sum first."}</Task>
+      <div className="mx-auto mt-1.5 max-w-xs rounded-xl border border-border bg-surface p-1.5">
+        <div className="px-1 pb-1 text-xs text-muted">নাসিবের খাতা</div>
+        <div className="grid gap-1">
+          {(fixed ? SL_FIXED : SL_LINES).map((l, i) => (
+            <button
+              key={i}
+              type="button"
+              disabled={!driven || fixed}
+              onClick={() => tap(i)}
+              className={`w-full cursor-pointer rounded-lg border-2 px-2.5 py-1 text-left text-[0.95rem] transition-[color,background-color,border-color] duration-200 disabled:cursor-default motion-reduce:transition-none ${LOOK[look(i)]}`}
+            >
+              <span key={l} className={fixed && i >= 2 ? `${POP} inline-block font-semibold` : ""}>
+                {l}
+              </span>
+            </button>
+          ))}
+        </div>
+      </div>
+      {pick !== null && pick !== SL_WRONG && !fixed && <Nope key={miss}>{SL_WHY[pick]}</Nope>}
+      <Task done={fixed && settled}>{driven ? "নাসিবের খাতায় যে line এ ভুল, সেটায় tap করুন." : "আগে নাসিবের card টা মামাকে দিয়ে চালান."}</Task>
     </>
   );
 }
 
 // ---------------------------------------------------------------------------
-// 7½ · A figure for screen 7's explanation, no task: two small maps, one
-//      tape. On the square grid the legs 2 and 3 meet square, and Pythagoras
-//      gives the tape's 3.61. On the road grid the corner isn't square and a
-//      lane block is 1.41 long, so √(1² + 3²) = 3.16 misses.
+// 6½ · A figure for the exercise's explanation, no task: the right card
+//      checked block by block. Up the lane 2 to (2, 2), back 1 to (1, 2), the
+//      stall; Nasib's (3, 2) shown faint, stopping 4 blocks east of it.
 
-const X7F = makeFrame(-1, 3.5, -0.5, 3.5, 20, 7);
-
-function L_Tick({ x, y, ok }: { x: number; y: number; ok: boolean }) {
-  return ok ? (
-    <path d={`M${x - 4} ${y}l3 3.5l6 -7`} strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round" className={`${POP} fill-none stroke-[#15803d]`} />
-  ) : (
-    <path d={`M${x - 3.5} ${y - 3.5}l7 7m0 -7l-7 7`} strokeWidth={2.2} strokeLinecap="round" className={`${POP} fill-none stroke-[#dc2626]`} />
-  );
-}
-
+const X7F = makeFrame(-1, 5, -0.5, 3, 20, 10);
 const X7_SAY = [
-  "Same school, same tape: 3.61 blocks.",
-  "On the map grid the two legs, 2 and 3, meet square. Pythagoras gives 3.61. It matches.",
-  "On the road grid the roads meet at a slant. Pythagoras says 3.16. Wrong.",
-  "And one lane block isn't 1 long. It's 1.41.",
+  "ঠিক card (−1, 2). মিলিয়ে দেখি.",
+  "গলিতে 2 block: (2, 2).",
+  "বড় রাস্তায় 1 block পিছনে: (1, 2). ফুচকার দোকান.",
+  "নাসিবের (3, 2) গেলে থামতো (5, 2) এ, দোকান থেকে 4 block দূরে.",
 ];
 
-export function TwoTapes() {
-  const s = useScene(3, [600, 2200, 2400, 2000]);
+export function StallCheck() {
+  const s = useScene(3, [600, 1800, 2000, 2400]);
   const k = s.k;
-  const tape = (
-    <path d={`M${X7F.sx(0)} ${X7F.sy(0)}L${X7F.sx(2)} ${X7F.sy(3)}`} strokeWidth={3.5} strokeLinecap="round" className="pointer-events-none stroke-[#eab308]" />
-  );
+  const trip = route(FIX);
+  const upto = k >= 2 ? 3 : k >= 1 ? 2 : 0;
+  const X = X7F;
 
   return (
     <Scene scene={s} caption={<span key={k} className={FADE}>{X7_SAY[k]}</span>}>
-      <div className="mx-auto flex max-w-[17rem] justify-center gap-2">
-        <div className="w-1/2 text-center">
-          <Plane f={X7F} grid={0} axes={false} label="square grid: legs 2 and 3 meet at a right angle" className="my-0! max-w-none">
-            <L_Squares f={X7F} />
-            {tape}
-            {k >= 1 && (
-              <g className={FADE}>
-                <Arrow f={X7F} from={O} to={[2, 0]} tone="teal" w={2} />
-                <Arrow f={X7F} from={[2, 0]} to={[2, 3]} tone="teal" w={2} />
-                <path d={`M${X7F.sx(2) - 7} ${X7F.sy(0)}v-7h7`} strokeWidth={1.2} className="pointer-events-none fill-none stroke-[#0f1b2d]" />
+      <div className="mx-auto flex items-center justify-center gap-3">
+        <div className="w-[9.5rem] shrink-0">
+          <Plane f={X} grid={0} axes={false} label="the fuchka stall's card (−1, 2): two blocks up the lane, one back; Nasib's (3, 2) stops at (5, 2)" className="my-0! max-w-none">
+            <L_Roads f={X} />
+            <L_Home f={X} name={false} />
+            <L_Place f={X} at={FUCHKA} kind="fuchka" name={false} hit={k >= 2} />
+            {k >= 3 && (
+              <g opacity={0.35} className={FADE}>
+                <L_Trail f={X} pts={route(NASIB)} w={1.6} />
               </g>
             )}
-            <L_Place f={X7F} at={SCHOOL} kind="school" name={false} />
+            <L_Trail f={X} pts={trip} upto={upto} draw />
+            <L_Rickshaw f={X} at={trip[upto]} facing={faceOf(trip, upto)} ms={800} s={0.9} />
           </Plane>
-          <div className="mt-0.5 text-xs text-muted">map grid</div>
-          <div className="flex h-5 items-center justify-center gap-1 font-mono text-[0.68rem] whitespace-nowrap">
-            {k >= 1 && (
-              <>
-                <span className={FADE}>√(2² + 3²) = 3.61</span>
-                <svg viewBox="-6 -6 12 12" className="h-3 w-3 shrink-0" aria-hidden="true">
-                  <L_Tick x={0} y={0} ok />
-                </svg>
-              </>
-            )}
-          </div>
         </div>
-        <div className="w-1/2 text-center">
-          <Plane f={X7F} grid={0} axes={false} label="road grid: three lane blocks and one back; the corner is not square" className="my-0! max-w-none">
-            <L_Roads f={X7F} w={2.6} />
-            {tape}
-            {k >= 2 && (
-              <g className={FADE}>
-                <L_Trail f={X7F} pts={route(CARD)} w={2} />
-              </g>
-            )}
-            <L_Place f={X7F} at={SCHOOL} kind="school" name={false} />
-            {k >= 2 && (
-              <path
-                d={`M${X7F.sx(0) + 13} ${X7F.sy(0)}A13 13 0 0 0 ${X7F.sx(0) + 9.2} ${X7F.sy(0) - 9.2}`}
-                strokeWidth={2}
-                className={`${POP} pointer-events-none fill-none stroke-[#7c3aed]`}
-              />
-            )}
-            {k >= 3 &&
-              [0, 1, 2].map((i) => (
-                <text key={i} x={X7F.sx(i + 0.5) - 5} y={X7F.sy(i + 0.5) - 3} textAnchor="end" fontSize={7} fontWeight={700} fill="#be123c" stroke="white" strokeWidth={2} paintOrder="stroke" className={POP}>
-                  1.41
-                </text>
-              ))}
-          </Plane>
-          <div className="mt-0.5 text-xs text-muted">road grid</div>
-          <div className="flex h-5 items-center justify-center gap-1 font-mono text-[0.68rem] whitespace-nowrap">
-            {k >= 2 && (
-              <>
-                <span className={FADE}>√(1² + 3²) = 3.16</span>
-                <svg viewBox="-6 -6 12 12" className="h-3 w-3 shrink-0" aria-hidden="true">
-                  <L_Tick x={0} y={0} ok={false} />
-                </svg>
-              </>
-            )}
-          </div>
+        <div className="font-mono text-xl font-bold">
+          (<span className="text-cat-blue">{k >= 2 ? <span className={`${POP} inline-block`}>−1</span> : "?"}</span>,{" "}
+          <span className="text-cat-coral">{k >= 1 ? <span className={`${POP} inline-block`}>2</span> : "?"}</span>)
         </div>
       </div>
     </Scene>
@@ -1399,200 +1199,9 @@ export function TwoTapes() {
 }
 
 // ---------------------------------------------------------------------------
-// 7¾ · A figure for screen 7's side quest, no task: on square roads, 1 block
-//      long, the card needs no solving. Light the school's arrow onto each
-//      road, as 4.3's torches did: the shadows are 2 and 3, the card itself.
-
-const X8F = makeFrame(-0.5, 3.5, -0.5, 3.5, 24, 10);
-const X8_SAY = [
-  "Square roads, each block 1 long: the map's own grid.",
-  "Shine a torch down on the east road. The shadow is 2 blocks.",
-  "Shine one across onto the north road. The shadow is 3 blocks.",
-  "The shadows are the card. On slanted roads they aren't. There you solve.",
-];
-
-export function ShadowRoads() {
-  const s = useScene(3, [600, 1800, 1800, 2400]);
-  const k = s.k;
-  const f = X8F;
-
-  return (
-    <Scene scene={s} caption={<span key={k} className={FADE}>{X8_SAY[k]}</span>}>
-      <div className="mx-auto flex items-center justify-center gap-4">
-        <div className="w-[7.5rem] shrink-0">
-          <Plane f={f} grid={0} axes={false} label="the school's arrow on square roads, with its shadows 2 and 3 on the two roads" className="my-0! max-w-none">
-            <L_Roads f={f} kind="square" w={2.6} />
-            {k >= 1 && (
-              <g className={FADE}>
-                <path d={`M${f.sx(2)} ${f.sy(3)}V${f.sy(0)}`} strokeWidth={1.2} strokeDasharray="3 3" className="pointer-events-none stroke-[#d97706]" />
-                <path d={`M${f.sx(0)} ${f.sy(0)}H${f.sx(2)}`} strokeWidth={6} strokeLinecap="round" className="pointer-events-none stroke-[#0f1b2d]/55" />
-              </g>
-            )}
-            {k >= 2 && (
-              <g className={FADE}>
-                <path d={`M${f.sx(2)} ${f.sy(3)}H${f.sx(0)}`} strokeWidth={1.2} strokeDasharray="3 3" className="pointer-events-none stroke-[#d97706]" />
-                <path d={`M${f.sx(0)} ${f.sy(0)}V${f.sy(3)}`} strokeWidth={6} strokeLinecap="round" className="pointer-events-none stroke-[#0f1b2d]/55" />
-              </g>
-            )}
-            <Arrow f={f} from={O} to={SCHOOL} tone="violet" w={2.6} />
-            <L_Home f={f} name={false} />
-          </Plane>
-        </div>
-        <div className="font-mono text-2xl font-bold">
-          (<span className="text-cat-teal">{k >= 1 ? <span className={`${POP} inline-block`}>2</span> : "?"}</span>,{" "}
-          <span className="text-cat-teal">{k >= 2 ? <span className={`${POP} inline-block`}>3</span> : "?"}</span>)
-        </div>
-      </div>
-    </Scene>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// 8 · Try it: three road maps as pictures, slanted roads · two parallel roads
-//     · square roads. The reader taps every map that can take a rickshaw
-//     anywhere, then sends the rickshaws. The parallel one runs along its one
-//     line and never reaches the school; a missed good map drives there
-//     anyway. Wrong tries bounce.
-
-const TF = makeFrame(-1, 4, -1, 4, 14, 6);
-const TW: { kind: RoadKind; name: string; keys: [XY, XY]; trip: XY[]; reach: boolean }[] = [
-  { kind: "slant", name: "slanted roads", keys: [[1, 0], [1, 1]], trip: route(CARD), reach: true },
-  { kind: "twin", name: "two parallel roads", keys: [[1, 1], [2, 2]], trip: [O, [1, 1], [2, 2], [3, 3]], reach: false },
-  {
-    kind: "square",
-    name: "square roads",
-    keys: [[1, 0], [0, 1]],
-    trip: [O, [1, 0], [2, 0], [2, 1], [2, 2], [2, 3]],
-    reach: true,
-  },
-];
-const TW_RIGHT = [0, 2];
-
-function L_Mini({ i, k, show, paint = false }: { i: number; k: number; show: boolean; paint?: boolean }) {
-  const m = TW[i];
-  const t = Math.min(k, m.trip.length - 1);
-  const end = m.trip[t];
-  const lo = Math.max(TF.x0, TF.y0);
-  const hi = Math.min(TF.x1, TF.y1);
-  return (
-    <Plane f={TF} grid={0} axes={false} label={`${m.name}${paint ? (m.reach ? ": they reach everywhere" : ": they reach only one line") : ""}`} className="my-0! max-w-none">
-      {paint &&
-        (m.reach ? (
-          <rect x={TF.sx(TF.x0)} y={TF.sy(TF.y1)} width={(TF.x1 - TF.x0) * TF.u} height={(TF.y1 - TF.y0) * TF.u} className={`${FADE} fill-cat-violet/20`} />
-        ) : (
-          <path d={`M${TF.sx(lo)} ${TF.sy(lo)}L${TF.sx(hi)} ${TF.sy(hi)}`} strokeWidth={11} className={`${FADE} fill-none stroke-cat-violet/30`} />
-        ))}
-      <L_Roads f={TF} kind={m.kind} w={2.4} />
-      <Arrow f={TF} from={O} to={m.keys[1]} tone="coral" w={2} />
-      <Arrow f={TF} from={O} to={m.keys[0]} tone="blue" w={2} />
-      <L_Place f={TF} at={SCHOOL} kind="school" name={false} hit={show && !paint && same(end, SCHOOL)} />
-      {show && !paint && <L_Trail f={TF} pts={m.trip} upto={t} w={1.6} />}
-      {show && !paint && <L_Rickshaw f={TF} at={end} s={0.6} facing={faceOf(m.trip, t)} ms={260} />}
-      {show && !paint && !m.reach && t === m.trip.length - 1 && (
-        <path d={`M${TF.sx(3) + 5} ${TF.sy(3) - 12}l7 7m0 -7l-7 7`} strokeWidth={2} strokeLinecap="round" className={`${POP} fill-none stroke-danger`} />
-      )}
-      <L_Home f={TF} name={false} />
-    </Plane>
-  );
-}
-
-export function TryWhichGrid() {
-  const pass = useGate();
-  const [picks, setPicks] = useSeed<number[]>("picks", []);
-  const [checked, setChecked] = useSeed("checked", false);
-  const [miss, setMiss] = useState(0);
-  const play = usePlay(260);
-  const right = picks.length === 2 && TW_RIGHT.every((i) => picks.includes(i));
-  const k = play.running ? play.k : 9;
-  const settled = checked && !play.running;
-  const shown = (i: number) => checked && (picks.includes(i) || TW[i].reach);
-
-  const toggle = (i: number) => {
-    if (play.running) return;
-    setChecked(false);
-    setPicks(picks.includes(i) ? picks.filter((p) => p !== i) : [...picks, i].sort());
-  };
-  const send = () => {
-    const ok = right;
-    setChecked(true);
-    play.play(5, () => (ok ? pass("Any two non-parallel roads make a basis.") : setMiss((m) => m + 1)));
-  };
-  const look = (i: number): Look => {
-    if (!settled) return picks.includes(i) ? "picked" : "idle";
-    if (picks.includes(i)) return TW[i].reach ? "right" : "wrong";
-    return TW[i].reach ? "wrong" : "dim";
-  };
-  const nope = [
-    picks.includes(1) && "On the parallel roads the rickshaw only runs along one line. The school isn't on it.",
-    !picks.includes(0) && "You left out the slanted roads. They took Fahim to school this morning.",
-    !picks.includes(2) && "You left out the square roads: plain east and north. They reach everywhere too.",
-  ]
-    .filter(Boolean)
-    .join(" ");
-
-  return (
-    <>
-      <div className="grid grid-cols-3 gap-1.5">
-        {TW.map((m, i) => (
-          <button
-            key={m.name}
-            type="button"
-            onClick={() => toggle(i)}
-            aria-pressed={picks.includes(i)}
-            className={`cursor-pointer rounded-xl border-2 p-1 text-center transition-[border-color,background-color,opacity] duration-200 ${LOOK[look(i)]}`}
-          >
-            <L_Mini i={i} k={k} show={shown(i)} />
-            <div className="mt-0.5 text-xs leading-tight font-semibold">{m.name}</div>
-          </button>
-        ))}
-      </div>
-      <div className="mt-2 text-center text-xs text-muted">Home is the house. The school is at (2, 3) on every map.</div>
-      <div className="mt-2 flex justify-center">
-        <button type="button" onClick={send} disabled={!picks.length || play.running || (settled && right)} className={primaryBtn}>
-          Send the rickshaws
-        </button>
-      </div>
-      {settled && !right && <Nope key={miss}>{nope}</Nope>}
-      {settled && right && <div className={`${FADE} mt-2 text-center text-[0.95rem]`}>Both reach the school. And from there, anywhere.</div>}
-      <Task done={settled && right}>Tap every map where a rickshaw can get anywhere, then send the rickshaws.</Task>
-    </>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// 8½ · A figure for the exercise's explanation, no task: each map's reach,
-//      painted. The slanted roads paint the whole map, the square roads too;
-//      the parallel roads paint one line, and the school is off it.
-
-const X9_SAY = [
-  "Three maps. Paint everywhere each one can reach.",
-  "Slanted roads: the whole map.",
-  "Square roads: the whole map too.",
-  "Parallel roads: one line. The school is off it.",
-];
-
-export function ReachPaint() {
-  const s = useScene(3, [600, 1600, 1600, 2200]);
-  const k = s.k;
-  const order = [0, 2, 1];
-
-  return (
-    <Scene scene={s} caption={<span key={k} className={FADE}>{X9_SAY[k]}</span>}>
-      <div className="mx-auto grid max-w-[17rem] grid-cols-3 gap-1.5">
-        {TW.map((m, i) => (
-          <div key={m.name} className="text-center">
-            <L_Mini i={i} k={0} show={false} paint={k > order.indexOf(i)} />
-            <div className="text-[0.7rem] leading-tight text-muted">{m.name}</div>
-          </div>
-        ))}
-      </div>
-    </Scene>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// 9a · A story scene for the finale's setup, no task: the rickshaw pulls up
-//      at the school gate, Fahim jumps down and runs in, the bell rings.
+// 7a · A story scene for the finale's setup, no task: the rickshaw pulls up
+//      at the school gate at 7:58, Fahim jumps down and runs in, and at 8:00
+//      the bell rings.
 
 export function BellRings({}: Story) {
   const s = useScene(3, [600, 1800, 1800, 2200]);
@@ -1600,29 +1209,21 @@ export function BellRings({}: Story) {
 
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="street" label="the rickshaw pulls up at the school gate, Fahim runs in, and the school bell rings">
+      <Stage backdrop="street" label="the rickshaw pulls up at the school gate, Fahim runs in, and at eight the school bell rings">
         <Building x={150} y={150} w={166} h={100} color="#fecaca" />
-        <Gate x={206} y={150} text="School" />
-        <g className="pointer-events-none">
-          <path d="M268 50V58" stroke="#57534e" strokeWidth={1.6} />
-          <path d="M261 72Q261 58 268 58Q275 58 275 72Z" fill="#d97706" stroke="#92400e" strokeWidth={1} />
-          <circle cx={268} cy={74} r={2} fill="#92400e" />
-          {k >= 3 && (
-            <g className={POP}>
-              <path d="M255 60l-6 -4M254 68h-8M281 60l6 -4M282 68h8" stroke="#b45309" strokeWidth={1.8} strokeLinecap="round" />
-            </g>
-          )}
-        </g>
+        <Gate x={206} y={150} text="স্কুল" />
+        <L_Clock x={186} y={40} h={k >= 3 ? 8 : 7} m={k >= 3 ? 0 : 58} r={11} />
+        <L_Bell x={160} y={44} ringing={k >= 3} />
         <L_BigRick x={k >= 1 ? 96 : -70} y={150} />
-        {k >= 1 && <Person who="fahim" x={k >= 2 ? 214 : 130} y={150} walking={k === 2} ms={1300} mood={k >= 3 ? "happy" : "plain"} />}
-        {k >= 3 && <Bubble x={116} y={86} side="right" lines={["Just in time!"]} />}
+        {k >= 1 && <Person who="fahim" x={k >= 2 ? 244 : 130} y={150} walking={k === 2} ms={1300} mood={k >= 3 ? "happy" : "plain"} />}
+        {k >= 3 && <Bubble x={250} y={84} side="right" lines={["বাঁচলাম."]} />}
       </Stage>
     </StoryFrame>
   );
 }
 
 // ---------------------------------------------------------------------------
-// 9 · The finale. The four sealed cards, and Mama drives each one on the
+// 7 · The finale. The four sealed cards, and Mama drives each one on the
 //     road grid: (2, 3) ends at (5, 3), (2, 1) at (3, 1), (−1, 3) at the
 //     school, and "can't get there" is answered by this morning's ride.
 
@@ -1633,10 +1234,10 @@ const BO_CARDS: XY[] = [
   [-1, 3],
 ];
 const BO_SAY = [
-  "(2, 3) are the map's numbers, read on the roads. Mama ends up at (5, 3), 3 blocks past the school.",
-  "(2, 1) ends at (3, 1). Wrong street altogether.",
-  "(−1, 3) ends right at the school gate.",
-  "“Can't get there”? Mama got there this morning, with (−1, 3). No north road doesn't mean no way north.",
+  "(2, 3) হলো map এর সংখ্যা, রাস্তায় পড়া. মামা থামেন (5, 3) এ, স্কুল ছাড়িয়ে 3 block.",
+  "(2, 1) থামে (3, 1) এ. পুরা অন্য রাস্তা.",
+  "(−1, 3) থামে ঠিক স্কুলের গেটে.",
+  "“যাওয়াই যাবে না”? মামা তো আজ সকালেই গেলেন, (−1, 3) দিয়ে.",
 ];
 
 export function BetOpened() {
@@ -1654,7 +1255,7 @@ export function BetOpened() {
     const next = tried.includes(i) ? tried : [...tried, i];
     play.play(route(BO_CARDS[i]).length - 1, () => {
       setTried(next);
-      if (next.length === 4 && tried.length < 4) pass("The bet: (−1, 3) wins.");
+      if (next.length === 4 && tried.length < 4) pass("বাজি: (−1, 3) জিতেছে.");
     });
   };
   const look = (i: number): Look => (!tried.includes(i) ? (pick === i ? "picked" : "idle") : i === 2 ? "right" : "wrong");
@@ -1676,7 +1277,7 @@ export function BetOpened() {
             {BO_SAY[pick]}
           </span>
         ) : (
-          <span className="text-muted">Tap a card, and Mama drives it on the roads.</span>
+          <span className="text-muted">একটা card এ tap করুন, মামা ওটা রাস্তায় চালাবেন.</span>
         )}
       </div>
       <div className="mt-1.5 grid grid-cols-2 gap-1.5">
@@ -1686,70 +1287,52 @@ export function BetOpened() {
           </Choice>
         ))}
       </div>
-      <Task done={tried.length === 4}>Open the bet: let Mama drive all four cards.</Task>
+      <Task done={tried.length === 4}>বাজি খুলুন: চারটা card-ই মামাকে দিয়ে চালিয়ে দেখুন.</Task>
     </>
   );
 }
 
 // ---------------------------------------------------------------------------
-// 9½ · A figure for the finale's explanation, no task: the card named with
-//      its grid. The arrow v alone; on the map grid (e₁, e₂) its card is
-//      (2, 3); on the road grid B = {w, z} it is (−1, 3), written [v]_B.
+// 7¼ · A figure for the finale's explanation, no task: the trap and the rule.
+//      No road north, crossed out, and "can't get there?"; north has one road
+//      only, the lane, so its slot fills first (3); then the rest opens by
+//      itself, the main road taking back the extra east (−1).
 
-const XAF = makeFrame(-1, 4, -1, 4, 20, 8);
-const XA_SAY = [
-  "The arrow from home to the school. Call it v.",
-  "On the map grid, e₁ and e₂, its card is (2, 3).",
-  "On the road grid, w = (1, 0) and z = (1, 1), its card is (−1, 3).",
-  "One arrow, two cards. A card means nothing without its grid.",
+const X7T = makeFrame(-1, 4, -1, 4, 20, 10);
+const X7T_SAY = [
+  "North এ রাস্তা নাই. তার মানে কি north এ যাওয়াই যাবে না?",
+  "North এ যায় একটাই রাস্তা, গলি. তাই আগে বাঁকা slot টা: 3.",
+  "বাকিটা নিজেই খুলে যায়. বাড়তি east টা বড় রাস্তা ফেরত নেয়: −1.",
 ];
 
-export function NameTheCard() {
-  const s = useScene(3, [600, 1800, 2200, 2200]);
+export function NoWayTrap() {
+  const s = useScene(2, [600, 2200, 2400]);
   const k = s.k;
-  const roads = k >= 2;
+  const trip = route(CARD);
+  const upto = k >= 2 ? 4 : k >= 1 ? 3 : 0;
 
   return (
-    <Scene scene={s} caption={<span key={k} className={FADE}>{XA_SAY[k]}</span>}>
-      <div className="mx-auto flex items-center justify-center gap-3">
+    <Scene scene={s} caption={<span key={k} className={FADE}>{X7T_SAY[k]}</span>}>
+      <div className="mx-auto flex items-center justify-center gap-4">
         <div className="w-[7.5rem] shrink-0">
-          <Plane f={XAF} grid={0} axes={false} label="the arrow v from home to school, on the map grid and then on the road grid" className="my-0! max-w-none">
-            <L_Squares f={XAF} show={k === 1} />
-            <L_Roads f={XAF} show={roads} w={2.6} />
-            {k === 1 && (
-              <g className={FADE}>
-                <Arrow f={XAF} from={O} to={[1, 0]} tone="teal" w={2.2} />
-                <Arrow f={XAF} from={O} to={[0, 1]} tone="teal" w={2.2} />
-              </g>
-            )}
-            {roads && (
-              <g className={FADE}>
-                <Arrow f={XAF} from={O} to={[1, 0]} tone="blue" w={2.2} />
-                <Arrow f={XAF} from={O} to={[1, 1]} tone="coral" w={2.2} />
-              </g>
-            )}
-            <Arrow f={XAF} from={O} to={SCHOOL} tone="violet" w={2.8} />
-            <Label f={XAF} at={[1, 1.5]} dx={-7} size={10} className="fill-cat-violet font-mono">
-              v
-            </Label>
-            <L_Home f={XAF} name={false} />
+          <Plane f={X7T} grid={0} axes={false} label="no road north, yet the rickshaw reaches the school: three blocks up the lane, then one back" className="my-0! max-w-none">
+            <L_Roads f={X7T} />
+            <g style={{ opacity: k === 0 ? 1 : 0.35 }} className="transition-opacity duration-500 motion-reduce:transition-none">
+              <path d={`M${X7T.sx(0)} ${X7T.sy(0.3)}V${X7T.sy(1.7)}`} strokeWidth={1.8} strokeDasharray="3 3" className="pointer-events-none stroke-[#94a3b8]" />
+              <path d={`M${X7T.sx(0) - 5} ${X7T.sy(1) - 5}l10 10m0 -10l-10 10`} strokeWidth={2} className="pointer-events-none stroke-danger" />
+            </g>
+            <L_Home f={X7T} name={false} />
+            <L_Place f={X7T} at={SCHOOL} kind="school" name={false} hit={k >= 2} />
+            <L_Trail f={X7T} pts={trip} upto={upto} draw />
+            <L_Rickshaw f={X7T} at={trip[upto]} facing={faceOf(trip, upto)} ms={900} s={0.9} />
           </Plane>
         </div>
-        <div className="min-w-0 space-y-1.5 text-left">
-          {k >= 1 && (
-            <div className={`${FADE} ${k === 2 ? "opacity-50" : ""}`}>
-              <div className="text-xs text-muted">map grid</div>
-              <div className="font-mono text-base font-bold text-cat-teal">v = (2, 3)</div>
-            </div>
-          )}
-          {k >= 2 && (
-            <div className={FADE}>
-              <div className="text-xs text-muted">road grid B = &#x7B;w, z&#x7D;</div>
-              <div className="font-mono text-base font-bold text-cat-violet">
-                [v]<sub>B</sub> = (−1, 3)
-              </div>
-            </div>
-          )}
+        <div className="font-mono text-2xl font-bold">
+          (<span className="text-cat-blue">{k >= 2 ? <span className={`${POP} inline-block`}>−1</span> : "?"}</span>,{" "}
+          <span className="text-cat-coral">
+            {k >= 1 ? <span className={`${POP} inline-block rounded-full px-0.5 ${k === 1 ? "ring-2 ring-cat-coral" : ""}`}>3</span> : "?"}
+          </span>
+          )
         </div>
       </div>
     </Scene>
@@ -1757,20 +1340,48 @@ export function NameTheCard() {
 }
 
 // ---------------------------------------------------------------------------
+// 7½ · A figure for the finale's explanation, no task: the bridge to 5.5b.
+//      Tiffin. Fahim writes the school's two cards in his khata, the map's
+//      (2, 3) and the road's (−1, 3); Karim, his new bench-mate, looks over
+//      and frowns at one school with two cards.
+
+export function TwoCardsTease() {
+  const s = useScene(3, [600, 1800, 1800, 2400]);
+  const k = s.k;
+
+  return (
+    <StoryFrame scene={s}>
+      <Stage backdrop="room" label="tiffin at the new school: Fahim writes the school's two cards, (2, 3) and (−1, 3), and Karim looks over, puzzled that one school has two cards">
+        <rect x={60} y={118} width={200} height={8} rx={2} fill="#92400e" />
+        <path d="M72 126V150M248 126V150" stroke="#78350f" strokeWidth={4} />
+        <Person who="fahim" x={110} y={150} arm={k >= 1 ? "hold" : "down"} mood="plain" />
+        {k >= 1 && <L_NamedCard x={58} y={46} name="map" text="(2, 3)" tone="teal" />}
+        {k >= 2 && <L_NamedCard x={58} y={84} name="রাস্তা" text="(−1, 3)" tone="coral" />}
+        <Person who="karim" x={k >= 2 ? 214 : 340} y={150} facing={-1} walking={k === 2} ms={1400} mood={k >= 3 ? "puzzled" : "plain"} />
+        {k >= 3 && <Bubble x={214} y={82} side="right" lines={["একটা স্কুলের", "দুইটা card?"]} />}
+      </Stage>
+    </StoryFrame>
+  );
+}
+
+// ---------------------------------------------------------------------------
 // States for `npm run shot` (keys = useSeed names).
 
 export const fixtures: Fixtures = {
-  FirstDay: { start: { k: 0 }, ammu: { k: 1 }, card: { k: 2 }, end: {} },
+  LastNight: { start: { k: 0 }, sheet: { k: 1 }, end: {} },
+  FahimReads: { start: { k: 0 }, seat: { k: 1 }, says: { k: 2 }, end: {} },
+  SystemBrace: { start: { k: 0 }, name: { k: 1 }, one: { k: 2 }, end: {} },
+  NoWayTrap: { start: { k: 0 }, lane: { k: 1 }, end: {} },
+  FirstDay: { start: { k: 0 }, ammu: { k: 1 }, card: { k: 2 }, mama: { k: 3 }, end: {} },
   SchoolBet: { start: {}, picked: { bet: 2 }, sealed: { bet: 3, sealed: true } },
   TwoGrids: { start: { k: 0 }, main: { k: 1 }, lanes: { k: 2 }, end: {} },
-  NoNorthRoad: { start: {}, lane: { amt: [0, 3] }, done: { amt: [-1, 3], done: true } },
+  NoNorthRoad: { start: {}, tried: { tried: true }, back: { tried: true, amt: [0, 3] }, done: { tried: true, amt: [-1, 3], done: true } },
   CardFills: { start: { k: 0 }, lane: { k: 1 }, back: { k: 2 }, end: {} },
-  WhyMinus: { start: {}, driven: { driven: true }, fixed: { driven: true, x: 2, fixed: true } },
+  WhyBack: { start: { k: 0 }, ahead: { k: 1 }, ask: { k: 2 }, end: {} },
+  WhyMinus: { start: {}, driven: { driven: true }, under: { driven: true, x: 1 }, fixed: { driven: true, x: 2, fixed: true } },
   LaneForced: { start: { k: 0 }, two: { k: 1 }, four: { k: 2 }, end: {} },
-  PeelEquations: { start: {}, split: { st: 1 }, north: { st: 2 }, east: { st: 3 }, done: { st: 4 } },
+  PeelEquations: { start: {}, north: { amt: [0, 3] }, off: { amt: [2, 1] }, done: { amt: [-1, 3], done: true } },
   PeelOrder: { start: { k: 0 }, strike: { k: 1 }, three: { k: 2 }, end: {} },
-  SameSchool: { start: {}, guessed: { guess: 0 }, roads: { guess: 0, grid: "roads", over: true } },
-  AssemblyLines: { start: { k: 0 }, new: { k: 1 }, end: {} },
   AmmuErrands: { start: { k: 0 }, bazaar: { k: 1 }, mosque: { k: 2 }, end: {} },
   YourErrand: {
     start: {},
@@ -1780,13 +1391,10 @@ export const fixtures: Fixtures = {
     done: { at: 1, card: [-2, 2], driven: [-2, 2], solved: [true, true] },
   },
   MosqueMinus: { start: { k: 0 }, lane: { k: 1 }, end: {} },
-  TapeOut: { start: { k: 0 }, tape: { k: 1 }, end: {} },
-  WrongTape: { start: {}, summed: { summed: true }, pulling: { summed: true, end: [1.4, 2.2] }, done: { summed: true, end: [2, 3], measured: true } },
-  TwoTapes: { start: { k: 0 }, square: { k: 1 }, road: { k: 2 }, end: {} },
-  ShadowRoads: { start: { k: 0 }, east: { k: 1 }, end: {} },
-  TryWhichGrid: { start: {}, picked: { picks: [0, 1] }, wrong: { picks: [1, 2], checked: true }, missed: { picks: [2], checked: true }, right: { picks: [0, 2], checked: true } },
-  ReachPaint: { start: { k: 0 }, slant: { k: 1 }, end: {} },
+  NasibCard: { start: { k: 0 }, ride: { k: 1 }, card: { k: 2 }, end: {} },
+  SpotTheSlip: { start: {}, driven: { driven: true }, wrong: { driven: true, pick: 1 }, fixed: { driven: true, pick: 2, fixed: true } },
+  StallCheck: { start: { k: 0 }, lane: { k: 1 }, back: { k: 2 }, end: {} },
   BellRings: { start: { k: 0 }, arrive: { k: 1 }, run: { k: 2 }, end: {} },
   BetOpened: { start: {}, first: { pick: 0, tried: [0] }, right: { pick: 2, tried: [0, 2] }, done: { pick: 3, tried: [0, 1, 2, 3] } },
-  NameTheCard: { start: { k: 0 }, map: { k: 1 }, roads: { k: 2 }, end: {} },
+  TwoCardsTease: { start: { k: 0 }, map: { k: 1 }, karim: { k: 2 }, end: {} },
 };

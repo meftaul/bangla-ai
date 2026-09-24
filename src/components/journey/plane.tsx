@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, type KeyboardEvent, type PointerEvent, type ReactNode } from "react";
+import { createContext, useContext, useRef, useState, type KeyboardEvent, type MouseEvent, type PointerEvent, type ReactNode } from "react";
 
 import { Draw, POP } from "./kit";
 
@@ -55,6 +55,9 @@ export const INK = "fill-[#0f1b2d]";
 export const INK_SOFT = "fill-[#5a6b7d]";
 
 export type Drag = { down?: (p: XY) => void; move?: (p: XY) => void; up?: () => void };
+
+/** True inside a sheet that is dragged on: there a tap belongs to the drag, not to an arrow. */
+const DragSheet = createContext(false);
 
 export function Plane({
   f,
@@ -161,7 +164,7 @@ export function Plane({
           {sg(y)}
         </text>
       ))}
-      {children}
+      <DragSheet.Provider value={!!drag}>{children}</DragSheet.Provider>
     </svg>
   );
 }
@@ -177,9 +180,74 @@ const TONE = {
 };
 export type Tone = keyof typeof TONE;
 
+/** A number on an arrow's tag: whole stays whole, the rest get one decimal. */
+const tagNum = (n: number) => sg(Math.round(n * 10) / 10 || 0);
+/** An arrow read as its list: where the head sits, counted from the tail. */
+export const listOf = (from: readonly number[], to: readonly number[]) => `(${to.map((t, i) => tagNum(t - from[i])).join(", ")})`;
+
+/**
+ * Makes any drawn arrow tappable: a tap lights it up and hangs its list, (2, 1),
+ * off the head; a second tap puts it away. Every arrow in the app goes through
+ * this, so the reader can always ask an arrow "which numbers are you?".
+ * `a`/`b` are the tail and head in SVG units; `stroke` is the arrow's stroke
+ * class, or `color` its hex. Stays out of the way on a dragged sheet and inside
+ * a button (the tap is the button's).
+ */
+export function Lit({
+  a,
+  b,
+  list,
+  w,
+  stroke,
+  color,
+  children,
+}: {
+  a: XY;
+  b: XY;
+  list: string;
+  w: number;
+  stroke?: string;
+  color?: string;
+  children: ReactNode;
+}) {
+  const [on, setOn] = useState(false);
+  const dragged = useContext(DragSheet);
+  if (dragged) return <>{children}</>;
+  const len = Math.hypot(b[0] - a[0], b[1] - a[1]) || 1;
+  const ux = (b[0] - a[0]) / len;
+  const uy = (b[1] - a[1]) / len;
+  const tw = list.length * 6.3 + 10;
+  const cx = b[0] + ux * (tw / 2 + 6);
+  const cy = b[1] + uy * 14;
+  const line = `M${a[0]} ${a[1]}L${b[0]} ${b[1]}`;
+  const tap = (e: MouseEvent<SVGGElement>) => {
+    if (e.currentTarget.closest("button, a")) return;
+    setOn((o) => !o);
+  };
+  return (
+    <g onClick={tap} className="cursor-pointer">
+      {on && <path d={line} strokeWidth={w + 7} strokeLinecap="round" opacity={0.3} stroke={color} className={`pointer-events-none fill-none ${stroke ?? ""}`} />}
+      {children}
+      <path d={line} strokeWidth={Math.max(14, w + 10)} strokeLinecap="round" stroke="transparent" pointerEvents="stroke" className="fill-none">
+        <title>{list}</title>
+      </path>
+      {on && (
+        <g className={`${POP} pointer-events-none`}>
+          <rect x={cx - tw / 2} y={cy - 9} width={tw} height={18} rx={5} strokeWidth={1.4} stroke={color} className={`fill-white ${stroke ?? ""}`} />
+          <text x={cx} y={cy + 4} textAnchor="middle" fontSize={11} fontWeight={700} className={`${INK} font-mono`}>
+            {list}
+          </text>
+        </g>
+      )}
+    </g>
+  );
+}
+
 /**
  * An arrow from one point to another. `draw` makes it draw itself from the
  * tail when mounted (key it to replay); `faint` leaves a ghost behind.
+ * Tapping it shows its list (see Lit); `list` overrides the words, `false`
+ * turns that off (an arrow whose sheet units are not the vector's numbers).
  */
 export function Arrow({
   f,
@@ -191,6 +259,7 @@ export function Arrow({
   dashed = false,
   faint = false,
   delay = 0,
+  list,
 }: {
   f: Frame;
   from: XY;
@@ -201,6 +270,7 @@ export function Arrow({
   dashed?: boolean;
   faint?: boolean;
   delay?: number;
+  list?: string | false;
 }) {
   const x1 = f.sx(from[0]);
   const y1 = f.sy(from[1]);
@@ -217,7 +287,7 @@ export function Arrow({
   const head = `M${x2} ${y2}L${bx - uy * half} ${by + ux * half}L${bx + uy * half} ${by - ux * half}Z`;
   const shaft = `M${x1} ${y1}L${bx + ux * 0.5} ${by + uy * 0.5}`;
   const { stroke, fill } = TONE[tone];
-  return (
+  const drawn = (
     <g opacity={faint ? 0.3 : 1} className="pointer-events-none">
       {draw ? (
         <Draw d={shaft} strokeWidth={w} delay={delay} className={stroke} />
@@ -226,6 +296,12 @@ export function Arrow({
       )}
       <path d={head} className={`${fill} ${draw ? POP : ""}`} style={draw ? { transitionDelay: `${delay + 450}ms` } : undefined} />
     </g>
+  );
+  if (list === false) return drawn;
+  return (
+    <Lit a={[x1, y1]} b={[x2, y2]} list={list ?? listOf(from, to)} w={w} stroke={stroke}>
+      {drawn}
+    </Lit>
   );
 }
 

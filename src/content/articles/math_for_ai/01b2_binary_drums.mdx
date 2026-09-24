@@ -1,0 +1,157 @@
+export const metadata = {
+  title: "Math for AI 1.2 — Binary from rice drums",
+  description: "At a wedding, Rina has five bulbs to tell the kitchen which table is hungry. That afternoon at Mama's rice shop she learned how. She just didn't know it yet.",
+  type: "article",
+};
+
+{/* The pieces-to-picture version of 1.2 (01b_binary stays as it is); built
+    with .claude/skills/pieces-to-picture, plan in 01b2_pieces_plan.md.
+    Screen 1 asks how five bulbs can say "table 13", and it isn't answered
+    until SendTable, eight screens later. In between: Mama's shelf makes base
+    10 physical (13, 93, then 150 overflows until the reader packs a tank),
+    two pieces that look unrelated (bulbs that are only on or off; a newspaper
+    whose layers double with each fold), the one rule change (a drum holds
+    2), and the snap that turns the tiny shelf into bulbs. 11 steps. Few
+    words: the screens carry the story, and only the snap gets a <Then>.
+    The screens live in components/interactive/drum-journey.tsx. */}
+
+import { Journey, Step, Then } from "@/components/journey/journey";
+import {
+  WeddingNight,
+  LightBoard,
+  RiceShop,
+  PackThirteen,
+  NinetyThree,
+  OneFifty,
+  TestBulbs,
+  FoldPaper,
+  TinyDrums,
+  ShelfToBulbs,
+  SendTable,
+  WhichTable,
+  EightBulbs,
+} from "@/components/interactive/drum-journey";
+
+<Journey title="Binary · rice drums">
+
+<Step>
+
+It's the night of Rina's cousin's wedding. The kitchen is at the far end of the field, and it's too loud to shout.
+
+So a string of five bulbs runs from Rina's table to the kitchen.
+
+<WeddingNight story />
+
+<LightBoard />
+
+</Step>
+
+<Step>
+
+Park that for now. Earlier that afternoon, Rina was helping at Mama's rice shop.
+
+<RiceShop story />
+
+<PackThirteen />
+
+</Step>
+
+<Step>
+
+A bigger order: 93 kg for the madrasa kitchen.
+
+<NinetyThree />
+
+</Step>
+
+<Step>
+
+Then the wedding order came in. 150 kg, for tonight's biryani.
+
+<OneFifty />
+
+</Step>
+
+<Step>
+
+Before dark, Rina tested the wedding bulbs, one card at a time.
+
+<TestBulbs />
+
+</Step>
+
+<Step>
+
+Back at the shop, Mama makes paper bags from old newspaper. Rina folds a sheet in half, then again.
+
+<FoldPaper />
+
+</Step>
+
+<Step>
+
+A bulb can only be on or off. Two looks, not ten. So Rina wondered: what if a drum could only hold 2?
+
+<TinyDrums />
+
+</Step>
+
+<Step>
+
+Look at that tiny shelf once more. Now look at it the way the kitchen would.
+
+<ShelfToBulbs />
+
+<Then>
+
+Each container held double the one next to it, like the folds: 1, 2, 4, 8. A full one became a lit bulb, an empty slot a dark one. So 13 kg is 8 + 4 + 1, written **1101**.
+
+Writing numbers with only 0 and 1 is called **binary**. Each bulb, one yes-or-no, is a **bit**.
+
+</Then>
+
+</Step>
+
+<Step>
+
+Back to the wedding. Table 13 is still waiting. Now the bulbs have sizes: 16, 8, 4, 2, 1.
+
+<SendTable />
+
+</Step>
+
+<Step>
+
+## Try it
+
+Later, the kitchen lit a row back to Rina. Someone wants more borhani.
+
+<WhichTable />
+
+</Step>
+
+<Step>
+
+## The end! Five bulbs, any table
+
+Your phone keeps every dot of a photo the same way: 8 bulbs per dot, from dark to bright.
+
+<EightBulbs />
+
+* Mama's shelf is how you already write numbers: one digit per slot, and ten of anything moves up.
+* Change "ten" to "two", and the shelf becomes a row of bulbs: that's **binary**.
+* The sizes double, 1, 2, 4, 8, 16, like a folded newspaper.
+* 8 bits give 0 to 255, which is why a pixel's brightness stops at 255.
+
+<LessonLink
+  href="/dashboard/articles/math_for_ai/01_intro#binary"
+  dir="back"
+  eyebrow="Back to the main lesson"
+  title="Pictures are numbers"
+>
+  Right where you left off.
+</LessonLink>
+
+</Step>
+
+</Journey>
