@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from "react";
-import { BoxRun, dot, num, tupN } from "@/components/journey/box";
+import { useId, useState } from "react";
+import { BoxRun, Tup, dot, num, tupN } from "@/components/journey/box";
 import { Bubble, Card as CastCard, Person, Stage, StoryFrame } from "@/components/journey/cast";
 import { Task, useGate } from "@/components/journey/journey";
 import { Choice, Draw, FADE, Nope, POP, Scene, Stepper, Ticks, pill, primaryBtn, usePlay, useScene, useSeed, useSeeded, useTween, type Fixtures } from "@/components/journey/kit";
-import { Arrow, Label, Plane, makeFrame, type XY } from "@/components/journey/plane";
+import { Arrow, Label, Plane, makeFrame, type Frame, type XY } from "@/components/journey/plane";
 import { O, S1_WL, T_Boat, T_Dab, T_INK, T_Majhi, T_Square, T_Water, T_say, fix, tupF, type Story } from "./towrope-journey";
 
 // Screens for "Math for AI 4.6 — বাঁকা নদী: shadow এর মাথা কোথায় পড়ে", told as a
@@ -98,7 +98,7 @@ export function BoxRecall() {
     p.play(
       2,
       () => {
-        if (i === BR_RIGHT) pass("Box 0 মানে right angle.");
+        if (i === BR_RIGHT) pass("Dot product 0 মানে right angle.");
       },
       1,
     );
@@ -131,7 +131,7 @@ export function BoxRecall() {
               <div className="font-mono text-lg font-bold">
                 <span className="text-cat-coral">(2, 1)</span> · <span className="text-cat-blue">(−1, 2)</span>
               </div>
-              <div className="mt-1 text-sm text-muted">Box কত, আর জোড়াটা দেখতে কেমন?</div>
+              <div className="mt-1 text-sm text-muted">Dot product কত, আর জোড়াটা দেখতে কেমন?</div>
             </>
           )}
         </div>
@@ -146,9 +146,9 @@ export function BoxRecall() {
         ))}
       </div>
       {pick !== null && k >= 2 && !right && (
-        <Nope key={miss}>Box বললো 0, {BR_OPTS[pick].box} না. লাল দাগে ছিল আপনার ছবি. নীল arrow টা আসলে গেলো কোথায়? দেখুন.</Nope>
+        <Nope key={miss}>Dot product বললো 0, {BR_OPTS[pick].box} না। লাল দাগে ছিল আপনার ছবি। নীল arrow টা আসলে গেলো কোথায়? দেখুন।</Nope>
       )}
-      <Task done={right}>(2, 1) · (−1, 2) এর ছবি কোনটা? একটা বেছে নিন, box নিজেই চলবে.</Task>
+      <Task done={right}>(2, 1) · (−1, 2) এর ছবি কোনটা? একটা বেছে নিন, dot product নিজেই চলবে।</Task>
     </>
   );
 }
@@ -178,7 +178,7 @@ export function FindFoot() {
     if (Math.abs(7 - 13 * x) < 0.15) {
       setLam(FOOT);
       setFound(true);
-      pass("মাথার উপরে line টা square. Box বলে 0.");
+      pass("মাথার উপরে line টা square। Dot product বলে 0.");
       return;
     }
     setLam(x);
@@ -232,7 +232,7 @@ export function FindFoot() {
           {found ? "0" : fix(box, 2)}
         </b>
       </div>
-      <Task done={found}>নদী বরাবর point টা slide করুন. কোথায় দড়ির মাথা থেকে নামা line টা নদীর সাথে right angle এ মিলে? ওখানে box বলবে 0.</Task>
+      <Task done={found}>নদী বরাবর point টা slide করুন। কোথায় দড়ির মাথা থেকে নামা line টা নদীর সাথে right angle এ মিলে? ওখানে dot product বলবে 0.</Task>
     </>
   );
 }
@@ -265,7 +265,7 @@ export function ShareWalk() {
     setStep(next);
     if (next === 7) {
       setWalked(true);
-      pass("নদীর 13 ভাগের 7 ভাগ. ওখানেই shadow এর মাথা.");
+      pass("নদীর 13 ভাগের 7 ভাগ। ওখানেই shadow এর মাথা।");
     }
   };
 
@@ -315,16 +315,16 @@ export function ShareWalk() {
       <div className="mt-1 min-h-10 text-center text-[0.95rem]">
         {fits ? (
           <span key="fit" className={FADE}>
-            13 ভাগ করলে একটা দাগ ঠিক মাথার উপরে পড়লো.{" "}
+            13 ভাগ করলে একটা দাগ ঠিক মাথার উপরে পড়লো।{" "}
             {step > 0 && (
               <b className="font-mono text-accent-text">
-                {step} ধাপ{walked ? " — পৌঁছে গেছি." : "…"}
+                {step} ধাপ{walked ? " — পৌঁছে গেছি।" : "…"}
               </b>
             )}
           </span>
         ) : (
           <span key={parts} className={FADE}>
-            {parts} ভাগে কোনো দাগ মাথার উপরে পড়ে না.
+            {parts} ভাগে কোনো দাগ মাথার উপরে পড়ে না।
           </span>
         )}
       </div>
@@ -337,14 +337,14 @@ export function ShareWalk() {
         </div>
       )}
 
-      <Task done={walked}>নদীকে ভাগ করতে থাকুন, যতক্ষণ না একটা দাগ মাথার উপরে পড়ে. তারপর গুনুন, কয় ধাপ.</Task>
+      <Task done={walked}>নদীকে ভাগ করতে থাকুন, যতক্ষণ না একটা দাগ মাথার উপরে পড়ে। তারপর গুনুন, কয় ধাপ।</Task>
     </>
   );
 }
 
 // ---------------------------------------------------------------------------
 // 4 · 7 এলো কোথা থেকে? The reader walked 7 steps. Now run the box of দড়ি and
-//      নদী: 2 × 2 + 1 × 3 = 7. The same 7. The box counted the steps without
+//      নদী: 2 × 2 + 1 × 3 = 7। The same 7. The box counted the steps without
 //      anybody walking.
 
 export function SevenFromBox() {
@@ -355,7 +355,7 @@ export function SevenFromBox() {
 
   const match = () => {
     setMatched(true);
-    pass("দড়ি · নদী = 7. Box-ই ধাপ গুনে দিলো.");
+    pass("দড়ি · নদী = 7। Dot product-ই ধাপ গুনে দিলো।");
   };
 
   return (
@@ -389,7 +389,7 @@ export function SevenFromBox() {
           ) : (
             <div className="grid h-full place-content-center">
               <button type="button" onClick={() => setRan(true)} className={primaryBtn}>
-                Box চালান
+                Dot product চালান
               </button>
             </div>
           )}
@@ -399,12 +399,12 @@ export function SevenFromBox() {
       <div className="mt-2 min-h-10 text-center text-[0.95rem]">
         {matched ? (
           <span className={FADE}>
-            আপনি হেঁটেছেন <b className="font-mono">7</b> ধাপ. Box-ও বললো <b className="font-mono text-accent-text">7</b>. এক জিনিস.
+            আপনি হেঁটেছেন <b className="font-mono">7</b> ধাপ। Dot product-ও বললো <b className="font-mono text-accent-text">7</b>. এক জিনিস।
           </span>
         ) : ran ? (
-          <span className={FADE}>Box বললো 7. আর আপনি হেঁটেছিলেন কয় ধাপ?</span>
+          <span className={FADE}>Dot product বললো 7। আর আপনি হেঁটেছিলেন কয় ধাপ?</span>
         ) : (
-          <span className="text-muted">দড়ি আর নদীর box চালিয়ে দেখুন কী আসে.</span>
+          <span className="text-muted">দড়ি আর নদীর dot product চালিয়ে দেখুন কী আসে।</span>
         )}
       </div>
 
@@ -416,7 +416,7 @@ export function SevenFromBox() {
         </div>
       )}
 
-      <Task done={matched}>Box চালান. তারপর সংখ্যাটা মিলিয়ে দেখুন, আপনার হাঁটা ধাপের সাথে.</Task>
+      <Task done={matched}>Dot product চালান। তারপর সংখ্যাটা মিলিয়ে দেখুন, আপনার হাঁটা ধাপের সাথে।</Task>
     </>
   );
 }
@@ -442,7 +442,7 @@ export function ThirteenFromRiver() {
   };
   const add = () => {
     setAdded(true);
-    pass("নদীর নিজের box 13. তাই 13 ভাগ.");
+    pass("নদীর নিজের dot product 13। তাই 13 ভাগ।");
   };
 
   return (
@@ -500,12 +500,12 @@ export function ThirteenFromRiver() {
       <div className="mt-1 min-h-10 text-center text-[0.95rem]">
         {added ? (
           <span className={FADE}>
-            13 টা ঘর. নদীকে আমরা ভাগও করেছিলাম <b className="font-mono text-accent-text">13</b> ভাগে. এটাই নদীর নিজের box, <span className="font-mono">v · v</span>.
+            13 টা ঘর। নদীকে আমরা ভাগও করেছিলাম <b className="font-mono text-accent-text">13</b> ভাগে। এটাই নদীর নিজের dot product, <span className="font-mono">v · v</span>.
           </span>
         ) : both ? (
-          <span className={FADE}>4 আর 9. যোগ করলে?</span>
+          <span className={FADE}>4 আর 9। যোগ করলে?</span>
         ) : (
-          <span className="text-muted">নদীর দুইটা slot-ই বর্গ করুন.</span>
+          <span className="text-muted">নদীর দুইটা slot-ই বর্গ করুন।</span>
         )}
       </div>
 
@@ -517,7 +517,7 @@ export function ThirteenFromRiver() {
         </div>
       )}
 
-      <Task done={added}>নদীর প্রতিটা slot বর্গ করুন, তারপর যোগ করে দেখুন কয়টা ঘর হয়.</Task>
+      <Task done={added}>নদীর প্রতিটা slot বর্গ করুন, তারপর যোগ করে দেখুন কয়টা ঘর হয়।</Task>
     </>
   );
 }
@@ -533,20 +533,20 @@ export function ThirteenFromRiver() {
 // Each line carries `say`: what it means in plain words, shown under the sheet
 // for the line just run, so the reader never meets a number without its story.
 const RECIPE: { btn: string; line: string; say: string; box?: [readonly number[], readonly number[], string, string] }[] = [
-  { btn: "দড়ি · নদী", line: "w · v = 7", say: "দড়ি আর নদীর box: সেই 7 ধাপ.", box: [[2, 1], [2, 3], "w", "v"] },
-  { btn: "নদী · নদী", line: "v · v = 13", say: "নদীর নিজের box: সেই 13 ভাগ.", box: [[2, 3], [2, 3], "v", "v"] },
-  { btn: "Shadow বানান", line: "shadow = (7 ÷ 13) × (2, 3) = (14/13, 21/13) ≈ (1.08, 1.62)", say: "নদীর arrow এর দুইটা slot-ই 7/13 দিয়ে গুণ. মাথা 1.08 ঘর ডানে, 1.62 ঘর উপরে." },
-  { btn: "বাকিটা বের করুন", line: "বাকি = w − shadow = (12/13, −8/13) ≈ (0.92, −0.62)", say: "টানের যেটুকু shadow এ ধরা পড়ে নাই. Shadow এর মাথা থেকে দড়ির মাথা পর্যন্ত." },
-  { btn: "বাকি · নদী", line: "বাকি · v = 24/13 − 24/13 = 0", say: "বাকিটা নদীর সাথে right angle এ. সামনের দিকে এক ফোঁটাও টানে না." },
+  { btn: "দড়ি · নদী", line: "w · v = 7", say: "দড়ি আর নদীর dot product: সেই 7 ধাপ।", box: [[2, 1], [2, 3], "w", "v"] },
+  { btn: "নদী · নদী", line: "v · v = 13", say: "নদীর নিজের dot product: সেই 13 ভাগ।", box: [[2, 3], [2, 3], "v", "v"] },
+  { btn: "Shadow বানান", line: "shadow = (7 ÷ 13) × (2, 3) = (14/13, 21/13) ≈ (1.08, 1.62)", say: "নদীর arrow এর দুইটা slot-ই 7/13 দিয়ে গুণ। মাথা 1.08 ঘর ডানে, 1.62 ঘর উপরে।" },
+  { btn: "বাকিটা বের করুন", line: "বাকি = w − shadow = (12/13, −8/13) ≈ (0.92, −0.62)", say: "টানের যেটুকু shadow এ ধরা পড়ে নাই। Shadow এর মাথা থেকে দড়ির মাথা পর্যন্ত।" },
+  { btn: "বাকি · নদী", line: "বাকি · v = 24/13 − 24/13 = 0", say: "বাকিটা নদীর সাথে right angle এ। সামনের দিকে এক ফোঁটাও টানে না।" },
 ];
 const FR = makeFrame(-0.5, 3, -1, 3.5, 36);
 // the বাকি tap's play, one caption per phase; phase 4 is the line itself
 const X6_REST: XY = [12 / 13, -8 / 13];
 const X6_PH = [
-  "এই হলুদ টুকরাটাই বাকি: shadow এর মাথা থেকে দড়ির মাথা পর্যন্ত.",
-  "বাকিটাকে তুলে (0, 0) তে বসাই. তাহলে এর ঠিকানা পড়া যায়.",
-  "ডানে কত? দড়ি 2 ঘর, shadow 1.08 ঘর. বাকি 2 − 1.08 = 0.92.",
-  "উপরে কত? দড়ি 1 ঘর, shadow 1.62 ঘর. 1 − 1.62 = −0.62. মানে 0.62 ঘর নিচে.",
+  "এই হলুদ টুকরাটাই বাকি: shadow এর মাথা থেকে দড়ির মাথা পর্যন্ত।",
+  "বাকিটাকে তুলে (0, 0) তে বসাই। তাহলে এর ঠিকানা পড়া যায়।",
+  "ডানে কত? দড়ি 2 ঘর, shadow 1.08 ঘর। বাকি 2 − 1.08 = 0.92.",
+  "উপরে কত? দড়ি 1 ঘর, shadow 1.62 ঘর। 1 − 1.62 = −0.62. মানে 0.62 ঘর নিচে।",
 ];
 
 export function ShadowRecipe() {
@@ -655,13 +655,13 @@ export function ShadowRecipe() {
           </button>
         </div>
       )}
-      <Task done={k >= RECIPE.length}>হিসাবটা এক step এক step করে চালান.</Task>
+      <Task done={k >= RECIPE.length}>হিসাবটা এক step এক step করে চালান।</Task>
     </>
   );
 }
 
 // ---------------------------------------------------------------------------
-// 5b · ঠিকানা. The share is 7/13, but a dot on Fahim's khata needs an
+// 5b · ঠিকানা। The share is 7/13, but a dot on Fahim's khata needs an
 //      address: how many squares right, how many up. The boat rides the river
 //      the whole way, then half way, and a bar on each axis shows its address:
 //      both numbers halve together. Then the reader picks the address at 7/13
@@ -671,8 +671,8 @@ export function ShadowRecipe() {
 
 const SP_F = makeFrame(-0.6, 2.6, -0.5, 3.4, 40);
 const SP_SHARES = [
-  { btn: "পুরা পথ", t: 1, say: "পুরা পথ: 2 ঘর ডানে, 3 ঘর উপরে." },
-  { btn: "আধা পথ", t: 0.5, say: "আধা পথ: দুইটাই আধা. 1 ঘর ডানে, 1.5 ঘর উপরে." },
+  { btn: "পুরা পথ", t: 1, say: "পুরা পথ: 2 ঘর ডানে, 3 ঘর উপরে।" },
+  { btn: "আধা পথ", t: 0.5, say: "আধা পথ: দুইটাই আধা। 1 ঘর ডানে, 1.5 ঘর উপরে।" },
 ];
 const SP_PICKS: { top: string; approx: string; at: XY }[] = [
   { top: "(7/13 × 2, 3)", approx: "≈ (1.08, 3)", at: [(7 / 13) * 2, 3] },
@@ -681,9 +681,9 @@ const SP_PICKS: { top: string; approx: string; at: XY }[] = [
 ];
 const SP_RIGHT = 1;
 const SP_NOPE = [
-  "নৌকা নদী ছেড়ে চরে উঠলো. শুধু ডানের 2 ছোট হলো, উপরের 3 পুরাই রইলো. আধা পথে দুইটাই আধা হয়েছিল, মনে আছে?",
+  "নৌকা নদী ছেড়ে চরে উঠলো। শুধু ডানের 2 ছোট হলো, উপরের 3 পুরাই রইলো। আধা পথে দুইটাই আধা হয়েছিল, মনে আছে?",
   "",
-  "আবার চরে. এবার উপরেরটা ছোট হলো, ডানের 2 পুরাই রইলো. নদীর উপরে থাকতে হলে দুইটাকেই একই অংশ দিয়ে ছোট করতে হয়.",
+  "আবার চরে। এবার উপরেরটা ছোট হলো, ডানের 2 পুরাই রইলো। নদীর উপরে থাকতে হলে দুইটাকেই একই অংশ দিয়ে ছোট করতে হয়।",
 ];
 const SP_TILT = (Math.atan2(V[1], V[0]) * 180) / Math.PI;
 
@@ -722,7 +722,7 @@ export function ShareToPoint() {
   const choose = (i: number) => {
     if (play.running || pick === SP_RIGHT) return;
     setPick(i);
-    play.play(10, () => (i === SP_RIGHT ? pass("7/13 পথ মানে দুইটা slot-ই 7/13 গুণ.") : setMiss((m) => m + 1)));
+    play.play(10, () => (i === SP_RIGHT ? pass("7/13 পথ মানে দুইটা slot-ই 7/13 গুণ।") : setMiss((m) => m + 1)));
   };
 
   return (
@@ -796,7 +796,7 @@ export function ShareToPoint() {
         </div>
       </div>
       {aground && <Nope key={miss}>{SP_NOPE[pick ?? 0]}</Nope>}
-      <Task done={right}>নৌকাকে আগে পুরা পথ চালান, তারপর আধা পথ. ঠিকানার দুইটা number কী করে? দেখুন. তারপর 7/13 পথের ঠিকানা বেছে নিন.</Task>
+      <Task done={right}>নৌকাকে আগে পুরা পথ চালান, তারপর আধা পথ। ঠিকানার দুইটা number কী করে? দেখুন। তারপর 7/13 পথের ঠিকানা বেছে নিন।</Task>
     </>
   );
 }
@@ -861,8 +861,8 @@ export function KhataDot({}: Story) {
         {/* the same khata, small, in Fahim's hand */}
         <rect x={S5B_BX + 15} y={S1_WL - 42} width={11} height={8} rx={1} fill="white" stroke={T_INK} strokeOpacity={0.5} strokeWidth={0.8} className="pointer-events-none" />
         <S5B_Khata ask={k >= 1} />
-        {k === 1 && <Bubble x={S5B_BX + 8} y={S1_WL - 60} side="right" tone="think" lines={["7/13 অংশ তো বুঝলাম.", "Dot বসাই কোথায়?"]} />}
-        {k >= 2 && <Bubble x={cx} y={S5B_BANK - 60} side="left" lines={["আধা পথে কই থাকো,", "আগে হেইডা কও."]} />}
+        {k === 1 && <Bubble x={S5B_BX + 8} y={S1_WL - 60} side="right" tone="think" lines={["7/13 অংশ তো বুঝলাম।", "Dot বসাই কোথায়?"]} />}
+        {k >= 2 && <Bubble x={cx} y={S5B_BANK - 60} side="left" lines={["আধা পথে কই থাকো,", "আগে হেইডা কও।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -876,10 +876,10 @@ export function KhataDot({}: Story) {
 const X5T_F = makeFrame(-0.4, 2.6, -0.5, 3.4, 34);
 const X5T_T = [1, 0.5, FOOT, FOOT];
 const X5T_SAY = [
-  "নদীর arrow এর দুই পা: 2 ঘর ডানে, 3 ঘর উপরে.",
-  "আধা পথ: arrow আধা, দুই পা-ও আধা. 1 আর 1.5.",
-  "7/13 পথ: দুই পা-ই 7/13 হলো. 1.08 আর 1.62.",
-  "মাথার ঠিকানা (1.08, 1.62). খাতায় dot টা ওখানেই বসলো.",
+  "নদীর arrow এর দুই পা: 2 ঘর ডানে, 3 ঘর উপরে।",
+  "আধা পথ: arrow আধা, দুই পা-ও আধা। 1 আর 1.5.",
+  "7/13 পথ: দুই পা-ই 7/13 হলো। 1.08 আর 1.62.",
+  "মাথার ঠিকানা (1.08, 1.62). খাতায় dot টা ওখানেই বসলো।",
 ];
 
 export function ShrinkBoth() {
@@ -928,11 +928,11 @@ const X6C_SH: XY = [(7 / 13) * V[0], (7 / 13) * V[1]];
 const X6C_REST: XY = [W[0] - X6C_SH[0], W[1] - X6C_SH[1]];
 const X6C_N: XY = [3 / Math.sqrt(13), -2 / Math.sqrt(13)];
 const X6C_SAY = [
-  "দড়ির টান (2, 1), নদী (2, 3).",
-  "Shadow: টানের যেটুকু নদী বরাবর. নৌকা এটুকুতেই সামনে যায়.",
-  "বাকি: shadow এর মাথা থেকে দড়ির মাথা পর্যন্ত. টানের যেটুকু shadow এ ধরা পড়ে নাই.",
-  "বাকিটা একা নৌকায় লাগালে নৌকা শুধু পাড়ের দিকে যায়. 4.6 এর সেই হলুদ part.",
-  "বাকি · নদী = 0. সামনের দিকে বাকির এক ফোঁটাও নাই. সামনের পুরা টান shadow এ.",
+  "দড়ির টান (2, 1), নদী (2, 3)।",
+  "Shadow: টানের যেটুকু নদী বরাবর। নৌকা এটুকুতেই সামনে যায়।",
+  "বাকি: shadow এর মাথা থেকে দড়ির মাথা পর্যন্ত। টানের যেটুকু shadow এ ধরা পড়ে নাই।",
+  "বাকিটা একা নৌকায় লাগালে নৌকা শুধু পাড়ের দিকে যায়। 4.6 এর সেই হলুদ part।",
+  "বাকি · নদী = 0। সামনের দিকে বাকির এক ফোঁটাও নাই। সামনের পুরা টান shadow এ।",
 ];
 
 export function BakiPull() {
@@ -1001,7 +1001,7 @@ export function KeepShadows() {
     if (seen.includes(m)) return;
     const next = [...seen, m];
     setSeen(next);
-    if (next.includes(1) && next.includes(2)) pass("ঠিক line এ shadow নিলে প্রায় কিছুই হারায় না.");
+    if (next.includes(1) && next.includes(2)) pass("ঠিক line এ shadow নিলে প্রায় কিছুই হারায় না।");
   };
 
   return (
@@ -1034,10 +1034,10 @@ export function KeepShadows() {
       </div>
       <div className="mt-2 min-h-12 text-center text-[0.95rem]">
         {mode === 0 ? (
-          "প্রতিটা point এখন দুইটা number, মোট 24 টা."
+          "প্রতিটা point এখন দুইটা number, মোট 24 টা।"
         ) : (
           <span key={mode} className={FADE}>
-            প্রতিটা point এখন একটা number, মোট 12 টা. যেটুকু হারালো, তার সবচেয়ে বড়টা <b className={`font-mono ${mode === 2 ? "text-danger" : ""}`}>{num(lost)}</b>.
+            প্রতিটা point এখন একটা number, মোট 12 টা। যেটুকু হারালো, তার সবচেয়ে বড়টা <b className={`font-mono ${mode === 2 ? "text-danger" : ""}`}>{num(lost)}</b>.
           </span>
         )}
       </div>
@@ -1047,13 +1047,13 @@ export function KeepShadows() {
           ["90° এর line এ", seen.includes(2)],
         ]}
       />
-      <Task done={both}>দুইটা line এই shadow নিন. কোনটায় কম হারায়?</Task>
+      <Task done={both}>দুইটা line এই shadow নিন। কোনটায় কম হারায়?</Task>
     </>
   );
 }
 
 // ---------------------------------------------------------------------------
-// 8 · এবার আপনার পালা. মাঝি চাচা's riddle at the ghat: (4, 2) onto the
+// 8 · এবার আপনার পালা। মাঝি চাচা's riddle at the ghat: (4, 2) onto the
 //     stairs (1, 1), five small questions in a row: w · v = 6, v · v = 2,
 //     shadow (3, 3), leftover (1, −1), check 0. Wrong tries bounce, each with
 //     its own line saying what went wrong; a wrong shadow or leftover is drawn
@@ -1076,7 +1076,7 @@ const ASK: {
     ans: 0,
     say: "w · v = 6",
     box: [[4, 2], [1, 1], "w", "v"],
-    nope: ["", "8 আসে 4 × 2 থেকে, দড়ির নিজের দুইটা slot. Box এ দড়ির slot গুণ হয় সিঁড়ির slot এর সাথে.", "4 শুধু first slot এর গুণ. Second slot এর গুণটাও যোগ করুন."],
+    nope: ["", "8 আসে 4 × 2 থেকে, দড়ির নিজের দুইটা slot। Dot product এ দড়ির slot গুণ হয় সিঁড়ির slot এর সাথে।", "4 শুধু first slot এর গুণ। Second slot এর গুণটাও যোগ করুন।"],
   },
   {
     q: "v · v কত?",
@@ -1084,14 +1084,14 @@ const ASK: {
     ans: 1,
     say: "v · v = 2",
     box: [[1, 1], [1, 1], "v", "v"],
-    nope: ["", "সিঁড়ির slot দুইটা. দুইটারই বর্গ নিয়ে যোগ করুন: 1 × 1 + 1 × 1.", "4 আসে আগে যোগ করে পরে বর্গ করলে. আগে প্রতিটা slot বর্গ, তারপর যোগ."],
+    nope: ["", "সিঁড়ির slot দুইটা। দুইটারই বর্গ নিয়ে যোগ করুন: 1 × 1 + 1 × 1।", "4 আসে আগে যোগ করে পরে বর্গ করলে। আগে প্রতিটা slot বর্গ, তারপর যোগ।"],
   },
   {
     q: "তাহলে shadow টা কত?",
     opts: ["(6, 6)", "(1.5, 1.5)", "(3, 3)"],
     ans: 2,
     say: "shadow = (6 ÷ 2) × (1, 1) = (3, 3)",
-    nope: ["6 দিয়ে গুণ করেছেন, 2 দিয়ে ভাগটা বাদ পড়েছে. দেখুন, লাল arrow টা দড়ির মাথা ছাড়িয়ে কাগজের বাইরে চলে গেছে.", "লাল arrow এর মাথা থেকে দড়ির মাথায় line টা দেখুন, সিঁড়ির সাথে হেলে আছে. 6 ÷ 2 কত?", ""],
+    nope: ["6 দিয়ে গুণ করেছেন, 2 দিয়ে ভাগটা বাদ পড়েছে। দেখুন, লাল arrow টা দড়ির মাথা ছাড়িয়ে কাগজের বাইরে চলে গেছে।", "লাল arrow এর মাথা থেকে দড়ির মাথায় line টা দেখুন, সিঁড়ির সাথে হেলে আছে। 6 ÷ 2 কত?", ""],
     ghost: [[O, [3.9, 3.9]], [O, [1.5, 1.5]], null],
   },
   {
@@ -1099,15 +1099,15 @@ const ASK: {
     opts: ["(1, −1)", "(7, 5)", "(−1, 1)"],
     ans: 0,
     say: "বাকি = (4, 2) − (3, 3) = (1, −1)",
-    nope: ["", "(7, 5) আসে যোগ করলে. বাকি মানে দড়ি থেকে shadow বাদ.", "উল্টা দিকে বাদ দিয়েছেন. লাল arrow টা দড়ির মাথা থেকে দূরে যাচ্ছে. বাকিটা যায় shadow এর মাথা থেকে দড়ির মাথায়."],
+    nope: ["", "(7, 5) আসে যোগ করলে। বাকি মানে দড়ি থেকে shadow বাদ।", "উল্টা দিকে বাদ দিয়েছেন। লাল arrow টা দড়ির মাথা থেকে দূরে যাচ্ছে। বাকিটা যায় shadow এর মাথা থেকে দড়ির মাথায়।"],
     ghost: [null, null, [[3, 3], [2, 4]]],
   },
   {
     q: "বাকি · v কত?",
     opts: ["2", "0", "−2"],
     ans: 1,
-    say: "বাকি · v = 1 − 1 = 0. Right angle.",
-    nope: ["1 × 1 + (−1) × 1. Minus চিহ্নটা খেয়াল করুন.", "", "1 × 1 হলো +1, আর (−1) × 1 হলো −1. দুইটা যোগ করলে?"],
+    say: "বাকি · v = 1 − 1 = 0। Right angle.",
+    nope: ["1 × 1 + (−1) × 1. Minus চিহ্নটা খেয়াল করুন।", "", "1 × 1 হলো +1, আর (−1) × 1 হলো −1। দুইটা যোগ করলে?"],
   },
 ];
 const FY = makeFrame(-0.5, 4.5, -1.5, 3.5, 30);
@@ -1191,7 +1191,7 @@ export function YourShadow() {
     setBad(null);
     setDone(done + 1);
     // the corner mark lands first, then the pass
-    if (done + 1 === ASK.length) fin.play(1, () => pass("(4, 2) দুই টুকরা হয়ে গেলো, right angle এ."));
+    if (done + 1 === ASK.length) fin.play(1, () => pass("(4, 2) দুই টুকরা হয়ে গেলো, right angle এ।"));
   };
 
   return (
@@ -1275,7 +1275,7 @@ export function TapFoot() {
     const i = Math.max(1, Math.min(TF_N - 1, Math.round(t * TF_N)));
     setTap(i);
     // the line draws down to the tick first; the pass lands once it is square
-    if (i === TF_RIGHT) fin.play(1, () => pass("দড়ি · নদী = 5, নদী · নদী = 10. মাঝখানে."));
+    if (i === TF_RIGHT) fin.play(1, () => pass("দড়ি · নদী = 5, নদী · নদী = 10। মাঝখানে।"));
     else setMiss(miss + 1);
   };
 
@@ -1322,18 +1322,18 @@ export function TapFoot() {
 
       <div className="mt-1 min-h-10 text-center text-[0.95rem]">
         {tap === null ? (
-          <span className="text-muted">নদীটা 10 ভাগে কাটা আছে. মাথা কোন দাগে পড়বে?</span>
+          <span className="text-muted">নদীটা 10 ভাগে কাটা আছে। মাথা কোন দাগে পড়বে?</span>
         ) : (
           <span key={`${tap}-${miss}`} style={{ transitionDelay: "500ms" }} className={FADE}>
-            {tap} নম্বর দাগ · বাকি line আর নদীর box{" "}
+            {tap} নম্বর দাগ · বাকি line আর নদীর dot product{" "}
             <b className={`font-mono ${right ? "text-accent-text" : "text-danger"}`}>{num(dot(gap, TF_V))}</b>
           </span>
         )}
       </div>
 
-      {tap !== null && !right && <Nope key={miss}>Box 0 হয় নাই, মানে line টা নদীর সাথে হেলে আছে. দড়ি · নদী কত হয়, বের করে দেখুন.</Nope>}
+      {tap !== null && !right && <Nope key={miss}>Dot product 0 হয় নাই, মানে line টা নদীর সাথে হেলে আছে। দড়ি · নদী কত হয়, বের করে দেখুন।</Nope>}
 
-      <Task done={right}>নদীর যে দাগে shadow এর মাথা পড়বে, সেই দাগে tap করুন.</Task>
+      <Task done={right}>নদীর যে দাগে shadow এর মাথা পড়বে, সেই দাগে tap করুন।</Task>
     </>
   );
 }
@@ -1434,11 +1434,11 @@ export function RiverBend({}: Story) {
 
 const X3_F = makeFrame(-0.4, 2.9, -0.4, 3.4, 40);
 const X3A_SAY = [
-  "Shadow এর মাথা পড়লো ঠিক নদীর arrow এর 7/13 অংশে.",
-  "নদীর arrow টাকে 13 টুকরা করলে shadow এর মাথা বসে 7 নম্বর দাগে.",
+  "Shadow এর মাথা পড়লো ঠিক নদীর arrow এর 7/13 অংশে।",
+  "নদীর arrow টাকে 13 টুকরা করলে shadow এর মাথা বসে 7 নম্বর দাগে।",
   "কিন্তু 13 ভাগ করার কথা মাথায় আসলো কেন?",
   "আর গুনে 7 পাওয়ার মানেই বা কী?",
-  "দুইটা সংখ্যাই লুকিয়ে আছে চেনা এক জায়গায়.",
+  "দুইটা সংখ্যাই লুকিয়ে আছে চেনা এক জায়গায়।",
 ];
 
 /** one number of 7/13 with its "?" hung on it once the figure asks about it */
@@ -1513,14 +1513,14 @@ export function SevenThirteen() {
 
 const X3B_ROWS: { name: string; f: string[] }[] = [
   { name: "4.3: shadow এর length", f: ["", "‖w‖ cos θ"] },
-  { name: "box", f: ["w · v = ‖v‖ ", "‖w‖ cos θ"] },
+  { name: "dot product", f: ["w · v = ‖v‖ ", "‖w‖ cos θ"] },
   { name: "তাহলে shadow এর length", f: ["w · v ÷ ‖v‖"] },
 ];
 const X3B_SAY = [
-  "4.3 এর একটা কথা জানলেই 7 টা মিলে যায়.",
+  "4.3 এর একটা কথা জানলেই 7 টা মিলে যায়।",
   "4.3 থেকে: shadow এর length হলো ‖w‖ cos θ.",
-  "ওই একই ‖w‖ cos θ বসে আছে box এর ভিতরে, সাথে বাড়তি একটা ‖v‖.",
-  "তাই box কে ‖v‖ দিয়ে ভাগ দিলে shadow এর length পাওয়া যায়.",
+  "ওই একই ‖w‖ cos θ বসে আছে dot product এর ভিতরে, সাথে বাড়তি একটা ‖v‖।",
+  "তাই dot product কে ‖v‖ দিয়ে ভাগ দিলে shadow এর length পাওয়া যায়।",
 ];
 
 export function WhySeven() {
@@ -1561,16 +1561,16 @@ export function WhySeven() {
 
 const X4_F = makeFrame(-0.4, 2.6, -0.4, 3.4, 30);
 const X4A_SAY = [
-  "Shadow এর recipe টা জোরে জোরে পড়ি.",
-  "প্রথম box: দড়ি আর নদী, 7.",
-  "দ্বিতীয় box: নদী আর নদী, 13.",
-  "একটা ভাগ: 7 ÷ 13.",
-  "এরপর নদীর arrow টাকে ওই অংশ অনুযায়ী টানুন. ওটাই shadow.",
-  "Root লাগলো না, চাঁদাও লাগলো না.",
+  "Shadow এর recipe টা জোরে জোরে পড়ি।",
+  "প্রথম dot product: দড়ি আর নদী, 7।",
+  "দ্বিতীয় dot product: নদী আর নদী, 13।",
+  "একটা ভাগ: 7 ÷ 13।",
+  "এরপর নদীর arrow টাকে ওই অংশ অনুযায়ী টানুন। ওটাই shadow.",
+  "Root লাগলো না, চাঁদাও লাগলো না।",
 ];
 const X4A_ROWS = [
-  { name: "box", val: "w · v = 7" },
-  { name: "box", val: "v · v = 13" },
+  { name: "dot product", val: "w · v = 7" },
+  { name: "dot product", val: "v · v = 13" },
   { name: "ভাগ", val: "7 ÷ 13" },
   { name: "টানুন", val: "(7 ÷ 13) × v" },
 ];
@@ -1641,7 +1641,7 @@ export function AnyRiver() {
   const sh: XY = [t * v[0], t * v[1]];
   const rest: XY = [w[0] - sh[0], w[1] - sh[1]];
   const rl = Math.hypot(rest[0], rest[1]);
-  const caption = `নদী ${tupN(v)}, টান ${tupN(w)}: বাকি · নদী = 0.${k === 3 ? " যেকোনো টান, যেকোনো নদী." : ""}`;
+  const caption = `নদী ${tupN(v)}, টান ${tupN(w)}: বাকি · নদী = 0।${k === 3 ? " যেকোনো টান, যেকোনো নদী।" : ""}`;
   return (
     <Scene
       scene={s}
@@ -1762,7 +1762,7 @@ const X7A_SAY = [
   "বারোটা point এর একটা, দুইটা number: (2.46, 0.89).",
   "ছড়ানোর line এ shadow: থাকলো একটা number, 2.6.",
   "হারালো শুধু বাকিটুকু, 0.3.",
-  "Right angle এর line এ shadow: থাকলো −0.3, হারালো 2.6. প্রায় সবটাই.",
+  "Right angle এর line এ shadow: থাকলো −0.3, হারালো 2.6. প্রায় সবটাই।",
 ];
 
 export function OnePoint() {
@@ -1816,10 +1816,10 @@ export function OnePoint() {
 }
 
 const X7B_SAY = [
-  "ধরুন আপনার data এর প্রতিটা point 300 টা number.",
-  "কিন্তু ওরা আসলে ছড়িয়ে আছে মাত্র কয়েকটা direction বরাবর. ওই direction গুলাতেই shadow নিন.",
-  "প্রতি direction এ একটা number. 300 টার কাজ কয়েকটা দিয়েই হয়ে যায়.",
-  "বাকিটা ফেলে দিন. হারাবে শুধু সামান্য কিছু.",
+  "ধরুন আপনার data এর প্রতিটা point 300 টা number।",
+  "কিন্তু ওরা আসলে ছড়িয়ে আছে মাত্র কয়েকটা direction বরাবর। ওই direction গুলাতেই shadow নিন।",
+  "প্রতি direction এ একটা number। 300 টার কাজ কয়েকটা দিয়েই হয়ে যায়।",
+  "বাকিটা ফেলে দিন। হারাবে শুধু সামান্য কিছু।",
 ];
 
 export function FewNumbers() {
@@ -2054,10 +2054,10 @@ const X1_PAIRS: [XY, XY][] = [
   [[1, -2], [2, 1]],
 ];
 const X1_SAY = [
-  "(2, 1) আর (−1, 2). Box 0, right angle.",
-  "জোড়াটা একসাথে ঘুরিয়ে দিলাম: (3, 1) আর (−1, 3). এবারও 0.",
-  "আরেকবার ঘুরালাম: (1, −2) আর (2, 1). এবারও 0.",
-  "তিন slot হলেও একই কথা. এই জোড়ার box-ও 0.",
+  "(2, 1) আর (−1, 2)। Dot product 0, right angle.",
+  "জোড়াটা একসাথে ঘুরিয়ে দিলাম: (3, 1) আর (−1, 3)। এবারও 0।",
+  "আরেকবার ঘুরালাম: (1, −2) আর (2, 1)। এবারও 0।",
+  "তিন slot হলেও একই কথা। এই জোড়ার dot product-ও 0।",
 ];
 
 export function ZeroAnySlots() {
@@ -2096,10 +2096,10 @@ export function ZeroAnySlots() {
 //      and the boat reaching the next bend with nothing but a "?" there.
 
 const X2_SAY = [
-  "এই বাঁকে slide করে করে মাথাটা পাওয়া গেলো.",
-  "কিন্তু ঘাটের আগে নদী আরো কয়েকবার বাঁক নিবে.",
-  "আর সূর্য নামছে. মাঝি চাচা সন্ধ্যার আগে ঘাটে পৌঁছাতে চান.",
-  "প্রতিটা বাঁকে নতুন করে slide করতে বসলে সন্ধ্যা পার হয়ে যাবে. দরকার একটা হিসাব.",
+  "এই বাঁকে slide করে করে মাথাটা পাওয়া গেলো।",
+  "কিন্তু ঘাটের আগে নদী আরো কয়েকবার বাঁক নিবে।",
+  "আর সূর্য নামছে। মাঝি চাচা সন্ধ্যার আগে ঘাটে পৌঁছাতে চান।",
+  "প্রতিটা বাঁকে নতুন করে slide করতে বসলে সন্ধ্যা পার হয়ে যাবে। দরকার একটা হিসাব।",
 ];
 const X2_RIVER = "M-6 104H62Q80 104 88 86L104 48Q112 30 130 30H166Q184 30 192 48L202 70Q210 88 228 88H290";
 const X2_BENDS: XY[] = [
@@ -2152,10 +2152,10 @@ export function BendsAhead() {
 
 const X5_F = makeFrame(-3.3, 5.3, -2.3, 5.3, 17);
 const X5_SAY = [
-  "নদীর arrow (2, 3). ওর নিজের সাথে box: 2 × 2 + 3 × 3.",
-  "Arrow টা মানে 2 ঘর ডানে, তারপর 3 ঘর উপরে.",
-  "2 এর উপরে square এ 4 টা ঘর, 3 এর উপরে square এ 9 টা.",
-  "আর arrow এর নিজের উপরে বসানো square এ ঠিক 13 ঘর. 13 হলো length এর বর্গ.",
+  "নদীর arrow (2, 3)। ওর নিজের সাথে dot product: 2 × 2 + 3 × 3।",
+  "Arrow টা মানে 2 ঘর ডানে, তারপর 3 ঘর উপরে।",
+  "2 এর উপরে square এ 4 টা ঘর, 3 এর উপরে square এ 9 টা।",
+  "আর arrow এর নিজের উপরে বসানো square এ ঠিক 13 ঘর। 13 হলো length এর বর্গ।",
 ];
 
 export function RiverSquare() {
@@ -2228,7 +2228,7 @@ export function SecondBend({}: Story) {
         <path d={`M${bx - 14} ${S1_WL - 62}L${cx + 3} ${S7B_BANK - 27}`} stroke="#78350f" strokeWidth={1.4} fill="none" />
         <T_Majhi x={dx} y={S7B_BANK} walking={k === 1} run={String(k)} ms={1500} pose="pull" cloth="#15803d" />
         <T_Majhi x={cx} y={S7B_BANK} walking={k === 1} run={String(k)} ms={1500} pose="pull" name={k >= 2 ? "মাঝি চাচা" : undefined} />
-        {k === 2 && <Bubble x={cx - 10} y={S7B_BANK - 50} side="left" lines={["আরেকটা বাঁক আইলো.", "এইবার জলদি কও."]} />}
+        {k === 2 && <Bubble x={cx - 10} y={S7B_BANK - 50} side="left" lines={["আরেকটা বাঁক আইলো।", "এইবার জলদি কও।"]} />}
         {k >= 3 && (
           <g>
             {[
@@ -2257,10 +2257,10 @@ export function SecondBend({}: Story) {
 
 const X7T_F = makeFrame(-0.4, 3.4, -0.4, 2.4, 34);
 const X7T_SAY = [
-  "নতুন নদী (3, 1), দশ ভাগে কাটা. দড়ির টান (1, 2).",
-  "দড়ি · নদী = 3 + 2 = 5. এইটা কয় ধাপ.",
-  "নদী · নদী = 9 + 1 = 10. এইটা কয় ভাগ. তাই 10 ভাগের 5 ভাগ, ঠিক মাঝখানে.",
-  "7 নম্বর দাগে নামালে line টা হেলে যায়. Box বলে −2, 0 না.",
+  "নতুন নদী (3, 1), দশ ভাগে কাটা। দড়ির টান (1, 2)।",
+  "দড়ি · নদী = 3 + 2 = 5। এইটা কয় ধাপ।",
+  "নদী · নদী = 9 + 1 = 10। এইটা কয় ভাগ। তাই 10 ভাগের 5 ভাগ, ঠিক মাঝখানে।",
+  "7 নম্বর দাগে নামালে line টা হেলে যায়। Dot product বলে −2, 0 না।",
 ];
 
 export function HalfwayWhy() {
@@ -2313,7 +2313,7 @@ export function HalfwayWhy() {
             <span className="font-mono">5/10</span>, মাঝখানে
           </div>
           <div className={k >= 3 ? `${FADE} font-sans text-danger` : "opacity-0"}>
-            7 নম্বরে box <span className="font-mono">−2</span>
+            7 নম্বরে dot product <span className="font-mono">−2</span>
           </div>
         </div>
       </div>
@@ -2367,11 +2367,11 @@ export function BendNear({}: Story) {
 const X5B_U = 33;
 const X5B_L = Math.sqrt(13);
 const X5B_SAY = [
-  "Box বলে 7. ভিতরে shadow এর length, সাথে বাড়তি একটা ‖v‖.",
+  "Dot product বলে 7। ভিতরে shadow এর length, সাথে বাড়তি একটা ‖v‖।",
   "একবার ‖v‖ দিয়ে ভাগ: shadow এর length, প্রায় 1.94.",
   "নদীর arrow এর নিজের length ‖v‖, প্রায় 3.61.",
-  "নদীর কত অংশ? আরেকবার ‖v‖ দিয়ে ভাগ: 1.94 ÷ 3.61, মানে 7/13.",
-  "মোট ভাগ হলো ‖v‖² দিয়ে, মানে v · v, মানে 13.",
+  "নদীর কত অংশ? আরেকবার ‖v‖ দিয়ে ভাগ: 1.94 ÷ 3.61, মানে 7/13।",
+  "মোট ভাগ হলো ‖v‖² দিয়ে, মানে v · v, মানে 13।",
 ];
 
 export function TwoDivides() {
@@ -2382,7 +2382,7 @@ export function TwoDivides() {
   return (
     <Scene scene={s} caption={T_say(X5B_SAY, k)}>
       <div className="mx-auto w-full max-w-[17rem]">
-        <svg viewBox="0 0 250 92" role="img" aria-label="Box এর 7, ‖v‖ দিয়ে ভাগে shadow এর length 1.94; নদীর length 3.61; আরেকবার ভাগে 7/13" className="block h-auto w-full">
+        <svg viewBox="0 0 250 92" role="img" aria-label="Dot product এর 7, ‖v‖ দিয়ে ভাগে shadow এর length 1.94; নদীর length 3.61; আরেকবার ভাগে 7/13" className="block h-auto w-full">
           {/* the box's number, then the shadow's length */}
           <text x={x0} y={14} fontSize={9.5} fontWeight={700} className="fill-cat-teal">
             {k >= 1 ? "shadow এর length ≈ 1.94" : "w · v = 7"}
@@ -2432,10 +2432,10 @@ export function TwoDivides() {
 
 const X10_SAY = [
   "শুরুতে প্রশ্ন: নদী বাঁকা হলে shadow এর মাথা কোথায় পড়ে?",
-  "Slide করে খুঁজে পেলাম. দড়ির মাথা থেকে line টা নদীর সাথে right angle এ.",
-  "তারপর সংখ্যায় আনলাম: নদীকে 13 ভাগ করে 7 ধাপ.",
-  "7 আর 13 দুইটাই box থেকে: দড়ি আর নদীর box, আর নদীর নিজের box.",
-  "দড়ির টান দুই টুকরা: নদী বরাবর shadow, আর বাকিটা right angle এ.",
+  "Slide করে খুঁজে পেলাম। দড়ির মাথা থেকে line টা নদীর সাথে right angle এ।",
+  "তারপর সংখ্যায় আনলাম: নদীকে 13 ভাগ করে 7 ধাপ।",
+  "7 আর 13 দুইটাই dot product থেকে: দড়ি আর নদীর dot product, আর নদীর নিজের dot product।",
+  "দড়ির টান দুই টুকরা: নদী বরাবর shadow, আর বাকিটা right angle এ।",
 ];
 
 export function RecapBend({}: Story) {
@@ -2521,6 +2521,629 @@ export function RecapBend({}: Story) {
 }
 
 // ---------------------------------------------------------------------------
+// SQ · Side quest from screen 5, a journey of its own (<SideQuest journey>, 5
+//      steps): why does dividing by 13 give the shadow? The answer without
+//      cos θ: turn the paper until the river lies flat.
+//      1 That night, by the hurricane lamp, আপা copies both arrows onto thin
+//        paper; the reader turns it (TurnPaper). Both lists change, the dot
+//        product stays 7, and once the river is flat the rope's first number
+//        is the shadow — 4.6's straight river again.
+//      2 On the flat river the dot product is shadow × river length: the
+//        second slot dies on the river's 0 (FlatDot).
+//      3 So divide by the river's length — how many times? Once lands the boat
+//        at 7, off the river's end (a length, not a share); twice lands on the
+//        foot; three times stops short (DivideCount). Twice = ‖v‖² = v · v.
+//      4 Your turn: a new pair, নদী (4, 3) and দড়ি (2, 4), turned by hand and
+//        read off the grid, 4/5 = 20/25 (TurnAndRead).
+//      5 The end, the loop closed (TurnRecap).
+//      Figures: NightKhata (1 setup), KeepsTurning (1), ShadowTimesRiver (2),
+//      TwoDivides (3, screen 5's own), FormulaTurns (4).
+
+const SQ_SLOTS = ["ডানে", "উপরে"];
+const SQ_TILT = Math.atan2(V[1], V[0]);
+const SQ_FLAT = (SQ_TILT * 180) / Math.PI;
+// Rounded: the server's and the browser's sin/cos can differ in the last digit,
+// which would break hydration.
+const sqRound = (n: number) => Math.round(n * 1e6) / 1e6;
+const sqRot = (p: XY, a: number): XY => [sqRound(p[0] * Math.cos(a) - p[1] * Math.sin(a)), sqRound(p[0] * Math.sin(a) + p[1] * Math.cos(a))];
+const sqUnit = (p: XY): XY => {
+  const l = Math.hypot(...p);
+  return [p[0] / l, p[1] / l];
+};
+const r2 = (p: XY): XY => [Math.round(p[0] * 100) / 100, Math.round(p[1] * 100) / 100];
+/** the flat river and the rope turned with it: (3.61, 0) and (1.94, −1.11) */
+const SQ_VF: XY = [Math.sqrt(13), 0];
+const SQ_WF: XY = [7 / Math.sqrt(13), -4 / Math.sqrt(13)];
+
+/** The boat seen from above, sailing along the flat river. */
+function SQ_Boat({ f, x }: { f: Frame; x: number }) {
+  return (
+    <g style={{ transform: `translate(${f.sx(x)}px, ${f.sy(0)}px)` }} className="pointer-events-none">
+      <path d="M-12 0Q-6 -5 5 -4.5L13 0L5 4.5Q-6 5 -12 0Z" className="fill-[#92400e]" />
+      <circle cx={-1} r={2} className="fill-[#78350f]" />
+    </g>
+  );
+}
+
+/**
+ * The thin paper with both arrows on it, turned by `a` (radians) over the
+ * khata's grid, which stays put. The shadow is drawn on the river, and the drop
+ * to its foot square. `arc` marks the angle between the two arrows.
+ */
+function SQ_Paper({ f, river, rope, a, lit = false, arc = false, sheet = true }: { f: Frame; river: XY; rope: XY; a: number; lit?: boolean; arc?: boolean; sheet?: boolean }) {
+  const clip = `sq${useId().replace(/:/g, "")}`;
+  const v = sqRot(river, a);
+  const w = sqRot(rope, a);
+  const share = dot(rope, river) / dot(river, river);
+  const foot: XY = [share * v[0], share * v[1]];
+  const gap: XY = [w[0] - foot[0], w[1] - foot[1]];
+  const xs = [0, river[0], rope[0]];
+  const ys = [0, river[1], rope[1]];
+  const m = 0.35;
+  const [x0, x1, y0, y1] = [Math.min(...xs) - m, Math.max(...xs) + m, Math.min(...ys) - m, Math.max(...ys) + m];
+  const corners = ([[x0, y0], [x1, y0], [x1, y1], [x0, y1]] as XY[]).map((c) => sqRot(c, a));
+  const r = 0.8;
+  const uv = sqUnit(v);
+  const uw = sqUnit(w);
+  return (
+    <>
+      {/* the thin paper, cut off where the khata's page ends */}
+      {sheet && (
+        <>
+          <clipPath id={clip}>
+            <rect x={f.sx(f.x0)} y={f.sy(f.y1)} width={(f.x1 - f.x0) * f.u} height={(f.y1 - f.y0) * f.u} />
+          </clipPath>
+          <path
+            d={`M${corners.map((c) => `${f.sx(c[0])} ${f.sy(c[1])}`).join("L")}Z`}
+            clipPath={`url(#${clip})`}
+            strokeWidth={1}
+            strokeDasharray="4 3"
+            className="pointer-events-none fill-[#fde68a]/30 stroke-[#b45309]/50"
+          />
+        </>
+      )}
+      <path d={`M${f.sx(0)} ${f.sy(0)}L${f.sx(foot[0])} ${f.sy(foot[1])}`} strokeWidth={lit ? 8 : 5} strokeLinecap="round" className="pointer-events-none stroke-cat-teal/60" />
+      {arc && (
+        <path
+          d={`M${f.sx(uw[0] * r)} ${f.sy(uw[1] * r)}A${r * f.u} ${r * f.u} 0 0 0 ${f.sx(uv[0] * r)} ${f.sy(uv[1] * r)}`}
+          strokeWidth={2}
+          className="pointer-events-none fill-none stroke-[#d97706]"
+        />
+      )}
+      <Arrow f={f} from={O} to={v} tone="blue" w={2.4} />
+      <Arrow f={f} from={O} to={w} tone="coral" w={2.2} />
+      <path d={`M${f.sx(w[0])} ${f.sy(w[1])}L${f.sx(foot[0])} ${f.sy(foot[1])}`} strokeWidth={1.3} strokeDasharray="4 3" className="pointer-events-none stroke-accent" />
+      {Math.hypot(...gap) > 0.2 && <T_Square f={f} at={foot} a={sqUnit([-v[0], -v[1]])} b={sqUnit(gap)} size={0.24} />}
+      <circle cx={f.sx(foot[0])} cy={f.sy(foot[1])} r={3.5} className="pointer-events-none fill-accent" />
+    </>
+  );
+}
+
+/** a slider that turns the paper, bent on the left, flat once far enough */
+function SQ_Turn({ deg, max, off, onTurn }: { deg: number; max: number; off: boolean; onTurn: (d: number) => void }) {
+  return (
+    <div className="mx-auto flex max-w-sm items-center gap-3">
+      <span className="text-sm text-muted">বাঁকা</span>
+      <input
+        type="range"
+        min={0}
+        max={max}
+        step={0.5}
+        value={deg}
+        disabled={off}
+        aria-label="কাগজ কতটুকু ঘুরাবেন"
+        onChange={(e) => onTurn(Number(e.target.value))}
+        className="h-6 min-w-0 flex-1 cursor-pointer accent-[var(--cat-blue)] disabled:cursor-default"
+      />
+      <span className="text-sm text-muted">ঘুরানো</span>
+    </div>
+  );
+}
+
+// SQ 1 · Turn the paper.
+
+const SQ1_F = makeFrame(-0.6, 4.1, -1.7, 3.5, 34);
+
+export function TurnPaper() {
+  const pass = useGate();
+  const [deg, setDeg] = useSeed("deg", 0);
+  const [flat, setFlat] = useSeed("flat", false);
+  const a = (-deg * Math.PI) / 180;
+  const v = sqRot(V, a);
+  const w = sqRot(W, a);
+  const turn = (d: number) => {
+    if (flat) return;
+    if (Math.abs(d - SQ_FLAT) < 2.5) {
+      setDeg(SQ_FLAT);
+      setFlat(true);
+      pass("নদী সোজা। দড়ির first number ই shadow.");
+      return;
+    }
+    setDeg(d);
+  };
+  return (
+    <>
+      <Legend now={flat ? "নদী সোজা" : deg > 1 ? "কাগজ ঘুরছে" : "খাতার উপরে পাতলা কাগজ"} />
+      <Plane f={SQ1_F} ticks={1} label={`পাতলা কাগজ ${Math.round(deg)} ডিগ্রি ঘুরানো; নদী ${tupF(v)}, দড়ি ${tupF(w)}`} className="max-w-[12.5rem]">
+        <SQ_Paper f={SQ1_F} river={V} rope={W} a={a} lit={flat} />
+      </Plane>
+      <SQ_Turn deg={deg} max={75} off={flat} onTurn={turn} />
+      <div className="mx-auto mt-1 grid max-w-[16rem] grid-cols-[auto_1fr] items-baseline gap-x-3 font-mono text-[0.95rem]">
+        <b className="font-sans text-cat-blue">নদী</b>
+        <Tup v={v} of={SQ_SLOTS} />
+        <b className="font-sans text-cat-coral">দড়ি</b>
+        <Tup v={w} of={SQ_SLOTS} />
+        <span className="font-sans">dot product</span>
+        <b key={flat ? "f" : "t"} className={flat ? `${POP} inline-block text-accent-text` : ""}>
+          {num(dot(w, v))}
+        </b>
+      </div>
+      {flat && (
+        <div className={`${FADE} mt-1 text-center text-[0.95rem]`}>
+          দড়ির first number <b className="font-mono text-cat-teal">1.94</b>. Shadow এর length ও <b className="font-mono text-cat-teal">1.94</b>.
+        </div>
+      )}
+      <Task done={flat}>কাগজটা ঘুরিয়ে নদীকে ডান দিকের axis এর উপরে শুইয়ে দিন। ঘুরানোর সময় list দুইটা আর dot product এর দিকে চোখ রাখুন।</Task>
+    </>
+  );
+}
+
+// SQ 2 · The dot product on the flat river, slot by slot.
+
+const SQ2_F = makeFrame(-0.4, 4, -1.5, 0.8, 40);
+
+export function FlatDot() {
+  const pass = useGate();
+  const [ran, setRan] = useSeed("ran", false);
+  const seeded = useSeeded();
+  const p = usePlay(1100);
+  const k = !ran ? 0 : seeded ? 3 : p.k;
+  const run = () => {
+    if (p.running) return;
+    setRan(true);
+    p.play(3, () => pass("Dot product = shadow × নদীর length."));
+  };
+  const f = SQ2_F;
+  return (
+    <>
+      <Legend now="সোজা নদী" />
+      <Plane f={f} ticks={1} label="সোজা নদী (3.61, 0), দড়ি (1.94, −1.11); shadow 1.94" className="max-w-[14rem]">
+        <SQ_Paper f={f} river={V} rope={W} a={-SQ_TILT} lit={k === 1 || k >= 3} />
+        {/* the second slot: the rope's other piece, straight down, meets the river's 0 */}
+        {k === 2 && <Arrow key="rest" f={f} from={[SQ_WF[0], 0]} to={SQ_WF} tone="amber" w={2.6} draw list="(0, −1.11)" />}
+        {k === 2 && (
+          <text x={f.sx(SQ_WF[0]) + 8} y={f.sy(-0.7)} fontSize={11} fontWeight={800} fontFamily="ui-monospace, monospace" className={`fill-[#b45309] ${FADE}`}>
+            × 0
+          </text>
+        )}
+      </Plane>
+      {ran ? (
+        <BoxRun a={r2(SQ_WF)} b={r2(SQ_VF)} k={k} dense />
+      ) : (
+        <div className="mt-1 flex justify-center">
+          <button type="button" onClick={run} className={primaryBtn}>
+            Dot product চালান
+          </button>
+        </div>
+      )}
+      <div className="mt-1 min-h-6 text-center text-[0.9rem]">
+        {k === 1 && (
+          <span key="1" className={FADE}>
+            First slot: <b className="text-cat-teal">shadow</b> × <b className="text-cat-blue">নদীর length</b>.
+          </span>
+        )}
+        {k === 2 && (
+          <span key="2" className={FADE}>
+            Second slot: নদীর number 0। বাকি টুকরা যত বড়ই হোক, 0।
+          </span>
+        )}
+        {k >= 3 && (
+          <span key="3" className={FADE}>
+            শুধু <b className="text-cat-teal">shadow</b> × <b className="text-cat-blue">নদীর length</b> টিকে থাকলো।
+          </span>
+        )}
+      </div>
+      <Task done={k >= 3}>সোজা নদীতে দড়ি আর নদীর dot product চালান। প্রতিটা slot কী দিচ্ছে, দেখুন।</Task>
+    </>
+  );
+}
+
+// SQ 3 · How many times to divide by the river's length. The boat sails to
+//       the share it gets: once lands at 7, past the river's end; twice on the
+//       foot; three times short of it.
+
+const SQ3_F = makeFrame(-0.4, 7.5, -1.5, 0.9, 26);
+const SQ3_L = Math.sqrt(13);
+const SQ3_OPTS = [1, 2, 3];
+const SQ3_RIGHT = 1;
+const SQ3_NOPE = [
+  "নৌকা নদী ছাড়িয়ে 7 এ গিয়ে থামলো। একবার ভাগ দিলে পাওয়া যায় 1.94. ওটা shadow এর length, ঘর দিয়ে মাপা। অংশ না।",
+  "",
+  "নৌকা মাথার অনেক আগেই থামলো। একবার বেশি ভাগ দিয়ে ফেলেছেন।",
+];
+
+export function DivideCount() {
+  const pass = useGate();
+  const [pick, setPick] = useSeed<number | null>("pick", null);
+  const [miss, setMiss] = useSeed("miss", 0);
+  const p = usePlay(45);
+  const right = pick === SQ3_RIGHT && !p.running;
+  const share = (n: number) => 7 / SQ3_L ** n;
+  const t = pick === null ? 0 : p.running ? p.k / 24 : 1;
+  const x = pick === null ? 0 : t * share(SQ3_OPTS[pick]) * SQ3_L;
+  const choose = (i: number) => {
+    if (p.running || right) return;
+    setPick(i);
+    p.play(24, () => (i === SQ3_RIGHT ? pass("দুইবার ভাগ: 3.61 × 3.61 = 13.") : setMiss((m) => m + 1)));
+  };
+  const f = SQ3_F;
+  return (
+    <>
+      <Legend now="নৌকা কোথায় থামে" />
+      <Plane f={f} ticks={1} label="সোজা নদী 3.61 লম্বা; shadow এর মাথা 1.94 এ; নৌকা ভাগের অংশ ধরে চলে" className="max-w-[20rem]">
+        <path d={`M${f.sx(0)} ${f.sy(0)}H${f.sx(SQ3_L)}`} strokeWidth={16} className="pointer-events-none stroke-[#38bdf8]/20" />
+        <path d={`M${f.sx(SQ3_L)} ${f.sy(0)}H${f.sx(7.4)}`} strokeWidth={1.2} strokeDasharray="3 4" className="pointer-events-none stroke-[#0f1b2d]/35" />
+        <text x={f.sx(SQ3_L) + 4} y={f.sy(0.3)} fontSize={9} className="fill-[#5a6b7d]">
+          নদী এখানে শেষ
+        </text>
+        <SQ_Paper f={f} river={V} rope={W} a={-SQ_TILT} sheet={false} />
+        {pick !== null && <SQ_Boat f={f} x={x} />}
+      </Plane>
+      <div className="mt-1 min-h-6 text-center font-mono text-[0.95rem]">
+        {pick !== null && (
+          <span key={`${pick}-${miss}`} className={FADE}>
+            অংশ {fix(share(SQ3_OPTS[pick]), 2)} → নৌকা {fix(t * share(SQ3_OPTS[pick]) * SQ3_L, 2)} ঘর
+          </span>
+        )}
+      </div>
+      <div className="mt-2 grid grid-cols-3 gap-2">
+        {SQ3_OPTS.map((n, i) => (
+          <Choice key={n} n={i} look={pick === i && !p.running ? (i === SQ3_RIGHT ? "right" : "wrong") : pick === i ? "picked" : "idle"} disabled={right} onClick={() => choose(i)}>
+            <div className="text-center font-mono text-[0.8rem] leading-tight font-bold">
+              7
+              {Array.from({ length: n }, (_, j) => (
+                <div key={j}>÷ 3.61</div>
+              ))}
+            </div>
+            <div className="mt-0.5 text-center text-[0.75rem]">{n} বার</div>
+          </Choice>
+        ))}
+      </div>
+      {pick !== null && !p.running && pick !== SQ3_RIGHT && <Nope key={miss}>{SQ3_NOPE[pick]}</Nope>}
+      <Task done={right}>7 কে নদীর length, 3.61 দিয়ে কয়বার ভাগ দিলে নৌকা ঠিক shadow এর মাথায় থামে? একটা বেছে নিন।</Task>
+    </>
+  );
+}
+
+// SQ 4 · Your turn: নদী (4, 3), দড়ি (2, 4). Turn the paper flat by hand —
+//       the river becomes (5, 0), the rope (4, 2) — then say the share. Each
+//       pick sails the boat to it: 2/5 took the rope's second number, 4/25
+//       divided by 25 where the flat river is 5 long.
+
+const SQ4_V: XY = [4, 3];
+const SQ4_W: XY = [2, 4];
+const SQ4_FLAT = (Math.atan2(3, 4) * 180) / Math.PI;
+const SQ4_F = makeFrame(-0.6, 5.5, -0.6, 4.6, 27);
+const SQ4_OPTS = [
+  { n: "2/5", s: 0.4 },
+  { n: "4/5", s: 0.8 },
+  { n: "4/25", s: 0.16 },
+];
+const SQ4_RIGHT = 1;
+const SQ4_NOPE = [
+  "নৌকা 2 এ থামলো, মাথার আগে। 2 হলো দড়ির second number, নদী থেকে কতটা সরে আছে। নদী বরাবর কতদূর, সেটা কোন number?",
+  "",
+  "নৌকা প্রায় শুরুতেই থামলো। সোজা নদীর length তো 5, 25 না। Shadow কে একবারই ভাগ দিন নদীর length দিয়ে।",
+];
+
+export function TurnAndRead() {
+  const pass = useGate();
+  const [deg, setDeg] = useSeed("deg", 0);
+  const [flat, setFlat] = useSeed("flat", false);
+  const [pick, setPick] = useSeed<number | null>("pick", null);
+  const [miss, setMiss] = useSeed("miss", 0);
+  const p = usePlay(45);
+  const right = pick === SQ4_RIGHT && !p.running;
+  const a = (-deg * Math.PI) / 180;
+  const v = sqRot(SQ4_V, a);
+  const w = sqRot(SQ4_W, a);
+  const t = pick === null ? 0 : p.running ? p.k / 24 : 1;
+  const turn = (d: number) => {
+    if (flat) return;
+    if (Math.abs(d - SQ4_FLAT) < 2.5) {
+      setDeg(SQ4_FLAT);
+      setFlat(true);
+      return;
+    }
+    setDeg(d);
+  };
+  const choose = (i: number) => {
+    if (p.running || right) return;
+    setPick(i);
+    p.play(24, () => (i === SQ4_RIGHT ? pass("4/5 = 20/25. ঘুরিয়েও একই, না ঘুরিয়েও।") : setMiss((m) => m + 1)));
+  };
+  const f = SQ4_F;
+  return (
+    <>
+      <Legend now={flat ? "এবার অংশটা বলুন" : "কাগজ ঘুরান"} />
+      <Plane f={f} ticks={1} label={`নতুন নদী আর দড়ি, কাগজ ${Math.round(deg)} ডিগ্রি ঘুরানো; নদী ${tupF(v)}, দড়ি ${tupF(w)}`} className="max-w-[12rem]">
+        <SQ_Paper f={f} river={SQ4_V} rope={SQ4_W} a={a} lit={flat} />
+        {pick !== null && <SQ_Boat f={f} x={t * SQ4_OPTS[pick].s * 5} />}
+      </Plane>
+      {flat ? null : <SQ_Turn deg={deg} max={60} off={flat} onTurn={turn} />}
+      <div className="mx-auto mt-1 grid max-w-[16rem] grid-cols-[auto_1fr] items-baseline gap-x-3 font-mono text-[0.95rem]">
+        <b className="font-sans text-cat-blue">নদী</b>
+        <Tup v={v} of={SQ_SLOTS} />
+        <b className="font-sans text-cat-coral">দড়ি</b>
+        <Tup v={w} of={SQ_SLOTS} />
+      </div>
+      {flat && (
+        <div className={`${FADE} mt-2 grid grid-cols-3 gap-2`}>
+          {SQ4_OPTS.map((o, i) => (
+            <Choice key={o.n} n={i} look={pick === i && !p.running ? (i === SQ4_RIGHT ? "right" : "wrong") : pick === i ? "picked" : "idle"} disabled={right} onClick={() => choose(i)}>
+              <div className="text-center font-mono text-base font-bold">{o.n}</div>
+              <div className="text-center text-[0.72rem] leading-tight">নদীর অংশ</div>
+            </Choice>
+          ))}
+        </div>
+      )}
+      {pick !== null && !p.running && pick !== SQ4_RIGHT && <Nope key={miss}>{SQ4_NOPE[pick]}</Nope>}
+      <Task done={right}>{flat ? "Shadow এর মাথা নদীর কত অংশে? একটা বেছে নিন, নৌকা গিয়ে দেখাবে।" : "নতুন নদী, নতুন দড়ি। কাগজ ঘুরিয়ে নদী সোজা করুন, তারপর বলুন shadow এর মাথা নদীর কত অংশে।"}</Task>
+    </>
+  );
+}
+
+// SQ 1a · A story scene for the side quest's setup, no task: load-shedding,
+//         the hurricane lamp, ফাহিম at the table with 7 ÷ 13 in his khata;
+//         আপা comes in with a sheet of thin paper. The turning is the screen's.
+
+const SQ1A_G = 150;
+
+export function NightKhata({}: Story) {
+  const s = useScene(3, [600, 2200, 2000, 2200]);
+  const k = s.k;
+  const [ax] = useTween([k >= 2 ? 236 : 340], 1500);
+  return (
+    <StoryFrame scene={s}>
+      <Stage backdrop="room" label="রাতে load-shedding; হারিকেনের আলোয় ফাহিম খাতায় 7 ÷ 13 নিয়ে বসে আছে; আপা একটা পাতলা কাগজ নিয়ে আসলেন">
+        <rect x={0} y={0} width={320} height={180} fill="#0f172a" opacity={0.45} className="pointer-events-none" />
+        <circle cx={170} cy={88} r={70} fill="#fde68a" opacity={0.28} className="pointer-events-none" />
+        {/* the table, the khata, the lamp */}
+        <rect x={110} y={112} width={120} height={5} fill="#92400e" />
+        <rect x={116} y={117} width={4} height={33} fill="#78350f" />
+        <rect x={220} y={117} width={4} height={33} fill="#78350f" />
+        <rect x={138} y={105} width={34} height={7} rx={1} fill="white" stroke={T_INK} strokeOpacity={0.4} />
+        <text x={155} y={111} textAnchor="middle" fontSize={5.5} fontWeight={700} fontFamily="ui-monospace, monospace" fill={T_INK}>
+          7 ÷ 13
+        </text>
+        <g className="pointer-events-none">
+          <rect x={186} y={108} width={14} height={4} rx={1} fill="#57534e" />
+          <path d="M188 108Q184 98 193 90Q202 98 198 108Z" fill="#fef3c7" stroke="#57534e" strokeWidth={0.8} />
+          <ellipse cx={193} cy={100} rx={2} ry={3.5} fill="#f59e0b" />
+          <path d="M187 90H199" stroke="#57534e" strokeWidth={1.2} />
+        </g>
+        <Person who="fahim" x={92} y={SQ1A_G} mood={k === 1 ? "puzzled" : k >= 3 ? "happy" : "plain"} arm="hold" />
+        {k === 1 && <Bubble x={98} y={84} side="right" tone="think" lines={["ভাগ দিলে shadow", "আসে কেন?"]} />}
+        <Person who="apa" x={ax} y={SQ1A_G} facing={-1} walking={k === 2} ms={1500} arm={k >= 3 ? "hold" : "down"} />
+        {k >= 3 && (
+          <g className={POP}>
+            <rect x={ax - 30} y={96} width={20} height={14} rx={1} fill="#fef9c3" fillOpacity={0.85} stroke="#b45309" strokeOpacity={0.6} strokeDasharray="2 1.5" transform={`rotate(-18 ${ax - 20} 103)`} />
+            <Bubble x={ax} y={80} side="left" lines={["কাগজটা ঘুরা।", "নদী সোজা করে ফেল।"]} />
+          </g>
+        )}
+      </Stage>
+    </StoryFrame>
+  );
+}
+
+// SQ 1½ · A figure for step 1's explanation, no task: the pair turned to three
+//         angles in turn. The lists change; the angle between them (the arc),
+//         both lengths and the dot product do not.
+
+const SQ1B_DEG = [0, 22, 40, SQ_FLAT];
+const SQ1B_SAY = [
+  "বাঁকা নদী আর দড়ি। মাঝের angle টা দেখুন, কমলা দাগ।",
+  "একটু ঘুরালাম। list বদলালো। Angle একই, দুইটার length ও একই।",
+  "আরো ঘুরালাম। এখনো angle একই। Dot product ও 7.",
+  "নদী সোজা। তবু 7। Dot product শুধু length আর angle দেখে, কোনদিকে মুখ করে আছে দেখে না।",
+];
+
+export function KeepsTurning() {
+  const s = useScene(3, [600, 1800, 1800, 2200]);
+  const k = s.k;
+  const [deg] = useTween([SQ1B_DEG[k]], 1100);
+  const a = (-deg * Math.PI) / 180;
+  const v = sqRot(V, a);
+  const w = sqRot(W, a);
+  return (
+    <Scene scene={s} caption={T_say(SQ1B_SAY, k)}>
+      <div className="mx-auto flex w-full max-w-[19rem] items-center gap-3">
+        <div className="w-full max-w-[9rem] shrink-0">
+          <Plane f={SQ1_F} ticks={1} label={`কাগজ ${Math.round(deg)} ডিগ্রি ঘুরানো; angle একই, dot product 7`} className="my-0! max-w-none">
+            <SQ_Paper f={SQ1_F} river={V} rope={W} a={a} arc lit={k >= 3} />
+          </Plane>
+        </div>
+        <div className="grid min-w-0 flex-1 gap-1 font-mono text-[0.78rem] leading-snug">
+          <span>
+            <span className="text-cat-blue">v</span> <Tup v={v} of={SQ_SLOTS} />
+          </span>
+          <span>
+            <span className="text-cat-coral">w</span> <Tup v={w} of={SQ_SLOTS} />
+          </span>
+          <span className="font-sans text-[#b45309]">angle ≈ 30°</span>
+          <span className="font-sans">
+            dot product <b>7</b>
+          </span>
+        </div>
+      </div>
+    </Scene>
+  );
+}
+
+// SQ 2½ · A figure for step 2's explanation, no task: shadow × river length
+//         as a rectangle, 1.94 by 3.61, about 7 squares; the rest × 0 adds
+//         nothing; and the bent river's own 2 × 2 + 3 × 1 is the same 7.
+
+const SQ2B_U = 22;
+const SQ2B_SAY = [
+  "First slot: দড়ির first number, মানে shadow, গুণ নদীর length.",
+  "Second slot: দড়ির বাকি টুকরা গুণ নদীর 0। কিছুই যোগ হয় না।",
+  "তাই dot product = shadow × নদীর length. 1.94 চওড়া, 3.61 লম্বা একটা আয়ত, ভিতরে প্রায় 7 ঘর।",
+  "বাঁকা নদীতেও একই 7: 2 × 2 + 3 × 1। কাগজ ঘুরালে dot product বদলায় না।",
+];
+
+export function ShadowTimesRiver() {
+  const s = useScene(3, [600, 2000, 2000, 2600]);
+  const k = s.k;
+  const L = Math.sqrt(13) * SQ2B_U;
+  const H = (7 / Math.sqrt(13)) * SQ2B_U;
+  const [rest] = useTween([k >= 1 ? 0 : 1.11 * SQ2B_U], 900);
+  const x0 = 30;
+  const y0 = 24;
+  return (
+    <Scene scene={s} caption={T_say(SQ2B_SAY, k)}>
+      <div className="mx-auto w-full max-w-[17rem]">
+        <svg viewBox="0 0 250 112" role="img" aria-label="shadow 1.94 আর নদীর length 3.61 এর গুণ একটা আয়ত, ভিতরে প্রায় 7 ঘর; বাকি টুকরা গুণ 0" className="block h-auto w-full">
+          {/* the river's length along the top, the shadow down the side */}
+          <rect x={x0} y={y0 - 8} width={L} height={5} rx={2} className="fill-cat-blue/70" />
+          <text x={x0 + L / 2} y={y0 - 11} textAnchor="middle" fontSize={8.5} fontWeight={700} className="fill-cat-blue">
+            নদীর length 3.61
+          </text>
+          <rect x={x0 - 8} y={y0} width={5} height={H} rx={2} className="fill-cat-teal/80" />
+          <text x={x0 - 11} y={y0 + H / 2} textAnchor="middle" fontSize={8.5} fontWeight={700} className="fill-cat-teal" transform={`rotate(-90 ${x0 - 11} ${y0 + H / 2})`}>
+            shadow 1.94
+          </text>
+          {/* the second slot: the rest, squashed to nothing by the river's 0 */}
+          {k < 3 && (
+            <g className={FADE}>
+              <rect x={x0 + L + 18} y={y0} width={5} height={rest} rx={2} className="fill-cat-amber/80" />
+              <text x={x0 + L + 28} y={y0 + 10} fontSize={8.5} fontWeight={700} className="fill-[#b45309]">
+                {k >= 1 ? "বাকি × 0" : "বাকি টুকরা"}
+              </text>
+              {k === 2 && (
+                <text x={x0 + L + 28} y={y0 + 22} fontSize={9} fontWeight={800} fontFamily="ui-monospace, monospace" className="fill-[#b45309]">
+                  = 0
+                </text>
+              )}
+            </g>
+          )}
+          {/* the product: the rectangle, with its squares */}
+          {k >= 2 && (
+            <g className={FADE}>
+              <rect x={x0} y={y0} width={L} height={H} className="fill-cat-teal/15 stroke-cat-teal" strokeWidth={1.2} />
+              {Array.from({ length: 3 }, (_, i) => (
+                <path key={`v${i}`} d={`M${x0 + (i + 1) * SQ2B_U} ${y0}V${y0 + H}`} strokeWidth={0.6} className="stroke-cat-teal/50" />
+              ))}
+              <path d={`M${x0} ${y0 + SQ2B_U}H${x0 + L}`} strokeWidth={0.6} className="stroke-cat-teal/50" />
+              <text x={x0 + L / 2} y={y0 + H / 2 + 5} textAnchor="middle" fontSize={15} fontWeight={800} fontFamily="ui-monospace, monospace" className="fill-current">
+                7
+              </text>
+            </g>
+          )}
+          {k >= 3 && (
+            <text x={x0 + L + 14} y={y0 + H / 2 + 4} fontSize={9} fontWeight={700} fontFamily="ui-monospace, monospace" className={`fill-current ${FADE}`}>
+              = 2×2 + 3×1
+            </text>
+          )}
+        </svg>
+      </div>
+    </Scene>
+  );
+}
+
+// SQ 4½ · A figure for step 4's explanation, no task: the same answer with no
+//         turning. The bent pair (4, 3) and (2, 4), its two dot products, and
+//         the foot dropping on 20/25 of the river — where the turned paper said.
+
+const SQ4B_F = makeFrame(-0.4, 4.4, -0.4, 4.4, 26);
+const SQ4B_SAY = [
+  "কাগজ ঘুরাবো না। নদী (4, 3), দড়ি (2, 4) যেমন আছে তেমন।",
+  "দড়ি · নদী = 2×4 + 4×3 = 20।",
+  "নদী · নদী = 4×4 + 3×3 = 25।",
+  "20/25, মানে 4/5। মাথা ঠিক ওখানেই, যেখানে ঘুরানো কাগজ বলেছিল।",
+];
+
+export function FormulaTurns() {
+  const s = useScene(3, [600, 1800, 1800, 2400]);
+  const k = s.k;
+  const foot: XY = [0.8 * SQ4_V[0], 0.8 * SQ4_V[1]];
+  const f = SQ4B_F;
+  return (
+    <Scene scene={s} caption={T_say(SQ4B_SAY, k)}>
+      <div className="mx-auto flex w-full max-w-[19rem] items-center gap-3">
+        <div className="w-full max-w-[8.5rem] shrink-0">
+          <Plane f={f} ticks={1} label="নদী (4, 3), দড়ি (2, 4); shadow এর মাথা নদীর 20/25 অংশে" className="my-0! max-w-none">
+            <Arrow f={f} from={O} to={SQ4_V} tone="blue" w={2.2} />
+            <Arrow f={f} from={O} to={SQ4_W} tone="coral" w={2.2} />
+            {k >= 3 && (
+              <g className={FADE}>
+                <path d={`M${f.sx(0)} ${f.sy(0)}L${f.sx(foot[0])} ${f.sy(foot[1])}`} strokeWidth={5} strokeLinecap="round" className="pointer-events-none stroke-cat-teal/60" />
+                <path d={`M${f.sx(SQ4_W[0])} ${f.sy(SQ4_W[1])}L${f.sx(foot[0])} ${f.sy(foot[1])}`} strokeWidth={1.3} strokeDasharray="4 3" className="pointer-events-none stroke-accent" />
+                <circle cx={f.sx(foot[0])} cy={f.sy(foot[1])} r={3.5} className={`pointer-events-none fill-accent ${POP}`} />
+              </g>
+            )}
+          </Plane>
+        </div>
+        <div className="grid min-w-0 flex-1 gap-1 font-mono text-[0.8rem] leading-snug">
+          {k >= 1 && (
+            <span className={FADE}>
+              <span className="text-cat-coral">w</span> · <span className="text-cat-blue">v</span> = 20
+            </span>
+          )}
+          {k >= 2 && (
+            <span className={FADE}>
+              <span className="text-cat-blue">v</span> · <span className="text-cat-blue">v</span> = 25
+            </span>
+          )}
+          {k >= 3 && <b className={`${FADE} text-accent-text`}>20/25 = 4/5</b>}
+        </div>
+      </div>
+    </Scene>
+  );
+}
+
+// SQ 5 · A recap for the side quest's ending, no task: the paper turns flat,
+//        the dot product reads as shadow × river, and the two divisions by the
+//        river's length land on 7/13. Written with `story`: the last step has
+//        no widget.
+
+const SQ5_SAY = [
+  "প্রশ্ন ছিল: 7 কে 13 দিয়ে ভাগ দিলে shadow আসে কেন?",
+  "কাগজ ঘুরিয়ে নদী সোজা করলাম। Dot product তখনো 7.",
+  "সোজা নদীতে dot product = shadow × নদীর length.",
+  "একবার নদীর length দিয়ে ভাগ: shadow এর length, 1.94.",
+  "আরেকবার ভাগ: নদীর কত অংশ। দুইবারে ভাগ হলো 13 দিয়ে, মানে নদী · নদী।",
+];
+
+export function TurnRecap({}: Story) {
+  const s = useScene(4, [600, 2000, 2000, 2000, 2600]);
+  const k = s.k;
+  const [deg] = useTween([k >= 1 ? SQ_FLAT : 0], 1300);
+  const a = (-deg * Math.PI) / 180;
+  return (
+    <Scene scene={s} caption={T_say(SQ5_SAY, k)}>
+      <div className="mx-auto flex w-full max-w-[19rem] items-center gap-3">
+        <div className="w-full max-w-[9rem] shrink-0">
+          <Plane f={SQ1_F} ticks={1} label="পাতলা কাগজ ঘুরে নদী সোজা; shadow নদীর 7/13 অংশ" className="my-0! max-w-none">
+            <SQ_Paper f={SQ1_F} river={V} rope={W} a={a} lit={k >= 2} />
+          </Plane>
+        </div>
+        <div className="grid min-w-0 flex-1 gap-1 font-mono text-[0.78rem] leading-snug">
+          {k === 0 && <b className="text-lg text-[#b45309]">7 ÷ 13 ?</b>}
+          {k >= 2 && (
+            <span className={FADE}>
+              7 = <span className="text-cat-teal">1.94</span> × <span className="text-cat-blue">3.61</span>
+            </span>
+          )}
+          {k >= 3 && <span className={FADE}>7 ÷ 3.61 = <span className="text-cat-teal">1.94</span></span>}
+          {k >= 4 && <b className={`${FADE} text-accent-text`}>÷ 3.61 আবার = 7/13</b>}
+        </div>
+      </div>
+    </Scene>
+  );
+}
+
+// ---------------------------------------------------------------------------
 // States for `npm run shot` (keys are the useSeed names).
 
 export const fixtures: Fixtures = {
@@ -2555,5 +3178,14 @@ export const fixtures: Fixtures = {
   RecapBend: { rest: { k: 0 }, slide: { k: 1 }, count: { k: 2 }, boxes: { k: 3 }, done: {} },
   SevenThirteen: { rest: { k: 0 }, ticks: { k: 1 }, ask13: { k: 2 }, done: {} },
   WhySeven: { two: { k: 2 }, done: {} },
+  TurnPaper: { start: {}, mid: { deg: 30 }, flat: { deg: SQ_FLAT, flat: true } },
+  FlatDot: { start: {}, done: { ran: true } },
+  DivideCount: { start: {}, once: { pick: 0, miss: 1 }, thrice: { pick: 2, miss: 1 }, right: { pick: 1 } },
+  TurnAndRead: { start: {}, mid: { deg: 20 }, flat: { deg: SQ4_FLAT, flat: true }, wrong: { deg: SQ4_FLAT, flat: true, pick: 0, miss: 1 }, right: { deg: SQ4_FLAT, flat: true, pick: 1 } },
+  NightKhata: { rest: { k: 0 }, ask: { k: 1 }, done: {} },
+  KeepsTurning: { rest: { k: 0 }, mid: { k: 2 }, done: {} },
+  ShadowTimesRiver: { rest: { k: 0 }, zero: { k: 1 }, rect: { k: 2 }, done: {} },
+  FormulaTurns: { rest: { k: 0 }, done: {} },
+  TurnRecap: { rest: { k: 0 }, done: {} },
   YourShadow: { start: {}, box: { done: 1 }, slip8: { done: 0, miss: 1, bad: 1 }, slip4: { done: 1, miss: 1, bad: 2 }, miss: { done: 2, miss: 1, bad: 0 }, over: { done: 2, miss: 1, bad: 1 }, add: { done: 3, miss: 1, bad: 1 }, flip: { done: 3, miss: 1, bad: 2 }, minus: { done: 4, miss: 1, bad: 0 }, all: { done: 5 } },
 };

@@ -99,7 +99,7 @@ function LogRows({ rows, flags = false }: { rows: number[][]; flags?: boolean })
             </>
           ) : (
             <>
-              box <b className="font-mono">{nice(r[0])}</b> · ভ্যান গড়ালো <b className="font-mono">{nice(r[1])}</b>
+              dot product <b className="font-mono">{nice(r[0])}</b> · ভ্যান গড়ালো <b className="font-mono">{nice(r[1])}</b>
             </>
           )}
         </div>
@@ -151,14 +151,14 @@ export function VanStuck({}: Story) {
   const k = s.k;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="field" label="গ্রামের কাদা রাস্তা. করিমের ভ্যান আটকে আছে. ফাহিম ধাক্কা দেয়, box বলে 25, ভ্যান একটু নড়ে আবার থেমে যায়, এখনো কাদায়. করিম হাত তুলে দেখায়.">
+      <Stage backdrop="field" label="গ্রামের কাদা রাস্তা। করিমের ভ্যান আটকে আছে। ফাহিম ধাক্কা দেয়, dot product বলে 25, ভ্যান একটু নড়ে আবার থেমে যায়, এখনো কাদায়। করিম হাত তুলে দেখায়।">
         <Mud />
         <SideVan x={k >= 4 ? 150 : 120} y={SG + 6} />
         <Person who="karim" x={k >= 1 ? 228 : 344} y={SG} facing={-1} walking={k === 1} ms={1300} mood={k >= 5 ? "puzzled" : "plain"} arm={k >= 5 ? "point" : "down"} />
         <Person who="fahim" x={k >= 1 ? 58 : -24} y={SG} walking={k === 1} ms={1300} arm={k >= 3 ? "hold" : "down"} mood={k >= 4 ? "happy" : "plain"} />
-        {k >= 3 && <CastCard x={70} y={SG - 80} text="box: 25" tone="amber" />}
-        {k === 2 && <Bubble x={228} y={SG - 66} side="left" lines={["শুকনা রাস্তা পর্যন্ত", "6 ঘর গড়াইতে হইবো."]} />}
-        {k === 4 && <Bubble x={58} y={SG - 66} side="right" lines={["Box বলছে 25!", "6 এর চেয়ে অনেক বেশি."]} />}
+        {k >= 3 && <CastCard x={70} y={SG - 80} text="dot product: 25" tone="amber" />}
+        {k === 2 && <Bubble x={228} y={SG - 66} side="left" lines={["শুকনা রাস্তা পর্যন্ত", "6 ঘর গড়াইতে হইবো।"]} />}
+        {k === 4 && <Bubble x={58} y={SG - 66} side="right" lines={["Dot product বলছে 25!", "6 এর চেয়ে অনেক বেশি।"]} />}
         {k >= 5 && <Bubble x={228} y={SG - 66} side="left" lines={["তাইলে ভ্যান এখনো", "কাদায় ক্যান?"]} />}
       </Stage>
     </StoryFrame>
@@ -170,12 +170,12 @@ export function VanOut({}: Story) {
   const k = s.k;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="field" label="করিম শুকনা পাড় থেকে 30 degree তে টানে, ভ্যান কাদা থেকে গড়িয়ে শুকনা রাস্তায় ওঠে, সবাই হাত নাড়ে.">
+      <Stage backdrop="field" label="করিম শুকনা পাড় থেকে 30 degree তে টানে, ভ্যান কাদা থেকে গড়িয়ে শুকনা রাস্তায় ওঠে, সবাই হাত নাড়ে।">
         <Mud />
         <SideVan x={k >= 2 ? 262 : 120} y={SG + 6} />
         <Person who="karim" x={296} y={SG} facing={-1} mood={k >= 2 ? "happy" : "plain"} arm={k >= 1 ? "hold" : "down"} />
         <Person who="fahim" x={40} y={SG} mood={k >= 2 ? "happy" : "plain"} arm={k >= 2 ? "wave" : "down"} />
-        {k >= 3 && <Bubble x={40} y={SG - 66} side="right" lines={["Box 25, গড়ালো 5.", "Card টা ছিল 5 লম্বা!"]} />}
+        {k >= 3 && <Bubble x={40} y={SG - 66} side="right" lines={["Dot product 25, গড়ালো 5.", "Card টা ছিল 5 লম্বা!"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -193,7 +193,7 @@ function BetStrip({ bet }: { bet: number | null }) {
   const [g] = useTween([bet === 0 ? 25 : 0], 1200);
   const INKS = "#0f1b2d";
   return (
-    <svg viewBox="0 0 264 60" role="img" aria-label="0 তে কাদায় ভ্যান, 6 ঘর পর থেকে শুকনা রাস্তা, আর box এর 25 রাস্তার অনেক সামনে" className="mx-auto mt-2 block h-auto w-full max-w-[18rem]">
+    <svg viewBox="0 0 264 60" role="img" aria-label="0 তে কাদায় ভ্যান, 6 ঘর পর থেকে শুকনা রাস্তা, আর dot product এর 25 রাস্তার অনেক সামনে" className="mx-auto mt-2 block h-auto w-full max-w-[18rem]">
       <rect x={0.5} y={0.5} width={263} height={59} rx={6} fill="white" stroke="#cbd5e1" strokeWidth={0.8} />
       <rect x={B1_X(0) - 8} y={30} width={B1_X(26) - B1_X(0) + 8} height={11} rx={2} fill="#c8a27a" opacity={0.45} />
       <rect x={B1_X(0) - 8} y={29} width={B1_X(6) - B1_X(0) + 8} height={13} rx={4} fill="#7c5a31" opacity={0.65} />
@@ -207,10 +207,10 @@ function BetStrip({ bet }: { bet: number | null }) {
         </text>
       ))}
       <path d={`M${B1_X(25)} 26V45`} stroke="#b45309" strokeWidth={1.2} strokeDasharray="2 2" />
-      <text x={B1_X(25)} y={14} textAnchor="middle" fontSize={8} fontWeight={700} fill="#b45309">
-        box: 25
+      <text x={B1_X(25) - 14} y={14} textAnchor="middle" fontSize={8} fontWeight={700} fill="#b45309">
+        dot product: 25
       </text>
-      {bet === 2 && <path d={`M${B1_X(25) - 16} 11H${B1_X(25) + 16}`} stroke="#b45309" strokeWidth={1.2} className={FADE} />}
+      {bet === 2 && <path d={`M${B1_X(25) - 48} 11H${B1_X(25) + 20}`} stroke="#b45309" strokeWidth={1.2} className={FADE} />}
       {bet === 1 && <Draw d={`M${B1_X(0) + 8} 24H${B1_X(24)}`} strokeWidth={1.4} ms={900} className="stroke-[#2563eb] [stroke-dasharray:3_3]" />}
       <rect x={B1_X(0) - 7} y={31} width={14} height={9} rx={2} fill={VAN} />
       {bet === 0 && <rect x={B1_X(g) - 7} y={31} width={14} height={9} rx={2} fill="none" stroke={VAN} strokeWidth={1.3} strokeDasharray="2 2" />}
@@ -227,8 +227,8 @@ function BetStrip({ bet }: { bet: number | null }) {
 // 1 · The puzzle. Pick the question you want answered, then seal a bet on how
 //     far the van really rolled. Unmarked; checked on the last screen.
 
-const QUESTIONS = ["ভ্যান আসলে কতদূর গড়ালো?", "Box এর 25 মানে কী?", "ফাহিমের ধাক্কা কি বেশি দুর্বল?"];
-const BETS = ["25 ঘর, box যেমন বললো", "25 ঘরের কম", "Box দেখে বলা যায় না"];
+const QUESTIONS = ["ভ্যান আসলে কতদূর গড়ালো?", "Dot product এর 25 মানে কী?", "ফাহিমের ধাক্কা কি বেশি দুর্বল?"];
+const BETS = ["25 ঘর, dot product যেমন বললো", "25 ঘরের কম", "Dot product দেখে বলা যায় না"];
 
 export function StuckBet() {
   const pass = useGate();
@@ -250,7 +250,7 @@ export function StuckBet() {
         </>
       ) : (
         <div className={FADE}>
-          <div className="text-sm font-medium text-muted">ভালো প্রশ্ন. তিনটাই শেষে একই জায়গায় গিয়ে মেলে. তার আগে একটা বাজি: box বলেছে 25. ভ্যান কতদূর গড়ালো?</div>
+          <div className="text-sm font-medium text-muted">ভালো প্রশ্ন। তিনটাই শেষে একই জায়গায় গিয়ে মেলে। তার আগে একটা বাজি: dot product বলেছে 25। ভ্যান কতদূর গড়ালো?</div>
           <BetStrip bet={bet} />
           <div className="mt-2 grid gap-2">
             {BETS.map((o, i) => (
@@ -261,7 +261,7 @@ export function StuckBet() {
                 disabled={bet !== null}
                 onClick={() => {
                   setBet(i);
-                  pass("বাজি ধরা হয়ে গেলো. শেষে মিলিয়ে দেখবো.");
+                  pass("বাজি ধরা হয়ে গেলো। শেষে মিলিয়ে দেখবো।");
                 }}
               >
                 {o}
@@ -270,7 +270,7 @@ export function StuckBet() {
           </div>
         </div>
       )}
-      <Task done={bet !== null}>একটা প্রশ্ন বেছে নিন. তারপর বাজি ধরুন.</Task>
+      <Task done={bet !== null}>একটা প্রশ্ন বেছে নিন। তারপর বাজি ধরুন।</Task>
     </>
   );
 }
@@ -302,7 +302,7 @@ export function RollFour() {
     setPushed(true);
     const next = [...log, [dot(ROAD, w), r]];
     setLog(next);
-    if (next.length === 3) setTimeout(() => pass("Box এর number আর গড়ানো এক জিনিস না."), 900);
+    if (next.length === 3) setTimeout(() => pass("Dot product এর number আর গড়ানো এক জিনিস না।"), 900);
   };
 
   return (
@@ -320,8 +320,8 @@ export function RollFour() {
         </button>
       </div>
       <LogRows rows={log} />
-      {four && <div className={`${POP} mt-1 text-center text-sm font-semibold text-accent-text`}>ঠিক 4 গড়ালো.</div>}
-      <Task done={log.length >= 3}>ফাহিমের ধাক্কার মাথাটা যেদিকে ইচ্ছা টেনে নিন. তারপর “ধাক্কা দিন” চাপুন. ভ্যানটাকে ঠিক 4 গড়ানো যায়? তিনবার ধাক্কা দিয়ে দেখুন.</Task>
+      {four && <div className={`${POP} mt-1 text-center text-sm font-semibold text-accent-text`}>ঠিক 4 গড়ালো।</div>}
+      <Task done={log.length >= 3}>ফাহিমের ধাক্কার মাথাটা যেদিকে ইচ্ছা টেনে নিন। তারপর “ধাক্কা দিন” চাপুন। ভ্যানটাকে ঠিক 4 গড়ানো যায়? তিনবার ধাক্কা দিয়ে দেখুন।</Task>
     </>
   );
 }
@@ -353,7 +353,7 @@ export function BendFlags() {
     const next = [...log, [flag, r]];
     setLog(next);
     memory.flags = next.map((x) => [x[0], x[1]]);
-    if (next.length === 3) setTimeout(() => pass("এই রাস্তায় আগের guess গুলা মেলে না."), 900);
+    if (next.length === 3) setTimeout(() => pass("এই রাস্তায় আগের guess গুলা মেলে না।"), 900);
   };
 
   return (
@@ -380,7 +380,7 @@ export function BendFlags() {
         </button>
       </div>
       <LogRows rows={log} flags />
-      <Task done={log.length >= 3}>একটা ধাক্কা ঠিক করুন. ভ্যান যেখানে থামবে বলে মনে হয়, সেখানে flag পুঁতুন. তারপর ধাক্কা দিন. তিনবার.</Task>
+      <Task done={log.length >= 3}>একটা ধাক্কা ঠিক করুন। ভ্যান যেখানে থামবে বলে মনে হয়, সেখানে flag পুঁতুন। তারপর ধাক্কা দিন। তিনবার।</Task>
     </>
   );
 }
@@ -392,19 +392,19 @@ export function BendFlags() {
 
 const CASE_STOP = 7 / Math.sqrt(5); // 3.13
 const RULES = [
-  { who: "ফাহিম", rule: "box যত বলে, তত গড়ায়", flag: 7 },
+  { who: "ফাহিম", rule: "dot product যত বলে, তত গড়ায়", flag: 7 },
   { who: "সামিন", rule: "ধাক্কার first number যত, তত", flag: 2 },
-  { who: "রিনা", rule: "box এর number ÷ 5", flag: 1.4 },
+  { who: "রিনা", rule: "dot product এর number ÷ 5", flag: 1.4 },
 ];
 const GROW_WHY: Record<number, string> = {
-  0: "ফাহিমের flag 7 এ, ভ্যান ছাড়িয়ে অনেক দূরে. প্রথম রাস্তাতেও মেলে নাই: box 25, গড়ালো 5.",
-  1: "ধাক্কা কাগজের লাইন বরাবর শোয়ানো থাকলে? সামিনের নিয়ম কাজ করতো. কিন্তু এই রাস্তা উপরে উঠে গেছে. দেখুন, ওর flag আগেই থেমে গেছে.",
+  0: "ফাহিমের flag 7 এ, ভ্যান ছাড়িয়ে অনেক দূরে। প্রথম রাস্তাতেও মেলে নাই: dot product 25, গড়ালো 5।",
+  1: "ধাক্কা কাগজের লাইন বরাবর শোয়ানো থাকলে? সামিনের নিয়ম কাজ করতো। কিন্তু এই রাস্তা উপরে উঠে গেছে। দেখুন, ওর flag আগেই থেমে গেছে।",
 };
-const REASONS = ["প্রথম রাস্তার card (4, 3) ছিল 5 লম্বা", "ফাহিম 5 জোরে ধাক্কা দেয়", "Box শুধু শোয়ানো রাস্তায় কাজ করে"];
+const REASONS = ["প্রথম রাস্তার card (4, 3) ছিল 5 লম্বা", "ফাহিম 5 জোরে ধাক্কা দেয়", "Dot product শুধু শোয়ানো রাস্তায় কাজ করে"];
 const REASON_SHORT = ["card 5 লম্বা", "ধাক্কার জোর 5", "শুধু শোয়ানো রাস্তা"];
 const REASON_WHY: Record<number, string> = {
-  1: "ফাহিম একেকবার একেক জোরে ধাক্কা দিয়েছিল. তবু প্রথম রাস্তায় প্রতিটা ধাক্কায় ÷ 5 মিলে গেছে.",
-  2: "প্রথম রাস্তাটাও তো উপরে উঠে গিয়েছিল. সেখানে box একবারও ভুল করে নাই.",
+  1: "ফাহিম একেকবার একেক জোরে ধাক্কা দিয়েছিল। তবু প্রথম রাস্তায় প্রতিটা ধাক্কায় ÷ 5 মিলে গেছে।",
+  2: "প্রথম রাস্তাটাও তো উপরে উঠে গিয়েছিল। সেখানে dot product একবারও ভুল করে নাই।",
 };
 
 /** A picture choice: the picture across the whole button, its label under it (Choice's letter badge would squeeze it). */
@@ -473,8 +473,9 @@ function ReasonPic({ i, on }: { i: number; on: boolean }) {
         </g>
       )}
       {i === 2 && on && roll > 4.95 && (
-        <text x={97} y={61} textAnchor="end" fontSize={8.5} fontWeight={700} fill="#15803d" className={FADE}>
-          box 25, গড়ালো 5
+        <text x={97} y={51} textAnchor="end" fontSize={8.5} fontWeight={700} fill="#15803d" className={FADE}>
+          <tspan x={97}>dot product 25,</tspan>
+          <tspan x={97} dy={10}>গড়ালো 5</tspan>
         </text>
       )}
     </svg>
@@ -510,7 +511,7 @@ export function WhoseRule() {
   return (
     <>
       <div className="text-center text-sm text-muted">
-        রাস্তা (2, 1), ধাক্কা (2, 3), box <b className="font-mono text-foreground">7</b>. ভ্যান থামলো <b className="font-mono text-foreground">3.13</b> এ.
+        রাস্তা (2, 1), ধাক্কা (2, 3), dot product <b className="font-mono text-foreground">7</b>. ভ্যান থামলো <b className="font-mono text-foreground">3.13</b> এ।
       </div>
       <div className="mx-auto mt-2 grid max-w-sm gap-1.5">
         {RULES.map((r, i) => (
@@ -534,7 +535,7 @@ export function WhoseRule() {
       </div>
       {!grow ? (
         <>
-          <div className="mt-3 text-sm font-medium text-muted">তিনজনেরই মেলে নাই. কার idea টা ঠিক করে নিলে সব রাস্তায় কাজ করবে?</div>
+          <div className="mt-3 text-sm font-medium text-muted">তিনজনেরই মেলে নাই। কার idea টা ঠিক করে নিলে সব রাস্তায় কাজ করবে?</div>
           <div className="mt-2 grid grid-cols-3 gap-2">
             {RULES.map((r, i) => (
               <Choice
@@ -555,7 +556,7 @@ export function WhoseRule() {
         </>
       ) : (
         <div className={FADE}>
-          <div className="mt-3 text-sm font-medium text-muted">প্রথম রাস্তায় রিনার ÷ 5 একদম মিলে গিয়েছিল. 5 কেন?</div>
+          <div className="mt-3 text-sm font-medium text-muted">প্রথম রাস্তায় রিনার ÷ 5 একদম মিলে গিয়েছিল। 5 কেন?</div>
           <div className="mt-2 grid grid-cols-3 gap-2">
             {REASONS.map((o, i) => (
               <PicPick
@@ -564,7 +565,7 @@ export function WhoseRule() {
                 disabled={why === 0}
                 onClick={() => {
                   setWhy(i);
-                  if (i === 0) setTimeout(() => pass("রিনার 5 ছিল প্রথম রাস্তার card এর length."), 1100);
+                  if (i === 0) setTimeout(() => pass("রিনার 5 ছিল প্রথম রাস্তার card এর length।"), 1100);
                   else setMiss(miss + 1);
                 }}
               >
@@ -575,10 +576,10 @@ export function WhoseRule() {
             ))}
           </div>
           {why !== null && why !== 0 && <Nope key={miss}>{REASON_WHY[why]}</Nope>}
-          {why === 0 && <div className={`${FADE} mt-2 text-center text-sm`}>আর এই রাস্তার card (2, 1) মাত্র 2.24 লম্বা. তাই এখানে ÷ 5 ভুল number.</div>}
+          {why === 0 && <div className={`${FADE} mt-2 text-center text-sm`}>আর এই রাস্তার card (2, 1) মাত্র 2.24 লম্বা। তাই এখানে ÷ 5 ভুল number।</div>}
         </div>
       )}
-      <Task done={why === 0}>কার idea টা সব রাস্তায় চালানো যায়? বেছে নিন. তারপর বেছে নিন, প্রথম রাস্তায় ওটা কেন মিলেছিল.</Task>
+      <Task done={why === 0}>কার idea টা সব রাস্তায় চালানো যায়? বেছে নিন। তারপর বেছে নিন, প্রথম রাস্তায় ওটা কেন মিলেছিল।</Task>
     </>
   );
 }
@@ -615,7 +616,7 @@ export function LongerCard() {
             type="button"
             onClick={() => {
               setPushed(true);
-              setTimeout(() => pass("Card লম্বা, box বড়. গড়ানো একই."), 900);
+              setTimeout(() => pass("Card লম্বা, dot product বড়। গড়ানো একই।"), 900);
             }}
             className={`${primaryBtn} ${FADE}`}
           >
@@ -623,8 +624,8 @@ export function LongerCard() {
           </button>
         </div>
       )}
-      {pushed && <div className={`${FADE} mt-2 text-center text-sm`}>Box 50, আগের 25 এর দ্বিগুণ. ভ্যান আবারও গড়ালো <b className="font-mono">5</b>.</div>}
-      <div className="mt-3 text-sm font-medium text-muted">আগে ছিল box 25, গড়ালো 5. এই card দিয়ে ভ্যান কতদূর গড়াবে?</div>
+      {pushed && <div className={`${FADE} mt-2 text-center text-sm`}>Dot product 50, আগের 25 এর দ্বিগুণ। ভ্যান আবারও গড়ালো <b className="font-mono">5</b>.</div>}
+      <div className="mt-3 text-sm font-medium text-muted">আগে ছিল dot product 25, গড়ালো 5। এই card দিয়ে ভ্যান কতদূর গড়াবে?</div>
       <div className="mt-2 grid grid-cols-3 gap-2">
         {G_LONG.map((o, i) => (
           <Choice key={o} n={i} look={predictLook(i, guess, pushed, 1)} disabled={guess !== null} onClick={() => setGuess(i)}>
@@ -632,7 +633,7 @@ export function LongerCard() {
           </Choice>
         ))}
       </div>
-      <Task done={pushed}>আগে guess করুন. তারপর ধাক্কা দিন.</Task>
+      <Task done={pushed}>আগে guess করুন। তারপর ধাক্কা দিন।</Task>
     </>
   );
 }
@@ -644,9 +645,9 @@ export function LongerCard() {
 
 const W_CASE: XY = [2, 3];
 const FS = makeFrame(-1.2, 4.2, -0.8, 3.4, 27);
-const SHIKU_STEPS = ["First number বলে রাস্তা ধরে কতদূর.", "ধাক্কা (2, 3), তাই ভ্যান গড়াবে 2.", "আমি 2 এ flag পুঁতে ধাক্কা দিই."];
+const SHIKU_STEPS = ["First number বলে রাস্তা ধরে কতদূর।", "ধাক্কা (2, 3), তাই ভ্যান গড়াবে 2।", "আমি 2 এ flag পুঁতে ধাক্কা দিই।"];
 const DIVS = [
-  { text: "5", n: 5, why: "5 ছিল প্রথম রাস্তার length." },
+  { text: "5", n: 5, why: "5 ছিল প্রথম রাস্তার length।" },
   { text: "2", n: 2, why: "2 হলো ধাক্কার first number." },
   { text: "2.24", n: Math.sqrt(5), why: "" },
 ];
@@ -689,7 +690,7 @@ export function ShikuFlag() {
         </g>
       </Plane>
       <Speech who="Shiku" initial="S" tint="teal" tone={fixed ? "good" : "plain"}>
-        {fixed ? "7 ÷ 2.24 = 3.13. ভ্যান ঠিক আমার flag এ এসে থামলো." : div === null ? "আমার flag 2 এ. এতে কোনো ভুল নাই." : `আমার flag ${nice(flag)} এ. ঠিক আছে তো?`}
+        {fixed ? "7 ÷ 2.24 = 3.13. ভ্যান ঠিক আমার flag এ এসে থামলো।" : div === null ? "আমার flag 2 এ। এতে কোনো ভুল নাই।" : `আমার flag ${nice(flag)} এ। ঠিক আছে তো?`}
       </Speech>
       {broken !== 0 ? (
         <>
@@ -709,11 +710,11 @@ export function ShikuFlag() {
               </Choice>
             ))}
           </div>
-          {broken !== null && broken !== 0 && <Nope key={miss}>ওই ধাপটা তো আগের ধাপ থেকেই আসে. Shiku প্রথম ভুলটা করে কোথায়?</Nope>}
+          {broken !== null && broken !== 0 && <Nope key={miss}>ওই ধাপটা তো আগের ধাপ থেকেই আসে। Shiku প্রথম ভুলটা করে কোথায়?</Nope>}
         </>
       ) : (
         <div className={FADE}>
-          <div className="mt-2 text-sm font-medium text-muted">Box বলছে 7. রাস্তার card টা 2.24 লম্বা. Shiku র নিয়মটা ঠিক করে দিন: 7 ÷ কত?</div>
+          <div className="mt-2 text-sm font-medium text-muted">Dot product বলছে 7। রাস্তার card টা 2.24 লম্বা। Shiku র নিয়মটা ঠিক করে দিন: 7 ÷ কত?</div>
           <div className="mt-2 grid grid-cols-3 gap-2">
             {DIVS.map((d, i) => (
               <Choice
@@ -733,12 +734,12 @@ export function ShikuFlag() {
           </div>
           {div !== null && div !== 2 && (
             <Nope key={miss}>
-              Shiku র flag গেলো {nice(flag)} এ, কিন্তু ভ্যান থামলো 3.13 এ. {DIVS[div].why}
+              Shiku র flag গেলো {nice(flag)} এ, কিন্তু ভ্যান থামলো 3.13 এ। {DIVS[div].why}
             </Nope>
           )}
         </div>
       )}
-      <Task done={fixed}>Shiku কোন ধাপে ভুল করলো? সেখানে tap করুন. তারপর ওর নিয়মটা ঠিক করে দিন.</Task>
+      <Task done={fixed}>Shiku কোন ধাপে ভুল করলো? সেখানে tap করুন। তারপর ওর নিয়মটা ঠিক করে দিন।</Task>
     </>
   );
 }
@@ -766,7 +767,7 @@ export function PondRope() {
 
   const stand = (i: number) => {
     setSpot(i);
-    if (7 * SPOTS[i].card >= 6) setTimeout(() => pass("7 × 0.866 = 6.06. ভ্যান কাদা থেকে উঠে গেলো."), 1000);
+    if (7 * SPOTS[i].card >= 6) setTimeout(() => pass("7 × 0.866 = 6.06. ভ্যান কাদা থেকে উঠে গেলো।"), 1000);
     else setMiss(miss + 1);
   };
 
@@ -808,8 +809,8 @@ export function PondRope() {
           </span>
         )}
       </div>
-      {spot !== null && !out && <Nope key={miss}>দড়ি জোরেই টানছে. কিন্তু টানের বেশিটাই যাচ্ছে পাশের দিকে. ভ্যানকে সরায় শুধু রাস্তার উপরে টানের shadow টুকু.</Nope>}
-      <Task done={out}>করিম পাড়ের কোথায় দাঁড়ালে ভ্যান অন্তত 6 গড়াবে? বেছে নিন.</Task>
+      {spot !== null && !out && <Nope key={miss}>দড়ি জোরেই টানছে। কিন্তু টানের বেশিটাই যাচ্ছে পাশের দিকে। ভ্যানকে সরায় শুধু রাস্তার উপরে টানের shadow টুকু।</Nope>}
+      <Task done={out}>করিম পাড়ের কোথায় দাঁড়ালে ভ্যান অন্তত 6 গড়াবে? বেছে নিন।</Task>
     </>
   );
 }
@@ -835,15 +836,15 @@ export function RulesArrive({}: Story) {
   const k = s.k;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="field" label="কাদায় করিমের ভ্যান. ফাহিম বলে, box যত বলে ভ্যান তত গড়াবে. সামিন বলে, ধাক্কার first number যত, তত. রিনা বলে, box এর number ভাগ 5. তারপর আপনার flag টাও কাদায় পোঁতা হয়.">
+      <Stage backdrop="field" label="কাদায় করিমের ভ্যান। ফাহিম বলে, dot product যত বলে ভ্যান তত গড়াবে। সামিন বলে, ধাক্কার first number যত, তত। রিনা বলে, dot product এর number ভাগ 5। তারপর আপনার flag টাও কাদায় পোঁতা হয়।">
         <Mud />
         <SideVan x={120} y={SG + 6} />
         <Person who="fahim" x={36} y={SG} arm={k === 1 ? "point" : "down"} mood={k === 1 ? "smug" : "plain"} />
         <Person who="samin" x={206} y={SG} facing={-1} arm={k === 2 ? "point" : "down"} />
         <Person who="rina" x={270} y={SG} facing={-1} arm={k === 3 ? "point" : "down"} />
-        {k === 1 && <Bubble x={36} y={SG - 66} side="right" lines={["Box যত বলে,", "ভ্যান তত গড়াবে."]} />}
-        {k === 2 && <Bubble x={206} y={SG - 66} lines={["ধাক্কার first number", "যত, তত গড়াবে."]} />}
-        {k === 3 && <Bubble x={270} y={SG - 66} side="left" lines={["Box এর number ÷ 5.", "ওইটুকুই গড়াবে."]} />}
+        {k === 1 && <Bubble x={36} y={SG - 66} side="right" lines={["Dot product যত বলে,", "ভ্যান তত গড়াবে।"]} />}
+        {k === 2 && <Bubble x={206} y={SG - 66} lines={["ধাক্কার first number", "যত, তত গড়াবে।"]} />}
+        {k === 3 && <Bubble x={270} y={SG - 66} side="left" lines={["Dot product এর number ÷ 5.", "ওইটুকুই গড়াবে।"]} />}
         {k >= 4 && (
           <>
             <M4Flag x={172} y={SG + 6} color="#2563eb" />
@@ -866,7 +867,7 @@ export function KarimCard({}: Story) {
   const k = s.k;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="field" label="আটকে থাকা ভ্যানের পাশে ফাহিমের হাতে রাস্তার card (4, 3). করিম একই রাস্তার আরেকটা card নিয়ে আসে, (8, 6). Arrow হিসাবে আঁকলে দুইটা একই দিকে যায়, আর করিমেরটা দ্বিগুণ লম্বা.">
+      <Stage backdrop="field" label="আটকে থাকা ভ্যানের পাশে ফাহিমের হাতে রাস্তার card (4, 3)। করিম একই রাস্তার আরেকটা card নিয়ে আসে, (8, 6)। Arrow হিসাবে আঁকলে দুইটা একই দিকে যায়, আর করিমেরটা দ্বিগুণ লম্বা।">
         <Mud />
         <SideVan x={120} y={SG + 6} />
         <Person who="fahim" x={40} y={SG} arm="hold" />
@@ -893,12 +894,12 @@ export function ShikuSure({}: Story) {
   const k = s.k;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="field" label="Robot Shiku আটকে থাকা ভ্যানের কাছে আসে, একটু সামনে একটা বেগুনি flag পোঁতে, আর বলে ভ্যান থামবে 2 এ; এতে ওর কোনো সন্দেহ নাই.">
+      <Stage backdrop="field" label="Robot Shiku আটকে থাকা ভ্যানের কাছে আসে, একটু সামনে একটা বেগুনি flag পোঁতে, আর বলে ভ্যান থামবে 2 এ; এতে ওর কোনো সন্দেহ নাই।">
         <Mud />
         <SideVan x={120} y={SG + 6} />
         <Robot x={k >= 1 ? 214 : 344} y={SG} walking={k === 1} ms={1300} />
         {k >= 2 && <M4Flag x={180} y={SG + 6} color="#7c3aed" />}
-        {k >= 3 && <Bubble x={214} y={SG - 44} side="left" lines={["ভ্যান থামবে 2 এ.", "এতে কোনো ভুল নাই."]} />}
+        {k >= 3 && <Bubble x={214} y={SG - 44} side="left" lines={["ভ্যান থামবে 2 এ।", "এতে কোনো ভুল নাই।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -913,7 +914,7 @@ export function RopeBank({}: Story) {
   const k = s.k;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="field" label="গভীর কাদায় করিমের ভ্যান আটকে আছে. করিম রাস্তার পাশের শুকনা পাড়ে ওঠে, ভ্যান থেকে একটা দড়ি ওর হাতে, দড়ির spring balance এ 7.">
+      <Stage backdrop="field" label="গভীর কাদায় করিমের ভ্যান আটকে আছে। করিম রাস্তার পাশের শুকনা পাড়ে ওঠে, ভ্যান থেকে একটা দড়ি ওর হাতে, দড়ির spring balance এ 7।">
         <Mud />
         <path d="M232 150Q246 128 268 126H320V150Z" fill="#4d7c0f" opacity={0.85} />
         <SideVan x={120} y={SG + 6} />
@@ -954,12 +955,12 @@ export function MamiWhy({}: Story) {
   const k = s.k;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="field" label="ভ্যান শুকনা রাস্তায় উঠে গেছে. মামি এগিয়ে আসেন. Box গুণ করে জোড়ায় জোড়ায়; লাঠি মাপে length আর angle. মামি জিজ্ঞেস করেন, দুইটা সবসময় একই number দিবে কেন.">
+      <Stage backdrop="field" label="ভ্যান শুকনা রাস্তায় উঠে গেছে। মামি এগিয়ে আসেন। Dot product গুণ করে জোড়ায় জোড়ায়; লাঠি মাপে length আর angle। মামি জিজ্ঞেস করেন, দুইটা সবসময় একই number দিবে কেন।">
         <Mud />
         <SideVan x={262} y={SG + 6} />
         <Person who="fahim" x={40} y={SG} mood="happy" />
         <Person who="mami" x={k >= 1 ? 150 : -24} y={SG} walking={k === 1} ms={1300} arm={k >= 3 ? "point" : "down"} mood={k >= 3 ? "puzzled" : "plain"} />
-        {k >= 2 && <M11Card x={82} y={24} text="box: জোড়ায় জোড়ায়" ink="#b45309" />}
+        {k >= 2 && <M11Card x={82} y={24} text="dot product: জোড়ায় জোড়ায়" ink="#b45309" />}
         {k >= 2 && <M11Card x={232} y={24} text="stick: angle" ink="#be123c" />}
         {k >= 3 && <Bubble x={150} y={SG - 66} lines={["সবসময় একই number", "আসবে কেন?"]} />}
       </Stage>
@@ -978,10 +979,10 @@ const X5_F = makeFrame(-0.6, 3.8, -0.9, 3.4, 26);
 const X5_V: XY = [3, 0];
 const X5_W: XY = [2, 3];
 const X5_SAY = [
-  "রাস্তাটা কাগজের সাথে শোয়ানো. ফাহিমের ধাক্কা w উপরের দিকে হেলে আছে.",
-  "সূর্য w এর মাথা থেকে সোজা নিচে রাস্তার উপরে দাগ নামায়.",
-  "ভ্যান শুধু রাস্তা ধরেই গড়াতে পারে. দাগটা যেখানে পড়েছে, ঠিক সেখানে থামে.",
-  "এইটুকুই রাস্তার উপরে ধাক্কার shadow.",
+  "রাস্তাটা কাগজের সাথে শোয়ানো। ফাহিমের ধাক্কা w উপরের দিকে হেলে আছে।",
+  "সূর্য w এর মাথা থেকে সোজা নিচে রাস্তার উপরে দাগ নামায়।",
+  "ভ্যান শুধু রাস্তা ধরেই গড়াতে পারে। দাগটা যেখানে পড়েছে, ঠিক সেখানে থামে।",
+  "এইটুকুই রাস্তার উপরে ধাক্কার shadow।",
 ];
 
 export function VanShadow() {
@@ -1024,7 +1025,7 @@ export function VanShadow() {
 //      road, slot by slot. The 0 × 3 goes to 0; what's left is 3 × the
 //      shadow, and the 3 is the road's length.
 
-const X5B_SAY = ["Box, জোড়ায় জোড়ায়: রাস্তা (3, 0), ধাক্কা (2, 3).", "রাস্তার দ্বিতীয় number 0. তাই ওই অংশটা 0.", "বাকি থাকে 3 × shadow.", "আর এই 3 হলো রাস্তার length."];
+const X5B_SAY = ["Dot product, জোড়ায় জোড়ায়: রাস্তা (3, 0), ধাক্কা (2, 3)।", "রাস্তার দ্বিতীয় number 0। তাই ওই অংশটা 0।", "বাকি থাকে 3 × shadow।", "আর এই 3 হলো রাস্তার length।"];
 
 export function BoxThree() {
   const s = useScene(3, [500, 1800, 1800, 1800]);
@@ -1033,7 +1034,7 @@ export function BoxThree() {
     <Scene scene={s} caption={<span key={k} className={FADE}>{X5B_SAY[k]}</span>}>
       <div className="flex flex-col items-center gap-2">
         <div className="flex items-center gap-1.5 font-mono text-lg">
-          <span className="text-muted">box =</span>
+          <span className="text-muted">dot product =</span>
           <span className={`inline-block rounded-md px-1 ${k >= 2 ? "bg-cat-blue/10" : ""}`}>
             <span className="text-cat-blue">3</span> × <span className={k >= 2 ? "rounded bg-[#f59e0b]/25 px-0.5" : ""}>2</span>
           </span>
@@ -1070,10 +1071,10 @@ const X6_F = makeFrame(-0.6, 3.7, -0.8, 3.3, 30);
 const X6_PHI = deg(BEND); // 26.57°
 const X6_W = rot(W_CASE, -X6_PHI); // (3.13, 1.79) on the turned paper
 const X6_SAY = [
-  "(2, 1) রাস্তা, আর ধাক্কা (2, 3).",
-  "রাস্তা শুয়ে না পড়া পর্যন্ত কাগজটা ঘুরান.",
-  "সূর্য w এর মাথা থেকে রাস্তায় দাগ নামায়. দাগটা রাস্তার সাথে right angle এ মেলে. এটাই projection.",
-  "দাগটা পড়ে 3.13 এ. ভ্যান ঠিক যেখানে থেমেছিল.",
+  "(2, 1) রাস্তা, আর ধাক্কা (2, 3)।",
+  "রাস্তা শুয়ে না পড়া পর্যন্ত কাগজটা ঘুরান।",
+  "সূর্য w এর মাথা থেকে রাস্তায় দাগ নামায়। দাগটা রাস্তার সাথে right angle এ মেলে। এটাই projection.",
+  "দাগটা পড়ে 3.13 এ। ভ্যান ঠিক যেখানে থেমেছিল।",
 ];
 
 export function SquareDrop() {
@@ -1130,10 +1131,10 @@ export function SquareDrop() {
 //      5 back out.
 
 const X6B_SAY = [
-  "(2, 1) রাস্তায়: length × shadow, 2.24 × 3.13 = 7. এটাই box.",
-  "প্রথম রাস্তার card (4, 3) 5 লম্বা.",
-  "তাই ওর box ছিল গড়ানোর 5 গুণ: 25 = 5 × 5.",
-  "এজন্যই প্রথম রাস্তায় রিনার ÷ 5 মিলে গিয়েছিল.",
+  "(2, 1) রাস্তায়: length × shadow, 2.24 × 3.13 = 7. এটাই dot product.",
+  "প্রথম রাস্তার card (4, 3) 5 লম্বা।",
+  "তাই ওর dot product ছিল গড়ানোর 5 গুণ: 25 = 5 × 5।",
+  "এজন্যই প্রথম রাস্তায় রিনার ÷ 5 মিলে গিয়েছিল।",
 ];
 
 function X6BCard({ to, tape, on }: { to: XY; tape: string; on: boolean }) {
@@ -1193,12 +1194,12 @@ export function RinaFive() {
 
 const X8_F = makeFrame(-0.6, 8.8, -0.6, 6.9, 16);
 const X8_SAY = [
-  "একই রাস্তা, একই ধাক্কা (4, 3). ভ্যান থেমেছিল 5 এ.",
-  "করিমের card (8, 6) 10 লম্বা. আগের 5 এর দ্বিগুণ.",
-  "Box গুণ করে card এর length দিয়ে: 50 = 10 × 5.",
-  "Length দিয়ে ভাগ করে দিন: 50 ÷ 10 = 5. এটাই আসল গড়ানো.",
+  "একই রাস্তা, একই ধাক্কা (4, 3)। ভ্যান থেমেছিল 5 এ।",
+  "করিমের card (8, 6) 10 লম্বা। আগের 5 এর দ্বিগুণ।",
+  "Dot product গুণ করে card এর length দিয়ে: 50 = 10 × 5.",
+  "Length দিয়ে ভাগ করে দিন: 50 ÷ 10 = 5। এটাই আসল গড়ানো।",
 ];
-const X8_TXT = ["box 50", "box 50", "50 = 10 × 5", "50 ÷ 10 = 5"];
+const X8_TXT = ["dot product 50", "dot product 50", "50 = 10 × 5", "50 ÷ 10 = 5"];
 
 export function DivideBack() {
   const s = useScene(3, [500, 1800, 2000, 2200]);
@@ -1208,7 +1209,7 @@ export function DivideBack() {
   const off: XY = [-0.42, 0.56];
   return (
     <Scene scene={s} caption={<span key={k} className={FADE}>{X8_SAY[k]}</span>}>
-      <Plane f={f} grid={1} axes={false} label="রাস্তার card (8, 6), 10 লম্বা; ধাক্কা (4, 3); ভ্যান 5 এ; box 50, 10 দিয়ে ভাগ করলে 5" className="my-0! max-w-[11rem]">
+      <Plane f={f} grid={1} axes={false} label="রাস্তার card (8, 6), 10 লম্বা; ধাক্কা (4, 3); ভ্যান 5 এ; dot product 50, 10 দিয়ে ভাগ করলে 5" className="my-0! max-w-[11rem]">
         <Road f={f} v={LONG} from={-0.6} to={10.5} />
         <Arrow f={f} from={O} to={LONG} tone="blue" w={2.4} />
         <Arrow f={f} from={O} to={ROAD} tone="coral" w={2.6} />

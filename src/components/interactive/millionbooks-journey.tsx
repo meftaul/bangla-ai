@@ -65,7 +65,7 @@ function MB_Lane({ name, jobs, lit, p, count, tone }: { name: string; jobs: stri
           {jobs.map((j, i) => (
             <span
               key={j}
-              className={`rounded-md px-1.5 py-0.5 text-[0.7rem] leading-none transition-colors duration-150 motion-reduce:transition-none ${
+              className={`whitespace-nowrap rounded-md px-1.5 py-0.5 text-[0.7rem] leading-none transition-colors duration-150 motion-reduce:transition-none ${
                 lit === i ? "bg-cat-amber text-white" : "bg-foreground/8 text-muted"
               }`}
             >
@@ -82,7 +82,7 @@ function MB_Lane({ name, jobs, lit, p, count, tone }: { name: string; jobs: stri
   );
 }
 
-const B_JOBS = ["box", "length", "root", "ভাগ"];
+const B_JOBS = ["dot product", "length", "root", "ভাগ"];
 
 // ---------------------------------------------------------------------------
 // 1 · Recall at the door (4.7): the thick fish book doubled, (20, 1, 0) →
@@ -118,7 +118,7 @@ export function RecallTwice() {
 
   const choose = (i: number) => {
     setPick(i);
-    if (i === RC_RIGHT) pass("Length বাড়লে machine B র score বদলায় না.");
+    if (i === RC_RIGHT) pass("Length বাড়লে machine B র score বদলায় না।");
     else setMiss(miss + 1);
   };
 
@@ -139,7 +139,7 @@ export function RecallTwice() {
       </div>
       <div className="mx-auto mt-2 grid max-w-sm gap-2">
         <div className="grid grid-cols-[7rem_1fr_2.8rem] items-center gap-2 text-sm">
-          <span className="text-xs text-muted">machine A, box</span>
+          <span className="text-xs text-muted">machine A, dot product</span>
           <span className="h-3 rounded-full bg-foreground/10">
             <span className="block h-full rounded-full bg-cat-coral" style={{ width: `${(a / 40) * 100}%` }} />
           </span>
@@ -172,9 +172,9 @@ export function RecallTwice() {
         ))}
       </div>
       {pick !== null && !right && (
-        <Nope key={miss}>দেখুন, দ্বিগুণ হলো machine A র box, 20 থেকে 40. Machine B র bar টা কি নড়লো? লাল দাগটা আপনার guess.</Nope>
+        <Nope key={miss}>দেখুন, দ্বিগুণ হলো machine A র dot product, 20 থেকে 40। Machine B র bar টা কি নড়লো? লাল দাগটা আপনার guess।</Nope>
       )}
-      <Task done={right}>একটা ছবি বেছে নিন. তারপর দুইটা bar কী করে দেখুন.</Task>
+      <Task done={right}>একটা ছবি বেছে নিন। তারপর দুইটা bar কী করে দেখুন।</Task>
     </>
   );
 }
@@ -197,7 +197,7 @@ export function SpeedBet() {
 
   const seal = (i: number) => {
     setBet(i);
-    pass("বাজি ধরা হয়ে গেলো. শেষে মিলিয়ে দেখবো.");
+    pass("বাজি ধরা হয়ে গেলো। শেষে মিলিয়ে দেখবো।");
   };
 
   return (
@@ -212,7 +212,7 @@ export function SpeedBet() {
               machine {m}
             </text>
             <text x={137 + i * 68} y={45} textAnchor="middle" fontSize={8.5} fill="#334155">
-              {i === 0 ? "শুধু box" : "box, length,"}
+              {i === 0 ? "শুধু dot product" : "dot product, length,"}
             </text>
             <text x={137 + i * 68} y={57} textAnchor="middle" fontSize={8.5} fill="#334155">
               {i === 0 ? "দ্রুত" : "root, ভাগ"}
@@ -229,7 +229,7 @@ export function SpeedBet() {
           </text>
         </g>
       </svg>
-      <div className="mt-2 text-sm font-medium text-muted">আপুর ভাই বলছেন, machine B-কে machine A র মতোই দ্রুত করা যায়, একটা উত্তরও না বদলে. আপনার কী মনে হয়?</div>
+      <div className="mt-2 text-sm font-medium text-muted">আপুর ভাই বলছেন, machine B-কে machine A র মতোই দ্রুত করা যায়, একটা উত্তরও না বদলে। আপনার কী মনে হয়?</div>
       <div className="mt-2 grid gap-2">
         {SB_BET.map((o, i) => (
           <Choice key={o} n={i} look={bet === i ? "picked" : bet !== null ? "dim" : "idle"} disabled={bet !== null} onClick={() => seal(i)}>
@@ -237,7 +237,7 @@ export function SpeedBet() {
           </Choice>
         ))}
       </div>
-      <Task done={bet !== null}>একটার উপরে বাজি ধরুন.</Task>
+      <Task done={bet !== null}>একটার উপরে বাজি ধরুন।</Task>
     </>
   );
 }
@@ -272,14 +272,14 @@ export function CostRace() {
       if (seen.includes(s)) return;
       const next = [...seen, s];
       setSeen(next);
-      if (next.length === CR_SIZES.length) pass("Machine B প্রতি বইয়ে 4 টা কাজ করে, A করে 1 টা.");
+      if (next.length === CR_SIZES.length) pass("Machine B প্রতি বইয়ে 4 টা কাজ করে, A করে 1 টা।");
     });
   };
 
   return (
     <>
       <div className="mx-auto grid max-w-sm gap-3 rounded-2xl border border-border bg-surface px-3 py-3">
-        <MB_Lane name="machine A" jobs={["box"]} lit={run.running && pA < 1 ? 0 : null} p={pA} count={Math.round(pA * n)} tone="coral" />
+        <MB_Lane name="machine A" jobs={["dot product"]} lit={run.running && pA < 1 ? 0 : null} p={pA} count={Math.round(pA * n)} tone="coral" />
         <MB_Lane name="machine B" jobs={B_JOBS} lit={run.running && pB < 1 ? run.k % 4 : null} p={pB} count={Math.round(pB * n) * 4} tone="teal" />
       </div>
       <div className="mt-3 flex flex-wrap justify-center gap-2">
@@ -304,7 +304,7 @@ export function CostRace() {
         </button>
       </div>
       <Ticks items={CR_LABEL.map((l, i) => [l, seen.includes(i)] as [string, boolean])} />
-      <Task done={all}>তিনটা size এর প্রতিটাতে একবার করে search দিন. দেখুন কোন machine কত কাজ করে.</Task>
+      <Task done={all}>তিনটা size এর প্রতিটাতে একবার করে search দিন। দেখুন কোন machine কত কাজ করে।</Task>
     </>
   );
 }
@@ -336,7 +336,7 @@ export function SameLength() {
   const choose = (c: "box" | "len") => {
     if (!all || right) return;
     setPick(c);
-    if (c === "len") pass("Query বদলায়, বইয়ের length বদলায় না.");
+    if (c === "len") pass("Query বদলায়, বইয়ের length বদলায় না।");
     else setMiss(miss + 1);
   };
 
@@ -359,7 +359,7 @@ export function SameLength() {
         <div className="text-center text-xs text-muted">machine B র খাতা</div>
         <div className="mt-1 grid grid-cols-[5.2rem_1fr_1.5fr] items-center gap-x-1.5 gap-y-1.5">
           <span className="text-xs text-muted">বই</span>
-          {head("box", "box")}
+          {head("box", "dot product")}
           {head("len", "length")}
           {MB_BOOKS.map((b, r) => (
             <div key={b.id} className="contents">
@@ -397,11 +397,11 @@ export function SameLength() {
           </button>
         ))}
       </div>
-      {all && !right && <div className={`${FADE} mt-3 text-center text-sm font-medium`}>কোন column এর সংখ্যা প্রতিবার একই থাকলো? ওটার মাথায় tap করুন.</div>}
+      {all && !right && <div className={`${FADE} mt-3 text-center text-sm font-medium`}>কোন column এর সংখ্যা প্রতিবার একই থাকলো? ওটার মাথায় tap করুন।</div>}
       {pick === "box" && (
-        <Nope key={miss}>Box তো বদলেছে. মোটা বইয়ে তিনবারে তিনটা আলাদা সংখ্যা: 20, 1, 0.</Nope>
+        <Nope key={miss}>Dot product তো বদলেছে। মোটা বইয়ে তিনবারে তিনটা আলাদা সংখ্যা: 20, 1, 0।</Nope>
       )}
-      <Task done={right}>তিনটা word দিয়েই search দিন. তারপর যে column প্রতিবার একই থাকে, তার মাথায় tap করুন.</Task>
+      <Task done={right}>তিনটা word দিয়েই search দিন। তারপর যে column প্রতিবার একই থাকে, তার মাথায় tap করুন।</Task>
     </>
   );
 }
@@ -453,7 +453,7 @@ export function ShelveOnce() {
     if (shelved.includes(id)) return;
     const next = [...shelved, id];
     setShelved(next);
-    if (next.length === MB_BOOKS.length) pass("প্রতিটা বইয়ের length মাপা হলো একবারই.");
+    if (next.length === MB_BOOKS.length) pass("প্রতিটা বইয়ের length মাপা হলো একবারই।");
   };
 
   return (
@@ -480,9 +480,9 @@ export function ShelveOnce() {
         ))}
       </div>
       <div className="mt-2 text-center text-sm text-muted">
-        কালো দাগটা length 1. length মাপা হলো <b className="font-mono text-foreground">{shelved.length}</b> বার.
+        কালো দাগটা length 1। length মাপা হলো <b className="font-mono text-foreground">{shelved.length}</b> বার।
       </div>
-      <Task done={all}>তিনটা বই-ই shelf এ তুলুন. তোলার সময় প্রতিটা card নিজের length দিয়ে একবার ভাগ হবে.</Task>
+      <Task done={all}>তিনটা বই-ই shelf এ তুলুন। তোলার সময় প্রতিটা card নিজের length দিয়ে একবার ভাগ হবে।</Task>
     </>
   );
 }
@@ -534,7 +534,7 @@ export function BoxOnShelved() {
   const go = () => {
     race.play(Math.ceil((4 * BS_MS) / TICK), () => {
       setRaced(true);
-      pass("1 লম্বা card এ box-ই cosine.");
+      pass("1 লম্বা card এ dot product-ই cosine.");
     });
   };
 
@@ -566,7 +566,7 @@ export function BoxOnShelved() {
                   <>
                     <span className="font-mono text-xs text-muted">{card(b.u)}</span>
                     <button type="button" disabled={terms.running} onClick={() => box(b.id)} className="shrink-0 cursor-pointer rounded-full border-2 border-cat-coral/60 px-2.5 py-0.5 text-xs font-semibold text-cat-coral hover:bg-cat-coral/5 disabled:opacity-50">
-                      box চালান
+                      dot product চালান
                     </button>
                   </>
                 )}
@@ -578,7 +578,7 @@ export function BoxOnShelved() {
       {allRan && (
         <div className={`${FADE} mx-auto mt-2 grid max-w-sm gap-2 rounded-2xl border border-border bg-surface px-3 py-2`}>
           <MB_Lane name="machine B" jobs={B_JOBS} lit={race.running && pSlow < 1 ? race.k % 4 : null} p={pSlow} count={Math.round(pSlow * N) * 4} tone="teal" />
-          <MB_Lane name="shelf এর card এ" jobs={["box"]} lit={race.running && pFast < 1 ? 0 : null} p={pFast} count={Math.round(pFast * N)} tone="coral" />
+          <MB_Lane name="shelf এর card এ" jobs={["dot product"]} lit={race.running && pFast < 1 ? 0 : null} p={pFast} count={Math.round(pFast * N)} tone="coral" />
           {!raced && (
             <button type="button" disabled={race.running} onClick={go} className="mx-auto cursor-pointer rounded-full bg-cat-blue px-4 py-1.5 text-sm font-semibold text-white disabled:opacity-40">
               10 লাখ বইয়ে “মাছ” search দিন
@@ -586,7 +586,7 @@ export function BoxOnShelved() {
           )}
         </div>
       )}
-      <Task done={raced}>প্রতিটা card এ box চালান, B র আগের সংখ্যার সাথে মিলান. তারপর 10 লাখ বইয়ে search দিন.</Task>
+      <Task done={raced}>প্রতিটা card এ dot product চালান, B র আগের সংখ্যার সাথে মিলান। তারপর 10 লাখ বইয়ে search দিন।</Task>
     </>
   );
 }
@@ -619,12 +619,12 @@ export function TipGap() {
     if (stop < 0 || seen.includes(stop)) return;
     const next = [...seen, stop];
     setSeen(next);
-    if (next.length === TG_STOPS.length) pass("Box যত বড়, মাথা দুইটা তত কাছে.");
+    if (next.length === TG_STOPS.length) pass("Dot product যত বড়, মাথা দুইটা তত কাছে।");
   };
 
   return (
     <>
-      <svg viewBox="0 0 260 132" role="img" aria-label={`দুইটা 1 লম্বা card, মাঝে ${deg}°; box ${fix(c, 2)}, মাথার দূরত্ব ${fix(d, 2)}`} className="mx-auto block h-auto w-full max-w-[19rem]">
+      <svg viewBox="0 0 260 132" role="img" aria-label={`দুইটা 1 লম্বা card, মাঝে ${deg}°; dot product ${fix(c, 2)}, মাথার দূরত্ব ${fix(d, 2)}`} className="mx-auto block h-auto w-full max-w-[19rem]">
         <rect x={1} y={1} width={258} height={130} rx={10} fill="white" stroke="#cbd5e1" />
         <path d={`M${TG_O.x + TG_R} ${TG_O.y}A${TG_R} ${TG_R} 0 0 0 ${TG_O.x - TG_R} ${TG_O.y}`} fill="none" stroke="#0f1b2d" strokeOpacity={0.18} strokeDasharray="3 3" />
         {d > 0.02 && <path d={`M${TG_O.x + TG_R} ${TG_O.y}L${vx} ${vy}`} stroke="#e11d48" strokeWidth={2.2} strokeDasharray="4 3" />}
@@ -660,7 +660,7 @@ export function TipGap() {
         <span className="text-xs text-muted">উল্টা</span>
       </div>
       <div className="mt-1 text-center text-[0.95rem]">
-        box <b className="font-mono text-cat-teal">{fix(c, 2)}</b>, মাথার দূরত্ব <b className="font-mono text-cat-coral">{fix(d, 2)}</b>
+        dot product <b className="font-mono text-cat-teal">{fix(c, 2)}</b>, মাথার দূরত্ব <b className="font-mono text-cat-coral">{fix(d, 2)}</b>
       </div>
       <div className="mx-auto mt-2 grid max-w-sm grid-cols-4 gap-1.5">
         {TG_STOPS.map((s, i) => {
@@ -670,7 +670,7 @@ export function TipGap() {
             <div key={s} className={`rounded-lg border px-1 py-1 text-center text-xs ${on ? "win-pop border-accent/50 bg-accent/10" : "border-border text-muted"}`}>
               <div className="font-mono font-semibold">{s}°</div>
               <div>
-                box <b className="font-mono">{on ? fix(cs, 1) : "?"}</b>
+                dot product <b className="font-mono">{on ? fix(cs, 1) : "?"}</b>
               </div>
               <div>
                 দূরত্ব <b className="font-mono">{on ? fix(Math.sqrt(Math.max(0, 2 - 2 * cs)), 2) : "?"}</b>
@@ -679,7 +679,7 @@ export function TipGap() {
           );
         })}
       </div>
-      <Task done={all}>বইয়ের card টা ঘুরিয়ে 0°, 60°, 90° আর 180° তে থামান. Box আর দূরত্ব কী করে দেখুন.</Task>
+      <Task done={all}>বইয়ের card টা ঘুরিয়ে 0°, 60°, 90° আর 180° তে থামান। Dot product আর দূরত্ব কী করে দেখুন।</Task>
     </>
   );
 }
@@ -711,7 +711,7 @@ export function YourCos() {
 
   const choose = (i: number) => {
     setPick(i);
-    if (i === YC_RIGHT) pass("Shelf এর card এ box-ই cosine: 0.96.");
+    if (i === YC_RIGHT) pass("Shelf এর card এ dot product-ই cosine: 0.96.");
     else setMiss(miss + 1);
   };
 
@@ -781,20 +781,20 @@ export function YourCos() {
       {pick !== null && !right && (
         <Nope key={miss}>
           {pick === 0
-            ? "Cosine কখনো 1 এর বেশি হয় না. 0.6 আর 0.8 যোগ হলো. গুণটা কোথায়?"
+            ? "Cosine কখনো 1 এর বেশি হয় না। 0.6 আর 0.8 যোগ হলো। গুণটা কোথায়?"
             : pick === 2
-              ? "0.48 তো শুধু প্রথম slot জোড়ার গুণ. Box এ সব জোড়া লাগে."
-              : "দুইটা card-ই 1 লম্বা. 1 × 1 দিয়ে ভাগ দিলে কী বদলায়?"}
+              ? "0.48 তো শুধু প্রথম slot জোড়ার গুণ। Dot product এ সব জোড়া লাগে।"
+              : "দুইটা card-ই 1 লম্বা। 1 × 1 দিয়ে ভাগ দিলে কী বদলায়?"}
         </Nope>
       )}
-      <Task done={right}>দুইটা card এর cosine কত, বেছে নিন.</Task>
+      <Task done={right}>দুইটা card এর cosine কত, বেছে নিন।</Task>
     </>
   );
 }
 
 // ---------------------------------------------------------------------------
 // 9 · Try it: a new book arrives, (6, 8, 0). Machine B would give it 0.6 for
-//     “মাছ”. Pick what to divide the card by before it goes on the shelf; the
+//     “মাছ”। Pick what to divide the card by before it goes on the shelf; the
 //     arrow shrinks along its own line. ÷ 14 (the slots added) lands inside
 //     the ring, ÷ 8 (the biggest slot) stops outside, ÷ 10 sits on it and the
 //     plain box gives 0.6.
@@ -844,7 +844,7 @@ export function TryShelve() {
           <div className="font-mono">{pick === null ? "(6, 8, 0)" : card(v, 2)}</div>
           <div className="mt-1.5 text-xs text-muted">length</div>
           <div className="font-mono">{fix(L, 2)}</div>
-          <div className="mt-1.5 text-xs text-muted">“মাছ” এর সাথে box</div>
+          <div className="mt-1.5 text-xs text-muted">“মাছ” এর সাথে dot product</div>
           <div className={`font-mono text-lg font-bold ${right ? "text-accent-text" : pick === null ? "" : "text-danger"}`}>{cn(0.6 * L, 2)}</div>
           <div className="mt-1.5 rounded-md bg-cat-teal/10 px-1.5 py-0.5 text-xs">
             machine B বলতো <b className="font-mono">0.6</b>
@@ -861,11 +861,11 @@ export function TryShelve() {
       {pick !== null && !right && (
         <Nope key={miss}>
           {TS_DIV[pick] === 14
-            ? "Card টা ঢুকে গেলো ring এর ভিতরে. box 0.43. 14 তো 6 আর 8 এর যোগ. Length কি যোগ করে মাপে?"
-            : "Card টা এখনো ring এর বাইরে. box 0.75. সবচেয়ে বড় সংখ্যাটা দিয়ে ভাগ? তাতে length 1 হয় না."}
+            ? "Card টা ঢুকে গেলো ring এর ভিতরে। Dot product 0.43. 14 তো 6 আর 8 এর যোগ। Length কি যোগ করে মাপে?"
+            : "Card টা এখনো ring এর বাইরে। Dot product 0.75. সবচেয়ে বড় সংখ্যাটা দিয়ে ভাগ? তাতে length 1 হয় না।"}
         </Nope>
       )}
-      <Task done={right}>কত দিয়ে ভাগ দিলে card টা ঠিক ring এর উপরে বসে, আর box দেয় 0.6? বেছে নিন.</Task>
+      <Task done={right}>কত দিয়ে ভাগ দিলে card টা ঠিক ring এর উপরে বসে, আর dot product দেয় 0.6? বেছে নিন।</Task>
     </>
   );
 }
@@ -1031,7 +1031,7 @@ export function CatalogueArrives({}: Story) {
         )}
         {k >= 2 && <MB_Note x={96} y={24} lines={["উপজেলা library", "10,00,000 বই"]} tone="#b45309" />}
         {k === 3 && <Bubble x={240} y={LG - 64} side="left" lines={["দশ লাখ বইয়ে", "machine B?"]} />}
-        {k >= 4 && <Bubble x={298} y={LG - 66} side="left" lines={["B-কে A র মতোই", "দ্রুত করা যায়."]} />}
+        {k >= 4 && <Bubble x={298} y={LG - 66} side="left" lines={["B-কে A র মতোই", "দ্রুত করা যায়।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1043,15 +1043,15 @@ export function CatalogueArrives({}: Story) {
 //      20, squares added 401, root 20.02, ভাগ 0.999). Four jobs against one.
 
 const X2_SAY = [
-  "একটা বই, card এ (20, 1, 0). দুইটা machine এই যাবে.",
-  "Machine A: শুধু box. “মাছ” এর সাথে box, 20. শেষ.",
-  "Machine B: প্রথমে একই box, 20.",
-  "তারপর length: প্রতিটা সংখ্যার বর্গ করে যোগ, 401.",
-  "তারপর root: 20.02. এটাই বইয়ের length.",
-  "শেষে ভাগ: 20 ÷ 20.02 = 0.999. একটা বইয়ে 4 টা কাজ.",
+  "একটা বই, card এ (20, 1, 0)। দুইটা machine এই যাবে।",
+  "Machine A: শুধু dot product. “মাছ” এর সাথে dot product, 20। শেষ।",
+  "Machine B: প্রথমে একই dot product, 20.",
+  "তারপর length: প্রতিটা সংখ্যার বর্গ করে যোগ, 401।",
+  "তারপর root: 20.02. এটাই বইয়ের length।",
+  "শেষে ভাগ: 20 ÷ 20.02 = 0.999. একটা বইয়ে 4 টা কাজ।",
 ];
 const X2_B = [
-  { x: 72, name: "box", out: "20" },
+  { x: 72, name: "dot", out: "20" },
   { x: 112, name: "বর্গ যোগ", out: "401" },
   { x: 152, name: "root", out: "20.02" },
   { x: 192, name: "ভাগ", out: "0.999" },
@@ -1078,7 +1078,7 @@ export function MachineInsides() {
   const bAt = k >= 2 ? X2_B[Math.min(bStep, 4) - 1].x : 36;
   return (
     <Scene scene={s} caption={say(X2_SAY, k)}>
-      <svg viewBox="0 0 250 108" role="img" aria-label="একটা বই machine A তে একটা কাজ, machine B তে চারটা কাজ: box, বর্গ যোগ, root, ভাগ" className="mx-auto block h-auto w-full max-w-[18rem]">
+      <svg viewBox="0 0 250 108" role="img" aria-label="একটা বই machine A তে একটা কাজ, machine B তে চারটা কাজ: dot product, বর্গ যোগ, root, ভাগ" className="mx-auto block h-auto w-full max-w-[18rem]">
         <rect x={1} y={1} width={248} height={106} rx={10} fill="white" stroke="#cbd5e1" />
         <circle cx={16} cy={ay} r={9} fill="#e11d48" />
         <text x={16} y={ay + 3.5} textAnchor="middle" fontSize={10} fontWeight={800} fill="white">
@@ -1089,7 +1089,7 @@ export function MachineInsides() {
           B
         </text>
         <path d={`M28 ${ay}H240M28 ${by}H240`} stroke="#cbd5e1" strokeWidth={1} strokeDasharray="3 3" />
-        <X2_Station x={72} y={ay} name="box" lit={k === 1} done={k > 1} />
+        <X2_Station x={72} y={ay} name="dot" lit={k === 1} done={k > 1} />
         {k >= 1 && (
           <text x={244} y={ay + 3.5} textAnchor="end" fontSize={10} fontWeight={800} fontFamily="ui-monospace, monospace" fill="#be123c" className={FADE}>
             20
@@ -1122,7 +1122,7 @@ export function MachineInsides() {
 const X3_N = [1, 10, 100];
 const X3_B = ["40 লাখ", "4 কোটি", "40 কোটি"];
 const X3_A = ["10 লাখ", "1 কোটি", "10 কোটি"];
-const X3_SAY = ["একজন search দিলো. 10 লাখ বইয়ে machine B র 40 লাখ কাজ.", "10 জন: 4 কোটি কাজ.", "দিনে 100 জন: 40 কোটি. প্রতিটা search এ পুরাটা আবার."];
+const X3_SAY = ["একজন search দিলো। 10 লাখ বইয়ে machine B র 40 লাখ কাজ।", "10 জন: 4 কোটি কাজ।", "দিনে 100 জন: 40 কোটি। প্রতিটা search এ পুরাটা আবার।"];
 
 export function HundredSearches() {
   const s = useScene(2, [600, 1800, 2200]);
@@ -1168,13 +1168,13 @@ export function HundredSearches() {
 const X3H_U = 30; // one light job
 const X3H_X = 46;
 const X3H_SAY = [
-  "গুনলে machine B র কাজ 4 টা, machine A র 1 টা.",
-  "কিন্তু root ভারি কাজ. computer এর জন্যও, গুণ-যোগের চেয়ে ভারি.",
-  "ভাগও তাই.",
-  "তাই আসলে ব্যাপারটা চার গুণেরও বেশি.",
+  "গুনলে machine B র কাজ 4 টা, machine A র 1 টা।",
+  "কিন্তু root ভারি কাজ। computer এর জন্যও, গুণ-যোগের চেয়ে ভারি।",
+  "ভাগও তাই।",
+  "তাই আসলে ব্যাপারটা চার গুণেরও বেশি।",
 ];
 const X3H_JOBS = [
-  { name: "box", fill: "#f59e0b" },
+  { name: "dot", fill: "#f59e0b" },
   { name: "length", fill: "#0d9488" },
   { name: "root", fill: "#7c3aed" },
   { name: "ভাগ", fill: "#e11d48" },
@@ -1196,7 +1196,7 @@ export function HeavierThanFour() {
         </text>
         <rect x={X3H_X} y={20} width={X3H_U - 1.5} height={14} rx={2} fill="#f59e0b" />
         <text x={X3H_X + X3H_U / 2} y={30} textAnchor="middle" fontSize={7} fontWeight={700} fill="white">
-          box
+          dot
         </text>
         <text x={10} y={62} fontSize={9} fontWeight={800} fill="#0f766e">
           B
@@ -1228,14 +1228,14 @@ export function HeavierThanFour() {
 //      length; the rows fill with lines. No numbers, so the lengths don't
 //      give the screen away.
 
-const X4A_COLS = [{ x: 128, t: "search" }, { x: 172, t: "বই" }, { x: 218, t: "box" }, { x: 264, t: "length" }];
+const X4A_COLS = [{ x: 128, t: "search" }, { x: 172, t: "বই" }, { x: 218, t: "dot product" }, { x: 264, t: "length" }];
 
 export function FahimLog({}: Story) {
   const s = useScene(3, [600, 1500, 1500, 1800]);
   const k = s.k;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="room" label="ফাহিম computer এর কাছে গিয়ে machine B র খাতা খোলে; খাতায় search, বই, box, length এর ঘর, প্রতিটা search এর হিসাব লেখা">
+      <Stage backdrop="room" label="ফাহিম computer এর কাছে গিয়ে machine B র খাতা খোলে; খাতায় search, বই, dot product, length এর ঘর, প্রতিটা search এর হিসাব লেখা">
         <MB_Shelf x={6} y={LG} />
         <MB_Desk x={204} />
         {k >= 2 && <rect x={247} y={LG - 66} width={29} height={30} rx={2} fill="#fde68a" className={FADE} />}
@@ -1286,11 +1286,11 @@ export function FahimLog({}: Story) {
 
 const X4_WORDS = ["মাছ", "নৌকা", "ধান"];
 const X4_SAY = [
-  "মোটা বই, আর machine B র length মাপার জায়গা.",
+  "মোটা বই, আর machine B র length মাপার জায়গা।",
   "“মাছ” search: length মাপা হলো, 20.02.",
   "“নৌকা” search: আবার মাপা, আবার 20.02.",
   "“ধান” search: আবার 20.02.",
-  "একই উত্তর, প্রতিবার. 10 লাখ বইয়ে, প্রতিটা search এ.",
+  "একই উত্তর, প্রতিবার। 10 লাখ বইয়ে, প্রতিটা search এ।",
 ];
 
 export function SameTwenty() {
@@ -1363,8 +1363,8 @@ export function BhaiShelves({}: Story) {
           )}
         </MB_Carry>
         {k >= 1 && <CastCard key={k >= 2 ? "b" : "a"} x={60} y={16} text={k >= 2 ? "(1, 0, 0)" : "(2, 0, 0)"} tone={k >= 2 ? "teal" : "coral"} />}
-        {k === 2 && <Bubble x={112} y={LG - 66} side="right" lines={["Length 2. তাই", "সব 2 দিয়ে ভাগ."]} />}
-        {k >= 3 && <Bubble x={112} y={LG - 66} side="right" lines={["একবারই. shelf এ", "তোলার সময়."]} />}
+        {k === 2 && <Bubble x={112} y={LG - 66} side="right" lines={["Length 2. তাই", "সব 2 দিয়ে ভাগ।"]} />}
+        {k >= 3 && <Bubble x={112} y={LG - 66} side="right" lines={["একবারই। shelf এ", "তোলার সময়।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1383,9 +1383,9 @@ const X5_JOB = {
 } as const;
 type X5Job = keyof typeof X5_JOB;
 const X5_SAY = [
-  "আগে: প্রতিটা search এ box, length, root, ভাগ.",
-  "এখন: length, root, ভাগ একবার, shelf এ তোলার সময়.",
-  "তারপর প্রতিটা search এ শুধু box.",
+  "আগে: প্রতিটা search এ dot product, length, root, ভাগ।",
+  "এখন: length, root, ভাগ একবার, shelf এ তোলার সময়।",
+  "তারপর প্রতিটা search এ শুধু dot product।",
 ];
 
 function X5_Dots({ jobs }: { jobs: X5Job[] }) {
@@ -1409,7 +1409,7 @@ export function OnceNotEvery() {
           {all.map((j) => (
             <span key={j} className="inline-flex items-center gap-1">
               <span className={`size-2.5 rounded-sm ${X5_JOB[j]}`} />
-              {j}
+              {j === "box" ? "dot product" : j}
             </span>
           ))}
         </div>
@@ -1451,10 +1451,10 @@ export function OnceNotEvery() {
 //      what's left is the plain box: cos θ = û · v̂.
 
 const X6_SAY = [
-  "Cosine: box, তারপর দুইটা length দিয়ে ভাগ.",
-  "Card দুইটা আগেই 1 লম্বা. মাথায় 3.6 এর টুপি: û, v̂.",
-  "1 × 1 দিয়ে ভাগ দিলে কিছুই বদলায় না.",
-  "তাই সাদামাটা box-ই cosine.",
+  "Cosine: dot product, তারপর দুইটা length দিয়ে ভাগ।",
+  "Card দুইটা আগেই 1 লম্বা। মাথায় 3.6 এর টুপি: û, v̂।",
+  "1 × 1 দিয়ে ভাগ দিলে কিছুই বদলায় না।",
+  "তাই সাদামাটা dot product-ই cosine.",
 ];
 
 export function HatFormula() {
@@ -1494,10 +1494,10 @@ export function HatFormula() {
 
 const X6B_DOCS = [0, 1, 2, 3, 4, 5];
 const X6B_SAY = [
-  "জমা থাকা document গুলা.",
-  "জমা রাখার সময়েই প্রতিটা একবার normalise, length 1.",
-  "Search এর সময় প্রশ্নের সাথে শুধু box, একটার পর একটা.",
-  "GPU সব box একসাথে চালায়. আসল system এ কোটি কোটি.",
+  "জমা থাকা document গুলা।",
+  "জমা রাখার সময়েই প্রতিটা একবার normalise, length 1।",
+  "Search এর সময় প্রশ্নের সাথে শুধু dot product, একটার পর একটা।",
+  "GPU সব dot product একসাথে চালায়। আসল system এ কোটি কোটি।",
 ];
 
 export function StoreOnce() {
@@ -1506,7 +1506,7 @@ export function StoreOnce() {
   const dx = (i: number) => 22 + i * 40;
   return (
     <Scene scene={s} caption={say(X6B_SAY, k)}>
-      <svg viewBox="0 0 250 104" role="img" aria-label="document জমার সময় একবার normalise, search এর সময় শুধু box, GPU তে একসাথে" className="mx-auto block h-auto w-full max-w-[18rem]">
+      <svg viewBox="0 0 250 104" role="img" aria-label="document জমার সময় একবার normalise, search এর সময় শুধু dot product, GPU তে একসাথে" className="mx-auto block h-auto w-full max-w-[18rem]">
         {k >= 3 && (
           <g className={FADE}>
             <rect x={6} y={44} width={238} height={56} rx={6} fill="#ede9fe" stroke="#7c3aed" strokeWidth={1.2} />
@@ -1571,9 +1571,9 @@ export function FahimAsks({}: Story) {
         <Person who="fahim" x={112} y={LG} arm={k === 1 ? "point" : "down"} mood={k === 2 ? "puzzled" : "plain"} label />
         <Person who="karim" x={190} y={LG} facing={-1} mood={k >= 3 ? "smug" : "plain"} />
         <MB_Name x={190} text="আপুর ভাই" />
-        {k === 1 && <Bubble x={112} y={LG - 66} side="right" lines={["শহরের search নাকি", "distance দিয়ে খোঁজে."]} />}
+        {k === 1 && <Bubble x={112} y={LG - 66} side="right" lines={["শহরের search নাকি", "distance দিয়ে খোঁজে।"]} />}
         {k === 2 && <Bubble x={112} y={LG - 66} side="right" lines={["তাহলে আরেকটা", "হিসাব লাগবে?"]} />}
-        {k >= 3 && <Bubble x={190} y={LG - 66} side="left" lines={["মেপে দেখো."]} />}
+        {k >= 3 && <Bubble x={190} y={LG - 66} side="left" lines={["মেপে দেখো।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1586,13 +1586,13 @@ export function FahimAsks({}: Story) {
 
 const X7_SAY = [
   "Shelf এর তিনটা card, “মাছ” search.",
-  "Box: note, মোটা বই, নৌকা-ধান.",
-  "Cosine: হুবহু একই সংখ্যা, একই order.",
-  "Distance: এখানে ছোট মানে কাছে. 0, 0.05, 1.07.",
-  "তিনটা মাপ, একটাই order.",
+  "Dot product: note, মোটা বই, নৌকা-ধান।",
+  "Cosine: হুবহু একই সংখ্যা, একই order।",
+  "Distance: এখানে ছোট মানে কাছে। 0, 0.05, 1.07.",
+  "তিনটা মাপ, একটাই order।",
 ];
 const X7_COLS = [
-  { name: "box", val: (u: number[]) => fix(dot(QUERY, u), 3) },
+  { name: "dot product", val: (u: number[]) => fix(dot(QUERY, u), 3) },
   { name: "cosine", val: (u: number[]) => fix(dot(QUERY, u), 3) },
   { name: "distance", val: (u: number[]) => fix(len(u.map((x, i) => x - QUERY[i])), 2) },
 ];
@@ -1638,10 +1638,10 @@ export function SameOrderThree() {
 //      only 0.28 apart — screen 7's rule in one pair.
 
 const X8_SAY = [
-  "Shelf এর দুইটা card, দুইটাই ring এর উপরে.",
-  "Box: 0.48 + 0.48 = 0.96.",
-  "0.96 মানে প্রায় একই দিক. মাঝে মাত্র 16°.",
-  "মাথা দুইটা মাত্র 0.28 দূরে. Box বড়, মাথা কাছে.",
+  "Shelf এর দুইটা card, দুইটাই ring এর উপরে।",
+  "Dot product: 0.48 + 0.48 = 0.96.",
+  "0.96 মানে প্রায় একই দিক। মাঝে মাত্র 16°।",
+  "মাথা দুইটা মাত্র 0.28 দূরে। Dot product বড়, মাথা কাছে।",
 ];
 
 export function CloseTips() {
@@ -1667,7 +1667,7 @@ export function CloseTips() {
         </svg>
         <div className="min-w-0 text-sm leading-relaxed">
           <div className={k >= 1 ? "" : "opacity-30"}>
-            box <b className="font-mono">{k >= 1 ? "0.96" : "?"}</b>
+            dot product <b className="font-mono">{k >= 1 ? "0.96" : "?"}</b>
           </div>
           <div className={k >= 2 ? "" : "opacity-30"}>
             angle <b className="font-mono text-cat-amber">{k >= 2 ? "16°" : "?"}</b>
@@ -1687,10 +1687,10 @@ export function CloseTips() {
 //      jobs. The shelved card (0.6, 0.8, 0): box, 0.6 — one job.
 
 const X9_SAY = [
-  "একই বই, দুইভাবে. উপরে machine B, নিচে shelf এর card.",
-  "Machine B: box 6, length 10 (বর্গ যোগ 100, root), ভাগ: 0.6.",
-  "Shelf এর card: শুধু box, 0.6.",
-  "একই উত্তর. উপরে 4 টা কাজ, নিচে 1 টা.",
+  "একই বই, দুইভাবে। উপরে machine B, নিচে shelf এর card.",
+  "Machine B: dot product 6, length 10 (বর্গ যোগ 100, root), ভাগ: 0.6.",
+  "Shelf এর card: শুধু dot product, 0.6.",
+  "একই উত্তর। উপরে 4 টা কাজ, নিচে 1 টা।",
 ];
 
 export function SixEightTwoWays() {
@@ -1728,7 +1728,7 @@ export function SixEightTwoWays() {
     <Scene scene={s} caption={say(X9_SAY, k)}>
       <div className="mx-auto grid max-w-[17rem] gap-1.5">
         {row("machine B", "(6, 8, 0)", B_JOBS, "0.6", k >= 1, "text-cat-teal")}
-        {row("shelf এর card", "(0.6, 0.8, 0)", ["box"], "0.6", k >= 2, "text-cat-coral")}
+        {row("shelf এর card", "(0.6, 0.8, 0)", ["dot product"], "0.6", k >= 2, "text-cat-coral")}
       </div>
     </Scene>
   );
@@ -1759,7 +1759,7 @@ export function BetSettled({}: Story) {
             </g>
           ))}
         {k === 2 && <MB_Note x={150} y={22} lines={["shelf এ তোলার সময়", "একবার normalise"]} tone="#15803d" />}
-        {k >= 3 && <MB_Note x={150} y={22} lines={["“মাছ” search", "শুধু box"]} tone="#b45309" />}
+        {k >= 3 && <MB_Note x={150} y={22} lines={["“মাছ” search", "শুধু dot product"]} tone="#b45309" />}
         {k >= 3 &&
           [0, 1].map((i) => (
             <text key={i} x={176.5 + i * 31} y={LG - 39} textAnchor="middle" fontSize={6.5} fontWeight={800} fontFamily="ui-monospace, monospace" fill={i === 0 ? "#be123c" : "#0f766e"} className={FADE}>
@@ -1771,7 +1771,7 @@ export function BetSettled({}: Story) {
         <MB_Name x={240} text="লাইব্রেরির আপু" />
         <Person who="karim" x={296} y={LG} facing={-1} mood={k >= 3 ? "smug" : "plain"} />
         <MB_Name x={298} text="আপুর ভাই" />
-        {k === 1 && <Bubble x={296} y={LG - 66} side="left" lines={["B-কে A র মতোই", "দ্রুত করা যায়."]} />}
+        {k === 1 && <Bubble x={296} y={LG - 66} side="left" lines={["B-কে A র মতোই", "দ্রুত করা যায়।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1797,7 +1797,7 @@ export function NightCall({}: Story) {
   const k = s.k;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="night" label="রাতে ফাহিম সোমকে ফোন করে library র গল্প বলে; সোম বলে হাটের ওই box ChatGPT র ভিতরেও চলে; ফাহিম ভাবতে থাকে">
+      <Stage backdrop="night" label="রাতে ফাহিম সোমকে ফোন করে library র গল্প বলে; সোম বলে হাটের ওই dot product ChatGPT র ভিতরেও চলে; ফাহিম ভাবতে থাকে">
         <Building x={4} y={LG} w={66} h={72} color="#334155" />
         <Building x={250} y={LG} w={66} h={72} color="#334155" />
         <Person who="fahim" x={98} y={LG} arm="hold" mood={k >= 3 ? "puzzled" : "plain"} />
@@ -1811,8 +1811,8 @@ export function NightCall({}: Story) {
           </>
         )}
         {k === 1 && <Bubble x={98} y={LG - 66} side="right" lines={["আজকে library তে", "একটা কাণ্ড হলো..."]} />}
-        {k === 2 && <Bubble x={222} y={LG - 66} side="left" lines={["হাটের ওই box তো", "ChatGPT র ভিতরেও চলে."]} />}
-        {k >= 3 && <Bubble x={98} y={LG - 66} side="right" tone="think" lines={["ChatGPT র ভিতরে", "হাটের box?"]} />}
+        {k === 2 && <Bubble x={222} y={LG - 66} side="left" lines={["হাটের ওই dot product তো", "ChatGPT র ভিতরেও চলে।"]} />}
+        {k >= 3 && <Bubble x={98} y={LG - 66} side="right" tone="think" lines={["ChatGPT র ভিতরে", "হাটের dot product?"]} />}
       </Stage>
     </StoryFrame>
   );

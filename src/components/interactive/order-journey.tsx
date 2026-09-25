@@ -17,7 +17,7 @@ import { ID, LensCard, LightBhai, LightGrid, LitRegion, Post, Projector, StageBe
 // হলুদের রাত, late, straight on from 7.3's bridge: the show is over and the
 // লাইট ভাই has put 7.3's Z and W back the other way (W in the slot, Z held in
 // front), not yet switched on. Nasib: দুইটা lens ই তো লাগানো, আগে পরে কী আসে
-// যায়. For the বিয়ের রাত, আপা chose the picture of 7.3's last pair, chalked on
+// যায়। For the বিয়ের রাত, আপা chose the picture of 7.3's last pair, chalked on
 // the stand "আগে S, তারপর D": the হেলানো S = [[1, 1], [0, 1]] in the slot (by
 // the bulb, so the light meets it first) and the চওড়া D = [[2, 0], [0, 1]] in
 // front. Tomorrow the লাইট ভাই's helper fits them. ZW ≠ G is paid in step 2.
@@ -320,7 +320,7 @@ const TONE = { a: "#d97706", b: "#0d9488" } as const;
 //     acted out: the lenses swap in the slot, the wall goes dark, and the pick
 //     is drawn on it with a "?". Never marked.
 
-const X1_OPTS = ["একই ছবি. Order এ কিছু আসে যায় না.", "অন্য ছবি, সবসময়.", "কোন দুইটা lens, তার উপর নির্ভর করে."];
+const X1_OPTS = ["একই ছবি। Order এ কিছু আসে যায় না।", "অন্য ছবি, সবসময়।", "কোন দুইটা lens, তার উপর নির্ভর করে।"];
 
 function X1_Icon({ i }: { i: number }) {
   const fl = (x: number, y: number, dash = false) => <circle cx={x} cy={y} r={5} fill={dash ? "none" : "#fbbf24"} stroke="#d97706" strokeWidth={1.2} strokeDasharray={dash ? "2 1.5" : undefined} />;
@@ -350,7 +350,7 @@ export function OrderBet() {
   const seal = () => {
     if (bet === null || sealed) return;
     setSealed(true);
-    act.play(3, () => pass("বাজি সিল হলো. আগে হলুদ আর গোসল."));
+    act.play(3, () => pass("বাজি সিল হলো। আগে হলুদ আর গোসল।"));
   };
   const end = apply(DS, FLOWER);
   return (
@@ -393,7 +393,7 @@ export function OrderBet() {
           এই বাজি সিল
         </button>
       </div>
-      <Task done={k >= 3}>Lens দুইটার order উল্টালে দেয়ালের ছবি কী হয়? একটা বেছে নিয়ে বাজি সিল করুন. উত্তর শেষে.</Task>
+      <Task done={k >= 3}>Lens দুইটার order উল্টালে দেয়ালের ছবি কী হয়? একটা বেছে নিয়ে বাজি সিল করুন। উত্তর শেষে।</Task>
     </>
   );
 }
@@ -422,7 +422,7 @@ export function SwapLenses() {
     run.run(() => {
       const nd = done.map((v, i) => v || i === order);
       setDone(nd);
-      if (nd.every(Boolean)) pass("Lens উল্টালে ছবি বদলায়: AB ≠ BA.");
+      if (nd.every(Boolean)) pass("Lens উল্টালে ছবি বদলায়: AB ≠ BA।");
     });
   };
   const swap = () => {
@@ -472,7 +472,7 @@ export function SwapLenses() {
           </div>
         ))}
       </div>
-      <Task done={done[0] && done[1]}>যন্ত্র চালান, ফুল কোথায় থামে দেখুন. তারপর lens দুইটা অদলবদল করে আবার চালান.</Task>
+      <Task done={done[0] && done[1]}>যন্ত্র চালান, ফুল কোথায় থামে দেখুন। তারপর lens দুইটা অদলবদল করে আবার চালান।</Task>
     </>
   );
 }
@@ -502,7 +502,7 @@ export function WhichFirst() {
     setRan(false);
     run.run(() => {
       setRan(true);
-      if (i === X3_RIGHT) pass("DSv তে v এর পাশের S আগে: ডান থেকে বাম.");
+      if (i === X3_RIGHT) pass("DSv তে v এর পাশের S আগে: ডান থেকে বাম।");
       else setMiss((m) => m + 1);
     });
   };
@@ -544,9 +544,9 @@ export function WhichFirst() {
         ))}
       </div>
       {over && pick !== null && pick !== X3_RIGHT && (
-        <Nope key={miss}>আগে চওড়া দিলে ফুল থামলো (7, 3) এ. তারা থেকে 3 ঘর বামে. App এর DS এর আলো তাহলে আগে অন্যটায় ঢোকে.</Nope>
+        <Nope key={miss}>আগে চওড়া দিলে ফুল থামলো (7, 3) এ। তারা থেকে 3 ঘর বামে। App এর DS এর আলো তাহলে আগে অন্যটায় ঢোকে।</Nope>
       )}
-      <Task done={over && pick === X3_RIGHT}>App এ লেখা D S. আলো আগে কোন lens এ ঢুকলে ফুল তারায় পড়ে? বেছে নিন, যন্ত্র চালিয়ে দেখাবে.</Task>
+      <Task done={over && pick === X3_RIGHT}>App এ লেখা D S। আলো আগে কোন lens এ ঢুকলে ফুল তারায় পড়ে? বেছে নিন, যন্ত্র চালিয়ে দেখাবে।</Task>
     </>
   );
 }
@@ -578,7 +578,7 @@ export function TurnAndDouble() {
       setRan(true);
       const nd = done.map((v, j) => v || j === i);
       setDone(nd);
-      if (nd.every(Boolean)) pass("এই জোড়ায় order লাগে না. সব জোড়ায় না.");
+      if (nd.every(Boolean)) pass("এই জোড়ায় order লাগে না। সব জোড়ায় না।");
     });
   };
   const [a, b] = X4_ORDERS[order];
@@ -613,7 +613,7 @@ export function TurnAndDouble() {
           দুইভাবেই এক lens: <LensCard cols={X4_ONE} small />
         </div>
       )}
-      <Task done={done[0] && done[1]}>দুই order এই চালান. ফুল কোথায় থামে, grid কেমন হেলে, মিলিয়ে দেখুন.</Task>
+      <Task done={done[0] && done[1]}>দুই order এই চালান। ফুল কোথায় থামে, grid কেমন হেলে, মিলিয়ে দেখুন।</Task>
     </>
   );
 }
@@ -630,7 +630,7 @@ const X5_RUN: Record<X5_Mode, [Cols, Cols]> = {
   1: [L_K2.cols, ID],
   2: [L_K2.cols, L_K1.cols],
 };
-const X5_WHERE = ["সব আলো পেরেকের সারিতে, শোয়ানো লাইনে.", "সব আলো খুঁটির উপর, খাড়া লাইনে.", "দেয়াল অন্ধকার. আলো শুধু পেরেকে."];
+const X5_WHERE = ["সব আলো পেরেকের সারিতে, শোয়ানো লাইনে।", "সব আলো খুঁটির উপর, খাড়া লাইনে।", "দেয়াল অন্ধকার। আলো শুধু পেরেকে।"];
 
 export function DarkWall() {
   const pass = useGate();
@@ -646,7 +646,7 @@ export function DarkWall() {
       setRan(true);
       const nt = tried.map((v, i) => v || i === m);
       setTried(nt);
-      if (m === 2) pass("দুইটাই কিছু রাখে, একসাথে কিছুই না.");
+      if (m === 2) pass("দুইটাই কিছু রাখে, একসাথে কিছুই না।");
     });
   };
   const span = mode === 2 ? 2 : 1;
@@ -681,7 +681,7 @@ export function DarkWall() {
         <LensCard cols={L_K1.cols} small name={L_K1.name} />
         <LensCard cols={L_K2.cols} small name={L_K2.name} />
       </div>
-      <Task done={tried[2]}>আগে বাড়তি 1, তারপর বাড়তি 2, একটা একটা করে. তারপর দুইটা একসাথে.</Task>
+      <Task done={tried[2]}>আগে বাড়তি 1, তারপর বাড়তি 2, একটা একটা করে। তারপর দুইটা একসাথে।</Task>
     </>
   );
 }
@@ -700,10 +700,10 @@ const X6_PAIRS: { a: Lens; b: Lens; c: XY; same: boolean }[] = [
   { a: L_K1, b: L_K2, c: [2, 3], same: true },
 ];
 const X6_NOPE = [
-  "দুই দেয়ালে ফুল দুই জায়গায়. আগে হেলালে (−3, 2), আগে আয়না দিলে (1, 2).",
-  "দুই দেয়ালে ফুল একই জায়গায়, (−2, 4). দ্বিগুণ lens আগে পরে একই.",
-  "দুই দেয়ালে ফুল দুই জায়গায়: (3, 2) আর (2, 2). Grid ও আলাদা হেলে আছে.",
-  "দুই দেয়ালই অন্ধকার, আলো শুধু পেরেকে. দুই order এই একই.",
+  "দুই দেয়ালে ফুল দুই জায়গায়। আগে হেলালে (−3, 2), আগে আয়না দিলে (1, 2)।",
+  "দুই দেয়ালে ফুল একই জায়গায়, (−2, 4)। দ্বিগুণ lens আগে পরে একই।",
+  "দুই দেয়ালে ফুল দুই জায়গায়: (3, 2) আর (2, 2)। Grid ও আলাদা হেলে আছে।",
+  "দুই দেয়ালই অন্ধকার, আলো শুধু পেরেকে। দুই order এই একই।",
 ];
 
 function X6_Mini({ a, b, c, T, tone, title }: { a: Lens; b: Lens; c: XY; T: number; tone: string; title: string }) {
@@ -742,7 +742,7 @@ export function YourOrders() {
       if (v !== right) setMiss((m) => m + 1);
       else if (at === X6_PAIRS.length - 1) {
         setAt(X6_PAIRS.length);
-        pass("Order লাগে কি না, চালিয়েই দেখতে হয়.");
+        pass("Order লাগে কি না, চালিয়েই দেখতে হয়।");
       }
     });
   };
@@ -796,9 +796,9 @@ export function YourOrders() {
             আবার বলুন
           </button>
         )}
-        {fin && <div className={`${FADE} text-sm font-semibold text-accent-text`}>চারটা জোড়াই হলো. দুইটায় order লাগে, দুইটায় লাগে না.</div>}
+        {fin && <div className={`${FADE} text-sm font-semibold text-accent-text`}>চারটা জোড়াই হলো। দুইটায় order লাগে, দুইটায় লাগে না।</div>}
       </div>
-      <Task done={fin}>প্রতিটা জোড়ায় বলুন, order লাগে, নাকি লাগে না. যন্ত্র দুই order এই চালিয়ে দেখাবে.</Task>
+      <Task done={fin}>প্রতিটা জোড়ায় বলুন, order লাগে, নাকি লাগে না। যন্ত্র দুই order এই চালিয়ে দেখাবে।</Task>
     </>
   );
 }
@@ -817,9 +817,9 @@ const X7_OPTS: { first: Lens; second: Lens | null }[] = [
 ];
 const X7_RIGHT = 1;
 const X7_NOPE = [
-  "এই ছবি আসে আগে হেলিয়ে, তারপর ঘুরিয়ে. লিখলে সেটা R S. App এ লেখা S R: ডানে R.",
+  "এই ছবি আসে আগে হেলিয়ে, তারপর ঘুরিয়ে। লিখলে সেটা R S। App এ লেখা S R: ডানে R।",
   "",
-  "এখানে শুধু ঘোরানো হলো. হেলানো lens টা আলো পেলোই না. দুইটা lens ই আলোর পথে আছে.",
+  "এখানে শুধু ঘোরানো হলো। হেলানো lens টা আলো পেলোই না। দুইটা lens ই আলোর পথে আছে।",
 ];
 const x7Cols = (o: { first: Lens; second: Lens | null }) => [o.first.cols, o.second ? o.second.cols : ID] as [Cols, Cols];
 
@@ -848,7 +848,7 @@ export function TryWhichWall() {
     setRan(false);
     run.run(() => {
       setRan(true);
-      if (i === X7_RIGHT) pass("S R এ আগে R: ডানেরটা আগে কাজ করে.");
+      if (i === X7_RIGHT) pass("S R এ আগে R: ডানেরটা আগে কাজ করে।");
       else setMiss((m) => m + 1);
     });
   };
@@ -900,7 +900,7 @@ export function TryWhichWall() {
         ))}
       </div>
       {over && pick !== null && pick !== X7_RIGHT && <Nope key={miss}>{X7_NOPE[pick]}</Nope>}
-      <Task done={over && pick === X7_RIGHT}>App এ লেখা S R. দেয়ালে কোন ছবিটা উঠবে? বেছে নিন.</Task>
+      <Task done={over && pick === X7_RIGHT}>App এ লেখা S R। দেয়ালে কোন ছবিটা উঠবে? বেছে নিন।</Task>
     </>
   );
 }
@@ -938,7 +938,7 @@ export function HelperFits() {
     if (!back || !front || run.running) return;
     run.run(() => {
       setRan(true);
-      if (right) pass("আগে যেটা, সেটা খোপে. লেখায় ডানে.");
+      if (right) pass("আগে যেটা, সেটা খোপে। লেখায় ডানে।");
       else setMiss((m) => m + 1);
     });
   };
@@ -991,10 +991,10 @@ export function HelperFits() {
       </div>
       {over && !right && (
         <Nope key={miss}>
-          আলো আগে ঢুকলো {back?.name} lens এ, ওটা bulb এর পাশে. ফুল থামলো ({land?.[0]}, {land?.[1]}) এ. আপার ছবি (10, 3) এ.
+          আলো আগে ঢুকলো {back?.name} lens এ, ওটা bulb এর পাশে। ফুল থামলো ({land?.[0]}, {land?.[1]}) এ। আপার ছবি (10, 3) এ।
         </Nope>
       )}
-      <Task done={over && right}>একটা lens বেছে নিন, তারপর খোপে বা সামনে tap করুন. দুইটা বসলে চালান. দেয়ালে আপার ছবি উঠতে হবে.</Task>
+      <Task done={over && right}>একটা lens বেছে নিন, তারপর খোপে বা সামনে tap করুন। দুইটা বসলে চালান। দেয়ালে আপার ছবি উঠতে হবে।</Task>
     </>
   );
 }
@@ -1004,9 +1004,9 @@ export function HelperFits() {
 //     হেলানো + চওড়া pair lands on two spots; the ঘোরানো + দ্বিগুণ pair on one.
 
 const X9_CARDS: [string, boolean, string][] = [
-  ["একই ছবি. Order এ কিছু আসে যায় না.", false, "হেলানো আর চওড়া উল্টালে ফুল (10, 3) থেকে গেলো (7, 3) এ."],
-  ["অন্য ছবি, সবসময়.", false, "ঘোরানো আর দ্বিগুণ: দুই order এই ফুল (−2, 4) এ."],
-  ["কোন দুইটা lens, তার উপর নির্ভর করে.", true, "বেশিরভাগ জোড়ায় ছবি বদলায়. কিছু জোড়ায় বদলায় না."],
+  ["একই ছবি। Order এ কিছু আসে যায় না।", false, "হেলানো আর চওড়া উল্টালে ফুল (10, 3) থেকে গেলো (7, 3) এ।"],
+  ["অন্য ছবি, সবসময়।", false, "ঘোরানো আর দ্বিগুণ: দুই order এই ফুল (−2, 4) এ।"],
+  ["কোন দুইটা lens, তার উপর নির্ভর করে।", true, "বেশিরভাগ জোড়ায় ছবি বদলায়। কিছু জোড়ায় বদলায় না।"],
 ];
 
 function X9_Mark({ ok }: { ok: boolean }) {
@@ -1058,7 +1058,7 @@ export function BetOpen() {
       const next = [...open, i];
       setOpen(next);
       setNow(null);
-      if (next.length === 3) pass("Order সাধারণত লাগে. কিছু জোড়ায় লাগে না.");
+      if (next.length === 3) pass("Order সাধারণত লাগে। কিছু জোড়ায় লাগে না।");
     });
   };
   return (
@@ -1089,7 +1089,7 @@ export function BetOpen() {
           );
         })}
       </div>
-      <Task done={open.length === 3}>তিনটা বাজি একটা একটা করে খুলুন.</Task>
+      <Task done={open.length === 3}>তিনটা বাজি একটা একটা করে খুলুন।</Task>
     </>
   );
 }
@@ -1249,9 +1249,9 @@ export function HoludNight({}: Story) {
             <O_Glass x={293} y={98} letter="D" fill={D_FILL} r={5} />
           </g>
         )}
-        {k === 1 && <Bubble x={196} y={84} side="left" lines={["হলুদ মাখা শেষ.", "এবার গোসল."]} />}
+        {k === 1 && <Bubble x={196} y={84} side="left" lines={["হলুদ মাখা শেষ।", "এবার গোসল।"]} />}
         {k === 2 && <Bubble x={138} y={84} side="right" lines={["গোসল আগে করলে", "কী হতো?"]} />}
-        {k === 3 && <Bubble x={138} y={84} side="right" lines={["দুইটা lens ই তো লাগানো.", "আগে পরে কী আসে যায়."]} />}
+        {k === 3 && <Bubble x={138} y={84} side="right" lines={["দুইটা lens ই তো লাগানো।", "আগে পরে কী আসে যায়।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1327,7 +1327,7 @@ export function SaminApp({}: Story) {
 }
 
 // 4a · Nasib digs two more lenses out of the decorator's box: a ঘোরানো and a
-//      দ্বিগুণ. His claim.
+//      দ্বিগুণ। His claim.
 
 export function NasibBox({}: Story) {
   const s = useScene(3, [600, 1800, 1800, 2400]);
@@ -1356,7 +1356,7 @@ export function NasibBox({}: Story) {
         <Person who="samin" x={120} y={150} facing={1} />
         <O_Name x={120} who="samin" />
         <LightBhai x={298} y={150} facing={-1} nameTone="#e2e8f0" />
-        {k >= 3 && <Bubble x={170} y={64} side="left" lines={["এই দুইটা দিয়ে দেখাই.", "আগে পরে একই হবে."]} />}
+        {k >= 3 && <Bubble x={170} y={64} side="left" lines={["এই দুইটা দিয়ে দেখাই।", "আগে পরে একই হবে।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1387,7 +1387,7 @@ export function BoxBottom({}: Story) {
             <Card x={250} y={30} text="(0, 0) (0, 1)" tone="teal" />
           </>
         )}
-        {k >= 3 && <Bubble x={298} y={84} side="left" lines={["একটাও তো ফাঁকা না.", "একসাথে দেই?"]} />}
+        {k >= 3 && <Bubble x={298} y={84} side="left" lines={["একটাও তো ফাঁকা না।", "একসাথে দেই?"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1407,7 +1407,7 @@ export function HelperWaits({}: Story) {
         <Projector x={PJ[0]} y={PJ[1]} lens="empty" />
         <O_Chalk x={PJ[0]} y={PJ[1] - 22} />
         <LightBhai x={k >= 2 ? 360 : 300} y={150} facing={k >= 2 ? 1 : -1} arm={k === 0 ? "hold" : "down"} walking={k === 2} nameTone="#e2e8f0" />
-        {k === 1 && <Bubble x={300} y={84} side="left" lines={["কাইল তুই লাগাবি."]} />}
+        {k === 1 && <Bubble x={300} y={84} side="left" lines={["কাইল তুই লাগাবি।"]} />}
         <O_Helper x={205} y={150} facing={1} arm={k >= 1 ? "hold" : "down"} />
         {k >= 1 ? (
           <>
@@ -1429,7 +1429,7 @@ export function HelperWaits({}: Story) {
             <circle cx={168} cy={100.5} r={1.6} fill="#fbbf24" />
           </g>
         )}
-        {k === 3 && <Bubble x={150} y={84} side="right" lines={["কাল এইটাই চাই."]} />}
+        {k === 3 && <Bubble x={150} y={84} side="right" lines={["কাল এইটাই চাই।"]} />}
         {k >= 4 && <Bubble x={205} y={84} side="mid" lines={["আগে মানে কই?", "খোপে, না সামনে?"]} />}
       </Stage>
     </StoryFrame>
@@ -1483,11 +1483,11 @@ export function BackFromGosol({}: Story) {
 // 1½ · হলুদ মেখে গোসল vs গোসল করে হলুদ: two children, two orders, two faces.
 
 const X1B_SAY = [
-  "দুইজন. একই হলুদের বাটি, একই বালতি.",
-  "উপরের জন আগে হলুদ মাখলো.",
-  "তারপর গোসল. মুখ পরিষ্কার.",
-  "নিচের জন আগে গোসল করলো.",
-  "তারপর হলুদ. হলুদ মুখেই ঘুমাতে গেলো. একই দুই কাজ, order আলাদা, ফল আলাদা.",
+  "দুইজন। একই হলুদের বাটি, একই বালতি।",
+  "উপরের জন আগে হলুদ মাখলো।",
+  "তারপর গোসল। মুখ পরিষ্কার।",
+  "নিচের জন আগে গোসল করলো।",
+  "তারপর হলুদ। হলুদ মুখেই ঘুমাতে গেলো। একই দুই কাজ, order আলাদা, ফল আলাদা।",
 ];
 
 function X1B_Kid({ x, y, holud, wet }: { x: number; y: number; holud: boolean; wet: boolean }) {
@@ -1580,10 +1580,10 @@ function X2B_Panel({ first, second, k, title, tone }: { first: Lens; second: Len
 }
 
 const X2B_SAY = [
-  "দুই দড়ি: e₁ = (1, 0), e₂ = (0, 1).",
-  "প্রথম lens পার হলো. বামে হেলানো, ডানে চওড়া.",
-  "দ্বিতীয় lens ও পার. e₁ দুই দিকেই (2, 0). কিন্তু e₂ একদিকে (2, 1), অন্যদিকে (1, 1).",
-  "দড়ির মাথাগুলো column. দ্বিতীয় column মেলে না. দুইটা আলাদা lens.",
+  "দুই দড়ি: e₁ = (1, 0), e₂ = (0, 1)।",
+  "প্রথম lens পার হলো। বামে হেলানো, ডানে চওড়া।",
+  "দ্বিতীয় lens ও পার। e₁ দুই দিকেই (2, 0)। কিন্তু e₂ একদিকে (2, 1), অন্যদিকে (1, 1)।",
+  "দড়ির মাথাগুলো column। দ্বিতীয় column মেলে না। দুইটা আলাদা lens।",
 ];
 
 export function RopesTwoWays() {
@@ -1628,7 +1628,7 @@ function X2C_Panel({ first, second, k, show, title }: { first: Lens; second: Len
   );
 }
 
-const X2C_SAY = ["7.3 এর দুই lens, Z আর W.", "আগে Z, তারপর W: দড়ি দুইটা (2, 1) আর (1, 2) এ. এটাই G.", "উল্টা, আগে W, তারপর Z: (1, 1) আর (0, 3).", "ZW আর WZ আলাদা. উল্টালে G আর পাওয়া যায় না."];
+const X2C_SAY = ["7.3 এর দুই lens, Z আর W।", "আগে Z, তারপর W: দড়ি দুইটা (2, 1) আর (1, 2) এ। এটাই G।", "উল্টা, আগে W, তারপর Z: (1, 1) আর (0, 3)।", "ZW আর WZ আলাদা। উল্টালে G আর পাওয়া যায় না।"];
 
 export function ZWOther() {
   const s = useScene(3, [600, 2000, 2000, 2400]);
@@ -1648,11 +1648,11 @@ export function ZWOther() {
 //      move while the letters stay.
 
 const X3B_SAY = [
-  "বামে দেয়াল, ডানে bulb. নিচে লেখাটা একই জায়গায়: D S v.",
-  "আলো bulb থেকে বের হলো: v.",
-  "আগে S পার হলো: Sv.",
-  "তারপর D: D(Sv). এটাই (DS)v. পড়ি বাম থেকে, কাজ ডান থেকে.",
-  "Bracket যেখানেই বসাই, (DS)v বা D(Sv), আলো একই পথে যায়. শুধু অক্ষরের order বদলানো যায় না.",
+  "বামে দেয়াল, ডানে bulb। নিচে লেখাটা একই জায়গায়: D S v।",
+  "আলো bulb থেকে বের হলো: v।",
+  "আগে S পার হলো: Sv।",
+  "তারপর D: D(Sv)। এটাই (DS)v। পড়ি বাম থেকে, কাজ ডান থেকে।",
+  "Bracket যেখানেই বসাই, (DS)v বা D(Sv), আলো একই পথে যায়। শুধু অক্ষরের order বদলানো যায় না।",
 ];
 
 export function LightEnters() {
@@ -1728,11 +1728,11 @@ const X4B_STOPS: XY[][] = [
   ],
 ];
 const X4B_SAY = [
-  "ফুল (1, 1) এ. এবার দ্বিগুণ আর হেলানো.",
-  "আগে হেলানো: (2, 1).",
-  "তারপর দ্বিগুণ: (4, 2).",
-  "উল্টা. আগে দ্বিগুণ: (2, 2).",
-  "তারপর হেলানো: আবার (4, 2). দ্বিগুণ সব দিক সমান বাড়ায়, তাই যেকোনো lens এর আগে পরে একই.",
+  "ফুল (1, 1) এ। এবার দ্বিগুণ আর হেলানো।",
+  "আগে হেলানো: (2, 1)।",
+  "তারপর দ্বিগুণ: (4, 2)।",
+  "উল্টা। আগে দ্বিগুণ: (2, 2)।",
+  "তারপর হেলানো: আবার (4, 2)। দ্বিগুণ সব দিক সমান বাড়ায়, তাই যেকোনো lens এর আগে পরে একই।",
 ];
 
 export function DoubleCommutes() {
@@ -1765,10 +1765,10 @@ export function DoubleCommutes() {
 
 const KF = makeFrame(-1, 2, -1, 2, 30, 6); // 102 × 102
 const X5B_SAY = [
-  "দুই দড়ি: e₁ ডানে, e₂ উপরে.",
-  "বাড়তি 2 রাখে শুধু উপর-নিচ. e₁ পড়ে গেলো পেরেকে. e₂ রইলো.",
-  "বাড়তি 1 রাখে শুধু ডান-বাম. এবার e₂ ও পেরেকে.",
-  "দুই দড়ির মাথাই (0, 0). এক lens এ লিখলে সব ঘর 0.",
+  "দুই দড়ি: e₁ ডানে, e₂ উপরে।",
+  "বাড়তি 2 রাখে শুধু উপর-নিচ। e₁ পড়ে গেলো পেরেকে। e₂ রইলো।",
+  "বাড়তি 1 রাখে শুধু ডান-বাম। এবার e₂ ও পেরেকে।",
+  "দুই দড়ির মাথাই (0, 0)। এক lens এ লিখলে সব ঘর 0।",
 ];
 
 export function LostDirections() {
@@ -1801,7 +1801,7 @@ export function LostDirections() {
 //      orders; the flower lands on the same spot, the same as হেলানো alone.
 
 const L_I: Lens = { key: "I", name: "খালি কাঁচ", tag: "I", cols: ID, hex: "#64748b" };
-const X9B_SAY = ["খালি কাঁচ I আর হেলানো S.", "আগে I, তারপর S: ফুল (5, 3) এ.", "আগে S, তারপর I: আবার (5, 3). শুধু S দিলেও তাই. SI = IS = S."];
+const X9B_SAY = ["খালি কাঁচ I আর হেলানো S।", "আগে I, তারপর S: ফুল (5, 3) এ।", "আগে S, তারপর I: আবার (5, 3)। শুধু S দিলেও তাই। SI = IS = S."];
 
 export function ClearGlass() {
   const s = useScene(2, [600, 1800, 2400]);
@@ -1842,11 +1842,11 @@ const X9C_ROWS: [string, Cols, boolean | null][] = [
   ["AᵀBᵀ", colsOf([[1, 3], [2, 7]]), false],
 ];
 const X9C_SAY = [
-  "বইয়ের দুইটা matrix, A আর B.",
-  "AB: আগে B, তারপর A.",
-  "AB এর transpose: row গুলো column হয়ে গেলো.",
-  "BᵀAᵀ: order উল্টে গুণ. মিলে গেলো.",
-  "AᵀBᵀ: order না উল্টালে অন্য জিনিস.",
+  "বইয়ের দুইটা matrix, A আর B।",
+  "AB: আগে B, তারপর A।",
+  "AB এর transpose: row গুলো column হয়ে গেলো।",
+  "BᵀAᵀ: order উল্টে গুণ। মিলে গেলো।",
+  "AᵀBᵀ: order না উল্টালে অন্য জিনিস।",
 ];
 
 export function FlipOrder() {

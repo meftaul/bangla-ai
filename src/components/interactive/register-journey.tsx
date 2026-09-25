@@ -281,7 +281,7 @@ export function ShapeBet() {
   const seal = (i: number) => {
     if (bet !== null) return;
     setBet(i);
-    p.play(2, () => pass("বাজি ধরা হয়ে গেলো. শেষে মিলিয়ে দেখবো."));
+    p.play(2, () => pass("বাজি ধরা হয়ে গেলো। শেষে মিলিয়ে দেখবো।"));
   };
   const card = bet === null ? "" : SB_CARD[bet];
   const bn = /[ঀ-৿]/.test(card);
@@ -289,7 +289,7 @@ export function ShapeBet() {
     <>
       <svg viewBox="0 0 250 104" role="img" aria-label="খেলার স্যারের register, আটজনের height, weight আর বুকডন; পাশে laptop এ app জিজ্ঞেস করছে shape কত" className="mx-auto block h-auto w-full max-w-[19rem]">
         <Sheet data={cells(R_DATA)} g={SB_G} />
-        <R_Laptop x={140} y={22} lines={["register পেলাম.", k >= 2 ? `shape = ${card}` : "shape = ?"]} />
+        <R_Laptop x={140} y={22} lines={["register পেলাম।", k >= 2 ? `shape = ${card}` : "shape = ?"]} />
         {bet !== null && k < 2 && (
           <g
             className="transition-transform duration-700 ease-in-out motion-reduce:transition-none"
@@ -317,7 +317,7 @@ export function ShapeBet() {
           </Choice>
         ))}
       </div>
-      <Task done={bet !== null && k >= 2}>App কোন shape টা নেবে? একটার উপরে বাজি ধরুন.</Task>
+      <Task done={bet !== null && k >= 2}>App কোন shape টা নেবে? একটার উপরে বাজি ধরুন।</Task>
     </>
   );
 }
@@ -355,7 +355,7 @@ export function LooseCards() {
   const stack = () => {
     if (stacked) return;
     setStacked(true);
-    land.play(1, () => pass("একটা slip একটা row. সব slip গাদা করলে একটাই জিনিস, একটা table."));
+    land.play(1, () => pass("একটা slip একটা row। সব slip গাদা করলে একটাই জিনিস, একটা table।"));
   };
 
   return (
@@ -418,7 +418,7 @@ export function LooseCards() {
           </button>
         </div>
       )}
-      <Task done={stacked}>করিম সবার weight জানতে চায়. একটা একটা slip এ tap করে weight পড়ুন.</Task>
+      <Task done={stacked}>করিম সবার weight জানতে চায়। একটা একটা slip এ tap করে weight পড়ুন।</Task>
     </>
   );
 }
@@ -450,7 +450,7 @@ export function RowOrColumn() {
       if (!good) return setMiss((m) => m + 1);
       const next: [boolean, boolean] = kind === "row" ? [true, hit[1]] : [hit[0], true];
       setHit(next);
-      if (next[0] && next[1]) pass("Row মানে একজন মানুষ. Column মানে একটা feature, সবার জন্য.");
+      if (next[0] && next[1]) pass("Row মানে একজন মানুষ। Column মানে একটা feature, সবার জন্য।");
     });
   };
   const good = last !== null && isGood(last);
@@ -495,10 +495,10 @@ export function RowOrColumn() {
       />
       {last && !good && !reading && (
         <Nope key={miss}>
-          {last.kind === "row" ? `এটা ${R_NAMES[last.i]} এর row. রিনাকে খুঁজুন.` : `এটা সবার ${R_HEAD[last.i]}. Height এর column টা খুঁজুন.`}
+          {last.kind === "row" ? `এটা ${R_NAMES[last.i]} এর row। রিনাকে খুঁজুন।` : `এটা সবার ${R_HEAD[last.i]}. Height এর column টা খুঁজুন।`}
         </Nope>
       )}
-      <Task done={hit[0] && hit[1]}>দুইটা কাজ: রিনার সব number, আর সবার height. নামে বা column এর মাথায় tap করুন.</Task>
+      <Task done={hit[0] && hit[1]}>দুইটা কাজ: রিনার সব number, আর সবার height। নামে বা column এর মাথায় tap করুন।</Task>
     </>
   );
 }
@@ -539,7 +539,7 @@ export function CallTheCell() {
     setGuess(i);
     walk.play(CC_PATH.length - 1, () => {
       setOver(true);
-      pass("আগে row, পরে column. সবসময়.");
+      pass("আগে row, পরে column। সবসময়।");
     });
   };
   const started = guess !== null;
@@ -564,10 +564,10 @@ export function CallTheCell() {
       <div className="text-center text-sm font-medium text-muted">
         {wrong ? (
           <span className={`text-danger ${FADE}`}>
-            আপনার {CC_OPTS[guess]} আছে row {gr + 1}, column {gc + 1} এ.
+            আপনার {CC_OPTS[guess]} আছে row {gr + 1}, column {gc + 1} এ।
           </span>
         ) : (
-          "খেলার স্যার বললেন, row 2, column 3. ওইটা কত?"
+          "খেলার স্যার বললেন, row 2, column 3। ওইটা কত?"
         )}
       </div>
       <div className="mt-2 grid grid-cols-2 gap-2">
@@ -577,7 +577,7 @@ export function CallTheCell() {
           </Choice>
         ))}
       </div>
-      <Task done={over}>আগে আন্দাজ করুন, তারপর আঙুলটা কোথায় যায় দেখুন.</Task>
+      <Task done={over}>আগে আন্দাজ করুন, তারপর আঙুলটা কোথায় যায় দেখুন।</Task>
     </>
   );
 }
@@ -600,7 +600,7 @@ export function CountTheShape() {
     setRows(r);
     setCols(c);
     settle.play(1, () => {
-      if (r === 8 && c === 3) pass("মানুষ কয়জন × feature কয়টা: 8 × 3.");
+      if (r === 8 && c === 3) pass("মানুষ কয়জন × feature কয়টা: 8 × 3।");
     });
   };
 
@@ -621,7 +621,7 @@ export function CountTheShape() {
           column <Stepper value={cols} min={1} max={4} label="column" onChange={(v) => set(rows, v)} />
         </span>
       </div>
-      <Task done={done}>Frame টা এমন করুন যেন ঠিক সবগুলো number ঢাকে. নাম বাদ.</Task>
+      <Task done={done}>Frame টা এমন করুন যেন ঠিক সবগুলো number ঢাকে। নাম বাদ।</Task>
     </>
   );
 }
@@ -666,7 +666,7 @@ export function YesNoColumn() {
       p.play(2);
     } else {
       setSplit(true);
-      p.play(1, () => pass("Matrix এ শুধু number. আর যেটা বের করতে চাই, ওটা আলাদা থাকে: X আর y."));
+      p.play(1, () => pass("Matrix এ শুধু number। আর যেটা বের করতে চাই, ওটা আলাদা থাকে: X আর y।"));
     }
   };
 
@@ -742,7 +742,7 @@ export function YesNoColumn() {
       <div className="mt-1 min-h-6 text-center text-sm">
         {tried && !coded && tk >= 2 && (
           <span className={`font-mono text-danger ${FADE}`}>
-            average = হ্যাঁ + না + … ? <span className="font-sans">App আটকে গেলো.</span>
+            average = হ্যাঁ + না + … ? <span className="font-sans">App আটকে গেলো।</span>
           </span>
         )}
         {coded && ck >= 2 && (
@@ -775,7 +775,7 @@ export function YesNoColumn() {
           ["আলাদা করা", split],
         ]}
       />
-      <Task done={split && !p.running}>সোমের column টা app কে দিন. যেখানে আটকায়, ঠিক করুন.</Task>
+      <Task done={split && !p.running}>সোমের column টা app কে দিন। যেখানে আটকায়, ঠিক করুন।</Task>
     </>
   );
 }
@@ -821,7 +821,7 @@ export function FlipSideways() {
       setFed(was);
       const next: [boolean, boolean] = was ? [both[0], true] : [true, both[1]];
       setBoth(next);
-      if (was) pass("নাসিবের table ভুল না, কাত করা. নাম transpose.");
+      if (was) pass("নাসিবের table ভুল না, কাত করা। নাম transpose.");
     });
   };
   const flip = () => {
@@ -867,7 +867,7 @@ export function FlipSideways() {
         ))}
       </svg>
       <div className="mx-auto mt-1 min-h-10 max-w-xs rounded-lg px-3 py-1.5 text-center font-mono text-[0.8rem] leading-snug" style={{ backgroundColor: "#0f172a", color: fed === null ? "#94a3b8" : fed ? "#fca5a5" : "#6ee7b7" }}>
-        {counting ? `student গুনছি: ${Math.min(count.k + 1, rows)} জন…` : fed === null ? "team-picker: table দিন" : fed ? "3 জন student, প্রত্যেকের 8 টা feature? রাফি কি একটা feature?" : "8 জন student, 3 টা feature. ঠিক আছে."}
+        {counting ? `student গুনছি: ${Math.min(count.k + 1, rows)} জন…` : fed === null ? "team-picker: table দিন" : fed ? "3 জন student, প্রত্যেকের 8 টা feature? রাফি কি একটা feature?" : "8 জন student, 3 টা feature। ঠিক আছে।"}
       </div>
       <div className="mt-2 flex flex-wrap justify-center gap-2">
         <button type="button" className={quietBtn} onClick={flip} disabled={counting}>
@@ -877,7 +877,7 @@ export function FlipSideways() {
           App কে দিন
         </button>
       </div>
-      <Task done={both[1]}>Table টা কাত করে নাসিবের 3 × 8 বানান. তারপর app কে দিন.</Task>
+      <Task done={both[1]}>Table টা কাত করে নাসিবের 3 × 8 বানান। তারপর app কে দিন।</Task>
     </>
   );
 }
@@ -958,7 +958,7 @@ export function YourTables() {
   const next = () => {
     setPick(null);
     setCell(null);
-    if (round === 2) pass("জিনিস × feature. Shape পড়া হয়ে গেলো.");
+    if (round === 2) pass("জিনিস × feature. Shape পড়া হয়ে গেলো।");
     setRound(round + 1);
   };
   // a pick plays for `ticks` × 240ms; a right one then moves on, a wrong one is counted
@@ -1012,7 +1012,7 @@ export function YourTables() {
           </div>
         )}
         {round === 0 && pick !== null && pick !== 0 && !playing && (
-          <Nope key={miss}>{pick === 1 ? "Frame টা কাত হয়ে গেলো. Stall কয়টা, আর প্রতিটার কয়টা number?" : "15 টা number ঠিকই. কিন্তু shape বলে কী? কয়টা row, কয়টা column."}</Nope>
+          <Nope key={miss}>{pick === 1 ? "Frame টা কাত হয়ে গেলো। Stall কয়টা, আর প্রতিটার কয়টা number?" : "15 টা number ঠিকই। কিন্তু shape বলে কী? কয়টা row, কয়টা column।"}</Nope>
         )}
       </>
     );
@@ -1049,11 +1049,11 @@ export function YourTables() {
           )}
           {cell && playing && <circle cx={gx} cy={gy} r={5} fill={HI} fillOpacity={0.35} stroke={HI} className="pointer-events-none" />}
         </svg>
-        <div className="text-center text-sm font-medium text-muted">4 × 7 এর একটা matrix. a₂₅ কোন ঘরটা? Tap করুন.</div>
+        <div className="text-center text-sm font-medium text-muted">4 × 7 এর একটা matrix। a₂₅ কোন ঘরটা? Tap করুন।</div>
         {cell && !right && !playing && (
           <Nope key={miss}>
             এটা a{cell[0] + 1}
-            {cell[1] + 1}: row {cell[0] + 1}, column {cell[1] + 1}. আগে row.
+            {cell[1] + 1}: row {cell[0] + 1}, column {cell[1] + 1}. আগে row।
           </Nope>
         )}
       </>
@@ -1078,7 +1078,7 @@ export function YourTables() {
             </Choice>
           ))}
         </div>
-        {pick !== null && pick !== 0 && !playing && <Nope key={miss}>{pick === 1 ? "ওটা একটা column. সবার height. Row টা পড়ে পাশাপাশি." : "পুরা team হলো পুরা table টা. একটা row তার চেয়ে ছোট."}</Nope>}
+        {pick !== null && pick !== 0 && !playing && <Nope key={miss}>{pick === 1 ? "ওটা একটা column। সবার height. Row টা পড়ে পাশাপাশি।" : "পুরা team হলো পুরা table টা। একটা row তার চেয়ে ছোট।"}</Nope>}
       </>
     );
   }
@@ -1089,7 +1089,7 @@ export function YourTables() {
         {body}
       </div>
       <Ticks items={doneRounds} />
-      <Task done={round >= 3}>তিনটা table, একটা একটা করে. {round === 2 ? "কাবাডি team: একটা row মানে কী?" : round === 0 ? "মেলার stall: shape কত?" : ""}</Task>
+      <Task done={round >= 3}>তিনটা table, একটা একটা করে। {round === 2 ? "কাবাডি team: একটা row মানে কী?" : round === 0 ? "মেলার stall: shape কত?" : ""}</Task>
     </>
   );
 }
@@ -1120,7 +1120,7 @@ export function TryIsItAMatrix() {
   const [miss, setMiss] = useSeed("miss", 0);
   // the column's glide (700ms) and then the frame drawing round the matrix (800ms)
   const close = usePlay(1500);
-  const done_ = () => close.play(1, () => pass("নাম পাশে, হ্যাঁ/না এখন 1/0. এবার matrix."));
+  const done_ = () => close.play(1, () => pass("নাম পাশে, হ্যাঁ/না এখন 1/0। এবার matrix."));
 
   const tap = (col: number) => {
     if (col === 0 && !names) {
@@ -1184,8 +1184,8 @@ export function TryIsItAMatrix() {
           </g>
         )}
       </svg>
-      {bad !== null && !done && <Nope key={miss}>এগুলো তো number-ই আছে. সমস্যা অন্য column এ.</Nope>}
-      <Task done={done}>App এটা নেবে না. যে column গুলো বদলাতে হবে, সেগুলোতে tap করুন.</Task>
+      {bad !== null && !done && <Nope key={miss}>এগুলো তো number-ই আছে। সমস্যা অন্য column এ।</Nope>}
+      <Task done={done}>App এটা নেবে না। যে column গুলো বদলাতে হবে, সেগুলোতে tap করুন।</Task>
     </>
   );
 }
@@ -1256,13 +1256,13 @@ export function TeachersRoom({}: Story) {
         <Person who="karim" x={222} y={150} facing={-1} label mood={k >= 4 ? "happy" : "plain"} />
         <Person who="mama" x={k >= 1 ? 280 : 360} y={150} facing={-1} walking={k === 1} />
         {k >= 1 && <S_Name x={280} y={150} text="খেলার স্যার" />}
-        {k === 2 && <Bubble x={280} y={84} side="left" lines={["লিস্ট দিয়া দাও.", "যন্ত্র বাকিটা বুঝবো."]} />}
+        {k === 2 && <Bubble x={280} y={84} side="left" lines={["লিস্ট দিয়া দাও।", "যন্ত্র বাকিটা বুঝবো।"]} />}
         {k >= 4 && (
           <>
             <Card x={42} y={72} text="3 × 8" tone="coral" />
             <Card x={96} y={72} text="8 × 4" tone="amber" />
             <Card x={166} y={72} text="8 × 3" tone="teal" />
-            <Bubble x={222} y={84} side="right" lines={["যেটাই দাও."]} />
+            <Bubble x={222} y={84} side="right" lines={["যেটাই দাও।"]} />
           </>
         )}
       </Stage>
@@ -1355,7 +1355,7 @@ export function SomsColumn({}: Story) {
         )}
         <Person who="som" x={76} y={150} label arm={k >= 1 ? "hold" : "down"} mood={k >= 2 ? "smug" : "plain"} />
         <Person who="samin" x={262} y={150} facing={-1} label />
-        {k >= 2 && <Bubble x={76} y={84} side="right" lines={["এই column টাও", "দিতে হবে."]} />}
+        {k >= 2 && <Bubble x={76} y={84} side="right" lines={["এই column টাও", "দিতে হবে।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1382,7 +1382,7 @@ export function NasibsBoard({}: Story) {
             </g>
           ))}
         <Person who="nasib" x={110} y={150} label arm={k >= 1 ? "point" : "down"} mood={k >= 2 ? "smug" : "plain"} />
-        {k >= 2 && <Bubble x={110} y={84} lines={["নাম উপরে,", "তাই 3 × 8."]} />}
+        {k >= 2 && <Bubble x={110} y={84} lines={["নাম উপরে,", "তাই 3 × 8।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1412,7 +1412,7 @@ export function BellRings({}: Story) {
         {k >= 3 && (
           <>
             <rect x={238} y={100} width={14} height={18} rx={1} fill="white" stroke={INK} strokeOpacity={0.4} className={POP} />
-            <Bubble x={236} y={84} side="left" lines={["এক নম্বরে: করিম."]} />
+            <Bubble x={236} y={84} side="left" lines={["এক নম্বরে: করিম।"]} />
           </>
         )}
       </Stage>
@@ -1453,7 +1453,7 @@ export function ArtSirRoad({}: Story) {
             <circle cx={87} cy={110} r={2.5} fill="#db2777" />
           </g>
         )}
-        {k >= 3 && <Bubble x={112} y={94} side="right" lines={["এই ঘর দিয়াই পুরা", "আলপনা তুইল্যা নিমু."]} />}
+        {k >= 3 && <Bubble x={112} y={94} side="right" lines={["এই ঘর দিয়াই পুরা", "আলপনা তুইল্যা নিমু।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1567,7 +1567,7 @@ export function EightsNote({}: Story) {
               আমাদেরটাও
             </text>
             <text x={209} y={64} textAnchor="middle" fontSize={8} fontWeight={600} fill={INK}>
-              app এ দিও.
+              app এ দিও।
             </text>
           </g>
         )}
@@ -1591,7 +1591,7 @@ export function EightsNote({}: Story) {
 // 1½ · Two faces. A vector was a list and an arrow; a table of numbers has a
 //      name too, and a second face, left as "?".
 
-const X1_SAY = ["2.1 আর 2.2: একই vector, একবার list.", "আরেকবার arrow. দুই চেহারা.", "আজকের জিনিসটা number এর একটা table.", "এরও দ্বিতীয় একটা চেহারা আছে. ওটা পরে."];
+const X1_SAY = ["2.1 আর 2.2: একই vector, একবার list.", "আরেকবার arrow। দুই চেহারা।", "আজকের জিনিসটা number এর একটা table।", "এরও দ্বিতীয় একটা চেহারা আছে। ওটা পরে।"];
 
 export function TwoFaces() {
   const s = useScene(3, [600, 1600, 1800, 2200]);
@@ -1638,7 +1638,7 @@ export function TwoFaces() {
 // 2½ · Small v, big X. The whole stack is X; one row slides out and is a
 //      vector again, written small.
 
-const X2_SAY = ["পুরা table টা একটা জিনিস. নাম বড় হাতের X.", "একটা row টেনে বের করলে আবার একটা vector.", "vector এর নাম ছোট হাতের: v. দেখেই বোঝা যায় কোনটা কী."];
+const X2_SAY = ["পুরা table টা একটা জিনিস। নাম বড় হাতের X।", "একটা row টেনে বের করলে আবার একটা vector।", "vector এর নাম ছোট হাতের: v। দেখেই বোঝা যায় কোনটা কী।"];
 
 export function SmallVBigX() {
   const s = useScene(2, [600, 1800, 2400]);
@@ -1673,7 +1673,7 @@ export function SmallVBigX() {
 // 3½ · One column, measured. The height column lifts out and its eight values
 //      fall onto a number line; the spread 3.7 measured is that line's width.
 
-const X3_SAY = ["Height এর column টা.", "আটটা height, একটা লাইনের উপরে.", "3.7 এ এই ছড়ানোটাই মেপেছিলেন. ওটা ছিল একটা column."];
+const X3_SAY = ["Height এর column টা।", "আটটা height, একটা লাইনের উপরে।", "3.7 এ এই ছড়ানোটাই মেপেছিলেন। ওটা ছিল একটা column।"];
 
 export function HeightColumn() {
   const s = useScene(2, [600, 1800, 2400]);
@@ -1723,7 +1723,7 @@ export function HeightColumn() {
 //      the cell's name a₂₃ is built. Then Nasib's route, column first, ends on
 //      41: row 3, column 2.
 
-const X4_SAY = ["Table এর নাম A.", "আগে নিচে নামুন: row 2. R আগে.", "তারপর পাশে যান: column 3. C পরে.", "ঘরটার নাম a₂₃. ছোট a, আগে row, পরে column.", "নাসিব আগে column গুনেছিল. তাই পৌঁছেছে row 3, column 2 তে: 41."];
+const X4_SAY = ["Table এর নাম A.", "আগে নিচে নামুন: row 2। R আগে।", "তারপর পাশে যান: column 3। C পরে।", "ঘরটার নাম a₂₃। ছোট a, আগে row, পরে column.", "নাসিব আগে column গুনেছিল। তাই পৌঁছেছে row 3, column 2 তে: 41।"];
 
 export function RowThenColumn() {
   const s = useScene(4, [600, 1600, 1600, 2400, 2600]);
@@ -1762,7 +1762,7 @@ export function RowThenColumn() {
 // 5½ · Shapes, big and mismatched. The 8 × 3 frame shrinks to a speck inside a
 //      10000 × 300 table of emails; then an 8 × 3 and a 3 × 8 fail to line up.
 
-const X5_SAY = ["আমাদের table: 8 × 3.", "10,000 email, প্রত্যেকটার 300 feature: 10000 × 300.", "8 × 3 আর 3 × 8 মিলছে না. Program বলে: shape mismatch."];
+const X5_SAY = ["আমাদের table: 8 × 3।", "10,000 email, প্রত্যেকটার 300 feature: 10000 × 300.", "8 × 3 আর 3 × 8 মিলছে না। Program বলে: shape mismatch."];
 
 export function ShapeZoom() {
   const s = useScene(2, [600, 2200, 2400]);
@@ -1821,7 +1821,7 @@ export function ShapeZoom() {
 // 6½ · X and y. The three columns go into the app; y stays beside it as the
 //      answers the app has to learn to give.
 
-const X6_SAY = ["X: app যেটা দেখে. y: app যেটা বের করতে চায়.", "X ঢোকে app এ.", "App এর উত্তর y এর সাথে মেলানো হয়. এভাবেই শেখে."];
+const X6_SAY = ["X: app যেটা দেখে। y: app যেটা বের করতে চায়।", "X ঢোকে app এ।", "App এর উত্তর y এর সাথে মেলানো হয়। এভাবেই শেখে।"];
 
 export function XAndY() {
   const s = useScene(2, [600, 1800, 2400]);
@@ -1877,7 +1877,7 @@ const X7_A = [
   [1, 2, 3],
   [4, 5, 6],
 ];
-const X7_SAY = ["A: 2 × 3.", "Diagonal টা, কোণ থেকে কোনাকুনি.", "প্রতিটা number diagonal এর ওপারে তার আয়নার জায়গায়.", "3 × 2. নাম Aᵀ."];
+const X7_SAY = ["A: 2 × 3.", "Diagonal টা, কোণ থেকে কোনাকুনি।", "প্রতিটা number diagonal এর ওপারে তার আয়নার জায়গায়।", "3 × 2. নাম Aᵀ।"];
 
 export function DiagonalFlip() {
   const s = useScene(3, [600, 1400, 1800, 2200]);
@@ -1924,7 +1924,7 @@ const X7S_A = [
   [7, 4, 3],
 ];
 const X7S_TONE: Record<number, string> = { 5: "#b45309", 7: "#2563eb", 4: "#e11d48" };
-const X7S_SAY = ["3 row, 3 column. সমান, তাই square.", "Diagonal টা, কোণ থেকে কোনাকুনি.", "প্রতিটা number তার আয়নার জায়গায় গেলো.", "কাত করার পরও table একই. এটা symmetric."];
+const X7S_SAY = ["3 row, 3 column. সমান, তাই square।", "Diagonal টা, কোণ থেকে কোনাকুনি।", "প্রতিটা number তার আয়নার জায়গায় গেলো।", "কাত করার পরও table একই। এটা symmetric."];
 
 export function SymmetricFlip() {
   const s = useScene(3, [600, 1400, 1800, 2200]);
@@ -1962,7 +1962,7 @@ export function SymmetricFlip() {
 // 9½ · An array with no meaning. Heights times roll numbers: the laptop
 //      multiplies without a complaint, and the answer means nothing.
 
-const X9_SAY = ["এক দিকে height. আরেক দিকে roll number.", "Computer গুণ করে দিলো. কোনো আপত্তি নাই.", "কিন্তু height × roll এর কোনো মানে নাই. মানে দেয় মানুষ."];
+const X9_SAY = ["এক দিকে height। আরেক দিকে roll number.", "Computer গুণ করে দিলো। কোনো আপত্তি নাই।", "কিন্তু height × roll এর কোনো মানে নাই। মানে দেয় মানুষ।"];
 
 export function ArrayNoMeaning() {
   const s = useScene(2, [600, 1800, 2400]);
@@ -2020,7 +2020,7 @@ const X10_BETS: [string, string, "no" | "half" | "yes"][] = [
   ["সোম", "8 × 4", "half"],
   ["সামিন", "8 × 3", "yes"],
 ];
-const X10_SAY = ["চারটা বাজি.", "করিম: app কিছু বুঝে নেয় না.", "নাসিব: table ঠিক, শুধু কাত করা.", "সোম: column লাগে, তবে আলাদা করে, y হয়ে.", "সামিন: 8 × 3. App এটাই নিলো."];
+const X10_SAY = ["চারটা বাজি।", "করিম: app কিছু বুঝে নেয় না।", "নাসিব: table ঠিক, শুধু কাত করা।", "সোম: column লাগে, তবে আলাদা করে, y হয়ে।", "সামিন: 8 × 3। App এটাই নিলো।"];
 
 function X10_Mark({ kind }: { kind: "no" | "half" | "yes" }) {
   if (kind === "yes") return <path d="M-5 0l3.5 4l7 -8" fill="none" stroke={OK} strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round" />;

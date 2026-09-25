@@ -1,6 +1,6 @@
 export const metadata = {
   title: "Math for AI 4.5 — Cosine similarity, whose film fits better",
-  description: "Mama's Mr. Bean scored 5.34, Mami's Titanic 4.09. Mama says his film fits him better; Mami won't have it. Settle it: shave the lengths off the box's number and judge by the angle alone.",
+  description: "Mama's Mr. Bean scored 5.34, Mami's Titanic 4.09. Mama says his film fits him better; Mami won't have it. Settle it: shave the lengths off the dot product's number and judge by the angle alone.",
   type: "article",
 };
 
@@ -20,7 +20,7 @@ import { WhoFits, LoudPerson, RunBackwards, ScaleCard, LastDivide, NanuCard, Ver
 
 <Step>
 
-শুরু করার আগে একটা question.
+শুরু করার আগে একটা question।
 
 <RecipeRecall />
 
@@ -34,17 +34,17 @@ import { WhoFits, LoudPerson, RunBackwards, ScaleCard, LastDivide, NanuCard, Ver
 
 <Step>
 
-মামার পছন্দ comedy movie আর মামি পুরা উল্টা, তার নাকি একটু dramatic ধাঁচের movie বেশি ভাল্লাগে. Vector এ express করলে মামার পছন্দ (2,5) আর মামির পছন্দ (4,1). যেখানে first slot হলো dramaর score আর 2nd slot হলো comedy এর score. 
+মামার পছন্দ comedy movie আর মামি পুরা উল্টা, তার নাকি একটু dramatic ধাঁচের movie বেশি ভাল্লাগে। Vector এ express করলে মামার পছন্দ (2,5) আর মামির পছন্দ (4,1)। যেখানে first slot হলো dramaর score আর 2nd slot হলো comedy এর score. 
 
 <RemoteFight story />
 
-ফাহিম এর movie club এর তো rule create করাই ছিল. ফাহিম ওই rule অনুযায়ী calculation চালালো. First এ প্রতিটা movie এর length কে 1 বানাবে, এরপর ওই যে আগের ওই box টাই চালাবে. Slot by slot গুণ করে যোগ. সোজা নিয়ম. ঝামেলা নাই. এই নিয়মে calculate করে ফাহিম দেখলো মামা পেয়েছে Mr. Bean আর মামি পেয়েছে titanic. দুইজনই খুশি. But numberটা দেখে মামা আর চুপ থাকতে পারলো না. 
+ফাহিম এর movie club এর তো rule create করাই ছিল। ফাহিম ওই rule অনুযায়ী calculation চালালো। First এ প্রতিটা movie এর length কে 1 বানাবে, এরপর ওই যে আগের ওই dot product টাই চালাবে। Slot by slot গুণ করে যোগ। সোজা নিয়ম। ঝামেলা নাই। এই নিয়মে calculate করে ফাহিম দেখলো মামা পেয়েছে Mr. Bean আর মামি পেয়েছে titanic। দুইজনই খুশি। But numberটা দেখে মামা আর চুপ থাকতে পারলো না। 
 
 <WhoFits />
 
 <Then>
 
-মামার logic simple, number যত বড়, মিল তত বেশি. কিন্তু এখন তো আমরা জানি, box এর মধ্যে শুধু length না, angle ও আছে.
+মামার logic simple, number যত বড়, মিল তত বেশি। কিন্তু এখন তো আমরা জানি, dot product এর মধ্যে শুধু length না, angle ও আছে।
 
 <WhatsInScore />
 
@@ -60,7 +60,7 @@ import { WhoFits, LoudPerson, RunBackwards, ScaleCard, LastDivide, NanuCard, Ver
 
 <Then>
 
-দুইটা slot এ একসাথে বাড়লে তো drama score আর comedy score এর ratio same ই থাকছে, Direction same, just arrow টা লম্বা. এই type এর movie কে আমরা loud film বলেছিলাম.
+দুইটা slot এ একসাথে বাড়লে তো drama score আর comedy score এর ratio same ই থাকছে, Direction same, just arrow টা লম্বা। এই type এর movie কে আমরা loud film বলেছিলাম।
 
 <LoudFilmAgain />
 
@@ -70,8 +70,8 @@ import { WhoFits, LoudPerson, RunBackwards, ScaleCard, LastDivide, NanuCard, Ver
 
 <Step>
 
-মামা যেটাই পছন্দ করে থাকুক না কেন,তার পছন্দের মাত্রাটা যে অনেক বেশি সেটা বোঝা যায়.
-কারণ  সে comedyকে বড় score দিয়ে রেখেছেন. 
+মামা যেটাই পছন্দ করে থাকুক না কেন,তার পছন্দের মাত্রাটা যে অনেক বেশি সেটা বোঝা যায়।
+কারণ  সে comedyকে বড় score দিয়ে রেখেছেন। 
 
 <LoudSofa story />
 
@@ -79,13 +79,13 @@ import { WhoFits, LoudPerson, RunBackwards, ScaleCard, LastDivide, NanuCard, Ver
 
 <Then>
 
-মামার পছন্দের movie এর arrow মামির টার চাইতে লম্বা. 5.39 vs 4.12. Slotগুলা double করায় just score double হয়েছে. arrowটা কিন্তু অন্য কোনো দিকে যায় নি.
+মামার পছন্দের movie এর arrow মামির টার চাইতে লম্বা। 5.39 vs 4.12. Slotগুলা double করায় just score double হয়েছে। arrowটা কিন্তু অন্য কোনো দিকে যায় নি।
 
-তারমানে? মামার score এর পুরাটা যে শুধু মাত্র তার taste এর সাথে মেলে দেখে এসেছে, এমন না. মামার পছন্দের মাত্রাটা বেশি ছিল. As a result, slot এর value-ও বড় ছিল. এজন্য overall score ও বেশি এসেছে.
+তারমানে? মামার score এর পুরাটা যে শুধু মাত্র তার taste এর সাথে মেলে দেখে এসেছে, এমন না। মামার পছন্দের মাত্রাটা বেশি ছিল। As a result, slot এর value-ও বড় ছিল। এজন্য overall score ও বেশি এসেছে।
 
 <VoiceInScore />
 
-আগের একটা lesson এ আমরা movie এর length ই নাই করে দিছিলাম. এবার মানুষের পছন্দের যে length, ওটাও নাই করে দিতে হবে. $\|v\|$ আর $\|w\|$, এই দুইটা length ও একটা formulaতে use করেছিলাম, মনে আছে? এই দুইটা remove করলে কি বাঁচে? just angle-টা.
+আগের একটা lesson এ আমরা movie এর length ই নাই করে দিছিলাম। এবার মানুষের পছন্দের যে length, ওটাও নাই করে দিতে হবে। $\|v\|$ আর $\|w\|$, এই দুইটা length ও একটা formulaতে use করেছিলাম, মনে আছে? এই দুইটা remove করলে কি বাঁচে? just angle-টা।
 
 <TwoLengthsOff />
 
@@ -95,25 +95,25 @@ import { WhoFits, LoudPerson, RunBackwards, ScaleCard, LastDivide, NanuCard, Ver
 
 <Step>
 
-আগের একটা lesson-এ মামার formula ছিল: $v \cdot w = \|v\| \times \|w\| \times \cos\theta$. Equal sign এর left এ box, মানে slot এ slot এ গুণ করে যোগ. আর right side এ দুইটার length, আর তাদের মধ্যের angle.
+আগের একটা lesson-এ মামার formula ছিল: $v \cdot w = \|v\| \times \|w\| \times \cos\theta$. Equal sign এর left এ dot product, মানে slot এ slot এ গুণ করে যোগ। আর right side এ দুইটার length, আর তাদের মধ্যের angle।
 
-দুইটা side কেই একটা balance machine এ বসাই. আমাদের কাজ হবে balance নষ্ট না করে $\cos\theta$ কে একা বানানো.
+দুইটা side কেই একটা balance machine এ বসাই। আমাদের কাজ হবে balance নষ্ট না করে $\cos\theta$ কে একা বানানো।
 
 <RunBackwards />
 
 <Then>
 
-দুই side এ একই জিনিস দিয়ে divide করেন. দেখবেন balance level এ আছে. দুই side এই দুইটা length দিয়েই divide করার পর right এ শুধু $\cos\theta$ পড়ে থাকে.
+দুই side এ একই জিনিস দিয়ে divide করেন। দেখবেন balance level এ আছে। দুই side এই দুইটা length দিয়েই divide করার পর right এ শুধু $\cos\theta$ পড়ে থাকে।
 
 $$\cos\theta = \frac{v \cdot w}{\|v\| \, \|w\|}$$
 
-এবার নিজে জোরে জোরে বলুন: box ওর ভিতরের calculation করে আমাকে যে একটা number দিবে, সেটাকে দুইটা arrow এর individual length দিয়ে divide করি. যে numberটা পাবো সেটা আমাদের বলবে দুইটা arrow কতটা একই দিকে point করে আছে. এই পুরো ব্যাপারটাকে বলে **cosine similarity**.  
+এবার নিজে জোরে জোরে বলুন: dot product ওর calculation করে আমাকে যে একটা number দিবে, সেটাকে দুইটা arrow এর individual length দিয়ে divide করি। যে numberটা পাবো সেটা আমাদের বলবে দুইটা arrow কতটা একই দিকে point করে আছে। এই পুরো ব্যাপারটাকে বলে **cosine similarity**।  
 
 <ShaveLengths />
 
-Slot বাড়লে এর আসল power আসলে কি, সেটা বোঝা যায়. দুইটা slot থাকলে angle সহজেই মাপা যায়. কারণ, জিনিসটাকে আমরা কাগজে আঁকতে পারি.
+Slot বাড়লে এর আসল power আসলে কি, সেটা বোঝা যায়। দুইটা slot থাকলে angle সহজেই মাপা যায়। কারণ, জিনিসটাকে আমরা কাগজে আঁকতে পারি।
 
-কিন্তু সোম এর phone এ একটা word কে তো অনেক কয়টা number দিয়ে express করা লাগে. অনেক কয়টা number মানে slot-ও অনেক কয়টা. So ছবিও আঁকতে পারছি না. চাঁদা দিয়ে মাপার তো প্রশ্নই আসে না. তারপরও formulaটা ঠিকই কাজ করে. তারমানে অনেক slot থাকার পরও যদি বলি, এই দুইটা word এর মাঝের angle 20 degree, actually that makes sense.
+কিন্তু সোম এর phone এ একটা word কে তো অনেক কয়টা number দিয়ে express করা লাগে। অনেক কয়টা number মানে slot-ও অনেক কয়টা। So ছবিও আঁকতে পারছি না। চাঁদা দিয়ে মাপার তো প্রশ্নই আসে না। তারপরও formulaটা ঠিকই কাজ করে। তারমানে অনেক slot থাকার পরও যদি বলি, এই দুইটা word এর মাঝের angle 20 degree, actually that makes sense।
 
 <NoProtractor />
 
@@ -123,26 +123,26 @@ Slot বাড়লে এর আসল power আসলে কি, সেটা
 
 <Step>
 
-Cosine similarity এর কিন্তু একটা বিশাল বড় advantage আছে. Box আমাকে যে number দিচ্ছে, সেটা বড় নাকি ছোট, তা length এর উপর dependent. Length বড় মানে score ও বেশি. Length এর কি কোনো fixed range আছে? নাই. কিন্তু cosine সবসময় একটা fixed range এ থাকে. -1 থেকে 1 এর মধ্যে. এটা আমরা already দেখেছি.
+Cosine similarity এর কিন্তু একটা বিশাল বড় advantage আছে। Dot product আমাকে যে number দিচ্ছে, সেটা বড় নাকি ছোট, তা length এর উপর dependent। Length বড় মানে score ও বেশি। Length এর কি কোনো fixed range আছে? নাই। কিন্তু cosine সবসময় একটা fixed range এ থাকে। -1 থেকে 1 এর মধ্যে। এটা আমরা already দেখেছি।
 
 <NoCeiling story />
 
-Angle change করে দেখুন.
+Angle change করে দেখুন।
 
 <ScaleCard />
 
 <Then>
 
-1 মানে exactly same direction-এ. 0 মানে right angle বা 90 degree, same directionএ না. আর -1 মানে exactly opposite direction এ.
+1 মানে exactly same direction-এ। 0 মানে right angle বা 90 degree, same directionএ না। আর -1 মানে exactly opposite direction এ।
 
-তবে ভিতরের numberগুলা evenly spread না. 0.9 শুনে মনে হবে 90 percent match হচ্ছে. But in reality, ওদের মধ্যে 26 degree এর difference আছে. আর 0.5 মানেই অর্ধেক match? না. এর মানে এদের মধ্যে 60 degree এর difference. So Cosine কে কখনোই percentage হিসাবে চিন্তা করবেন না. এটা একটা ratio.
+তবে ভিতরের numberগুলা evenly spread না। 0.9 শুনে মনে হবে 90 percent match হচ্ছে। But in reality, ওদের মধ্যে 26 degree এর difference আছে। আর 0.5 মানেই অর্ধেক match? না। এর মানে এদের মধ্যে 60 degree এর difference। So Cosine কে কখনোই percentage হিসাবে চিন্তা করবেন না। এটা একটা ratio।
 
 <UnevenScale />
 
 
-Cosine কখনো -1 এর নিচে আর +1 এর উপরে যায় না কেন? এটা কিন্তু আমরা ছাদে কঞ্চি আর shadow এর example থেকে দেখছি. মনে করুন তো, লাঠি আমি যতই ঘুরাই না কেন, ছায়া কি কখনো stick এর চেয়ে বড় হতে পেরেছিল?
+Cosine কখনো -1 এর নিচে আর +1 এর উপরে যায় না কেন? এটা কিন্তু আমরা ছাদে কঞ্চি আর shadow এর example থেকে দেখছি। মনে করুন তো, লাঠি আমি যতই ঘুরাই না কেন, ছায়া কি কখনো stick এর চেয়ে বড় হতে পেরেছিল?
 
-পারে নি. এটার কিন্তু একটা বেশ খটমটে নাম আছে. **"Cauchy-Schwarz inequality"**. নামটা ভারিক্কি হলেও reason মাত্র 1 line এর.
+পারে নি। এটার কিন্তু একটা বেশ খটমটে নাম আছে। **"Cauchy-Schwarz inequality"**. নামটা ভারিক্কি হলেও reason মাত্র 1 line এর।
 
 
 <ShadowCap />
@@ -153,17 +153,17 @@ Cosine কখনো -1 এর নিচে আর +1 এর উপরে যা�
 
 <Step>
 
-মামার question এর answer দেয়ার আগে ওনার হাতে থাকা cardটার length measure করে ফেলি.
+মামার question এর answer দেয়ার আগে ওনার হাতে থাকা cardটার length measure করে ফেলি।
 
 <TapeMama />
 
 <Then>
 
-2 কে square করলে 4, 5 কে square করলে 25. যোগ করলে হয় 29. 29 এর root 5.39 এর কাছাকাছি.
+2 কে square করলে 4, 5 কে square করলে 25। যোগ করলে হয় 29। 29 এর root 5.39 এর কাছাকাছি।
 
 <SquareUp />
 
-যারা 7 pick করেছেন তারা manhattan distance বের করেছেন. মনে আছে manhattan distance এর কথা?
+যারা 7 pick করেছেন তারা manhattan distance বের করেছেন। মনে আছে manhattan distance এর কথা?
 
 <CornerWalk />
 
@@ -177,17 +177,17 @@ Cosine কখনো -1 এর নিচে আর +1 এর উপরে যা�
 
 <WasItWrong story />
 
-অবশ্যই ভুল না, তবে অসম্পূর্ণ. আগের একটা lesson এর rule অনুযায়ী মামা আর Titanic এর score ছিল 3.71. এবার দেখা যাক cosine আমাদেরকে কি result দেয়
+অবশ্যই ভুল না, তবে অসম্পূর্ণ। আগের একটা lesson এর rule অনুযায়ী মামা আর Titanic এর score ছিল 3.71. এবার দেখা যাক cosine আমাদেরকে কি result দেয়
 
 <LastDivide />
 
 <Then>
 
-ওই lesson এ আমরা movie কে ওর নিজের length দিয়ে divide করেছিলাম. কিন্তু মামার পছন্দও তো একটা list বা vector ছিল. মানে ওনার নিজের পছন্দেরও তো একটা length আছে, তাই না? ওই length দিয়ে তো divide করি নি. ওইটা করে ফেললেই cosine similarity. Value টা আসবে 0.69.
+ওই lesson এ আমরা movie কে ওর নিজের length দিয়ে divide করেছিলাম। কিন্তু মামার পছন্দও তো একটা list বা vector ছিল। মানে ওনার নিজের পছন্দেরও তো একটা length আছে, তাই না? ওই length দিয়ে তো divide করি নি। ওইটা করে ফেললেই cosine similarity। Value টা আসবে 0.69.
 
-তারমানে ওই lesson এর numberগুলা ভুল ছিল, এমন না. একজন মানুষের পছন্দের movie বের করতে ruleটা ভালোই কাজ করেছিল. কারণ, একজন মানুষ এর পছন্দের length তো আর change হবে না. যদি না হঠাৎ সে মনে করে, আজ থেকে আমি শুধুই দুঃখের movie দেখবো. Taste change না হওয়া পর্যন্ত ওনার vector এর কোনো change নাই.
+তারমানে ওই lesson এর numberগুলা ভুল ছিল, এমন না। একজন মানুষের পছন্দের movie বের করতে ruleটা ভালোই কাজ করেছিল। কারণ, একজন মানুষ এর পছন্দের length তো আর change হবে না। যদি না হঠাৎ সে মনে করে, আজ থেকে আমি শুধুই দুঃখের movie দেখবো। Taste change না হওয়া পর্যন্ত ওনার vector এর কোনো change নাই।
 
-সমস্যা শুরু হবে কখন? যখন দুইটা different মানুষের পছন্দ একসাথে consider করতে হবে. ঠিক যেমন এখানে. মামা আর মামি তো দুইজন আলাদা মানুষ. পছন্দ আলাদা বলে vector দুইটাও আলাদা. শুধু score দিয়ে ওদের compare করতে গেলে whole picture টা ধরা যাবে না.
+সমস্যা শুরু হবে কখন? যখন দুইটা different মানুষের পছন্দ একসাথে consider করতে হবে। ঠিক যেমন এখানে। মামা আর মামি তো দুইজন আলাদা মানুষ। পছন্দ আলাদা বলে vector দুইটাও আলাদা। শুধু score দিয়ে ওদের compare করতে গেলে whole picture টা ধরা যাবে না।
 
 <SameOrder />
 
@@ -197,8 +197,8 @@ Cosine কখনো -1 এর নিচে আর +1 এর উপরে যা�
 
 <Step>
 
-ঠিক তখনই নানু সোফায় এসে বসলো. "আমিও cinema দেখবো. আমাকেও একটা দে." কিন্তু নানু জীবনেও তার score কেমন হতে পারে সেটা নিয়ে ভাবেই নি. তার card এ
-লেখা  $(0, 0)$.
+ঠিক তখনই নানু সোফায় এসে বসলো। "আমিও cinema দেখবো। আমাকেও একটা দে।" কিন্তু নানু জীবনেও তার score কেমন হতে পারে সেটা নিয়ে ভাবেই নি। তার card এ
+লেখা  $(0, 0)$।
 
 <NanuComes story />
 
@@ -206,14 +206,14 @@ Cosine কখনো -1 এর নিচে আর +1 এর উপরে যা�
 
 <Then>
 
-নানুর arrow দেখি কোনোদিকেই যাচ্ছে না. মানে এটা কোনোদিকেই point করে নাই. যার direction নাই, তার angle ও নাই. কিন্তু formulaটায় তো division এর ব্যাপার স্যাপার আছে.
-আমরা তো একটা trap এ পড়ে যাচ্ছি. Divide by zero trap. এটাকে NaN বলে. "Not a number".
+নানুর arrow দেখি কোনোদিকেই যাচ্ছে না। মানে এটা কোনোদিকেই point করে নাই। যার direction নাই, তার angle ও নাই। কিন্তু formulaটায় তো division এর ব্যাপার স্যাপার আছে।
+আমরা তো একটা trap এ পড়ে যাচ্ছি। Divide by zero trap. এটাকে NaN বলে। "Not a number".
 
 <ShrinkToNothing />
 
-ধরেন, আপনি brand new user. netflix এ login করলেন. আপনার পছন্দ তো system জানে না. সে আপনার vector কে $(0,0)$ হিসাবে treat করবে. তারমানে Netflix কে ব্যাপারটা একটু অন্যভাবে handle করতে হবে. তা না হলে NaN এর ঝামেলা create হবে.
+ধরেন, আপনি brand new user. netflix এ login করলেন। আপনার পছন্দ তো system জানে না। সে আপনার vector কে $(0,0)$ হিসাবে treat করবে। তারমানে Netflix কে ব্যাপারটা একটু অন্যভাবে handle করতে হবে। তা না হলে NaN এর ঝামেলা create হবে।
 
-But ফাহিম তো নানুর পছন্দ জানে. ও নানুর জন্য tv তে "গোলাপী এখন ট্রেনে" ছেড়ে দিলো. সাদা কালো movie. কিন্তু নানু খুশি.
+But ফাহিম তো নানুর পছন্দ জানে। ও নানুর জন্য tv তে "গোলাপী এখন ট্রেনে" ছেড়ে দিলো। সাদা কালো movie। কিন্তু নানু খুশি।
 
 <NanRanking />
 
@@ -223,19 +223,19 @@ But ফাহিম তো নানুর পছন্দ জানে. ও ন
 
 <Step>
 
-তর্কের মিটমাট তো হলো. মামা দেখবে Mr. Bean আর মামি দেখবে Titanic. দুইটা pair এরই Cosine similarity measure করতে হবে. Box এর numbers আর length দিয়ে দেয়া আছে.
+তর্কের মিটমাট তো হলো। মামা দেখবে Mr. Bean আর মামি দেখবে Titanic। দুইটা pair এরই Cosine similarity measure করতে হবে। Dot product এর numbers আর length দিয়ে দেয়া আছে।
 
-এখন আপনার turn.
+এখন আপনার turn।
 
 <VerdictCos />
 
 <Then>
 
-আরে, দুইটাই 0.991 দেখা যায়! মামার movie মামাকে যেমন suit করেছে, মামির movieটা মামিকে ঠিক ততটাই suit করেছে. দুই pair এর মধ্যে angle এর difference বেশ কম. তাহলে মামার score 5.34 কেন? ওনার initially পছন্দের score বেশি ছিল, এজন্যই.
+আরে, দুইটাই 0.991 দেখা যায়! মামার movie মামাকে যেমন suit করেছে, মামির movieটা মামিকে ঠিক ততটাই suit করেছে। দুই pair এর মধ্যে angle এর difference বেশ কম। তাহলে মামার score 5.34 কেন? ওনার initially পছন্দের score বেশি ছিল, এজন্যই।
 
 <SameWedge />
 
-Match টা কোনো co-incidence না. মামার card এর slot দুইটার place swap করে দিলে হয় $(5,2)$. মামা তখন titanic পাবে. মামির card এর slot swap করে দিলে মামি পাবেন Mr. Bean. মানে একটা pair আরেকটা pair এর mirror image. Mirror তো আর angle change করে না. mirror এর সামনে কোনো angle ধরলে, ওই angle টা same ই থাকবে.
+Match টা কোনো co-incidence না। মামার card এর slot দুইটার place swap করে দিলে হয় $(5,2)$। মামা তখন titanic পাবে। মামির card এর slot swap করে দিলে মামি পাবেন Mr. Bean. মানে একটা pair আরেকটা pair এর mirror image. Mirror তো আর angle change করে না। mirror এর সামনে কোনো angle ধরলে, ওই angle টা same ই থাকবে।
 
 <MirrorSlots />
 
@@ -251,13 +251,13 @@ Match টা কোনো co-incidence না. মামার card এর slot 
 
 <Then>
 
-Box এ দিলে $(1, 3) \cdot b = 4 + 6 = 10$, আর $(1, 3) \cdot c = 2 + 9 = 11$. Length তিনটা $\sqrt{10}$, $\sqrt{20}$, $\sqrt{13}$. তাহলে $\cos(b) = 10 / \sqrt{200} \approx 0.707$, মানে 45°, আর $\cos(c) = 11 / \sqrt{130} \approx 0.965$, মানে প্রায় 15°. সামিনকে $c$ দিন.
+Dot product করলে $(1, 3) \cdot b = 4 + 6 = 10$, আর $(1, 3) \cdot c = 2 + 9 = 11$. Length তিনটা $\sqrt{10}$, $\sqrt{20}$, $\sqrt{13}$. তাহলে $\cos(b) = 10 / \sqrt{200} \approx 0.707$, মানে 45°, আর $\cos(c) = 11 / \sqrt{130} \approx 0.965$, মানে প্রায় 15°। সামিনকে $c$ দিন।
 
-একটা জিনিস খেয়াল করেছেন, 10 vs 11 — almost tie হচ্ছে. Cosine use করলে, 0.707 vs 0.965 — একটা clear gap পাওয়া যাচ্ছে.
+একটা জিনিস খেয়াল করেছেন, 10 vs 11 — almost tie হচ্ছে। Cosine use করলে, 0.707 vs 0.965 — একটা clear gap পাওয়া যাচ্ছে।
 
 <BoxVsCos />
 
-এখন নিজে নিজে বের করুন. $(1, 2)$ আর $(-2, -4)$ এর cosine কত হবে?
+এখন নিজে নিজে বের করুন। $(1, 2)$ আর $(-2, -4)$ এর cosine কত হবে?
 
 <OppositeAsk />
 
@@ -269,12 +269,12 @@ Box এ দিলে $(1, 3) \cdot b = 4 + 6 = 10$, আর $(1, 3) \cdot c = 2 +
 
 ## শেষ!
 
-মামা বলেছিল, ওনার numberটা বড়. তাই ওনার film টা ওনার taste এর সাথে বেশি suit করেছে, যতটা না মামির movie টা মামির taste এর সাথে করেছে. Cosine এসে বললো, কই? দুইজনের score তো বেশ কাছাকাছি. দুইজনেরই almost 0.991.
+মামা বলেছিল, ওনার numberটা বড়। তাই ওনার film টা ওনার taste এর সাথে বেশি suit করেছে, যতটা না মামির movie টা মামির taste এর সাথে করেছে। Cosine এসে বললো, কই? দুইজনের score তো বেশ কাছাকাছি। দুইজনেরই almost 0.991.
 
 <TeaForTwo story />
 
 
-এক line এ যদি বলি: **cosine similarity হলো box এর numberকে দুইটা length দিয়ে divide করলে যেটা হয় সেটা. So, এটা একই direction এ কতটুকু match করলো শুধু 
+এক line এ যদি বলি: **cosine similarity হলো dot product এর numberকে দুইটা length দিয়ে divide করলে যেটা হয় সেটা। So, এটা একই direction এ কতটুকু match করলো শুধু 
 সেটাই measure করে**
 
 $$\cos\theta = \frac{u \cdot v}{\|u\| \, \|v\|}$$
@@ -290,20 +290,20 @@ $$\cos\theta = \frac{u \cdot v}{\|u\| \, \|v\|}$$
   ]}
 />
 
-পরেরদিন সকালে হাটের অন্যান্য মালপত্র নৌকায় করে আনা লাগবে. নদীর পাড় দিয়ে দুই মাঝি হেঁটে যাচ্ছে, আর হাত দিয়ে নৌকার গুন টানছে.
+পরেরদিন সকালে হাটের অন্যান্য মালপত্র নৌকায় করে আনা লাগবে। নদীর পাড় দিয়ে দুই মাঝি হেঁটে যাচ্ছে, আর হাত দিয়ে নৌকার গুন টানছে।
 
 <GunTana story />
 
-মাঝি চাচা বললেন, দড়ি লম্বা যত বেশি হইবো, টানা তত কম লাগবো.
+মাঝি চাচা বললেন, দড়ি লম্বা যত বেশি হইবো, টানা তত কম লাগবো।
 
-ফাহিম একটু হকচকিয়ে গেলো. কম টানা লাগবে মানে? দড়ি লম্বা হলেই কম টানা লাগবে? আর যা টানছি তার পুরাটা যদি কাজেই না লাগে. Wasted part টুকু কোথায় যায়?
+ফাহিম একটু হকচকিয়ে গেলো। কম টানা লাগবে মানে? দড়ি লম্বা হলেই কম টানা লাগবে? আর যা টানছি তার পুরাটা যদি কাজেই না লাগে। Wasted part টুকু কোথায় যায়?
 
 <LessonLink
   href="/dashboard/articles/math_for_ai/04e_tow_rope"
   eyebrow="Next lesson"
-  title="নৌকার গুন টানা. টানাটানির কতটুকু actually কাজে লাগে"
+  title="নৌকার গুন টানা। টানাটানির কতটুকু actually কাজে লাগে"
 >
-  মাঝি চাচা বলেছেন লম্বা দড়ি দিয়ে টানা কম লাগে. সত্যি নাকি মিথ্যা সেটা measure করবো shadow use করে. Hehe.
+  মাঝি চাচা বলেছেন লম্বা দড়ি দিয়ে টানা কম লাগে। সত্যি নাকি মিথ্যা সেটা measure করবো shadow use করে। Hehe.
 </LessonLink>
 
 </Step>

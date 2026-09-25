@@ -2435,7 +2435,7 @@ export function FlipCard() {
 // 8a · A story scene for screen 8's setup, no task: সামিন keeps the stall's
 //      money. He comes up to সংখ্যার মেলা with his notebook open, and the two
 //      years' spending pop up as three-slot cards, (খাবার, decoration,
-//      পুরস্কার). What changed is the widget's.
+//      পুরস্কার)। What changed is the widget's.
 
 const S8_Y = 158;
 const S8_SAMIN = 228;

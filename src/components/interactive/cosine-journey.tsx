@@ -62,7 +62,7 @@ export function WhoFits() {
 
   const seal = (i: number) => {
     setBet(i);
-    pass("বাজি ধরা হয়ে গেলো. শেষে মিলিয়ে দেখবো.");
+    pass("বাজি ধরা হয়ে গেলো। শেষে মিলিয়ে দেখবো।");
   };
 
   return (
@@ -72,7 +72,7 @@ export function WhoFits() {
         <Card who="মামি (4, 1)" film="Titanic (5, 2)" score="4.09" tone="violet" />
       </div>
       <Speech who="মামা" initial="M">
-        Number গুলা দেখো! আমার movie আমার taste এর সাথে বেশি suit করেছে. কাল সকালের চা কিন্তু তুমি বানাবা.
+        Number গুলা দেখো! আমার movie আমার taste এর সাথে বেশি suit করেছে। কাল সকালের চা কিন্তু তুমি বানাবা।
       </Speech>
       <div className="mt-3 text-sm font-medium text-muted">কার movie তার taste এর সাথে বেশি suit করেছে?</div>
       <div className="mt-2 grid gap-2">
@@ -82,7 +82,7 @@ export function WhoFits() {
           </Choice>
         ))}
       </div>
-      <Task done={bet !== null}>দুইটা number দেখে একটার উপর বাজি ধরুন.</Task>
+      <Task done={bet !== null}>দুইটা number দেখে একটার উপর বাজি ধরুন।</Task>
     </>
   );
 }
@@ -104,7 +104,7 @@ export function LoudPerson() {
   const measure = (i: number) => !measured.includes(i) && setMeasured([...measured, i]);
   const double = () => {
     setDoubled(true);
-    pass("Number double করলে score ও double হয়.");
+    pass("Number double করলে score ও double হয়।");
   };
 
   return (
@@ -155,7 +155,7 @@ export function LoudPerson() {
           ["মামার card double", doubled],
         ]}
       />
-      <Task done={doubled}>Tape দিয়ে দুইজনের পছন্দের arrow মাপুন. তারপর মামার card double করে score টা দেখুন.</Task>
+      <Task done={doubled}>Tape দিয়ে দুইজনের পছন্দের arrow মাপুন। তারপর মামার card double করে score টা দেখুন।</Task>
     </>
   );
 }
@@ -197,7 +197,7 @@ export function RunBackwards() {
   };
   const practise = () => {
     setTried(true);
-    pass("দুইটা length দিয়ে divide করলে থাকে শুধু cos θ.");
+    pass("দুইটা length দিয়ে divide করলে থাকে শুধু cos θ।");
   };
 
   return (
@@ -212,7 +212,7 @@ export function RunBackwards() {
           {right}
         </div>
       </div>
-      {tilt !== null && <Nope key={tilt}>Balance হেলে গেলো. শুধু এক side কে divide করলে দুই side আর সমান থাকে না.</Nope>}
+      {tilt !== null && <Nope key={tilt}>Balance হেলে গেলো। শুধু এক side কে divide করলে দুই side আর সমান থাকে না।</Nope>}
       {!alone ? (
         <div className="mt-3 grid gap-2">
           {MOVES.map((m, i) => (
@@ -223,7 +223,7 @@ export function RunBackwards() {
         </div>
       ) : (
         <div className={`${FADE} mt-3 text-center`}>
-          <div className="text-[0.95rem]">একটা pair এ চালিয়ে দেখি: (3, 4) আর (4, 3). দুইটারই length 5.</div>
+          <div className="text-[0.95rem]">একটা pair এ চালিয়ে দেখি: (3, 4) আর (4, 3)। দুইটারই length 5।</div>
           {!tried ? (
             <button type="button" onClick={practise} className={`${primaryBtn} mt-2`}>
               হিসাবটা চালান
@@ -238,7 +238,7 @@ export function RunBackwards() {
           )}
         </div>
       )}
-      <Task done={tried}>দুই side কে একই জিনিস দিয়ে divide করে cos θ কে একা করুন. তারপর একটা pair এ হিসাবটা চালান.</Task>
+      <Task done={tried}>দুই side কে একই জিনিস দিয়ে divide করে cos θ কে একা করুন। তারপর একটা pair এ হিসাবটা চালান।</Task>
     </>
   );
 }
@@ -270,7 +270,7 @@ export function ScaleCard() {
     if (i < 0 || hit.includes(i)) return;
     const next = [...hit, i];
     setHit(next);
-    if (next.length === MARKS.length) pass("0.9 মানে 90 percent match না. মানে 26° angle.");
+    if (next.length === MARKS.length) pass("0.9 মানে 90 percent match না। মানে 26° angle.");
   };
 
   return (
@@ -311,7 +311,7 @@ export function ScaleCard() {
         </span>
       </div>
       <Ticks items={MARKS.map((m, i) => [`cos ${m.c < 0 ? "−1" : m.c}`, hit.includes(i)])} />
-      <Task done={all}>Angle ঘুরিয়ে চারটা জায়গা খুঁজে বের করুন, যেখানে cos হয় 0.9, 0.5, 0 আর −1.</Task>
+      <Task done={all}>Angle ঘুরিয়ে চারটা জায়গা খুঁজে বের করুন, যেখানে cos হয় 0.9, 0.5, 0 আর −1।</Task>
     </>
   );
 }
@@ -328,7 +328,7 @@ export function LastDivide() {
 
   const step = () => {
     setK(k + 1);
-    if (k + 1 === 2) pass("Box কে দুইটা length দিয়ে ভাগ করলেই cosine.");
+    if (k + 1 === 2) pass("Dot product কে দুইটা length দিয়ে ভাগ করলেই cosine।");
   };
 
   return (
@@ -336,7 +336,7 @@ export function LastDivide() {
       <div className="mx-auto mt-2 max-w-sm rounded-xl border border-border bg-surface px-3 py-2 text-center">
         <div className="text-sm text-muted">আগের lesson এর rule এ, মামা আর Titanic</div>
         <div className="text-[0.95rem]">
-          Titanic এর length 1 বানিয়ে, তারপর box: <b className="font-mono">3.71</b>
+          Titanic এর length 1 বানিয়ে, তারপর dot product: <b className="font-mono">3.71</b>
         </div>
       </div>
       <div className="mx-auto mt-3 grid max-w-sm gap-2">
@@ -350,11 +350,11 @@ export function LastDivide() {
         )}
         {k >= 2 && (
           <div className={`${FADE} rounded-xl border-2 border-cat-amber/40 bg-cat-amber/5 px-3 py-2 text-center`}>
-            <div className="text-xs text-muted">পুরা formula: box ÷ মামার length ÷ Titanic এর length</div>
+            <div className="text-xs text-muted">পুরা formula: dot product ÷ মামার length ÷ Titanic এর length</div>
             <div className="font-mono text-lg">
               20 ÷ 5.39 ÷ 5.39 = <b>0.69</b>
             </div>
-            <div className="text-sm">মানে মামা আর Titanic এর মাঝে প্রায় 46° angle.</div>
+            <div className="text-sm">মানে মামা আর Titanic এর মাঝে প্রায় 46° angle।</div>
           </div>
         )}
       </div>
@@ -365,7 +365,7 @@ export function LastDivide() {
           </button>
         </div>
       )}
-      <Task done={k >= 2}>আগের lesson এর number টাকে মামার নিজের length দিয়ে divide করুন. তারপর পুরা formula দিয়ে মিলিয়ে দেখুন.</Task>
+      <Task done={k >= 2}>আগের lesson এর number টাকে মামার নিজের length দিয়ে divide করুন। তারপর পুরা formula দিয়ে মিলিয়ে দেখুন।</Task>
     </>
   );
 }
@@ -402,7 +402,7 @@ export function NanuCard() {
       if (i !== 1) return setMiss((miss ?? 0) + 1);
       setMiss(null);
       setGot(true);
-      pass("Zero arrow এর কোনো angle নাই.");
+      pass("Zero arrow এর কোনো angle নাই।");
     });
   };
 
@@ -470,7 +470,7 @@ export function NanuCard() {
               )}
             </div>
           </div>
-          <div className="mt-3 text-sm font-medium text-muted">Calculator বলছে NaN, মানে “not a number”. কেন?</div>
+          <div className="mt-3 text-sm font-medium text-muted">Calculator বলছে NaN, মানে “not a number”। কেন?</div>
           <div className="mt-2 grid gap-2">
             {NANU_WHY.map((o, i) => (
               <Choice
@@ -486,20 +486,20 @@ export function NanuCard() {
           </div>
           {miss !== null && (
             <Nope key={miss}>
-              {!play.running && pick === 0 && "0 মানে right angle, কিন্তু নানুর তো কোনো arrow ই নাই যে ওখানে বসাবো. "}
+              {!play.running && pick === 0 && "0 মানে right angle, কিন্তু নানুর তো কোনো arrow ই নাই যে ওখানে বসাবো। "}
               {!play.running && pick === 2 && "সাধারণ একটা pair এ তো ঠিকই চলে: 0.96. "}
-              উঁহু. যে arrow কোথাও যায় না, সেটা কোন দিকে point করে?
+              উঁহু। যে arrow কোথাও যায় না, সেটা কোন দিকে point করে?
             </Nope>
           )}
         </div>
       )}
-      <Task done={got}>নানুর জন্য formula চালান. তারপর বলুন answer টা এমন আসলো কেন.</Task>
+      <Task done={got}>নানুর জন্য formula চালান। তারপর বলুন answer টা এমন আসলো কেন।</Task>
     </>
   );
 }
 
 // ---------------------------------------------------------------------------
-// 7 · এবার আপনার পালা. The verdict: the reader picks each couple's cosine from
+// 7 · এবার আপনার পালা। The verdict: the reader picks each couple's cosine from
 //     the box and the lengths, wrong tries bouncing. 0.99 and 0.99, a tie.
 //     Then the mirror: swap every card's two slots and one pair lands on the
 //     other.
@@ -567,7 +567,7 @@ export function VerdictCos() {
         </Plane>
         <div className="grid min-w-0 flex-1 gap-1 text-xs">
           <div className="rounded-lg bg-surface px-2 py-1">
-            box: মামা · Bean = <b className="font-mono">22</b>, মামি · Titanic = <b className="font-mono">22</b>
+            dot product: মামা · Bean = <b className="font-mono">22</b>, মামি · Titanic = <b className="font-mono">22</b>
           </div>
           <div className="rounded-lg bg-surface px-2 py-1">
             length: মামা, Titanic <b className="font-mono">5.39</b>; মামি, Bean <b className="font-mono">4.12</b>
@@ -607,7 +607,7 @@ export function VerdictCos() {
             </div>
           )}
           {miss !== null && <Nope key={miss}>
-            {!play.running && tried !== null && tried !== v.ans && (inRange ? "এই angle তো দুইটা arrow এর মাঝের ফাঁকের চেয়ে অনেক বড়. " : "Cosine কখনো 1 এর উপরে যায় না. ")}উঁহু. Box এর number কে দুইজনের length দিয়েই divide করতে হবে, একজনেরটা দিয়ে না.</Nope>}
+            {!play.running && tried !== null && tried !== v.ans && (inRange ? "এই angle তো দুইটা arrow এর মাঝের ফাঁকের চেয়ে অনেক বড়। " : "Cosine কখনো 1 এর উপরে যায় না। ")}উঁহু। Dot product এর number কে দুইজনের length দিয়েই divide করতে হবে, একজনেরটা দিয়ে না।</Nope>}
         </>
       ) : (
         <div className={`${FADE} mt-3 text-center`}>
@@ -625,7 +625,7 @@ export function VerdictCos() {
           ["Mirror", mirror],
         ]}
       />
-      <Task done={mirror}>দুইটা pair এর cosine similarity বের করুন. তারপর mirror টা দেখুন.</Task>
+      <Task done={mirror}>দুইটা pair এর cosine similarity বের করুন। তারপর mirror টা দেখুন।</Task>
     </>
   );
 }
@@ -791,11 +791,11 @@ function C_Roof({ deg, bx, L, children }: { deg: number; bx: number; L: number; 
 const X0_BX = 62;
 const X0_L = 58;
 const X0_SAY = [
-  "দুপুরবেলা ছাদের stick. উপরে রোদ. মাটিতে তার shadow.",
+  "দুপুরবেলা ছাদের stick। উপরে রোদ। মাটিতে তার shadow।",
   "মাটির direction হলো v, আর stick টা w. Shadow হলো ‖w‖ cos θ.",
-  "তাই v · w এর ভিতরে তিনটা জিনিস গুণ হয়: দুইটা length আর cos θ.",
-  "Stick টা খাড়া করে দিলে shadow একদমই নাই: cos 90° = 0.",
-  "শুধু ‖v‖ × ‖w‖ হলে খাড়া stick এও বড় একটা number আসতো. তাই cos বাদ দেয়া যায় না.",
+  "তাই v · w এর ভিতরে তিনটা জিনিস গুণ হয়: দুইটা length আর cos θ।",
+  "Stick টা খাড়া করে দিলে shadow একদমই নাই: cos 90° = 0।",
+  "শুধু ‖v‖ × ‖w‖ হলে খাড়া stick এও বড় একটা number আসতো। তাই cos বাদ দেয়া যায় না।",
 ];
 
 export function RoofStick() {
@@ -865,7 +865,7 @@ export function RemoteFight({}: Story) {
 
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="room" label="সন্ধ্যা. নানুর বাসা. TV এর remote নিয়ে মামা আর মামির টানাটানি. ফাহিম phone এ আগের lesson এর rule চালালো. TV তে মামার জন্য Mr. Bean, মামির জন্য Titanic. Number দেখে মামা জোর গলায় কথা বলে উঠলেন.">
+      <Stage backdrop="room" label="সন্ধ্যা। নানুর বাসা। TV এর remote নিয়ে মামা আর মামির টানাটানি। ফাহিম phone এ আগের lesson এর rule চালালো। TV তে মামার জন্য Mr. Bean, মামির জন্য Titanic. Number দেখে মামা জোর গলায় কথা বলে উঠলেন।">
         <C_Sofa x={196} y={C_Y} w={124} />
         <C_TV x={50} y={C_Y}>
           {k >= 3 && (
@@ -905,9 +905,9 @@ export function RemoteFight({}: Story) {
 
 const X1_SAY = [
   "মামা আর Mr. Bean এর score 5.34.",
-  "4.3 এ দেখেছিলাম, box এর number এর ভিতরে তিনটা জিনিস গুণ হয়.",
-  "একটা হলো angle, মানে কতটা মিল.",
-  "Film এর length তো আগের lesson এই 1 বানিয়ে ফেলেছিলাম.",
+  "4.3 এ দেখেছিলাম, dot product এর number এর ভিতরে তিনটা জিনিস গুণ হয়।",
+  "একটা হলো angle, মানে কতটা মিল।",
+  "Film এর length তো আগের lesson এই 1 বানিয়ে ফেলেছিলাম।",
   "তাহলে বাকি যে length টা রইলো, ওটা কার?",
 ];
 
@@ -971,9 +971,9 @@ export function WhatsInScore() {
 const X1L_F = makeFrame(-0.4, 10.6, -0.4, 4.6, 15, 10);
 const X1L_SAY = [
   "Titanic, (5, 2).",
-  "দুইটা slot ই double: (10, 4). Arrow টাও দ্বিগুণ লম্বা.",
-  "5 : 2 আর 10 : 4. Drama আর comedy এর ratio একই. তাই direction ও একই.",
-  "Direction same, just arrow টা লম্বা. একেই বলে loud film.",
+  "দুইটা slot ই double: (10, 4). Arrow টাও দ্বিগুণ লম্বা।",
+  "5 : 2 আর 10 : 4। Drama আর comedy এর ratio একই। তাই direction ও একই।",
+  "Direction same, just arrow টা লম্বা। একেই বলে loud film.",
 ];
 
 export function LoudFilmAgain() {
@@ -1021,7 +1021,7 @@ export function LoudSofa({}: Story) {
 
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="room" label="সোফার সামনে মামা আর মামি. মামা জোর গলায় comedy কে দিলেন 5. মামি drama কে দিলেন 4. তারপর দুইজনের card.">
+      <Stage backdrop="room" label="সোফার সামনে মামা আর মামি। মামা জোর গলায় comedy কে দিলেন 5। মামি drama কে দিলেন 4। তারপর দুইজনের card।">
         <C_Sofa x={164} y={C_Y} w={150} />
         <Person who="mama" x={S2_MAMA} y={C_Y} mood={k === 1 ? "shout" : k >= 3 ? "smug" : "plain"} arm={k === 1 ? "wave" : "down"} label />
         <Person who="mami" x={S2_MAMI} y={C_Y} facing={-1} mood={k === 2 ? "happy" : "plain"} label />
@@ -1033,7 +1033,7 @@ export function LoudSofa({}: Story) {
             </g>
           </>
         )}
-        {k === 2 && <Bubble x={S2_MAMI} y={C_Y - 66} lines={["Drama? 4 দিলাম."]} />}
+        {k === 2 && <Bubble x={S2_MAMI} y={C_Y - 66} lines={["Drama? 4 দিলাম।"]} />}
         {k >= 3 && (
           <>
             <CastCard x={S2_MAMA} y={C_Y - 78} text="(2, 5)" tone="teal" />
@@ -1052,9 +1052,9 @@ export function LoudSofa({}: Story) {
 
 const X2_SAY = [
   "মামা আর Mr. Bean: 5.34.",
-  "এই 5.34 হলো মামার length 5.39, গুণ আরো কিছু একটা.",
-  "Card double করলাম: length 10.77, score 10.67. কিন্তু ? এক চুলও নড়লো না.",
-  "তাহলে 5.34 এর একটা অংশ movie এর মিল না. ওটা মামার গলার জোর.",
+  "এই 5.34 হলো মামার length 5.39, গুণ আরো কিছু একটা।",
+  "Card double করলাম: length 10.77, score 10.67. কিন্তু ? এক চুলও নড়লো না।",
+  "তাহলে 5.34 এর একটা অংশ movie এর মিল না। ওটা মামার গলার জোর।",
 ];
 
 function X2Row({ score, len, voice }: { score: string; len: string; voice: boolean }) {
@@ -1113,10 +1113,10 @@ const X3_F = makeFrame(-0.2, 4.3, -0.2, 4.3, 27, 7);
 const X3_V: XY = [3, 4];
 const X3_W: XY = [4, 3];
 const X3_SAY = [
-  "(3, 4) আর (4, 3), দুইটারই length 5. Box বলে 24.",
-  "প্রথমটাকে ওর length 5 দিয়ে divide করি. Arrow ছোট হয়ে 1, number হয় 4.8.",
+  "(3, 4) আর (4, 3), দুইটারই length 5। Dot product বলে 24.",
+  "প্রথমটাকে ওর length 5 দিয়ে divide করি। Arrow ছোট হয়ে 1, number হয় 4.8.",
   "দ্বিতীয়টার length ও বাদ দেই: 0.96.",
-  "Length বাদ গেলো, কিন্তু angle এক চুলও নড়লো না. যা বাকি থাকলো, সেটাই cosine similarity.",
+  "Length বাদ গেলো, কিন্তু angle এক চুলও নড়লো না। যা বাকি থাকলো, সেটাই cosine similarity।",
 ];
 
 export function ShaveLengths() {
@@ -1168,10 +1168,10 @@ const X3P_WORDS = [
   ["0.09", "−0.31", "0.47"],
 ];
 const X3P_SAY = [
-  "দুইটা slot হলে চাঁদা দিয়েই angle মাপা যায়.",
-  "কিন্তু সোমের phone এ প্রতিটা word হলো 300 slot এর একটা list.",
-  "300 slot এর কোনো ছবি আঁকা যায় না. চাঁদা বসাবেন কোথায়?",
-  "Formula টা তারপরও কাজ করে: box ÷ দুইটা length = 0.94. মানে word দুইটার মাঝে 20° angle.",
+  "দুইটা slot হলে চাঁদা দিয়েই angle মাপা যায়।",
+  "কিন্তু সোমের phone এ প্রতিটা word হলো 300 slot এর একটা list।",
+  "300 slot এর কোনো ছবি আঁকা যায় না। চাঁদা বসাবেন কোথায়?",
+  "Formula টা তারপরও কাজ করে: dot product ÷ দুইটা length = 0.94. মানে word দুইটার মাঝে 20° angle।",
 ];
 
 function X3Protractor({ crossed }: { crossed: boolean }) {
@@ -1229,10 +1229,10 @@ const X4_SPAN = 244;
 const x4Top = (deg: number) => X4_X0 + (deg / 180) * X4_SPAN;
 const x4Bot = (deg: number) => X4_X0 + ((1 - Math.cos((deg * Math.PI) / 180)) / 2) * X4_SPAN;
 const X4_SAY = [
-  "উপরের line এ angle, 0° থেকে 180°. নিচের line এ তার cos, 1 থেকে −1.",
-  "প্রতি 15° তে একটা সুতা. Angle সমান তালে বাড়ে, কিন্তু cos দুই মাথায় গিয়ে জমে যায়.",
-  "0.9 শুনে মনে হয় 90 percent match. আসলে মাঝে 26° angle.",
-  "0.5 মানেও অর্ধেক match না. মাঝে 60°. তাই percentage হিসাবে পড়বেন না. দেখুন কে আগে, কে পরে.",
+  "উপরের line এ angle, 0° থেকে 180°। নিচের line এ তার cos, 1 থেকে −1।",
+  "প্রতি 15° তে একটা সুতা। Angle সমান তালে বাড়ে, কিন্তু cos দুই মাথায় গিয়ে জমে যায়।",
+  "0.9 শুনে মনে হয় 90 percent match। আসলে মাঝে 26° angle।",
+  "0.5 মানেও অর্ধেক match না। মাঝে 60°। তাই percentage হিসাবে পড়বেন না। দেখুন কে আগে, কে পরে।",
 ];
 const X4_ENDS: [number, string][] = [
   [1, "1"],
@@ -1296,11 +1296,11 @@ export function UnevenScale() {
 const X4S_DEG = [60, 0, 90, 180];
 const X4S_COS = ["0.5", "1", "0", "−1"];
 const X4S_SAY = [
-  "আবার সেই ছাদের stick, 60° তে. Shadow টা stick এর অর্ধেক.",
-  "শুইয়ে দিলে shadow পুরা stick এর সমান. এর চেয়ে বড় কখনো হয় না.",
-  "খাড়া করে দিলে shadow 0.",
-  "উল্টা দিকে শুইয়ে দিলে shadow পড়ে পেছনে. পুরা stick: −1.",
-  "তাই shadow ÷ stick সবসময় −1 আর 1 এর মধ্যে. বইয়ে এর নাম Cauchy–Schwarz inequality.",
+  "আবার সেই ছাদের stick, 60° তে। Shadow টা stick এর অর্ধেক।",
+  "শুইয়ে দিলে shadow পুরা stick এর সমান। এর চেয়ে বড় কখনো হয় না।",
+  "খাড়া করে দিলে shadow 0।",
+  "উল্টা দিকে শুইয়ে দিলে shadow পড়ে পেছনে। পুরা stick: −1.",
+  "তাই shadow ÷ stick সবসময় −1 আর 1 এর মধ্যে। বইয়ে এর নাম Cauchy–Schwarz inequality.",
 ];
 
 export function ShadowCap() {
@@ -1332,10 +1332,10 @@ export function ShadowCap() {
 
 const X5_T = 6;
 const X5_SAY = [
-  "মামার card, (2, 5).",
-  "দুইটা slot কেই square করি: 2 × 2 = 4, আর 5 × 5 = 25.",
-  "যোগ করলে 29.",
-  "29 এর root প্রায় 5.39. Square না করে যোগ করলে আসে 7. ওটা ভুল.",
+  "মামার card, (2, 5)।",
+  "দুইটা slot কেই square করি: 2 × 2 = 4, আর 5 × 5 = 25।",
+  "যোগ করলে 29।",
+  "29 এর root প্রায় 5.39. Square না করে যোগ করলে আসে 7। ওটা ভুল।",
 ];
 
 function X5Tiles({ n, x, fill }: { n: number; x: number; fill: string }) {
@@ -1392,13 +1392,13 @@ export function WasItWrong({}: Story) {
 
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="room" label="মামা থেমে গেলেন. আগে যা করলাম, সেটা কি ভুল ছিল? ফাহিম বললো, ভুল না, unfinished. তারপর phone এ মামা আর Titanic এর 3.71 দেখালো.">
+      <Stage backdrop="room" label="মামা থেমে গেলেন। আগে যা করলাম, সেটা কি ভুল ছিল? ফাহিম বললো, ভুল না, unfinished। তারপর phone এ মামা আর Titanic এর 3.71 দেখালো।">
         <C_Sofa x={166} y={C_Y} w={140} />
         <Person who="mama" x={S5_MAMA} y={C_Y} mood={k >= 1 && k < 3 ? "puzzled" : "plain"} label />
         <Person who="fahim" x={S5_FAHIM} y={C_Y} facing={-1} arm={k >= 3 ? "hold" : "down"} mood={k === 2 ? "happy" : "plain"} label />
         {k >= 3 && <C_Phone x={S5_FAHIM - 19} y={C_Y - 47} lit />}
         {k === 1 && <Bubble x={S5_MAMA} y={C_Y - 66} lines={["তাহলে আগে যা করলাম,", "সেটা কি ভুল?"]} />}
-        {k === 2 && <Bubble x={S5_FAHIM} y={C_Y - 66} lines={["ভুল না, তবে অসম্পূর্ণ."]} />}
+        {k === 2 && <Bubble x={S5_FAHIM} y={C_Y - 66} lines={["ভুল না, তবে অসম্পূর্ণ।"]} />}
         {k >= 3 && <CastCard x={S5_FAHIM} y={C_Y - 80} text="Titanic: 3.71" tone="amber" />}
       </Stage>
     </StoryFrame>
@@ -1414,9 +1414,9 @@ export function WasItWrong({}: Story) {
 const X5O_MAX = 6;
 const X5O_SAY = [
   "আগের lesson এর rule এ মামার দুইটা movie: Mr. Bean 5.34, Titanic 3.71.",
-  "দুইটাকেই মামার একটাই length, 5.39 দিয়ে divide করি. Number ছোট হয়, কিন্তু order একই থাকে.",
+  "দুইটাকেই মামার একটাই length, 5.39 দিয়ে divide করি। Number ছোট হয়, কিন্তু order একই থাকে।",
   "এবার দুইজন আলাদা মানুষ: মামার 5.34, মামির 4.09.",
-  "এদের divide করতে হয় আলাদা length দিয়ে, 5.39 আর 4.12. তাই এই দুইটা number পাশাপাশি রেখে compare করা যায় না.",
+  "এদের divide করতে হয় আলাদা length দিয়ে, 5.39 আর 4.12. তাই এই দুইটা number পাশাপাশি রেখে compare করা যায় না।",
 ];
 
 function X5Bar({ name, v, shown, tone, cut }: { name: string; v: number; shown: string; tone: "teal" | "violet"; cut?: string }) {
@@ -1477,12 +1477,12 @@ export function NanuComes({}: Story) {
 
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="room" label="নানু এসে সোফার পাশে দাঁড়ালেন. পাশে মামা আর মামি. নানু বললেন, আমিও cinema দেখবো, আমাকেও একটা দে. নানুর card এ (0, 0).">
+      <Stage backdrop="room" label="নানু এসে সোফার পাশে দাঁড়ালেন। পাশে মামা আর মামি। নানু বললেন, আমিও cinema দেখবো, আমাকেও একটা দে। নানুর card এ (0, 0)।">
         <C_Sofa x={S6_SOFA} y={C_Y} w={104} />
         <Person who="mama" x={70} y={C_Y} label />
         <Person who="mami" x={128} y={C_Y} label />
         <C_Nanu x={k >= 1 ? S6_SOFA : 360} y={C_Y} facing={-1} walking={k === 1} ms={1600} happy={k >= 2} />
-        {k === 2 && <Bubble x={S6_SOFA} y={C_Y - 66} lines={["আমিও cinema দেখবো.", "আমাকেও একটা দে."]} />}
+        {k === 2 && <Bubble x={S6_SOFA} y={C_Y - 66} lines={["আমিও cinema দেখবো।", "আমাকেও একটা দে।"]} />}
         {k >= 3 && <CastCard x={S6_SOFA} y={C_Y - 80} text="(0, 0)" tone="amber" />}
       </Stage>
     </StoryFrame>
@@ -1498,11 +1498,11 @@ const X6_F = makeFrame(-2.6, 2.6, -1.4, 5.4, 16, 6);
 const X6_S = [1, 0.5, 0.15, 0];
 const X6_AT = ["(2, 5)", "(1, 2.5)", "(0.3, 0.75)", "(0, 0)"];
 const X6_SAY = [
-  "মামার arrow, (2, 5). কোন দিকে point করছে, পরিষ্কার.",
-  "অর্ধেক করি: (1, 2.5). ছোট হলো, কিন্তু direction একই.",
-  "আরো ছোট. এখনো সেই একই দিকে point করছে.",
-  "(0, 0) তে এসে arrow ই আর নাই. এখন কোন দিকে point করছে?",
-  "Direction নাই, তাই angle ও নাই. হিসাবটা হয়ে যায় 0 দিয়ে divide, আর code বলে NaN.",
+  "মামার arrow, (2, 5)। কোন দিকে point করছে, পরিষ্কার।",
+  "অর্ধেক করি: (1, 2.5). ছোট হলো, কিন্তু direction একই।",
+  "আরো ছোট। এখনো সেই একই দিকে point করছে।",
+  "(0, 0) তে এসে arrow ই আর নাই। এখন কোন দিকে point করছে?",
+  "Direction নাই, তাই angle ও নাই। হিসাবটা হয়ে যায় 0 দিয়ে divide, আর code বলে NaN।",
 ];
 
 export function ShrinkToNothing() {
@@ -1567,7 +1567,7 @@ export function NanRanking() {
 
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="room" label="TV তে নানুর ranking. একটার পর একটা row তে NaN. তারপর ফাহিম নানুর জন্য ছেড়ে দিলো গোলাপী এখন ট্রেনে. সাদা কালো movie. নানুর মুখে হাসি.">
+      <Stage backdrop="room" label="TV তে নানুর ranking। একটার পর একটা row তে NaN। তারপর ফাহিম নানুর জন্য ছেড়ে দিলো গোলাপী এখন ট্রেনে। সাদা কালো movie। নানুর মুখে হাসি।">
         <C_TV x={96} y={C_Y} w={124} h={70}>
           {!film ? (
             <g>
@@ -1616,9 +1616,9 @@ export function NanRanking() {
 const X7_F = makeFrame(-0.3, 5.4, -0.3, 5.4, 15, 6);
 const X7_SAY = [
   "মামা আর Mr. Bean পেলো 5.34, মামি আর Titanic 4.09.",
-  "কিন্তু দুই pair এরই মাঝের angle একই, প্রায় 8°.",
-  "সবার length সমান করে দেই. গলার জোর বাদ. Angle দুইটা একদম সমান.",
-  "তাই দুই pair ই পায় 0.991. মামার বাড়তি number টা পুরাটাই গলার জোর.",
+  "কিন্তু দুই pair এরই মাঝের angle একই, প্রায় 8°।",
+  "সবার length সমান করে দেই। গলার জোর বাদ। Angle দুইটা একদম সমান।",
+  "তাই দুই pair ই পায় 0.991. মামার বাড়তি number টা পুরাটাই গলার জোর।",
 ];
 
 function X7Pair({ a, b, tone, arms, score, k }: { a: XY; b: XY; tone: "teal" | "violet"; arms: number[]; score: string; k: number }) {
@@ -1672,9 +1672,9 @@ export function SameWedge() {
 
 const X7M_SAY = [
   "একটা pair: মামা (2, 5) আর Mr. Bean (1, 4).",
-  "মামার slot দুইটা swap করি: (5, 2). এটা তো Titanic.",
-  "Mr. Bean এর slot দুইটা swap করি: (4, 1). এটা মামি.",
-  "একটা pair আরেকটা pair এর mirror image. Mirror angle change করে না. তাই cosine ও change হয় না.",
+  "মামার slot দুইটা swap করি: (5, 2)। এটা তো Titanic।",
+  "Mr. Bean এর slot দুইটা swap করি: (4, 1)। এটা মামি।",
+  "একটা pair আরেকটা pair এর mirror image. Mirror angle change করে না। তাই cosine ও change হয় না।",
 ];
 
 function X7Swap({ name, v, flipped, becomes }: { name: string; v: XY; flipped: boolean; becomes: string }) {
@@ -1724,10 +1724,10 @@ export function MirrorSlots() {
 //     clear gap.
 
 const X8_SAY = [
-  "সামিন (1, 3). হাতে দুইটা movie: b = (4, 2), c = (2, 3).",
-  "Box দিয়ে 10 vs 11. প্রায় tie.",
-  "Cosine দিয়ে 0.707 vs 0.965. পরিষ্কার gap.",
-  "b এর সাথে angle 45°, c এর সাথে প্রায় 15°. সামিনকে c দিন.",
+  "সামিন (1, 3)। হাতে দুইটা movie: b = (4, 2), c = (2, 3)।",
+  "Dot product দিয়ে 10 vs 11। প্রায় tie।",
+  "Cosine দিয়ে 0.707 vs 0.965. পরিষ্কার gap।",
+  "b এর সাথে angle 45°, c এর সাথে প্রায় 15°। সামিনকে c দিন।",
 ];
 
 function X8Bars({ title, rows, max }: { title: string; rows: [string, number, string][]; max: number }) {
@@ -1756,7 +1756,7 @@ export function BoxVsCos() {
       <div className="mx-auto grid min-h-[7rem] max-w-xs content-start gap-2">
         {k >= 1 && (
           <X8Bars
-            title="box"
+            title="dot product"
             max={11}
             rows={[
               ["b", 10, "10"],
@@ -1790,7 +1790,7 @@ export function TeaForTwo({}: Story) {
 
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="room" label="সকাল. মামা আর মামি, দুইজনেরই cosine 0.991. দুইজন একসাথে চা বানাচ্ছেন.">
+      <Stage backdrop="room" label="সকাল। মামা আর মামি, দুইজনেরই cosine 0.991. দুইজন একসাথে চা বানাচ্ছেন।">
         <rect x={130} y={112} width={60} height={6} rx={2} fill="#92400e" />
         <path d="M136 118V150M184 118V150" stroke="#78350f" strokeWidth={3} />
         <path d="M150 112q0 -14 10 -14t10 14Z" fill="#e11d48" />
@@ -1838,7 +1838,7 @@ export function GunTana({}: Story) {
 
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="field" ground={108} label="নদীর পাড় দিয়ে দুই মাঝি হেঁটে যাচ্ছে. লম্বা দড়ি দিয়ে নৌকার গুন টানছে. মাঝি চাচা বললেন, দড়ি লম্বা যত বেশি হইবো, টানা তত কম লাগবো. নৌকায় বসে ফাহিম দড়িটার দিকে তাকিয়ে আছে.">
+      <Stage backdrop="field" ground={108} label="নদীর পাড় দিয়ে দুই মাঝি হেঁটে যাচ্ছে। লম্বা দড়ি দিয়ে নৌকার গুন টানছে। মাঝি চাচা বললেন, দড়ি লম্বা যত বেশি হইবো, টানা তত কম লাগবো। নৌকায় বসে ফাহিম দড়িটার দিকে তাকিয়ে আছে।">
         <rect y={132} width={320} height={48} fill="#60a5fa" />
         <path d="M0 132H320" stroke="#3b82f6" strokeWidth={1.5} />
         <path d="M20 150q10 -3 20 0M120 166q10 -3 20 0M250 158q10 -3 20 0" fill="none" stroke="#dbeafe" strokeWidth={1.2} />
@@ -1853,7 +1853,7 @@ export function GunTana({}: Story) {
         <Person who="fahim" x={38 + dx} y={148} scale={0.7} ms={2200} mood={k >= 3 ? "puzzled" : "plain"} />
         <Person who="karim" x={196 + dx} y={S9_BANK} scale={0.85} walking={pull} ms={2200} arm="hold" />
         <Person who="karim" x={236 + dx} y={S9_BANK} scale={0.85} walking={pull} ms={2200} arm="hold" />
-        {k === 2 && <Bubble x={196 + dx} y={S9_BANK - 58} lines={["দড়ি লম্বা যত বেশি হইবো,", "টানা তত কম লাগবো."]} />}
+        {k === 2 && <Bubble x={196 + dx} y={S9_BANK - 58} lines={["দড়ি লম্বা যত বেশি হইবো,", "টানা তত কম লাগবো।"]} />}
         {k >= 3 && <Bubble x={38 + dx} y={148 - 46} side="right" tone="think" lines={["দড়ি লম্বা হলেই", "কম টানা লাগবে?"]} />}
       </Stage>
     </StoryFrame>
@@ -1918,7 +1918,7 @@ export function RecipeRecall() {
       2,
       () => {
         setOver(true);
-        if (i === R0_RIGHT) pass("দুইটা length গুণ, সাথে angle এর cos.");
+        if (i === R0_RIGHT) pass("দুইটা length গুণ, সাথে angle এর cos।");
         else setMiss((m) => m + 1);
       },
       pick === null ? 1 : 0,
@@ -1961,10 +1961,10 @@ export function RecipeRecall() {
       </div>
       {over && pick !== null && pick !== R0_RIGHT && (
         <Nope key={miss}>
-          Shadow নাই, তাই v · w হলো 0. কিন্তু এই formula টা একটুও নড়লো না. Hint: দুইটা length, আর shadow এর জন্য একটা angle.
+          Shadow নাই, তাই v · w হলো 0। কিন্তু এই formula টা একটুও নড়লো না। Hint: দুইটা length, আর shadow এর জন্য একটা angle।
         </Nope>
       )}
-      <Task done={won}>একটা formula বেছে নিন, তারপর stick টাকে খাড়া হতে দেখুন. ঠিকটা shadow এর সাথে সাথে নড়বে.</Task>
+      <Task done={won}>একটা formula বেছে নিন, তারপর stick টাকে খাড়া হতে দেখুন। ঠিকটা shadow এর সাথে সাথে নড়বে।</Task>
     </div>
   );
 }
@@ -2018,7 +2018,7 @@ export function DoubleTitanic() {
       3,
       () => {
         setOver(true);
-        if (i === D1_RIGHT) pass("Double মানে লম্বা, কিন্তু direction একই.");
+        if (i === D1_RIGHT) pass("Double মানে লম্বা, কিন্তু direction একই।");
         else setMiss((m) => m + 1);
       },
       pick === null ? 1 : 0,
@@ -2065,10 +2065,10 @@ export function DoubleTitanic() {
       </div>
       {over && pick !== null && pick !== D1_RIGHT && (
         <Nope key={miss}>
-          Double আসলে (10, 4), (5, 2) এর line এর উপরেই. Hint: দুইটা slot ই double করলে drama আর comedy এর মধ্যে কি angle এর কোনো difference চোখে পড়ে?
+          Double আসলে (10, 4), (5, 2) এর line এর উপরেই। Hint: দুইটা slot ই double করলে drama আর comedy এর মধ্যে কি angle এর কোনো difference চোখে পড়ে?
         </Nope>
       )}
-      <Task done={won}>একটা answer tap করুন, আর দেখুন arrow টা কোথায় যায়.</Task>
+      <Task done={won}>একটা answer tap করুন, আর দেখুন arrow টা কোথায় যায়।</Task>
     </div>
   );
 }
@@ -2118,7 +2118,7 @@ export function TapeMama() {
 
   return (
     <div className="mt-1">
-      <Q>মামার card এ (2,5) লেখা. এটার length কত?</Q>
+      <Q>মামার card এ (2,5) লেখা। এটার length কত?</Q>
       <div className="mt-2 flex items-center gap-3">
         <svg viewBox={`0 0 ${f.W} ${f.H}`} className="block h-auto w-full max-w-[6.5rem] shrink-0" aria-label="মামার arrow (2, 5), আর পাশে বেছে নেয়া answer এর সমান লম্বা একটা tape">
           <C_Sheet f={f} />
@@ -2159,10 +2159,10 @@ export function TapeMama() {
       </div>
       {over && pick !== null && pick !== T5_RIGHT && (
         <Nope key={miss}>
-          Tape টা arrow ছাড়িয়ে গেলো.{pick === 0 ? " 7 হলো grid ধরে 2 ঘর ডানে আর 5 ঘর উপরে হাঁটা." : ""} Hint: square, add, root: 4 + 25.
+          Tape টা arrow ছাড়িয়ে গেলো।{pick === 0 ? " 7 হলো grid ধরে 2 ঘর ডানে আর 5 ঘর উপরে হাঁটা।" : ""} Hint: square, add, root: 4 + 25.
         </Nope>
       )}
-      <Task done={won}>একটা length tap করুন. Tape টা arrow এর মাথায় গিয়ে থামে কিনা দেখুন.</Task>
+      <Task done={won}>একটা length tap করুন। Tape টা arrow এর মাথায় গিয়ে থামে কিনা দেখুন।</Task>
     </div>
   );
 }
@@ -2215,7 +2215,7 @@ export function SaminPick() {
 
   return (
     <div className="mt-1">
-      <Q>সামিনের পছন্দ a = (1, 3). হাতে দুইটা movie আছে: b = (4, 2) আর c = (2, 3). Cosine similarity হিসাব করলে, কোনটা সামিনের জন্য pick করবেন?</Q>
+      <Q>সামিনের পছন্দ a = (1, 3)। হাতে দুইটা movie আছে: b = (4, 2) আর c = (2, 3)। Cosine similarity হিসাব করলে, কোনটা সামিনের জন্য pick করবেন?</Q>
       <div className="mt-2 flex items-center gap-2">
       <svg viewBox={`0 0 ${f.W} ${f.H}`} className="block h-auto w-full max-w-[9.5rem] shrink-0" aria-label="সামিনের arrow (1, 3), movie b (4, 2) আর movie c (2, 3), আর সামিন আর বেছে নেয়া movie এর মাঝের angle">
         <C_Sheet f={f} />
@@ -2255,10 +2255,10 @@ export function SaminPick() {
       </div>
       {over && pick !== null && pick !== S8_RIGHT && (
         <Nope key={miss}>
-          {pick === 0 ? "b এর wedge টা c এর চাইতে অনেক চওড়া." : "দুইটা wedge তো সমান না."} একটা hint: First এ ,a আর b কে box এ pass করবো. box যে number দিবে ওটাকে a আর b এর length দিয়ে ভাগ করবো. সামিন এর length √10.
+          {pick === 0 ? "b এর wedge টা c এর চাইতে অনেক চওড়া।" : "দুইটা wedge তো সমান না।"} একটা hint: First এ ,a আর b এর dot product করবো। Dot product যে number দিবে ওটাকে a আর b এর length দিয়ে ভাগ করবো। সামিন এর length √10।
         </Nope>
       )}
-      <Task done={won}>একটা answer tap করুন, আর সামিনের সাথে movie এর angle টা খুলে যেতে দেখুন.</Task>
+      <Task done={won}>একটা answer tap করুন, আর সামিনের সাথে movie এর angle টা খুলে যেতে দেখুন।</Task>
     </div>
   );
 }
@@ -2272,10 +2272,10 @@ export function SaminPick() {
 const X4C_F = makeFrame(0, 12.6, 0, 12.6, 8, 6);
 const X4C_BOX = [24, 48, 72, 72];
 const X4C_SAY = [
-  "(3, 4) আর (4, 3). Box বলে 24, cosine 0.96.",
-  "প্রথম arrow টা double করি: (6, 8). Box এখন 48. Cosine সেই 0.96.",
-  "তিনগুণ: (9, 12). Box 72, বেড়েই চলেছে. Cosine এক চুলও নড়ে না.",
-  "Box এর number এর কোনো fixed range নাই. Cosine থাকে −1 থেকে 1 এর মধ্যেই.",
+  "(3, 4) আর (4, 3)। Dot product বলে 24, cosine 0.96.",
+  "প্রথম arrow টা double করি: (6, 8)। Dot product এখন 48. Cosine সেই 0.96.",
+  "তিনগুণ: (9, 12)। Dot product 72, বেড়েই চলেছে। Cosine এক চুলও নড়ে না।",
+  "Dot product এর number এর কোনো fixed range নাই। Cosine থাকে −1 থেকে 1 এর মধ্যেই।",
 ];
 
 export function NoCeiling({}: Story) {
@@ -2296,7 +2296,7 @@ export function NoCeiling({}: Story) {
         <div className="grid min-w-0 flex-1 gap-3">
           <div>
             <div className="flex items-baseline justify-between text-xs text-muted">
-              <span>box</span>
+              <span>dot product</span>
               <b key={box} className={`${POP} inline-block font-mono text-sm text-foreground`}>
                 {box}
               </b>
@@ -2332,10 +2332,10 @@ export function NoCeiling({}: Story) {
 //      them stays put, and cos θ is all that's left.
 
 const X2L_SAY = [
-  "Box এর number এ তিনটা জিনিস গুণ হয়: দুইটা length আর cos θ.",
-  "আগের lesson এ film এর length 1 করে দিয়েছিলাম.",
-  "এবার মামার length ও 1 করে দেই.",
-  "দুইটা length নাই হয়ে গেলো. Angle টা যেমন ছিল তেমনই আছে. বাকি শুধু cos θ.",
+  "Dot product এর number এ তিনটা জিনিস গুণ হয়: দুইটা length আর cos θ।",
+  "আগের lesson এ film এর length 1 করে দিয়েছিলাম।",
+  "এবার মামার length ও 1 করে দেই।",
+  "দুইটা length নাই হয়ে গেলো। Angle টা যেমন ছিল তেমনই আছে। বাকি শুধু cos θ।",
 ];
 
 export function TwoLengthsOff() {
@@ -2394,9 +2394,9 @@ export function TwoLengthsOff() {
 
 const X5W_F = makeFrame(-0.3, 2.6, -0.3, 5.4, 19, 6);
 const X5W_SAY = [
-  "মামার card, (2, 5).",
-  "Grid ধরে হাঁটলে, আগে 2 ঘর ডানে.",
-  "তারপর 5 ঘর উপরে. মোট 7. এটাই manhattan distance.",
+  "মামার card, (2, 5)।",
+  "Grid ধরে হাঁটলে, আগে 2 ঘর ডানে।",
+  "তারপর 5 ঘর উপরে। মোট 7। এটাই manhattan distance.",
   "কিন্তু arrow এর length মানে সোজা পথটা: 5.39.",
 ];
 
@@ -2436,7 +2436,7 @@ export function CornerWalk() {
 //      the cosine left as "?".
 
 const X8Q_F = makeFrame(-2.5, 1.5, -4.5, 2.5, 16, 6);
-const X8Q_SAY = ["(1, 2).", "আর (−2, −4).", "এদের cosine কত হবে?"];
+const X8Q_SAY = ["(1, 2).", "আর (−2, −4)।", "এদের cosine কত হবে?"];
 
 export function OppositeAsk() {
   const s = useScene(2, [600, 1500]);

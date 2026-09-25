@@ -544,14 +544,14 @@ export function TruckDay({}: Story) {
         <CastPerson who="karim" x={136} y={S1_G} scale={0.8} mood={k === 1 ? "smug" : "plain"} arm={k === 1 ? "point" : "down"} />
         <Stall x={136} y={S1_G} sign="button 50 টাকা" color="#0d9488" w={78} />
         <MvTag x={136} y={S1_G + 12} name="দোকানদার" />
-        {k === 0 && <Bubble x={72} y={S1_G - 34} side="right" lines={["আধা ঘণ্টার মইধ্যে", "মাল নামান, ভাই."]} />}
-        {k === 1 && <Bubble x={136} y={S1_G - 70} side="mid" lines={["button যত বেশি,", "ঝামেলা তত কম."]} />}
+        {k === 0 && <Bubble x={72} y={S1_G - 34} side="right" lines={["আধা ঘণ্টার মইধ্যে", "মাল নামান, ভাই।"]} />}
+        {k === 1 && <Bubble x={136} y={S1_G - 70} side="mid" lines={["button যত বেশি,", "ঝামেলা তত কম।"]} />}
         <CastPerson who="nasib" x={k >= 2 ? 214 : 360} y={S1_G} facing={-1} walking={k === 2} mood="smug" arm={k === 2 ? "point" : "down"} />
         {k >= 2 && <MvTag x={214} y={S1_G + 12} name="নাসিব" />}
-        {k === 2 && <Bubble x={214} y={S1_G - 66} side="mid" lines={["ঠিক দিকে তাক করা", "একটা button ই যথেষ্ট."]} />}
+        {k === 2 && <Bubble x={214} y={S1_G - 66} side="mid" lines={["ঠিক দিকে তাক করা", "একটা button ই যথেষ্ট।"]} />}
         <CastPerson who="som" x={k >= 3 ? 276 : 380} y={S1_G} facing={-1} walking={k === 3} mood={k === 3 ? "happy" : "plain"} />
         {k >= 3 && <MvTag x={276} y={S1_G + 12} name="সোম" />}
-        {k === 3 && <Bubble x={276} y={S1_G - 66} side="left" lines={["যেভাবেই বানাও,", "সংখ্যা একই থাকবে."]} />}
+        {k === 3 && <Bubble x={276} y={S1_G - 66} side="left" lines={["যেভাবেই বানাও,", "সংখ্যা একই থাকবে।"]} />}
         {k >= 4 && (
           <g className={POP}>
             <MvDrone at={[236, 44]} />
@@ -607,7 +607,7 @@ export function FewestButtons() {
 
   const seal = () => {
     setSealed(true);
-    pass("বাজি ধরা হলো. এবার button খোলা শুরু.");
+    pass("বাজি ধরা হলো। এবার button খোলা শুরু।");
   };
 
   return (
@@ -620,7 +620,7 @@ export function FewestButtons() {
       <div className="mt-1.5">
         <CountPick opts={ROOM_OPT} pick={room} sealed={sealed} onPick={setRoom} />
       </div>
-      <div className="mt-3 text-sm font-medium">সোম বলছে, যে-ই বানাক, সবচেয়ে কম সংখ্যাটা একই. তাই কি?</div>
+      <div className="mt-3 text-sm font-medium">সোম বলছে, যে-ই বানাক, সবচেয়ে কম সংখ্যাটা একই। তাই কি?</div>
       <div className="mt-1.5 flex flex-wrap justify-center gap-2">
         {SOM_OPT.map((o, i) => (
           <button
@@ -641,9 +641,9 @@ export function FewestButtons() {
           </button>
         </div>
       ) : (
-        <div className={`${FADE} mt-3 text-center text-[0.95rem] text-muted`}>বাজি ধরা হয়ে গেলো. দিনের শেষে খুলে দেখবো.</div>
+        <div className={`${FADE} mt-3 text-center text-[0.95rem] text-muted`}>বাজি ধরা হয়ে গেলো। দিনের শেষে খুলে দেখবো।</div>
       )}
-      <Task done={sealed}>তিনটা প্রশ্নেরই উত্তর বেছে নিন, তারপর বাজি ধরুন.</Task>
+      <Task done={sealed}>তিনটা প্রশ্নেরই উত্তর বেছে নিন, তারপর বাজি ধরুন।</Task>
     </>
   );
 }
@@ -653,16 +653,16 @@ export function FewestButtons() {
 //      side, each with its remote, and a "?" stamped on every one.
 
 const X1_SAY = [
-  "তিনজন মানুষ, একটা remote নিয়ে তিন রকম কথা.",
-  "দোকানদার: button যত বেশি, তত নিরাপদ.",
-  "নাসিব: ঠিক দিকে তাক করলে একটা button ই যথেষ্ট.",
-  "সোম: যেভাবেই বানান, গুনলে সংখ্যা একই আসবে.",
-  "তিনজন একসাথে ঠিক হতে পারে না. কে ঠিক? আজকের প্রশ্ন এটাই.",
+  "তিনজন মানুষ, একটা remote নিয়ে তিন রকম কথা।",
+  "দোকানদার: button যত বেশি, তত নিরাপদ।",
+  "নাসিব: ঠিক দিকে তাক করলে একটা button ই যথেষ্ট।",
+  "সোম: যেভাবেই বানান, গুনলে সংখ্যা একই আসবে।",
+  "তিনজন একসাথে ঠিক হতে পারে না। কে ঠিক? আজকের প্রশ্ন এটাই।",
 ];
 const X1_CLAIMS: { who: string; lines: string[]; n: number }[] = [
-  { who: "দোকানদার", lines: ["যত বেশি,", "তত নিরাপদ."], n: 6 },
-  { who: "নাসিব", lines: ["একটা button,", "ঠিক দিকে."], n: 1 },
-  { who: "সোম", lines: ["সংখ্যা একই,", "যে-ই বানাক."], n: 2 },
+  { who: "দোকানদার", lines: ["যত বেশি,", "তত নিরাপদ।"], n: 6 },
+  { who: "নাসিব", lines: ["একটা button,", "ঠিক দিকে।"], n: 1 },
+  { who: "সোম", lines: ["সংখ্যা একই,", "যে-ই বানাক।"], n: 2 },
 ];
 
 export function ThreeCards() {
@@ -713,11 +713,11 @@ export function ThreeCards() {
 //      No count is shown as the right one: that is the bet.
 
 const X1B_SAY = [
-  "প্রতিটা button 50 টাকা.",
-  "একটা button বেশি হলে, দাম 50 টাকা বেশি.",
-  "ওই 50 টাকা পানিতে গেলো.",
+  "প্রতিটা button 50 টাকা।",
+  "একটা button বেশি হলে, দাম 50 টাকা বেশি।",
+  "ওই 50 টাকা পানিতে গেলো।",
   "আর একটা button কম হলে?",
-  "কোনো একটা জায়গা নাগালের বাইরে থেকে যায়.",
+  "কোনো একটা জায়গা নাগালের বাইরে থেকে যায়।",
 ];
 const X1B_KEY = ["#2563eb", "#e0664f", "#0d9488"];
 
@@ -846,7 +846,7 @@ export function DropOne() {
     const k1 = saw1 || n === 1;
     setSaw2(k2);
     setSaw1(k1);
-    if (!done && k2 && k1) pass("একটা খুললে কিছুই হারায় না. দুইটা খুললে line.");
+    if (!done && k2 && k1) pass("একটা খুললে কিছুই হারায় না। দুইটা খুললে line।");
   };
 
   return (
@@ -876,7 +876,7 @@ export function DropOne() {
       </div>
       <div key={kept.join()} className={`${FADE} mt-2 text-center text-[0.95rem]`}>
         {keys.length} টা button, {keys.length * 50} টাকা:{" "}
-        <b className={full ? "text-accent-text" : "text-danger"}>{full ? "পুরা floor" : "শুধু একটা line"}</b>, 4 টা দাগের {hit.length} টা.
+        <b className={full ? "text-accent-text" : "text-danger"}>{full ? "পুরা floor" : "শুধু একটা line"}</b>, 4 টা দাগের {hit.length} টা।
       </div>
       <Ticks
         items={[
@@ -884,7 +884,7 @@ export function DropOne() {
           ["দুইটা খুলুন", saw1],
         ]}
       />
-      <Task done={done}>একটা একটা করে button খুলুন. রং আর আম্মুর দাগগুলা খেয়াল করুন.</Task>
+      <Task done={done}>একটা একটা করে button খুলুন। রং আর আম্মুর দাগগুলা খেয়াল করুন।</Task>
     </>
   );
 }
@@ -902,10 +902,10 @@ const X2_REMOTES: { keys: Key[]; extra: boolean; all: boolean }[] = [
 ];
 const X2_ORDER = [0, 2, 1];
 const X2_SAY = [
-  "তিনটা remote. প্রত্যেকের দুইটা কাজ: কিছু বাড়তি না, আর সব জায়গায় পৌঁছানো.",
-  "তিন button: সব জায়গায় পৌঁছায়, কিন্তু একটা button বাড়তি.",
-  "এক button: বাড়তি কিছু নাই, কিন্তু floor এর বেশিরভাগই বাদ.",
-  "দুই button: বাড়তি নাই, সব জায়গায় পৌঁছায়. এটাই basis.",
+  "তিনটা remote। প্রত্যেকের দুইটা কাজ: কিছু বাড়তি না, আর সব জায়গায় পৌঁছানো।",
+  "তিন button: সব জায়গায় পৌঁছায়, কিন্তু একটা button বাড়তি।",
+  "এক button: বাড়তি কিছু নাই, কিন্তু floor এর বেশিরভাগই বাদ।",
+  "দুই button: বাড়তি নাই, সব জায়গায় পৌঁছায়। এটাই basis.",
 ];
 
 function JobLine({ ok, on, text }: { ok: boolean; on: boolean; text: string }) {
@@ -971,7 +971,7 @@ export function FiveOnCounter({}: Story) {
             <MvRemote x={70 + i * 24} y={S1_G - 24 - (8 + n * 9) * 0.75} n={n} s={0.75} />
           </g>
         ))}
-        {k >= 3 && <Bubble x={118} y={S1_G - 72} side="mid" lines={["সবগুলাই ভালো জিনিস.", "নিয়া যান."]} />}
+        {k >= 3 && <Bubble x={118} y={S1_G - 72} side="mid" lines={["সবগুলাই ভালো জিনিস।", "নিয়া যান।"]} />}
         <CastPerson who="fahim" x={240} y={S1_G} facing={-1} mood={k >= 3 ? "puzzled" : "plain"} />
         <MvTag x={240} y={S1_G + 12} name="ফাহিম" />
       </Stage>
@@ -1002,7 +1002,7 @@ const SHOP5: { keys: Key[]; ok: Bin[]; why: string }[] = [
       { name: "v", v: [2, 5], tone: "coral" },
     ],
     ok: ["basis"],
-    why: "দুইটা আলাদা direction, খোলার মতো কিছু নাই.",
+    why: "দুইটা আলাদা direction, খোলার মতো কিছু নাই।",
   },
   {
     keys: [
@@ -1011,16 +1011,16 @@ const SHOP5: { keys: Key[]; ok: Bin[]; why: string }[] = [
       { name: "w", v: [2, 3], tone: "teal" },
     ],
     ok: ["extra"],
-    why: "w = 2 e₁ + 3 e₂. ওটা খুললেও একই floor.",
+    why: "w = 2 e₁ + 3 e₂. ওটা খুললেও একই floor।",
   },
-  { keys: [{ name: "e₁", v: [1, 0], tone: "blue" }], ok: ["misses"], why: "এক button রং করে একটা line." },
+  { keys: [{ name: "e₁", v: [1, 0], tone: "blue" }], ok: ["misses"], why: "এক button রং করে একটা line।" },
   {
     keys: [
       { name: "e₁", v: [1, 0], tone: "blue" },
       { name: "e₂", v: [0, 1], tone: "coral" },
     ],
     ok: ["basis"],
-    why: "একটা east, একটা north. বাড়তিও নাই, বাদও নাই.",
+    why: "একটা east, একটা north। বাড়তিও নাই, বাদও নাই।",
   },
   {
     keys: [
@@ -1028,17 +1028,17 @@ const SHOP5: { keys: Key[]; ok: Bin[]; why: string }[] = [
       { name: "v", v: [2, 2], tone: "coral" },
     ],
     ok: ["extra", "misses"],
-    why: "(2, 2) হলো (1, 1) এর দুইগুণ: বাড়তি, আর শুধু একটা line.",
+    why: "(2, 2) হলো (1, 1) এর দুইগুণ: বাড়তি, আর শুধু একটা line।",
   },
 ];
 const SF = makeFrame(-2, 4, -2, 6, 13, 8);
 
 function shelfNope(right: Bin[], picked: Bin, n: number) {
-  if (picked === "basis" && right.includes("misses")) return "উঁহু. রং টা দেখুন. পুরা floor কি ঢেকেছে?";
-  if (picked === "basis") return "উঁহু. একটা button খুলে ফেললেও কি রং একই থাকে না?";
-  if (picked === "extra" && n === 1) return "উঁহু. Button তো একটাই, খোলার কিছু নাই. রং টা দেখুন.";
-  if (picked === "extra") return "উঁহু. মনে মনে যেকোনো একটা খুলে ফেলুন. রং কি টিকে থাকে?";
-  return "উঁহু. রং তো পুরা floor ঢেকে ফেলেছে. কোন জায়গাটা বাদ গেলো?";
+  if (picked === "basis" && right.includes("misses")) return "উঁহু। রং টা দেখুন। পুরা floor কি ঢেকেছে?";
+  if (picked === "basis") return "উঁহু। একটা button খুলে ফেললেও কি রং একই থাকে না?";
+  if (picked === "extra" && n === 1) return "উঁহু। Button তো একটাই, খোলার কিছু নাই। রং টা দেখুন।";
+  if (picked === "extra") return "উঁহু। মনে মনে যেকোনো একটা খুলে ফেলুন। রং কি টিকে থাকে?";
+  return "উঁহু। রং তো পুরা floor ঢেকে ফেলেছে। কোন জায়গাটা বাদ গেলো?";
 }
 
 /** What a bin tap tests on the plane: take a button off, or check Ammu's marks. */
@@ -1079,10 +1079,10 @@ export function ShopShelf() {
   const readout =
     test === "drop"
       ? isPlane(left) === isPlane(r.keys)
-        ? `${tup(r.keys[di].v)} খুলে দেখি: রং একই রইলো.`
-        : `${tup(r.keys[di].v)} খুলে দেখি: রং চুপসে গেলো.`
+        ? `${tup(r.keys[di].v)} খুলে দেখি: রং একই রইলো।`
+        : `${tup(r.keys[di].v)} খুলে দেখি: রং চুপসে গেলো।`
       : test === "marks"
-        ? `আম্মুর 4 টা দাগের ${hit.length} টা রং এর ভিতরে.`
+        ? `আম্মুর 4 টা দাগের ${hit.length} টা রং এর ভিতরে।`
         : "";
 
   const file = (b: Bin) => {
@@ -1100,7 +1100,7 @@ export function ShopShelf() {
     pl.play(3, () => {
       setFiled(next);
       setProbe(null);
-      if (next.length === SHOP5.length) pass("বেশি হলে বাড়তি. কম হলে জায়গা বাদ.");
+      if (next.length === SHOP5.length) pass("বেশি হলে বাড়তি। কম হলে জায়গা বাদ।");
       else setAt(at + 1);
     });
   };
@@ -1162,7 +1162,7 @@ export function ShopShelf() {
         ))}
         {filed.length > 0 && <div className={`${FADE} text-center text-xs text-muted`}>{SHOP5[filed.length - 1].why}</div>}
       </div>
-      <Task done={done}>পাঁচটা remote ই ঠিক ঘরে রাখুন: basis, বাড়তি button আছে, নাকি জায়গা বাদ পড়ে.</Task>
+      <Task done={done}>পাঁচটা remote ই ঠিক ঘরে রাখুন: basis, বাড়তি button আছে, নাকি জায়গা বাদ পড়ে।</Task>
     </>
   );
 }
@@ -1176,11 +1176,11 @@ const X3_F = makeFrame(-1, 4, -1, 4, 14, 6);
 const X3_FULL = SHOP5[1].keys;
 const X3_THIN: Key[] = [{ name: "u", v: [1, 1], tone: "blue" }];
 const X3_SAY = [
-  "দুইটা remote, দুইটাই ফেল. যার যার নিজের মতো করে.",
-  "বেশি: তিন button, পুরা floor রং হয়েছে.",
-  "কিন্তু w আসলে দুইবার e₁ আর তিনবার e₂. 50 টাকা এমনি এমনি গেলো.",
-  "কম: এক button, একটা line.",
-  "আর খাটের দাগটা বাদ পড়লো. যত চাপই দেন, ওখানে যাওয়া যায় না.",
+  "দুইটা remote, দুইটাই ফেল। যার যার নিজের মতো করে।",
+  "বেশি: তিন button, পুরা floor রং হয়েছে।",
+  "কিন্তু w আসলে দুইবার e₁ আর তিনবার e₂। 50 টাকা এমনি এমনি গেলো।",
+  "কম: এক button, একটা line।",
+  "আর খাটের দাগটা বাদ পড়লো। যত চাপই দেন, ওখানে যাওয়া যায় না।",
 ];
 
 export function TwoFails() {
@@ -1239,11 +1239,11 @@ export function TwoFails() {
 
 const X3B_KEYS = SHOP5[0].keys;
 const X3B_SAY = [
-  "দোকানের basis remote: (1, 2) আর (2, 5). পুরা floor রং.",
-  "(1, 2) খুলে দেখি: রং চুপসে একটা line.",
-  "(2, 5) খুলে দেখি: আবারো একটা line. খোলার মতো কিছু নাই.",
-  "আর আম্মুর চারটা দাগই রং এর ভিতরে. বাকিও কিছু নাই.",
-  "বেশি আর কমের ঠিক মাঝখানে: basis.",
+  "দোকানের basis remote: (1, 2) আর (2, 5)। পুরা floor রং।",
+  "(1, 2) খুলে দেখি: রং চুপসে একটা line।",
+  "(2, 5) খুলে দেখি: আবারো একটা line। খোলার মতো কিছু নাই।",
+  "আর আম্মুর চারটা দাগই রং এর ভিতরে। বাকিও কিছু নাই।",
+  "বেশি আর কমের ঠিক মাঝখানে: basis।",
 ];
 
 export function BasisMiddle() {
@@ -1306,7 +1306,7 @@ export function AnyPairTwo() {
   const done = kept.length >= 3 && tried3;
 
   const finish = (k3: string[], t3: boolean) => {
-    if (!done && k3.length >= 3 && t3) pass("যে-ই বানাক, floor এ লাগে দুইটা.");
+    if (!done && k3.length >= 3 && t3) pass("যে-ই বানাক, floor এ লাগে দুইটা।");
   };
   const down = (p: XY) => {
     let best = -1;
@@ -1346,12 +1346,12 @@ export function AnyPairTwo() {
   };
 
   const flag = basis
-    ? { tone: "text-accent-text", say: "দুইটা direction: পুরা floor, বাড়তি কিছু নাই. Basis." }
+    ? { tone: "text-accent-text", say: "দুইটা direction: পুরা floor, বাড়তি কিছু নাই। Basis." }
     : tips.length === 1
-      ? { tone: "text-danger", say: "এক button: শুধু একটা line. বেশিরভাগ জায়গা বাদ." }
+      ? { tone: "text-danger", say: "এক button: শুধু একটা line। বেশিরভাগ জায়গা বাদ।" }
       : full
-        ? { tone: "text-danger", say: "পুরা floor, কিন্তু একটা button বাড়তি." }
-        : { tone: "text-danger", say: "শুধু একটা line, আর একটা button বাড়তি." };
+        ? { tone: "text-danger", say: "পুরা floor, কিন্তু একটা button বাড়তি।" }
+        : { tone: "text-danger", say: "শুধু একটা line, আর একটা button বাড়তি।" };
 
   return (
     <>
@@ -1403,7 +1403,7 @@ export function AnyPairTwo() {
           ["তিন button", tried3],
         ]}
       />
-      <Task done={done}>Button এর মাথা টেনে সরান. কাজ করে এমন তিনটা আলাদা design রাখুন. আর একবার দেখুন তিন button দিয়ে.</Task>
+      <Task done={done}>Button এর মাথা টেনে সরান। কাজ করে এমন তিনটা আলাদা design রাখুন। আর একবার দেখুন তিন button দিয়ে।</Task>
     </>
   );
 }
@@ -1438,10 +1438,10 @@ const X4_DESIGNS: { who: string; keys: Key[] }[] = [
   },
 ];
 const X4_SAY = [
-  "তিনজন তিনটা floor remote design করলো.",
-  "ফাহিমের টা: east আর north. পুরা floor.",
-  "নাসিবের টা: দুইটা বাঁকা button. পুরা floor.",
-  "সোমের টা: আরেক জোড়া. আবারো পুরা floor.",
+  "তিনজন তিনটা floor remote design করলো।",
+  "ফাহিমের টা: east আর north। পুরা floor.",
+  "নাসিবের টা: দুইটা বাঁকা button। পুরা floor.",
+  "সোমের টা: আরেক জোড়া। আবারো পুরা floor।",
 ];
 
 export function ThreeDesigners() {
@@ -1449,7 +1449,7 @@ export function ThreeDesigners() {
   const k = s.k;
 
   return (
-    <Scene scene={s} caption={k < 3 ? <span key={k} className={FADE}>{X4_SAY[k]}</span> : <span className={FADE}>{X4_SAY[3]} কারো সাথে কারো মিল নাই, কিন্তু সবগুলাতেই ঠিক 2 টা.</span>}>
+    <Scene scene={s} caption={k < 3 ? <span key={k} className={FADE}>{X4_SAY[k]}</span> : <span className={FADE}>{X4_SAY[3]} কারো সাথে কারো মিল নাই, কিন্তু সবগুলাতেই ঠিক 2 টা।</span>}>
       <div className="flex justify-center gap-2">
         {X4_DESIGNS.map((d, i) => (
           <div key={d.who} className={`w-[5.5rem] transition-opacity duration-500 motion-reduce:transition-none ${k >= i + 1 ? "opacity-100" : "opacity-40"}`}>
@@ -1477,10 +1477,10 @@ export function ThreeDesigners() {
 
 const X4B_WHO = ["ফাহিম", "নাসিব", "সোম"];
 const X4B_SAY = [
-  "তিনজনের তিনটা design. গুনলে তিনটাতেই 2.",
-  "সংখ্যাটা কে বানালো তার উপর নির্ভর করে না. ওটা floor এর নিজের.",
-  "এই সংখ্যার নাম dimension. Floor এর dimension 2.",
-  "সোমের কথা টিকে গেলো, অন্তত floor এ. ঘর এখনো বাকি.",
+  "তিনজনের তিনটা design। গুনলে তিনটাতেই 2।",
+  "সংখ্যাটা কে বানালো তার উপর নির্ভর করে না। ওটা floor এর নিজের।",
+  "এই সংখ্যার নাম dimension। Floor এর dimension 2.",
+  "সোমের কথা টিকে গেলো, অন্তত floor এ। ঘর এখনো বাকি।",
 ];
 
 export function FloorsOwnNumber() {
@@ -1533,7 +1533,7 @@ export function FloorsOwnNumber() {
               সংখ্যা একই,
             </text>
             <text x={245} y={54} textAnchor="middle" fontSize={8.5} fontWeight={600} fill="#334155">
-              যে-ই বানাক.
+              যে-ই বানাক।
             </text>
             <g className={POP}>
               <path d="M212 74l4 4 8 -9" stroke="#0f766e" strokeWidth={2} fill="none" strokeLinecap="round" strokeLinejoin="round" />
@@ -1624,12 +1624,12 @@ export function DroneUnderFan({}: Story) {
         <CastPerson who="fahim" x={46} y={S5_G + 16} mood={k === 2 ? "puzzled" : "plain"} arm="hold" />
         <MvTag x={46} y={S5_G + 26} name="ফাহিম" />
         <MvRemote x={70} y={S5_G - 30} n={2} s={0.8} />
-        {k === 1 && <Bubble x={46} y={S5_G - 50} side="right" lines={["Shiku র remote টাই", "লাগিয়ে দেখি."]} />}
-        {k === 2 && <Bubble x={46} y={S5_G - 50} side="right" lines={["উপরে তো", "ওঠেই না."]} />}
+        {k === 1 && <Bubble x={46} y={S5_G - 50} side="right" lines={["Shiku র remote টাই", "লাগিয়ে দেখি।"]} />}
+        {k === 2 && <Bubble x={46} y={S5_G - 50} side="right" lines={["উপরে তো", "ওঠেই না।"]} />}
         <Robot x={86} y={S5_G + 16} />
         <CastPerson who="nasib" x={k >= 3 ? 262 : 360} y={S5_G + 16} facing={-1} walking={k === 3} mood="smug" arm={k >= 3 ? "point" : "down"} />
         {k >= 3 && <MvTag x={262} y={S5_G + 26} name="নাসিব" />}
-        {k >= 3 && <Bubble x={262} y={S5_G - 50} side="left" lines={["ফ্যানের দিকে তাক করা", "একটা button ই যথেষ্ট."]} />}
+        {k >= 3 && <Bubble x={262} y={S5_G - 50} side="left" lines={["ফ্যানের দিকে তাক করা", "একটা button ই যথেষ্ট।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1654,17 +1654,17 @@ export function OneAimed() {
     if (tried.includes(i)) return;
     const next = [...tried, i];
     setTried(next);
-    if (next.length === 2) pass("এক button, এক line. একটা ধরলে আরেকটা ফসকায়.");
+    if (next.length === 2) pass("এক button, এক line। একটা ধরলে আরেকটা ফসকায়।");
   };
 
   const say =
     aim === null
-      ? "নাসিবের button টা ফ্যানের দিকে তাক করুন."
+      ? "নাসিবের button টা ফ্যানের দিকে তাক করুন।"
       : aim === 0
         ? tried.length === 2
-          ? "ফ্যান আবার পাওয়া গেলো. ঝুল আবার line এর বাইরে."
-          : "Drone line ধরে সোজা ফ্যানে. নাসিব ঠিক?"
-        : "ঝুল পাওয়া গেলো. কিন্তু এবার ফ্যান line এর বাইরে.";
+          ? "ফ্যান আবার পাওয়া গেলো। ঝুল আবার line এর বাইরে।"
+          : "Drone line ধরে সোজা ফ্যানে। নাসিব ঠিক?"
+        : "ঝুল পাওয়া গেলো। কিন্তু এবার ফ্যান line এর বাইরে।";
 
   return (
     <>
@@ -1675,10 +1675,10 @@ export function OneAimed() {
       </div>
       {tried.length > 0 && (
         <Speech who="আম্মু" initial="আ" tint="teal">
-          ফ্যান তো হলো. কোনার ঝুলটা?
+          ফ্যান তো হলো। কোনার ঝুলটা?
         </Speech>
       )}
-      <Task done={done}>একটা button দিয়েই ফ্যান আর ঝুল, দুইটাতে পৌঁছানোর চেষ্টা করুন.</Task>
+      <Task done={done}>একটা button দিয়েই ফ্যান আর ঝুল, দুইটাতে পৌঁছানোর চেষ্টা করুন।</Task>
     </>
   );
 }
@@ -1690,10 +1690,10 @@ export function OneAimed() {
 
 const X5A_F = makeFrame(-1, 4, -1, 4, 14, 6);
 const X5A_SAY = [
-  "Floor এ এক button, আর ঘরে এক button.",
-  "Floor এ: এক button মানে একটা line. DropOne এ দেখেছিলেন.",
-  "ঘরেও: এক button মানে একটা line. এবার সেটা ফ্যানের ভিতর দিয়ে যায়.",
-  "Line এর বাইরে যা আছে, যতবারই চাপুন, নাগালের বাইরে.",
+  "Floor এ এক button, আর ঘরে এক button।",
+  "Floor এ: এক button মানে একটা line। DropOne এ দেখেছিলেন।",
+  "ঘরেও: এক button মানে একটা line। এবার সেটা ফ্যানের ভিতর দিয়ে যায়।",
+  "Line এর বাইরে যা আছে, যতবারই চাপুন, নাগালের বাইরে।",
 ];
 
 export function OneLine() {
@@ -1766,11 +1766,11 @@ export function AmmuSpots({}: Story) {
         <S6Room k={k} />
         <CastPerson who="ammu" x={108} y={S5_G + 16} arm={k === 1 || k === 2 ? "point" : "hold"} facing={k === 2 ? 1 : -1} />
         <MvTag x={108} y={S5_G + 26} name="আম্মু" />
-        {k === 1 && <Bubble x={108} y={S5_G - 50} side="mid" lines={["আলমারির মাথা.", "কেউ দেখে নাই."]} />}
-        {k === 2 && <Bubble x={108} y={S5_G - 50} side="right" lines={["ঘড়ির মাথাতেও ধুলা."]} />}
+        {k === 1 && <Bubble x={108} y={S5_G - 50} side="mid" lines={["আলমারির মাথা।", "কেউ দেখে নাই।"]} />}
+        {k === 2 && <Bubble x={108} y={S5_G - 50} side="right" lines={["ঘড়ির মাথাতেও ধুলা।"]} />}
         <CastPerson who="nasib" x={k >= 3 ? 272 : 360} y={S5_G + 16} facing={-1} walking={k === 3} mood="smug" />
         {k >= 3 && <MvTag x={272} y={S5_G + 26} name="নাসিব" />}
-        {k >= 3 && <Bubble x={272} y={S5_G - 50} side="left" lines={["ঠিক আছে, দুইটা button.", "এদিকে একটা, ওদিকে একটা."]} />}
+        {k >= 3 && <Bubble x={272} y={S5_G - 50} side="left" lines={["ঠিক আছে, দুইটা button।", "এদিকে একটা, ওদিকে একটা।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1813,11 +1813,11 @@ export function TwoAimed() {
           <AimChips aimed={aimed} onTap={tap} />
           <div key={pairKey(aimed)} className={`${FADE} mt-1.5 text-center text-[0.9rem]`}>
             {aimed.length < 2 ? (
-              <span className="text-muted">দুইটা spot এ দুইটা button তাক করুন.</span>
+              <span className="text-muted">দুইটা spot এ দুইটা button তাক করুন।</span>
             ) : (
               <>
-                2 টা button, 100 টাকা: একটা sheet. <b className="text-danger">{missed} টা spot বাইরে.</b>
-                {pairs.length === 1 && <span className="text-muted"> এবার অন্য একটা জোড়া.</span>}
+                2 টা button, 100 টাকা: একটা sheet। <b className="text-danger">{missed} টা spot বাইরে।</b>
+                {pairs.length === 1 && <span className="text-muted"> এবার অন্য একটা জোড়া।</span>}
               </>
             )}
           </div>
@@ -1831,7 +1831,7 @@ export function TwoAimed() {
           </Choice>
         ))}
       </div>
-      <Task done={over}>{guess === null ? "আগে একটা guess দিন." : "দুইটা আলাদা জোড়া spot এ button তাক করে দেখুন."}</Task>
+      <Task done={over}>{guess === null ? "আগে একটা guess দিন।" : "দুইটা আলাদা জোড়া spot এ button তাক করে দেখুন।"}</Task>
     </>
   );
 }
@@ -1843,11 +1843,11 @@ export function TwoAimed() {
 
 const X6A_PAIRS: V3[][] = [[E1, E2], [SPOTS[0].at, SPOTS[1].at], [SPOTS[2].at, SPOTS[3].at]];
 const X6A_SAY = [
-  "ঘর, আর আম্মুর চারটা ধুলার spot.",
-  "ফাহিমের floor এর দুই button: sheet টা মেঝেতে শুয়ে আছে. চারটা spot ই উপরে.",
-  "ফ্যান আর ঝুলে তাক করলে sheet হেলে যায়. আলমারি আর ঘড়ি বাইরে.",
-  "আলমারি আর ঘড়িতে তাক করলে হেলে আরেক দিকে. ফ্যান আর ঝুল বাইরে.",
-  "যেভাবেই হেলান, sheet একটা পাতলা পাতাই থাকে. ঘর ভরে না.",
+  "ঘর, আর আম্মুর চারটা ধুলার spot।",
+  "ফাহিমের floor এর দুই button: sheet টা মেঝেতে শুয়ে আছে। চারটা spot ই উপরে।",
+  "ফ্যান আর ঝুলে তাক করলে sheet হেলে যায়। আলমারি আর ঘড়ি বাইরে।",
+  "আলমারি আর ঘড়িতে তাক করলে হেলে আরেক দিকে। ফ্যান আর ঝুল বাইরে।",
+  "যেভাবেই হেলান, sheet একটা পাতলা পাতাই থাকে। ঘর ভরে না।",
 ];
 
 export function SheetTilts() {
@@ -1890,8 +1890,8 @@ export function SomThird({}: Story) {
         <MvRemote x={134} y={S5_G - 30} n={2} s={0.8} />
         <CastPerson who="som" x={k >= 1 ? 236 : 360} y={S5_G + 16} facing={-1} walking={k === 1} mood="plain" arm={k >= 2 ? "point" : "down"} />
         {k >= 1 && <MvTag x={236} y={S5_G + 26} name="সোম" />}
-        {k === 2 && <Bubble x={236} y={S5_G - 50} side="left" lines={["তিন নম্বর button", "লাগবে."]} />}
-        {k >= 3 && <Bubble x={236} y={S5_G - 50} side="left" lines={["যে তিনটাতেই তাক করো,", "সংখ্যা তিনই থাকবে."]} />}
+        {k === 2 && <Bubble x={236} y={S5_G - 50} side="left" lines={["তিন নম্বর button", "লাগবে।"]} />}
+        {k >= 3 && <Bubble x={236} y={S5_G - 50} side="left" lines={["যে তিনটাতেই তাক করো,", "সংখ্যা তিনই থাকবে।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1922,16 +1922,16 @@ export function ThirdButton() {
     const f = tried4 || next.length === 4;
     setTrios(t);
     setTried4(f);
-    if (!done && t.length >= 2 && f) pass("যে তিনটাই হোক, ঘরে লাগে তিনটা.");
+    if (!done && t.length >= 2 && f) pass("যে তিনটাই হোক, ঘরে লাগে তিনটা।");
   };
 
   const say =
     aimed.length === 4
-      ? "4 টা button, 200 টাকা: সেই একই ঘর. একটা বাড়তি."
+      ? "4 টা button, 200 টাকা: সেই একই ঘর। একটা বাড়তি।"
       : r === 3
-        ? "3 টা button, 150 টাকা: পুরা ঘর রং হলো. সব spot পাওয়া গেলো."
+        ? "3 টা button, 150 টাকা: পুরা ঘর রং হলো। সব spot পাওয়া গেলো।"
         : r === 2
-          ? "2 টা button: একটা sheet. আরেকটা spot এ তাক করুন."
+          ? "2 টা button: একটা sheet। আরেকটা spot এ তাক করুন।"
           : "1 টা button: একটা line.";
 
   return (
@@ -1948,7 +1948,7 @@ export function ThirdButton() {
           ["চার button", tried4],
         ]}
       />
-      <Task done={done}>তিনটা button দিয়ে সব spot এ পৌঁছান, দুইটা আলাদা ভাবে. তারপর চার নম্বর একটা লাগিয়ে দেখুন.</Task>
+      <Task done={done}>তিনটা button দিয়ে সব spot এ পৌঁছান, দুইটা আলাদা ভাবে। তারপর চার নম্বর একটা লাগিয়ে দেখুন।</Task>
     </>
   );
 }
@@ -1961,10 +1961,10 @@ export function ThirdButton() {
 const XV = roomView(24);
 const X5_SAY = [
   "East আর north: দুইটা button.",
-  "দুইটা মিলে রং করে একটা flat sheet, মেঝেটা.",
-  "এবার up যোগ করি, তিন নম্বর direction.",
-  "Up এর প্রতিটা চাপ পুরা sheet টাকে এক ধাপ উপরে তোলে.",
-  "Sheet এর উপর sheet, ঘর ভরে যায়. Floor: 2. ঘর: 3.",
+  "দুইটা মিলে রং করে একটা flat sheet, মেঝেটা।",
+  "এবার up যোগ করি, তিন নম্বর direction।",
+  "Up এর প্রতিটা চাপ পুরা sheet টাকে এক ধাপ উপরে তোলে।",
+  "Sheet এর উপর sheet, ঘর ভরে যায়। Floor: 2. ঘর: 3।",
 ];
 
 export function SheetLift() {
@@ -1995,10 +1995,10 @@ export function SheetLift() {
 
 const X7B_SAY = [
   "প্রতিটা space এর কয়টা slot, আর কয়টা button লাগে?",
-  "1 slot: একটা line. লাগে 1 টা button.",
-  "2 slot: floor. লাগে 2 টা.",
-  "3 slot: ঘর. লাগে 3 টা. ঘরের dimension 3.",
-  "n টা slot এর space, ℝⁿ, নেয় ঠিক n টা.",
+  "1 slot: একটা line। লাগে 1 টা button।",
+  "2 slot: floor. লাগে 2 টা।",
+  "3 slot: ঘর। লাগে 3 টা। ঘরের dimension 3.",
+  "n টা slot এর space, ℝⁿ, নেয় ঠিক n টা।",
 ];
 const X7B_HEAD = ["ℝ¹", "ℝ²", "ℝ³", "ℝⁿ"];
 
@@ -2076,13 +2076,13 @@ export function AbbuOrders({}: Story) {
         {Array.from({ length: 7 }, (_, i) => (
           <rect key={i} x={42 + i * 12} y={S6_G - 30} width={9} height={6} rx={1.5} fill={["#2563eb", "#e0664f", "#0d9488", "#d97706", "#64748b", "#7c3aed", "#e11d48"][i]} />
         ))}
-        {k === 2 && <Bubble x={84} y={S6_G - 74} side="right" lines={["সাতটাই নিয়া যান.", "কোনো চিন্তা নাই."]} />}
+        {k === 2 && <Bubble x={84} y={S6_G - 74} side="right" lines={["সাতটাই নিয়া যান।", "কোনো চিন্তা নাই।"]} />}
         <CastPerson who="mama" x={k >= 1 ? 186 : 340} y={S6_G + 16} facing={-1} walking={k === 1} mood="plain" />
         {k >= 1 && <MvTag x={186} y={S6_G + 26} name="আব্বু" />}
-        {k === 1 && <Bubble x={186} y={S6_G - 52} side="mid" lines={["একটাই remote, দুই কাজ.", "যত কমে হয়."]} />}
+        {k === 1 && <Bubble x={186} y={S6_G - 52} side="mid" lines={["একটাই remote, দুই কাজ।", "যত কমে হয়।"]} />}
         <CastPerson who="fahim" x={250} y={S6_G + 16} facing={-1} arm={k >= 3 ? "hold" : "down"} mood={k >= 3 ? "puzzled" : "plain"} />
         <MvTag x={250} y={S6_G + 26} name="ফাহিম" />
-        {k >= 3 && <Bubble x={250} y={S6_G - 50} side="left" tone="think" lines={["একেকটা 50 টাকা."]} />}
+        {k >= 3 && <Bubble x={250} y={S6_G - 50} side="left" tone="think" lines={["একেকটা 50 টাকা।"]} />}
         <Robot x={292} y={S6_G + 16} />
       </Stage>
     </StoryFrame>
@@ -2114,10 +2114,10 @@ const extraIn = (cart: number[]) => {
   return EXTRA_ORDER.find((i) => cart.includes(i) && rank3(cart.filter((j) => j !== i).map((j) => SHELF7[j].v)) === all);
 };
 const WHY7: Record<number, string> = {
-  4: "(0, 0, 0) কিছুই নড়ায় না.",
-  2: "(2, 0, 0) হলো (1, 0, 0) এর দুইগুণ.",
-  3: "(1, 1, 0) হলো (1, 0, 0) যোগ (0, 1, 0).",
-  6: "(1, 2, 1) হলো (1, 1, 0) যোগ (0, 1, 1).",
+  4: "(0, 0, 0) কিছুই নড়ায় না।",
+  2: "(2, 0, 0) হলো (1, 0, 0) এর দুইগুণ।",
+  3: "(1, 1, 0) হলো (1, 0, 0) যোগ (0, 1, 0)।",
+  6: "(1, 2, 1) হলো (1, 1, 0) যোগ (0, 1, 1)।",
 };
 const RV6 = roomView(26);
 
@@ -2125,12 +2125,12 @@ function orderVerdict(cart: number[]) {
   const vs = cart.map((i) => SHELF7[i].v);
   const r = rank3(vs);
   const ex = extraIn(cart);
-  const why = ex !== undefined ? (WHY7[ex] ?? `${SHELF7[ex].name} বাকিগুলা দিয়েই বানানো যায়.`) : "";
-  if (r === 3 && cart.length === 3) return { ok: true, say: "তিন button, তিন direction: পুরা ঘর. 150 টাকা." };
-  if (r === 3) return { ok: false, say: `ফ্যানে পৌঁছায়, কিন্তু দাম ${cart.length * 50} টাকা. ${why} ওটা খুলে ফেলুন.` };
+  const why = ex !== undefined ? (WHY7[ex] ?? `${SHELF7[ex].name} বাকিগুলা দিয়েই বানানো যায়।`) : "";
+  if (r === 3 && cart.length === 3) return { ok: true, say: "তিন button, তিন direction: পুরা ঘর। 150 টাকা।" };
+  if (r === 3) return { ok: false, say: `ফ্যানে পৌঁছায়, কিন্তু দাম ${cart.length * 50} টাকা। ${why} ওটা খুলে ফেলুন।` };
   const floorOnly = vs.every((v) => v[2] === 0);
   const shape = r === 2 ? "একটা sheet" : r === 1 ? "একটা line" : "কিছুই না";
-  const head = floorOnly && r === 2 ? "Drone মেঝে ছেড়ে ওঠেই না." : `শুধু ${shape}. ফ্যান নাগালের বাইরে.`;
+  const head = floorOnly && r === 2 ? "Drone মেঝে ছেড়ে ওঠেই না।" : `শুধু ${shape}. ফ্যান নাগালের বাইরে।`;
   return { ok: false, say: `${head}${why ? ` ${why}` : ""}` };
 }
 
@@ -2159,7 +2159,7 @@ export function ShopOrder() {
     const v = orderVerdict(c);
     if (v.ok) {
       setWon(true);
-      pass("তিন button, 150 টাকা. একটাও বেশি না.");
+      pass("তিন button, 150 টাকা। একটাও বেশি না।");
     } else setMiss(miss + 1);
   };
 
@@ -2191,7 +2191,7 @@ export function ShopOrder() {
       </div>
       {verdict && landed && fresh && verdict.ok && <div className={`${FADE} mt-1 text-center text-[0.95rem] text-accent-text`}>{verdict.say}</div>}
       {verdict && landed && fresh && !verdict.ok && <Nope key={miss}>{verdict.say}</Nope>}
-      <Task done={won}>সবচেয়ে সস্তা remote টা বানান, যেটা drone কে ফ্যানে নেয় আর Shiku কে floor এর যেকোনো জায়গায়.</Task>
+      <Task done={won}>সবচেয়ে সস্তা remote টা বানান, যেটা drone কে ফ্যানে নেয় আর Shiku কে floor এর যেকোনো জায়গায়।</Task>
     </>
   );
 }
@@ -2202,10 +2202,10 @@ export function ShopOrder() {
 //      shopkeeper's "the more, the safer" gets its line through it.
 
 const X6_SAY = [
-  "Cart এ: (1, 0, 0), (0, 1, 0) আর (0, 1, 1).",
-  "প্রথম দুইটা মেঝে রং করে.",
-  "(0, 1, 1) ঠেলে নতুন দিকে, উপরে আর ভিতরে. ঘর ভরে যায়.",
-  "3 × 50 = 150 টাকা. চার নম্বর button শুধু একটা copy যোগ করতো.",
+  "Cart এ: (1, 0, 0), (0, 1, 0) আর (0, 1, 1)।",
+  "প্রথম দুইটা মেঝে রং করে।",
+  "(0, 1, 1) ঠেলে নতুন দিকে, উপরে আর ভিতরে। ঘর ভরে যায়।",
+  "3 × 50 = 150 টাকা। চার নম্বর button শুধু একটা copy যোগ করতো।",
 ];
 
 export function CartOfThree() {
@@ -2228,7 +2228,7 @@ export function CartOfThree() {
             <MvRemote x={20} y={4} n={3} s={1.2} />
           </svg>
           {k >= 3 && <div className={`${POP} text-sm font-bold`}>150 টাকা</div>}
-          <div className={`mt-1 text-xs ${k >= 3 ? "text-danger line-through" : "text-muted"}`}>&ldquo;যত বেশি, তত নিরাপদ.&rdquo;</div>
+          <div className={`mt-1 text-xs ${k >= 3 ? "text-danger line-through" : "text-muted"}`}>&ldquo;যত বেশি, তত নিরাপদ।&rdquo;</div>
         </div>
       </div>
     </Scene>
@@ -2242,10 +2242,10 @@ export function CartOfThree() {
 //      nothing, the drone stays at the door.
 
 const X8B_SAY = [
-  "ফাঁদে পড়া সহজ ছিল. তাকের তিনটা ফাঁদ দেখি.",
-  "(2, 0, 0): (1, 0, 0) দুইবার চাপলেই. একই দিকে, শুধু লম্বা.",
-  "(1, 1, 0): east যোগ north. মেঝে ছেড়ে কখনো ওঠে না.",
-  "(0, 0, 0): কোনো arrow ই নাই. Drone দরজা থেকে নড়েই না.",
+  "ফাঁদে পড়া সহজ ছিল। তাকের তিনটা ফাঁদ দেখি।",
+  "(2, 0, 0): (1, 0, 0) দুইবার চাপলেই। একই দিকে, শুধু লম্বা।",
+  "(1, 1, 0): east যোগ north। মেঝে ছেড়ে কখনো ওঠে না।",
+  "(0, 0, 0): কোনো arrow ই নাই। Drone দরজা থেকে নড়েই না।",
 ];
 
 /** a closer view: the traps are one or two steps long */
@@ -2347,7 +2347,7 @@ export function TryTwoInRoom() {
   const tapDrop = (i: number) => {
     if (won) return;
     setDrop(i);
-    if (rank3(FOUR.filter((_, j) => j !== i).map((k) => k.v)) === 3) pass("লম্বা মানে নতুন দিক না. চারে একটা বাড়তি.");
+    if (rank3(FOUR.filter((_, j) => j !== i).map((k) => k.v)) === 3) pass("লম্বা মানে নতুন দিক না। চারে একটা বাড়তি।");
     else setMiss2(miss2 + 1);
   };
   const four = drop === null ? FOUR : FOUR.filter((_, i) => i !== drop);
@@ -2388,13 +2388,13 @@ export function TryTwoInRoom() {
           {pick !== null && pick !== T_RIGHT && landed && (
             <Nope key={miss}>
               {T_PICS[pick].kind === "room"
-                ? "উঁহু. Drone যতটা কাছে যাওয়া যায় গেলো, তবু ফ্যান নাগালের বাইরে."
-                : "উঁহু. Drone নামলো u এর মাথায়, আর সেটা line এর বাইরে. দুইটা direction একটা line এর চেয়ে বেশি রং করে."}
+                ? "উঁহু। Drone যতটা কাছে যাওয়া যায় গেলো, তবু ফ্যান নাগালের বাইরে।"
+                : "উঁহু। Drone নামলো u এর মাথায়, আর সেটা line এর বাইরে। দুইটা direction একটা line এর চেয়ে বেশি রং করে।"}
             </Nope>
           )}
           {pick === T_RIGHT && landed && (
             <div className={`${FADE} mt-2 flex items-center justify-center gap-3`}>
-              <span className="text-[0.9rem] text-accent-text">একটা হেলানো sheet. ফ্যান তার বাইরে.</span>
+              <span className="text-[0.9rem] text-accent-text">একটা হেলানো sheet। ফ্যান তার বাইরে।</span>
               <button type="button" onClick={() => setRound2(true)} className={`${primaryBtn} h-9! px-4! text-sm`}>
                 দুই নম্বর round
               </button>
@@ -2410,7 +2410,7 @@ export function TryTwoInRoom() {
               <Arrow3 key={k.name} v={RV7} to={k.v} tone={k.tone} faint={drop === i} />
             ))}
           </svg>
-          <div className="text-center text-sm text-muted">চারটা button. কোনটা খুললেও পুরা ঘর রং থাকে?</div>
+          <div className="text-center text-sm text-muted">চারটা button। কোনটা খুললেও পুরা ঘর রং থাকে?</div>
           <div className="mt-1.5 grid grid-cols-4 gap-1.5">
             {FOUR.map((k, i) => (
               <button
@@ -2426,11 +2426,11 @@ export function TryTwoInRoom() {
               </button>
             ))}
           </div>
-          {drop !== null && !won && <Nope key={miss2}>উঁহু. ওটা খুলতেই ঘর চুপসে একটা sheet. খুঁজুন সেই দুইটা button, যারা একই দিকে ঠেলে.</Nope>}
-          {won && <div className={`${FADE} mt-2 text-center text-[0.95rem] text-accent-text`}>এখনো পুরা ঘর. ওটা শুধু আরেকটা button এর কাজ আবার করছিল.</div>}
+          {drop !== null && !won && <Nope key={miss2}>উঁহু। ওটা খুলতেই ঘর চুপসে একটা sheet। খুঁজুন সেই দুইটা button, যারা একই দিকে ঠেলে।</Nope>}
+          {won && <div className={`${FADE} mt-2 text-center text-[0.95rem] text-accent-text`}>এখনো পুরা ঘর। ওটা শুধু আরেকটা button এর কাজ আবার করছিল।</div>}
         </>
       )}
-      <Task done={won}>{round2 ? "যে button টা খুললেও পুরা ঘর থাকে, সেটায় tap করুন." : "লম্বা দুইটা button কী রং করে, সেই ছবিটা বেছে নিন."}</Task>
+      <Task done={won}>{round2 ? "যে button টা খুললেও পুরা ঘর থাকে, সেটায় tap করুন।" : "লম্বা দুইটা button কী রং করে, সেই ছবিটা বেছে নিন।"}</Task>
     </>
   );
 }
@@ -2446,9 +2446,9 @@ const X7_SHORT: V3[] = [
 ];
 const X7_SAY = [
   "দুইটা ছোট button: (2, 0, 1) আর (0, 2, 0.5).",
-  "এরা রং করে একটা হেলানো sheet.",
-  "এবার দুইটাকেই টেনে দ্বিগুণ লম্বা করি.",
-  "ঠিক সেই একই sheet. আর ফ্যান এখনো তার বাইরে.",
+  "এরা রং করে একটা হেলানো sheet।",
+  "এবার দুইটাকেই টেনে দ্বিগুণ লম্বা করি।",
+  "ঠিক সেই একই sheet। আর ফ্যান এখনো তার বাইরে।",
 ];
 
 export function LongArrows() {
@@ -2505,8 +2505,8 @@ export function NasibStretches({}: Story) {
         <CastPerson who="nasib" x={116} y={S5_G + 16} arm="hold" mood="smug" />
         <MvTag x={116} y={S5_G + 26} name="নাসিব" />
         <MvRemote x={140} y={S5_G - 30} n={2} s={0.8} />
-        {k === 1 && <Bubble x={116} y={S5_G - 50} side="right" lines={["button দুইটা অনেক", "লম্বা বানাই."]} />}
-        {k === 2 && <Bubble x={116} y={S5_G - 50} side="right" lines={["তাহলেই সব জায়গায়", "পৌঁছাবে."]} />}
+        {k === 1 && <Bubble x={116} y={S5_G - 50} side="right" lines={["button দুইটা অনেক", "লম্বা বানাই।"]} />}
+        {k === 2 && <Bubble x={116} y={S5_G - 50} side="right" lines={["তাহলেই সব জায়গায়", "পৌঁছাবে।"]} />}
         {k >= 3 && (
           <>
             <CastCard x={252} y={58} text="(4, 0, 2)" tone="blue" />
@@ -2527,10 +2527,10 @@ export function NasibStretches({}: Story) {
 //      counts: two is always too few, four always one too many.
 
 const X9B_SAY = [
-  "ঘরে চারটা button. পুরা ঘর রং.",
-  "(1, 0, 0) তিনবার চাপলেই (3, 0, 0). একই দিকে ঠেলে.",
-  "তাই (3, 0, 0) বাড়তি. খুলে ফেললেও পুরা ঘর রং.",
-  "ঘরে দুই সবসময় কম, আর চার সবসময় একটা বেশি.",
+  "ঘরে চারটা button। পুরা ঘর রং।",
+  "(1, 0, 0) তিনবার চাপলেই (3, 0, 0)। একই দিকে ঠেলে।",
+  "তাই (3, 0, 0) বাড়তি। খুলে ফেললেও পুরা ঘর রং।",
+  "ঘরে দুই সবসময় কম, আর চার সবসময় একটা বেশি।",
 ];
 
 export function FourInRoom() {
@@ -2589,7 +2589,7 @@ export function FanDusted({}: Story) {
         <MvTag x={204} y={S5_G + 26} name="আম্মু" />
         <CastPerson who="som" x={262} y={S5_G + 16} facing={-1} mood={k >= 3 ? "happy" : "plain"} arm={k >= 3 ? "wave" : "down"} />
         <MvTag x={262} y={S5_G + 26} name="সোম" />
-        {k >= 3 && <Bubble x={262} y={S5_G - 52} side="left" lines={["Floor এ দুই.", "ঘরে তিন."]} />}
+        {k >= 3 && <Bubble x={262} y={S5_G - 52} side="left" lines={["Floor এ দুই।", "ঘরে তিন।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -2601,9 +2601,9 @@ export function FanDusted({}: Story) {
 //     line, Som's 2 and 3.
 
 const VERDICTS: { who: string; claim: string; ok: boolean; why: string; pic: "extra" | "line" | "count" }[] = [
-  { who: "দোকানদার", claim: "Button যত বেশি, তত নিরাপদ.", ok: false, why: "তিনের পরে প্রতিটা button বাড়তি. একই ঘর, বেশি টাকা.", pic: "extra" },
-  { who: "নাসিব", claim: "ঠিক দিকে তাক করা একটা button ই যথেষ্ট.", ok: false, why: "এক button রং করে একটা line, যেদিকেই তাক করুন.", pic: "line" },
-  { who: "সোম", claim: "যে-ই বানাক, সংখ্যা একই.", ok: true, why: "Floor এ সবসময় 2. ঘরে সবসময় 3.", pic: "count" },
+  { who: "দোকানদার", claim: "Button যত বেশি, তত নিরাপদ।", ok: false, why: "তিনের পরে প্রতিটা button বাড়তি। একই ঘর, বেশি টাকা।", pic: "extra" },
+  { who: "নাসিব", claim: "ঠিক দিকে তাক করা একটা button ই যথেষ্ট।", ok: false, why: "এক button রং করে একটা line, যেদিকেই তাক করুন।", pic: "line" },
+  { who: "সোম", claim: "যে-ই বানাক, সংখ্যা একই।", ok: true, why: "Floor এ সবসময় 2। ঘরে সবসময় 3।", pic: "count" },
 ];
 const V8_F = makeFrame(-1, 3, -1, 2, 11, 4);
 
@@ -2635,7 +2635,7 @@ export function ThreeVerdicts() {
     if (open.includes(i)) return;
     const next = [...open, i];
     setOpen(next);
-    if (next.length === VERDICTS.length) pass("Floor এ 2, ঘরে 3, যে-ই বানাক.");
+    if (next.length === VERDICTS.length) pass("Floor এ 2, ঘরে 3, যে-ই বানাক।");
   };
 
   return (
@@ -2672,10 +2672,10 @@ export function ThreeVerdicts() {
       </div>
       {all && (
         <div className={`${FADE} mx-auto mt-3 max-w-sm rounded-2xl bg-cat-violet/5 px-4 py-2.5 text-center text-[0.95rem]`}>
-          সোম জিতলো. বাড়তি কিছু নাই, সব জায়গায় পৌঁছায়: basis. কয়টা লাগে, সেটাই dimension.
+          সোম জিতলো। বাড়তি কিছু নাই, সব জায়গায় পৌঁছায়: basis। কয়টা লাগে, সেটাই dimension।
         </div>
       )}
-      <Task done={all}>তিনটা দাবি একটা একটা করে খুলুন, আর আপনার বাজির সাথে মিলিয়ে দেখুন.</Task>
+      <Task done={all}>তিনটা দাবি একটা একটা করে খুলুন, আর আপনার বাজির সাথে মিলিয়ে দেখুন।</Task>
     </>
   );
 }
@@ -2685,7 +2685,7 @@ export function ThreeVerdicts() {
 //      two buttons beside the room with its three, and the two counts.
 
 const X8_F = makeFrame(-1, 3, -1, 3, 15, 6);
-const X8_SAY = ["বাসায় নিয়ে যাওয়ার মতো দুইটা সংখ্যা.", "Floor: দুই button, বাড়তি কিছু নাই. Dimension 2.", "ঘর: তিন button, বাড়তি কিছু নাই. Dimension 3."];
+const X8_SAY = ["বাসায় নিয়ে যাওয়ার মতো দুইটা সংখ্যা।", "Floor: দুই button, বাড়তি কিছু নাই। Dimension 2.", "ঘর: তিন button, বাড়তি কিছু নাই। Dimension 3."];
 
 export function TwoAndThree() {
   const s = useScene(2, [600, 1700, 1900]);

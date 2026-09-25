@@ -100,17 +100,17 @@ export function RooftopBet({}: Story) {
         <RoofSet />
         <Chacha x={98} y={GROUND} arm="hold" />
         <NameTag x={98} y={GROUND + 13} name="চাচা" />
-        {k === 1 && <Bubble x={98} y={GROUND - 68} side="mid" lines={["রাইতেই ভাড়াটিয়া আইবো.", "ভাড়া কত চামু?"]} />}
+        {k === 1 && <Bubble x={98} y={GROUND - 68} side="mid" lines={["রাইতেই ভাড়াটিয়া আইবো।", "ভাড়া কত চামু?"]} />}
         <CastPerson who="fahim" x={186} y={GROUND} facing={-1} arm={k === 2 ? "point" : "down"} mood={k >= 2 ? "smug" : "plain"} label />
-        {k === 2 && <Bubble x={186} y={GROUND - 68} side="mid" lines={["দুইটা column নতুন করে", "লিখলে, ভাড়া এক সংখ্যায়."]} />}
+        {k === 2 && <Bubble x={186} y={GROUND - 68} side="mid" lines={["দুইটা column নতুন করে", "লিখলে, ভাড়া এক সংখ্যায়।"]} />}
         <CastPerson who="nasib" x={250} y={GROUND} facing={-1} arm={k >= 4 ? "hold" : "down"} mood={k === 3 ? "shout" : k >= 4 ? "smug" : "plain"} label />
-        {k === 3 && <Bubble x={250} y={GROUND - 68} side="left" lines={["নতুন তথ্য নাই,", "নতুন কিছু বের হবে না."]} />}
+        {k === 3 && <Bubble x={250} y={GROUND - 68} side="left" lines={["নতুন তথ্য নাই,", "নতুন কিছু বের হবে না।"]} />}
         {k >= 4 && (
           <g className={POP}>
             <Jilapi x={262} y={GROUND - 34} s={0.9} />
           </g>
         )}
-        {k >= 4 && <Bubble x={250} y={GROUND - 68} side="left" lines={["বাজি. এক ঠোঙা জিলাপি."]} />}
+        {k >= 4 && <Bubble x={250} y={GROUND - 68} side="left" lines={["বাজি। এক ঠোঙা জিলাপি।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -131,7 +131,7 @@ export function JilapiBet() {
 
   const seal = () => {
     setSealed(true);
-    pass("বাজি সিল হলো. জিলাপি এখন দানে.");
+    pass("বাজি সিল হলো। জিলাপি এখন দানে।");
   };
 
   return (
@@ -139,11 +139,11 @@ export function JilapiBet() {
       <div className="mx-auto grid max-w-sm grid-cols-2 gap-2">
         <div className="rounded-xl border-2 border-cat-blue/30 bg-cat-blue/5 px-2.5 py-1.5">
           <div className="text-xs font-semibold text-cat-blue">ফাহিম</div>
-          <div className="text-[0.8rem] leading-snug">খাতার দুইটা column ই নতুন করে লিখবো. তখন ভাড়া বলতে একটা সংখ্যাই লাগবে.</div>
+          <div className="text-[0.8rem] leading-snug">খাতার দুইটা column ই নতুন করে লিখবো। তখন ভাড়া বলতে একটা সংখ্যাই লাগবে।</div>
         </div>
         <div className="rounded-xl border-2 border-cat-coral/30 bg-cat-coral/5 px-2.5 py-1.5">
           <div className="text-xs font-semibold text-cat-coral">নাসিব</div>
-          <div className="text-[0.8rem] leading-snug">নতুন কোনো তথ্য তো ঢুকছে না. তাই নতুন কিছু বেরও হবে না.</div>
+          <div className="text-[0.8rem] leading-snug">নতুন কোনো তথ্য তো ঢুকছে না। তাই নতুন কিছু বেরও হবে না।</div>
         </div>
       </div>
       <svg viewBox="0 0 240 52" className="mx-auto mt-1 block h-auto w-full max-w-[15rem]" aria-label="the cone of jilapi, sliding to whoever you back">
@@ -176,10 +176,10 @@ export function JilapiBet() {
       ) : null}
       {sealed ? (
         <div className={`${FADE} mt-2 text-center text-[0.9rem] leading-snug text-muted`}>
-          সিল করা থাকলো. চাচা ভাড়া পেয়ে গেলে শেষ screen এ খুলবো.
+          সিল করা থাকলো। চাচা ভাড়া পেয়ে গেলে শেষ screen এ খুলবো।
         </div>
       ) : null}
-      <Task done={sealed}>ফাহিম, নাসিব, নাকি দুইজনই? একটা বেছে নিয়ে বাজি সিল করুন. কে জিতলো, শেষের আগে কেউ বলবে না.</Task>
+      <Task done={sealed}>ফাহিম, নাসিব, নাকি দুইজনই? একটা বেছে নিয়ে বাজি সিল করুন। কে জিতলো, শেষের আগে কেউ বলবে না।</Task>
     </>
   );
 }
@@ -192,9 +192,9 @@ export function EightFlats() {
   const s = useScene(2, [700, 2200]);
   const k = s.k;
   const SAY = [
-    "চাচার খাতা, ছবি করে: bed ডানে, bath উপরে.",
-    "ওনার 8 টা flat, প্রতিটা নিজের (bed, bath) এ. গায়ে লেখা সংখ্যাটা ভাড়া, হাজার টাকায়.",
-    "আর ছাদের flat, (4, 2). ওর ভাড়ার জায়গায় এখনো একটা প্রশ্ন.",
+    "চাচার খাতা, ছবি করে: bed ডানে, bath উপরে।",
+    "ওনার 8 টা flat, প্রতিটা নিজের (bed, bath) এ। গায়ে লেখা সংখ্যাটা ভাড়া, হাজার টাকায়।",
+    "আর ছাদের flat, (4, 2)। ওর ভাড়ার জায়গায় এখনো একটা প্রশ্ন।",
   ];
 
   return (
@@ -242,7 +242,7 @@ export function ChachaTries({}: Story) {
             </text>
           </g>
         )}
-        {k === 1 && <Bubble x={128} y={GROUND - 70} side="mid" lines={["bed প্রতি ছয় হাজার", "ধরলেই তো হইলো."]} />}
+        {k === 1 && <Bubble x={128} y={GROUND - 70} side="mid" lines={["bed প্রতি ছয় হাজার", "ধরলেই তো হইলো।"]} />}
         <CastPerson who="fahim" x={214} y={GROUND} facing={-1} mood={k >= 2 ? "puzzled" : "plain"} label />
         {k >= 2 && <Bubble x={214} y={GROUND - 68} side="mid" tone="think" lines={["সবগুলা মিলবে?"]} />}
       </Stage>
@@ -272,7 +272,7 @@ export function RentGrid() {
     const next = [...seen, key];
     setSeen(next);
     const t = (b: Axis) => next.filter((x) => x.startsWith(b)).length >= 3;
-    if (!both && t("bed") && t("bath")) pass("ভাড়া বাড়ে কোনাকুনি, এক axis বরাবর না.");
+    if (!both && t("bed") && t("bath")) pass("ভাড়া বাড়ে কোনাকুনি, এক axis বরাবর না।");
   };
   const pick = (a: Axis) => {
     setMode(a);
@@ -339,10 +339,10 @@ export function RentGrid() {
       <div className="mt-1.5 min-h-6 text-center text-[0.9rem]">
         {mode ? (
           <span key={`${mode}${knob}`} className={FADE}>
-            8 টার মধ্যে <b className={`font-mono ${fit >= 8 ? "text-accent-text" : "text-danger"}`}>{fit}</b> টা flat মিললো, 1000 টাকার ভিতরে.
+            8 টার মধ্যে <b className={`font-mono ${fit >= 8 ? "text-accent-text" : "text-danger"}`}>{fit}</b> টা flat মিললো, 1000 টাকার ভিতরে।
           </span>
         ) : (
-          <span className="text-muted">কোন column দিয়ে দাম ধরবেন, বেছে নিন.</span>
+          <span className="text-muted">কোন column দিয়ে দাম ধরবেন, বেছে নিন।</span>
         )}
       </div>
       <Ticks
@@ -351,7 +351,7 @@ export function RentGrid() {
           ["শুধু bath", tried("bath")],
         ]}
       />
-      <Task done={both}>আগে শুধু bed দিয়ে, তারপর শুধু bath দিয়ে দাম ধরুন. প্রতিটায় knob টা তিনটা দামে ঘুরিয়ে সবুজ ring গুনুন.</Task>
+      <Task done={both}>আগে শুধু bed দিয়ে, তারপর শুধু bath দিয়ে দাম ধরুন। প্রতিটায় knob টা তিনটা দামে ঘুরিয়ে সবুজ ring গুনুন।</Task>
     </>
   );
 }
@@ -365,10 +365,10 @@ export function SlantClimb() {
   const s = useScene(3, [700, 2200, 2200]);
   const k = s.k;
   const SAY = [
-    "আবার সেই 8 টা flat, ভাড়ার রঙে.",
-    "3 bed এর তিনটা flat: 17, 20 আর 25. একই column, তিন রকম ভাড়া.",
-    "একই কোনাকুনি line এর flat গুলার ভাড়া প্রায় সমান.",
-    "তাই ভাড়া বাড়ে এই দিকে: bed আর bath যখন একসাথে বাড়ে.",
+    "আবার সেই 8 টা flat, ভাড়ার রঙে।",
+    "3 bed এর তিনটা flat: 17, 20 আর 25। একই column, তিন রকম ভাড়া।",
+    "একই কোনাকুনি line এর flat গুলার ভাড়া প্রায় সমান।",
+    "তাই ভাড়া বাড়ে এই দিকে: bed আর bath যখন একসাথে বাড়ে।",
   ];
   const diag = (c: number) => {
     const xa = Math.max(KF.x0, c - KF.y1);
@@ -424,7 +424,7 @@ export function FahimDraws({}: Story) {
         <Chacha x={k >= 3 ? 100 : 70} y={GROUND} arm="hold" />
         <NameTag x={k >= 3 ? 100 : 70} y={GROUND + 13} name="চাচা" />
         {k === 3 && <Bubble x={100} y={GROUND - 68} side="mid" lines={["এইগুলা আবার", "কী জিনিস?"]} />}
-        {k >= 4 && <Bubble x={222} y={GROUND - 68} side="left" lines={["দুইটা নতুন button,", "চাচা."]} />}
+        {k >= 4 && <Bubble x={222} y={GROUND - 68} side="left" lines={["দুইটা নতুন button,", "চাচা।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -443,7 +443,7 @@ const PB_START: XY = [2, 2];
 const PB_BOX = [
   ["bed slot", "1 × 1 = 1"],
   ["bath slot", "1 × (−1) = −1"],
-  ["box", "1 + (−1) = 0"],
+  ["dot product", "1 + (−1) = 0"],
 ];
 
 /** a right-angle mark at `at`, for arrows along (1, 1) and (1, −1) from there */
@@ -470,13 +470,13 @@ export function PressButtons() {
     if (p.running) return;
     p.play(3, () => {
       setBoxed(true);
-      pass("Size আর imbalance, right angle এ.");
+      pass("Size আর imbalance, right angle এ।");
     });
   };
   const SAY: Record<string, string> = {
-    none: "Flat (2, 2): 2 bed, 2 bath. একটা button চাপুন.",
-    s: "Size: এক bed আর এক bath একসাথে বাড়লো. Flat টা শুধু বড় হলো.",
-    m: "Imbalance: এক bath গেলো, এক bed আসলো. মোট room একই, ভাগটা বদলালো.",
+    none: "Flat (2, 2): 2 bed, 2 bath. একটা button চাপুন।",
+    s: "Size: এক bed আর এক bath একসাথে বাড়লো। Flat টা শুধু বড় হলো।",
+    m: "Imbalance: এক bath গেলো, এক bed আসলো। মোট room একই, ভাগটা বদলালো।",
   };
 
   return (
@@ -532,7 +532,7 @@ export function PressButtons() {
       ) : null}
       <div className="mx-auto mt-1.5 min-h-10 max-w-sm text-center text-[0.85rem] leading-snug">
         <span key={boxed ? "box" : moves.length} className={FADE}>
-          {boxed ? "বড় হওয়া আর ভাগ বদলানো. কেউ কারো কাজে নাক গলায় না. এটাই right angle." : SAY[last ?? "none"]}
+          {boxed ? "বড় হওয়া আর ভাগ বদলানো। কেউ কারো কাজে নাক গলায় না। এটাই right angle." : SAY[last ?? "none"]}
         </span>
       </div>
       {pressedBoth && rows > 0 ? (
@@ -548,7 +548,7 @@ export function PressButtons() {
       {pressedBoth && !boxed && !p.running ? (
         <div className="mt-2 flex justify-center">
           <button type="button" onClick={box} className={`${primaryBtn} ${FADE}`}>
-            দুইটা button কে 4.2 এর box এ ফেলুন
+            4.2 এর মতো দুইটা button এর dot product নিন
           </button>
         </div>
       ) : null}
@@ -556,10 +556,10 @@ export function PressButtons() {
         items={[
           ["size চাপা", moves.includes("s")],
           ["imbalance চাপা", moves.includes("m")],
-          ["box", boxed],
+          ["dot product", boxed],
         ]}
       />
-      <Task done={boxed}>দুইটা button ই চেপে দেখুন flat এর কী বদলায়. তারপর দুইটাকে 4.2 এর box এ ফেলুন.</Task>
+      <Task done={boxed}>দুইটা button ই চেপে দেখুন flat এর কী বদলায়। তারপর 4.2 এর মতো দুইটার dot product নিন।</Task>
     </>
   );
 }
@@ -576,9 +576,9 @@ export function SquareTurned() {
   const s = useScene(2, [700, 2000]);
   const k = s.k;
   const SAY = [
-    "ফাহিমের দুইটা button, bed আর bath এর sheet এ.",
-    "প্রতিটা button বরাবর ধাপে ধাপে line টানলে ফাহিমের grid. ঘর গুলা সব square.",
-    "Sheet টা একটু ঘুরিয়ে দিলেই চেনা square grid. শুধু ঘুরানো.",
+    "ফাহিমের দুইটা button, bed আর bath এর sheet এ।",
+    "প্রতিটা button বরাবর ধাপে ধাপে line টানলে ফাহিমের grid। ঘর গুলা সব square।",
+    "Sheet টা একটু ঘুরিয়ে দিলেই চেনা square grid। শুধু ঘুরানো।",
   ];
   const turn = {
     style: { transform: `rotate(${k >= 2 ? 45 : 0}deg)`, transformOrigin: `${ST_F.sx(0)}px ${ST_F.sy(0)}px` },
@@ -688,16 +688,16 @@ export function FindCard() {
           </div>
           {walked && end ? (
             <Nope key={walks}>
-              Card {tup(walked)} গিয়ে থামলো {tup(end)} এ. Flat টা (3, 2) তে.{walks >= 2 ? " আধা ধাপও চলে." : ""}
+              Card {tup(walked)} গিয়ে থামলো {tup(end)} এ। Flat টা (3, 2) তে।{walks >= 2 ? " আধা ধাপও চলে।" : ""}
             </Nope>
           ) : null}
         </>
       ) : (
         <div className={`${FADE} mx-auto mt-2 max-w-sm rounded-2xl bg-accent/10 px-3 py-1.5 text-center text-[0.85rem] leading-snug text-accent-text`}>
-          Size এ 2.5 ধাপ গিয়ে (2.5, 2.5). আধা ধাপ imbalance এ গিয়ে (3, 2).
+          Size এ 2.5 ধাপ গিয়ে (2.5, 2.5). আধা ধাপ imbalance এ গিয়ে (3, 2)।
         </div>
       )}
-      <Task done={right}>Size আর imbalance এর ধাপ ঠিক করে card টা হাঁটান, যতক্ষণ না ওটা flat (3, 2) তে গিয়ে থামে.</Task>
+      <Task done={right}>Size আর imbalance এর ধাপ ঠিক করে card টা হাঁটান, যতক্ষণ না ওটা flat (3, 2) তে গিয়ে থামে।</Task>
     </>
   );
 }
@@ -714,7 +714,7 @@ export function TwoCards() {
   const k = s.k;
   const SAY = [
     "Bed আর bath এর grid এ flat টার card (3, 2).",
-    "উপরে ফাহিমের grid বসাই: এক দিকে size এর line, আরেক দিকে imbalance এর.",
+    "উপরে ফাহিমের grid বসাই: এক দিকে size এর line, আরেক দিকে imbalance এর।",
     "একই dot, নতুন card: size বরাবর 2.5, imbalance বরাবর 0.5.",
   ];
 
@@ -761,12 +761,12 @@ export function ReadTheNumbers() {
   const tapImb = () => {
     if (read !== 1) return;
     setRead(2);
-    pass("নতুন সংখ্যা গুলা flat এর গল্প বলে.");
+    pass("নতুন সংখ্যা গুলা flat এর গল্প বলে।");
   };
   const SAY = [
-    "আগে 2.5 এ tap করুন.",
-    "2.5 ধাপ size. প্রতি ধাপে এক bed আর এক bath, মানে দুইটা room. তাই 2.5 ধাপে 5 টা room. এবার 0.5 এ tap করুন.",
-    "আধা ধাপ imbalance. আধা bed বেশি, আধা bath কম. তাই bath এর চেয়ে bed একটা বেশি. দাঁড়ালো কী? 3 bed, 2 bath. আবার সেই flat (3, 2).",
+    "আগে 2.5 এ tap করুন।",
+    "2.5 ধাপ size। প্রতি ধাপে এক bed আর এক bath, মানে দুইটা room। তাই 2.5 ধাপে 5 টা room। এবার 0.5 এ tap করুন।",
+    "আধা ধাপ imbalance। আধা bed বেশি, আধা bath কম। তাই bath এর চেয়ে bed একটা বেশি। দাঁড়ালো কী? 3 bed, 2 bath. আবার সেই flat (3, 2)।",
   ];
 
   return (
@@ -808,7 +808,7 @@ export function ReadTheNumbers() {
           {SAY[read]}
         </span>
       </div>
-      <Task done={read >= 2}>আগে 2.5, তারপর 0.5 এ tap করুন. দেখুন কোনটা কী বানায়.</Task>
+      <Task done={read >= 2}>আগে 2.5, তারপর 0.5 এ tap করুন। দেখুন কোনটা কী বানায়।</Task>
     </>
   );
 }
@@ -827,8 +827,8 @@ export function RoomsToCard() {
   const k = s.k;
   const SAY = [
     "Flat (3, 2): 3 টা bed, 2 টা bath.",
-    "সব room এক সারিতে, মোট 5 টা. মাঝখান দিয়ে অর্ধেক করলে 2.5. এটাই size.",
-    "প্রতিটা bath এর জোড়া একটা bed. বাকি থাকে 1 টা bed, মানে ফারাক 1. ওটার অর্ধেক 0.5. এটাই imbalance.",
+    "সব room এক সারিতে, মোট 5 টা। মাঝখান দিয়ে অর্ধেক করলে 2.5. এটাই size।",
+    "প্রতিটা bath এর জোড়া একটা bed। বাকি থাকে 1 টা bed, মানে ফারাক 1। ওটার অর্ধেক 0.5. এটাই imbalance.",
     "হাঁটা ছাড়াই card: (2.5, 0.5).",
   ];
   const at = (j: number): XY => (k === 1 ? [rcX(j), 24] : j < 3 ? [rcX(j), 6] : [rcX(j - 3), 42]);
@@ -905,8 +905,8 @@ export function AddLines() {
   const cut = k >= 1 ? "text-danger line-through decoration-2" : "";
   const SAY = [
     "s ধাপ size আর m ধাপ imbalance হলে bed হয় s + m, আর bath হয় s − m.",
-    "দুইটা line যোগ করি. +m আর −m কাটাকাটি, থাকে 5 = 2s.",
-    "অর্ধেক করলে s = 2.5. মোট room এর অর্ধেক.",
+    "দুইটা line যোগ করি। +m আর −m কাটাকাটি, থাকে 5 = 2s।",
+    "অর্ধেক করলে s = 2.5. মোট room এর অর্ধেক।",
     "s ফেরত বসাই bed এর line এ: 3 = 2.5 + m. তাই m = 0.5.",
   ];
 
@@ -978,7 +978,7 @@ export function OneNumberRent() {
     const n = FLATS.filter((fl) => fits(v * sizeOf(fl), fl.rent)).length;
     if (n === 8 && !done) {
       setDone(true);
-      pass("একই তথ্য, নতুন grid: ভাড়া এক সংখ্যায়.");
+      pass("একই তথ্য, নতুন grid: ভাড়া এক সংখ্যায়।");
     }
   };
   const sizeEnd = P([4.6, 4.6]);
@@ -1041,17 +1041,17 @@ export function OneNumberRent() {
           </div>
           <div className="mt-1.5 min-h-6 text-center text-[0.9rem]">
             <span key={knob} className={FADE}>
-              8 টার মধ্যে <b className={`font-mono ${fit === 8 ? "text-accent-text" : "text-danger"}`}>{fit}</b> টা flat মিললো, 1000 টাকার ভিতরে.
+              8 টার মধ্যে <b className={`font-mono ${fit === 8 ? "text-accent-text" : "text-danger"}`}>{fit}</b> টা flat মিললো, 1000 টাকার ভিতরে।
             </span>
           </div>
           {done ? (
             <div className={`${FADE} mx-auto mt-1 max-w-sm text-center text-[0.85rem] leading-snug text-muted`}>
-              প্রতিটা খাড়া পট্টি ধরে নিচে তাকান. এক size এর flat গুলার ভাড়া প্রায় সমান. imbalance যা-ই হোক.
+              প্রতিটা খাড়া পট্টি ধরে নিচে তাকান। এক size এর flat গুলার ভাড়া প্রায় সমান। imbalance যা-ই হোক।
             </div>
           ) : null}
         </div>
       )}
-      <Task done={done}>Sheet টা ঘুরান. তারপর size এর প্রতি ধাপে এমন একটা দাম খুঁজুন, যেটা 8 টা flat এই মিলে.</Task>
+      <Task done={done}>Sheet টা ঘুরান। তারপর size এর প্রতি ধাপে এমন একটা দাম খুঁজুন, যেটা 8 টা flat এই মিলে।</Task>
     </>
   );
 }
@@ -1067,9 +1067,9 @@ export function DotsSlide() {
   const s = useScene(2, [700, 2200]);
   const k = s.k;
   const SAY = [
-    "ফাহিমের grid এ 8 টা flat: size ডানে, imbalance নিচে.",
-    "Imbalance এর সংখ্যাটা ফেলে দিন. প্রতিটা flat size এর line এ নেমে আসে, ওর shadow তে.",
-    "ভাড়া এখনো এক line বরাবর ধাপে ধাপে বাড়ে. একটা সংখ্যা রাখলাম, হারালাম খুব সামান্য.",
+    "ফাহিমের grid এ 8 টা flat: size ডানে, imbalance নিচে।",
+    "Imbalance এর সংখ্যাটা ফেলে দিন। প্রতিটা flat size এর line এ নেমে আসে, ওর shadow তে।",
+    "ভাড়া এখনো এক line বরাবর ধাপে ধাপে বাড়ে। একটা সংখ্যা রাখলাম, হারালাম খুব সামান্য।",
   ];
 
   return (
@@ -1113,10 +1113,10 @@ export function OtherBases() {
   const s = useScene(3, [700, 2600, 1800]);
   const k = s.k;
   const SAY = [
-    "দোকানের আয় আর খরচ, দুইটা column.",
-    "একই দুইটা, নতুন করে: লাভ, মানে আয়ের যে অংশ খরচের উপরে. আর দুইটার যোগফল.",
-    "এক দেয়ালে দুইটা thermometer.",
-    "নতুন করে: ওদের average আর ওদের ফারাক. প্রতিবার একই তথ্য, শুধু নতুন grid.",
+    "দোকানের আয় আর খরচ, দুইটা column।",
+    "একই দুইটা, নতুন করে: লাভ, মানে আয়ের যে অংশ খরচের উপরে। আর দুইটার যোগফল।",
+    "এক দেয়ালে দুইটা thermometer।",
+    "নতুন করে: ওদের average আর ওদের ফারাক। প্রতিবার একই তথ্য, শুধু নতুন grid।",
   ];
   const dim = "transition-opacity duration-700 motion-reduce:transition-none";
   const bar = (x: number, h: number, cls: string, y = OB_BASE - h) => <rect x={x} y={y} width={16} height={h} className={cls} />;
@@ -1229,7 +1229,7 @@ export function TenantStairs({}: Story) {
         )}
         <Chacha x={106} y={GROUND} arm="hold" facing={1} />
         <NameTag x={106} y={GROUND + 13} name="চাচা" />
-        {k === 1 && <Bubble x={106} y={GROUND - 68} side="mid" lines={["উইঠা আসতেছে.", "দাম কী কমু?"]} />}
+        {k === 1 && <Bubble x={106} y={GROUND - 68} side="mid" lines={["উইঠা আসতেছে।", "দাম কী কমু?"]} />}
         <CastPerson who="fahim" x={176} y={GROUND} facing={1} arm={k >= 2 ? "hold" : "down"} label />
         {k >= 2 && <CastCard x={196} y={GROUND - 66} text="(4, 2) → ?" tone="amber" />}
       </Stage>
@@ -1277,8 +1277,8 @@ function YhChip({ kind, i }: { kind: number; i: number }) {
 }
 
 const YH_NOPE: Record<number, string> = {
-  0: "এটা 8000 × 4. গুনলেন bed. কিন্তু rule গুনে size এর ধাপ.",
-  2: "এটা 8000 × 6 room. কিন্তু size এর এক ধাপে দুইটা room.",
+  0: "এটা 8000 × 4। গুনলেন bed। কিন্তু rule গুনে size এর ধাপ।",
+  2: "এটা 8000 × 6 room। কিন্তু size এর এক ধাপে দুইটা room।",
 };
 
 export function YourHouse() {
@@ -1303,7 +1303,7 @@ export function YourHouse() {
     if (priced) return;
     setPrice(i);
     setMiss((x) => x + 1);
-    cp.play(YH_COUNT[i], i === YH_RIGHT ? () => pass("Card (3, 1): 3 ধাপ size, 24000 টাকা.") : undefined);
+    cp.play(YH_COUNT[i], i === YH_RIGHT ? () => pass("Card (3, 1): 3 ধাপ size, 24000 টাকা।") : undefined);
   };
   const mid: XY | null = walked ? [walked[0], walked[0]] : null;
   const end: XY | null = walked ? land(walked) : null;
@@ -1327,7 +1327,7 @@ export function YourHouse() {
           <div className="font-mono">4 bed, 2 bath</div>
           {cardOk ? (
             <div className={`${FADE} mt-1 text-accent-text`}>
-              Card <b className="font-mono">(3, 1)</b>: 3 ধাপ size, মানে 6 টা room. 1 ধাপ imbalance, মানে bath এর চেয়ে bed 2 টা বেশি.
+              Card <b className="font-mono">(3, 1)</b>: 3 ধাপ size, মানে 6 টা room। 1 ধাপ imbalance, মানে bath এর চেয়ে bed 2 টা বেশি।
             </div>
           ) : (
             <div className="mt-1 text-muted">
@@ -1355,7 +1355,7 @@ export function YourHouse() {
           </div>
           {walked && end ? (
             <Nope key={walks}>
-              Card {tup(walked)} গিয়ে থামলো {tup(end)} এ. ছাদের flat টা (4, 2) তে.
+              Card {tup(walked)} গিয়ে থামলো {tup(end)} এ। ছাদের flat টা (4, 2) তে।
             </Nope>
           ) : null}
         </>
@@ -1395,7 +1395,7 @@ export function YourHouse() {
           ) : null}
         </div>
       )}
-      <Task done={priced}>ছাদের flat এর card বের করে হাঁটান. তারপর ওর ভাড়া বেছে নিন.</Task>
+      <Task done={priced}>ছাদের flat এর card বের করে হাঁটান। তারপর ওর ভাড়া বেছে নিন।</Task>
     </>
   );
 }
@@ -1410,9 +1410,9 @@ export function SameSizeRow() {
   const k = s.k;
   const sx = (v: number) => 16 + v * 58;
   const SAY = [
-    "খাতার flat গুলা, শুধু size দিয়ে সাজানো.",
-    "ছাদের flat বসলো size এর 3 ধাপে: 24000.",
-    "ঠিক পাশেই flat (3, 3), একই size, ভাড়া 25000. Imbalance প্রায় কিছুই বদলায় নাই.",
+    "খাতার flat গুলা, শুধু size দিয়ে সাজানো।",
+    "ছাদের flat বসলো size এর 3 ধাপে: 24000।",
+    "ঠিক পাশেই flat (3, 3), একই size, ভাড়া 25000। Imbalance প্রায় কিছুই বদলায় নাই।",
   ];
 
   return (
@@ -1569,7 +1569,7 @@ export function TryConvertBack() {
     setTries((t) => t + 1);
     p.play(2, () => {
       setWalked(true);
-      if (same(at, TCB_AT)) pass("প্রতিটা card ফেরত যায়. নতুন তথ্য নাই.");
+      if (same(at, TCB_AT)) pass("প্রতিটা card ফেরত যায়। নতুন তথ্য নাই।");
     });
   };
 
@@ -1591,8 +1591,8 @@ export function TryConvertBack() {
       {drop && step >= 2 && !right ? (
         <Nope key={tries}>
           {same(drop, TCB_CARD)
-            ? "card টাকে পড়লেন bed আর bath হিসাবে. হাঁটাটা দেখুন. 2 ধাপ size এ (2, 2). তারপর 1 ধাপ imbalance এ (3, 1)."
-            : `Card টা হেঁটে গেলো (3, 1) এ, ${tup(drop)} এ না. যেখানে থামলো, সেখানে tap করুন.`}
+            ? "card টাকে পড়লেন bed আর bath হিসাবে। হাঁটাটা দেখুন। 2 ধাপ size এ (2, 2)। তারপর 1 ধাপ imbalance এ (3, 1)।"
+            : `Card টা হেঁটে গেলো (3, 1) এ, ${tup(drop)} এ না। যেখানে থামলো, সেখানে tap করুন।`}
         </Nope>
       ) : null}
       {right && step >= 2 ? (
@@ -1600,7 +1600,7 @@ export function TryConvertBack() {
           Card (2, 1) মানে flat (3, 1): 3 bed, 1 bath.
         </div>
       ) : null}
-      <Task done={right && step >= 2}>নাসিবের card টা bed আর bath এ আসলে কোথায়, সেই জায়গায় tap করুন.</Task>
+      <Task done={right && step >= 2}>নাসিবের card টা bed আর bath এ আসলে কোথায়, সেই জায়গায় tap করুন।</Task>
     </>
   );
 }
@@ -1616,7 +1616,7 @@ export function BackAndForth() {
     "নাসিবের card, (2, 1): size 2, imbalance 1.",
     "Bed: size যোগ imbalance, 2 + 1 = 3. Bath: size বিয়োগ imbalance, 2 − 1 = 1.",
     "আবার ফেরত: size = (3 + 1) ÷ 2 = 2, imbalance = (3 − 1) ÷ 2 = 1.",
-    "দুই দিকেই দুইটা করে হিসাব. কিছু হারায় না, কিছু যোগও হয় না.",
+    "দুই দিকেই দুইটা করে হিসাব। কিছু হারায় না, কিছু যোগও হয় না।",
   ];
 
   return (
@@ -1654,9 +1654,9 @@ export function SchoolSlip() {
   const s = useScene(2, [700, 2400]);
   const k = s.k;
   const SAY = [
-    "নাসিবের card (2, 1), আর কালকের স্কুলের রাস্তার card (−1, 3).",
-    "দুইটাকেই পুরানো grid এর slot হিসাবে পড়লাম. দুইটাই ভুল জায়গায় থামলো.",
-    "যার card, তার grid এ হাঁটলে: flat (3, 1), আর স্কুলের গেট.",
+    "নাসিবের card (2, 1), আর কালকের স্কুলের রাস্তার card (−1, 3)।",
+    "দুইটাকেই পুরানো grid এর slot হিসাবে পড়লাম। দুইটাই ভুল জায়গায় থামলো।",
+    "যার card, তার grid এ হাঁটলে: flat (3, 1), আর স্কুলের গেট।",
   ];
   const tag = (t: string, cls: string) => <div className={`text-center font-mono text-xs font-bold ${cls}`}>{t}</div>;
 
@@ -1738,7 +1738,7 @@ export function FirstNight({}: Story) {
             <g className={POP}>
               <Jilapi x={254} y={GROUND - 28} s={0.8} half />
             </g>
-            <Bubble x={222} y={GROUND - 72} side="mid" lines={["অর্ধেক অর্ধেক.", "দুইজনই ঠিক."]} />
+            <Bubble x={222} y={GROUND - 72} side="mid" lines={["অর্ধেক অর্ধেক।", "দুইজনই ঠিক।"]} />
           </>
         )}
       </Stage>
@@ -1759,7 +1759,7 @@ export function BetSettled() {
 
   const unseal = () => {
     setOpen(true);
-    p.play(3, () => pass("একই তথ্য, ভালো grid: দুইজনই ঠিক."));
+    p.play(3, () => pass("একই তথ্য, ভালো grid: দুইজনই ঠিক।"));
   };
 
   return (
@@ -1774,12 +1774,12 @@ export function BetSettled() {
         <div className="mx-auto grid max-w-sm gap-1.5">
           {shown >= 1 ? (
             <div className={`${FADE} rounded-xl border-2 border-accent/50 bg-accent/5 px-2.5 py-1 text-[0.8rem] leading-snug`}>
-              <b className="text-cat-coral">নাসিব</b> <Tick /> নতুন কোনো তথ্য নাই: card (2, 1) সোজা ফেরত গেলো flat (3, 1) এ.
+              <b className="text-cat-coral">নাসিব</b> <Tick /> নতুন কোনো তথ্য নাই: card (2, 1) সোজা ফেরত গেলো flat (3, 1) এ।
             </div>
           ) : null}
           {shown >= 2 ? (
             <div className={`${FADE} rounded-xl border-2 border-accent/50 bg-accent/5 px-2.5 py-1 text-[0.8rem] leading-snug`}>
-              <b className="text-cat-blue">ফাহিম</b> <Tick /> ভাড়া এক সংখ্যায়: size এর প্রতি ধাপে 8000, আর 8 টা flat এই মিলে গেলো.
+              <b className="text-cat-blue">ফাহিম</b> <Tick /> ভাড়া এক সংখ্যায়: size এর প্রতি ধাপে 8000, আর 8 টা flat এই মিলে গেলো।
             </div>
           ) : null}
         </div>
@@ -1794,8 +1794,8 @@ export function BetSettled() {
           <Jilapi x={100} y={36} />
         )}
       </svg>
-      {shown >= 3 ? <div className={`${FADE} text-center text-sm font-semibold`}>দুইজনই ঠিক. জিলাপি ভাগ হলো.</div> : null}
-      <Task done={shown >= 3}>সিল করা বাজিটা খুলুন.</Task>
+      {shown >= 3 ? <div className={`${FADE} text-center text-sm font-semibold`}>দুইজনই ঠিক। জিলাপি ভাগ হলো।</div> : null}
+      <Task done={shown >= 3}>সিল করা বাজিটা খুলুন।</Task>
     </>
   );
 }
@@ -1812,9 +1812,9 @@ export function KhataTwice() {
   const s = useScene(2, [700, 2600]);
   const k = s.k;
   const SAY = [
-    "চাচার খাতা: 8 টা flat, bed, bath আর ভাড়া.",
-    "একই 8 টা row, একই ভাড়া. শুধু দুইটা column নতুন করে লেখা: size আর imbalance.",
-    "এখন size পড়লেই ভাড়া বোঝা যায়. নতুন তথ্য নাই, শুধু দেখা সহজ.",
+    "চাচার খাতা: 8 টা flat, bed, bath আর ভাড়া।",
+    "একই 8 টা row, একই ভাড়া। শুধু দুইটা column নতুন করে লেখা: size আর imbalance।",
+    "এখন size পড়লেই ভাড়া বোঝা যায়। নতুন তথ্য নাই, শুধু দেখা সহজ।",
   ];
   const cols: [string, (f: Flat) => number][] =
     k >= 1
@@ -1883,7 +1883,7 @@ export function NasibNotDone() {
         {k < 2 && <Jilapi x={206} y={GROUND - 28} s={0.8} half />}
         {k >= 1 && <CastCard x={134} y={40} text="(4, 2)" tone="amber" />}
         {k >= 1 && <CastCard x={186} y={40} text="(3, 1)" tone="blue" />}
-        {k >= 2 && <Bubble x={220} y={GROUND - 68} side="left" lines={["যেকোনো grid নিলে", "যেকোনো সংখ্যা."]} />}
+        {k >= 2 && <Bubble x={220} y={GROUND - 68} side="left" lines={["যেকোনো grid নিলে", "যেকোনো সংখ্যা।"]} />}
         {k >= 3 && (
           <text x={158} y={112} textAnchor="middle" fontSize={22} fontWeight={800} fill="#fde047" className={POP}>
             ?

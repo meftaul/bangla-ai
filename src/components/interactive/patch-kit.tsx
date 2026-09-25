@@ -12,7 +12,7 @@ import { GOOD_LENS, byCols, det, partway, type Cols } from "./light-kit";
 // The patch is one chalk ঘর of light (the stencil's one square) carried by a
 // lens into its parallelogram: corners at, at + c₁, at + c₁ + c₂, at + c₂,
 // where c₁, c₂ are the lens's columns (light-kit's `Cols`). One ঘর = one
-// কৌটা রং. How many ঘর the patch covers is the determinant.
+// কৌটা রং। How many ঘর the patch covers is the determinant.
 //
 // "Cut and slide": for a lens with whole-number columns, the chalk lines cut
 // the patch into pieces, one per ঘর it touches. Pieces that hang over (only

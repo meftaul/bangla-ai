@@ -313,7 +313,7 @@ export function UndoBet() {
   const toggle = (i: number) => setTicks(ticks.map((t, j) => (j === i ? !t : t)));
   const seal = () => {
     setSealed(true);
-    act.play(order.length + 1, () => pass("বাজি সিল হলো. সহজটা দিয়ে শুরু."));
+    act.play(order.length + 1, () => pass("বাজি সিল হলো। সহজটা দিয়ে শুরু।"));
   };
   // how many ticked roads have sent their "?" up so far
   const shown = !sealed ? 0 : act.running ? act.k : order.length + 1;
@@ -359,8 +359,8 @@ export function UndoBet() {
           {sealed ? "সিল হলো" : "বাজি সিল করুন"}
         </button>
       </div>
-      <div className="mt-2 text-center text-sm text-muted">রাস্তায় এখন যা আছে. কোনগুলো উল্টা চালালে কাগজে ফিরবে?</div>
-      <Task done={sealed && shown > order.length}>যে মোড়গুলো কাগজে ফিরবে বলে মনে হয়, সেগুলোতে tick দিন. তারপর সিল করুন.</Task>
+      <div className="mt-2 text-center text-sm text-muted">রাস্তায় এখন যা আছে। কোনগুলো উল্টা চালালে কাগজে ফিরবে?</div>
+      <Task done={sealed && shown > order.length}>যে মোড়গুলো কাগজে ফিরবে বলে মনে হয়, সেগুলোতে tick দিন। তারপর সিল করুন।</Task>
     </>
   );
 }
@@ -423,7 +423,7 @@ export function RunBackwards() {
   };
   const onS = (v: number) => {
     setS(v);
-    land.play(1, v === -1 ? () => pass("দ্বিগুণ হলে অর্ধেক, ঠেলা হলে উল্টা ঠেলা.") : undefined);
+    land.play(1, v === -1 ? () => pass("দ্বিগুণ হলে অর্ধেক, ঠেলা হলে উল্টা ঠেলা।") : undefined);
   };
 
   return (
@@ -437,7 +437,7 @@ export function RunBackwards() {
           under={<Alpana f={f} move={(p) => p} faint />}
         />
         <div className="mt-2 text-center text-sm text-muted">
-          {round === 0 ? "রাস্তায় সব দ্বিগুণ. হালকা ছবিটা কাগজের মাপ." : "Shear কি করেছিল? প্রত্যেক বিন্দুকে ডানে ঠেলেছিল. উচ্চতা যত, তত ঘর."}
+          {round === 0 ? "রাস্তায় সব দ্বিগুণ। হালকা ছবিটা কাগজের মাপ।" : "Shear কি করেছিল? প্রত্যেক বিন্দুকে ডানে ঠেলেছিল। উচ্চতা যত, তত ঘর।"}
         </div>
         <div className="mt-2 flex items-center justify-center gap-2 text-sm font-medium">
           {round === 0 ? (
@@ -457,7 +457,7 @@ export function RunBackwards() {
         <div className="mt-2 flex min-h-11 items-center justify-center gap-3 text-sm">
           {hit ? (
             <>
-              <span className={`font-semibold text-accent-text ${FADE}`}>{round === 0 ? "কাগজের মাপে ফিরলো." : "মাইনাস মানে বামে. ফিরলো."}</span>
+              <span className={`font-semibold text-accent-text ${FADE}`}>{round === 0 ? "কাগজের মাপে ফিরলো।" : "মাইনাস মানে বামে। ফিরলো।"}</span>
               {round === 0 && (
                 <button type="button" className={quietBtn} onClick={() => setRound(1)}>
                   চার নম্বর মোড় →
@@ -465,7 +465,7 @@ export function RunBackwards() {
               )}
             </>
           ) : (
-            <span className="text-muted">{round === 0 ? "আলপনা টা হালকা ছবির উপর বসান." : "মাইনাস দিলে ঠেলা যায় বামে."}</span>
+            <span className="text-muted">{round === 0 ? "আলপনা টা হালকা ছবির উপর বসান।" : "মাইনাস দিলে ঠেলা যায় বামে।"}</span>
           )}
         </div>
       </div>
@@ -475,7 +475,7 @@ export function RunBackwards() {
           ["মোড় 4", done],
         ]}
       />
-      <Task done={done}>{round === 0 ? "এক নম্বর মোড়ের আলপনা কাগজের মাপে ফিরিয়ে আনুন." : "এবার চার নম্বর মোড়: shear টা উল্টা চালান."}</Task>
+      <Task done={done}>{round === 0 ? "এক নম্বর মোড়ের আলপনা কাগজের মাপে ফিরিয়ে আনুন।" : "এবার চার নম্বর মোড়: shear টা উল্টা চালান।"}</Task>
     </>
   );
 }
@@ -497,7 +497,7 @@ export function FlatCrossing() {
   const tap = (x: number) => {
     const next = taps.includes(x) ? [...taps.filter((t) => t !== x), x] : [...taps, x];
     setTaps(next);
-    rise.play(1, next.length === 2 && taps.length === 1 ? () => pass("অনেকে এক জায়গায়: কে কোথা থেকে, বলা যায় না.") : undefined);
+    rise.play(1, next.length === 2 && taps.length === 1 ? () => pass("অনেকে এক জায়গায়: কে কোথা থেকে, বলা যায় না।") : undefined);
   };
   return (
     <>
@@ -532,14 +532,14 @@ export function FlatCrossing() {
       </svg>
       <div className="mt-2 min-h-12 text-center text-sm">
         {last === null ? (
-          <span className="text-muted">লাইনের উপর সাদা বিন্দুগুলোর যেকোনোটায় tap করুন.</span>
+          <span className="text-muted">লাইনের উপর সাদা বিন্দুগুলোর যেকোনোটায় tap করুন।</span>
         ) : (
           <span key={last} className={FADE}>
             <span className="font-mono whitespace-nowrap">({last}, 0)</span> তে এসে পড়তে পারে <span className="font-mono whitespace-nowrap">({last}, 1)</span>, <span className="font-mono whitespace-nowrap">({last}, 4)</span>, এমনকি <span className="font-mono whitespace-nowrap">({last}, 99)</span>. কে ছিল আসলে?
           </span>
         )}
       </div>
-      <Task done={taps.length >= 2 && !rise.running}>লাইনের দুইটা আলাদা জায়গায় tap করুন. প্রত্যেকবার জিজ্ঞেস করুন: তুমি কোথা থেকে এসেছিলে?</Task>
+      <Task done={taps.length >= 2 && !rise.running}>লাইনের দুইটা আলাদা জায়গায় tap করুন। প্রত্যেকবার জিজ্ঞেস করুন: তুমি কোথা থেকে এসেছিলে?</Task>
     </>
   );
 }
@@ -604,7 +604,7 @@ export function OwlShadow() {
     setZ(v);
     const next = seen.includes(v) ? seen : [...seen, v];
     if (next !== seen) setSeen(next);
-    rise.play(1, next.length === 3 && seen.length === 2 ? () => pass("তিন সংখ্যা থেকে দুই: কিছু হারাবেই.") : undefined);
+    rise.play(1, next.length === 3 && seen.length === 2 ? () => pass("তিন সংখ্যা থেকে দুই: কিছু হারাবেই।") : undefined);
   };
   return (
     <>
@@ -619,7 +619,7 @@ export function OwlShadow() {
         পেঁচা <span className="font-mono">(3, 2, {z})</span> → ছায়া <span className="font-mono">(3, 2)</span>
       </div>
       <Ticks items={[1, 2, 3, 4].map((h): [string, boolean] => [`উচ্চতা ${h}`, seen.includes(h)])} />
-      <Task done={seen.length >= 3 && !rise.running}>বাঁশটা উঠান-নামান. তিনটা আলাদা উচ্চতায় ছায়াটা দেখুন.</Task>
+      <Task done={seen.length >= 3 && !rise.running}>বাঁশটা উঠান-নামান। তিনটা আলাদা উচ্চতায় ছায়াটা দেখুন।</Task>
     </>
   );
 }
@@ -672,7 +672,7 @@ export function ShapeIsRoute() {
   const chk = usePlay(700);
   const check = () => {
     setChecked(true);
-    chk.play(3, () => pass("m × n: n টা সংখ্যা ঢোকে, m টা বের হয়."));
+    chk.play(3, () => pass("m × n: n টা সংখ্যা ঢোকে, m টা বের হয়।"));
   };
   const ck = !checked ? 0 : chk.running ? chk.k : 3;
   const tone = cur === 1 ? "#2dd4bf" : AMBER;
@@ -758,10 +758,10 @@ export function ShapeIsRoute() {
               Column দিয়ে: <span className="font-mono">2×(7, 1, 1) + 3×(0, 2, 1) = (14, 8, 5)</span>
             </div>
           )}
-          {ck >= 3 && <div className={`font-semibold text-accent-text ${FADE}`}>দুই পথে একই উত্তর.</div>}
+          {ck >= 3 && <div className={`font-semibold text-accent-text ${FADE}`}>দুই পথে একই উত্তর।</div>}
         </div>
       )}
-      <Task done={checked && ck >= 3}>(1, 0) আর (0, 1) machine এ পাঠান. উত্তর দুইটা matrix এর column হবে. তারপর (2, 3) দিয়ে মিলিয়ে দেখুন.</Task>
+      <Task done={checked && ck >= 3}>(1, 0) আর (0, 1) machine এ পাঠান। উত্তর দুইটা matrix এর column হবে। তারপর (2, 3) দিয়ে মিলিয়ে দেখুন।</Task>
     </>
   );
 }
@@ -858,7 +858,7 @@ export function YourUndo() {
     setVerdict(v);
     b.run(2);
     if (v === it.back) {
-      if (round === YU_ITEMS.length - 1) fin.play(2, () => pass("দুই column এক লাইনে, বা সংখ্যা কমলে: ফেরে না."));
+      if (round === YU_ITEMS.length - 1) fin.play(2, () => pass("দুই column এক লাইনে, বা সংখ্যা কমলে: ফেরে না।"));
     } else setMiss(miss + 1);
   };
   const next = () => {
@@ -868,9 +868,9 @@ export function YourUndo() {
 
   let nope: string | null = null;
   if (verdict !== null && !right) {
-    if (it.back) nope = "দেখুন, উল্টা move চালাতেই আলপনা আগের জায়গায় ফিরে এলো. কিছুই হারায় নাই.";
-    else if (!it.cols) nope = "4 টা সংখ্যা ঢুকে 2 টা বের হয়. দুইটা আলাদা list একই উত্তর দিলো. ফেরত পাঠাবেন কোনটায়?";
-    else nope = "দেখুন: পুরা আলপনা একটা লাইনে বসে গেলো. তিনটা বিন্দু এক জায়গায়. উল্টা চালালে কোনটা কোথায় যাবে?";
+    if (it.back) nope = "দেখুন, উল্টা move চালাতেই আলপনা আগের জায়গায় ফিরে এলো। কিছুই হারায় নাই।";
+    else if (!it.cols) nope = "4 টা সংখ্যা ঢুকে 2 টা বের হয়। দুইটা আলাদা list একই উত্তর দিলো। ফেরত পাঠাবেন কোনটায়?";
+    else nope = "দেখুন: পুরা আলপনা একটা লাইনে বসে গেলো। তিনটা বিন্দু এক জায়গায়। উল্টা চালালে কোনটা কোথায় যাবে?";
   }
 
   return (
@@ -923,7 +923,7 @@ export function YourUndo() {
         </div>
       )}
       <Ticks items={YU_ITEMS.map((_, i): [string, boolean] => [`${i + 1}`, i < round || (i === round && right)])} />
-      <Task done={round === YU_ITEMS.length - 1 && right && !fin.running}>পাঁচটা matrix, একটা একটা করে. প্রত্যেকটা কাগজে ফেরত আসে, না আসে না?</Task>
+      <Task done={round === YU_ITEMS.length - 1 && right && !fin.running}>পাঁচটা matrix, একটা একটা করে। প্রত্যেকটা কাগজে ফেরত আসে, না আসে না?</Task>
     </>
   );
 }
@@ -966,7 +966,7 @@ export function TryWhichLine() {
   const choose = (i: number) => {
     if (sq.running) return;
     setPick(i);
-    if (i === TW_RIGHT) sq.play(3, () => pass("দুই column একই দিকে, তাই রাস্তা একটা লাইনে."));
+    if (i === TW_RIGHT) sq.play(3, () => pass("দুই column একই দিকে, তাই রাস্তা একটা লাইনে।"));
     else {
       setMiss(miss + 1);
       sq.play(3);
@@ -1004,9 +1004,9 @@ export function TryWhichLine() {
         ))}
       </div>
       {landed && pick !== TW_RIGHT && (
-        <Nope key={miss}>{pick === 0 ? "উঁহু, শোয়ানো লাইন ছিল পাঁচ নম্বর মোড়ে. এখানে দুই column ই (1, 1). আলপনা কোনদিকে বসলো, দেখুন." : "উঁহু, আলপনা বসলো অন্যদিকে. Column দুইটা কোনদিকে তাকিয়ে আছে?"}</Nope>
+        <Nope key={miss}>{pick === 0 ? "উঁহু, শোয়ানো লাইন ছিল পাঁচ নম্বর মোড়ে। এখানে দুই column ই (1, 1)। আলপনা কোনদিকে বসলো, দেখুন।" : "উঁহু, আলপনা বসলো অন্যদিকে। Column দুইটা কোনদিকে তাকিয়ে আছে?"}</Nope>
       )}
-      <Task done={pick === TW_RIGHT && landed}>এই matrix পুরা রাস্তাকে কোন লাইনে চেপে বসাবে? ছবি দেখে বাছুন.</Task>
+      <Task done={pick === TW_RIGHT && landed}>এই matrix পুরা রাস্তাকে কোন লাইনে চেপে বসাবে? ছবি দেখে বাছুন।</Task>
     </>
   );
 }
@@ -1061,9 +1061,9 @@ export function GateSteps({}: Story) {
         </g>
         {k >= 1 && <S_Name x={196} y={150} text="তপু" />}
         <Person who="nasib" x={262} y={150} facing={-1} label mood={k >= 4 ? "smug" : "plain"} />
-        {k === 2 && <Bubble x={196} y={84} lines={["পাঁচটা আলপনাই", "ম্যাগাজিনে যাবে."]} />}
-        {k === 3 && <Bubble x={62} y={84} side="right" lines={["কাগজ তো নাই.", "রাস্তা আছে, খাতা আছে."]} />}
-        {k >= 4 && <Bubble x={262} y={84} side="left" lines={["উল্টা চালালেই", "তো হয়."]} />}
+        {k === 2 && <Bubble x={196} y={84} lines={["পাঁচটা আলপনাই", "ম্যাগাজিনে যাবে।"]} />}
+        {k === 3 && <Bubble x={62} y={84} side="right" lines={["কাগজ তো নাই।", "রাস্তা আছে, খাতা আছে।"]} />}
+        {k >= 4 && <Bubble x={262} y={84} side="left" lines={["উল্টা চালালেই", "তো হয়।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1086,7 +1086,7 @@ export function FifthCrossing({}: Story) {
         <rect x={50} y={116} width={12} height={10} rx={1} fill="#1d4ed8" />
         <Person who="nasib" x={k >= 1 ? 262 : 370} y={164} facing={-1} walking={k === 1} label />
         {k === 2 && <Bubble x={42} y={98} side="right" lines={["ওটাও ফেরত আসবে?"]} />}
-        {k >= 3 && <Bubble x={262} y={98} side="left" lines={["আসবে. দাঁড়াও."]} />}
+        {k >= 3 && <Bubble x={262} y={98} side="left" lines={["আসবে। দাঁড়াও।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1113,7 +1113,7 @@ export function OwlNoon({}: Story) {
         <ellipse cx={fx} cy={151} rx={9} ry={2.5} fill="#0b1220" fillOpacity={0.45} className="transition-[cx] duration-[1200ms] ease-out motion-reduce:transition-none" />
         <Person who="fahim" x={fx} y={150} walking={k === 1} arm="hold" label />
         <Person who="nasib" x={266} y={150} facing={-1} label mood={k >= 3 ? "smug" : "plain"} />
-        {k >= 3 && <Bubble x={266} y={84} side="left" lines={["ছায়া দেখে বলে দিবো,", "পেঁচা কত উঁচুতে."]} />}
+        {k >= 3 && <Bubble x={266} y={84} side="left" lines={["ছায়া দেখে বলে দিবো,", "পেঁচা কত উঁচুতে।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1154,7 +1154,7 @@ export function RinaRedraws({}: Story) {
         <S_Name x={40} y={150} text="তপু" />
         <Person who="nana" x={284} y={150} facing={-1} arm={k >= 4 ? "hold" : "down"} />
         <S_Name x={284} y={150} text="আর্ট স্যার" />
-        {k >= 4 && <Bubble x={284} y={84} side="left" lines={["হইছে."]} />}
+        {k >= 4 && <Bubble x={284} y={84} side="left" lines={["হইছে।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1453,7 +1453,7 @@ export function OldKhata({}: Story) {
 //      arrow back with "?", to a blank page. Which crossings have that way
 //      back is the bet, left open.
 
-const X1_SAY = ["কাগজে design. আর্ট স্যারের খাতায় এক মোড়ের matrix.", "Matrix চালিয়ে design উঠলো রাস্তায়.", "তপুর দরকার উল্টা পথ: রাস্তা থেকে কাগজে.", "পাঁচ মোড়েই কি এই পথ আছে? এটাই বাজি."];
+const X1_SAY = ["কাগজে design। আর্ট স্যারের খাতায় এক মোড়ের matrix।", "Matrix চালিয়ে design উঠলো রাস্তায়।", "তপুর দরকার উল্টা পথ: রাস্তা থেকে কাগজে।", "পাঁচ মোড়েই কি এই পথ আছে? এটাই বাজি।"];
 const X1_F = fitFrame([FC_CROSS[1].cols], 76, 66);
 
 export function BackToPaper() {
@@ -1493,7 +1493,7 @@ export function BackToPaper() {
 // 2½ · The way back is a matrix too. The shear goes out and comes back; its
 //      matrix and the undo matrix appear beside it.
 
-const X2_SAY = ["চার নম্বর মোড়ের কাগজ.", "Shear: প্রত্যেক বিন্দু তার উচ্চতা যত, তত ঘর ডানে.", "উল্টা shear: উচ্চতা যত, তত ঘর বামে. ফেরত.", "উল্টা move টাও একটা matrix."];
+const X2_SAY = ["চার নম্বর মোড়ের কাগজ।", "Shear: প্রত্যেক বিন্দু তার উচ্চতা যত, তত ঘর ডানে।", "উল্টা shear: উচ্চতা যত, তত ঘর বামে। ফেরত।", "উল্টা move টাও একটা matrix।"];
 const X2_SHEAR = FC_CROSS[3].cols;
 const X2_F = fitFrame([ID, X2_SHEAR], 170, 90);
 
@@ -1534,7 +1534,7 @@ export function UndoShear() {
 //      to (0, 0); the grid presses down onto the line and the two points meet
 //      at (5, 0); (5, 99) would too.
 
-const X3_SAY = ["কাগজে দুইটা বিন্দু: (5, 1) আর (5, 4).", "রিনার matrix: প্রথম দড়ি থাকে (1, 0) তে. দ্বিতীয়টা যাবে (0, 0) তে.", "পুরা grid চেপে বসলো একটা লাইনে. দুই বিন্দু এক জায়গায়, (5, 0).", "(5, 99) হলেও আসতো এখানেই. কে ছিল, বলার উপায় নাই."];
+const X3_SAY = ["কাগজে দুইটা বিন্দু: (5, 1) আর (5, 4)।", "রিনার matrix: প্রথম দড়ি থাকে (1, 0) তে। দ্বিতীয়টা যাবে (0, 0) তে।", "পুরা grid চেপে বসলো একটা লাইনে। দুই বিন্দু এক জায়গায়, (5, 0)।", "(5, 99) হলেও আসতো এখানেই। কে ছিল, বলার উপায় নাই।"];
 const X3_F = makeFrame(-0.8, 7, -1.2, 5.2, 24, 8);
 const X3_PTS: XY[] = [
   [5, 1],
@@ -1592,7 +1592,7 @@ export function PressFlat() {
 // 4½ · Two owls, one shadow. Low owl, then high; both kept, one shadow; then
 //      the 2 × 3 with its third column (height) marked: it goes nowhere.
 
-const X4_SAY = ["পেঁচা (3, 2, 1) এ. ছায়া (3, 2).", "পেঁচা উঠলো (3, 2, 4) এ. ছায়া এখনো (3, 2).", "দুইটা আলাদা পেঁচা, একটা ছায়া.", "Matrix এর তৃতীয় column শূন্য. উচ্চতা কোথাও যায় না."];
+const X4_SAY = ["পেঁচা (3, 2, 1) এ। ছায়া (3, 2)।", "পেঁচা উঠলো (3, 2, 4) এ। ছায়া এখনো (3, 2)।", "দুইটা আলাদা পেঁচা, একটা ছায়া।", "Matrix এর তৃতীয় column শূন্য। উচ্চতা কোথাও যায় না।"];
 
 export function TwoOwls() {
   const s = useScene(3, [600, 1600, 1600, 2400]);
@@ -1621,7 +1621,7 @@ export function TwoOwls() {
 //      narrow to two through the shadow's 2 × 3; then a network layer's
 //      768 → 512.
 
-const X5_SAY = ["কাগজের একটা বিন্দু: দুইটা সংখ্যা.", "3 × 2 (পেঁচার খাঁচা): দুই ঢুকলো, তিন বের হলো.", "2 × 3 (ছায়া): তিন ঢুকলো, দুই বের হলো.", "AI এর একটা layer: 512 × 768. 768 ঢোকে, 512 বের হয়."];
+const X5_SAY = ["কাগজের একটা বিন্দু: দুইটা সংখ্যা।", "3 × 2 (পেঁচার খাঁচা): দুই ঢুকলো, তিন বের হলো।", "2 × 3 (ছায়া): তিন ঢুকলো, দুই বের হলো।", "AI এর একটা layer: 512 × 768. 768 ঢোকে, 512 বের হয়।"];
 
 function X5_Stack({ x, n, tone }: { x: number; n: number; tone: string }) {
   return (
@@ -1675,7 +1675,7 @@ export function RouteWidth() {
 //      on top of it; then the line y = x through them, and a few recipes'
 //      landing spots on it.
 
-const X7_SAY = ["দুই দড়ি, pillar থেকে.", "প্রথম column (1, 1): প্রথম দড়ি কোনাকুনি.", "দ্বিতীয় column ও (1, 1). একই জায়গায়.", "যেকোনো recipe এ এদের যোগ পড়বে এই লাইনেই."];
+const X7_SAY = ["দুই দড়ি, pillar থেকে।", "প্রথম column (1, 1): প্রথম দড়ি কোনাকুনি।", "দ্বিতীয় column ও (1, 1)। একই জায়গায়।", "যেকোনো recipe এ এদের যোগ পড়বে এই লাইনেই।"];
 const X7_F = makeFrame(-1, 4, -1, 4, 30, 8);
 
 export function ColumnsSameWay() {
@@ -1703,7 +1703,7 @@ export function ColumnsSameWay() {
 
 // 8½ · The bet settled, crossing by crossing: four ticks, one cross.
 
-const X8_SAY = ["পাঁচ মোড়, পাঁচটা বাজি.", "দ্বিগুণ: অর্ধেক করলেই ফেরত.", "আয়না: আবার আয়না.", "ঘোরানো: উল্টা দিকে ঘোরানো.", "Shear: উল্টা ঠেলা.", "পাঁচ নম্বর: দুই column এক লাইনে. ফেরার পথ নাই."];
+const X8_SAY = ["পাঁচ মোড়, পাঁচটা বাজি।", "দ্বিগুণ: অর্ধেক করলেই ফেরত।", "আয়না: আবার আয়না।", "ঘোরানো: উল্টা দিকে ঘোরানো।", "Shear: উল্টা ঠেলা।", "পাঁচ নম্বর: দুই column এক লাইনে। ফেরার পথ নাই।"];
 const X8_F = FC_CROSS.map((c) => fitFrame([c.cols], 64, 52, 4, 0.5));
 
 export function FiveBack() {
@@ -1730,7 +1730,7 @@ export function FiveBack() {
 //      determinant. The road presses onto a line and the number reads 0;
 //      then the way back from the line is crossed out: no inverse.
 
-const X3Z_SAY = ["যে matrix একটা দিক হারায়, Article 8 এ তার একটা সংখ্যা মাপা হবে: determinant.", "পুরা রাস্তা একটা লাইনে বসে গেলে ওই সংখ্যা শূন্য.", "Determinant শূন্য হলে উল্টা matrix, মানে inverse, থাকে না."];
+const X3Z_SAY = ["যে matrix একটা দিক হারায়, Article 8 এ তার একটা সংখ্যা মাপা হবে: determinant।", "পুরা রাস্তা একটা লাইনে বসে গেলে ওই সংখ্যা শূন্য।", "Determinant শূন্য হলে উল্টা matrix, মানে inverse, থাকে না।"];
 const X3Z_F = fitFrame([ID, FLAT], 170, 110);
 
 export function ZeroLine() {

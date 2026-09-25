@@ -95,7 +95,7 @@ export function TiffinSums({}: Story) {
         <Person who="fahim" x={104} y={150} mood="plain" />
         <Person who="karim" x={208} y={150} facing={-1} arm={k === 1 || k === 2 ? "point" : "down"} mood={k >= 3 ? "puzzled" : "plain"} />
         {k === 3 && <Bubble x={208} y={82} side="right" lines={["একটা স্কুল,", "দুইটা দূরত্ব?"]} />}
-        {k >= 4 && <Bubble x={208} y={82} side="right" lines={["একটা card", "নিশ্চয়ই ভুল."]} />}
+        {k >= 4 && <Bubble x={208} y={82} side="right" lines={["একটা card", "নিশ্চয়ই ভুল।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -126,7 +126,7 @@ export function DistanceBet() {
 
   const seal = () => {
     setSealed(true);
-    pass("বাজি ধরা হলো. শেষে ফিতা দিয়ে মাপবো.");
+    pass("বাজি ধরা হলো। শেষে ফিতা দিয়ে মাপবো।");
   };
 
   return (
@@ -182,9 +182,9 @@ export function DistanceBet() {
           </div>
         )
       ) : (
-        <div className={`${FADE} mt-2.5 text-center text-[0.95rem] text-muted`}>বাজি ধরা হলো. মাপবে ফিতা.</div>
+        <div className={`${FADE} mt-2.5 text-center text-[0.95rem] text-muted`}>বাজি ধরা হলো। মাপবে ফিতা।</div>
       )}
-      <Task done={sealed}>স্কুল আসলে কত দূরে? একটা বেছে নিয়ে বাজি ধরুন.</Task>
+      <Task done={sealed}>স্কুল আসলে কত দূরে? একটা বেছে নিয়ে বাজি ধরুন।</Task>
     </>
   );
 }
@@ -197,10 +197,10 @@ export function DistanceBet() {
 
 const X1F = makeFrame(-1, 3.5, -0.5, 3.5, 20, 7);
 const X1_SAY = [
-  "দুইটা card, একটা স্কুল.",
-  "Map এর (2, 3): 2 block east, 3 block north. স্কুলে পৌঁছায়.",
-  "রাস্তার (−1, 3): গলিতে 3, বড় রাস্তায় 1 পিছনে. এটাও স্কুলে পৌঁছায়.",
-  "দুইটাই পৌঁছায়. তবু Pythagoras বলে একবার 3.61, একবার 3.16.",
+  "দুইটা card, একটা স্কুল।",
+  "Map এর (2, 3): 2 block east, 3 block north। স্কুলে পৌঁছায়।",
+  "রাস্তার (−1, 3): গলিতে 3, বড় রাস্তায় 1 পিছনে। এটাও স্কুলে পৌঁছায়।",
+  "দুইটাই পৌঁছায়। তবু Pythagoras বলে একবার 3.61, একবার 3.16.",
 ];
 const X1_WALK: XY[] = [O, [1, 0], [2, 0], [2, 1], [2, 2], [2, 3]];
 
@@ -257,7 +257,7 @@ export function SameSchool() {
     setGrid(g);
     if (g === "roads" && !over) {
       setOver(true);
-      pass("স্কুল নড়ে নাই. নড়েছে শুধু grid.");
+      pass("স্কুল নড়ে নাই। নড়েছে শুধু grid।");
     }
   };
 
@@ -309,7 +309,7 @@ export function SameSchool() {
           </Choice>
         ))}
       </div>
-      <Task done={over}>আগে guess করুন. তারপর রাস্তার grid এ গিয়ে arrow টার দিকে তাকান.</Task>
+      <Task done={over}>আগে guess করুন। তারপর রাস্তার grid এ গিয়ে arrow টার দিকে তাকান।</Task>
     </>
   );
 }
@@ -323,10 +323,10 @@ export function SameSchool() {
 
 const X2BF = makeFrame(-1.6, 3.4, -0.9, 3.6, 22, 8);
 const X2B_SAY = [
-  "বাসা থেকে স্কুলের arrow. নিচে map এর দুই direction: east আর north.",
-  "এরকম এক জোড়া direction কে বলে basis. এই basis এ card (2,\u00a03).",
-  "রাস্তার basis: সোজা আর বাঁকা. একই arrow, card (−1,\u00a03).",
-  "(−1,\u00a03) কে map এর basis এ পড়লে? অন্য জায়গা. Card একা কিছু বোঝায় না.",
+  "বাসা থেকে স্কুলের arrow। নিচে map এর দুই direction: east আর north.",
+  "এরকম এক জোড়া direction কে বলে basis। এই basis এ card (2,\u00a03).",
+  "রাস্তার basis: সোজা আর বাঁকা। একই arrow, card (−1,\u00a03).",
+  "(−1,\u00a03) কে map এর basis এ পড়লে? অন্য জায়গা। Card একা কিছু বোঝায় না।",
 ];
 
 export function BasisPair() {
@@ -404,9 +404,9 @@ const X2_NEW: { who: "nasib" | "karim" | "fahim"; x: number; s: number }[] = [
   { who: "karim", x: 276, s: 1.14 },
 ];
 const X2_SAY = [
-  "গত বছর, পুরানো স্কুলের assembly. Height অনুযায়ী লাইন. ফাহিম সবার শেষে: সবচেয়ে লম্বা.",
-  "আজ সকালে, নতুন স্কুলে. একই ফাহিম, এবার মাঝখানে.",
-  "ওর height একচুলও বদলায় নাই. বদলেছে শুধু লাইন.",
+  "গত বছর, পুরানো স্কুলের assembly। Height অনুযায়ী লাইন। ফাহিম সবার শেষে: সবচেয়ে লম্বা।",
+  "আজ সকালে, নতুন স্কুলে। একই ফাহিম, এবার মাঝখানে।",
+  "ওর height একচুলও বদলায় নাই। বদলেছে শুধু লাইন।",
 ];
 
 export function AssemblyLines() {
@@ -475,8 +475,8 @@ export function TapeOut({}: Story) {
         )}
         {k >= 3 && <Draw d="M194 108H150" strokeWidth={2.4} ms={900} className="stroke-[#eab308]" />}
         {k === 1 && <Bubble x={214} y={82} side="left" lines={["এটা কী?"]} />}
-        {k === 2 && <Bubble x={104} y={82} side="right" lines={["মাপার ফিতা."]} />}
-        {k >= 3 && <Bubble x={214} y={82} side="left" lines={["আগে এক block", "মেপে দেখি."]} />}
+        {k === 2 && <Bubble x={104} y={82} side="right" lines={["মাপার ফিতা।"]} />}
+        {k >= 3 && <Bubble x={214} y={82} side="left" lines={["আগে এক block", "মেপে দেখি।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -554,7 +554,7 @@ export function LaneBlock() {
           </div>
         ))}
       </div>
-      <Task done={all}>বাসা থেকে ফিতার মাথা টেনে বড় রাস্তার এক block আর গলির এক block মাপুন.</Task>
+      <Task done={all}>বাসা থেকে ফিতার মাথা টেনে বড় রাস্তার এক block আর গলির এক block মাপুন।</Task>
     </>
   );
 }
@@ -566,10 +566,10 @@ export function LaneBlock() {
 
 const X3F = makeFrame(-0.4, 3.4, -0.4, 3.4, 26, 10);
 const X3_SAY = [
-  "গলির এক block: বাসা থেকে (1, 1).",
-  "এটা map এর একটা ছোট square এর কোনাকুনি. দুই পাশ 1 আর 1, কোণায় right angle.",
+  "গলির এক block: বাসা থেকে (1, 1)।",
+  "এটা map এর একটা ছোট square এর কোনাকুনি। দুই পাশ 1 আর 1, কোণায় right angle।",
   "তাই Pythagoras খাটে: √(1² + 1²) = √2 = 1.41.",
-  "গলিতে 3 block মানে 3 × 1.41 = 4.24 পথ. করিমের হিসাব ওটাকে ধরেছিল 3.",
+  "গলিতে 3 block মানে 3 × 1.41 = 4.24 পথ। করিমের হিসাব ওটাকে ধরেছিল 3।",
 ];
 
 export function DiagonalBlock() {
@@ -638,7 +638,7 @@ export function RoadCorner() {
     play.play(3, () => {
       const next = ran.map((r, j) => r || j === i);
       setRan(next);
-      if (next.every(Boolean)) pass("রাস্তার কোণায় box 1. Right angle না.");
+      if (next.every(Boolean)) pass("রাস্তার কোণায় dot product 1। Right angle না।");
     });
   };
 
@@ -689,14 +689,14 @@ export function RoadCorner() {
                 </div>
               ) : (
                 <button type="button" onClick={() => run(i)} disabled={play.running} className={`${primaryBtn} px-3! py-1! text-sm`}>
-                  box চালান
+                  dot product নিন
                 </button>
               )}
             </div>
           );
         })}
       </div>
-      <Task done={ran.every(Boolean)}>দুইটা grid এর কোণাতেই 4.2 এর box চালিয়ে দেখুন: দুই রাস্তা কি right angle এ মিলে?</Task>
+      <Task done={ran.every(Boolean)}>দুইটা grid এর কোণাতেই 4.2 এর dot product নিয়ে দেখুন: দুই রাস্তা কি right angle এ মিলে?</Task>
     </>
   );
 }
@@ -709,10 +709,10 @@ export function RoadCorner() {
 
 const X4F = makeFrame(-1, 3.5, -0.5, 3.5, 20, 7);
 const X4_SAY = [
-  "একই স্কুল, একই arrow.",
-  "Map grid এ দুই পা, 2 আর 3, square হয়ে মিলেছে. Pythagoras বলে 3.61.",
-  "রাস্তার grid এ রাস্তা দুইটা হেলে মিলেছে. এখানে Pythagoras খাটে না, 3.16 ভুল.",
-  "আর গলির এক block 1 না. 1.41.",
+  "একই স্কুল, একই arrow।",
+  "Map grid এ দুই পা, 2 আর 3, square হয়ে মিলেছে। Pythagoras বলে 3.61.",
+  "রাস্তার grid এ রাস্তা দুইটা হেলে মিলেছে। এখানে Pythagoras খাটে না, 3.16 ভুল।",
+  "আর গলির এক block 1 না। 1.41.",
 ];
 
 export function TwoTapes() {
@@ -796,10 +796,10 @@ export function TwoTapes() {
 
 const X5F = makeFrame(-0.5, 3.5, -0.5, 3.5, 24, 10);
 const X5_SAY = [
-  "Square রাস্তা, প্রতিটা block 1 লম্বা: map এর নিজের grid.",
-  "East এর রাস্তার উপর torch ফেলুন. Shadow 2 block.",
-  "North এর রাস্তায় আরেকটা torch. Shadow 3 block.",
-  "Shadow গুলাই card. বাঁকা রাস্তায় তা হয় না. সেখানে solve করতে হয়.",
+  "Square রাস্তা, প্রতিটা block 1 লম্বা: map এর নিজের grid।",
+  "East এর রাস্তার উপর torch ফেলুন। Shadow 2 block.",
+  "North এর রাস্তায় আরেকটা torch। Shadow 3 block.",
+  "Shadow গুলাই card। বাঁকা রাস্তায় তা হয় না। সেখানে solve করতে হয়।",
 ];
 
 export function ShadowRoads() {
@@ -854,9 +854,9 @@ const YD_OPT = [
 ];
 const YD_RIGHT = 1;
 const YD_NOPE = [
-  "ফিতা বাজারের আগেই থেমে গেলো. কেন? (3, 1) হলো রাস্তার card. আর রাস্তার grid এ Pythagoras খাটে না.",
+  "ফিতা বাজারের আগেই থেমে গেলো। কেন? (3, 1) হলো রাস্তার card। আর রাস্তার grid এ Pythagoras খাটে না।",
   "",
-  "ফিতা বাজার ছাড়িয়ে গেলো. 4.41 হলো রিকশার পুরা পথ, রাস্তা ধরে ধরে. সোজা line এর দূরত্ব এর চেয়ে কম.",
+  "ফিতা বাজার ছাড়িয়ে গেলো। 4.41 হলো রিকশার পুরা পথ, রাস্তা ধরে ধরে। সোজা line এর দূরত্ব এর চেয়ে কম।",
 ];
 const YD_DIR: XY = [4 / Math.hypot(4, 1), 1 / Math.hypot(4, 1)];
 
@@ -873,7 +873,7 @@ export function YourDistance() {
   const choose = (i: number) => {
     if (play.running) return;
     setPick(i);
-    play.play(12, () => (i === YD_RIGHT ? pass("বাজার map এ (4, 1). দূরত্ব 4.12.") : setMiss((m) => m + 1)));
+    play.play(12, () => (i === YD_RIGHT ? pass("বাজার map এ (4, 1)। দূরত্ব 4.12.") : setMiss((m) => m + 1)));
   };
   const look = (i: number): Look => (pick !== i || !settled ? "idle" : i === YD_RIGHT ? "right" : "wrong");
 
@@ -902,7 +902,7 @@ export function YourDistance() {
         ))}
       </div>
       {settled && pick !== YD_RIGHT && <Nope key={miss}>{YD_NOPE[pick]}</Nope>}
-      <Task done={settled && pick === YD_RIGHT}>বাজার বাসা থেকে সোজা line এ কত দূরে? যে হিসাবটা ঠিক, সেটা বেছে নিন. ফিতা খুলে দেখাবে.</Task>
+      <Task done={settled && pick === YD_RIGHT}>বাজার বাসা থেকে সোজা line এ কত দূরে? যে হিসাবটা ঠিক, সেটা বেছে নিন। ফিতা খুলে দেখাবে।</Task>
     </>
   );
 }
@@ -913,9 +913,9 @@ export function YourDistance() {
 
 const X6F = makeFrame(-0.5, 4.6, -0.6, 1.8, 26, 10);
 const X6_SAY = [
-  "বাজারের রাস্তার card (3, 1).",
-  "গলিতে 1 block, তারপর বড় রাস্তায় 3. Map এ গিয়ে থামে (4, 1) এ.",
-  "Map এর grid এ: 4 block east, 1 block north. কোণায় right angle.",
+  "বাজারের রাস্তার card (3, 1)।",
+  "গলিতে 1 block, তারপর বড় রাস্তায় 3। Map এ গিয়ে থামে (4, 1) এ।",
+  "Map এর grid এ: 4 block east, 1 block north। কোণায় right angle.",
   "Square grid, তাই Pythagoras খাটে: √(4² + 1²) = √17 = 4.12.",
 ];
 
@@ -981,7 +981,7 @@ export function KarimObjects({}: Story) {
         </g>
         <Person who="fahim" x={96} y={150} mood={k >= 2 ? "puzzled" : "plain"} />
         <Person who="karim" x={214} y={150} facing={-1} arm={k === 1 ? "point" : "down"} mood={k >= 1 ? "smug" : "plain"} />
-        {k === 1 && <Bubble x={214} y={82} side="left" lines={["বাঁকা রাস্তা মানেই", "বাজে grid."]} />}
+        {k === 1 && <Bubble x={214} y={82} side="left" lines={["বাঁকা রাস্তা মানেই", "বাজে grid।"]} />}
         {k >= 2 && <Bubble x={214} y={82} side="left" lines={["Square না হলে", "আবার grid কীসের?"]} />}
       </Stage>
     </StoryFrame>
@@ -1056,7 +1056,7 @@ export function TryWhichGrid() {
   const send = () => {
     const ok = right;
     setChecked(true);
-    play.play(5, () => (ok ? pass("পাশাপাশি না হলেই দুই রাস্তা একটা basis.") : setMiss((m) => m + 1)));
+    play.play(5, () => (ok ? pass("পাশাপাশি না হলেই দুই রাস্তা একটা basis।") : setMiss((m) => m + 1)));
   };
   const look = (i: number): Look => {
     if (!settled) return picks.includes(i) ? "picked" : "idle";
@@ -1064,9 +1064,9 @@ export function TryWhichGrid() {
     return TW[i].reach ? "wrong" : "dim";
   };
   const nope = [
-    picks.includes(1) && "পাশাপাশি রাস্তায় রিকশা শুধু একটা line ধরে চলে. স্কুল ওই line এ নাই.",
-    !picks.includes(0) && "বাঁকা রাস্তা বাদ দিয়েছেন. আজ সকালে এগুলা দিয়েই ফাহিম স্কুলে এসেছে.",
-    !picks.includes(2) && "Square রাস্তা বাদ দিয়েছেন: সাধারণ east আর north. এগুলাও সব জায়গায় যায়.",
+    picks.includes(1) && "পাশাপাশি রাস্তায় রিকশা শুধু একটা line ধরে চলে। স্কুল ওই line এ নাই।",
+    !picks.includes(0) && "বাঁকা রাস্তা বাদ দিয়েছেন। আজ সকালে এগুলা দিয়েই ফাহিম স্কুলে এসেছে।",
+    !picks.includes(2) && "Square রাস্তা বাদ দিয়েছেন: সাধারণ east আর north। এগুলাও সব জায়গায় যায়।",
   ]
     .filter(Boolean)
     .join(" ");
@@ -1087,15 +1087,15 @@ export function TryWhichGrid() {
           </button>
         ))}
       </div>
-      <div className="mt-2 text-center text-xs text-muted">ছোট ঘরটা বাসা. প্রতিটা map এ স্কুল (2, 3) এ.</div>
+      <div className="mt-2 text-center text-xs text-muted">ছোট ঘরটা বাসা। প্রতিটা map এ স্কুল (2, 3) এ।</div>
       <div className="mt-2 flex justify-center">
         <button type="button" onClick={send} disabled={!picks.length || play.running || (settled && right)} className={primaryBtn}>
           রিকশা পাঠান
         </button>
       </div>
       {settled && !right && <Nope key={miss}>{nope}</Nope>}
-      {settled && right && <div className={`${FADE} mt-2 text-center text-[0.95rem]`}>দুইটাই স্কুলে পৌঁছায়. আর সেখান থেকে যেকোনো জায়গায়.</div>}
-      <Task done={settled && right}>যেসব map এ রিকশা যেকোনো জায়গায় যেতে পারে, সবগুলায় tap করুন. তারপর রিকশা পাঠান.</Task>
+      {settled && right && <div className={`${FADE} mt-2 text-center text-[0.95rem]`}>দুইটাই স্কুলে পৌঁছায়। আর সেখান থেকে যেকোনো জায়গায়।</div>}
+      <Task done={settled && right}>যেসব map এ রিকশা যেকোনো জায়গায় যেতে পারে, সবগুলায় tap করুন। তারপর রিকশা পাঠান।</Task>
     </>
   );
 }
@@ -1106,10 +1106,10 @@ export function TryWhichGrid() {
 //      the parallel roads paint one line, and the school is off it.
 
 const X7_SAY = [
-  "তিনটা map. প্রতিটা যেখানে যেখানে যেতে পারে, রঙ করি.",
-  "বাঁকা রাস্তা: পুরা map.",
-  "Square রাস্তা: এটাও পুরা map.",
-  "পাশাপাশি রাস্তা: একটা line. স্কুল তার বাইরে.",
+  "তিনটা map। প্রতিটা যেখানে যেখানে যেতে পারে, রঙ করি।",
+  "বাঁকা রাস্তা: পুরা map।",
+  "Square রাস্তা: এটাও পুরা map।",
+  "পাশাপাশি রাস্তা: একটা line। স্কুল তার বাইরে।",
 ];
 
 export function ReachPaint() {
@@ -1160,7 +1160,7 @@ export function TapeOnMap({}: Story) {
           </g>
         )}
         <Person who="karim" x={k >= 2 ? 200 : 236} y={150} facing={-1} walking={k === 2} ms={900} arm={k >= 2 ? "hold" : "down"} mood="plain" />
-        {k >= 3 && <Bubble x={200} y={82} side="left" lines={["এবার দেখি", "কে ঠিক."]} />}
+        {k >= 3 && <Bubble x={200} y={82} side="left" lines={["এবার দেখি", "কে ঠিক।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1183,7 +1183,7 @@ export function TapeReveal() {
     if (dist(t, SCHOOL) < 0.45) {
       setEnd(SCHOOL);
       setMeasured(true);
-      pass("ফিতা বললো 3.61. দুইটা card-ই সত্যি.");
+      pass("ফিতা বললো 3.61. দুইটা card-ই সত্যি।");
     } else setEnd(t);
   };
 
@@ -1222,7 +1222,7 @@ export function TapeReveal() {
           {measured && <div className={`${FADE} text-xs font-semibold text-danger`}>মিলে না</div>}
         </div>
       </div>
-      <Task done={measured}>ফিতার মাথাটা বাসা থেকে টেনে স্কুল পর্যন্ত নিন.</Task>
+      <Task done={measured}>ফিতার মাথাটা বাসা থেকে টেনে স্কুল পর্যন্ত নিন।</Task>
     </>
   );
 }
@@ -1234,10 +1234,10 @@ export function TapeReveal() {
 
 const XAF = makeFrame(-1, 4, -1, 4, 20, 8);
 const XA_SAY = [
-  "বাসা থেকে স্কুলের arrow. নাম দিলাম v.",
+  "বাসা থেকে স্কুলের arrow। নাম দিলাম v।",
   "Map grid এ, e₁ আর e₂ দিয়ে, ওর card (2, 3).",
-  "রাস্তার grid এ, w = (1, 0) আর z = (1, 1) দিয়ে, ওর card (−1, 3).",
-  "Arrow একটা, card দুইটা. Grid ছাড়া card এর কোনো মানে নাই.",
+  "রাস্তার grid এ, w = (1, 0) আর z = (1, 1) দিয়ে, ওর card (−1, 3)।",
+  "Arrow একটা, card দুইটা। Grid ছাড়া card এর কোনো মানে নাই।",
 ];
 
 export function NameTheCard() {

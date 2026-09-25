@@ -336,7 +336,7 @@ export function NotebookBet() {
   const run = useRun();
   const seal = (i: number) => {
     setBet(i);
-    run.go(() => pass("বাজি সিল হলো. আগে কালকের দড়িটা খুঁজি."));
+    run.go(() => pass("বাজি সিল হলো। আগে কালকের দড়িটা খুঁজি।"));
   };
   return (
     <>
@@ -360,7 +360,7 @@ export function NotebookBet() {
           </Choice>
         ))}
       </div>
-      <Task done={bet !== null && !run.running}>এই চারটা সংখ্যা কোন ছবির? একটা ছবিতে বাজি ধরুন.</Task>
+      <Task done={bet !== null && !run.running}>এই চারটা সংখ্যা কোন ছবির? একটা ছবিতে বাজি ধরুন।</Task>
     </>
   );
 }
@@ -401,7 +401,7 @@ export function RopesInTheGrid() {
     if (sameM(mOf([n1, n2]), NB_G)) {
       setDone(true);
       setHeld(null);
-      ring.play(1, () => pass("প্রথম column: e₁ যেখানে গেলো. দ্বিতীয়: e₂."));
+      ring.play(1, () => pass("প্রথম column: e₁ যেখানে গেলো। দ্বিতীয়: e₂।"));
     }
   };
   const d = (a: XY, p: XY) => Math.hypot(a[0] - p[0], a[1] - p[1]);
@@ -465,8 +465,8 @@ export function RopesInTheGrid() {
           </span>
         </span>
       </div>
-      {swapped && <Nope>দড়ি দুইটা ক্রসে পৌঁছালো. তবে জায়গা বদল করে. তাই grid এর দুই column ও জায়গা বদল করলো. Amber দড়ি কাল কোথায় ছিল? (2, 1) এ.</Nope>}
-      <Task done={done && !ring.running}>দড়ির মাথা দুইটা টেনে এমন জায়গায় নিন, যাতে বাম দিকের চারটা সংখ্যা স্যারের পাতার সাথে মেলে.</Task>
+      {swapped && <Nope>দড়ি দুইটা ক্রসে পৌঁছালো। তবে জায়গা বদল করে। তাই grid এর দুই column ও জায়গা বদল করলো। Amber দড়ি কাল কোথায় ছিল? (2, 1) এ।</Nope>}
+      <Task done={done && !ring.running}>দড়ির মাথা দুইটা টেনে এমন জায়গায় নিন, যাতে বাম দিকের চারটা সংখ্যা স্যারের পাতার সাথে মেলে।</Task>
     </>
   );
 }
@@ -533,10 +533,10 @@ export function BuildTheGrid() {
   return (
     <GridBuilder
       goal={NB_HALF}
-      note="Rope কোথায় যায় জানলে grid লেখা যায়."
-      task="আধা পাক ঘুরলে e₁ আর e₂ কোথায় যায়, সেটা দিয়ে চারটা ঘর ভরুন. তারপর চালান."
+      note="Rope কোথায় যায় জানলে grid লেখা যায়।"
+      task="আধা পাক ঘুরলে e₁ আর e₂ কোথায় যায়, সেটা দিয়ে চারটা ঘর ভরুন। তারপর চালান।"
       label="রাস্তায় আলপনা; নিচে চারটা ঘর, চালালে আলপনা সেই grid মত সরে; আবছা করে আঁকা আধা পাক ঘোরানো আলপনা"
-      hint={(s) => `উঁহু, আলপনা আবছা ছবির উপরে বসলো না. ${wentTo(s)} আধা পাক ঘুরলে e₁ কোথায় যাওয়ার কথা? খুঁটির ঠিক উল্টা পাশে.`}
+      hint={(s) => `উঁহু, আলপনা আবছা ছবির উপরে বসলো না। ${wentTo(s)} আধা পাক ঘুরলে e₁ কোথায় যাওয়ার কথা? খুঁটির ঠিক উল্টা পাশে।`}
     />
   );
 }
@@ -545,16 +545,16 @@ export function MakeQuarterTurn() {
   return (
     <GridBuilder
       goal={NB_QUARTER}
-      note="e₁ উপরে যায় (0, 1), e₂ বামে যায় (−1, 0)."
-      task="বাম দিকে এক কোণা ঘুরলে দড়ি দুইটা কোথায় যায়? চারটা ঘর ভরে চালান."
+      note="e₁ উপরে যায় (0, 1), e₂ বামে যায় (−1, 0)।"
+      task="বাম দিকে এক কোণা ঘুরলে দড়ি দুইটা কোথায় যায়? চারটা ঘর ভরে চালান।"
       label="রাস্তায় আলপনা; নিচে চারটা ঘর; আবছা করে আঁকা বাম দিকে এক কোণা ঘোরানো আলপনা"
       hint={(s) =>
         sameM(s, [
           [0, 1],
           [-1, 0],
         ])
-          ? "আলপনা ঘুরলো, কিন্তু উল্টা দিকে, ডানে. e₁ এর জায়গায় দেখুন: ওটা নিচে নামলো না উপরে উঠলো?"
-          : `উঁহু. ${wentTo(s)} বাম দিকে এক কোণা ঘুরলে amber দড়ি সোজা উপরে দাঁড়ায়.`
+          ? "আলপনা ঘুরলো, কিন্তু উল্টা দিকে, ডানে। e₁ এর জায়গায় দেখুন: ওটা নিচে নামলো না উপরে উঠলো?"
+          : `উঁহু। ${wentTo(s)} বাম দিকে এক কোণা ঘুরলে amber দড়ি সোজা উপরে দাঁড়ায়।`
       }
     />
   );
@@ -621,7 +621,7 @@ export function RowReading() {
     calc.play(4, () => {
       const next: [boolean, boolean] = r === 0 ? [true, rows[1]] : [rows[0], true];
       setRows(next);
-      if (next[0] && next[1]) run.go(() => pass("Column বলে ছবি, row বলে হিসাব."));
+      if (next[0] && next[1]) run.go(() => pass("Column বলে ছবি, row বলে হিসাব।"));
     });
   };
   const k = act === null ? 0 : calc.running ? calc.k : 4;
@@ -695,7 +695,7 @@ export function RowReading() {
             </span>
           ))}
       </div>
-      <Task done={both && !run.running}>দুইটা row তেই tap করুন. দেখুন কোন row থেকে কোন সংখ্যাটা বের হয়.</Task>
+      <Task done={both && !run.running}>দুইটা row তেই tap করুন। দেখুন কোন row থেকে কোন সংখ্যাটা বের হয়।</Task>
     </>
   );
 }
@@ -711,42 +711,42 @@ const ZOO: [M2, string][] = [
       [1, 0],
       [0, 1],
     ],
-    "দড়ি দুইটা যেখানে ছিল সেখানেই. কিছুই নড়লো না.",
+    "দড়ি দুইটা যেখানে ছিল সেখানেই। কিছুই নড়লো না।",
   ],
   [
     [
       [3, 0],
       [0, 3],
     ],
-    "দুই দড়িই 3 গুণ লম্বা. পুরা আলপনা 3 গুণ বড়.",
+    "দুই দড়িই 3 গুণ লম্বা। পুরা আলপনা 3 গুণ বড়।",
   ],
   [
     [
       [1, 0],
       [0, 3],
     ],
-    "শুধু e₂ লম্বা হলো. আলপনা খাড়া দিকে টেনে লম্বা.",
+    "শুধু e₂ লম্বা হলো। আলপনা খাড়া দিকে টেনে লম্বা।",
   ],
   [
     [
       [-1, 0],
       [0, 1],
     ],
-    "e₁ উল্টা দিকে গেলো. আলপনা খুঁটির বাম পাশে, আয়নার মত.",
+    "e₁ উল্টা দিকে গেলো। আলপনা খুঁটির বাম পাশে, আয়নার মত।",
   ],
   [
     [
       [1, 0],
       [1, 1],
     ],
-    "e₁ কাত হয়ে উপরে উঠলো. আলপনা উপরের দিকে হেলে গেলো.",
+    "e₁ কাত হয়ে উপরে উঠলো। আলপনা উপরের দিকে হেলে গেলো।",
   ],
   [
     [
       [0.5, 0],
       [0, 0.5],
     ],
-    "দুই দড়িই অর্ধেক. আলপনা ছোট হয়ে খুঁটির কাছে চলে এলো.",
+    "দুই দড়িই অর্ধেক। আলপনা ছোট হয়ে খুঁটির কাছে চলে এলো।",
   ],
 ];
 
@@ -761,7 +761,7 @@ export function ZooWalk() {
     run.go(() => {
       const next = seen.includes(i) ? seen : [...seen, i];
       setSeen(next);
-      if (next.length === ZOO.length) pass("Column দুইটা দেখেই বোঝা যায়.");
+      if (next.length === ZOO.length) pass("Column দুইটা দেখেই বোঝা যায়।");
     });
   };
   return (
@@ -789,7 +789,7 @@ export function ZooWalk() {
           </button>
         ))}
       </div>
-      <Task done={seen.length === ZOO.length}>ছয়টা grid এই tap করুন. প্রতিবার আগে দেখুন দড়ি দুইটা কোথায় যায়.</Task>
+      <Task done={seen.length === ZOO.length}>ছয়টা grid এই tap করুন। প্রতিবার আগে দেখুন দড়ি দুইটা কোথায় যায়।</Task>
     </>
   );
 }
@@ -820,7 +820,7 @@ export function AnyAngle() {
     setDeg(n);
     const next = seen.includes(n) ? seen : [...seen, n];
     setSeen(next);
-    if (next.includes(45) && next.includes(90) && !(got45 && got90)) pass("যেকোনো angle এর grid, দুই ছায়া দিয়ে.");
+    if (next.includes(45) && next.includes(90) && !(got45 && got90)) pass("যেকোনো angle এর grid, দুই ছায়া দিয়ে।");
   };
   return (
     <>
@@ -860,7 +860,7 @@ export function AnyAngle() {
           ["90° তে যান", got90],
         ]}
       />
-      <Task done={got45 && got90}>দড়ি ঘুরিয়ে 45° তে একবার থামুন, তারপর 90° তে যান. Grid এর ঘরগুলো দেখুন.</Task>
+      <Task done={got45 && got90}>দড়ি ঘুরিয়ে 45° তে একবার থামুন, তারপর 90° তে যান। Grid এর ঘরগুলো দেখুন।</Task>
     </>
   );
 }
@@ -890,7 +890,7 @@ export function ReadTheNotebook() {
         const next = [...done, g];
         setDone(next);
         setSel(null);
-        if (next.length === NB_CROSS.length) pass("পাঁচ মোড়, পাঁচ ছবি. সব column থেকে.");
+        if (next.length === NB_CROSS.length) pass("পাঁচ মোড়, পাঁচ ছবি। সব column থেকে।");
       } else setMiss(miss + 1);
     });
   };
@@ -939,10 +939,10 @@ export function ReadTheNotebook() {
       </div>
       {wrong && !run.running && miss > 0 && tried && (
         <Nope key={miss}>
-          উঁহু. মোড় {tried[0] + 1} এর grid এ আলপনা আবছা ছবির উপরে বসলো না. Column দুইটা আবার পড়ুন: e₁ আর e₂ কোথায় যায়?
+          উঁহু। মোড় {tried[0] + 1} এর grid এ আলপনা আবছা ছবির উপরে বসলো না। Column দুইটা আবার পড়ুন: e₁ আর e₂ কোথায় যায়?
         </Nope>
       )}
-      <Task done={done.length === NB_CROSS.length}>একটা grid এ tap করুন, তারপর যে ছবিটা ওর মনে হয় সেটাতে. পাঁচটাই মেলান.</Task>
+      <Task done={done.length === NB_CROSS.length}>একটা grid এ tap করুন, তারপর যে ছবিটা ওর মনে হয় সেটাতে। পাঁচটাই মেলান।</Task>
     </>
   );
 }
@@ -970,7 +970,7 @@ export function TryMirror() {
     if (right || run.running) return;
     const q: XY = [clamp(Math.round(p[0]), -1, 6), clamp(Math.round(p[1]), -1, 6)];
     setPick(q);
-    if (q[0] === TM_RIGHT[0] && q[1] === TM_RIGHT[1]) run.go(() => pass("দুই দড়ি জায়গা বদল করে: y = x এর আয়না."));
+    if (q[0] === TM_RIGHT[0] && q[1] === TM_RIGHT[1]) run.go(() => pass("দুই দড়ি জায়গা বদল করে: y = x এর আয়না।"));
     else setMiss(miss + 1);
   };
   const mid = mv(TM_C);
@@ -1002,10 +1002,10 @@ export function TryMirror() {
       </div>
       {pick && !right && (
         <Nope key={miss}>
-          উঁহু, {tupN(pick)} না. প্রথম column (0, 1): amber দড়ি এখন সোজা উপরে. 3 বার ওটা, তারপর 1 বার সবুজটা, (1, 0). কোথায় পৌঁছায়?
+          উঁহু, {tupN(pick)} না। প্রথম column (0, 1): amber দড়ি এখন সোজা উপরে। 3 বার ওটা, তারপর 1 বার সবুজটা, (1, 0)। কোথায় পৌঁছায়?
         </Nope>
       )}
-      <Task done={right}>পদ্মের মাঝখান (3, 1) এই grid এ কোথায় যাবে? রাস্তার সেই ঘরে tap করুন.</Task>
+      <Task done={right}>পদ্মের মাঝখান (3, 1) এই grid এ কোথায় যাবে? রাস্তার সেই ঘরে tap করুন।</Task>
     </>
   );
 }
@@ -1090,7 +1090,7 @@ export function SickMorning({}: Story) {
         <Person who="som" x={130} y={150} facing={-1} label arm={k >= 1 ? "hold" : "down"} mood={k >= 4 ? "puzzled" : "plain"} />
         {k === 1 && <S_Book x={122} y={112} />}
         {k >= 2 && <S_Page x={218} y={36} w={170} fs={8} grids={NB_CROSS} flip={k === 3} />}
-        {k >= 4 && <Bubble x={130} y={86} side="right" lines={["চারটা সংখ্যা.", "ছবি বের হয় না."]} />}
+        {k >= 4 && <Bubble x={130} y={86} side="right" lines={["চারটা সংখ্যা।", "ছবি বের হয় না।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1118,7 +1118,7 @@ export function LastNightPage({}: Story) {
         <Person who="rina" x={60} y={160} label arm="hold" />
         <S_Page x={60} y={62} grids={[NB_G]} w={44} fs={11} />
         <Person who="fahim" x={124} y={160} facing={1} label arm={k >= 2 ? "point" : "down"} />
-        {k >= 2 && <Bubble x={124} y={94} side="right" lines={["সংখ্যাও চারটা.", "ক্রসের সংখ্যাও চারটা."]} />}
+        {k >= 2 && <Bubble x={124} y={94} side="right" lines={["সংখ্যাও চারটা।", "ক্রসের সংখ্যাও চারটা।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1142,7 +1142,7 @@ export function BlankPage({}: Story) {
           </text>
         </g>
         <Person who="som" x={170} y={150} facing={-1} label arm={k >= 2 ? "point" : "down"} />
-        {k >= 2 && <Bubble x={170} y={84} side="right" lines={["লিখে ফেলি তাহলে."]} />}
+        {k >= 2 && <Bubble x={170} y={84} side="right" lines={["লিখে ফেলি তাহলে।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1166,7 +1166,7 @@ export function SomReadsRows({}: Story) {
         </g>
         <Person who="som" x={112} y={150} label arm={k >= 4 ? "point" : "hold"} mood={k >= 2 ? "smug" : "plain"} />
         <Person who="rina" x={236} y={150} facing={-1} label arm="hold" />
-        {k === 2 && <Bubble x={112} y={84} side="right" lines={["প্রথম লাইনে 2 আর 1.", "এটা একটা হিসাব."]} />}
+        {k === 2 && <Bubble x={112} y={84} side="right" lines={["প্রথম লাইনে 2 আর 1।", "এটা একটা হিসাব।"]} />}
         {k === 3 && <Bubble x={236} y={84} side="left" lines={["কীসের হিসাব?"]} />}
         {k >= 4 && (
           <g className={POP}>
@@ -1216,7 +1216,7 @@ export function CornerMap({}: Story) {
         {k >= 1 && <Draw d="M122 112V74M116 80l6 -6l6 6" strokeWidth={2} className="stroke-[#e11d48]" />}
         </g>
         <Person who="nasib" x={278} y={150} facing={-1} label arm={k >= 2 ? "point" : "down"} mood={k >= 2 ? "smug" : "plain"} />
-        {k >= 2 && <Bubble x={278} y={84} side="left" lines={["এইটা আমি লিখবো."]} />}
+        {k >= 2 && <Bubble x={278} y={84} side="left" lines={["এইটা আমি লিখবো।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1299,7 +1299,7 @@ export function NightChalk({}: Story) {
           </g>
         )}
         {k === 2 && <Bubble x={34} y={84} side="right" lines={["3, 0, 0, 1."]} />}
-        {k === 3 && <Bubble x={250} y={84} side="left" lines={["লম্বা মাছ."]} />}
+        {k === 3 && <Bubble x={250} y={84} side="left" lines={["লম্বা মাছ।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1457,7 +1457,7 @@ const RM_AT: XY[] = [
   [150, 44],
   [232, 70],
 ];
-const X1_SAY = ["গেট থেকে শোভাযাত্রার রাস্তা.", "রাস্তায় পাঁচটা মোড়.", "প্রতিটা মোড়ের জন্য খাতায় চারটা সংখ্যা.", "কোন ছবি কোন মোড়ের, লেখা নাই."];
+const X1_SAY = ["গেট থেকে শোভাযাত্রার রাস্তা।", "রাস্তায় পাঁচটা মোড়।", "প্রতিটা মোড়ের জন্য খাতায় চারটা সংখ্যা।", "কোন ছবি কোন মোড়ের, লেখা নাই।"];
 
 export function RouteMap() {
   const s = useScene(3, [600, 1300, 1800, 2000]);
@@ -1495,7 +1495,7 @@ export function RouteMap() {
 //      the teal end (1, 2) column 2. Then (3, 0): three amber ropes end to end.
 
 const X2_F = makeFrame(-0.5, 6.8, -0.5, 3.6, 22, 8);
-const X2_SAY = ["কালকের দুই দড়ি.", "Amber দড়ির মাথা (2, 1) খাড়া হয়ে বসলো প্রথম column এ.", "সবুজ দড়ির মাথা (1, 2) দ্বিতীয় column এ.", "(3, 0) মানে তিনবার amber দড়ি: 3 × (2, 1) = (6, 3)."];
+const X2_SAY = ["কালকের দুই দড়ি।", "Amber দড়ির মাথা (2, 1) খাড়া হয়ে বসলো প্রথম column এ।", "সবুজ দড়ির মাথা (1, 2) দ্বিতীয় column এ।", "(3, 0) মানে তিনবার amber দড়ি: 3 × (2, 1) = (6, 3)।"];
 
 export function RopesStandUp() {
   const s = useScene(3, [600, 1800, 1800, 2400]);
@@ -1525,7 +1525,7 @@ export function RopesStandUp() {
 //      and (0, −1), the columns fill, and (2, 3) crosses to (−2, −3).
 
 const X3_F = makeFrame(-3.4, 3.4, -3.4, 3.4, 17, 8);
-const X3_SAY = ["e₁ আর e₂, খুঁটি থেকে.", "আধা পাক: e₁ গেলো (−1, 0), e₂ গেলো (0, −1).", "দুই column বসালেই grid.", "(2, 3) গেলো খুঁটির ঠিক উল্টা পাশে, (−2, −3)."];
+const X3_SAY = ["e₁ আর e₂, খুঁটি থেকে।", "আধা পাক: e₁ গেলো (−1, 0), e₂ গেলো (0, −1)।", "দুই column বসালেই grid.", "(2, 3) গেলো খুঁটির ঠিক উল্টা পাশে, (−2, −3)।"];
 
 export function HalfTurnCols() {
   const s = useScene(3, [600, 1800, 1600, 2200]);
@@ -1567,7 +1567,7 @@ export function HalfTurnCols() {
 // 4½ · A row is a box. Row 1 and the tip (2, 3) side by side, slot times slot,
 //      added: 7. Row 2: 8. Then the label: every row is one of 4.x's boxes.
 
-const X4_SAY = ["Row 1: (2, 1). Petal এর আগা: (2, 3).", "Slot এর সাথে slot গুণ, তারপর যোগ: 4 + 3 = 7.", "Row 2 একই কাজ করে: 2 + 6 = 8.", "দুইটা row, দুইটা box. উত্তর (7, 8)."];
+const X4_SAY = ["Row 1: (2, 1). Petal এর আগা: (2, 3)।", "Slot এর সাথে slot গুণ, তারপর যোগ: 4 + 3 = 7।", "Row 2 একই কাজ করে: 2 + 6 = 8।", "দুইটা row, দুইটা dot product। উত্তর (7, 8)।"];
 
 export function RowSlide() {
   const s = useScene(3, [600, 2000, 2000, 2200]);
@@ -1592,14 +1592,14 @@ export function RowSlide() {
   );
   return (
     <Scene scene={s} caption={say(X4_SAY, k)}>
-      <Sheet w={300} h={96} label="grid এর প্রতিটা row petal এর আগা (2, 3) এর সাথে box: 2×2 + 1×3 = 7, 1×2 + 2×3 = 8">
+      <Sheet w={300} h={96} label="grid এর প্রতিটা row petal এর আগা (2, 3) এর সাথে dot product: 2×2 + 1×3 = 7, 1×2 + 2×3 = 8">
         {line(30, [2, 1], 7, k !== 2, k >= 1)}
         {line(58, [1, 2], 8, k >= 2, k >= 2)}
         {k >= 3 && (
           <g className={POP}>
             <rect x={20} y={70} width={260} height={18} rx={4} fill="#dbeafe" />
             <text x={150} y={83} textAnchor="middle" fontSize={10} fontWeight={700} fill="#1d4ed8">
-              প্রতিটা row = 4.x এর একটা box
+              প্রতিটা row = 4.x এর একটা dot product
             </text>
           </g>
         )}
@@ -1611,7 +1611,7 @@ export function RowSlide() {
 // 5½ · The grams trap. Three people as dots; A's nearest is B. The grid
 //      [[1,0],[0,3]] stretches only the upright line, and A's nearest becomes C.
 
-const X5_SAY = ["তিনজন মানুষ, দুইটা feature. A এর twin B.", "[[1,0],[0,3]]: শুধু খাড়া দিকটা 3 গুণ, unit বদলানোর মত.", "এবার A এর twin C. মানুষ একই, map বদলে গেছে."];
+const X5_SAY = ["তিনজন মানুষ, দুইটা feature। A এর twin B.", "[[1,0],[0,3]]: শুধু খাড়া দিকটা 3 গুণ, unit বদলানোর মত।", "এবার A এর twin C। মানুষ একই, map বদলে গেছে।"];
 const X5_PTS: [string, XY][] = [
   ["A", [1, 1]],
   ["B", [1, 1.6]],
@@ -1654,7 +1654,7 @@ export function StretchTrap() {
 //      the other way, in red.
 
 const X6_F = makeFrame(-1.8, 1.8, -1.8, 1.8, 36, 8);
-const X6_SAY = ["e₁ আর e₂, খুঁটি থেকে.", "বাম দিকে এক কোণা: e₁ গেলো উপরে (0, 1), e₂ গেলো বামে (−1, 0).", "Column বসালে [[0,−1],[1,0]].", "Row ধরে উল্টা লিখলে [[0,1],[−1,0]]: দড়ি ঘোরে ডানে."];
+const X6_SAY = ["e₁ আর e₂, খুঁটি থেকে।", "বাম দিকে এক কোণা: e₁ গেলো উপরে (0, 1), e₂ গেলো বামে (−1, 0)।", "Column বসালে [[0,−1],[1,0]].", "Row ধরে উল্টা লিখলে [[0,1],[−1,0]]: দড়ি ঘোরে ডানে।"];
 
 export function QuarterSwing() {
   const s = useScene(3, [600, 1800, 1600, 2400]);
@@ -1699,7 +1699,7 @@ export function QuarterSwing() {
 
 const X7_F = makeFrame(-0.3, 1.3, -0.3, 1.3, 90, 10);
 const X7_DEG = [0, 30, 60, 90];
-const X7_SAY = ["θ = 0°: মেঝের ছায়া 1, অন্য ছায়া 0.", "θ = 30°: মেঝের ছায়া 0.87, অন্য ছায়া 0.5.", "θ = 60°: 0.5 আর 0.87. দুইটা জায়গা বদল করলো.", "θ = 90°: মেঝের ছায়া 0, অন্য ছায়া 1. cos 90° আর sin 90°."];
+const X7_SAY = ["θ = 0°: মেঝের ছায়া 1, অন্য ছায়া 0।", "θ = 30°: মেঝের ছায়া 0.87, অন্য ছায়া 0.5.", "θ = 60°: 0.5 আর 0.87. দুইটা জায়গা বদল করলো।", "θ = 90°: মেঝের ছায়া 0, অন্য ছায়া 1। cos 90° আর sin 90°."];
 
 export function ShadowCircle() {
   const s = useScene(3, [600, 1600, 1600, 2200]);
@@ -1747,7 +1747,7 @@ export function ShadowCircle() {
 
 const X7B_F = makeFrame(-1.35, 1.35, -0.25, 1.3, 70, 8);
 const X7B_TH = 35;
-const X7B_SAY = ["তাহলে e₁ যায় (cos θ, sin θ) তে.", "e₂ সবসময় e₁ থেকে এক কোণা এগিয়ে, তাই (−sin θ, cos θ).", "দুই column বসালে যেকোনো angle এর grid: R(θ).", "θ = 90° দিলে তিন নম্বর মোড়ের grid ই ফেরত আসে."];
+const X7B_SAY = ["তাহলে e₁ যায় (cos θ, sin θ) তে।", "e₂ সবসময় e₁ থেকে এক কোণা এগিয়ে, তাই (−sin θ, cos θ)।", "দুই column বসালে যেকোনো angle এর grid: R(θ)।", "θ = 90° দিলে তিন নম্বর মোড়ের grid ই ফেরত আসে।"];
 
 export function RotorBuild() {
   const s = useScene(3, [600, 1800, 2000, 2400]);
@@ -1829,7 +1829,7 @@ export function RotorBuild() {
 //      (5, 2) crosses it to (2, 5) and (2, 2) stays put.
 
 const X9_F = makeFrame(-0.5, 5.6, -0.5, 5.6, 26, 8);
-const X9_SAY = ["e₁ (1, 0), e₂ (0, 1).", "Grid [[0,1],[1,0]]: দুই দড়ি জায়গা বদল করলো.", "কোনাকুনি y = x লাইনটা আয়না.", "(5, 2) গেলো (2, 5). লাইনের উপরের (2, 2) নড়লো না."];
+const X9_SAY = ["e₁ (1, 0), e₂ (0, 1).", "Grid [[0,1],[1,0]]: দুই দড়ি জায়গা বদল করলো।", "কোনাকুনি y = x লাইনটা আয়না।", "(5, 2) গেলো (2, 5)। লাইনের উপরের (2, 2) নড়লো না।"];
 
 export function SwapRopes() {
   const s = useScene(3, [600, 1600, 1600, 2400]);
@@ -1865,7 +1865,7 @@ export function SwapRopes() {
 // 10½ · The bet settled: five grids on the left, five sketches on the right,
 //       joined one by one. Crossing 4 (the bet) last, and marked.
 
-const X10_SAY = ["পাঁচটা grid, পাঁচটা ছবি.", "মোড় 1: দুই দড়িই 2 গুণ. সব 2 গুণ বড়.", "মোড় 2: e₂ নিচে. আয়নায় উল্টা.", "মোড় 3: e₁ উপরে, e₂ বামে. এক কোণা ঘোরা.", "মোড় 5: e₁ 3 গুণ. লম্বা মাছ.", "মোড় 4, বাজির ঘর: e₂ গেলো (1, 1). ডানে হেলানো."];
+const X10_SAY = ["পাঁচটা grid, পাঁচটা ছবি।", "মোড় 1: দুই দড়িই 2 গুণ। সব 2 গুণ বড়।", "মোড় 2: e₂ নিচে। আয়নায় উল্টা।", "মোড় 3: e₁ উপরে, e₂ বামে। এক কোণা ঘোরা।", "মোড় 5: e₁ 3 গুণ। লম্বা মাছ।", "মোড় 4, বাজির ঘর: e₂ গেলো (1, 1)। ডানে হেলানো।"];
 const X10_ORDER = [0, 1, 2, 4, 3];
 
 export function BetSettled() {

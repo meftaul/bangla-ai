@@ -135,7 +135,7 @@ export function NasibWager({}: Story) {
 }
 
 // ---------------------------------------------------------------------------
-// 1 · নাসিবের বাজি. The six jobs of this journey, laid out at the start beside
+// 1 · নাসিবের বাজি। The six jobs of this journey, laid out at the start beside
 //     the only two moves the reader owns. The reader bets on the one that
 //     cannot be done, and the bet is sealed, never marked: BendIt (screen 9)
 //     is what settles it. This is the question the whole journey answers.

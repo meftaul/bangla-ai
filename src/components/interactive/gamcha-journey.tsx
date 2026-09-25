@@ -16,7 +16,7 @@ import { BIRD_COLS, BIRD_PX } from "./pixel-art";
 // cell's colour is how dark its row's thread (পাশের সুতা) × how dark its
 // column's thread (উপরের সুতা): one column × one row, a whole grid, the outer
 // product. সোম wants আপার নামের প্রথম অক্ষর, T, woven in. নানা: একবারে একটা
-// চেকই ওঠে; নাসিব: চেক দিয়ে অক্ষর কোনোদিন হয় না. How many checks does T need?
+// চেকই ওঠে; নাসিব: চেক দিয়ে অক্ষর কোনোদিন হয় না। How many checks does T need?
 //
 // The letter is a T on a 7 × 7 loom: row 2 full (columns 2–6), the stem in
 // column 4 (rows 3–6). Its rows come in exactly two kinds, so it is rank 2:
@@ -344,7 +344,7 @@ export function GamchaBet() {
   const act = usePlay(800);
   const seal = (i: number) => {
     setBet(i);
-    act.play(3, () => pass("বাজি সিল হলো. আগে একটা চেক বুনি."));
+    act.play(3, () => pass("বাজি সিল হলো। আগে একটা চেক বুনি।"));
   };
   // beats of the acted bet: 1 the checks drop in, 2 the "?", 3 sealed
   const k = bet === null ? 0 : act.running ? act.k : 3;
@@ -362,7 +362,7 @@ export function GamchaBet() {
           {pick && k >= 2 && <span className={`${POP} text-2xl font-extrabold text-cat-violet`}>?</span>}
         </div>
       </div>
-      <div className="mt-1 h-5 text-center text-sm text-muted">{pick && k >= 1 ? <span className={FADE}>{pick[2] ? "চেক দিয়ে T? কোনোদিন না?" : `${pick[1]} টা চেক উপর উপর?`}</span> : "দাগ কাটা ঘরগুলো লাল হলে T."}</div>
+      <div className="mt-1 h-5 text-center text-sm text-muted">{pick && k >= 1 ? <span className={FADE}>{pick[2] ? "চেক দিয়ে T? কোনোদিন না?" : `${pick[1]} টা চেক উপর উপর?`}</span> : "দাগ কাটা ঘরগুলো লাল হলে T।"}</div>
       <div className="mt-2 grid grid-cols-2 gap-2">
         {B1_OPTS.map(([o, n, none], i) => (
           <Choice key={o} n={i} look={bet === i ? "picked" : bet !== null ? "dim" : "idle"} disabled={bet !== null} onClick={() => seal(i)}>
@@ -373,7 +373,7 @@ export function GamchaBet() {
           </Choice>
         ))}
       </div>
-      <Task done={bet !== null && k >= 3}>T বুনতে কয়টা চেক লাগবে? একটায় বাজি ধরুন. উত্তর শেষে.</Task>
+      <Task done={bet !== null && k >= 3}>T বুনতে কয়টা চেক লাগবে? একটায় বাজি ধরুন। উত্তর শেষে।</Task>
     </>
   );
 }
@@ -398,7 +398,7 @@ export function OneCheck() {
     const w = { u: [...u], v: [...v] };
     setWoven(w);
     p.play(4, () => {
-      if (hit(w)) pass("এক column × এক row = পুরা একটা grid.");
+      if (hit(w)) pass("এক column × এক row = পুরা একটা grid।");
     });
   };
   const setAt = (arr: number[], set: (a: number[]) => void, i: number) => (val: number) => set(arr.map((a, j) => (j === i ? val : a)));
@@ -436,8 +436,8 @@ export function OneCheck() {
           <Tup v={u} of={U2} /> ⊗ <Tup v={v} of={V2} />
         </span>
       </div>
-      {woven && !p.running && !hit(woven) && <div className={`${FADE} mt-2 text-center text-sm text-muted`}>বোনা হলো. এবার পাশে (1, 2), উপরে (3, 4) দিয়ে বুনুন.</div>}
-      <Task done={hit(woven) && !p.running}>পাশের সুতা (1, 2), উপরের সুতা (3, 4) করে বুনুন. দেখুন প্রতিটা ঘর কত গাঢ় হয়.</Task>
+      {woven && !p.running && !hit(woven) && <div className={`${FADE} mt-2 text-center text-sm text-muted`}>বোনা হলো। এবার পাশে (1, 2), উপরে (3, 4) দিয়ে বুনুন।</div>}
+      <Task done={hit(woven) && !p.running}>পাশের সুতা (1, 2), উপরের সুতা (3, 4) করে বুনুন। দেখুন প্রতিটা ঘর কত গাঢ় হয়।</Task>
     </>
   );
 }
@@ -451,9 +451,9 @@ export function OneCheck() {
 const NG_OPTS = ["একটা grid, 4 টা ঘর", "একটা number", "দুইটা number"];
 const NG_RIGHT = 1;
 const NG_NOPE = [
-  "Grid টা এসেছিল, কিন্তু box দুইটা ঘর ফেলে দিলো. বাকি দুইটা যোগ হয়ে একটা number হলো: 11.",
+  "Grid টা এসেছিল, কিন্তু dot product দুইটা ঘর ফেলে দিলো। বাকি দুইটা যোগ হয়ে একটা number হলো: 11।",
   "",
-  "দুইটা number থাকলো না. 3 আর 8 যোগ হয়ে গেলো. Box শেষে সব যোগ করে, তাই একটা number.",
+  "দুইটা number থাকলো না। 3 আর 8 যোগ হয়ে গেলো। Dot product শেষে সব যোগ করে, তাই একটা number।",
 ];
 
 function NG_Icon({ i }: { i: number }) {
@@ -475,7 +475,7 @@ export function NumberOrGrid() {
     if (p.running) return;
     p.play(4, () => {
       setRan(true);
-      pass("Box এ একটা number. তাঁতে পুরা grid.");
+      pass("Dot product এ একটা number। তাঁতে পুরা grid।");
     });
   };
   const beat = ran ? 4 : p.k;
@@ -516,7 +516,7 @@ export function NumberOrGrid() {
         )}
       </svg>
       <div className="mt-1 h-5 text-center text-xs text-muted">
-        {beat >= 4 ? "একটা number: 11." : beat >= 3 ? "মিলে যাওয়া জোড়া দুইটা এক জায়গায়." : beat >= 2 ? "Box শুধু প্রথমের সাথে প্রথম, দ্বিতীয়র সাথে দ্বিতীয়." : beat >= 1 ? "আগে তাঁতের মতো সব জোড়া." : "(1, 2) আর (3, 4), box এর দিকে."}
+        {beat >= 4 ? "একটা number: 11." : beat >= 3 ? "মিলে যাওয়া জোড়া দুইটা এক জায়গায়।" : beat >= 2 ? "Dot product শুধু প্রথমের সাথে প্রথম, দ্বিতীয়র সাথে দ্বিতীয়।" : beat >= 1 ? "আগে তাঁতের মতো সব জোড়া।" : "(1, 2) আর (3, 4), dot product এর জন্য।"}
       </div>
       <div className="mt-2 grid gap-1.5">
         {NG_OPTS.map((o, i) => (
@@ -531,12 +531,12 @@ export function NumberOrGrid() {
       {guess !== null && !ran && (
         <div className="mt-3 flex justify-center">
           <button type="button" className={primaryBtn} disabled={p.running} onClick={run}>
-            Box এ দিন
+            Dot product নিন
           </button>
         </div>
       )}
       {ran && guess !== null && guess !== NG_RIGHT && <Nope>{NG_NOPE[guess]}</Nope>}
-      <Task done={ran}>আগে guess দিন. তারপর (1, 2) আর (3, 4) box এ দিয়ে দেখুন.</Task>
+      <Task done={ran}>আগে guess দিন। তারপর (1, 2) আর (3, 4) এর dot product নিয়ে দেখুন।</Task>
     </>
   );
 }
@@ -547,7 +547,7 @@ export function NumberOrGrid() {
 //     by row and rings every cell that doesn't match T in red. It never
 //     matches: the screen passes after the first try.
 
-const L4_NOPE = (n: number) => `${n} টা ঘর মিললো না. যে row এর সুতা গাঢ়, সেখানে উপরের গাঢ় সুতাগুলোর ছাঁদটাই বসে. সব row এ একই ছাঁদ.`;
+const L4_NOPE = (n: number) => `${n} টা ঘর মিললো না। যে row এর সুতা গাঢ়, সেখানে উপরের গাঢ় সুতাগুলোর ছাঁদটাই বসে। সব row এ একই ছাঁদ।`;
 
 const mismatch = (g: Grid): (boolean | null)[][] => g.map((r, i) => r.map((val, j) => (val === T[i][j] ? null : false)));
 const misses = (g: Grid) => g.flat().filter((val, i) => val !== T.flat()[i]).length;
@@ -569,7 +569,7 @@ export function OneLayerIsPlain() {
     setJudged(true);
     p.play(N7, () => {
       setTries((t) => t + 1);
-      if (tries === 0) pass("এক চেকে সব row একই ছাঁদের.");
+      if (tries === 0) pass("এক চেকে সব row একই ছাঁদের।");
     });
   };
   const shownRows = p.running ? p.k : N7;
@@ -578,14 +578,14 @@ export function OneLayerIsPlain() {
   return (
     <>
       <G_Loom7 rows={rows} cols={cols} sum={sum} ring={ring} onRow={flip(rows, setRows)} onCol={flip(cols, setCols)} label="7 × 7 এর তাঁত, এক চেক: বামে row এর সুতা, উপরে column এর সুতা, tap করলে গাঢ় বা সাদা; দাগ কাটা ঘরে T" />
-      <div className="mt-1 h-5 text-center text-xs text-muted">বামের আর উপরের সুতার মাথায় tap করুন.</div>
+      <div className="mt-1 h-5 text-center text-xs text-muted">বামের আর উপরের সুতার মাথায় tap করুন।</div>
       <div className="mt-2 flex justify-center">
         <button type="button" className={primaryBtn} disabled={p.running} onClick={check}>
           T এর সাথে মিলিয়ে দেখুন
         </button>
       </div>
       {judged && !p.running && n > 0 && <Nope key={tries}>{L4_NOPE(n)}</Nope>}
-      <Task done={tries > 0}>এক চেকে T বানানোর চেষ্টা করুন. তারপর মিলিয়ে দেখুন.</Task>
+      <Task done={tries > 0}>এক চেকে T বানানোর চেষ্টা করুন। তারপর মিলিয়ে দেখুন।</Task>
     </>
   );
 }
@@ -611,7 +611,7 @@ const G: Grid = [
   [1, 2],
 ];
 const colOf = (m: Grid, j: number) => m.map((r) => r[j]);
-const TL_NOPE = "দুই চেক মিলে G হলো না. লাল ঘরটা দেখুন. W এর column 1 এর জুড়ি হলো Z এর row 1. Column 2 এর জুড়ি row 2.";
+const TL_NOPE = "দুই চেক মিলে G হলো না। লাল ঘরটা দেখুন। W এর column 1 এর জুড়ি হলো Z এর row 1। Column 2 এর জুড়ি row 2.";
 
 export function TwoLayers() {
   const pass = useGate();
@@ -621,7 +621,7 @@ export function TwoLayers() {
   const choose = (r: number) => {
     if (p.running) return;
     setPick(r);
-    p.play(4, () => (r === 0 ? pass("দুই matrix এর গুণ = কয়েকটা চেকের যোগ.") : setMiss((m) => m + 1)));
+    p.play(4, () => (r === 0 ? pass("দুই matrix এর গুণ = কয়েকটা চেকের যোগ।") : setMiss((m) => m + 1)));
   };
   const beat = pick === null ? 0 : p.running ? p.k : 4;
   const r1 = pick ?? 0;
@@ -651,7 +651,7 @@ export function TwoLayers() {
         {beat >= 3 ? <G_Weave g={s} x={4 * c + 68} c={c} max={2} ring={ring} /> : <G_Weave g={zeros(2, 2)} x={4 * c + 68} c={c} />}
       </svg>
       <div className="mt-1 h-5 text-center text-xs text-muted">
-        {beat >= 4 ? (pick === 0 ? "দুই চেক মিলে ঠিক G." : "উপরের বামের ঘর মিললো না.") : beat >= 3 ? "দুই চেক উপর উপর: ঘরে ঘরে যোগ." : beat >= 2 ? "চেক 2: W এর column 2, Z এর বাকি row." : beat >= 1 ? "চেক 1: W এর column 1 পাশে." : "নীল ঘর মানে minus."}
+        {beat >= 4 ? (pick === 0 ? "দুই চেক মিলে ঠিক G।" : "উপরের বামের ঘর মিললো না।") : beat >= 3 ? "দুই চেক উপর উপর: ঘরে ঘরে যোগ।" : beat >= 2 ? "চেক 2: W এর column 2, Z এর বাকি row।" : beat >= 1 ? "চেক 1: W এর column 1 পাশে।" : "নীল ঘর মানে minus।"}
       </div>
       {(pick === null || (pick !== 0 && !p.running)) && <div className="mt-2 text-sm font-medium text-muted">W এর column 1 এর সাথে, উপরে Z এর কোন row?</div>}
       <div className="mt-1.5 grid grid-cols-2 gap-2">
@@ -671,7 +671,7 @@ export function TwoLayers() {
         ))}
       </div>
       {pick === 1 && !p.running && <Nope key={miss}>{TL_NOPE}</Nope>}
-      <Task done={pick === 0 && !p.running}>W এর column দুইটা আর Z এর row দুইটা দিয়ে দুইটা চেক বুনুন. যোগ করে G ওঠে কিনা দেখুন.</Task>
+      <Task done={pick === 0 && !p.running}>W এর column দুইটা আর Z এর row দুইটা দিয়ে দুইটা চেক বুনুন। যোগ করে G ওঠে কিনা দেখুন।</Task>
     </>
   );
 }
@@ -681,9 +681,9 @@ export function TwoLayers() {
 //     loom shows them all on each other (a cell two checks hit goes deeper).
 //     "মিলিয়ে দেখুন" sweeps row by row and rings the misses. Passes on a match.
 
-const YL_TWO = "T উঠলো. দুই রকম row, দুই চেক.";
-const YL_MORE = "T উঠলো. তবে 2 চেকেই হয়.";
-const YL_TRIES_NOPE = (n: number) => `${n} টা ঘর মিললো না. লাল দাগ দেখুন. দুই চেক একই ঘরে পড়লে ঘর দ্বিগুণ গাঢ় হয়, সেটাও ভুল.`;
+const YL_TWO = "T উঠলো। দুই রকম row, দুই চেক।";
+const YL_MORE = "T উঠলো। তবে 2 চেকেই হয়।";
+const YL_TRIES_NOPE = (n: number) => `${n} টা ঘর মিললো না। লাল দাগ দেখুন। দুই চেক একই ঘরে পড়লে ঘর দ্বিগুণ গাঢ় হয়, সেটাও ভুল।`;
 
 export function YourLetter() {
   const pass = useGate();
@@ -737,7 +737,7 @@ export function YourLetter() {
         </button>
       </div>
       {judged && !p.running && !sameG(sum, T) && <Nope key={tries}>{YL_TRIES_NOPE(misses(sum))}</Nope>}
-      <Task done={done}>চেক বেছে নিয়ে তার সুতা গাঢ় করুন. T বুনুন, যত কম চেকে পারেন.</Task>
+      <Task done={done}>চেক বেছে নিয়ে তার সুতা গাঢ় করুন। T বুনুন, যত কম চেকে পারেন।</Task>
     </>
   );
 }
@@ -759,9 +759,9 @@ const TW_OPTS: [number[], number[]][] = [
 ];
 const TW_RIGHT = 1;
 const TW_NOPE = [
-  "গামছাটা কাত হয়ে গেলো: row গুলো column হয়ে বসেছে. পাশের সুতা আর উপরের সুতা অদলবদল হয়ে আছে.",
+  "গামছাটা কাত হয়ে গেলো: row গুলো column হয়ে বসেছে। পাশের সুতা আর উপরের সুতা অদলবদল হয়ে আছে।",
   "",
-  "প্রথম row টা দেখুন. পুরানো গামছায় মাঝের ঘর সবচেয়ে গাঢ়. এখানে ডানের ঘর. উপরের সুতা মিলছে না.",
+  "প্রথম row টা দেখুন। পুরানো গামছায় মাঝের ঘর সবচেয়ে গাঢ়। এখানে ডানের ঘর। উপরের সুতা মিলছে না।",
 ];
 
 function TW_Pic({ u, v }: { u: readonly number[]; v: readonly number[] }) {
@@ -780,7 +780,7 @@ export function TryWhichThreads() {
   const choose = (i: number) => {
     if (p.running || pick === TW_RIGHT) return;
     setPick(i);
-    p.play(9, () => (i === TW_RIGHT ? pass("(2, 0, 1) পাশে, (1, 2, 1) উপরে.") : setMiss((m) => m + 1)));
+    p.play(9, () => (i === TW_RIGHT ? pass("(2, 0, 1) পাশে, (1, 2, 1) উপরে।") : setMiss((m) => m + 1)));
   };
   const shown = pick === null ? 0 : p.running ? p.k : 9;
   const opt = pick === null ? null : TW_OPTS[pick];
@@ -813,7 +813,7 @@ export function TryWhichThreads() {
         ))}
       </div>
       {pick !== null && pick !== TW_RIGHT && !p.running && <Nope key={miss}>{TW_NOPE[pick]}</Nope>}
-      <Task done={pick === TW_RIGHT && !p.running}>কোন জোড়া সুতায় রিনার পুরানো গামছা বোনা? বেছে নিন, তাঁতে বুনে দেখুন.</Task>
+      <Task done={pick === TW_RIGHT && !p.running}>কোন জোড়া সুতায় রিনার পুরানো গামছা বোনা? বেছে নিন, তাঁতে বুনে দেখুন।</Task>
     </>
   );
 }
@@ -826,10 +826,10 @@ export function TryWhichThreads() {
 
 const ONE_CELL = (r: number): Check => ({ rows: e7(r), cols: e7(3) });
 const BC_CARDS: [string, Check[], boolean, string][] = [
-  ["1 টা চেক", [BAR], false, "এক চেকে শুধু মাথার দাগ. খুঁটি নাই."],
-  ["2 টা চেক", [BAR, STEM], true, "মাথার দাগ, তারপর খুঁটি. T."],
-  ["5 টা চেক", [BAR, ONE_CELL(2), ONE_CELL(3), ONE_CELL(4), ONE_CELL(5)], false, "5 টাতেও ওঠে. কিন্তু লাগে 2 টাই."],
-  ["চেক দিয়ে অক্ষর হয়ই না", [BAR, STEM], false, "হয়. দুই চেকেই উঠলো."],
+  ["1 টা চেক", [BAR], false, "এক চেকে শুধু মাথার দাগ। খুঁটি নাই।"],
+  ["2 টা চেক", [BAR, STEM], true, "মাথার দাগ, তারপর খুঁটি। T."],
+  ["5 টা চেক", [BAR, ONE_CELL(2), ONE_CELL(3), ONE_CELL(4), ONE_CELL(5)], false, "5 টাতেও ওঠে। কিন্তু লাগে 2 টাই।"],
+  ["চেক দিয়ে অক্ষর হয়ই না", [BAR, STEM], false, "হয়। দুই চেকেই উঠলো।"],
 ];
 
 export function BetCards() {
@@ -843,7 +843,7 @@ export function BetCards() {
     p.play(BC_CARDS[i][1].length, () => {
       const next = [...open, i];
       setOpen(next);
-      if (next.length === BC_CARDS.length) pass("দুই চেক, এক অক্ষর.");
+      if (next.length === BC_CARDS.length) pass("দুই চেক, এক অক্ষর।");
     });
   };
   const showing = now ?? (open.length ? open[open.length - 1] : null);
@@ -853,7 +853,7 @@ export function BetCards() {
       <div className="mx-auto w-44 rounded-lg bg-[#15803d] p-2">
         <G_Loom7 sum={pile(layers)} outline={false} label="নানার গামছার কোণা: বাছাই করা card এর চেক গুলো একটা একটা করে বোনা হয়" className="block h-auto w-full rounded" />
       </div>
-      <div className="mt-1 text-center text-xs text-muted">{showing === null ? "একটা card tap করুন." : `চেক: ${layers.length} টা`}</div>
+      <div className="mt-1 text-center text-xs text-muted">{showing === null ? "একটা card tap করুন।" : `চেক: ${layers.length} টা`}</div>
       <div className="mt-2 grid gap-1.5">
         {BC_CARDS.map(([t, , ok, line], i) => {
           const shown = open.includes(i);
@@ -876,7 +876,7 @@ export function BetCards() {
           );
         })}
       </div>
-      <Task done={open.length === BC_CARDS.length}>চারটা বাজি একটা একটা করে খুলুন.</Task>
+      <Task done={open.length === BC_CARDS.length}>চারটা বাজি একটা একটা করে খুলুন।</Task>
     </>
   );
 }
@@ -886,11 +886,11 @@ export function BetCards() {
 //     turns a card over; its little picture draws itself.
 
 const FT_THINGS: [string, string][] = [
-  ["Ax দুইভাবে", "Ax মানে A এর column গুলো x এর মাপে হাঁটা. আবার প্রতিটা row এর সাথে x এর dot product. একই হিসাব, দুই রকম গোছানো."],
-  ["Shape এর নিয়ম", "(m × n)(n × p) → (m × p). ভেতরের দুইটা মিলতে হবে, তারপর গায়েব."],
-  ["AB মানে আগে B", "AB মানে দুই move পরপর: আগে B, তারপর A. তাই সাধারণত AB\u00a0≠\u00a0BA."],
-  ["Column space", "Ax যেখানেই যাক, থাকে A এর column গুলোর span এ. Column এক লাইনে থাকলে একটা দিক পুরাই হারায়."],
-  ["Layer জোড়া লাগে", "W₂(W₁x) = (W₂W₁)x. মাঝে বাঁক না থাকলে 50 layer আসলে 1 টা."],
+  ["Ax দুইভাবে", "Ax মানে A এর column গুলো x এর মাপে হাঁটা। আবার প্রতিটা row এর সাথে x এর dot product। একই হিসাব, দুই রকম গোছানো।"],
+  ["Shape এর নিয়ম", "(m × n)(n × p) → (m × p). ভেতরের দুইটা মিলতে হবে, তারপর গায়েব।"],
+  ["AB মানে আগে B", "AB মানে দুই move পরপর: আগে B, তারপর A। তাই সাধারণত AB\u00a0≠\u00a0BA।"],
+  ["Column space", "Ax যেখানেই যাক, থাকে A এর column গুলোর span এ। Column এক লাইনে থাকলে একটা দিক পুরাই হারায়।"],
+  ["Layer জোড়া লাগে", "W₂(W₁x) = (W₂W₁)x. মাঝে বাঁক না থাকলে 50 layer আসলে 1 টা।"],
 ];
 
 /** a small picture per thing, drawn when its card opens */
@@ -916,7 +916,7 @@ export function FiveThings() {
     if (open.includes(i)) return;
     const next = [...open, i];
     setOpen(next);
-    if (next.length === FT_THINGS.length) pass("Article 7 এর পাঁচটা কথা.");
+    if (next.length === FT_THINGS.length) pass("Article 7 এর পাঁচটা কথা।");
   };
   return (
     <>
@@ -941,7 +941,7 @@ export function FiveThings() {
           );
         })}
       </div>
-      <Task done={open.length === FT_THINGS.length}>পাঁচটা card একটা একটা করে খুলুন.</Task>
+      <Task done={open.length === FT_THINGS.length}>পাঁচটা card একটা একটা করে খুলুন।</Task>
     </>
   );
 }
@@ -1034,10 +1034,10 @@ export function LoomNight({}: Story) {
         <Person who="som" x={k >= 1 ? 214 : 360} y={150} facing={-1} walking={k === 1} arm={k >= 1 ? "hold" : "down"} label />
         {k >= 1 && <G_Paper x={200} y={104} />}
         <Person who="nasib" x={276} y={150} facing={-1} label />
-        {k === 2 && <Bubble x={214} y={84} side="left" lines={["নানা, গামছায়", "এইটা বুনে দেন."]} />}
-        {k === 3 && <Bubble x={160} y={84} lines={["একবারে একটা", "চেকই ওঠে."]} />}
-        {k === 4 && <Bubble x={160} y={84} lines={["দুই-তিনটা উপর উপর", "বসাইলে যা খুশি উঠে."]} />}
-        {k >= 5 && <Bubble x={276} y={84} side="left" lines={["চেক দিয়ে অক্ষর?", "কোনোদিন হয় না."]} />}
+        {k === 2 && <Bubble x={214} y={84} side="left" lines={["নানা, গামছায়", "এইটা বুনে দেন।"]} />}
+        {k === 3 && <Bubble x={160} y={84} lines={["একবারে একটা", "চেকই ওঠে।"]} />}
+        {k === 4 && <Bubble x={160} y={84} lines={["দুই-তিনটা উপর উপর", "বসাইলে যা খুশি উঠে।"]} />}
+        {k >= 5 && <Bubble x={276} y={84} side="left" lines={["চেক দিয়ে অক্ষর?", "কোনোদিন হয় না।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1063,7 +1063,7 @@ export function NanaTwoThreads({}: Story) {
         {k >= 2 && <Draw d="M236 42V138" strokeWidth={6} className="stroke-[#dc2626]/70" />}
         {k >= 3 && <rect x={233} y={73} width={6} height={6} fill={MAROON} className={POP} />}
         {k >= 3 && <circle cx={236} cy={76} r={10} fill="none" stroke="#fde047" strokeWidth={1.4} className={POP} />}
-        {k >= 4 && <Bubble x={112} y={84} side="right" lines={["দুই সুতা যত গাঢ়,", "ঘর তত গাঢ়."]} />}
+        {k >= 4 && <Bubble x={112} y={84} side="right" lines={["দুই সুতা যত গাঢ়,", "ঘর তত গাঢ়।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1082,7 +1082,7 @@ export function NasibAtLoom({}: Story) {
         <G_Loom x={104} y={150} cloth={0.6} />
         <Person who="nana" x={k >= 3 ? 220 : 160} y={150} facing={-1} walking={k === 3} label />
         <Person who="nasib" x={k >= 1 ? 160 : 280} y={150} facing={-1} walking={k === 1} arm={k >= 2 ? "hold" : "down"} label />
-        {k === 2 && <Bubble x={160} y={84} side="right" lines={["দেখি এক চেকে", "T ওঠে কিনা."]} />}
+        {k === 2 && <Bubble x={160} y={84} side="right" lines={["দেখি এক চেকে", "T ওঠে কিনা।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1154,7 +1154,7 @@ export function RinaTrunk({}: Story) {
           </g>
         )}
         {k === 3 && <Bubble x={130} y={84} side="right" lines={["নানা, এইটা", "কোন সুতায়?"]} />}
-        {k >= 4 && <Bubble x={220} y={84} side="left" lines={["তুই বল."]} />}
+        {k >= 4 && <Bubble x={220} y={84} side="left" lines={["তুই বল।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1213,7 +1213,7 @@ function G_Car({ x, y }: { x: number; y: number }) {
   );
 }
 
-// 9a · বিদায়. Morning; the car at the gate, Apa and the বর inside, the গামছা
+// 9a · বিদায়। Morning; the car at the gate, Apa and the বর inside, the গামছা
 //      on his shoulder. The light machine still throws its pattern on the
 //      wall, faint in daylight. The car goes. Nana stays at the gate.
 
@@ -1255,7 +1255,7 @@ export function Bidai({}: Story) {
 // 1½ · The stake: the empty loom, Som's paper T laid next to it, dawn coming.
 //      Stopped at "?".
 
-const X1_SAY = ["নানার তাঁত. এখনো খালি.", "সোমের কাগজ: T.", "ভোরে বিদায়. তার আগে গামছা.", "কয়টা চেক? বাজি শেষে খুলবে."];
+const X1_SAY = ["নানার তাঁত। এখনো খালি।", "সোমের কাগজ: T।", "ভোরে বিদায়। তার আগে গামছা।", "কয়টা চেক? বাজি শেষে খুলবে।"];
 
 export function EmptyLoom() {
   const s = useScene(3, [600, 1400, 1800, 2200]);
@@ -1287,7 +1287,7 @@ export function EmptyLoom() {
 
 const X2_U = [1, 2, 1];
 const X2_V = [2, 1, 0, 2];
-const X2_SAY = ["পাশে 3 টা সুতা.", "উপরে 4 টা.", "প্রতিটা মোড়ে একটা গুণ. 12 টা ঘর.", "3 টা আর 4 টা: 3 × 4 এর grid. u ⊗ v, outer product."];
+const X2_SAY = ["পাশে 3 টা সুতা।", "উপরে 4 টা।", "প্রতিটা মোড়ে একটা গুণ। 12 টা ঘর।", "3 টা আর 4 টা: 3 × 4 এর grid। u ⊗ v, outer product."];
 
 export function ThreadsCross() {
   const s = useScene(3, [600, 1200, 1400, 2400]);
@@ -1312,11 +1312,11 @@ export function ThreadsCross() {
 //      under each.
 
 const X3_SAY = [
-  "একই দুইটা list. শুধু কে শোয়া, কে দাঁড়ানো.",
-  "শোয়া row আগে, দাঁড়ানো column পরে: uᵀv.",
+  "একই দুইটা list। শুধু কে শোয়া, কে দাঁড়ানো।",
+  "শোয়া row আগে, দাঁড়ানো column পরে: uᵀv।",
   "(1 × 2)(2 × 1) → 1 × 1. একটা number.",
-  "দাঁড়ানো আগে, শোয়া পরে: uvᵀ.",
-  "(2 × 1)(1 × 2) → 2 × 2. পুরা grid.",
+  "দাঁড়ানো আগে, শোয়া পরে: uvᵀ।",
+  "(2 × 1)(1 × 2) → 2 × 2. পুরা grid।",
 ];
 
 function X3_Cells({ x, y, v, down }: { x: number; y: number; v: number[]; down: boolean }) {
@@ -1391,12 +1391,12 @@ export function InnerOuter() {
 const X4_U = [1, 0, 2, 1, 0];
 const X4_V = [0, 1, 1, 0, 1];
 const X4_SAY = [
-  "একটা চেক, 5 × 5.",
-  "উপরের সুতার ছাঁদ: খালি, গাঢ়, গাঢ়, খালি, গাঢ়.",
-  "Row 1: সেই ছাঁদ.",
-  "Row 2: সুতা সাদা, row খালি.",
-  "Row 3: একই ছাঁদ, দ্বিগুণ গাঢ়.",
-  "সব row একই ছাঁদের. আলাদা ছাঁদ মাত্র একটা: rank 1.",
+  "একটা চেক, 5 × 5।",
+  "উপরের সুতার ছাঁদ: খালি, গাঢ়, গাঢ়, খালি, গাঢ়।",
+  "Row 1: সেই ছাঁদ।",
+  "Row 2: সুতা সাদা, row খালি।",
+  "Row 3: একই ছাঁদ, দ্বিগুণ গাঢ়।",
+  "সব row একই ছাঁদের। আলাদা ছাঁদ মাত্র একটা: rank 1।",
 ];
 
 export function PlaidRows() {
@@ -1421,11 +1421,11 @@ export function PlaidRows() {
 //      G's column 1. A pile of checks: the two checks lie on each other.
 
 const X5_SAY = [
-  "W আর Z. গুণ করলে G.",
+  "W আর Z। গুণ করলে G।",
   "ঘরে ঘরে: W এর row 1 · Z এর column 1 = 2.",
   "Column ধরে: Z এর column 1 কে W চালালো, (2, 1). G এর column 1.",
-  "চেকের যোগ: দুইটা চেক উপর উপর.",
-  "তিন রাস্তা, একই G.",
+  "চেকের যোগ: দুইটা চেক উপর উপর।",
+  "তিন রাস্তা, একই G।",
 ];
 
 export function ThreeViews() {
@@ -1476,7 +1476,7 @@ export function ThreeViews() {
 // 6½ · Why two: T's rows lit by kind. The bar's row; the four stem rows;
 //      then the T split into its two checks side by side.
 
-const X6_SAY = ["T এর row গুলো.", "এক রকম: লম্বা দাগ. একটাই row.", "আরেক রকম: মাঝে এক ঘর. চারটা row.", "দুই রকম ছাঁদ, তাই কম করে দুই চেক: মাথা আর খুঁটি."];
+const X6_SAY = ["T এর row গুলো।", "এক রকম: লম্বা দাগ। একটাই row।", "আরেক রকম: মাঝে এক ঘর। চারটা row।", "দুই রকম ছাঁদ, তাই কম করে দুই চেক: মাথা আর খুঁটি।"];
 
 export function TwoKindsOfRows() {
   const s = useScene(3, [600, 1800, 1800, 2600]);
@@ -1546,7 +1546,7 @@ function birdApprox(): Grid[] {
   });
   return birdCache;
 }
-const X6B_SAY = ["1.1 এর পাখি. 40 × 40 টা number.", "সবচেয়ে কাজের চেক, মাত্র 1 টা: শুধু আলো-অন্ধকারের আন্দাজ.", "3 টা চেক: একটা কিছু বসে আছে.", "8 টা: পাখি.", "20 টা: প্রায় আসলটা. 1,600 টার বদলে 20 জোড়া সুতা."];
+const X6B_SAY = ["1.1 এর পাখি। 40 × 40 টা number.", "সবচেয়ে কাজের চেক, মাত্র 1 টা: শুধু আলো-অন্ধকারের আন্দাজ।", "3 টা চেক: একটা কিছু বসে আছে।", "8 টা: পাখি।", "20 টা: প্রায় আসলটা। 1,600 টার বদলে 20 জোড়া সুতা।"];
 
 function X6B_Pic({ g }: { g: Grid }) {
   return (
@@ -1578,7 +1578,7 @@ export function BirdByChecks() {
 //      sides; the new check is the old one's rows stood up as columns; the
 //      diagonal stays put.
 
-const X7_SAY = ["রিনার গামছা: (2, 0, 1) পাশে, (1, 2, 1) উপরে.", "সুতা অদলবদল: (1, 2, 1) পাশে, (2, 0, 1) উপরে.", "Row গুলো column হয়ে গেলো.", "কোনাকুনি ঘর নড়ে না. v ⊗ u = (u ⊗ v)ᵀ."];
+const X7_SAY = ["রিনার গামছা: (2, 0, 1) পাশে, (1, 2, 1) উপরে।", "সুতা অদলবদল: (1, 2, 1) পাশে, (2, 0, 1) উপরে।", "Row গুলো column হয়ে গেলো।", "কোনাকুনি ঘর নড়ে না। v ⊗ u = (u ⊗ v)ᵀ."];
 
 export function FlipCheck() {
   const s = useScene(3, [600, 1800, 1800, 2400]);
@@ -1604,7 +1604,7 @@ export function FlipCheck() {
 
 // 9½ · The recap: T is two checks; G is two checks; any product, a few.
 
-const X9_SAY = ["T = দুইটা চেক.", "7.3 এর G = দুইটা চেক.", "যেকোনো গুণ = কয়েকটা চেকের যোগ."];
+const X9_SAY = ["T = দুইটা চেক।", "7.3 এর G = দুইটা চেক।", "যেকোনো গুণ = কয়েকটা চেকের যোগ।"];
 
 export function CheckRecap() {
   const s = useScene(3, [600, 1600, 1600, 2200]);
@@ -1653,7 +1653,7 @@ const X9B_AT: Grid = [
   [4, 3],
 ];
 const X9B_STAR: Grid = X9B_A.map((r, i) => r.map((x, j) => x * X9B_B[i][j]));
-const X9B_SAY = ["A আর B.", "A @ B: row · column. এই article এর গুণ.", "A * B: ঘরে ঘরে গুণ.", "একই দুইটা grid, দুই রকম উত্তর. Code এ একটা চিহ্নের তফাত."];
+const X9B_SAY = ["A আর B।", "A @ B: row · column. এই article এর গুণ।", "A * B: ঘরে ঘরে গুণ।", "একই দুইটা grid, দুই রকম উত্তর। Code এ একটা চিহ্নের তফাত।"];
 
 export function AtOrStar() {
   const s = useScene(3, [600, 1800, 1800, 2400]);
@@ -1684,7 +1684,7 @@ export function AtOrStar() {
 //       good lens it lands as a slanted, bigger patch. How much bigger? And a
 //       minus area? Stopped at "?".
 
-const X9C_SAY = ["দেয়ালে একটা চারকোনা আলো.", "Lens এর ভেতর দিয়ে গেলে: হেলানো, বড় একটা ছোপ.", "জায়গা কতগুণ বাড়লো?", "আর জায়গা যদি minus হয়? Article 8 এ."];
+const X9C_SAY = ["দেয়ালে একটা চারকোনা আলো।", "Lens এর ভেতর দিয়ে গেলে: হেলানো, বড় একটা ছোপ।", "জায়গা কতগুণ বাড়লো?", "আর জায়গা যদি minus হয়? Article 8 এ।"];
 
 export function SquareQuestion() {
   const s = useScene(3, [600, 1800, 1800, 2400]);

@@ -132,8 +132,8 @@ export function NasibRemote({}: Story) {
         <CastPerson who="nasib" x={k >= 1 ? 200 : 330} y={GROUND} facing={-1} walking={k === 1} arm={k >= 1 ? "hold" : "down"} mood={k === 3 ? "smug" : "plain"} label={k >= 1} />
         {k >= 1 && <RemoteProp x={184} y={GROUND - 46} n={3} />}
         {k >= 2 && <PaperTag x={250} y={34} text="3 button · 150 টাকা" />}
-        {k === 3 && <Bubble x={200} y={GROUND - 68} side="left" lines={["দুই button-এ আর", "বিশ্বাস নাই. তিনটা!"]} />}
-        {k >= 4 && <Bubble x={92} y={GROUND - 68} side="right" lines={["আমার remote C-তে", "তো দুইটাই."]} />}
+        {k === 3 && <Bubble x={200} y={GROUND - 68} side="left" lines={["দুই button-এ আর", "বিশ্বাস নাই। তিনটা!"]} />}
+        {k >= 4 && <Bubble x={92} y={GROUND - 68} side="right" lines={["আমার remote C-তে", "তো দুইটাই।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -144,7 +144,7 @@ export function NasibRemote({}: Story) {
 //     no marking: the bet opens only in the finale. The remote's three
 //     buttons are drawn above the question, no two on one line.
 
-const BET = ["হ্যাঁ. তিন নম্বর button Shiku-কে নতুন জায়গায় নিবে", "না. Floor-এ তিন নম্বর button সবসময় বাড়তি", "কোন button, তার উপর নির্ভর করে"];
+const BET = ["হ্যাঁ। তিন নম্বর button Shiku-কে নতুন জায়গায় নিবে", "না। Floor-এ তিন নম্বর button সবসময় বাড়তি", "কোন button, তার উপর নির্ভর করে"];
 const NR_F = makeFrame(-1, 3, -1, 3.5, 22, 12);
 
 /** The picked bet, acted out on Nasib's floor as a claim with a "?", never
@@ -197,7 +197,7 @@ export function ThirdBet() {
 
   const seal = () => {
     setSealed(true);
-    pass("বাজি সিল হলো. এবার চোখ ছাড়া পরীক্ষা.");
+    pass("বাজি সিল হলো। এবার চোখ ছাড়া পরীক্ষা।");
   };
 
   return (
@@ -244,7 +244,7 @@ export function ThirdBet() {
           </button>
         </div>
       ) : null}
-      <Task done={sealed}>একটা উত্তর বেছে সিল করে দিন. মিলাবো একদম শেষে, remote ফেরত দেওয়ার আগে.</Task>
+      <Task done={sealed}>একটা উত্তর বেছে সিল করে দিন। মিলাবো একদম শেষে, remote ফেরত দেওয়ার আগে।</Task>
     </>
   );
 }
@@ -256,9 +256,9 @@ export function ThirdBet() {
 
 const NL_F = makeFrame(-1, 3, -1, 3.5, 22, 12);
 const NL_SAY = [
-  "কাল remote B-র বাড়তি button চোখেই ধরা পড়েছিল. দুইটা একই line-এ.",
-  "নাসিবের remote-এ তিনটা button: e₁, e₂ আর w = (2, 3).",
-  "প্রতিটার নিজের line. কোনো line-এ দুইটা button নাই. চোখে কোনো কপি নাই.",
+  "কাল remote B-র বাড়তি button চোখেই ধরা পড়েছিল। দুইটা একই line-এ।",
+  "নাসিবের remote-এ তিনটা button: e₁, e₂ আর w = (2, 3)।",
+  "প্রতিটার নিজের line। কোনো line-এ দুইটা button নাই। চোখে কোনো কপি নাই।",
   "তাহলে বাড়তি button, যদি থাকেই, ধরবো কীভাবে?",
 ];
 
@@ -338,7 +338,7 @@ export function ZeroWalk() {
     if (rm === 0 && nonzero && same(spot, O)) t[0] = true;
     if (rm === 1 && ds[1].length >= 3) t[1] = true;
     setTick(t);
-    if (t[0] && t[1]) pass("শূন্য না চেপেও দরজায় ফেরা মানে: বাড়তি button.");
+    if (t[0] && t[1]) pass("শূন্য না চেপেও দরজায় ফেরা মানে: বাড়তি button।");
   };
 
   return (
@@ -368,13 +368,13 @@ export function ZeroWalk() {
           <div className="mt-2">
             <ButtonRemote keys={keys} amt={amt[rm]} onAmt={press} f={WB_F} min={-3} max={3} />
           </div>
-          {tick[0] ? <div className={`${FADE} mt-2 text-[0.85rem] leading-snug text-accent-text`}>B: 2·u − 1·v = (0, 0). সত্যিকারের চাপ, সোজা দরজায়.</div> : null}
-          {tick[1] ? <div className={`${FADE} mt-1 text-[0.85rem] leading-snug text-muted`}>A: শুধু (0, 0) চাপলেই দরজা. মানে কিছুই না চাপা.</div> : null}
+          {tick[0] ? <div className={`${FADE} mt-2 text-[0.85rem] leading-snug text-accent-text`}>B: 2·u − 1·v = (0, 0). সত্যিকারের চাপ, সোজা দরজায়।</div> : null}
+          {tick[1] ? <div className={`${FADE} mt-1 text-[0.85rem] leading-snug text-muted`}>A: শুধু (0, 0) চাপলেই দরজা। মানে কিছুই না চাপা।</div> : null}
         </div>
       </div>
       <Ticks items={[["B দরজায় ফিরলো", tick[0]], ["A: শূন্য ছাড়া ফেরে না", tick[1]]]} />
       <Task done={tick[0] && tick[1]}>
-        {rm === 0 ? "Remote B-তে: দুইটা button-ই 0 না রেখে Shiku-কে আবার দরজায় আনুন." : "এবার remote A. চেষ্টা করুন তিনটা আলাদা চাপ দিয়ে. শূন্য না, এমন."}
+        {rm === 0 ? "Remote B-তে: দুইটা button-ই 0 না রেখে Shiku-কে আবার দরজায় আনুন।" : "এবার remote A। চেষ্টা করুন তিনটা আলাদা চাপ দিয়ে। শূন্য না, এমন।"}
       </Task>
     </>
   );
@@ -386,10 +386,10 @@ export function ZeroWalk() {
 //      twice forward, then v once back to the door.
 
 const WH_SAY = [
-  "Remote B-র u = (1, 1). u একা থাকলে ওকে কখনো বাড়তি মনে হয় নাই.",
-  "v একই line-এ এসে বসতেই u বাড়তি হয়ে গেলো.",
-  "u দুইবার: (1, 1), তারপর (2, 2). ঠিক v যেখানে পৌঁছায়.",
-  "এবার v একবার, উল্টা দিকে: 2·u − 1·v = (0, 0). দরজা, অথচ চাপগুলা শূন্য না.",
+  "Remote B-র u = (1, 1). u একা থাকলে ওকে কখনো বাড়তি মনে হয় নাই।",
+  "v একই line-এ এসে বসতেই u বাড়তি হয়ে গেলো।",
+  "u দুইবার: (1, 1), তারপর (2, 2)। ঠিক v যেখানে পৌঁছায়।",
+  "এবার v একবার, উল্টা দিকে: 2·u − 1·v = (0, 0)। দরজা, অথচ চাপগুলা শূন্য না।",
 ];
 
 export function WalkHome() {
@@ -485,9 +485,9 @@ export function RemoteCStare({}: Story) {
 
 const TP_F = makeFrame(-1, 3, -1, 6, 18, 15);
 const TRICK_ROWS: { lhs: string; rhs: string; note: string }[] = [
-  { lhs: "slot 1: α·1 + β·2 = 0", rhs: "α = −2β", note: "Slot 1 শূন্যে ফিরতে পারে, যদি α হয় β-র মাইনাস দ্বিগুণ." },
-  { lhs: "slot 2: α·2 + β·5 = 0", rhs: "β = 0", note: "α = −2β বসাই: −4β + 5β = β. β শূন্য না হলে slot 2 রাজি না." },
-  { lhs: "তাহলে α = −2 · 0", rhs: "α = 0", note: "একটা চাপ শূন্য হলো, সাথে অন্যটাও." },
+  { lhs: "slot 1: α·1 + β·2 = 0", rhs: "α = −2β", note: "Slot 1 শূন্যে ফিরতে পারে, যদি α হয় β-র মাইনাস দ্বিগুণ।" },
+  { lhs: "slot 2: α·2 + β·5 = 0", rhs: "β = 0", note: "α = −2β বসাই: −4β + 5β = β। β শূন্য না হলে slot 2 রাজি না।" },
+  { lhs: "তাহলে α = −2 · 0", rhs: "α = 0", note: "একটা চাপ শূন্য হলো, সাথে অন্যটাও।" },
 ];
 
 export function NoVisibleCopy() {
@@ -510,7 +510,7 @@ export function NoVisibleCopy() {
   const step = () => {
     const nk = k + 1;
     setK(nk);
-    if (nk > TRICK_ROWS.length) pass("শুধু (0, 0)-তেই দরজা: independent.");
+    if (nk > TRICK_ROWS.length) pass("শুধু (0, 0)-তেই দরজা: independent।");
   };
 
   return (
@@ -535,7 +535,7 @@ export function NoVisibleCopy() {
               <div className="mt-2">
                 <ButtonRemote keys={keys} amt={amt} onAmt={press} f={TP_F} min={-2} max={4} />
               </div>
-              {tries.length > 0 && tries.length < 3 ? <div className="mt-1.5 text-xs text-muted">চেষ্টা {tries.length} বার. দরজায় একবারও না.</div> : null}
+              {tries.length > 0 && tries.length < 3 ? <div className="mt-1.5 text-xs text-muted">চেষ্টা {tries.length} বার। দরজায় একবারও না।</div> : null}
               {tries.length >= 3 ? (
                 <div className="mt-2">
                   <button type="button" onClick={() => setPhase("sum")} className={`${quietBtn} h-9 text-sm`}>
@@ -546,7 +546,7 @@ export function NoVisibleCopy() {
             </>
           ) : (
             <div className="rounded-2xl border border-border px-3 py-2">
-              <div className="text-center text-xs font-semibold">α বার (1, 2), β বার (2, 5). দুইটা slot-ই 0</div>
+              <div className="text-center text-xs font-semibold">α বার (1, 2), β বার (2, 5)। দুইটা slot-ই 0</div>
               <div className="mt-1.5 grid gap-1">
                 {TRICK_ROWS.slice(0, k).map((r) => (
                   <div key={r.lhs} className={`${POP} rounded-xl bg-foreground/[0.04] px-2.5 py-1`}>
@@ -560,7 +560,7 @@ export function NoVisibleCopy() {
               </div>
               {over && (
                 <div className={`${FADE} mt-1.5 rounded-xl bg-accent/10 px-2.5 py-1.5 text-center text-[0.85rem] font-medium text-accent-text`}>
-                  শুধু (0, 0). দুইটা button-ই দরকারি.
+                  শুধু (0, 0)। দুইটা button-ই দরকারি।
                 </div>
               )}
               {!over && (
@@ -574,7 +574,7 @@ export function NoVisibleCopy() {
           )}
         </div>
       </div>
-      <Task done={over}>{phase === "hunt" ? "Remote C-কে দরজায় ফেরানোর চেষ্টা করুন. তিনবার সৎ চেষ্টা, তারপর হিসাব." : "হিসাবটা এক লাইন এক লাইন করে চালান: শূন্য না, এমন কোনো জোড়া কি দরজায় ফেরে?"}</Task>
+      <Task done={over}>{phase === "hunt" ? "Remote C-কে দরজায় ফেরানোর চেষ্টা করুন। তিনবার সৎ চেষ্টা, তারপর হিসাব।" : "হিসাবটা এক লাইন এক লাইন করে চালান: শূন্য না, এমন কোনো জোড়া কি দরজায় ফেরে?"}</Task>
     </>
   );
 }
@@ -589,10 +589,10 @@ const SK_F = makeFrame(-2.5, 2.5, -4.5, 3.5, 14, 10);
 const SK_U: XY = [1, 2];
 const SK_V: XY = [2, 5];
 const SK_SAY = [
-  "Remote C: u = (1, 2), v = (2, 5). α = −2β রেখে চাপ দিই: ধরেন α = −2, β = 1.",
-  "−2u, তারপর v: slot 1 শূন্যে ফিরলো, কথামতো. Slot 2 থামলো 1-এ. ওটাই β.",
-  "β যা-ই দিন, Shiku থামে দরজার ঠিক উপরে বা নিচে, β ঘর দূরে.",
-  "β = 0, তাই α = 0-ও. কিছু না চাপলেই শুধু দরজা.",
+  "Remote C: u = (1, 2), v = (2, 5). α = −2β রেখে চাপ দিই: ধরেন α = −2, β = 1।",
+  "−2u, তারপর v: slot 1 শূন্যে ফিরলো, কথামতো। Slot 2 থামলো 1-এ। ওটাই β।",
+  "β যা-ই দিন, Shiku থামে দরজার ঠিক উপরে বা নিচে, β ঘর দূরে।",
+  "β = 0, তাই α = 0-ও। কিছু না চাপলেই শুধু দরজা।",
 ];
 
 export function SlotKill() {
@@ -639,7 +639,7 @@ export function SlotKill() {
 //      huge; there the same sum is the whole test, and the machine runs it,
 //      column by column.
 
-const BT_SAY = ["Remote C-র পুরা পরীক্ষা: দুই লাইন হিসাব. খোঁজাখুঁজি নাই.", "AI-এর table-গুলা বিশাল হয়.", "সেখানে এই হিসাবটাই পুরা পরীক্ষা. Machine চালায়."];
+const BT_SAY = ["Remote C-র পুরা পরীক্ষা: দুই লাইন হিসাব। খোঁজাখুঁজি নাই।", "AI-এর table-গুলা বিশাল হয়।", "সেখানে এই হিসাবটাই পুরা পরীক্ষা। Machine চালায়।"];
 const BT_COLS = 14;
 const BT_ROWS = 7;
 
@@ -698,7 +698,7 @@ export function BigTable() {
 //      number. Remote C's two buttons go in, one number comes out, and which
 //      number is left as "?" for Article 8.
 
-const ON_SAY = ["Remote C-র দুইটা button: (1, 2) আর (2, 5).", "এক সংখ্যাতেই পুরা ব্যাপারটা মিটিয়ে ফেলার একটা উপায়ও আছে.", "কোন সংখ্যা? Article 8 সেটা আপনার হাতে দিবে."];
+const ON_SAY = ["Remote C-র দুইটা button: (1, 2) আর (2, 5).", "এক সংখ্যাতেই পুরা ব্যাপারটা মিটিয়ে ফেলার একটা উপায়ও আছে।", "কোন সংখ্যা? Article 8 সেটা আপনার হাতে দিবে।"];
 
 export function OneNumber() {
   const s = useScene(2, [700, 2200, 2200]);
@@ -758,7 +758,7 @@ export function NasibWalk() {
     setAmt(next);
     if (next.some((x) => x !== 0) && same(land(TH_KEYS, next), O)) {
       setFound(true);
-      pass("w-ও শূন্য না চেপে দরজায় ফেরে. ও বাড়তি.");
+      pass("w-ও শূন্য না চেপে দরজায় ফেরে। ও বাড়তি।");
     }
   };
 
@@ -783,10 +783,10 @@ export function NasibWalk() {
       </div>
       {found ? (
         <div className={`${FADE} mx-auto mt-2 max-w-sm rounded-2xl bg-accent/10 px-3 py-1.5 text-center text-[0.85rem] leading-snug text-accent-text`}>
-          তিনটা button. চাপ শূন্য না, তবু দরজা. কেন? w যতদূর নেয়, e₁ আর e₂ মিলে ঠিক ততটাই ফেরত আনে.
+          তিনটা button। চাপ শূন্য না, তবু দরজা। কেন? w যতদূর নেয়, e₁ আর e₂ মিলে ঠিক ততটাই ফেরত আনে।
         </div>
       ) : null}
-      <Task done={found}>তিন button মিলিয়ে এমন চাপ খুঁজুন যাতে Shiku আবার দরজায় ফেরে. সবগুলা 0 রাখলে চলবে না.</Task>
+      <Task done={found}>তিন button মিলিয়ে এমন চাপ খুঁজুন যাতে Shiku আবার দরজায় ফেরে। সবগুলা 0 রাখলে চলবে না।</Task>
     </>
   );
 }
@@ -797,9 +797,9 @@ export function NasibWalk() {
 
 const TH2_SAY = [
   "দুই slot-এর floor-এ তিনটা button: e₁, e₂ আর w = (2, 3).",
-  "w একবার চাপুন: Shiku এখন (2, 3)-এ.",
-  "e₁ −2 বার: 2 ঘর পিছনে. এখন (0, 3).",
-  "e₂ −3 বার: দরজা. চাপগুলা ছিল (−2, −3, 1).",
+  "w একবার চাপুন: Shiku এখন (2, 3)-এ।",
+  "e₁ −2 বার: 2 ঘর পিছনে। এখন (0, 3)।",
+  "e₂ −3 বার: দরজা। চাপগুলা ছিল (−2, −3, 1)।",
 ];
 
 export function ThirdHome() {
@@ -834,7 +834,7 @@ export function ThirdHome() {
 //      nowhere new. One press of w lands on (2, 3); from the door again, e₁
 //      twice and e₂ three times land on the very same spot.
 
-const SS_SAY = ["w একবার চাপলে Shiku যায় (2, 3)-এ.", "আবার দরজা থেকে, এবার w ছাড়া. e₁ দুইবার: (2, 0).", "e₂ তিনবার: সেই (2, 3). w নতুন কোনো জায়গায় নেয় নাই."];
+const SS_SAY = ["w একবার চাপলে Shiku যায় (2, 3)-এ।", "আবার দরজা থেকে, এবার w ছাড়া। e₁ দুইবার: (2, 0)।", "e₂ তিনবার: সেই (2, 3)। w নতুন কোনো জায়গায় নেয় নাই।"];
 
 export function SameSpot() {
   const s = useScene(2, [700, 2000, 2400]);
@@ -878,8 +878,8 @@ export function NasibObjects({}: Story) {
         <CastPerson who="nasib" x={190} y={GROUND} facing={-1} arm={k >= 1 ? "point" : "hold"} mood={k >= 1 ? "shout" : "plain"} label />
         <RemoteProp x={168} y={GROUND - 44} n={3} />
         {k >= 1 && <CastCard x={270} y={66} text="w = (2, 3)" tone="teal" />}
-        {k === 1 && <Bubble x={190} y={GROUND - 68} side="left" lines={["ওই w টাই", "খারাপ ছিল."]} />}
-        {k >= 2 && <Bubble x={190} y={GROUND - 68} side="left" lines={["অন্য কোনো button", "হলে দেখতে."]} />}
+        {k === 1 && <Bubble x={190} y={GROUND - 68} side="left" lines={["ওই w টাই", "খারাপ ছিল।"]} />}
+        {k >= 2 && <Bubble x={190} y={GROUND - 68} side="left" lines={["অন্য কোনো button", "হলে দেখতে।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -924,13 +924,13 @@ export function AnyThird() {
     if (placed.includes(key)) return;
     const list = [...placed, key];
     setPlaced(list);
-    if (list.length >= 3) pass("Floor-এ তিনটা button: একটা সবসময় বাড়তি.");
+    if (list.length >= 3) pass("Floor-এ তিনটা button: একটা সবসময় বাড়তি।");
   };
   const line = !last
-    ? "w এখনো (2, 3). টেনে নতুন কোথাও নিয়ে ছেড়ে দিন."
+    ? "w এখনো (2, 3)। টেনে নতুন কোথাও নিয়ে ছেড়ে দিন।"
     : same(last, O)
-      ? "w = (0, 0): শূন্য button. একবার চাপলেই, কোথাও না গিয়ে দরজায়."
-      : `w = ${tup(last)}: চাপ (${sg(-last[0])}, ${sg(-last[1])}, 1). দরজা.`;
+      ? "w = (0, 0): শূন্য button। একবার চাপলেই, কোথাও না গিয়ে দরজায়।"
+      : `w = ${tup(last)}: চাপ (${sg(-last[0])}, ${sg(-last[1])}, 1). দরজা।`;
 
   return (
     <>
@@ -949,16 +949,16 @@ export function AnyThird() {
           </Plane>
         </div>
         <div className="min-w-0 flex-1">
-          <div className="text-[0.85rem] leading-snug text-muted">নাসিব বলছে, w টাই বাজে ছিল. যেখানে খুশি তিন নম্বর button বসান. Machine সাথে সাথে দরজায় ফেরার পথ খুঁজবে.</div>
+          <div className="text-[0.85rem] leading-snug text-muted">নাসিব বলছে, w টাই বাজে ছিল। যেখানে খুশি তিন নম্বর button বসান। Machine সাথে সাথে দরজায় ফেরার পথ খুঁজবে।</div>
           <div key={placed.length} className={`${FADE} mt-2 rounded-xl bg-foreground/[0.04] px-2.5 py-1.5 text-[0.8rem] leading-relaxed`}>
             {line}
           </div>
           <div className="mt-1.5 text-xs text-muted">
-            আপনার button: {placed.length ? placed.map((p) => `(${p.replace(",", ", ")})`).join(" · ") : "এখনো নাই"}.{done ? "" : ` আর ${3 - placed.length} টা.`}
+            আপনার button: {placed.length ? placed.map((p) => `(${p.replace(",", ", ")})`).join(" · ") : "এখনো নাই"}.{done ? "" : ` আর ${3 - placed.length} টা।`}
           </div>
         </div>
       </div>
-      <Task done={done}>এমন একটা তিন নম্বর button খুঁজুন যেটা বাড়তি না. তিন জায়গায় বসিয়ে দেখুন.</Task>
+      <Task done={done}>এমন একটা তিন নম্বর button খুঁজুন যেটা বাড়তি না। তিন জায়গায় বসিয়ে দেখুন।</Task>
     </>
   );
 }
@@ -974,10 +974,10 @@ const EV_W: XY[] = [
   [0, 0],
 ];
 const EV_SAY = [
-  "e₁ আর e₂ মিলে floor-এর যেকোনো জায়গায় যায়. কাল remote A-তে দেখেছেন.",
-  "w = (3, 1): e₁ −3 বার, e₂ −1 বার, w একবার. দরজা.",
-  "w = (−2, 2): e₁ +2 বার, e₂ −2 বার, w একবার. দরজা.",
-  "w = (0, 0): শূন্য button নিজেই দরজায় ফেরে. সবসময় বাড়তি.",
+  "e₁ আর e₂ মিলে floor-এর যেকোনো জায়গায় যায়। কাল remote A-তে দেখেছেন।",
+  "w = (3, 1): e₁ −3 বার, e₂ −1 বার, w একবার। দরজা।",
+  "w = (−2, 2): e₁ +2 বার, e₂ −2 বার, w একবার। দরজা।",
+  "w = (0, 0): শূন্য button নিজেই দরজায় ফেরে। সবসময় বাড়তি।",
 ];
 
 export function EveryThird() {
@@ -1006,9 +1006,9 @@ export function EveryThird() {
 //      lands on a spot already in hand, so it is always the extra one.
 
 const FF_SAY = [
-  "দুই slot-এর floor. e₁ আর e₂.",
-  "এই দুইটা মিলেই floor-এর প্রতিটা জায়গায় পৌঁছানো যায়.",
-  "তিন নম্বর button যেখানেই নামুক, জায়গাটা আগেই হাতে. তিনটা হলেই একটা সবসময় বাড়তি.",
+  "দুই slot-এর floor. e₁ আর e₂।",
+  "এই দুইটা মিলেই floor-এর প্রতিটা জায়গায় পৌঁছানো যায়।",
+  "তিন নম্বর button যেখানেই নামুক, জায়গাটা আগেই হাতে। তিনটা হলেই একটা সবসময় বাড়তি।",
 ];
 const FF_SPOTS: XY[] = [];
 for (let y = 4; y >= -1; y -= 1) for (let x = -2; x <= 3; x += 1) FF_SPOTS.push([x, y]);
@@ -1075,7 +1075,7 @@ export function CheapRemote({}: Story) {
             </text>
           </g>
         )}
-        {k === 2 && <Bubble x={96} y={GROUND - 96} side="right" lines={["এইটা নকল মাল.", "একটা বাটন আরেকটার কপি."]} />}
+        {k === 2 && <Bubble x={96} y={GROUND - 96} side="right" lines={["এইটা নকল মাল।", "একটা বাটন আরেকটার কপি।"]} />}
         <CastPerson who="fahim" x={k >= 1 ? 214 : 290} y={GROUND} facing={-1} walking={k === 1} mood={k >= 3 ? "puzzled" : "plain"} label />
         <CastPerson who="nasib" x={k >= 1 ? 262 : 320} y={GROUND} facing={-1} walking={k === 1} arm="hold" mood="plain" label />
         {k >= 3 && <Bubble x={214} y={GROUND - 68} side="left" tone="think" lines={["কপি?"]} />}
@@ -1100,7 +1100,7 @@ const X10_PICKS: { t: number | null; label: string }[] = [
   { t: null, label: "কোনোটাই না" },
 ];
 const X10_RIGHT = 2;
-const X10_NOPE = ["Slot 1 ঠিক আছে, কিন্তু slot 2 v-র 7 থেকে এক ঘর কম.", "Slot 2 ঠিক আছে, কিন্তু slot 1 v-র 2 পার হয়ে গেলো."];
+const X10_NOPE = ["Slot 1 ঠিক আছে, কিন্তু slot 2 v-র 7 থেকে এক ঘর কম।", "Slot 2 ঠিক আছে, কিন্তু slot 1 v-র 2 পার হয়ে গেলো।"];
 /** a stretch as it would be said: 2, or 2⅓ */
 const x10Say = (t: number) => (Math.abs(t - 7 / 3) < 0.01 ? "2⅓" : `${r1(t)}`);
 
@@ -1138,7 +1138,7 @@ export function StretchReach() {
   const choose = (i: number) => {
     if (right) return;
     setPick(i);
-    if (i === X10_RIGHT) pass("u টেনে v-তে পৌঁছানো যায় না: independent.");
+    if (i === X10_RIGHT) pass("u টেনে v-তে পৌঁছানো যায় না: independent।");
     else setMiss((m) => m + 1);
   };
 
@@ -1180,15 +1180,15 @@ export function StretchReach() {
       </div>
       {pick !== null && !right ? (
         <Nope key={miss}>
-          u × {x10Say(X10_PICKS[pick].t ?? 1)} গিয়ে পড়ে ({x10Say(X10_U[0] * (X10_PICKS[pick].t ?? 1))}, {r1(X10_U[1] * (X10_PICKS[pick].t ?? 1))})-এ. {X10_NOPE[pick]}
+          u × {x10Say(X10_PICKS[pick].t ?? 1)} গিয়ে পড়ে ({x10Say(X10_U[0] * (X10_PICKS[pick].t ?? 1))}, {r1(X10_U[1] * (X10_PICKS[pick].t ?? 1))})-এ। {X10_NOPE[pick]}
         </Nope>
       ) : null}
       {right ? (
         <div className={`${FADE} mx-auto mt-2 max-w-sm rounded-2xl bg-accent/10 px-3 py-1.5 text-center text-[0.85rem] leading-snug text-accent-text`}>
-          Slot 1 চায় × 2, slot 2 চায় × 2⅓. একটা টানে দুইটা হয় না. u-র line টা v-র পাশ দিয়ে চলে যায়.
+          Slot 1 চায় × 2, slot 2 চায় × 2⅓। একটা টানে দুইটা হয় না। u-র line টা v-র পাশ দিয়ে চলে যায়।
         </div>
       ) : null}
-      <Task done={right}>u-কে কত গুণ টানলে v-তে পড়ে, সেই ছবিটা বাছুন. নাকি কোনোটাতেই পড়ে না?</Task>
+      <Task done={right}>u-কে কত গুণ টানলে v-তে পড়ে, সেই ছবিটা বাছুন। নাকি কোনোটাতেই পড়ে না?</Task>
     </>
   );
 }
@@ -1200,10 +1200,10 @@ export function StretchReach() {
 //      only when β = 0, and then α = 0 too.
 
 const SH_BEATS: { a: number; b: number; say: string }[] = [
-  { a: 0, b: 0, say: "α বার u = (1, 3), β বার v = (2, 7). দুইটা slot-ই 0 হতে হবে." },
-  { a: -2, b: 1, say: "Slot 1: α + 2β = 0, তাই α = −2β. ধরেন α = −2, β = 1. Slot 1 শূন্যে." },
-  { a: 2, b: -1, say: "Slot 2: 3·(−2β) + 7β = β. β = −1 দিলে slot 2-ও −1." },
-  { a: 0, b: 0, say: "β শূন্য হতেই হবে, সাথে α-ও. শুধু (0, 0)." },
+  { a: 0, b: 0, say: "α বার u = (1, 3), β বার v = (2, 7)। দুইটা slot-ই 0 হতে হবে।" },
+  { a: -2, b: 1, say: "Slot 1: α + 2β = 0, তাই α = −2β। ধরেন α = −2, β = 1। Slot 1 শূন্যে।" },
+  { a: 2, b: -1, say: "Slot 2: 3·(−2β) + 7β = β. β = −1 দিলে slot 2-ও −1।" },
+  { a: 0, b: 0, say: "β শূন্য হতেই হবে, সাথে α-ও। শুধু (0, 0)।" },
 ];
 
 export function ShopSlots() {
@@ -1253,10 +1253,10 @@ export function ShopSlots() {
 
 const TA_F = makeFrame(-1, 3, -1, 8, 13, 12);
 const TA_SAY = [
-  "প্রশ্নের জোড়া: u = (1, 3).",
-  "আর v = (2, 7). চোখে দেখে বোঝার উপায় ছিল না.",
-  "2u পড়ে (2, 6)-এ, v থেকে এক ঘর নিচে.",
-  "এখানে u টেনে v পাওয়া যায় না, v টেনেও u না.",
+  "প্রশ্নের জোড়া: u = (1, 3)।",
+  "আর v = (2, 7)। চোখে দেখে বোঝার উপায় ছিল না।",
+  "2u পড়ে (2, 6)-এ, v থেকে এক ঘর নিচে।",
+  "এখানে u টেনে v পাওয়া যায় না, v টেনেও u না।",
 ];
 
 export function TwoArrowsTest() {
@@ -1302,8 +1302,8 @@ export function NasibReturns({}: Story) {
         <CastPerson who="nasib" x={k >= 1 ? 172 : 250} y={GROUND} facing={-1} walking={k === 1} arm={k >= 1 && k < 4 ? "hold" : "down"} mood="plain" label />
         {k >= 1 && k < 3 && <RemoteProp x={156} y={GROUND - 46} n={3} />}
         {k >= 3 && <RemoteProp x={120} y={GROUND - 64} n={3} />}
-        {k === 2 && <Bubble x={172} y={GROUND - 68} side="left" lines={["চাচা, তিন নম্বরটা", "লাগবে না."]} />}
-        {k === 3 && <Bubble x={96} y={GROUND - 96} side="right" lines={["বাড়তি বাটন, বাড়তি দাম.", "লও, পঞ্চাশ টাকা."]} />}
+        {k === 2 && <Bubble x={172} y={GROUND - 68} side="left" lines={["চাচা, তিন নম্বরটা", "লাগবে না।"]} />}
+        {k === 3 && <Bubble x={96} y={GROUND - 96} side="right" lines={["বাড়তি বাটন, বাড়তি দাম।", "লও, পঞ্চাশ টাকা।"]} />}
         {k >= 4 && <PaperTag x={172} y={64} text="50 টাকা ফেরত" ink="#0f766e" />}
         {k >= 4 && <RemoteProp x={186} y={GROUND - 42} n={2} />}
         <CastPerson who="fahim" x={250} y={GROUND} facing={-1} mood="plain" label />
@@ -1317,9 +1317,9 @@ export function NasibReturns({}: Story) {
 //     each showing its verdict and why, with a tiny floor that acts it out.
 
 const VERDICT: { ok: boolean; why: string; w: XY[] }[] = [
-  { ok: false, why: "w = (2, 3) নতুন কোনো জায়গায় যায় না. e₁ 2 বার, e₂ 3 বার চাপলেই সেখানে.", w: [[2, 3]] },
-  { ok: true, why: "যে button-ই দিন, (−x, −y, 1) চেপে দরজায় ফেরা যায়. তাই সবসময় বাড়তি.", w: [[2, 3], [-1, 2], [2, 1]] },
-  { ok: false, why: "নিজে তিনবার চেষ্টা করেছেন. কোনো w-ই পার পায় নাই, (0, 0) তো আরোই না.", w: [[3, 1], [-2, 2]] },
+  { ok: false, why: "w = (2, 3) নতুন কোনো জায়গায় যায় না। e₁ 2 বার, e₂ 3 বার চাপলেই সেখানে।", w: [[2, 3]] },
+  { ok: true, why: "যে button-ই দিন, (−x, −y, 1) চেপে দরজায় ফেরা যায়। তাই সবসময় বাড়তি।", w: [[2, 3], [-1, 2], [2, 1]] },
+  { ok: false, why: "নিজে তিনবার চেষ্টা করেছেন। কোনো w-ই পার পায় নাই, (0, 0) তো আরোই না।", w: [[3, 1], [-2, 2]] },
 ];
 const VD_F = makeFrame(-2, 3, -1, 3.5, 11, 5);
 
@@ -1332,7 +1332,7 @@ export function ThirdVerdict() {
     if (open.includes(i)) return;
     const next = [...open, i];
     setOpen(next);
-    if (next.length === VERDICT.length) pass("Floor-এ তিন নম্বর button সবসময় বাড়তি.");
+    if (next.length === VERDICT.length) pass("Floor-এ তিন নম্বর button সবসময় বাড়তি।");
   };
 
   return (
@@ -1376,7 +1376,7 @@ export function ThirdVerdict() {
           );
         })}
       </div>
-      <Task done={done}>সিল করা বাজি খুলুন. তিনটা card-ই tap করে দেখুন কোনটা টিকলো.</Task>
+      <Task done={done}>সিল করা বাজি খুলুন। তিনটা card-ই tap করে দেখুন কোনটা টিকলো।</Task>
     </>
   );
 }
@@ -1387,9 +1387,9 @@ export function ThirdVerdict() {
 //      a third one does. n slots, at most n needed buttons.
 
 const FC_SAY = [
-  "একটা line-এ slot একটাই. সেখানে দ্বিতীয় button সবসময় বাড়তি: 3 বার 2 সামনে, 2 বার 3 পিছনে, দরজা.",
-  "Floor-এ slot দুইটা. সেখানে তৃতীয় button সবসময় বাড়তি.",
-  "n টা slot, বড়জোর n টা দরকারি button. এর বেশি হলেই কেউ একজন বাড়তি.",
+  "একটা line-এ slot একটাই। সেখানে দ্বিতীয় button সবসময় বাড়তি: 3 বার 2 সামনে, 2 বার 3 পিছনে, দরজা।",
+  "Floor-এ slot দুইটা। সেখানে তৃতীয় button সবসময় বাড়তি।",
+  "n টা slot, বড়জোর n টা দরকারি button। এর বেশি হলেই কেউ একজন বাড়তি।",
 ];
 
 export function FloorCount() {

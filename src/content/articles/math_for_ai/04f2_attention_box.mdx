@@ -1,20 +1,20 @@
 export const metadata = {
-  title: "Math for AI 4.9 — The same box, inside ChatGPT",
-  description: "Som says the haat's box, multiply the slots and add, runs inside ChatGPT. True? Find out which word 'it' means in a sentence, and the box turns up. Then read Module 1's formula out loud, piece by piece.",
+  title: "Math for AI 4.9 — The same dot product, inside ChatGPT",
+  description: "Som says the haat's dot product, multiply the slots and add, runs inside ChatGPT. True? Find out which word 'it' means in a sentence, and the dot product turns up. Then read Module 1's formula out loud, piece by piece.",
   type: "article",
 };
 
 {/* Told as a Brilliant-style journey, like 1.1 and 2.3: screen 1 seals the
-    reader's bet on সোম's claim that ChatGPT runs the হাট's box, and the bet is
+    reader's bet on সোম's claim that ChatGPT runs the হাট's dot product, and the bet is
     not settled until the reader builds a query themselves (YourSentence) and
     the ending says it by name. 11 steps. Each screen opens by reacting to the
     last; the explanation sits in <Then> and shows only once the task is done,
     one phone screen each.
 
     The spine: words are lists (2.3 recall, WordWalk) → a rule by position
-    fails (NearestRule) → the box between a query and each key finds "ওটা"
+    fails (NearestRule) → the dot product between a query and each key finds "ওটা"
     (WhoIsIt) → nobody writes those numbers, the machine learns them
-    (LearnQuery) → every word boxes every word, and that is attention
+    (LearnQuery) → every word takes a dot product with every word, and that is attention
     (EveryWord) → the neuron is 4.1's দালাল card plus a number and a bend
     (NeuronRun) → এবার আপনার পালা (YourSentence) → Try it (CatMilk) → the
     ending, Module 1 read out loud (Finale) → the look-ahead (MixW).
@@ -33,11 +33,11 @@ import { WordTimesWord, WordBox, EndingFlips, TwoSlots, QueryKeys, LongStrips, N
 
 <Step>
 
-রাতে ফাহিম সোমকে ফোন দিলো. লাইব্রেরির পুরা গল্পটা বললো. দুইটা machine, মাছের বই, box আর cosine.
+রাতে ফাহিম সোমকে ফোন দিলো। লাইব্রেরির পুরা গল্পটা বললো। দুইটা machine, মাছের বই, dot product আর cosine.
 
-সোম চুপচাপ শুনলো. তারপর হালকা গলায় বললো, ChatGPT এর ভিতরেও তো এই box চলে. হাটের সেই box. ঘরে ঘরে গুণ, তারপর যোগ.
+সোম চুপচাপ শুনলো। তারপর হালকা গলায় বললো, ChatGPT এর ভিতরেও তো এই dot product চলে। হাটের সেই dot product। ঘরে ঘরে গুণ, তারপর যোগ।
 
-ফাহিম কিছু বললো না. মুদি দোকানের হিসাব আর ChatGPT. এক জিনিস?
+ফাহিম কিছু বললো না। মুদি দোকানের হিসাব আর ChatGPT। এক জিনিস?
 
 <NightCall story />
 
@@ -45,11 +45,11 @@ import { WordTimesWord, WordBox, EndingFlips, TwoSlots, QueryKeys, LongStrips, N
 
 <Then>
 
-বাজি ধরা হয়ে গেলো. তবে সোমের কথায় একটা খটকা আছে. হাটের box চালাতে কী লাগে? দুইটা list of numbers. চাল, তেল, ডিম কতটুকু কেনা. আর কোনটার দাম কত. ChatGPT এর কাছে তো আসে শব্দ. শব্দের সাথে শব্দের গুণ হয় কেমনে?
+বাজি ধরা হয়ে গেলো। তবে সোমের কথায় একটা খটকা আছে। হাটের dot product করতে কী লাগে? দুইটা list of numbers। চাল, তেল, ডিম কতটুকু কেনা। আর কোনটার দাম কত। ChatGPT এর কাছে তো আসে শব্দ। শব্দের সাথে শব্দের গুণ হয় কেমনে?
 
 <WordTimesWord />
 
-আগে এই খটকাটা মিটাই. তারপর খুঁজবো box টা ChatGPT এর কোথায় বসে আছে.
+আগে এই খটকাটা মিটাই। তারপর খুঁজবো dot product টা ChatGPT এর কোথায় বসে আছে।
 
 </Then>
 
@@ -57,21 +57,21 @@ import { WordTimesWord, WordBox, EndingFlips, TwoSlots, QueryKeys, LongStrips, N
 
 <Step>
 
-সোম হাসলো. বললো, 2.3 মনে নাই? king − man + woman.
+সোম হাসলো। বললো, 2.3 মনে নাই? king − man + woman.
 
 <SomRecalls story />
 
-Map এর উপরে হিসাবটা আরেকবার করে দেখুন.
+Map এর উপরে হিসাবটা আরেকবার করে দেখুন।
 
 <WordWalk />
 
 <Then>
 
-খেয়াল করেছেন? map এ প্রতিটা শব্দ বসে আছে একটা জায়গায়. আর জায়গা মানেই দুইটা number. king মানে (2.6, 5.9). তাই machine এর চোখে শব্দ একটা list of numbers. মানে একটা **vector**. এজন্যই তো শব্দ থেকে শব্দ বিয়োগ করা গেছিল.
+খেয়াল করেছেন? map এ প্রতিটা শব্দ বসে আছে একটা জায়গায়। আর জায়গা মানেই দুইটা number। king মানে (2.6, 5.9). তাই machine এর চোখে শব্দ একটা list of numbers। মানে একটা **vector**। এজন্যই তো শব্দ থেকে শব্দ বিয়োগ করা গেছিল।
 
-আর list হলে? box ও চলে.
+আর list হলে? dot product ও চলে।
 
-খটকাটা মিটে গেলো.
+খটকাটা মিটে গেলো।
 
 <WordBox />
 
@@ -81,23 +81,23 @@ Map এর উপরে হিসাবটা আরেকবার করে �
 
 <Step>
 
-ফাহিম জানালা দিয়ে তাকালো. উঠানের কোণায় মামার গোয়ালঘর. গরুটা দাঁড়িয়ে আছে. সামনে এক আঁটি খড়, ছোঁয়াও হয় নাই.
+ফাহিম জানালা দিয়ে তাকালো। উঠানের কোণায় মামার গোয়ালঘর। গরুটা দাঁড়িয়ে আছে। সামনে এক আঁটি খড়, ছোঁয়াও হয় নাই।
 
-সোম বললো, এটাই ধর. গরুটা খড় খেলো না, কারণ ওটার পেট ভরা ছিল. ওটা কে?
+সোম বললো, এটাই ধর। গরুটা খড় খেলো না, কারণ ওটার পেট ভরা ছিল। ওটা কে?
 
 <GoyalGhor story />
 
-আপনি এক পলকেই জানেন. গরু. Machine জানে না. ওকে বের করতে হবে. শুরু করি সহজ একটা নিয়ম দিয়ে.
+আপনি এক পলকেই জানেন। গরু। Machine জানে না। ওকে বের করতে হবে। শুরু করি সহজ একটা নিয়ম দিয়ে।
 
 <NearestRule />
 
 <Then>
 
-কী এসেছে? নিয়মটা একবার মিললো. একবার মিললো না. অথচ দুইটা বাক্যেই গরু আর খড় একই জায়গায় বসা. বদলেছে কী? শুধু শেষের কথাটা. পেট ভরা হয় প্রাণীর. পচা হয় খাবার.
+কী এসেছে? নিয়মটা একবার মিললো। একবার মিললো না। অথচ দুইটা বাক্যেই গরু আর খড় একই জায়গায় বসা। বদলেছে কী? শুধু শেষের কথাটা। পেট ভরা হয় প্রাণীর। পচা হয় খাবার।
 
 <EndingFlips />
 
-তাহলে জায়গা দেখে হবে না. machine কে দেখতে হবে মানে. খেলনা একটা version বানাই. প্রতিটা শব্দের মাত্র দুইটা slot. প্রাণী slot আর খাবার slot.
+তাহলে জায়গা দেখে হবে না। machine কে দেখতে হবে মানে। খেলনা একটা version বানাই। প্রতিটা শব্দের মাত্র দুইটা slot। প্রাণী slot আর খাবার slot।
 
 <TwoSlots />
 
@@ -107,15 +107,15 @@ Map এর উপরে হিসাবটা আরেকবার করে �
 
 <Step>
 
-এবার ওটা নিজেই খুঁজবে. ওর হাতেও দুই slot এর একটা list. বাক্যের প্রতিটা শব্দের সাথে ওটার list এর box চালান. যার সাথে box সবচেয়ে বড়, ওটা ঘুরবে তার দিকে.
+এবার ওটা নিজেই খুঁজবে। ওর হাতেও দুই slot এর একটা list। বাক্যের প্রতিটা শব্দের সাথে ওটার list এর dot product নিন। যার সাথে dot product সবচেয়ে বড়, ওটা ঘুরবে তার দিকে।
 
 <WhoIsIt />
 
 <Then>
 
-ওটা যেন একটা প্রশ্ন পাঠায়. আমি কেমন জিনিস খুঁজছি? এই list টার নাম **query**. মানে প্রশ্ন. প্রতিটা শব্দ দেখায় নিজের পরিচয়. আমি কেমন জিনিস. এটার নাম **key**. তারপর? query র সাথে যে key এর box সবচেয়ে বড়, ওটা ঘুরে তার দিকে.
+ওটা যেন একটা প্রশ্ন পাঠায়। আমি কেমন জিনিস খুঁজছি? এই list টার নাম **query**। মানে প্রশ্ন। প্রতিটা শব্দ দেখায় নিজের পরিচয়। আমি কেমন জিনিস। এটার নাম **key**। তারপর? query র সাথে যে key এর dot product সবচেয়ে বড়, ওটা ঘুরে তার দিকে।
 
-পেট ভরা হয় প্রাণীর. তাই query তাক করা ছিল প্রাণী slot এ. জিতলো গরু. পচা হয় খাবার. query ঘুরে গেলো খাবার slot এ. জিতলো খড়.
+পেট ভরা হয় প্রাণীর। তাই query তাক করা ছিল প্রাণী slot এ। জিতলো গরু। পচা হয় খাবার। query ঘুরে গেলো খাবার slot এ। জিতলো খড়।
 
 <QueryKeys />
 
@@ -125,17 +125,17 @@ Map এর উপরে হিসাবটা আরেকবার করে �
 
 <Step>
 
-খেলনাটায় query আর key এর numbers আমি হাতে বসিয়েছি. আসল ChatGPT এ শব্দ লাখ লাখ. কেউ কি বসে বসে প্রতিটার numbers লিখে দেয়?
+খেলনাটায় query আর key এর numbers আমি হাতে বসিয়েছি। আসল ChatGPT এ শব্দ লাখ লাখ। কেউ কি বসে বসে প্রতিটার numbers লিখে দেয়?
 
-না. শুরুতে ওটার query এলোমেলো থাকে. তারপর machine পড়তে থাকে.
+না। শুরুতে ওটার query এলোমেলো থাকে। তারপর machine পড়তে থাকে।
 
 <LearnQuery />
 
 <Then>
 
-Query টা একটু একটু করে ঘুরে চলে আসলো প্রাণী slot এর দিকে. কে ঘুরালো? কেউ না. ভুল হলে machine নিজেই নিজের numbers সরিয়ে নিয়েছে.
+Query টা একটু একটু করে ঘুরে চলে আসলো প্রাণী slot এর দিকে। কে ঘুরালো? কেউ না। ভুল হলে machine নিজেই নিজের numbers সরিয়ে নিয়েছে।
 
-আসল model এ একেকটা শব্দের slot দুইটা না. শত শত. বড় model এ হাজার হাজার. কোন slot এর মানে কী? সেটাও machine নিজেই ঠিক করে. প্রাণী slot, খাবার slot, এমন নাম কেউ দিয়ে দেয় না.
+আসল model এ একেকটা শব্দের slot দুইটা না। শত শত। বড় model এ হাজার হাজার। কোন slot এর মানে কী? সেটাও machine নিজেই ঠিক করে। প্রাণী slot, খাবার slot, এমন নাম কেউ দিয়ে দেয় না।
 
 <LongStrips />
 
@@ -145,17 +145,17 @@ Query টা একটু একটু করে ঘুরে চলে আস�
 
 <Step>
 
-খেলনায় প্রশ্ন করেছিল শুধু ওটা. আসলে বাক্যের প্রতিটা শব্দই প্রশ্ন করে. খড় জানতে চায়, কে আমাকে খেলো না? পেট জানতে চায়, কার পেট?
+খেলনায় প্রশ্ন করেছিল শুধু ওটা। আসলে বাক্যের প্রতিটা শব্দই প্রশ্ন করে। খড় জানতে চায়, কে আমাকে খেলো না? পেট জানতে চায়, কার পেট?
 
 <EveryWord />
 
 <Then>
 
-9 টা শব্দের ছোট একটা বাক্য. box চললো কতবার? 9 × 9 = 81 বার. প্রতিটা শব্দ বাকি সবার দিকে তাকায়. box চালায়. তারপর ঠিক করে কার দিকে বেশি মন দিবে. এই কায়দার নাম **attention**. মানে মনোযোগ.
+9 টা শব্দের ছোট একটা বাক্য। dot product হলো কতবার? 9 × 9 = 81 বার। প্রতিটা শব্দ বাকি সবার দিকে তাকায়। dot product নেয়। তারপর ঠিক করে কার দিকে বেশি মন দিবে। এই কায়দার নাম **attention**। মানে মনোযোগ।
 
-বইয়ে এর পুরা নাম scaled dot-product attention. নামটাই বলে দিচ্ছে. ভিতরে আছে dot product. হাটের সেই box.
+বইয়ে এর পুরা নাম scaled dot-product attention। নামটাই বলে দিচ্ছে। ভিতরে আছে dot product। হাটের সেই হিসাবটাই।
 
-ChatGPT এর ভিতরে box পাওয়া গেলো. এক জায়গায়.
+ChatGPT এর ভিতরে dot product পাওয়া গেলো। এক জায়গায়।
 
 <NameLands />
 
@@ -165,9 +165,9 @@ ChatGPT এর ভিতরে box পাওয়া গেলো. এক জ�
 
 <Step>
 
-সোম বললো, এটা তো গেলো attention. ChatGPT এর বাকি বড় অংশটা neuron দিয়ে ভরা. আর neuron তুই আগেই দেখছিস. গরুর হাটে.
+সোম বললো, এটা তো গেলো attention। ChatGPT এর বাকি বড় অংশটা neuron দিয়ে ভরা। আর neuron তুই আগেই দেখছিস। গরুর হাটে।
 
-ফাহিম খাতা উল্টালো. 4.1 এর পাতায় দালালের card এর number গুলা এখনো লেখা.
+ফাহিম খাতা উল্টালো। 4.1 এর পাতায় দালালের card এর number গুলা এখনো লেখা।
 
 <KhataCard story />
 
@@ -175,9 +175,9 @@ ChatGPT এর ভিতরে box পাওয়া গেলো. এক জ�
 
 <Then>
 
-4.1 এর কথা মনে আছে তো? একটা neuron করে $w \cdot x$. তার সাথে একটা number যোগ করে. তারপর একটু বাঁকিয়ে দেয়. দালালের card টাই $w$. গাইয়ের list টা $x$. আর প্রথম কাজটা? হাটের box.
+4.1 এর কথা মনে আছে তো? একটা neuron করে $w \cdot x$। তার সাথে একটা number যোগ করে। তারপর একটু বাঁকিয়ে দেয়। দালালের card টাই $w$। গাইয়ের list টা $x$। আর প্রথম কাজটা? হাটের dot product.
 
-বাঁকটা কীভাবে হয়? সেটা অনেক পরের গল্প. আজকের জন্য এইটুকুই যথেষ্ট. ChatGPT এ এরকম neuron আছে কোটি কোটি. প্রতিটার ভিতরে একটা করে box.
+বাঁকটা কীভাবে হয়? সেটা অনেক পরের গল্প। আজকের জন্য এইটুকুই যথেষ্ট। ChatGPT এ এরকম neuron আছে কোটি কোটি। প্রতিটার ভিতরে একটা করে dot product।
 
 <ManyNeurons />
 
@@ -189,21 +189,21 @@ ChatGPT এর ভিতরে box পাওয়া গেলো. এক জ�
 
 ## এবার আপনার পালা
 
-মামা ছাগলটার সামনে এক গোছা কাঁঠাল পাতা রেখে গেলেন. ছাগলটা মুখ ফিরিয়ে নিলো.
+মামা ছাগলটার সামনে এক গোছা কাঁঠাল পাতা রেখে গেলেন। ছাগলটা মুখ ফিরিয়ে নিলো।
 
 <GoatLeaves story />
 
-ছাগলটা পাতা খেলো না, কারণ ওটা শুকনা ছিল. এবার machine আপনি. ওটার query টা আপনি নিজে বানান.
+ছাগলটা পাতা খেলো না, কারণ ওটা শুকনা ছিল। এবার machine আপনি। ওটার query টা আপনি নিজে বানান।
 
 <YourSentence />
 
 <Then>
 
-শুকনা হয় কী? পাতা. তাই query তাক করতে হয় খাবার slot এ. তখন পাতার box সবচেয়ে বড়, 6.
+শুকনা হয় কী? পাতা। তাই query তাক করতে হয় খাবার slot এ। তখন পাতার dot product সবচেয়ে বড়, 6।
 
-দুই দিকেই তাক করেছিলেন? তাহলে query র প্রাণী slot এও ছিল 1. ওটা গুণ হলো ছাগলের প্রাণী slot এর 3 এর সাথে. জিতে গেলো ছাগল.
+দুই দিকেই তাক করেছিলেন? তাহলে query র প্রাণী slot এও ছিল 1। ওটা গুণ হলো ছাগলের প্রাণী slot এর 3 এর সাথে। জিতে গেলো ছাগল।
 
-আর খেয়াল করুন. আপনি চালালেন কী? হাটের box ই. শুধু list দুইটা বদলেছে.
+আর খেয়াল করুন। আপনি চালালেন কী? হাটের dot product ই। শুধু list দুইটা বদলেছে।
 
 <SameBox />
 
@@ -215,19 +215,19 @@ ChatGPT এর ভিতরে box পাওয়া গেলো. এক জ�
 
 ## Try it
 
-রাতে বিড়ালটা রান্নাঘরে ঢুকলো. সকালে দুধের বাটি খালি.
+রাতে বিড়ালটা রান্নাঘরে ঢুকলো। সকালে দুধের বাটি খালি।
 
 <CatKitchen story />
 
-বিড়ালটা দুধ খেলো, কারণ ওটার খিদে পেয়েছিল. ওটার query $(1, 0)$. মানে ও প্রাণী খুঁজছে. বলুন তো, ওটা কার দিকে ঘুরবে?
+বিড়ালটা দুধ খেলো, কারণ ওটার খিদে পেয়েছিল। ওটার query $(1, 0)$। মানে ও প্রাণী খুঁজছে। বলুন তো, ওটা কার দিকে ঘুরবে?
 
 <CatMilk />
 
 <Then>
 
-বিড়াল: $1 \times 2 + 0 \times 0 = 2$. দুধ: $1 \times 0 + 0 \times 3 = 0$. বিড়ালের box বড়. তাই ওটা ঘুরে বিড়ালের দিকে.
+বিড়াল: $1 \times 2 + 0 \times 0 = 2$। দুধ: $1 \times 0 + 0 \times 3 = 0$। বিড়ালের dot product বড়। তাই ওটা ঘুরে বিড়ালের দিকে।
 
-দুধ বেছেছিলেন? চোখ গেছে শুধু বড় number টায়. দুধের 3 বসে আছে খাবার slot এ. আর query র খাবার slot এ 0. গুণ করলে? 0. Arrow দুইটাও right angle এ. 4.2 এর ভ্যানের ধাক্কা মনে আছে? সেই রকম.
+দুধ বেছেছিলেন? চোখ গেছে শুধু বড় number টায়। দুধের 3 বসে আছে খাবার slot এ। আর query র খাবার slot এ 0। গুণ করলে? 0. Arrow দুইটাও right angle এ। 4.2 এর ভ্যানের ধাক্কা মনে আছে? সেই রকম।
 
 <RightAngleZero />
 
@@ -239,27 +239,27 @@ ChatGPT এর ভিতরে box পাওয়া গেলো. এক জ�
 
 ## শেষ! সোমের কথাই ঠিক, আর Module 1 এক নিঃশ্বাসে
 
-সোমের কথাই ঠিক. ChatGPT এর ভিতরে সত্যিই হাটের box চলে. Attention এ query আর key এর box. neuron এ দালালের card এর box. প্রথমটার উপর বাজি ধরে থাকলে আপনি জিতেছেন.
+সোমের কথাই ঠিক। ChatGPT এর ভিতরে সত্যিই হাটের dot product চলে। Attention এ query আর key এর dot product. neuron এ দালালের card এর dot product। প্রথমটার উপর বাজি ধরে থাকলে আপনি জিতেছেন।
 
-ছুটি শেষ. ফেরার বাস. জানালার পাশে ফাহিম. সোমকে একটা message পাঠালো. তারপর খাতা খুলে একটা formula লিখলো. Series এর শুরুতে এটা ছিল কতগুলো অচেনা দাগ. এখন প্রতিটা টুকরা চেনা.
+ছুটি শেষ। ফেরার বাস। জানালার পাশে ফাহিম। সোমকে একটা message পাঠালো। তারপর খাতা খুলে একটা formula লিখলো। Series এর শুরুতে এটা ছিল কতগুলো অচেনা দাগ। এখন প্রতিটা টুকরা চেনা।
 
 <BusHome story />
 
-টুকরাগুলোতে একটা একটা করে tap করুন.
+টুকরাগুলোতে একটা একটা করে tap করুন।
 
 <Finale />
 
 <Then>
 
-চারটা article এ এই formula র টুকরাগুলো হাতে এসেছে, একটা একটা করে. জিনিসকে list of numbers বানানো. সেই list কে arrow হিসাবে দেখা. arrow এর length মাপা. আর দুইটা arrow কতটা একই দিকে. পুরাটা এক line এ:
+চারটা article এ এই formula র টুকরাগুলো হাতে এসেছে, একটা একটা করে। জিনিসকে list of numbers বানানো। সেই list কে arrow হিসাবে দেখা। arrow এর length মাপা। আর দুইটা arrow কতটা একই দিকে। পুরাটা এক line এ:
 
-**দুইটা জিনিস কতটা একরকম জানতে চাইলে ওদের arrow বানান, দেখুন কতটা একই দিকে, আর length ভাগ দিয়ে ফেলে দিন, যাতে থাকে শুধু direction.**
+**দুইটা জিনিস কতটা একরকম জানতে চাইলে ওদের arrow বানান, দেখুন কতটা একই দিকে, আর length ভাগ দিয়ে ফেলে দিন, যাতে থাকে শুধু direction।**
 
 <FourArticles />
 
 <SideQuest title="এই formula রোজ কোথায় চলে">
 
-Search engine আপনার প্রশ্নের সাথে page মিলায় এভাবে. Film এর app আপনার পছন্দের মতো আরো film খুঁজে দেয় এভাবে. Chatbot আপনার প্রশ্নের উত্তর কোন paragraph এ আছে, সেটা খুঁজে পায় এভাবে. তিনটাই আপনি এখন হাতে কলমে করতে পারেন.
+Search engine আপনার প্রশ্নের সাথে page মিলায় এভাবে। Film এর app আপনার পছন্দের মতো আরো film খুঁজে দেয় এভাবে। Chatbot আপনার প্রশ্নের উত্তর কোন paragraph এ আছে, সেটা খুঁজে পায় এভাবে। তিনটাই আপনি এখন হাতে কলমে করতে পারেন।
 
 <EverydayMatch />
 
@@ -280,14 +280,14 @@ Search engine আপনার প্রশ্নের সাথে page মি�
     ["cos θ", "কতটা একই দিকে, −1 থেকে 1"],
     ["(u · v) ÷ (‖u‖ ‖v‖)", "cosine similarity"],
     ["u ⊥ v", "u আর v right angle এ, মানে u · v = 0"],
-    ["v · v = ‖v‖²", "নিজের সাথে box মানে length এর বর্গ"],
+    ["v · v = ‖v‖²", "নিজের সাথে dot product মানে length এর বর্গ"],
     ["((w · v) ÷ (v · v)) v", "v এর উপরে w এর shadow, arrow হিসাবে"],
-    ["û · v̂", "দুইটা 1 লম্বা card এর box, সোজা cosine"],
-    ["q · k", "query আর key এর box, attention এর ভিতরে"],
+    ["û · v̂", "দুইটা 1 লম্বা card এর dot product, সোজা cosine"],
+    ["q · k", "query আর key এর dot product, attention এর ভিতরে"],
   ]}
 />
 
-প্রথম চারটা line আসলে একটাই কাজ. চারভাবে লেখা. যেকোনো paper এ $x^\top w$, $\langle x, w \rangle$ বা $x \cdot w$ দেখলে বুঝবেন: ঘরে ঘরে গুণ, তারপর যোগ. এর বেশি রহস্য নাই.
+প্রথম চারটা line আসলে একটাই কাজ। চারভাবে লেখা। যেকোনো paper এ $x^\top w$, $\langle x, w \rangle$ বা $x \cdot w$ দেখলে বুঝবেন: ঘরে ঘরে গুণ, তারপর যোগ। এর বেশি রহস্য নাই।
 
 <FourSpellings />
 
@@ -299,26 +299,26 @@ Search engine আপনার প্রশ্নের সাথে page মি�
 
 <Step>
 
-পোঁটলা বাঁধার আগে সামনের দিকে একটা প্রশ্ন. 3.3 এর রেসিপি মনে আছে? দুইটা উপকরণ মিশিয়ে নতুন কিছু বানানো.
+পোঁটলা বাঁধার আগে সামনের দিকে একটা প্রশ্ন। 3.3 এর রেসিপি মনে আছে? দুইটা উপকরণ মিশিয়ে নতুন কিছু বানানো।
 
-এখানে তিনটা উপকরণ: u, v আর w. দেখুন তো, প্রথম দুইটা মিশিয়েই w বানানো যায় কি না.
+এখানে তিনটা উপকরণ: u, v আর w। দেখুন তো, প্রথম দুইটা মিশিয়েই w বানানো যায় কি না।
 
 <MixW />
 
 <Then>
 
-u আর v মিশিয়েই w বানানো গেলো. তাহলে w কে আলাদা করে রাখার দরকার আছে? নাই. ও বাড়তি.
+u আর v মিশিয়েই w বানানো গেলো। তাহলে w কে আলাদা করে রাখার দরকার আছে? নাই। ও বাড়তি।
 
-সামনের প্রশ্নগুলো এরকমই. একগাদা vector মিলে কোথায় কোথায় পৌঁছাতে পারে? কোনটা বাড়তি? সবচেয়ে কম কয়টা দিয়ে সব বানানো যায়? এদের নাম span, independence আর basis.
+সামনের প্রশ্নগুলো এরকমই। একগাদা vector মিলে কোথায় কোথায় পৌঁছাতে পারে? কোনটা বাড়তি? সবচেয়ে কম কয়টা দিয়ে সব বানানো যায়? এদের নাম span, independence আর basis.
 
 <SpanRecipe />
 
-ওখান থেকেই শুরু matrix এর গল্প. Matrix মানে একসাথে একগাদা box.
+ওখান থেকেই শুরু matrix এর গল্প। Matrix মানে একসাথে একগাদা dot product।
 
 <MatrixBoxes />
 
 <LessonLink href="/dashboard/articles/math_for_ai/05a_remote_span" eyebrow="পরের lesson" title="Span, কোন remote কোথায় পৌঁছায়">
-  ছুটি শেষ, ফাহিমরা বাসা বদলাচ্ছে. খালি ফ্ল্যাটে Shiku এর remote নষ্ট, আর দোকানে চার রকম দুই-button এর remote.
+  ছুটি শেষ, ফাহিমরা বাসা বদলাচ্ছে। খালি ফ্ল্যাটে Shiku এর remote নষ্ট, আর দোকানে চার রকম দুই-button এর remote।
 </LessonLink>
 
 </Then>

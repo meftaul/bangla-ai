@@ -13,7 +13,7 @@ import { LightBhai, Projector, StageBeam, StageWall, heartPath, projectorLens } 
 // Journey in the author's Bangla-English. The plan is 08_journey_specs.md,
 // block 8.6; the source is 08-the-determinant.md §6.
 //
-// ফিরানির দিন সকাল. The পাইকার buys নানার ধান by his own crooked wooden box:
+// ফিরানির দিন সকাল। The পাইকার buys নানার ধান by his own crooked wooden box:
 // তিন কাঠার বাক্স, he says, and pays for 3 কাঠা each time it's filled. নানার
 // কাঠা is the true unit cube. The box's three edges from one corner are the
 // columns of K = [[2, 1, 1], [1, 1, 0], [0, 1, 3]] (edges (2, 1, 0), (1, 1, 1),
@@ -64,7 +64,7 @@ const EDGE_INK = ["#b45309", "#0f766e", "#6d28d9"] as const;
 /** A story scene takes `story` (it marks the scene as setup words for the Journey) and ignores it. */
 export type Story = { story?: boolean };
 
-/** What the three numbers of an edge count (for journey/box <Tup of>). One কাঠার কিনারা = 1. */
+/** What the three numbers of an edge count (for journey/box <Tup of>). One কাঠার কিনারা = 1। */
 const EDGE_SLOTS = ["পূবে কত কাঠা", "উত্তরে কত কাঠা", "উপরে কত কাঠা"] as const;
 
 const say = (lines: readonly string[], k: number) => (
@@ -371,7 +371,7 @@ function CubeRow({ pj, n, fill = DHAN, stroke = DHAN_DARK, from = 0 }: { pj: Pj;
 
 // ---------------------------------------------------------------------------
 // 1 · The sealed bet. Four cards: নাসিব কম ধরে · পাইকার ঠিক 3 · সোম বেশি ধরে
-//     · করিম মাপা যায় না. A pick is drawn on the box; sealing writes it into
+//     · করিম মাপা যায় না। A pick is drawn on the box; sealing writes it into
 //     the খাতা with a "?". Never marked.
 
 const X1_CARDS = [
@@ -428,7 +428,7 @@ export function KathaBet() {
   const seal = () => {
     if (pick === null || sealed) return;
     setSealed(true);
-    act.play(2, () => pass("বাজি সিল হলো. আগে নানার কাঠা."));
+    act.play(2, () => pass("বাজি সিল হলো। আগে নানার কাঠা।"));
   };
   return (
     <>
@@ -464,7 +464,7 @@ export function KathaBet() {
           এই বাজি সিল
         </button>
       </div>
-      <Task done={k >= 2}>পাইকারের বাক্সে আসলে কত ধরে? একটা আন্দাজ বেছে বাজি সিল করুন. উত্তর শেষে.</Task>
+      <Task done={k >= 2}>পাইকারের বাক্সে আসলে কত ধরে? একটা আন্দাজ বেছে বাজি সিল করুন। উত্তর শেষে।</Task>
     </>
   );
 }
@@ -514,7 +514,7 @@ export function UnitCube() {
       const next = full.map((f, j) => f || j === i);
       setFull(next);
       setCur(null);
-      if (next.every(Boolean)) pass("সোজা বাক্স: তিন দিক গুণ.");
+      if (next.every(Boolean)) pass("সোজা বাক্স: তিন দিক গুণ।");
     });
   };
   const count = (i: number) => (full[i] ? vol(X2_BOXES[i].dims) : cur === i && play.running ? play.k : 0);
@@ -544,7 +544,7 @@ export function UnitCube() {
           </div>
         ))}
       </div>
-      <Task done={full.every(Boolean)}>দুইটা বাক্সেই নানার কাঠা দিয়ে ধান ঢালুন. কয় কাঠায় ভরে, গুনুন.</Task>
+      <Task done={full.every(Boolean)}>দুইটা বাক্সেই নানার কাঠা দিয়ে ধান ঢালুন। কয় কাঠায় ভরে, গুনুন।</Task>
     </>
   );
 }
@@ -589,7 +589,7 @@ export function LeanTheStack() {
     if (lean >= 3) return;
     const n = lean + 1;
     setLean(n);
-    if (n === 3) pass("হেলালে ধান কমে না.");
+    if (n === 3) pass("হেলালে ধান কমে না।");
   };
   const hand = X3_PJ([(2 * lean) / 3 - 0.35, 0, 2.5]);
   return (
@@ -624,7 +624,7 @@ export function LeanTheStack() {
           সোজা করুন
         </button>
       </div>
-      <Task done={lean >= 3}>করিমের মতো stack টা ঠেলুন, তিনবার. বস্তা কমে কি না দেখুন.</Task>
+      <Task done={lean >= 3}>করিমের মতো stack টা ঠেলুন, তিনবার। বস্তা কমে কি না দেখুন।</Task>
     </>
   );
 }
@@ -662,7 +662,7 @@ export function WalkTheTopRow() {
     play.play(4, () => {
       const next = done.map((d, x) => d || x === j);
       setDone(next);
-      if (next.every(Boolean)) pass("উপরের সারি: সংখ্যা × বাকি 2 × 2.");
+      if (next.every(Boolean)) pass("উপরের সারি: সংখ্যা × বাকি 2 × 2।");
     });
   };
   const k = play.running ? play.k : cur !== null ? 4 : 0;
@@ -702,10 +702,10 @@ export function WalkTheTopRow() {
         <div className={`${FADE} mt-2 text-center text-sm`}>
           <span>করিম বললো, যোগ করে দাও: </span>
           <span className="font-mono font-bold">5 + 4 + 1 = 10</span>
-          <span className="ml-1.5 font-semibold text-danger">বাক্সে লেখা 2.</span>
+          <span className="ml-1.5 font-semibold text-danger">বাক্সে লেখা 2।</span>
         </div>
       )}
-      <Task done={all}>উপরের সারির তিনটা সংখ্যায় একে একে চাপ দিন. প্রতিটার পরে কী বাকি থাকে, দেখুন.</Task>
+      <Task done={all}>উপরের সারির তিনটা সংখ্যায় একে একে চাপ দিন। প্রতিটার পরে কী বাকি থাকে, দেখুন।</Task>
     </>
   );
 }
@@ -725,8 +725,8 @@ const X5_OPTS: { t: string; s: number[] }[] = [
 ];
 const X5_RIGHT = 1;
 const X5_NOPE = ["", "", ""];
-X5_NOPE[0] = "ধান হলো 8 কাঠা. বাক্সে লেখা 2. এত ধান এই বাক্সে ধরে না.";
-X5_NOPE[2] = "সব ধান বের হয়ে গেলো: 0. 0 মানে চ্যাপ্টা বাক্স (8.4). এই বাক্সে তো 2 কাঠা ধরে.";
+X5_NOPE[0] = "ধান হলো 8 কাঠা। বাক্সে লেখা 2। এত ধান এই বাক্সে ধরে না।";
+X5_NOPE[2] = "সব ধান বের হয়ে গেলো: 0। 0 মানে চ্যাপ্টা বাক্স (8.4). এই বাক্সে তো 2 কাঠা ধরে।";
 
 /** the order a pick plays: plus pieces first, then the minus one; the running total after each */
 const x5Run = (s: number[]) => {
@@ -776,7 +776,7 @@ export function Checkerboard() {
     if (terms.running) return;
     setLine(n);
     terms.play(4, () => {
-      if (hasZero(X5_LINES[n])) pass("যেই সারিতে শূন্য বেশি, সেটা ধরো.");
+      if (hasZero(X5_LINES[n])) pass("যেই সারিতে শূন্য বেশি, সেটা ধরো।");
     });
   };
 
@@ -883,8 +883,8 @@ export function Checkerboard() {
           </div>
         )}
       </div>
-      {line !== null && lk >= 4 && !hasZero(X5_LINES[line]) && <Nope key={line}>এটাও 2. তবে তিনটা 2 × 2 লাগলো. শূন্য আছে এমন একটা line ধরুন.</Nope>}
-      <Task done={line !== null && lk >= 4 && hasZero(X5_LINES[line])}>চিহ্নের ছক বসে গেছে. এবার বামের সারি বা উপরের কলাম, যেকোনো একটায় চাপ দিয়ে হাঁটুন. কাজ সবচেয়ে কম কোনটায়?</Task>
+      {line !== null && lk >= 4 && !hasZero(X5_LINES[line]) && <Nope key={line}>এটাও 2। তবে তিনটা 2 × 2 লাগলো। শূন্য আছে এমন একটা line ধরুন।</Nope>}
+      <Task done={line !== null && lk >= 4 && hasZero(X5_LINES[line])}>চিহ্নের ছক বসে গেছে। এবার বামের সারি বা উপরের কলাম, যেকোনো একটায় চাপ দিয়ে হাঁটুন। কাজ সবচেয়ে কম কোনটায়?</Task>
     </>
   );
 }
@@ -929,12 +929,12 @@ export function PaikarBox() {
     if (play.running) return;
     setRan(true);
     const ok = right;
-    play.play(ticks, () => (ok ? pass("পাইকারের বাক্সে 4 কাঠা, 3 না.") : setMiss((m) => m + 1)));
+    play.play(ticks, () => (ok ? pass("পাইকারের বাক্সে 4 কাঠা, 3 না।") : setMiss((m) => m + 1)));
   };
   const layers = Math.max(0, Math.min(k - 3, fillN));
   const spill = Math.max(0, k - 3 - fillN);
-  const nope = !settled || right ? null : !minOk.every(Boolean) ? "লাল piece টা দেখুন. ওই সংখ্যার সারি আর কলাম কেটে যে 2 × 2 থাকে, তার ad − bc আবার করুন." : "Piece গুলো ঠিক আছে. চিহ্ন দেখুন: উপরের সারিতে + − +.";
-  const fillNote = !settled ? null : total > 4 ? `${total} কাঠা ঢাললেন. 4 কাঠাতেই বাক্স ভরে গেলো, বাকিটা উপচে পড়লো.` : total < 4 ? `${Math.max(total, 0)} কাঠায় বাক্স ভরলো না, উপরে ফাঁকা.` : "";
+  const nope = !settled || right ? null : !minOk.every(Boolean) ? "লাল piece টা দেখুন। ওই সংখ্যার সারি আর কলাম কেটে যে 2 × 2 থাকে, তার ad − bc আবার করুন।" : "Piece গুলো ঠিক আছে। চিহ্ন দেখুন: উপরের সারিতে + − +।";
+  const fillNote = !settled ? null : total > 4 ? `${total} কাঠা ঢাললেন। 4 কাঠাতেই বাক্স ভরে গেলো, বাকিটা উপচে পড়লো।` : total < 4 ? `${Math.max(total, 0)} কাঠায় বাক্স ভরলো না, উপরে ফাঁকা।` : "";
 
   return (
     <>
@@ -980,7 +980,7 @@ export function PaikarBox() {
           {fillNote} {nope}
         </Nope>
       )}
-      <Task done={settled && right}>উপরের সারি ধরে হাঁটুন: প্রতিটা সংখ্যার চিহ্ন আর বাকি 2 × 2 বসান. তারপর বাক্সে ঢালুন.</Task>
+      <Task done={settled && right}>উপরের সারি ধরে হাঁটুন: প্রতিটা সংখ্যার চিহ্ন আর বাকি 2 × 2 বসান। তারপর বাক্সে ঢালুন।</Task>
     </>
   );
 }
@@ -995,8 +995,8 @@ const X7_RIGHT = 2;
 const X7_PJ = pjAt(12, 116, 26);
 const X7_SPILL = pjAt(170, 124, 14);
 const X7_NOPE = ["", "", ""];
-X7_NOPE[0] = "দুই কাঠায় বাক্সের উপরে ফাঁকা থাকলো. উপরের সারি ধরে হাঁটুন: 0 এর term টা বাদ.";
-X7_NOPE[1] = "তিন কাঠাতেই বাক্স ভরে গেলো. বাকি দুই কাঠা উপচে পড়লো.";
+X7_NOPE[0] = "দুই কাঠায় বাক্সের উপরে ফাঁকা থাকলো। উপরের সারি ধরে হাঁটুন: 0 এর term টা বাদ।";
+X7_NOPE[1] = "তিন কাঠাতেই বাক্স ভরে গেলো। বাকি দুই কাঠা উপচে পড়লো।";
 
 function X7_Pile({ n }: { n: number }) {
   const pj = pjAt(6, 52, 15);
@@ -1015,7 +1015,7 @@ export function TryBox() {
   const choose = (i: number) => {
     if (play.running) return;
     setPick(i);
-    play.play(X7_PILES[i], () => (i === X7_RIGHT ? pass("শূন্যের term বাদ: 2·1 + 1·1 = 3.") : setMiss((m) => m + 1)));
+    play.play(X7_PILES[i], () => (i === X7_RIGHT ? pass("শূন্যের term বাদ: 2·1 + 1·1 = 3।") : setMiss((m) => m + 1)));
   };
   const n = pick === null ? 0 : play.running ? play.k : X7_PILES[pick];
   const over = pick !== null && !play.running;
@@ -1038,7 +1038,7 @@ export function TryBox() {
         ))}
       </div>
       {over && pick !== X7_RIGHT && <Nope key={miss}>{X7_NOPE[pick!]}</Nope>}
-      <Task done={over && pick === X7_RIGHT}>কোন স্তূপটা ঢাললে বাক্স ঠিক ভরে? উপরের সারি ধরে হিসাব করে বেছে নিন.</Task>
+      <Task done={over && pick === X7_RIGHT}>কোন স্তূপটা ঢাললে বাক্স ঠিক ভরে? উপরের সারি ধরে হিসাব করে বেছে নিন।</Task>
     </>
   );
 }
@@ -1096,7 +1096,7 @@ export function TooManyTerms() {
   const [xf, xc] = useTween([x8x(tf), x8x(tc)], 700);
   const set = (v: number) => {
     setN(v);
-    if (v === 20) pass("বড় matrix এ n! না, n³.");
+    if (v === 20) pass("বড় matrix এ n! না, n³।");
   };
   const dot = 64 / Math.max(n, 1);
   return (
@@ -1152,7 +1152,7 @@ export function TooManyTerms() {
           </button>
         ))}
       </div>
-      <Task done={n === 20}>নিচের সংখ্যায় চাপ দিয়ে matrix বড় করুন, 20 × 20 পর্যন্ত. দুইটা ঘড়ি দেখুন.</Task>
+      <Task done={n === 20}>নিচের সংখ্যায় চাপ দিয়ে matrix বড় করুন, 20 × 20 পর্যন্ত। দুইটা ঘড়ি দেখুন।</Task>
     </>
   );
 }
@@ -1184,7 +1184,7 @@ export function BetOpen() {
       if (n === 4)
         open.play(4, () => {
           setOpened(true);
-          pass("বাক্সে ধরলো 4 কাঠা. পাইকারের 3 টিকলো না.");
+          pass("বাক্সে ধরলো 4 কাঠা। পাইকারের 3 টিকলো না।");
         });
     });
   };
@@ -1231,7 +1231,7 @@ export function BetOpen() {
           ))}
         </div>
       )}
-      <Task done={opened}>নানার কাঠায় একটা একটা করে ধান ঢালুন, বাক্স ভরা পর্যন্ত. তারপর বাজি খুলবে.</Task>
+      <Task done={opened}>নানার কাঠায় একটা একটা করে ধান ঢালুন, বাক্স ভরা পর্যন্ত। তারপর বাজি খুলবে।</Task>
     </>
   );
 }
@@ -1321,7 +1321,7 @@ function StageCrate({ x, y, s, label, edges = 0 }: { x: number; y: number; s: nu
   );
 }
 
-// 1a · ফিরানির দিন সকাল. The heap on the পাটি, নানা with his কাঠা, করিম with a
+// 1a · ফিরানির দিন সকাল। The heap on the পাটি, নানা with his কাঠা, করিম with a
 //      বস্তা; the van rolls in with the crooked box; the পাইকার slaps it and
 //      claims; নানা turns his কাঠা in his hands.
 
@@ -1344,15 +1344,15 @@ export function PaikarArrives({}: Story) {
           <StageCrate x={14} y={0} s={11} />
         </Van>
         <Paikar x={k >= 1 ? 206 : 340} y={154} facing={1} arm={k === 2 ? "point" : "down"} walking={k === 1} ms={1400} />
-        {k === 2 && <Bubble x={206} y={88} side="mid" lines={["তিন কাঠার বাক্স,", "বাপ-দাদার আমলের."]} />}
-        {k >= 3 && <Bubble x={206} y={88} side="mid" lines={["হেলানো তো কী,", "ধান তো একই ধরে."]} />}
+        {k === 2 && <Bubble x={206} y={88} side="mid" lines={["তিন কাঠার বাক্স,", "বাপ-দাদার আমলের।"]} />}
+        {k >= 3 && <Bubble x={206} y={88} side="mid" lines={["হেলানো তো কী,", "ধান তো একই ধরে।"]} />}
       </Stage>
     </StoryFrame>
   );
 }
 
 // 3a · করিম stacks the বস্তা three high, then pushes the top ones; the stack
-//      leans; নানা: আস্তে. The count under it stays 6.
+//      leans; নানা: আস্তে। The count under it stays 6.
 
 export function KarimPushes({}: Story) {
   const s = useScene(3, [600, 1600, 2000, 2000]);
@@ -1373,7 +1373,7 @@ export function KarimPushes({}: Story) {
         ))}
         <Person who="karim" x={k >= 2 ? 136 : 128} y={152} facing={1} arm={k >= 2 ? "point" : "hold"} label />
         <Person who="nana" x={62} y={152} facing={1} arm={k >= 3 ? "wave" : "down"} label />
-        {k >= 3 && <Bubble x={62} y={86} side="left" lines={["আস্তে!", "বস্তা ফাটবো."]} />}
+        {k >= 3 && <Bubble x={62} y={86} side="left" lines={["আস্তে!", "বস্তা ফাটবো।"]} />}
         {k >= 1 && (
           <text x={188} y={170} textAnchor="middle" fontSize={10} fontWeight={800} fill={INK} className={FADE}>
             6 বস্তা
@@ -1407,10 +1407,10 @@ export function NanaOldBox({}: Story) {
           </g>
         )}
         {k >= 1 && <Person who="nana" x={110} y={154} facing={1} arm={k === 2 ? "point" : "down"} label />}
-        {k >= 2 && <Bubble x={110} y={88} side="mid" lines={["আব্বার বাক্স.", "দুই কাঠা, মাপা."]} />}
+        {k >= 2 && <Bubble x={110} y={88} side="mid" lines={["আব্বার বাক্স।", "দুই কাঠা, মাপা।"]} />}
         <Person who="som" x={236} y={154} facing={-1} arm={k >= 3 ? "hold" : "down"} label />
         {k >= 3 && <rect x={214} y={104} width={14} height={11} rx={1} fill="white" stroke="#64748b" strokeWidth={0.8} className={POP} />}
-        {k >= 3 && <Bubble x={236} y={88} side="right" lines={["জানা বাক্সে", "আগে হাঁটি."]} />}
+        {k >= 3 && <Bubble x={236} y={88} side="right" lines={["জানা বাক্সে", "আগে হাঁটি।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1430,7 +1430,7 @@ export function SaminTape({}: Story) {
           <StageCrate x={10} y={0} s={17} edges={Math.max(0, k - 1)} />
         </Van>
         <Paikar x={276} y={154} facing={-1} arm={k === 1 ? "point" : "down"} />
-        {k === 1 && <Bubble x={276} y={88} side="left" lines={["মাপেন, বাইরে থিকা.", "ভিতরে হাত দিবেন না."]} />}
+        {k === 1 && <Bubble x={276} y={88} side="left" lines={["মাপেন, বাইরে থিকা।", "ভিতরে হাত দিবেন না।"]} />}
         <Person who="samin" x={112} y={154} facing={1} arm={k >= 2 ? "point" : "hold"} label />
         {k >= 2 && <path d="M124 116L160 124" stroke="#eab308" strokeWidth={2.5} strokeLinecap="round" className={FADE} />}
       </Stage>
@@ -1515,9 +1515,9 @@ export function LastHeart({}: Story) {
         <Projector x={PJ[0]} y={PJ[1]} facing={-1} on={k >= 2} lens="good" />
         {k >= 2 && <StageBeam from={[lx, ly]} to={[94, 92]} w={k >= 3 ? 14 : 4} />}
         <LightBhai x={272} y={150} facing={-1} arm={k >= 1 ? "point" : "down"} />
-        {k === 1 && <Bubble x={272} y={84} side="left" lines={["শেষ একটা heart.", "পুরা দেয়াল জুড়ে."]} />}
+        {k === 1 && <Bubble x={272} y={84} side="left" lines={["শেষ একটা heart।", "পুরা দেয়াল জুড়ে।"]} />}
         <Person who="som" x={196} y={154} facing={-1} label />
-        {k >= 3 && <Bubble x={196} y={88} side="mid" lines={["এত বড় করলে", "আলো ফিকে হবে."]} />}
+        {k >= 3 && <Bubble x={196} y={88} side="mid" lines={["এত বড় করলে", "আলো ফিকে হবে।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1531,10 +1531,10 @@ export function LastHeart({}: Story) {
 //      sooner and the খাতা shows less than 60. Stops on "?".
 
 const KS_SAY = [
-  "উঠানে নানার ধান. নানার কাঠায় মাপলে 60 কাঠা.",
-  "পাইকারের বাক্স একবার ভরলো. খাতায় উঠলো 3.",
-  "যতবার বাক্স ভরে, খাতায় ততবার 3. বিশবার ভরলে 60.",
-  "বাক্স যদি 3 এর বেশি ধরে? স্তূপ ফুরাবে বিশবারের আগেই. খাতায় 60 উঠবে না.",
+  "উঠানে নানার ধান। নানার কাঠায় মাপলে 60 কাঠা।",
+  "পাইকারের বাক্স একবার ভরলো। খাতায় উঠলো 3।",
+  "যতবার বাক্স ভরে, খাতায় ততবার 3। বিশবার ভরলে 60।",
+  "বাক্স যদি 3 এর বেশি ধরে? স্তূপ ফুরাবে বিশবারের আগেই। খাতায় 60 উঠবে না।",
 ];
 
 export function KathaStake() {
@@ -1575,10 +1575,10 @@ export function KathaStake() {
 //      diagonal multiplies to the count, 6.
 
 const EC_SAY = [
-  "সোজা বাক্সের কোনা থেকে তিনটা কিনারা.",
-  "পূবের কিনারা (2, 0, 0) হলো প্রথম column.",
-  "উত্তরের কিনারা (0, 3, 0) দ্বিতীয় column.",
-  "উপরের কিনারা (0, 0, 1) তৃতীয়. det = 2 × 3 × 1 = 6: বাক্সে 6 কাঠা.",
+  "সোজা বাক্সের কোনা থেকে তিনটা কিনারা।",
+  "পূবের কিনারা (2, 0, 0) হলো প্রথম column।",
+  "উত্তরের কিনারা (0, 3, 0) দ্বিতীয় column।",
+  "উপরের কিনারা (0, 0, 1) তৃতীয়। det = 2 × 3 × 1 = 6: বাক্সে 6 কাঠা।",
 ];
 const EC_M: M3 = [
   [2, 0, 0],
@@ -1627,10 +1627,10 @@ export function EdgesToColumns() {
 //      মাপলে অন্য কিছু: কতগুণ has no answer.
 
 const FS_SAY = [
-  "একটা ঘর. দুই দিকের জিনিস: লম্বা আর চওড়া.",
-  "3 × 2 matrix টা ঘরটাকে তিন দিকের জায়গায় তুলে দিলো. হয়ে গেলো একটা হেলানো পাতা.",
-  "পাতার ভেতরে ধান ধরে না: কাঠায় মাপলে 0. ঘরে মাপলে অন্য সংখ্যা.",
-  "তাহলে জায়গা কতগুণ হলো? উত্তর নাই. যত দিক ঢোকে, তত দিক বের না হলে det হয় না.",
+  "একটা ঘর। দুই দিকের জিনিস: লম্বা আর চওড়া।",
+  "3 × 2 matrix টা ঘরটাকে তিন দিকের জায়গায় তুলে দিলো। হয়ে গেলো একটা হেলানো পাতা।",
+  "পাতার ভেতরে ধান ধরে না: কাঠায় মাপলে 0। ঘরে মাপলে অন্য সংখ্যা।",
+  "তাহলে জায়গা কতগুণ হলো? উত্তর নাই। যত দিক ঢোকে, তত দিক বের না হলে det হয় না।",
 ];
 
 export function FlatInSpace() {
@@ -1677,10 +1677,10 @@ export function FlatInSpace() {
 //      three directions; three pushes are tried and none makes it straight.
 
 const WW_SAY = [
-  "করিমের stack হেলানো এক দিকে, পূবে.",
-  "উল্টো দিকে ঠেললেই সোজা: 2 × 1 × 3 = 6.",
-  "পাইকারের বাক্স হেলানো তিন দিকেই. কোন দিকে ঠেললে সোজা হবে?",
-  "চোখে দেখে সোজা করা যায় না. তাই সংখ্যা লাগবে: তিনটা কিনারার নয়টা সংখ্যা.",
+  "করিমের stack হেলানো এক দিকে, পূবে।",
+  "উল্টো দিকে ঠেললেই সোজা: 2 × 1 × 3 = 6।",
+  "পাইকারের বাক্স হেলানো তিন দিকেই। কোন দিকে ঠেললে সোজা হবে?",
+  "চোখে দেখে সোজা করা যায় না। তাই সংখ্যা লাগবে: তিনটা কিনারার নয়টা সংখ্যা।",
 ];
 
 export function WhichWayBack() {
@@ -1718,7 +1718,7 @@ export function WhichWayBack() {
 
 // 4½ · The name: cross out row 1 and column 2, the 2 × 2 left is M₁₂.
 
-const CO_SAY = ["নানার আব্বার বাক্সের নয়টা সংখ্যা.", "সারি 1 কাটা.", "কলাম 2 কাটা.", "যে 2 × 2 বাকি থাকলো, তার নাম minor. সারি 1, কলাম 2 কেটে পাওয়া, তাই M₁₂."];
+const CO_SAY = ["নানার আব্বার বাক্সের নয়টা সংখ্যা।", "সারি 1 কাটা।", "কলাম 2 কাটা।", "যে 2 × 2 বাকি থাকলো, তার নাম minor। সারি 1, কলাম 2 কেটে পাওয়া, তাই M₁₂।"];
 
 export function CrossOut() {
   const s = useScene(3, [600, 1200, 1200, 2400]);
@@ -1763,10 +1763,10 @@ const SIX_MINUS = [
   [0, 5, 7],
 ];
 const SIX_SAY = [
-  "নয়টা অক্ষর, a থেকে i.",
-  "প্রতিটা সারি থেকে একটা, প্রতিটা কলাম থেকে একটা: aei, bfg, cdh. এই তিনটা plus.",
-  "আরো তিনটা: ceg, bdi, afh. এরা minus.",
-  "aei + bfg + cdh − ceg − bdi − afh. ছয়টা term. কেউ মুখস্থ করে না.",
+  "নয়টা অক্ষর, a থেকে i।",
+  "প্রতিটা সারি থেকে একটা, প্রতিটা কলাম থেকে একটা: aei, bfg, cdh। এই তিনটা plus।",
+  "আরো তিনটা: ceg, bdi, afh। এরা minus.",
+  "aei + bfg + cdh − ceg − bdi − afh. ছয়টা term। কেউ মুখস্থ করে না।",
 ];
 
 export function SixTerms() {
@@ -1809,10 +1809,10 @@ export function SixTerms() {
 // 5½ · The checkerboard: (−1)^(i+j), sign × minor = cofactor.
 
 const SB_SAY = [
-  "উপরের বাম কোনায় +.",
-  "পাশে গেলে চিহ্ন বদলায়, নিচে গেলেও বদলায়. দাবার ছকের মতো.",
-  "সারি i, কলাম j এর চিহ্ন (−1)^(i+j): i + j জোড় হলে +, বিজোড় হলে −.",
-  "চিহ্ন × minor এর নাম cofactor, Cᵢⱼ. উপরের সারির তিনটা cofactor: +5, −2, +1.",
+  "উপরের বাম কোনায় +।",
+  "পাশে গেলে চিহ্ন বদলায়, নিচে গেলেও বদলায়। দাবার ছকের মতো।",
+  "সারি i, কলাম j এর চিহ্ন (−1)^(i+j): i + j জোড় হলে +, বিজোড় হলে −।",
+  "চিহ্ন × minor এর নাম cofactor, Cᵢⱼ। উপরের সারির তিনটা cofactor: +5, −2, +1।",
 ];
 
 export function SignBoard() {
@@ -1863,10 +1863,10 @@ const DG_M: M3 = [
   [0, 0, 1],
 ];
 const DG_SAY = [
-  "কোনাকুনির নিচে সব 0.",
-  "প্রথম কলাম ধরে হাঁটলে দুইটা term 0. থাকে শুধু 2 × (বাকি 2 × 2).",
-  "বাকি 2 × 2 এর নিচেও 0: 3 · 1 − 1 · 0 = 3.",
-  "থাকলো শুধু কোনাকুনি: 2 × 3 × 1 = 6. সোজা বাক্সের মতো.",
+  "কোনাকুনির নিচে সব 0।",
+  "প্রথম কলাম ধরে হাঁটলে দুইটা term 0। থাকে শুধু 2 × (বাকি 2 × 2)।",
+  "বাকি 2 × 2 এর নিচেও 0: 3 · 1 − 1 · 0 = 3।",
+  "থাকলো শুধু কোনাকুনি: 2 × 3 × 1 = 6। সোজা বাক্সের মতো।",
 ];
 
 export function DiagonalOnly() {
@@ -1894,10 +1894,10 @@ export function DiagonalOnly() {
 //      (Article 10 does it by hand), then the diagonal is multiplied.
 
 const TW_SAY = [
-  "একটা 4 × 4. প্রতিটা বিন্দু একটা সংখ্যা.",
-  "এক সারিকে কয়েকগুণ করে আরেক সারি থেকে বাদ দিলে প্রথম কলামের নিচে সব 0.",
-  "তারপর দ্বিতীয় কলাম, তারপর তৃতীয়. matrix টা triangle হয়ে গেলো.",
-  "এবার শুধু কোনাকুনি গুণ. পুরা কাজে মোটামুটি n³ টা গুণ-যোগ.",
+  "একটা 4 × 4। প্রতিটা বিন্দু একটা সংখ্যা।",
+  "এক সারিকে কয়েকগুণ করে আরেক সারি থেকে বাদ দিলে প্রথম কলামের নিচে সব 0।",
+  "তারপর দ্বিতীয় কলাম, তারপর তৃতীয়। matrix টা triangle হয়ে গেলো।",
+  "এবার শুধু কোনাকুনি গুণ। পুরা কাজে মোটামুটি n³ টা গুণ-যোগ।",
 ];
 
 export function TriangleWay() {
@@ -1937,10 +1937,10 @@ const TP_PATHS: { p: number[]; name: string; odd: boolean }[] = [
   { p: [2, 1, 0], name: "321", odd: true },
 ];
 const TP_SAY = [
-  "প্রতিটা সারি থেকে একটা সংখ্যা, প্রতিটা কলাম একবার: একটা পথ.",
-  "123: কোনাকুনি. কোনো অদলবদল নাই, চিহ্ন +.",
-  "213: প্রথম দুইটা অদলবদল. একটা swap, বিজোড়, চিহ্ন −. বইয়ে লেখা even: ভুল.",
-  "321: 1 আর 3 অদলবদল. এটাও একটা swap, বিজোড়, −. বইয়ে এটাও even লেখা.",
+  "প্রতিটা সারি থেকে একটা সংখ্যা, প্রতিটা কলাম একবার: একটা পথ।",
+  "123: কোনাকুনি। কোনো অদলবদল নাই, চিহ্ন +।",
+  "213: প্রথম দুইটা অদলবদল। একটা swap, বিজোড়, চিহ্ন −। বইয়ে লেখা even: ভুল।",
+  "321: 1 আর 3 অদলবদল। এটাও একটা swap, বিজোড়, −। বইয়ে এটাও even লেখা।",
 ];
 
 export function TermPaths() {
@@ -1981,11 +1981,11 @@ const BS_M: M3 = [
   [3, 5, 10],
 ];
 const BS_SAY = [
-  "বইয়ের শেষ উদাহরণ. উপরের সারি ধরে হাঁটি: + − +.",
+  "বইয়ের শেষ উদাহরণ। উপরের সারি ধরে হাঁটি: + − +।",
   "1 × (2·10 − 4·5) = 1 × 0 = 0.",
   "− 4 × (9·10 − 4·3) = − 4 × 78 = −312.",
   "+ 5 × (9·5 − 2·3) = 5 × 39 = 195.",
-  "0 − 312 + 195 = −117. উত্তর বইয়ের সাথে মেলে. শুধু পাশের কয়েকটা লেখা ভুল ছাপা.",
+  "0 − 312 + 195 = −117. উত্তর বইয়ের সাথে মেলে। শুধু পাশের কয়েকটা লেখা ভুল ছাপা।",
 ];
 
 export function BookSlip() {

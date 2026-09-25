@@ -197,7 +197,7 @@ export function WallBet() {
   };
   const seal = () => {
     setSealed(true);
-    act.play(3, () => pass("বাজি সিল হলো. আগে knob দুইটা ঘুরাই."));
+    act.play(3, () => pass("বাজি সিল হলো। আগে knob দুইটা ঘুরাই।"));
   };
   const near = (p: XY) => {
     let best = -1;
@@ -247,7 +247,7 @@ export function WallBet() {
           {none ? "কোনোটাতেই না: সিল" : "এই বাজি সিল"}
         </button>
       </div>
-      <Task done={k >= 3}>যন্ত্রের আলো কোন কোন heart এ যাবে? Heart গুলো বেছে নিয়ে বাজি সিল করুন. উত্তর শেষে.</Task>
+      <Task done={k >= 3}>যন্ত্রের আলো কোন কোন heart এ যাবে? Heart গুলো বেছে নিয়ে বাজি সিল করুন। উত্তর শেষে।</Task>
     </>
   );
 }
@@ -278,7 +278,7 @@ export function KnobPlay() {
     setUsed(nu);
     if (!done && nu[0] && nu[1] && nt.length >= 4) {
       setDone(true);
-      pass("যেদিকেই ঘুরাই, dot একটা লাইনেই থাকে.");
+      pass("যেদিকেই ঘুরাই, dot একটা লাইনেই থাকে।");
     }
   };
   return (
@@ -295,7 +295,7 @@ export function KnobPlay() {
         <LW_Read label="Knob এর পাক" v={ab} of={KNOB_SLOTS} />
         <LW_Read label="dot, দেয়ালের ঘরে" v={pos} of={WALL_SLOTS} tone="text-cat-amber" />
       </div>
-      <Task done={done}>দুইটা knob ই ঘুরান, সামনে আর পেছনে. অন্তত চার জায়গায় dot থামান, দাগ গুলো দেখুন.</Task>
+      <Task done={done}>দুইটা knob ই ঘুরান, সামনে আর পেছনে। অন্তত চার জায়গায় dot থামান, দাগ গুলো দেখুন।</Task>
     </>
   );
 }
@@ -317,7 +317,7 @@ export function WhyOneLine() {
     if (done) return;
     const c: XY = [clamp(t[0], -3, 5), clamp(t[1], -2, 4)];
     setTail(c);
-    if (same(c, [0, 0])) pass("দুইটা knob, কিন্তু দিক একটাই.");
+    if (same(c, [0, 0])) pass("দুইটা knob, কিন্তু দিক একটাই।");
   };
   return (
     <>
@@ -370,7 +370,7 @@ export function WhyOneLine() {
           </span>
         )}
       </div>
-      <Task done={done}>সবুজ arrow টা টেনে আনুন. গোড়াটা বসান খুঁটির পেরেকে, (0, 0) তে.</Task>
+      <Task done={done}>সবুজ arrow টা টেনে আনুন। গোড়াটা বসান খুঁটির পেরেকে, (0, 0) তে।</Task>
     </>
   );
 }
@@ -386,8 +386,8 @@ const X4_OPTS = ["শুধু ওই লাইন", "পুরা দেয়�
 const X4_RIGHT = 0;
 const X4_NOPE = [
   "",
-  "শত শত বার ঘুরিয়েও আলো লাইন ছাড়লো না. দেয়ালের বাকিটা অন্ধকার.",
-  "পট্টি হলো না. আলো পড়লো ঠিক লাইনের উপরে, এক চুলও পাশে না.",
+  "শত শত বার ঘুরিয়েও আলো লাইন ছাড়লো না। দেয়ালের বাকিটা অন্ধকার।",
+  "পট্টি হলো না। আলো পড়লো ঠিক লাইনের উপরে, এক চুলও পাশে না।",
 ];
 const X4_OLD = sweepPts(OLD_LENS, 420);
 const X4_GOOD = sweepPts(GOOD_LENS, 900);
@@ -437,7 +437,7 @@ export function AllTheLanding() {
       setSwept(true);
       if (lens === "old") {
         if (guess !== X4_RIGHT) setMiss((m) => m + 1);
-      } else pass("Ax যেখানে যেতে পারে, সেটা column দুইটার span.");
+      } else pass("Ax যেখানে যেতে পারে, সেটা column দুইটার span।");
     });
   };
   const swap = () => {
@@ -488,7 +488,7 @@ export function AllTheLanding() {
         )}
       </div>
       <Task done={lens === "good" && swept}>
-        {lens === "old" ? "আগে guess: knob যত রকমে ঘোরানো যায়, dot কোথায় কোথায় পড়বে? তারপর ঘুরিয়ে দেখুন." : "এবার গত রাতের lens এ একই কাজ. দুই knob এলোমেলো ঘোরান."}
+        {lens === "old" ? "আগে guess: knob যত রকমে ঘোরানো যায়, dot কোথায় কোথায় পড়বে? তারপর ঘুরিয়ে দেখুন।" : "এবার গত রাতের lens এ একই কাজ। দুই knob এলোমেলো ঘোরান।"}
       </Task>
     </>
   );
@@ -519,7 +519,7 @@ export function BrokenCorner() {
     if (run.running) return;
     run.run(() => {
       setSwept(true);
-      pass("একটা column শূন্য হলে, একটা দিক পুরাই হারায়.");
+      pass("একটা column শূন্য হলে, একটা দিক পুরাই হারায়।");
     });
   };
   const t = run.running ? run.t : swept ? 1 : 0;
@@ -538,7 +538,7 @@ export function BrokenCorner() {
       <div className="mt-1 h-5 text-center text-sm text-danger">
         {still > 0 && !swept && (
           <span key={still} className={FADE}>
-            Knob 2 ঘুরলো. Dot নড়লো না.
+            Knob 2 ঘুরলো। Dot নড়লো না।
           </span>
         )}
       </div>
@@ -547,7 +547,7 @@ export function BrokenCorner() {
           এবার দুই knob এলোমেলো ঘোরান
         </button>
       </div>
-      <Task done={swept}>আগে দুইটা knob একবার করে ঘুরান. তারপর এলোমেলো ঘুরিয়ে দেখুন, আলো দেয়ালের কোথায় পড়ে.</Task>
+      <Task done={swept}>আগে দুইটা knob একবার করে ঘুরান। তারপর এলোমেলো ঘুরিয়ে দেখুন, আলো দেয়ালের কোথায় পড়ে।</Task>
     </>
   );
 }
@@ -560,8 +560,8 @@ export function BrokenCorner() {
 //     the heart, which gets a cross.
 
 const X6_ORDER = [1, 0, 2]; // window, door, tree: the reachable one isn't first
-const X6_NOPE_YES = "আলোর লাইন দেখুন. Heart টা লাইনের বাইরে. কোনো পাকেই dot ওখানে যায় না.";
-const X6_NOPE_NO = "আলোর লাইন তো heart এর উপর দিয়েই গেলো. Knob ঘুরিয়ে dot টা ওখানে নিয়ে যান.";
+const X6_NOPE_YES = "আলোর লাইন দেখুন। Heart টা লাইনের বাইরে। কোনো পাকেই dot ওখানে যায় না।";
+const X6_NOPE_NO = "আলোর লাইন তো heart এর উপর দিয়েই গেলো। Knob ঘুরিয়ে dot টা ওখানে নিয়ে যান।";
 
 export function YourSpots() {
   const pass = useGate();
@@ -585,7 +585,7 @@ export function YourSpots() {
     setNope(null);
     setAb([0, 0]);
     setAt(at + 1);
-    if (at + 1 >= 3) pass("শুধু দরজার উপরের heart টা লাইনে পড়ে.");
+    if (at + 1 >= 3) pass("শুধু দরজার উপরের heart টা লাইনে পড়ে।");
   };
   const verdict = (v: "yes" | "no") => {
     if (run.running || at >= 3) return;
@@ -635,12 +635,12 @@ export function YourSpots() {
       {!over && said === "yes" && (
         <>
           <LW_Knobs cols={OLD_LENS} ab={ab} onTurn={turn} />
-          <div className="mt-1 text-center text-xs text-muted">Knob ঘুরিয়ে dot টা heart এ বসান.</div>
+          <div className="mt-1 text-center text-xs text-muted">Knob ঘুরিয়ে dot টা heart এ বসান।</div>
         </>
       )}
       {nope && <Nope key={miss}>{nope}</Nope>}
       <Task done={over}>
-        {over ? "তিনটা heart এর হিসাব শেষ." : nb(`${HEART_OF[hi]} heart: আলো যায়, নাকি যায় না? যায় বললে knob ঘুরিয়ে দেখিয়ে দিন.`)}
+        {over ? "তিনটা heart এর হিসাব শেষ।" : nb(`${HEART_OF[hi]} heart: আলো যায়, নাকি যায় না? যায় বললে knob ঘুরিয়ে দেখিয়ে দিন।`)}
       </Task>
     </>
   );
@@ -668,9 +668,9 @@ const X7_LENSES: Cols[] = [
 const X7_RIGHT = 1;
 const X7_TARGET: XY = [5, 4];
 const X7_NOPE = [
-  "দুই column, (1, 2) আর (2, 4), একই লাইনে. আলো পড়লো শুধু ওই খাড়া লাইনে. তারা বাইরে.",
+  "দুই column, (1, 2) আর (2, 4), একই লাইনে। আলো পড়লো শুধু ওই খাড়া লাইনে। তারা বাইরে।",
   "",
-  "দুই column, (0, 3) আর (0, 1), দুইটাই সোজা উপরের দিকে. আলো শুধু খুঁটি বরাবর. তারা বাইরে.",
+  "দুই column, (0, 3) আর (0, 1), দুইটাই সোজা উপরের দিকে। আলো শুধু খুঁটি বরাবর। তারা বাইরে।",
 ];
 
 /** a choice's picture: the lens's two columns from a pin */
@@ -715,7 +715,7 @@ export function TryReach() {
     setAb(n);
     if (same(p, X7_TARGET)) {
       setHit(true);
-      pass("Target টা column space এ থাকলেই যায়.");
+      pass("Target টা column space এ থাকলেই যায়।");
     }
   };
   const t = run.running ? run.t : swept ? 1 : 0;
@@ -748,13 +748,13 @@ export function TryReach() {
       {knobs && (
         <>
           <div className="mt-2 flex items-center justify-center gap-2 text-sm">
-            <span className="text-muted">পুরা দেয়াল আলো. এবার</span>
+            <span className="text-muted">পুরা দেয়াল আলো। এবার</span>
             <LensCard cols={GOOD_LENS} small />
           </div>
           <LW_Knobs cols={GOOD_LENS} ab={ab} onTurn={turn} disabled={hit} />
         </>
       )}
-      <Task done={hit}>{knobs ? "Knob ঘুরিয়ে dot টা তারার উপর বসান." : "কোন lens এর আলো তারা পর্যন্ত যায়? একটা বেছে নিন."}</Task>
+      <Task done={hit}>{knobs ? "Knob ঘুরিয়ে dot টা তারার উপর বসান।" : "কোন lens এর আলো তারা পর্যন্ত যায়? একটা বেছে নিন।"}</Task>
     </>
   );
 }
@@ -787,7 +787,7 @@ export function HeartsLight() {
     glow.play(1, () => {
       const nl = lit.map((v, j) => v || j === i);
       setLit(nl);
-      if (nl.every(Boolean)) pass("গত রাতের lens এ তিনটা heart ই জ্বললো.");
+      if (nl.every(Boolean)) pass("গত রাতের lens এ তিনটা heart ই জ্বললো।");
     });
   };
   const t = run.running ? run.t : on ? 1 : 0;
@@ -822,7 +822,7 @@ export function HeartsLight() {
           </span>
         )}
       </div>
-      <Task done={lit.every(Boolean)}>{on ? "একটা একটা heart এ tap করুন. Dot যাক, heart জ্বলুক." : "গত রাতের lens এ যন্ত্রটা চালান."}</Task>
+      <Task done={lit.every(Boolean)}>{on ? "একটা একটা heart এ tap করুন। Dot যাক, heart জ্বলুক।" : "গত রাতের lens এ যন্ত্রটা চালান।"}</Task>
     </>
   );
 }
@@ -871,9 +871,9 @@ export function ApaPoints({}: Story) {
         <Robot x={132} y={150} />
         <Projector x={PJ[0]} y={PJ[1]} />
         <LightBhai x={298} y={150} facing={-1} arm={k >= 3 ? "point" : "down"} />
-        {k === 2 && <Bubble x={86} y={58} side="right" lines={["কাল হলুদ.", "তিনটা heart চাই."]} />}
-        {k === 3 && <Bubble x={298} y={84} side="left" lines={["দুই knob, দুই দিক."]} />}
-        {k >= 4 && <Bubble x={298} y={84} side="left" lines={["যেইখানে কন,", "সেইখানে যাইবো."]} />}
+        {k === 2 && <Bubble x={86} y={58} side="right" lines={["কাল হলুদ।", "তিনটা heart চাই।"]} />}
+        {k === 3 && <Bubble x={298} y={84} side="left" lines={["দুই knob, দুই দিক।"]} />}
+        {k >= 4 && <Bubble x={298} y={84} side="left" lines={["যেইখানে কন,", "সেইখানে যাইবো।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -894,8 +894,8 @@ export function MachineOn({}: Story) {
         <Projector x={PJ[0]} y={PJ[1]} on={k >= 1} />
         <Person who="samin" x={212} y={150} facing={1} label arm={k >= 1 ? "hold" : "down"} />
         <LightBhai x={298} y={150} facing={-1} arm={k === 1 ? "point" : "down"} />
-        {k === 2 && <Bubble x={298} y={84} side="left" lines={["এক পাক ঘুরাইলে", "dot এক লাফ দেয়."]} />}
-        {k >= 3 && <Bubble x={298} y={84} side="left" lines={["উল্টা ঘুরাইলে", "উল্টা লাফ."]} />}
+        {k === 2 && <Bubble x={298} y={84} side="left" lines={["এক পাক ঘুরাইলে", "dot এক লাফ দেয়।"]} />}
+        {k >= 3 && <Bubble x={298} y={84} side="left" lines={["উল্টা ঘুরাইলে", "উল্টা লাফ।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -915,7 +915,7 @@ export function SomReads({}: Story) {
         <Person who="som" x={k >= 1 ? 296 : 360} y={150} facing={-1} walking={k === 1} label arm={k >= 2 ? "point" : "down"} />
         {k >= 2 && <Card x={210} y={98} text="(2, 1)" tone="amber" />}
         {k >= 3 && <Card x={210} y={120} text="(4, 2)" tone="teal" />}
-        {k >= 4 && <Bubble x={296} y={84} side="left" lines={["দুইটা knob.", "কিন্তু লাফ একই দিকে."]} />}
+        {k >= 4 && <Bubble x={296} y={84} side="left" lines={["দুইটা knob।", "কিন্তু লাফ একই দিকে।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -935,7 +935,7 @@ export function BagLens({}: Story) {
         </StageWall>
         <Projector x={PJ[0]} y={PJ[1]} />
         <Person who="nasib" x={200} y={150} facing={1} label arm={k === 1 ? "point" : "down"} />
-        {k === 1 && <Bubble x={200} y={84} side="right" lines={["এক লাইনের বাইরে", "তো যায়ই না."]} />}
+        {k === 1 && <Bubble x={200} y={84} side="right" lines={["এক লাইনের বাইরে", "তো যায়ই না।"]} />}
         <LightBhai x={298} y={150} facing={-1} arm={k >= 2 ? "hold" : "down"} />
         {/* the bag at his feet */}
         <path d="M304 150l3 -14h14l3 14Z" fill="#78350f" />
@@ -950,7 +950,7 @@ export function BagLens({}: Story) {
             <Card x={296} y={60} text="(1, 2)" tone="teal" />
           </>
         )}
-        {k >= 4 && <Bubble x={298} y={44} side="left" lines={["কাইল রাইতে", "এইটা চলছে."]} />}
+        {k >= 4 && <Bubble x={298} y={44} side="left" lines={["কাইল রাইতে", "এইটা চলছে।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -978,7 +978,7 @@ export function SpareLens({}: Story) {
           </>
         )}
         <LightBhai x={298} y={150} facing={-1} />
-        {k >= 3 && <Bubble x={298} y={84} side="left" lines={["এইটা বাড়তি.", "Knob 2 এর তার ছিঁড়া."]} />}
+        {k >= 3 && <Bubble x={298} y={84} side="left" lines={["এইটা বাড়তি।", "Knob 2 এর তার ছিঁড়া।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1049,7 +1049,7 @@ function LW_FigWall({ f = FIG_F, label, lit, children }: { f?: Frame; label: str
 // 1½ · The stake: আপার three hearts appear one by one; then a "?" on each and
 //      the হলুদ tomorrow.
 
-const X1_SAY = ["দেয়াল, খুঁটি, রিনার grid.", "দরজার উপরে একটা heart.", "আপার জানালার উপরে একটা.", "নারকেল গাছের দিকে একটা.", "কাল হলুদের আগে তিনটাই চাই. পুরানো যন্ত্রে হবে?"];
+const X1_SAY = ["দেয়াল, খুঁটি, রিনার grid।", "দরজার উপরে একটা heart।", "আপার জানালার উপরে একটা।", "নারকেল গাছের দিকে একটা।", "কাল হলুদের আগে তিনটাই চাই। পুরানো যন্ত্রে হবে?"];
 
 export function ThreeHearts() {
   const s = useScene(4, [600, 1400, 1400, 1400, 2400]);
@@ -1074,12 +1074,12 @@ const X2B_STOPS: { ab: XY; at: XY }[] = [
   { ab: [-1, 1], at: [2, 1] },
 ];
 const X2B_SAY = [
-  "Dot খুঁটির পেরেকে. পাক (0, 0).",
-  "Knob 1 এক পাক: dot (2, 1) এ.",
-  "Knob 2 এক পাক: (4, 2) এ. আরো দূরে, একই দিকে.",
-  "Knob 1 এক পাক, knob 2 এক পাক পেছনে: (−2, −1). পেরেকের উল্টা পাশে.",
-  "Knob 1 পেছনে, knob 2 সামনে: আবার (2, 1). দুই রকম পাক, একই জায়গা.",
-  "সব দাগ একটাই হেলানো লাইনে. বাকি দেয়ালে কোনো দাগ নাই.",
+  "Dot খুঁটির পেরেকে। পাক (0, 0)।",
+  "Knob 1 এক পাক: dot (2, 1) এ।",
+  "Knob 2 এক পাক: (4, 2) এ। আরো দূরে, একই দিকে।",
+  "Knob 1 এক পাক, knob 2 এক পাক পেছনে: (−2, −1)। পেরেকের উল্টা পাশে।",
+  "Knob 1 পেছনে, knob 2 সামনে: আবার (2, 1)। দুই রকম পাক, একই জায়গা।",
+  "সব দাগ একটাই হেলানো লাইনে। বাকি দেয়ালে কোনো দাগ নাই।",
 ];
 
 export function TrailOneLine() {
@@ -1103,7 +1103,7 @@ export function TrailOneLine() {
 //       three times longer and leaves (1, −1) where it was.
 
 const X2C_F = makeFrame(-2, 4, -2, 4, 22, 8);
-const X2C_SAY = ["6.3 এর move: দড়ি (2, 1) আর (1, 2).", "(1, 1) গেলো (3, 3) এ. একই দিকে, 3 গুণ লম্বা.", "(1, −1) গেলো (1, −1) এ. যেখানে ছিল, সেখানেই. একটুও লম্বা না."];
+const X2C_SAY = ["6.3 এর move: দড়ি (2, 1) আর (1, 2)।", "(1, 1) গেলো (3, 3) এ। একই দিকে, 3 গুণ লম্বা।", "(1, −1) গেলো (1, −1) এ। যেখানে ছিল, সেখানেই। একটুও লম্বা না।"];
 
 export function StubbornAgain() {
   const s = useScene(2, [600, 2200, 2400]);
@@ -1135,11 +1135,11 @@ export function StubbornAgain() {
 //      dot is on the nail again. Non-zero turns, zero place: dependent.
 
 const X3B_SAY = [
-  "দুইটা arrow একই লাইনে. সবুজটা কমলার ঠিক দ্বিগুণ.",
-  "Knob 1 এক পাক: (2, 1).",
-  "আরেক পাক: (4, 2).",
-  "Knob 2 এক পাক পেছনে: (4, 2) পেছনে হাঁটা.",
-  "Dot আবার পেরেকে. পাক (2, −1). শূন্য না, তবু শূন্যে ফেরা.",
+  "দুইটা arrow একই লাইনে। সবুজটা কমলার ঠিক দ্বিগুণ।",
+  "Knob 1 এক পাক: (2, 1)।",
+  "আরেক পাক: (4, 2)।",
+  "Knob 2 এক পাক পেছনে: (4, 2) পেছনে হাঁটা।",
+  "Dot আবার পেরেকে। পাক (2, −1)। শূন্য না, তবু শূন্যে ফেরা।",
 ];
 
 export function ZeroWalk() {
@@ -1172,11 +1172,11 @@ export function ZeroWalk() {
 //      (3, 3)), then many mixes as specks, then the whole wall lit and named.
 
 const X4B_SAY = [
-  "গত রাতের lens: knob 1 এর লাফ (2, 1), knob 2 এর (1, 2).",
-  "পাক (1, 1): আগে কমলা লাফ, (2, 1).",
-  "তারপর সবুজ লাফ: (3, 3). দুই column এর একটা mix.",
-  "আরো অনেক রকম পাক. প্রত্যেকটা আরেকটা mix.",
-  "সব mix একসাথে: column দুইটার span. এখানে পুরা দেয়াল. এটাই column space.",
+  "গত রাতের lens: knob 1 এর লাফ (2, 1), knob 2 এর (1, 2)।",
+  "পাক (1, 1): আগে কমলা লাফ, (2, 1)।",
+  "তারপর সবুজ লাফ: (3, 3)। দুই column এর একটা mix।",
+  "আরো অনেক রকম পাক। প্রত্যেকটা আরেকটা mix।",
+  "সব mix একসাথে: column দুইটার span। এখানে পুরা দেয়াল। এটাই column space.",
 ];
 const X4B_PTS = sweepPts(GOOD_LENS, 420, 5, 11);
 
@@ -1210,7 +1210,7 @@ const X5B_LENSES: { cols: Cols; name: string; n: number }[] = [
   { cols: OLD_LENS, name: "পুরানো", n: 1 },
   { cols: SPARE_LENS, name: "বাড়তি", n: 1 },
 ];
-const X5B_SAY = ["তিনটা lens, তিনটা দেয়াল.", "গত রাতের lens: দুইটা দিকই টিকে আছে. পুরা দেয়াল. rank 2.", "পুরানো lens: একটা দিক. হেলানো লাইন. rank 1.", "বাড়তি lens: একটা দিক. শোয়ানো লাইন. rank 1."];
+const X5B_SAY = ["তিনটা lens, তিনটা দেয়াল।", "গত রাতের lens: দুইটা দিকই টিকে আছে। পুরা দেয়াল। rank 2.", "পুরানো lens: একটা দিক। হেলানো লাইন। rank 1.", "বাড়তি lens: একটা দিক। শোয়ানো লাইন। rank 1."];
 
 export function HowMany() {
   const s = useScene(3, [600, 2000, 2000, 2000]);
@@ -1233,7 +1233,7 @@ export function HowMany() {
 // 7½ · Try it's answer walked: with last night's lens, knob 1 twice, (4, 2),
 //      then knob 2 once, (5, 4): the star.
 
-const X7B_SAY = ["গত রাতের lens. তারা (5, 4) এ.", "Knob 1 এক পাক: (2, 1).", "আরেক পাক: (4, 2).", "Knob 2 এক পাক: (5, 4). তারার উপরে. পাক (2, 1)."];
+const X7B_SAY = ["গত রাতের lens। তারা (5, 4) এ।", "Knob 1 এক পাক: (2, 1)।", "আরেক পাক: (4, 2)।", "Knob 2 এক পাক: (5, 4)। তারার উপরে। পাক (2, 1)।"];
 
 export function StarWalk() {
   const s = useScene(3, [600, 1400, 1400, 2200]);
@@ -1262,11 +1262,11 @@ const BS_ROWS: [string, boolean][] = [
   ["লাইট ভাই: যেখানে বলবেন, সেখানে", false],
 ];
 const BS_SAY = [
-  "পুরানো lens, তিনটা heart.",
-  "দরজার উপরেরটা লাইনে. knob 1 এর তিন পাকেই যায়.",
-  "জানালার উপরেরটা লাইনের অনেক উপরে. যায় না.",
-  "নারকেল গাছের দিকেরটা লাইনের নিচে. যায় না.",
-  "তাই সব জায়গায় না. লাইট ভাইয়ের কথা টিকলো না.",
+  "পুরানো lens, তিনটা heart।",
+  "দরজার উপরেরটা লাইনে। knob 1 এর তিন পাকেই যায়।",
+  "জানালার উপরেরটা লাইনের অনেক উপরে। যায় না।",
+  "নারকেল গাছের দিকেরটা লাইনের নিচে। যায় না।",
+  "তাই সব জায়গায় না। লাইট ভাইয়ের কথা টিকলো না।",
 ];
 
 function LW_Mark({ ok }: { ok: boolean }) {
@@ -1306,7 +1306,7 @@ export function BetSettled({}: Story) {
 // 8½ · For the Ax = b side quest: on the old lens, a b on the line has knob
 //      turns; a b off it has none, however the knobs turn.
 
-const X8B_SAY = ["পুরানো lens. প্রশ্ন: কোন পাক x দিলে Ax = b?", "b = (6, 3), লাইনের উপরে. x = (3, 0) দিলেই হয়.", "b = (2, 4), লাইনের বাইরে. কোনো x ই নাই.", "b column space এ থাকলে উত্তর আছে. না থাকলে নাই."];
+const X8B_SAY = ["পুরানো lens। প্রশ্ন: কোন পাক x দিলে Ax = b?", "b = (6, 3), লাইনের উপরে। x = (3, 0) দিলেই হয়।", "b = (2, 4), লাইনের বাইরে। কোনো x ই নাই।", "b column space এ থাকলে উত্তর আছে। না থাকলে নাই।"];
 
 export function SolvableOrNot() {
   const s = useScene(3, [600, 2000, 2000, 2400]);

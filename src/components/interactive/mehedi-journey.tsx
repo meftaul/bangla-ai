@@ -27,7 +27,7 @@ import { LensCard, LightBhai, Projector, WALL_SLOTS, WallBed, apply, byCols, det
 // 5 Z on the wall: cut and slide to 3 ঘর, then turn the picture fingers-up:
 // a left hand (ZOnTheWall). 6 Nasib's [[−1, 0], [0, −1]]: a half turn fits
 // it, no turn fits the mirror's (TurnIsNotFlip). 7 Your turn: four lenses,
-// উল্টায় কি না + কতগুণ (YourSign). 8 Try it: which picture does [[0, 2],
+// উল্টায় কি না + কতগুণ (YourSign)। 8 Try it: which picture does [[0, 2],
 // [2, 0]] throw (TryWhichHand). 9 the bet opened (BetOpen).
 //
 // After the screens: the story scenes (MehediAfternoon, AynaLens, BackToZ,
@@ -375,7 +375,7 @@ function HandBadge({ d }: { d: number }) {
 //     hand.
 
 const X1_F = makeFrame(-1.5, 2.5, -0.4, 1.5, 48, 8); // 208 × 107
-const X1_OPTS = ["করিম: 3 কৌটা ফেরত. Minus মানে জায়গা কমে.", "আলোই পড়বে না. দেয়াল অন্ধকার.", "Formula টাই ভুল. জায়গা minus হয় না.", "3 গুণ রং. সাথে অন্য কিছু একটা বদলায়."];
+const X1_OPTS = ["করিম: 3 কৌটা ফেরত। Minus মানে জায়গা কমে।", "আলোই পড়বে না। দেয়াল অন্ধকার।", "Formula টাই ভুল। জায়গা minus হয় না।", "3 গুণ রং। সাথে অন্য কিছু একটা বদলায়।"];
 
 export function MinusBet() {
   const pass = useGate();
@@ -386,7 +386,7 @@ export function MinusBet() {
   const seal = () => {
     if (bet === null || sealed) return;
     setSealed(true);
-    act.play(2, () => pass("বাজি সিল হলো. আগে সোজা আয়না."));
+    act.play(2, () => pass("বাজি সিল হলো। আগে সোজা আয়না।"));
   };
   const show = k >= 1 ? bet : null;
   const q = k >= 2;
@@ -419,13 +419,13 @@ export function MinusBet() {
           এই বাজি সিল
         </button>
       </div>
-      <Task done={k >= 2}>জায়গা minus হলে দেয়ালে কী হয়? একটা বেছে নিয়ে বাজি সিল করুন. উত্তর শেষে.</Task>
+      <Task done={k >= 2}>জায়গা minus হলে দেয়ালে কী হয়? একটা বেছে নিয়ে বাজি সিল করুন। উত্তর শেষে।</Task>
     </>
   );
 }
 
 // ---------------------------------------------------------------------------
-// 2 · The আয়না. Run M: the lit ঘর turns over like a page onto the other side
+// 2 · The আয়না। Run M: the lit ঘর turns over like a page onto the other side
 //     of the nail, still one ঘর. Then: which hand is it now? The picked hand
 //     slides onto the picture; the right hand never sits (thumbs on opposite
 //     sides), the left one does.
@@ -449,7 +449,7 @@ export function MirrorLens() {
   const choose = (i: number) => {
     if (!ran || slide.running || pick === 1) return;
     setPick(i);
-    slide.play(14, () => (i === 1 ? pass("জায়গা একই. হাতটা উল্টে গেছে.") : setMiss((m) => m + 1)));
+    slide.play(14, () => (i === 1 ? pass("জায়গা একই। হাতটা উল্টে গেছে।") : setMiss((m) => m + 1)));
   };
   const dx = pick !== null && slide.running ? 2 * (1 - slide.k / 14) : 0;
   const settled = pick !== null && !slide.running;
@@ -487,8 +487,8 @@ export function MirrorLens() {
           ))}
         </div>
       )}
-      {settled && pick === 0 && <Nope key={miss}>ডান হাত বসালাম. চারকোনা মিললো, কিন্তু বুড়ো আঙুল পড়লো উল্টা পাশে.</Nope>}
-      <Task done={settled && pick === 1}>আয়না দিয়ে চালান. তারপর বলুন, দেয়ালে এখন কোন হাত.</Task>
+      {settled && pick === 0 && <Nope key={miss}>ডান হাত বসালাম। চারকোনা মিললো, কিন্তু বুড়ো আঙুল পড়লো উল্টা পাশে।</Nope>}
+      <Task done={settled && pick === 1}>আয়না দিয়ে চালান। তারপর বলুন, দেয়ালে এখন কোন হাত।</Task>
     </>
   );
 }
@@ -507,7 +507,7 @@ const X3_V: XY[] = [
 const X3_NAME = ["g", "l"];
 const X3_TONE = ["coral", "violet"] as const;
 const X3_HEX = ["#e8604c", "#7c5cd6"];
-const X3_NOPE = ["l এর মাথা 1 ঘর ডানে, g এর মাথা 3 ঘর. বেশি ডানে কে?", "আয়নার পরে g এর মাথা −3 এ, l এর −1 এ. −1 বেশি ডানে."];
+const X3_NOPE = ["l এর মাথা 1 ঘর ডানে, g এর মাথা 3 ঘর। বেশি ডানে কে?", "আয়নার পরে g এর মাথা −3 এ, l এর −1 এ। −1 বেশি ডানে।"];
 
 export function LeftOfRight() {
   const pass = useGate();
@@ -532,7 +532,7 @@ export function LeftOfRight() {
     } else {
       if (p2 === 1) return;
       setP2(i);
-      meas.play(10, () => (i === 1 ? pass("ডানেরটা বামে গেলো: উল্টানো.") : setMiss((m) => m + 1)));
+      meas.play(10, () => (i === 1 ? pass("ডানেরটা বামে গেলো: উল্টানো।") : setMiss((m) => m + 1)));
     }
   };
   const m = meas.running ? meas.k / 10 : 1;
@@ -593,7 +593,7 @@ export function LeftOfRight() {
         ))}
       </div>
       {settled && pick !== right && <Nope key={miss}>{X3_NOPE[phase - 1]}</Nope>}
-      <Task done={flipped && p2 === 1 && !busy}>{phase === 1 ? "দুই তীরের কোনটা ডানে, বেছে নিন. তারপর আয়না চলবে." : "আয়না চললো. এবার কোনটা ডানে?"}</Task>
+      <Task done={flipped && p2 === 1 && !busy}>{phase === 1 ? "দুই তীরের কোনটা ডানে, বেছে নিন। তারপর আয়না চলবে।" : "আয়না চললো। এবার কোনটা ডানে?"}</Task>
     </>
   );
 }
@@ -605,10 +605,10 @@ export function LeftOfRight() {
 //     left hand.
 
 const X4_F = makeFrame(-0.45, 1.45, -0.35, 1.35, 70, 8); // 149 × 135
-const X4_OPTS = ["+1. একই সংখ্যা, শুধু জায়গা বদল.", "−1.", "0. সরালে জায়গাই থাকে না."];
+const X4_OPTS = ["+1. একই সংখ্যা, শুধু জায়গা বদল।", "−1.", "0. সরালে জায়গাই থাকে না।"];
 const X4_ANSWER = 1;
-const X4_NOPE = ["", "", "জায়গা হারায় নাই: দেয়ালে এখনো পুরা এক ঘর. শুধু হাত উল্টালো, তাই −1."];
-const X4_NOPE0 = "দেয়ালে হাত উল্টে গেলো. আঙুল এখন ডানে, বুড়ো আঙুল উপরে. সোজা করে ধরলে বাম হাত. তাই −1.";
+const X4_NOPE = ["", "", "জায়গা হারায় নাই: দেয়ালে এখনো পুরা এক ঘর। শুধু হাত উল্টালো, তাই −1।"];
+const X4_NOPE0 = "দেয়ালে হাত উল্টে গেলো। আঙুল এখন ডানে, বুড়ো আঙুল উপরে। সোজা করে ধরলে বাম হাত। তাই −1।";
 
 /** the lens as two columns that can slide past each other (t 0 → 1) */
 function X4_Columns({ t }: { t: number }) {
@@ -639,7 +639,7 @@ export function SwapColumns() {
     setGuess(i);
     run.run(() => {
       setRan(true);
-      pass("Column দুইটা অদলবদল করলেই minus.");
+      pass("Column দুইটা অদলবদল করলেই minus।");
     });
   };
   return (
@@ -674,7 +674,7 @@ export function SwapColumns() {
         ))}
       </div>
       {ran && guess !== null && guess !== X4_ANSWER && <Nope>{guess === 0 ? X4_NOPE0 : X4_NOPE[guess]}</Nope>}
-      <Task done={ran}>Column দুইটা অদলবদল করলে হিসাব plus না minus? আগে guess দিন, তারপর দেয়ালে দেখুন.</Task>
+      <Task done={ran}>Column দুইটা অদলবদল করলে হিসাব plus না minus? আগে guess দিন, তারপর দেয়ালে দেখুন।</Task>
     </>
   );
 }
@@ -739,7 +739,7 @@ export function ZOnTheWall() {
     else if (stage === 2)
       turn.run(() => {
         setStage(3);
-        pass("−3 মানে: তিনগুণ, উল্টানো.");
+        pass("−3 মানে: তিনগুণ, উল্টানো।");
       });
   };
   const f = X5_F;
@@ -793,7 +793,7 @@ export function ZOnTheWall() {
           </button>
         </div>
       )}
-      <Task done={stage >= 3}>Z চালান. তারপর ঘর গুনুন, আর ছবি ঘুরিয়ে দেখুন কোন হাত.</Task>
+      <Task done={stage >= 3}>Z চালান। তারপর ঘর গুনুন, আর ছবি ঘুরিয়ে দেখুন কোন হাত।</Task>
     </>
   );
 }
@@ -836,7 +836,7 @@ export function TurnIsNotFlip() {
     if (tab === 1 && !tried.includes(n)) {
       const nt = [...tried, n];
       setTried(nt);
-      if (nt.length === 4) pass("ঘোরানো আর উল্টানো এক না.");
+      if (nt.length === 4) pass("ঘোরানো আর উল্টানো এক না।");
     }
   };
   const toMirror = () => {
@@ -878,9 +878,9 @@ export function TurnIsNotFlip() {
         </div>
       </div>
       <div className="mt-1.5 min-h-5 text-center text-sm">
-        {fits && <span className={`font-semibold text-accent ${FADE}`}>আধা পাক ঘুরাতেই হুবহু বসে গেলো.</span>}
-        {tileOnly && <span className={`text-muted ${FADE}`}>চারকোনা মিললো. হাত মেলে নাই.</span>}
-        {done && <span className={`font-semibold ${FADE}`}>কোনো ঘোরানোতেই আয়নার ছবি বসে না.</span>}
+        {fits && <span className={`font-semibold text-accent ${FADE}`}>আধা পাক ঘুরাতেই হুবহু বসে গেলো।</span>}
+        {tileOnly && <span className={`text-muted ${FADE}`}>চারকোনা মিললো। হাত মেলে নাই।</span>}
+        {done && <span className={`font-semibold ${FADE}`}>কোনো ঘোরানোতেই আয়নার ছবি বসে না।</span>}
       </div>
       <div className="mt-1.5 flex justify-center">
         {!ran[tab] && (
@@ -894,7 +894,7 @@ export function TurnIsNotFlip() {
           </button>
         )}
       </div>
-      <Task done={done}>{tab === 0 ? "নাসিবের lens চালান. তারপর ছায়াটা ঘুরিয়ে ছবির উপর বসান." : "আয়নার ছবিতেও ছায়াটা ঘুরিয়ে দেখুন, চার রকমই."}</Task>
+      <Task done={done}>{tab === 0 ? "নাসিবের lens চালান। তারপর ছায়াটা ঘুরিয়ে ছবির উপর বসান।" : "আয়নার ছবিতেও ছায়াটা ঘুরিয়ে দেখুন, চার রকমই।"}</Task>
     </>
   );
 }
@@ -943,7 +943,7 @@ export function YourSign() {
     run.run(() => {
       setRan(true);
       if (flip === D < 0 && times === Math.abs(D)) {
-        if (last) pass("চিহ্ন বলে উল্টায় কি না. সংখ্যা বলে কতগুণ.");
+        if (last) pass("চিহ্ন বলে উল্টায় কি না। সংখ্যা বলে কতগুণ।");
       } else setMiss((m) => m + 1);
     });
   };
@@ -1002,10 +1002,10 @@ export function YourSign() {
       </div>
       {ran && !run.running && !right && (
         <Nope key={miss}>
-          দেয়ালে এলো {Math.abs(D)} ঘর, হাত {D < 0 ? "উল্টানো" : "সোজা"}. ad − bc হিসাব করে দেখুন: চিহ্ন আর সংখ্যা.
+          দেয়ালে এলো {Math.abs(D)} ঘর, হাত {D < 0 ? "উল্টানো" : "সোজা"}. ad − bc হিসাব করে দেখুন: চিহ্ন আর সংখ্যা।
         </Nope>
       )}
-      <Task done={last && ran && right}>প্রতিটা lens এর জন্য বলুন: হাত উল্টাবে কি না, জায়গা কতগুণ. তারপর চালিয়ে মিলান.</Task>
+      <Task done={last && ran && right}>প্রতিটা lens এর জন্য বলুন: হাত উল্টাবে কি না, জায়গা কতগুণ। তারপর চালিয়ে মিলান।</Task>
     </>
   );
 }
@@ -1032,9 +1032,9 @@ const X8_OPTS: Cols[] = [
 const X8_RIGHT = 1;
 const X8_F = makeFrame(-0.5, 2.5, -2.3, 2.3, 30, 8); // 106 × 154
 const X8_NOPE = [
-  "আপনার ছবিতে বুড়ো আঙুল নিচে: ডান হাত. Lens এর ছবিতে বুড়ো আঙুল উপরে. 0 · 0 − 2 · 2 = −4: উল্টানো.",
+  "আপনার ছবিতে বুড়ো আঙুল নিচে: ডান হাত। Lens এর ছবিতে বুড়ো আঙুল উপরে। 0 · 0 − 2 · 2 = −4: উল্টানো।",
   "",
-  "হাত ঠিক, উল্টানো. কিন্তু মাপে ছোট: আপনারটা 1 ঘর, lens এর ছবি 4 ঘর.",
+  "হাত ঠিক, উল্টানো। কিন্তু মাপে ছোট: আপনারটা 1 ঘর, lens এর ছবি 4 ঘর।",
 ];
 
 export function TryWhichHand() {
@@ -1050,7 +1050,7 @@ export function TryWhichHand() {
     setRan(false);
     run.run(() => {
       setRan(true);
-      if (i === X8_RIGHT) pass("−4: চারগুণ বড়, আর বাম হাত.");
+      if (i === X8_RIGHT) pass("−4: চারগুণ বড়, আর বাম হাত।");
       else setMiss((m) => m + 1);
     });
   };
@@ -1075,7 +1075,7 @@ export function TryWhichHand() {
         ))}
       </div>
       {settled && pick !== X8_RIGHT && <Nope key={miss}>{X8_NOPE[pick]}</Nope>}
-      <Task done={settled && pick === X8_RIGHT}>এই lens দেয়ালে কোন ছবিটা ফেলবে? বেছে নিন.</Task>
+      <Task done={settled && pick === X8_RIGHT}>এই lens দেয়ালে কোন ছবিটা ফেলবে? বেছে নিন।</Task>
     </>
   );
 }
@@ -1086,10 +1086,10 @@ export function TryWhichHand() {
 
 const X9_F = makeFrame(-1.3, 1.3, -0.3, 3.3, 26, 6); // 80 × 106
 const X9_CARDS: [string, boolean, string][] = [
-  ["করিম: 3 কৌটা ফেরত.", false, "ফেরত দিলে থাকতো 1 কৌটা. দেয়ালে লাগলো 3."],
-  ["আলোই পড়বে না.", false, "আলো পড়লো, 3 ঘর জুড়ে."],
-  ["Formula টাই ভুল.", false, "Formula ঠিক. Minus টা উল্টানোর information."],
-  ["3 গুণ রং, সাথে অন্য কিছু বদলায়.", true, "3 গুণ রং. আর হাতটা উল্টানো: বাম হাত."],
+  ["করিম: 3 কৌটা ফেরত।", false, "ফেরত দিলে থাকতো 1 কৌটা। দেয়ালে লাগলো 3।"],
+  ["আলোই পড়বে না।", false, "আলো পড়লো, 3 ঘর জুড়ে।"],
+  ["Formula টাই ভুল।", false, "Formula ঠিক। Minus টা উল্টানোর information."],
+  ["3 গুণ রং, সাথে অন্য কিছু বদলায়।", true, "3 গুণ রং। আর হাতটা উল্টানো: বাম হাত।"],
 ];
 
 function X9_Mark({ ok }: { ok: boolean }) {
@@ -1116,7 +1116,7 @@ export function BetOpen() {
       const next = [...open, i];
       setOpen(next);
       setNow(null);
-      if (next.length === X9_CARDS.length) pass("Minus মানে উল্টানো, কম না.");
+      if (next.length === X9_CARDS.length) pass("Minus মানে উল্টানো, কম না।");
     });
   };
   const shown = open.length > 0;
@@ -1153,7 +1153,7 @@ export function BetOpen() {
           );
         })}
       </div>
-      <Task done={open.length === X9_CARDS.length}>চারটা বাজি একটা একটা করে খুলুন.</Task>
+      <Task done={open.length === X9_CARDS.length}>চারটা বাজি একটা একটা করে খুলুন।</Task>
     </>
   );
 }
@@ -1259,9 +1259,9 @@ export function MehediAfternoon({}: Story) {
         {k >= 2 && <H_HeldPhone x={196} y={108} text="−3" />}
         <Person who="karim" x={284} y={150} facing={-1} arm="hold" label />
         <H_StageBag x={272} y={118} />
-        {k === 1 && <Bubble x={92} y={84} side="right" lines={["এইটা বড় কইরা ফালাই.", "Z দিয়া."]} />}
+        {k === 1 && <Bubble x={92} y={84} side="right" lines={["এইটা বড় কইরা ফালাই।", "Z দিয়া।"]} />}
         {k === 2 && <Bubble x={206} y={84} side="mid" lines={["Z এর হিসাব:", "−3."]} />}
-        {k === 3 && <Bubble x={284} y={84} side="left" lines={["Minus মানে জায়গা কমে.", "তিন কৌটা ফেরত দিয়ে আসি."]} />}
+        {k === 3 && <Bubble x={284} y={84} side="left" lines={["Minus মানে জায়গা কমে।", "তিন কৌটা ফেরত দিয়ে আসি।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1328,7 +1328,7 @@ export function BackToZ({}: Story) {
         <Person who="karim" x={294} y={150} facing={-1} arm="hold" label />
         <H_StageBag x={282} y={118} />
         {k === 2 && <Bubble x={294} y={84} side="left" lines={["ফেরত দিতে যাবো?"]} />}
-        {k === 3 && <Bubble x={170} y={84} side="mid" lines={["দাঁড়া."]} />}
+        {k === 3 && <Bubble x={170} y={84} side="mid" lines={["দাঁড়া।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1369,8 +1369,8 @@ export function NasibTwoMinus({}: Story) {
         <Person who="nasib" x={186} y={150} facing={-1} arm={k >= 1 ? "point" : "down"} label />
         <Person who="som" x={246} y={150} facing={-1} label />
         <Person who="rina" x={296} y={150} facing={-1} label />
-        {k === 2 && <Bubble x={186} y={84} side="right" lines={["একটা minus এ", "এক উল্টা."]} />}
-        {k === 3 && <Bubble x={186} y={84} side="right" lines={["দুইটা minus.", "দুইবার উল্টাবে."]} />}
+        {k === 2 && <Bubble x={186} y={84} side="right" lines={["একটা minus এ", "এক উল্টা।"]} />}
+        {k === 3 && <Bubble x={186} y={84} side="right" lines={["দুইটা minus।", "দুইবার উল্টাবে।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1465,10 +1465,10 @@ export function BulbFuses() {
 //      reading walks three কৌটা back to the দোকান; and if the wall needs more?
 
 const X1B_SAY = [
-  "Stencil এর আলো দেয়ালে এক ঘর. এক ঘরে এক কৌটা রং.",
-  "Z এর হিসাব বললো −3.",
-  "করিমের পড়া: 3 কম. তিন কৌটা দোকানে ফেরত.",
-  "দেয়ালে যদি আসলে বেশি লাগে? পলিথিনে তখন এক কৌটা.",
+  "Stencil এর আলো দেয়ালে এক ঘর। এক ঘরে এক কৌটা রং।",
+  "Z এর হিসাব বললো −3।",
+  "করিমের পড়া: 3 কম। তিন কৌটা দোকানে ফেরত।",
+  "দেয়ালে যদি আসলে বেশি লাগে? পলিথিনে তখন এক কৌটা।",
 ];
 const X1B_F = makeFrame(0, 1, 0, 1, 40, 0);
 
@@ -1526,7 +1526,7 @@ export function MinusStake() {
 //      page and lands on the other side, the back of the hand showing: a left
 //      hand, the same one ঘর.
 
-const X2B_SAY = ["আসল ছাপ: আপার ডান হাত, বুড়ো আঙুল ডানে.", "আয়না ছবিটাকে খুঁটির দাগ বরাবর ভাঁজ করে.", "পাতার মতো উল্টে যাচ্ছে.", "উল্টো পিঠ: বাম হাত. জায়গা সেই এক ঘর."];
+const X2B_SAY = ["আসল ছাপ: আপার ডান হাত, বুড়ো আঙুল ডানে।", "আয়না ছবিটাকে খুঁটির দাগ বরাবর ভাঁজ করে।", "পাতার মতো উল্টে যাচ্ছে।", "উল্টো পিঠ: বাম হাত। জায়গা সেই এক ঘর।"];
 const X2B_T = [0, 0.35, 0.7, 1];
 const X2B_F = makeFrame(-1.35, 1.35, -0.25, 1.25, 64, 6); // 185 × 108
 
@@ -1552,10 +1552,10 @@ export function PageFlip() {
 //      4 ঘর again, the other side up: −4.
 
 const X3B_SAY = [
-  "g ডানে, l বামে. দুই তীরের মাঝের হেলানো জায়গা 4 ঘর.",
-  "আয়না চলছে. মাঝপথে দুই তীর এক লাইনে. জায়গা শূন্য.",
-  "ওপারে l ডানে, g বামে. জায়গা আবার 4 ঘর, উল্টো পিঠ.",
-  "মাপ একই, পাশ উল্টা. তাই হিসাবে −4. একে বলে signed area.",
+  "g ডানে, l বামে। দুই তীরের মাঝের হেলানো জায়গা 4 ঘর।",
+  "আয়না চলছে। মাঝপথে দুই তীর এক লাইনে। জায়গা শূন্য।",
+  "ওপারে l ডানে, g বামে। জায়গা আবার 4 ঘর, উল্টো পিঠ।",
+  "মাপ একই, পাশ উল্টা। তাই হিসাবে −4। একে বলে signed area.",
 ];
 const X3B_T = [0, 0.5, 1, 1];
 const X3B_F = makeFrame(-4.4, 4.4, -0.4, 4.4, 26, 6); // 241 × 137
@@ -1597,7 +1597,7 @@ export function ArrowsCross() {
 // 4½ · Trading places: the plain glass's two columns swap; the hand turns
 //      over (−1); swap them again and it is the right hand again (+1).
 
-const X4B_SAY = ["খালি কাঁচ: প্রথম column (1, 0), দ্বিতীয় (0, 1). ডান হাত. +1.", "Column দুইটা জায়গা বদলালো. হাত উল্টালো. −1.", "আরেকবার অদলবদল. আবার ডান হাত, আবার +1."];
+const X4B_SAY = ["খালি কাঁচ: প্রথম column (1, 0), দ্বিতীয় (0, 1)। ডান হাত। +1.", "Column দুইটা জায়গা বদলালো। হাত উল্টালো। −1.", "আরেকবার অদলবদল। আবার ডান হাত, আবার +1।"];
 const X4B_T = [0, 1, 0];
 const X4B_F = makeFrame(-0.35, 1.35, -0.35, 1.35, 64, 6); // 121 × 121
 
@@ -1633,11 +1633,11 @@ export function TradePlaces() {
 //      mirror's never does.
 
 const X6B_SAY = [
-  "বামে নাসিবের lens এর ছবি, ডানে আয়নার. উপরে আসল হাতের ছায়া.",
-  "ছায়া ঘুরছে. আয়নার ছবিতে চারকোনা মিললো, হাত মেলে নাই.",
-  "আধা পাকে নাসিবের ছবিতে হুবহু বসে গেলো.",
-  "আয়নার ছবিতে এখনো মেলে না.",
-  "পুরা এক পাক. আয়নার ছবিতে একবারও বসলো না.",
+  "বামে নাসিবের lens এর ছবি, ডানে আয়নার। উপরে আসল হাতের ছায়া।",
+  "ছায়া ঘুরছে। আয়নার ছবিতে চারকোনা মিললো, হাত মেলে নাই।",
+  "আধা পাকে নাসিবের ছবিতে হুবহু বসে গেলো।",
+  "আয়নার ছবিতে এখনো মেলে না।",
+  "পুরা এক পাক। আয়নার ছবিতে একবারও বসলো না।",
 ];
 const X6B_A = [0, 90, 180, 270, 360];
 const X6B_F = makeFrame(-1.3, 1.3, -1.3, 1.3, 40, 4); // 112 × 112
@@ -1666,7 +1666,7 @@ export function SpinVsMirror() {
 // 6½b · Only a mirror undoes a mirror: আয়না once (a left hand), আয়না again
 //       (the right hand back).
 
-const X6C_SAY = ["আপার ডান হাত.", "আয়না একবার: বাম হাত.", "আয়না আরেকবার: আবার ডান হাত. উল্টানো ফেরায় আরেকটা উল্টানো."];
+const X6C_SAY = ["আপার ডান হাত।", "আয়না একবার: বাম হাত।", "আয়না আরেকবার: আবার ডান হাত। উল্টানো ফেরায় আরেকটা উল্টানো।"];
 const X6C_F = makeFrame(-1.35, 1.35, -0.25, 1.25, 56, 6); // 163 × 96
 
 export function MirrorTwice() {
@@ -1690,7 +1690,7 @@ export function MirrorTwice() {
 // 9½ · For the side quest: your two hands in the আয়না. A right hand before a
 //      mirror; inside it, a left hand.
 
-const X9B_SAY = ["আয়নার সামনে একটা ডান হাত.", "আয়নার ভেতরে যে হাত, সেটা বাম হাত.", "3D তে minus det ঠিক এটাই করে: ডান হাতকে বাম হাত বানায়."];
+const X9B_SAY = ["আয়নার সামনে একটা ডান হাত।", "আয়নার ভেতরে যে হাত, সেটা বাম হাত।", "3D তে minus det ঠিক এটাই করে: ডান হাতকে বাম হাত বানায়।"];
 const X9B_F = makeFrame(-2.2, 2.2, -0.2, 1.2, 50, 6); // 232 × 82
 
 export function TwoHandsMirror() {

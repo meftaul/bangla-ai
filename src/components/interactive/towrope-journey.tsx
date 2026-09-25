@@ -126,7 +126,7 @@ export function CosRecall() {
     p.play(
       2,
       () => {
-        if (i === CR_RIGHT) pass("Cosine 0.5 মানে 60° এর angle.");
+        if (i === CR_RIGHT) pass("Cosine 0.5 মানে 60° এর angle।");
       },
       0,
     );
@@ -168,10 +168,10 @@ export function CosRecall() {
       </div>
       {pick !== null && pick !== CR_RIGHT && (
         <Nope key={miss}>
-          {pick === 0 ? "30° এ আরো শক্ত মিল. Shadow লম্বা, cos 0.87." : "90° এ shadow বলে কিছুই নাই, cos 0."} মাঝামাঝি একটা লাগবে.
+          {pick === 0 ? "30° এ আরো শক্ত মিল। Shadow লম্বা, cos 0.87." : "90° এ shadow বলে কিছুই নাই, cos 0।"} মাঝামাঝি একটা লাগবে।
         </Nope>
       )}
-      <Task done={pick === CR_RIGHT}>তিনটা জোড়ার কোনটার cosine 0.5, ছবি দেখে বেছে নিন.</Task>
+      <Task done={pick === CR_RIGHT}>তিনটা জোড়ার কোনটার cosine 0.5, ছবি দেখে বেছে নিন।</Task>
     </>
   );
 }
@@ -192,7 +192,7 @@ export function RopeBet() {
 
   const seal = (i: number) => {
     setBet(i);
-    pass("বাজি ধরা হয়ে গেলো. শেষে মিলিয়ে দেখবো.");
+    pass("বাজি ধরা হয়ে গেলো। শেষে মিলিয়ে দেখবো।");
   };
 
   return (
@@ -210,7 +210,7 @@ export function RopeBet() {
           পাড়
         </Label>
       </Plane>
-      <div className="text-sm font-medium text-muted">মাঝি চাচা বলছেন, দড়ি লম্বা যত বেশি হইবো, টানা তত কম লাগবো. আপনার কী মনে হয়?</div>
+      <div className="text-sm font-medium text-muted">মাঝি চাচা বলছেন, দড়ি লম্বা যত বেশি হইবো, টানা তত কম লাগবো। আপনার কী মনে হয়?</div>
       <div className="mt-2 grid gap-2">
         {ROPE_BET.map((o, i) => (
           <Choice key={o} n={i} look={bet === i ? "picked" : bet !== null ? "dim" : "idle"} disabled={bet !== null} onClick={() => seal(i)}>
@@ -218,7 +218,7 @@ export function RopeBet() {
           </Choice>
         ))}
       </div>
-      <Task done={bet !== null}>ছবিটা দেখে একটার উপরে বাজি ধরুন.</Task>
+      <Task done={bet !== null}>ছবিটা দেখে একটার উপরে বাজি ধরুন।</Task>
     </>
   );
 }
@@ -251,7 +251,7 @@ export function SplitPull() {
     if (g < 0 || hit.includes(g)) return;
     const next = [...hit, g];
     setHit(next);
-    if (next.length === SPLIT_GOALS.length) pass("প্রতিটা টান দুই ভাগ হয়: সামনে, আর পাড়ের দিকে.");
+    if (next.length === SPLIT_GOALS.length) pass("প্রতিটা টান দুই ভাগ হয়: সামনে, আর পাড়ের দিকে।");
   };
 
   return (
@@ -277,7 +277,7 @@ export function SplitPull() {
         </div>
       </div>
       <Ticks items={SPLIT_GOALS.map((g, i) => [g, hit.includes(i)])} />
-      <Task done={all}>টানের মাথা ঘুরিয়ে ঘুরিয়ে তিনটা অবস্থা খুঁজে বের করুন.</Task>
+      <Task done={all}>টানের মাথা ঘুরিয়ে ঘুরিয়ে তিনটা অবস্থা খুঁজে বের করুন।</Task>
     </>
   );
 }
@@ -313,7 +313,7 @@ export function SidePull() {
     if (seen.includes(f)) return;
     const s = [...seen, f];
     setSeen(s);
-    if (s.includes(true) && s.includes(false)) pass("Right angle এর part টা নৌকাকে সামনে নেয় না.");
+    if (s.includes(true) && s.includes(false)) pass("Right angle এর part টা নৌকাকে সামনে নেয় না।");
   };
 
   return (
@@ -364,8 +364,8 @@ export function SidePull() {
           {free !== null && (
             <div key={`say${track.length}`} className={`${FADE} mt-2 text-center text-[0.95rem]`}>
               {free
-                ? `${guess === 1 ? "ঠিক ধরেছেন. " : ""}নৌকা সামনেও গেলো, পাড়ের দিকেও ভেসে গেলো. সামনে যাওয়াটুকু পুরাটাই সবুজ part এর কাজ.`
-                : "মাঝি হাল ধরে উল্টা দিকে চাপ দিলো. নৌকা সোজা সামনে গেলো, পাড়ের দিকে এক চুলও না."}
+                ? `${guess === 1 ? "ঠিক ধরেছেন। " : ""}নৌকা সামনেও গেলো, পাড়ের দিকেও ভেসে গেলো। সামনে যাওয়াটুকু পুরাটাই সবুজ part এর কাজ।`
+                : "মাঝি হাল ধরে উল্টা দিকে চাপ দিলো। নৌকা সোজা সামনে গেলো, পাড়ের দিকে এক চুলও না।"}
             </div>
           )}
         </div>
@@ -378,7 +378,7 @@ export function SidePull() {
           ]}
         />
       )}
-      <Task done={both}>আগে guess করুন. এরপর নৌকাটা চালান, একবার হাল ছেড়ে, একবার হাল ধরে.</Task>
+      <Task done={both}>আগে guess করুন। এরপর নৌকাটা চালান, একবার হাল ছেড়ে, একবার হাল ধরে।</Task>
     </>
   );
 }
@@ -409,7 +409,7 @@ export function LongRope() {
     if (b < 0 || seen.includes(b)) return;
     const next = [...seen, b];
     setSeen(next);
-    if (next.length === 3) pass("লম্বা দড়ি টানের প্রায় পুরাটাই সামনে পাঠায়.");
+    if (next.length === 3) pass("লম্বা দড়ি টানের প্রায় পুরাটাই সামনে পাঠায়।");
   };
 
   return (
@@ -461,7 +461,7 @@ export function LongRope() {
           ["14 metre বা তার বেশি", seen.includes(2)],
         ]}
       />
-      <Task done={all}>দড়িটা ছোট, মাঝারি আর লম্বা করুন. টানের কতটুকু সামনে যায়? মোট টান সবসময় {PULL}.</Task>
+      <Task done={all}>দড়িটা ছোট, মাঝারি আর লম্বা করুন। টানের কতটুকু সামনে যায়? মোট টান সবসময় {PULL}.</Task>
     </>
   );
 }
@@ -480,7 +480,7 @@ const ZM_ANG = [180, 90, 0];
 const ZM_RIGHT = 1;
 const ZM_COS = [-1, 0, 1];
 const ZM_OPTS = ["হ্যাঁ, 0 মানে উল্টা", "না, 0 মানে right angle, কোনো relationship-ই নাই; উল্টা হলো −1", "না, 0 মানে একই direction"];
-const ZM_NOPE = ["উল্টা হলে shadow পুরাটাই পিছনে, cosine −1.", "", "একই direction এ shadow পুরাটাই সামনে, cosine 1."];
+const ZM_NOPE = ["উল্টা হলে shadow পুরাটাই পিছনে, cosine −1।", "", "একই direction এ shadow পুরাটাই সামনে, cosine 1।"];
 
 /** the pair of arrows an option means, as a small picture for its Choice */
 function ZM_Pic({ deg }: { deg: number }) {
@@ -519,7 +519,7 @@ export function MamiPick() {
     p.play(
       2,
       () => {
-        if (i === ZM_RIGHT) pass("0 মানে right angle, উল্টা না.");
+        if (i === ZM_RIGHT) pass("0 মানে right angle, উল্টা না।");
       },
       0,
     );
@@ -527,7 +527,7 @@ export function MamiPick() {
 
   return (
     <>
-      <div className="text-[0.95rem] leading-snug font-semibold text-balance">মামি বললেন, cosine 0 মানে দুইটা একদম উল্টা দিকে point করে আছে. উনি কি ঠিক বলেছেন?</div>
+      <div className="text-[0.95rem] leading-snug font-semibold text-balance">মামি বললেন, cosine 0 মানে দুইটা একদম উল্টা দিকে point করে আছে। উনি কি ঠিক বলেছেন?</div>
       <div className="mx-auto mt-2 flex w-full max-w-[20rem] items-center gap-3">
         <div className="w-full max-w-[9.5rem] shrink-0">
           <Plane f={f} grid={0} axes={false} label={pick === null ? "একটা arrow, এখনো জোড়া বেছা হয় নাই" : `${deg}° এর জোড়া, shadow ${sg(c)}`} className="my-0! max-w-none">
@@ -571,7 +571,7 @@ export function MamiPick() {
           {ZM_NOPE[pick]} মাঝি হাল ছেড়ে দেয়ার পর পাড়ের দিকের টানটা কি নৌকাকে পিছনে নিয়েছিল, নাকি সামনে-পিছনে কিছুই করে নাই?
         </Nope>
       )}
-      <Task done={won}>একটা বেছে নিন, আর ছবিতে দেখুন মামি ঠিক বলেছেন কি না.</Task>
+      <Task done={won}>একটা বেছে নিন, আর ছবিতে দেখুন মামি ঠিক বলেছেন কি না।</Task>
     </>
   );
 }
@@ -619,7 +619,7 @@ export function PickRope() {
 
   const choose = (i: number) => {
     setPick(i);
-    if (i === TI_RIGHT) pass("লম্বা দড়ি, ছোট angle, টান কম নষ্ট.");
+    if (i === TI_RIGHT) pass("লম্বা দড়ি, ছোট angle, টান কম নষ্ট।");
     else setMiss(miss + 1);
   };
 
@@ -655,9 +655,9 @@ export function PickRope() {
         ))}
       </div>
       {pick !== null && pick !== TI_RIGHT && (
-        <Nope key={miss}>এই দড়িতে পাড়ের দিকে যাচ্ছে {fix(side, 1)}, আর সামনে মোটে {fix(fwd, 1)}. হলুদ বারটা ছোট করতে হবে.</Nope>
+        <Nope key={miss}>এই দড়িতে পাড়ের দিকে যাচ্ছে {fix(side, 1)}, আর সামনে মোটে {fix(fwd, 1)}. হলুদ বারটা ছোট করতে হবে।</Nope>
       )}
-      <Task done={pick === TI_RIGHT}>তিনটা দড়ির ছবি দেখে বেছে নিন কোনটায় টান সবচেয়ে কম নষ্ট হয়.</Task>
+      <Task done={pick === TI_RIGHT}>তিনটা দড়ির ছবি দেখে বেছে নিন কোনটায় টান সবচেয়ে কম নষ্ট হয়।</Task>
     </>
   );
 }
@@ -872,7 +872,7 @@ export function RaateKhata({}: Story) {
         <K_Pair x={208} y={132} deg={60} on={k >= 1} />
         <K_Pair x={256} y={132} deg={90} on={k >= 1} />
         <Person who="fahim" x={72} y={150} mood={k >= 2 ? "happy" : "plain"} arm={k >= 2 ? "point" : "down"} label />
-        {k >= 2 && <Bubble x={72} y={84} side="left" tone="think" lines={["প্রতিটা arrow ঠিক", "এক ঘর লম্বা."]} />}
+        {k >= 2 && <Bubble x={72} y={84} side="left" tone="think" lines={["প্রতিটা arrow ঠিক", "এক ঘর লম্বা।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -918,7 +918,7 @@ export function GunTana({}: Story) {
         <T_Majhi x={dx} y={my} walking={k === 2 || k === 3} run={String(k)} ms={far ? 1800 : 1200} pose={far ? "pull" : "down"} cloth="#15803d" name={ashore ? "ভাই" : undefined} />
         <T_Majhi x={cx} y={my} walking={k === 2 || k === 3} run={String(k)} ms={far ? 1800 : 1200} pose={far ? "pull" : "down"} mood={k >= 5 ? "happy" : "plain"} name={ashore ? "মাঝি চাচা" : undefined} />
         {k === 4 && <Bubble x={bx + 6} y={S1_WL - 60} lines={["দড়িটা এত লম্বা কেন?"]} />}
-        {k >= 5 && <Bubble x={cx} y={my - 50} side="left" lines={["দড়ি লম্বা যত বেশি হইবো,", "টানা তত কম লাগবো."]} />}
+        {k >= 5 && <Bubble x={cx} y={my - 50} side="left" lines={["দড়ি লম্বা যত বেশি হইবো,", "টানা তত কম লাগবো।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -932,10 +932,10 @@ export function GunTana({}: Story) {
 
 const X1_F = makeFrame(-1, 10, -1, 4, 28);
 const X1_SAY = [
-  "উপর থেকে: নদীতে নৌকা, পাড়ে মাঝিরা.",
-  "মাঝিরা হাঁটে পাড় বরাবর, নৌকা চলে নদী বরাবর. দুইটা line পাশাপাশি.",
-  "তাই দড়িটা যায় বাঁকা হয়ে, নদীর সাথে একটা angle করে.",
-  "টান তো একটাই, দড়ি বরাবর. তাহলে কোন part টা “নষ্ট” হয়?",
+  "উপর থেকে: নদীতে নৌকা, পাড়ে মাঝিরা।",
+  "মাঝিরা হাঁটে পাড় বরাবর, নৌকা চলে নদী বরাবর। দুইটা line পাশাপাশি।",
+  "তাই দড়িটা যায় বাঁকা হয়ে, নদীর সাথে একটা angle করে।",
+  "টান তো একটাই, দড়ি বরাবর। তাহলে কোন part টা “নষ্ট” হয়?",
 ];
 
 export function SlantRope() {
@@ -989,11 +989,11 @@ export function SlantRope() {
 const X2_F = makeFrame(-0.6, 4.4, -0.8, 3, 36);
 const X2_W: XY = [3, 2];
 const X2A_SAY = [
-  "নদী গেছে east দিকে, দড়ির টান (3, 2).",
-  "4.3 এর মতো সূর্যটা একদম মাথার উপর থেকে আলো ফেলুক.",
-  "নদীর উপরে যেটুকু পড়লো সেটাই টানের shadow, ওর projection.",
-  "বাকি থাকলো হলুদ part টা, নদীর সাথে right angle এ.",
-  "হলুদটাকে সবুজের মাথায় জোড়া দিলে পুরা টানটা ফেরত.",
+  "নদী গেছে east দিকে, দড়ির টান (3, 2)।",
+  "4.3 এর মতো সূর্যটা একদম মাথার উপর থেকে আলো ফেলুক।",
+  "নদীর উপরে যেটুকু পড়লো সেটাই টানের shadow, ওর projection।",
+  "বাকি থাকলো হলুদ part টা, নদীর সাথে right angle এ।",
+  "হলুদটাকে সবুজের মাথায় জোড়া দিলে পুরা টানটা ফেরত।",
 ];
 
 /** A right-angle mark at `at`, its sides along the unit directions `a` and `b`, in units of `f`. */
@@ -1077,11 +1077,11 @@ export function RudderMan({}: Story) {
 
 const X5_F = makeFrame(-1, 7, -1.6, 3.3, 28);
 const X5A_SAY = [
-  "টান দুই part এ: সবুজ সামনে, হলুদ পাড়ের দিকে.",
-  "হলুদ part একা থাকলে নৌকাকে শুধু পাড়ে নিতো, সামনে এক পা-ও না.",
-  "মাঝি হাল ধরে ঠিক উল্টা দিকে চাপ দেয়, আর ওটাকে ঠেকিয়ে রাখে.",
-  "হলুদ আর হালের চাপ কাটাকাটি হয়ে যায়. নৌকা চলে শুধু সবুজ part এ.",
-  "হলুদ part টা খরচ হলো, কাজে লাগলো না. মাঝি চাচার ওই “নষ্ট হওয়া টান”.",
+  "টান দুই part এ: সবুজ সামনে, হলুদ পাড়ের দিকে।",
+  "হলুদ part একা থাকলে নৌকাকে শুধু পাড়ে নিতো, সামনে এক পা-ও না।",
+  "মাঝি হাল ধরে ঠিক উল্টা দিকে চাপ দেয়, আর ওটাকে ঠেকিয়ে রাখে।",
+  "হলুদ আর হালের চাপ কাটাকাটি হয়ে যায়। নৌকা চলে শুধু সবুজ part এ।",
+  "হলুদ part টা খরচ হলো, কাজে লাগলো না। মাঝি চাচার ওই “নষ্ট হওয়া টান”।",
 ];
 
 export function RudderHolds() {
@@ -1137,11 +1137,11 @@ const X6_ROPES = [4, 8, 15].map((L) => {
   return { L, x, deg: (Math.atan2(3, x) * 180) / Math.PI, cos: x / L };
 });
 const X6A_SAY = [
-  "দড়ি যত লম্বাই হোক, নৌকা থেকে পাড় 3 metre দূরে.",
+  "দড়ি যত লম্বাই হোক, নৌকা থেকে পাড় 3 metre দূরে।",
   `দড়ি 4 metre: মাঝিরা প্রায় নৌকার বরাবর দাঁড়ায়, angle ${fix(X6_ROPES[0].deg, 0)}°. cos θ মোটে ${fix(X6_ROPES[0].cos, 2)}.`,
   `দড়ি 8 metre: angle কমে দাঁড়ায় ${fix(X6_ROPES[1].deg, 0)}°, cos θ ${fix(X6_ROPES[1].cos, 2)}.`,
-  `দড়ি 15 metre: angle মোটে ${fix(X6_ROPES[2].deg, 0)}°, cos θ ${fix(X6_ROPES[2].cos, 2)}, প্রায় 1. টানের প্রায় পুরাটাই সামনে যায়.`,
-  "দড়ি যত লম্বা, angle তত ছোট, cos θ তত 1 এর কাছে. মাঝি চাচা ঠিকই বলেছিলেন.",
+  `দড়ি 15 metre: angle মোটে ${fix(X6_ROPES[2].deg, 0)}°, cos θ ${fix(X6_ROPES[2].cos, 2)}, প্রায় 1। টানের প্রায় পুরাটাই সামনে যায়।`,
+  "দড়ি যত লম্বা, angle তত ছোট, cos θ তত 1 এর কাছে। মাঝি চাচা ঠিকই বলেছিলেন।",
 ];
 
 export function RopeFan() {
@@ -1193,10 +1193,10 @@ export function RopeFan() {
 }
 
 const X6B_SAY = [
-  "Maths বলছে, দড়ি যত লম্বা তত ভালো.",
-  "কিন্তু খুব লম্বা দড়ি ভারি, মাঝখানটা পানিতে ঝুলে পড়ে.",
-  "আর নিচে বাঁধলে দড়ি পাড়ের ঝোপঝাড়ে আটকে যায়.",
-  "তাই মাঝিরা মাঝামাঝি একটা length নেয়, আর দড়ি বাঁধে মাস্তুলের মাথায়.",
+  "Maths বলছে, দড়ি যত লম্বা তত ভালো।",
+  "কিন্তু খুব লম্বা দড়ি ভারি, মাঝখানটা পানিতে ঝুলে পড়ে।",
+  "আর নিচে বাঁধলে দড়ি পাড়ের ঝোপঝাড়ে আটকে যায়।",
+  "তাই মাঝিরা মাঝামাঝি একটা length নেয়, আর দড়ি বাঁধে মাস্তুলের মাথায়।",
 ];
 
 export function SagRope() {
@@ -1253,8 +1253,8 @@ export function MamiSays({}: Story) {
       <Stage backdrop="room" label="সন্ধ্যায় ঘরে ফাহিম নৌকার গল্প বলছে; মামি বললেন cosine 0 মানে দুইটা উল্টা দিকে">
         <Person who="mami" x={214} y={150} facing={-1} mood={k >= 2 ? "smug" : "plain"} label />
         <Person who="fahim" x={104} y={150} mood={k >= 3 ? "puzzled" : "plain"} arm={k === 1 ? "point" : "down"} label />
-        {k === 1 && <Bubble x={104} y={84} side="left" lines={["পাড়ের দিকের টানটা", "নৌকাকে সামনে নেয় না."]} />}
-        {k === 2 && <Bubble x={214} y={84} side="right" lines={["তার মানে cosine 0,", "মানে একদম উল্টা দিক."]} />}
+        {k === 1 && <Bubble x={104} y={84} side="left" lines={["পাড়ের দিকের টানটা", "নৌকাকে সামনে নেয় না।"]} />}
+        {k === 2 && <Bubble x={214} y={84} side="right" lines={["তার মানে cosine 0,", "মানে একদম উল্টা দিক।"]} />}
         {k >= 3 && <Bubble x={104} y={84} side="left" tone="think" lines={["উল্টা? নাকি", "অন্য কিছু?"]} />}
       </Stage>
     </StoryFrame>
@@ -1271,11 +1271,11 @@ const X5B_F = makeFrame(-2.6, 2.6, -1.8, 1.9, 30);
 const X5B_R: XY = [0.8, 0.6];
 const X5B_N: XY = [-0.6, 0.8];
 const X5B_SAY = [
-  "4.2 এর ভ্যান, তার রাস্তার উপরে.",
-  "মামি ধাক্কা দিয়েছিলেন right angle এ. ভ্যান এক চুলও নড়ে নাই.",
-  "রাস্তার উপরে ওই ধাক্কার shadow মোটে একটা বিন্দু, মানে 0. একটার direction এ আরেকটার কিছুই নাই.",
-  "উল্টা দিক থেকে সোজাসুজি ধাক্কা দিলে shadow পুরাটাই পিছন দিকে. Cosine তখন −1.",
-  "0 মানে কোনো relationship নাই. −1 মানে উল্টা, আর ওটা strong একটা relationship.",
+  "4.2 এর ভ্যান, তার রাস্তার উপরে।",
+  "মামি ধাক্কা দিয়েছিলেন right angle এ। ভ্যান এক চুলও নড়ে নাই।",
+  "রাস্তার উপরে ওই ধাক্কার shadow মোটে একটা বিন্দু, মানে 0। একটার direction এ আরেকটার কিছুই নাই।",
+  "উল্টা দিক থেকে সোজাসুজি ধাক্কা দিলে shadow পুরাটাই পিছন দিকে। Cosine তখন −1.",
+  "0 মানে কোনো relationship নাই। −1 মানে উল্টা, আর ওটা strong একটা relationship।",
 ];
 
 export function ZeroNotMinus() {
@@ -1344,10 +1344,10 @@ export function ZeroNotMinus() {
 const X7_F = makeFrame(-0.6, 14.6, -0.8, 3.6, 18);
 const X7_ROPES = [7, 14].map((L) => ({ L, x: Math.sqrt(L * L - 9), side: 30 / L }));
 const X7_SAY = [
-  "একই নৌকা, পাড় 3 metre দূরে, টান সবসময় 10.",
-  `দড়ি 7 metre. পাড়ের দিকে নষ্ট হয় ${fix(X7_ROPES[0].side, 1)}.`,
-  `দড়ি দ্বিগুণ করে 14 metre. নষ্ট ${fix(X7_ROPES[1].side, 1)}, ঠিক অর্ধেক.`,
-  "পাড় সরে নাই, টানও বাড়ে নাই. শুধু দড়ি দ্বিগুণ হয়েছে, আর নষ্টটুকু অর্ধেক.",
+  "একই নৌকা, পাড় 3 metre দূরে, টান সবসময় 10।",
+  `দড়ি 7 metre। পাড়ের দিকে নষ্ট হয় ${fix(X7_ROPES[0].side, 1)}.`,
+  `দড়ি দ্বিগুণ করে 14 metre। নষ্ট ${fix(X7_ROPES[1].side, 1)}, ঠিক অর্ধেক।`,
+  "পাড় সরে নাই, টানও বাড়ে নাই। শুধু দড়ি দ্বিগুণ হয়েছে, আর নষ্টটুকু অর্ধেক।",
 ];
 
 export function HalfWaste() {
@@ -1407,10 +1407,10 @@ const X8_L = 15;
 const X8_X = Math.sqrt(X8_L * X8_L - 9);
 const X8_W: XY = [(4.2 * X8_X) / X8_L, (4.2 * 3) / X8_L];
 const X8_SAY = [
-  "মাঝি চাচার দড়ি, লম্বা. পাড় 3 metre দূরে.",
-  "লম্বা দড়ি মানে ছোট angle.",
-  "আর ছোট angle এ shadow প্রায় পুরা টানটাই.",
-  "নষ্ট হওয়া টান যায় নদীর সাথে right angle এ, পাড়ের দিকে.",
+  "মাঝি চাচার দড়ি, লম্বা। পাড় 3 metre দূরে।",
+  "লম্বা দড়ি মানে ছোট angle।",
+  "আর ছোট angle এ shadow প্রায় পুরা টানটাই।",
+  "নষ্ট হওয়া টান যায় নদীর সাথে right angle এ, পাড়ের দিকে।",
 ];
 
 export function GunHisab({}: Story) {
@@ -1477,7 +1477,7 @@ export function NoonBend({}: Story) {
         <path d={`M${bx - 14} ${S1_WL - 62}L${cx + 3} ${S1_BANK - 27}`} stroke="#78350f" strokeWidth={1.4} fill="none" />
         <T_Majhi x={dx} y={S1_BANK} walking={k === 1} run={String(k)} ms={1600} pose="pull" cloth="#15803d" />
         <T_Majhi x={cx} y={S1_BANK} walking={k === 1} run={String(k)} ms={1600} pose="pull" />
-        {k === 2 && <Bubble x={cx - 16} y={S1_BANK - 50} side="left" lines={["সামনে নদী বাঁক নিছে."]} />}
+        {k === 2 && <Bubble x={cx - 16} y={S1_BANK - 50} side="left" lines={["সামনে নদী বাঁক নিছে।"]} />}
         {k >= 3 && <Bubble x={bx + 8} y={S1_WL - 60} side="right" tone="think" lines={["বাঁকা নদীতে shadow", "কতদূর পড়বে?"]} />}
       </Stage>
     </StoryFrame>
@@ -1491,10 +1491,10 @@ export function NoonBend({}: Story) {
 
 const X2B_F = makeFrame(-0.5, 3.6, -0.6, 3.2, 34);
 const X2B_SAY = [
-  "টান আবার (3, 2), নদী গেছে east দিকে.",
-  "নদী বরাবর shadow হলো 3 — টানের first number.",
-  "বাকিটা 2, second number. কোনো হিসাব লাগলো না.",
-  "কিন্তু নদী তো সবসময় east দিকে যায় না. বাঁক নিলে shadow তখন কত লম্বা?",
+  "টান আবার (3, 2), নদী গেছে east দিকে।",
+  "নদী বরাবর shadow হলো 3 — টানের first number।",
+  "বাকিটা 2, second number। কোনো হিসাব লাগলো না।",
+  "কিন্তু নদী তো সবসময় east দিকে যায় না। বাঁক নিলে shadow তখন কত লম্বা?",
 ];
 
 export function EastEasy() {

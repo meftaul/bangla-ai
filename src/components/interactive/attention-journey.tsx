@@ -206,7 +206,7 @@ function Sentence({ words, ota, win = null, cursor = null, miss = false }: { wor
 //     left, ChatGPT is a closed phone on the right. The bet is sealed unmarked:
 //     an envelope takes the letter and closes. Settled on screen 8 / 10.
 
-const BET = ["ঠিক — ChatGPT এর ভিতরেও এই box টাই চলে", "না, ওটা পুরা অন্য হিসাব", "Box আছে, কিন্তু আসল কাজে না"];
+const BET = ["ঠিক — ChatGPT এর ভিতরেও এই dot product টাই চলে", "না, ওটা পুরা অন্য হিসাব", "Dot product আছে, কিন্তু আসল কাজে না"];
 
 function B1_Envelope({ letter }: { letter: string }) {
   const [flap] = useTween([1], 900, [0]);
@@ -228,14 +228,14 @@ export function BoxBet() {
 
   const seal = (i: number) => {
     setBet(i);
-    pass("বাজি ধরা হয়ে গেলো. শেষে মিলিয়ে দেখবো.");
+    pass("বাজি ধরা হয়ে গেলো। শেষে মিলিয়ে দেখবো।");
   };
 
   return (
     <>
       <div className="grid grid-cols-2 gap-2 text-center">
         <div className="rounded-2xl border-2 border-cat-amber/40 bg-cat-amber/5 px-2 py-2">
-          <div className="text-sm font-semibold">হাটের box</div>
+          <div className="text-sm font-semibold">হাটের dot product</div>
           <div className="mt-1 text-[0.8rem] leading-relaxed">
             <BoxRun a={[2, 1, 12]} b={[60, 180, 12]} inline />
           </div>
@@ -258,7 +258,7 @@ export function BoxBet() {
           )}
         </div>
       </div>
-      <div className="mt-3 text-sm font-medium text-muted">সোম বললো, ChatGPT এর ভিতরেও এই box চলে. আপনার কী মনে হয়?</div>
+      <div className="mt-3 text-sm font-medium text-muted">সোম বললো, ChatGPT এর ভিতরেও এই dot product চলে। আপনার কী মনে হয়?</div>
       <div className="mt-2 grid gap-2">
         {BET.map((o, i) => (
           <Choice key={o} n={i} look={bet === i ? "picked" : bet !== null ? "dim" : "idle"} disabled={bet !== null} onClick={() => seal(i)}>
@@ -266,7 +266,7 @@ export function BoxBet() {
           </Choice>
         ))}
       </div>
-      <Task done={bet !== null}>সোমের কথার উপরে একটা বাজি ধরুন.</Task>
+      <Task done={bet !== null}>সোমের কথার উপরে একটা বাজি ধরুন।</Task>
     </>
   );
 }
@@ -351,7 +351,7 @@ export function WordWalk() {
         {k >= 3 && <circle cx={w2x(W2_END[0])} cy={w2y(W2_END[1])} r={4.5} fill={A_CORAL} className={POP} />}
       </svg>
       <div className="mt-1 min-h-6 text-center font-mono text-sm">
-        {k === 0 && <span className="font-sans text-muted">শব্দে tap করুন.</span>}
+        {k === 0 && <span className="font-sans text-muted">শব্দে tap করুন।</span>}
         {k === 1 && <span className={FADE}>king − man = {tupN(W2_D)}</span>}
         {k === 2 && <span className={FADE}>woman থেকে একই arrow</span>}
         {k >= 3 && (
@@ -360,8 +360,8 @@ export function WordWalk() {
           </span>
         )}
       </div>
-      {over && !right && <Nope key={miss}>Arrow টা থামলো {tupN(W2_END)} এ, queen এর একদম পাশে. {W2[pick].w} ওখান থেকে অনেক দূরে. আবার tap করুন.</Nope>}
-      <Task done={right}>king − man + woman কোন শব্দের পাশে গিয়ে পড়ে? Map এ সেই শব্দে tap করুন.</Task>
+      {over && !right && <Nope key={miss}>Arrow টা থামলো {tupN(W2_END)} এ, queen এর একদম পাশে। {W2[pick].w} ওখান থেকে অনেক দূরে। আবার tap করুন।</Nope>}
+      <Task done={right}>king − man + woman কোন শব্দের পাশে গিয়ে পড়ে? Map এ সেই শব্দে tap করুন।</Task>
     </>
   );
 }
@@ -373,8 +373,8 @@ export function WordWalk() {
 //     different answers.
 
 const R3 = [
-  { words: ["গরুটা", "খড়", "খেলো", "না,", "কারণ", "ওটার", "পেট", "ভরা", "ছিল."], tick: "পেট ভরা", ok: false, say: "ওটা মানে খড়? খড়ের পেট ভরা ছিল? মিললো না." },
-  { words: ["গরুটা", "খড়", "খেলো", "না,", "কারণ", "ওটা", "পচা", "ছিল."], tick: "পচা", ok: true, say: "ওটা মানে খড়. খড় পচা ছিল. মিলে গেলো." },
+  { words: ["গরুটা", "খড়", "খেলো", "না,", "কারণ", "ওটার", "পেট", "ভরা", "ছিল।"], tick: "পেট ভরা", ok: false, say: "ওটা মানে খড়? খড়ের পেট ভরা ছিল? মিললো না।" },
+  { words: ["গরুটা", "খড়", "খেলো", "না,", "কারণ", "ওটা", "পচা", "ছিল।"], tick: "পচা", ok: true, say: "ওটা মানে খড়। খড় পচা ছিল। মিলে গেলো।" },
 ];
 const R3_OTA = 5;
 const R3_STOP = 1;
@@ -392,14 +392,14 @@ export function NearestRule() {
     hop.play(R3_OTA - R3_STOP, () => {
       const next = [...ran, r];
       setRan(next);
-      if (next.length === 2) pass("শব্দ একই জায়গায়, তবু উত্তর আলাদা.");
+      if (next.length === 2) pass("শব্দ একই জায়গায়, তবু উত্তর আলাদা।");
     });
   };
 
   return (
     <>
       <div className="mx-auto max-w-sm rounded-xl bg-cat-amber/10 px-3 py-1.5 text-center text-sm">
-        নিয়ম: ওটার ঠিক আগে যে নামটা, ওটা মানে সেটাই.
+        নিয়ম: ওটার ঠিক আগে যে নামটা, ওটা মানে সেটাই।
       </div>
       <div className="mt-3 grid gap-3">
         {R3.map((row, r) => {
@@ -422,7 +422,7 @@ export function NearestRule() {
         })}
       </div>
       <Ticks items={R3.map((row, r) => [row.tick, ran.includes(r)] as [string, boolean])} />
-      <Task done={ran.length === 2}>দুইটা বাক্যেই নিয়মটা চালান. দেখুন ওটা কার উপরে গিয়ে থামে.</Task>
+      <Task done={ran.length === 2}>দুইটা বাক্যেই নিয়মটা চালান। দেখুন ওটা কার উপরে গিয়ে থামে।</Task>
     </>
   );
 }
@@ -430,7 +430,7 @@ export function NearestRule() {
 // ---------------------------------------------------------------------------
 // 4 · Attention in a toy. "ওটা" sends a query (2, 0) and each word shows a
 //     key, in two slots (প্রাণী, খাবার). The boxes land one by one; the biggest
-//     wins: গরু. Change the ending to "পচা ছিল": the query swings to (0, 2),
+//     wins: গরু। Change the ending to "পচা ছিল": the query swings to (0, 2),
 //     and খড় wins.
 
 const W4_KEYS: Key[] = [
@@ -439,8 +439,8 @@ const W4_KEYS: Key[] = [
   { w: "খেলো", key: [1, 1] },
 ];
 const W4_ROUNDS = [
-  { words: ["গরুটা", "খড়", "খেলো", "না,", "কারণ", "ওটার", "পেট", "ভরা", "ছিল."], q: [2, 0], ans: 0, tick: "পেট ভরা" },
-  { words: ["গরুটা", "খড়", "খেলো", "না,", "কারণ", "ওটা", "পচা", "ছিল."], q: [0, 2], ans: 1, tick: "পচা" },
+  { words: ["গরুটা", "খড়", "খেলো", "না,", "কারণ", "ওটার", "পেট", "ভরা", "ছিল।"], q: [2, 0], ans: 0, tick: "পেট ভরা" },
+  { words: ["গরুটা", "খড়", "খেলো", "না,", "কারণ", "ওটা", "পচা", "ছিল।"], q: [0, 2], ans: 1, tick: "পচা" },
 ];
 
 export function WhoIsIt() {
@@ -455,7 +455,7 @@ export function WhoIsIt() {
     if (box.running) return;
     box.play(4, () => {
       setRan(true);
-      if (round === 1) pass("ওটা ঘুরে যায় সবচেয়ে বড় box এর দিকে.");
+      if (round === 1) pass("ওটা ঘুরে যায় সবচেয়ে বড় dot product এর দিকে।");
     });
   };
 
@@ -466,7 +466,7 @@ export function WhoIsIt() {
       <div className="mt-3 flex min-h-10 items-center justify-center">
         {k === 0 && !box.running ? (
           <button type="button" onClick={run} className={`${pill(false)} font-sans`}>
-            ওটার query র সাথে সবার box চালান
+            ওটার query র সাথে সবার dot product নিন
           </button>
         ) : k >= 4 && round === 0 ? (
           <button
@@ -486,7 +486,7 @@ export function WhoIsIt() {
         ) : null}
       </div>
       <Ticks items={W4_ROUNDS.map((x, i) => [x.tick, round > i || (round === i && ran)] as [string, boolean])} />
-      <Task done={round === 1 && ran}>ওটার query র সাথে প্রতিটা শব্দের box চালান. তারপর বাক্যের শেষটা বদলে আবার দেখুন.</Task>
+      <Task done={round === 1 && ran}>ওটার query র সাথে প্রতিটা শব্দের dot product নিন। তারপর বাক্যের শেষটা বদলে আবার দেখুন।</Task>
     </>
   );
 }
@@ -536,7 +536,7 @@ export function LearnQuery() {
     const i = n;
     read.play(3, () => {
       setN(i + 1);
-      if (i + 1 === L5_READS.length) pass("Numbers কেউ বসায় না, machine নিজে শেখে.");
+      if (i + 1 === L5_READS.length) pass("Numbers কেউ বসায় না, machine নিজে শেখে।");
     });
   };
 
@@ -544,10 +544,10 @@ export function LearnQuery() {
     <>
       <div className="mx-auto max-w-sm rounded-xl border border-border bg-surface px-3 py-2 text-center text-[0.95rem]">
         {d < 0 ? (
-          <span className="text-muted">এখনো কোনো বাক্য পড়া হয় নাই.</span>
+          <span className="text-muted">এখনো কোনো বাক্য পড়া হয় নাই।</span>
         ) : (
           <span key={d} className={FADE}>
-            {shownRead.animal}টা {shownRead.food} খেলো না, কারণ <span className="rounded-md bg-cat-violet/15 px-1 font-semibold text-cat-violet">ওটার</span> পেট ভরা ছিল.
+            {shownRead.animal}টা {shownRead.food} খেলো না, কারণ <span className="rounded-md bg-cat-violet/15 px-1 font-semibold text-cat-violet">ওটার</span> পেট ভরা ছিল।
           </span>
         )}
       </div>
@@ -555,7 +555,7 @@ export function LearnQuery() {
       <div className="mt-2 min-h-6 text-center text-sm">
         {verdict && (
           <span key={`${d}v`} className={`${FADE} ${guessAnimal ? "text-accent-text" : "text-danger"}`}>
-            Machine বললো, ওটা মানে {guessAnimal ? shownRead.animal : shownRead.food}. {guessAnimal ? "ঠিক." : `ভুল, হবে ${shownRead.animal}. Query একটু সরলো.`}
+            Machine বললো, ওটা মানে {guessAnimal ? shownRead.animal : shownRead.food}. {guessAnimal ? "ঠিক।" : `ভুল, হবে ${shownRead.animal}. Query একটু সরলো।`}
           </span>
         )}
       </div>
@@ -572,7 +572,7 @@ export function LearnQuery() {
           ))}
         </div>
       </div>
-      <Task done={n >= L5_READS.length}>Machine কে একটা একটা করে চারটা বাক্য পড়ান. ভুল হলে query কোন দিকে সরে, দেখুন.</Task>
+      <Task done={n >= L5_READS.length}>Machine কে একটা একটা করে চারটা বাক্য পড়ান। ভুল হলে query কোন দিকে সরে, দেখুন।</Task>
     </>
   );
 }
@@ -608,20 +608,20 @@ export function EveryWord() {
     const next = [...done, i];
     setDone(next);
     setFresh(i);
-    if (next.length === E6.length) pass("9 টা শব্দ, 81 টা box. সবাই সবার সাথে.");
+    if (next.length === E6.length) pass("9 টা শব্দ, 81 টা dot product। সবাই সবার সাথে।");
   };
   const runRest = () => {
     if (rest.running) return;
     setFresh(null);
     rest.play(left.length, () => {
       setDone(E6.map((_, i) => i));
-      pass("9 টা শব্দ, 81 টা box. সবাই সবার সাথে.");
+      pass("9 টা শব্দ, 81 টা dot product। সবাই সবার সাথে।");
     });
   };
 
   return (
     <>
-      <svg viewBox="0 0 320 116" role="img" aria-label="বাক্যের 9 টা শব্দ; tap করলে শব্দটা বাকি সবার সাথে box চালায়, arc দিয়ে দেখানো" className="mx-auto block h-auto w-full max-w-[22rem]">
+      <svg viewBox="0 0 320 116" role="img" aria-label="বাক্যের 9 টা শব্দ; tap করলে শব্দটা বাকি সবার সাথে dot product নেয়, arc দিয়ে দেখানো" className="mx-auto block h-auto w-full max-w-[22rem]">
         {shown.map((i) =>
           E6.map((_, j) =>
             i === fresh ? (
@@ -644,7 +644,7 @@ export function EveryWord() {
         })}
       </svg>
       <div className="mt-2 flex items-center justify-center gap-4">
-        <svg viewBox="0 0 74 74" role="img" aria-label="9 × 9 ঘরের grid; প্রতিটা ঘর একটা box" className="block h-auto w-[4.6rem] shrink-0">
+        <svg viewBox="0 0 74 74" role="img" aria-label="9 × 9 ঘরের grid; প্রতিটা ঘর একটা dot product" className="block h-auto w-[4.6rem] shrink-0">
           {E6.map((_, i) =>
             E6.map((__, j) => (
               <rect
@@ -663,7 +663,7 @@ export function EveryWord() {
         </svg>
         <div className="grid gap-1 text-sm">
           <div>
-            box চললো: <b className="font-mono">{shown.length * 9}</b> <span className="text-muted">/ 81</span>
+            dot product হলো: <b className="font-mono">{shown.length * 9}</b> <span className="text-muted">/ 81</span>
           </div>
           {!all && done.length >= 2 && (
             <button type="button" onClick={runRest} disabled={rest.running} className={`${pill(false)} ${FADE} font-sans text-xs`}>
@@ -672,7 +672,7 @@ export function EveryWord() {
           )}
         </div>
       </div>
-      <Task done={all}>শব্দগুলোতে tap করুন. প্রতিটা শব্দ কার কার সাথে box চালায়, দেখুন.</Task>
+      <Task done={all}>শব্দগুলোতে tap করুন। প্রতিটা শব্দ কার কার সাথে dot product নেয়, দেখুন।</Task>
     </>
   );
 }
@@ -686,9 +686,9 @@ const N7_W = [400, 4000, -5000];
 const N7_X = [200, 5, 3];
 const N7_B = 2000;
 const N7_BOX = dot(N7_W, N7_X);
-const N7_STEPS = ["box চালান", "হাসিল যোগ করুন", "বাঁকিয়ে দিন"];
+const N7_STEPS = ["dot product নিন", "হাসিল যোগ করুন", "বাঁকিয়ে দিন"];
 const N7_STATIONS = [
-  { name: "box", val: "85,000" },
+  { name: "dot product", val: "85,000" },
   { name: "+ হাসিল", val: "87,000" },
   { name: "বাঁক", val: "বাঁকা" },
 ];
@@ -740,7 +740,7 @@ export function NeuronRun() {
     if (stage >= 3) return;
     const s = stage + 1;
     setStage(s);
-    if (s === 3) pass("Neuron এর প্রথম কাজটাই হাটের box.");
+    if (s === 3) pass("Neuron এর প্রথম কাজটাই হাটের dot product।");
   };
 
   return (
@@ -786,13 +786,13 @@ export function NeuronRun() {
           <div key="b" className={`${FADE} text-center font-mono text-lg`}>
             {N7_BOX.toLocaleString("en-IN")} + {N7_B.toLocaleString("en-IN")} ={" "}
             <b className={`${POP} inline-block`}>{(N7_BOX + N7_B).toLocaleString("en-IN")}</b>
-            <div className="font-sans text-xs text-muted">একটা fixed number যোগ: হাটের হাসিল.</div>
+            <div className="font-sans text-xs text-muted">একটা fixed number যোগ: হাটের হাসিল।</div>
           </div>
         )}
         {stage === 3 && (
           <div key="bend" className={`${FADE} w-full`}>
             <N7_Bend />
-            <div className="mt-1 text-center text-xs text-muted">কীভাবে বাঁকায়, সেটা পরের গল্প.</div>
+            <div className="mt-1 text-center text-xs text-muted">কীভাবে বাঁকায়, সেটা পরের গল্প।</div>
           </div>
         )}
       </div>
@@ -802,16 +802,16 @@ export function NeuronRun() {
             {N7_STEPS[stage]}
           </button>
         ) : (
-          <span className={`${FADE} text-sm font-semibold text-cat-violet`}>এই পুরাটাই একটা neuron.</span>
+          <span className={`${FADE} text-sm font-semibold text-cat-violet`}>এই পুরাটাই একটা neuron।</span>
         )}
       </div>
-      <Task done={stage >= 3}>তিনটা ধাপ একটা একটা করে চালান. দেখুন কোন ধাপে হাটের box টা বসে আছে.</Task>
+      <Task done={stage >= 3}>তিনটা ধাপ একটা একটা করে চালান। দেখুন কোন ধাপে হাটের dot product টা বসে আছে।</Task>
     </>
   );
 }
 
 // ---------------------------------------------------------------------------
-// 8 · এবার আপনার পালা. "ছাগলটা পাতা খেলো না, কারণ ওটা শুকনা ছিল." The reader
+// 8 · এবার আপনার পালা। "ছাগলটা পাতা খেলো না, কারণ ওটা শুকনা ছিল।" The reader
 //     builds ওটা's query, picking one of three arrows; the boxes play out. Aimed
 //     at প্রাণী, ছাগল wins (6); aimed at both, ছাগল still wins (4 vs 3); aimed
 //     at খাবার, পাতা wins (6).
@@ -821,7 +821,7 @@ const Y8_KEYS: Key[] = [
   { w: "পাতা", key: [0, 3] },
   { w: "খেলো", key: [1, 1] },
 ];
-const Y8_WORDS = ["ছাগলটা", "পাতা", "খেলো", "না,", "কারণ", "ওটা", "শুকনা", "ছিল."];
+const Y8_WORDS = ["ছাগলটা", "পাতা", "খেলো", "না,", "কারণ", "ওটা", "শুকনা", "ছিল।"];
 const Y8_Q = [
   { q: [2, 0], say: "প্রাণী" },
   { q: [1, 1], say: "দুই দিকেই" },
@@ -859,7 +859,7 @@ export function YourSentence() {
     if (box.running) return;
     setPick(i);
     box.play(4, () => {
-      if (i === Y8_RIGHT) pass("ওটার query আপনি নিজেই বানালেন.");
+      if (i === Y8_RIGHT) pass("ওটার query আপনি নিজেই বানালেন।");
       else setMiss((m) => m + 1);
     });
   };
@@ -882,18 +882,18 @@ export function YourSentence() {
       {over && pick !== Y8_RIGHT && (
         <Nope key={miss}>
           {pick === 0
-            ? "ছাগলের box 6. সবচেয়ে বড়. তাহলে ছাগলটা শুকনা ছিল? শুকনা হয় কী, ভাবুন."
-            : "ছাগলের box 4, পাতার 3. ছাগল জিতে গেলো. প্রাণী slot এর 1 টা ছাগলকে টেনে নিচ্ছে."}
+            ? "ছাগলের dot product 6। সবচেয়ে বড়। তাহলে ছাগলটা শুকনা ছিল? শুকনা হয় কী, ভাবুন।"
+            : "ছাগলের dot product 4, পাতার 3। ছাগল জিতে গেলো। প্রাণী slot এর 1 টা ছাগলকে টেনে নিচ্ছে।"}
         </Nope>
       )}
-      <Task done={over && pick === Y8_RIGHT}>ওটার query বানান, যাতে ওটা ঠিক শব্দটার দিকে ঘুরে.</Task>
+      <Task done={over && pick === Y8_RIGHT}>ওটার query বানান, যাতে ওটা ঠিক শব্দটার দিকে ঘুরে।</Task>
     </>
   );
 }
 
 // ---------------------------------------------------------------------------
 // 9 · Try it: the cat and the milk. Query (1, 0); keys দুধ (0, 3), বিড়াল
-//     (2, 0), খেলো (1, 1). The reader picks a word as a picture of its key; the
+//     (2, 0), খেলো (1, 1)। The reader picks a word as a picture of its key; the
 //     picked box plays term by term, its bar grows, and then ওটা lands on the
 //     picked word in the sentence (red if wrong). দুধ's big 3 is the slip: its
 //     box is 0, so its bar never grows. pass() fires from the play's done.
@@ -905,7 +905,7 @@ const T9_KEYS: Key[] = [
 ];
 const T9_Q = [1, 0];
 const T9_RIGHT = 1;
-const T9_WORDS = ["বিড়ালটা", "দুধ", "খেলো,", "কারণ", "ওটার", "খিদে", "পেয়েছিল."];
+const T9_WORDS = ["বিড়ালটা", "দুধ", "খেলো,", "কারণ", "ওটার", "খিদে", "পেয়েছিল।"];
 const T9_AT = [1, 0, 2];
 
 function KeyPic({ v, tone }: { v: readonly number[]; tone: string }) {
@@ -935,7 +935,7 @@ export function CatMilk() {
     setPick(i);
     setTries((t) => t + 1);
     run.play(2, () => {
-      if (i === T9_RIGHT) pass("Query যে slot এ তাকায়, সেই slot এর number জেতে.");
+      if (i === T9_RIGHT) pass("Query যে slot এ তাকায়, সেই slot এর number জেতে।");
       else setMiss((m) => m + 1);
     }, 1);
   };
@@ -965,11 +965,11 @@ export function CatMilk() {
       {over && pick !== T9_RIGHT && (
         <Nope key={miss}>
           {pick === 0
-            ? `দুধের box ${score}. ওর 3 বসে আছে খাবার slot এ. query র খাবার slot এ 0. গুণ করলে? 0.`
-            : `খেলো র box ${score}. আরেকটা শব্দের box এর চেয়ে ছোট. কোনটা?`}
+            ? `দুধের dot product ${score}. ওর 3 বসে আছে খাবার slot এ। query র খাবার slot এ 0। গুণ করলে? 0.`
+            : `খেলো র dot product ${score}. আরেকটা শব্দের dot product এর চেয়ে ছোট। কোনটা?`}
         </Nope>
       )}
-      <Task done={over && pick === T9_RIGHT}>ওটা কার দিকে ঘুরবে? সেই শব্দের ছবিতে tap করুন.</Task>
+      <Task done={over && pick === T9_RIGHT}>ওটা কার দিকে ঘুরবে? সেই শব্দের ছবিতে tap করুন।</Task>
     </>
   );
 }
@@ -983,7 +983,7 @@ const PIECES = [
   { sym: "u, v", say: "দুইটা জিনিস, সংখ্যার list বানানো", where: "Article 1, representation" },
   { sym: "arrow", say: "সেই u আর v, এবার arrow হিসাবে: একটা direction, একটা length", where: "Article 2, vector এর দুই চেহারা" },
   { sym: "‖u‖ ‖v‖", say: "ওদের length: বর্গ, যোগ, root", where: "Article 3, ফিতা" },
-  { sym: "u · v", say: "ঘরে ঘরে গুণ, তারপর যোগ. মানে length × length × কতটা একই দিকে", where: "4.1 থেকে 4.4, হাট, ভ্যান, ছাদ" },
+  { sym: "u · v", say: "ঘরে ঘরে গুণ, তারপর যোগ। মানে length × length × কতটা একই দিকে", where: "4.1 থেকে 4.4, হাট, ভ্যান, ছাদ" },
   { sym: "cos θ", say: "শুধু কতটা একই দিকে, −1 থেকে 1", where: "4.5, TV এর সামনে" },
 ];
 
@@ -996,7 +996,7 @@ export function Finale() {
     if (open.includes(i)) return;
     const next = [...open, i];
     setOpen(next);
-    if (next.length === PIECES.length) pass("Module 1 এর প্রতিটা টুকরা এখন চেনা.");
+    if (next.length === PIECES.length) pass("Module 1 এর প্রতিটা টুকরা এখন চেনা।");
   };
   const chip = (i: number, body: string, cls = "") => (
     <button
@@ -1034,12 +1034,12 @@ export function Finale() {
         )}
         {all && (
           <div className={`${FADE} rounded-2xl bg-cat-violet/5 px-4 py-3 text-center text-[0.95rem]`}>
-            দুইটা জিনিস কতটা একরকম জানতে চাইলে ওদের arrow বানান, দেখুন কতটা একই দিকে, আর length ভাগ দিয়ে ফেলে দিন, যাতে থাকে শুধু direction.
+            দুইটা জিনিস কতটা একরকম জানতে চাইলে ওদের arrow বানান, দেখুন কতটা একই দিকে, আর length ভাগ দিয়ে ফেলে দিন, যাতে থাকে শুধু direction।
           </div>
         )}
       </div>
       <Ticks items={PIECES.map((p, i) => [p.sym, open.includes(i)] as [string, boolean])} />
-      <Task done={all}>Formula র প্রতিটা টুকরায় tap করুন. কোনটা কোথায় শিখেছিলেন, দেখুন.</Task>
+      <Task done={all}>Formula র প্রতিটা টুকরায় tap করুন। কোনটা কোথায় শিখেছিলেন, দেখুন।</Task>
     </>
   );
 }
@@ -1066,7 +1066,7 @@ export function MixW() {
   const set = (na: number, nb: number) => {
     setA(na);
     setB(nb);
-    if (na * M11_U[0] + nb * M11_V[0] === M11_W[0] && na * M11_U[1] + nb * M11_V[1] === M11_W[1]) pass("w কে u আর v মিশিয়েই বানানো যায়. ও বাড়তি.");
+    if (na * M11_U[0] + nb * M11_V[0] === M11_W[0] && na * M11_U[1] + nb * M11_V[1] === M11_W[1]) pass("w কে u আর v মিশিয়েই বানানো যায়। ও বাড়তি।");
   };
   const legs: { from: number[]; to: number[]; tone: string }[] = [];
   let at = [0, 0];
@@ -1124,8 +1124,8 @@ export function MixW() {
       <div className="mt-2 text-center font-mono text-sm">
         {a} u + {b} v = {tupN(end)} <span className="font-sans text-muted">· w = {tupN(M11_W)}</span>
       </div>
-      {hit && <div className={`${FADE} mt-1 text-center text-sm font-semibold text-accent-text`}>w এর মাথায় পৌঁছানো গেলো. w বাড়তি.</div>}
-      <Task done={hit}>u আর v কয়টা করে মিশালে পথটা w এর মাথায় গিয়ে থামে? Stepper দিয়ে মিলান.</Task>
+      {hit && <div className={`${FADE} mt-1 text-center text-sm font-semibold text-accent-text`}>w এর মাথায় পৌঁছানো গেলো। w বাড়তি।</div>}
+      <Task done={hit}>u আর v কয়টা করে মিশালে পথটা w এর মাথায় গিয়ে থামে? Stepper দিয়ে মিলান।</Task>
     </>
   );
 }
@@ -1153,7 +1153,7 @@ export function NightCall({}: Story) {
   const k = s.k;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="night" label="রাতে ফাহিম সোমকে ফোন করে লাইব্রেরির গল্প বলে; সোম বলে ChatGPT এর ভিতরেও এই box; ফাহিম চুপ">
+      <Stage backdrop="night" label="রাতে ফাহিম সোমকে ফোন করে লাইব্রেরির গল্প বলে; সোম বলে ChatGPT এর ভিতরেও এই dot product; ফাহিম চুপ">
         <Building x={4} y={LG} w={66} h={72} color="#334155" />
         <Building x={250} y={LG} w={66} h={72} color="#334155" />
         <Person who="fahim" x={96} y={LG} arm="hold" mood={k === 1 ? "happy" : k >= 3 ? "puzzled" : "plain"} />
@@ -1167,8 +1167,8 @@ export function NightCall({}: Story) {
           </>
         )}
         {k === 1 && <Bubble x={96} y={LG - 66} lines={["লাইব্রেরির পুরা", "গল্পটা শোন…"]} />}
-        {k === 2 && <Bubble x={224} y={LG - 66} side="left" lines={["ChatGPT এর ভিতরেও", "তো এই box চলে."]} />}
-        {k >= 3 && <Bubble x={96} y={LG - 66} tone="think" lines={["হাটের box?", "ChatGPT তে?"]} />}
+        {k === 2 && <Bubble x={224} y={LG - 66} side="left" lines={["ChatGPT এর ভিতরেও", "তো এই dot product চলে।"]} />}
+        {k >= 3 && <Bubble x={96} y={LG - 66} tone="think" lines={["হাটের dot product?", "ChatGPT তে?"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1202,20 +1202,20 @@ export function GoyalGhor({}: Story) {
         <Person who="fahim" x={90} y={LG} arm="hold" mood={k >= 3 ? "puzzled" : "plain"} />
         <A_Name x={90} text="ফাহিম" light />
         {k >= 2 && <A_Waves x={120} y={96} />}
-        {k === 1 && <Bubble x={90} y={LG - 66} side="left" lines={["মামার গরুটা আজ", "খড় খায় নাই."]} />}
+        {k === 1 && <Bubble x={90} y={LG - 66} side="left" lines={["মামার গরুটা আজ", "খড় খায় নাই।"]} />}
         {k === 2 && (
           <g className={FADE}>
             <text x={96} y={56} fontSize={8} fontWeight={700} fill="#e2e8f0">
               ফোনে সোম:
             </text>
-            <Bubble x={104} y={100} side="right" lines={["এটাই ধর.", "ওটা কে?"]} />
+            <Bubble x={104} y={100} side="right" lines={["এটাই ধর।", "ওটা কে?"]} />
           </g>
         )}
         {k >= 3 && (
           <g className={FADE}>
             <rect x={14} y={14} width={292} height={26} rx={6} fill="white" />
             <text x={160} y={31} textAnchor="middle" fontSize={10} fontWeight={600} fill={A_INK}>
-              গরুটা খড় খেলো না, কারণ <tspan fill={A_VIOLET} fontWeight={800}>ওটার</tspan> পেট ভরা ছিল.
+              গরুটা খড় খেলো না, কারণ <tspan fill={A_VIOLET} fontWeight={800}>ওটার</tspan> পেট ভরা ছিল।
             </text>
             <text x={160} y={56} textAnchor="middle" fontSize={11} fontWeight={800} fill="#fde68a">
               ওটা কে?
@@ -1249,7 +1249,7 @@ export function KhataCard({}: Story) {
             <text x={92} y={56} fontSize={8} fontWeight={700} fill={A_INK}>
               ফোনে সোম:
             </text>
-            <Bubble x={100} y={100} side="right" lines={["neuron তুই আগেই", "দেখছিস. গরুর হাটে."]} />
+            <Bubble x={100} y={100} side="right" lines={["neuron তুই আগেই", "দেখছিস। গরুর হাটে।"]} />
           </g>
         )}
         {k >= 2 && (
@@ -1331,7 +1331,7 @@ export function BusHome({}: Story) {
               সোমকে:
             </text>
             <text x={190} y={58} fontSize={9} fontWeight={600} fill={A_INK}>
-              তোর কথাই ঠিক ছিল.
+              তোর কথাই ঠিক ছিল।
             </text>
           </g>
         )}
@@ -1453,7 +1453,7 @@ export function GoatLeaves({}: Story) {
           <g className={FADE}>
             <rect x={14} y={14} width={292} height={26} rx={6} fill="white" />
             <text x={160} y={31} textAnchor="middle" fontSize={10} fontWeight={600} fill={A_INK}>
-              ছাগলটা পাতা খেলো না, কারণ <tspan fill={A_VIOLET} fontWeight={800}>ওটা</tspan> শুকনা ছিল.
+              ছাগলটা পাতা খেলো না, কারণ <tspan fill={A_VIOLET} fontWeight={800}>ওটা</tspan> শুকনা ছিল।
             </text>
           </g>
         )}
@@ -1536,9 +1536,9 @@ export function CatKitchen({}: Story) {
 //      box jams. The question is left open for screen 2.
 
 const F1_SAY = [
-  "হাটের box: দুইটা list of numbers. চাল, তেল, ডিম কতটুকু কেনা, আর দাম কত.",
-  "ঘরে ঘরে গুণ, তারপর যোগ: 444 টাকা.",
-  "ChatGPT এর কাছে আসে শব্দ: গরু, খড়.",
+  "হাটের dot product: দুইটা list of numbers। চাল, তেল, ডিম কতটুকু কেনা, আর দাম কত।",
+  "ঘরে ঘরে গুণ, তারপর যোগ: 444 টাকা।",
+  "ChatGPT এর কাছে আসে শব্দ: গরু, খড়।",
   "গরুর সাথে খড়ের গুণ? শব্দের সাথে শব্দের গুণ হয় কেমনে?",
 ];
 
@@ -1590,9 +1590,9 @@ export function WordTimesWord() {
 //      Words are lists, so words can be boxed.
 
 const F2_SAY = [
-  "Map এ দুইটা শব্দ, দুইটা জায়গা.",
-  "জায়গা মানে দুইটা number. king (2.6, 5.9), queen (6.9, 5.8).",
-  "দুইটা list, তাই box ও চলে: 52.16.",
+  "Map এ দুইটা শব্দ, দুইটা জায়গা।",
+  "জায়গা মানে দুইটা number। king (2.6, 5.9), queen (6.9, 5.8).",
+  "দুইটা list, তাই dot product ও চলে: 52.16.",
 ];
 
 export function WordBox() {
@@ -1643,10 +1643,10 @@ export function WordBox() {
 //      each word's card landing as an arrow: গরু (3, 1), খড় (0, 3), খেলো (1, 1).
 
 const F3_SAY = [
-  "খেলনা sheet: ডানে প্রাণী slot, উপরে খাবার slot.",
-  "গরু: প্রাণী 3, খাবার 1.",
-  "খড়: প্রাণী 0, খাবার 3.",
-  "খেলো: দুইটাতেই একটু একটু, (1, 1).",
+  "খেলনা sheet: ডানে প্রাণী slot, উপরে খাবার slot।",
+  "গরু: প্রাণী 3, খাবার 1।",
+  "খড়: প্রাণী 0, খাবার 3।",
+  "খেলো: দুইটাতেই একটু একটু, (1, 1)।",
 ];
 
 export function TwoSlots() {
@@ -1692,11 +1692,11 @@ export function TwoSlots() {
 //      to খাবার and খড় wins (6). Query and key named in the captions.
 
 const F4_SAY = [
-  "প্রতিটা শব্দের key, একটা arrow: আমি কেমন জিনিস.",
-  "পেট ভরা হয় প্রাণীর. ওটার query তাক করা প্রাণী slot এ.",
-  "Box সবচেয়ে বড় গরুর সাথে, 6. ওটা মানে গরু.",
-  "পচা হয় খাবার. Query ঘুরে গেলো খাবার slot এ.",
-  "এবার box সবচেয়ে বড় খড়ের সাথে. জিতলো খড়.",
+  "প্রতিটা শব্দের key, একটা arrow: আমি কেমন জিনিস।",
+  "পেট ভরা হয় প্রাণীর। ওটার query তাক করা প্রাণী slot এ।",
+  "Dot product সবচেয়ে বড় গরুর সাথে, 6। ওটা মানে গরু।",
+  "পচা হয় খাবার। Query ঘুরে গেলো খাবার slot এ।",
+  "এবার dot product সবচেয়ে বড় খড়ের সাথে। জিতলো খড়।",
 ];
 
 export function QueryKeys() {
@@ -1718,9 +1718,9 @@ export function QueryKeys() {
 //      machine set every number itself.
 
 const F5_SAY = [
-  "খেলনায় গরুর card এ দুইটা slot: (3, 1).",
-  "আসল model এ slot শত শত.",
-  "কোন slot এর মানে কী, কেউ নাম দেয় নাই. সব number machine এর শেখা.",
+  "খেলনায় গরুর card এ দুইটা slot: (3, 1)।",
+  "আসল model এ slot শত শত।",
+  "কোন slot এর মানে কী, কেউ নাম দেয় নাই। সব number machine এর শেখা।",
 ];
 const F5_N = 72;
 const F5_TONE = ["bg-cat-blue/60", "bg-cat-amber/60", "bg-cat-teal/60", "bg-cat-violet/50", "bg-cat-coral/50"];
@@ -1760,9 +1760,9 @@ export function LongStrips() {
 //      same one), scaled (the box divided by one fixed number).
 
 const F6_SAY = [
-  "সবাই সবার দিকে তাকায়, আর বেছে নেয় কার দিকে বেশি মন দিবে. নাম attention.",
-  "কীভাবে বাছে? Dot product দিয়ে. হাটের সেই box.",
-  "Scaled মানে box এর number টাকে একটা fixed number দিয়ে ভাগ. কেন? যাতে বেশি বড় না হয়ে যায়.",
+  "সবাই সবার দিকে তাকায়, আর বেছে নেয় কার দিকে বেশি মন দিবে। নাম attention.",
+  "কীভাবে বাছে? Dot product দিয়ে। হাটের সেই হিসাবটাই।",
+  "Scaled মানে dot product এর number টাকে একটা fixed number দিয়ে ভাগ। কেন? যাতে বেশি বড় না হয়ে যায়।",
 ];
 
 export function NameLands() {
@@ -1792,10 +1792,10 @@ export function NameLands() {
 //      inside; a column of them; many columns, all lit. Millions of boxes.
 
 const F7_SAY = [
-  "একটা neuron. ভিতরে একটা box.",
-  "পাশাপাশি অনেকগুলো neuron.",
-  "সারির পর সারি. প্রতিটার ভিতরে একটা করে box.",
-  "ChatGPT এ এরকম neuron কোটি কোটি.",
+  "একটা neuron। ভিতরে একটা dot product.",
+  "পাশাপাশি অনেকগুলো neuron।",
+  "সারির পর সারি। প্রতিটার ভিতরে একটা করে dot product।",
+  "ChatGPT এ এরকম neuron কোটি কোটি।",
 ];
 
 export function ManyNeurons() {
@@ -1805,7 +1805,7 @@ export function ManyNeurons() {
   const rows = k === 0 ? 1 : 5;
   return (
     <Scene scene={s} caption={say(F7_SAY, k)}>
-      <svg viewBox="0 0 220 100" role="img" aria-label="Neuron এর সারি, প্রতিটার ভিতরে একটা box" className="mx-auto block h-auto w-full max-w-[16rem]">
+      <svg viewBox="0 0 220 100" role="img" aria-label="Neuron এর সারি, প্রতিটার ভিতরে একটা dot product" className="mx-auto block h-auto w-full max-w-[16rem]">
         {Array.from({ length: cols }, (_, c) =>
           Array.from({ length: rows }, (__, r) => {
             const cx = cols === 1 ? 110 : 25 + c * 34;
@@ -1818,10 +1818,10 @@ export function ManyNeurons() {
                     <path key={r2} d={`M${cx - 34 + 7} ${12 + r2 * 19}L${cx - 7} ${cy}`} stroke={A_SLATE} strokeOpacity={0.18} strokeWidth={0.6} />
                   ))}
                 <circle cx={cx} cy={cy} r={big ? 26 : 7} fill={k >= 3 ? "#fde68a" : "white"} stroke={A_VIOLET} strokeWidth={big ? 2 : 1.2} className="transition-[fill] duration-500 motion-reduce:transition-none" />
-                <rect x={cx - (big ? 12 : 3.5)} y={cy - (big ? 8 : 2.5)} width={big ? 24 : 7} height={big ? 16 : 5} rx={big ? 3 : 1} fill="#fef3c7" stroke="#b45309" strokeWidth={big ? 1.2 : 0.6} />
+                <rect x={cx - (big ? 23 : 3.5)} y={cy - (big ? 8 : 2.5)} width={big ? 46 : 7} height={big ? 16 : 5} rx={big ? 3 : 1} fill="#fef3c7" stroke="#b45309" strokeWidth={big ? 1.2 : 0.6} />
                 {big && (
-                  <text x={cx} y={cy + 4} textAnchor="middle" fontSize={9} fontWeight={700} fill="#92400e">
-                    box
+                  <text x={cx} y={cy + 3} textAnchor="middle" fontSize={7.5} fontWeight={700} fill="#92400e">
+                    dot product
                   </text>
                 )}
               </g>
@@ -1839,11 +1839,11 @@ export function ManyNeurons() {
 //      add. Same box, other lists.
 
 const F8_SAY = [
-  "হাটের বিল: পরিমাণ আর দাম.",
-  "ঘরে ঘরে গুণ, তারপর যোগ: 444.",
-  "ওটার query আর পাতার key.",
-  "ঘরে ঘরে গুণ, তারপর যোগ: 6.",
-  "একই কাজ, একই box. শুধু list দুইটা আলাদা.",
+  "হাটের বিল: পরিমাণ আর দাম।",
+  "ঘরে ঘরে গুণ, তারপর যোগ: 444।",
+  "ওটার query আর পাতার key।",
+  "ঘরে ঘরে গুণ, তারপর যোগ: 6।",
+  "একই কাজ, একই dot product। শুধু list দুইটা আলাদা।",
 ];
 
 export function SameBox() {
@@ -1874,9 +1874,9 @@ export function SameBox() {
 
 const F9_SAY = [
   "Query (1, 0) আর দুধের key (0, 3).",
-  "দুইটা arrow right angle এ.",
-  "Box: 1 × 0 + 0 × 3 = 0.",
-  "4.2 এর ভ্যানের মতো. পাশ থেকে ধাক্কা দিলে ভ্যান এক চুলও আগায় না.",
+  "দুইটা arrow right angle এ।",
+  "Dot product: 1 × 0 + 0 × 3 = 0.",
+  "4.2 এর ভ্যানের মতো। পাশ থেকে ধাক্কা দিলে ভ্যান এক চুলও আগায় না।",
 ];
 
 export function RightAngleZero() {
@@ -1941,10 +1941,10 @@ const F10_R = 70;
 const F10_COS = dot(F10_F[0].v, F10_F[1].v) / (len(F10_F[0].v) * len(F10_F[1].v));
 const F10_SAY = [
   "দুইটা জিনিস: Titanic আর Mr. Bean.",
-  "Article 1: জিনিসকে সংখ্যার list বানানো.",
-  "Article 2: সেই list কে arrow হিসাবে দেখা.",
-  "Article 3: arrow এর length মাপা.",
-  "Article 4: দুইটা arrow কতটা একই দিকে.",
+  "Article 1: জিনিসকে সংখ্যার list বানানো।",
+  "Article 2: সেই list কে arrow হিসাবে দেখা।",
+  "Article 3: arrow এর length মাপা।",
+  "Article 4: দুইটা arrow কতটা একই দিকে।",
   `Length ভাগ দিয়ে ফেলে দিলে থাকে শুধু direction: cos θ = ${fix(F10_COS, 2)}.`,
 ];
 
@@ -2019,11 +2019,11 @@ export function FourArticles() {
 
 const F10S_SPELL = ["u · v", "Σ uᵢvᵢ", "uᵀv", "⟨u, v⟩"];
 const F10S_SAY = [
-  "4.1 এর দুইটা list. ঘরে ঘরে গুণ, তারপর যোগ: 11.",
-  "u · v: dot দিয়ে লেখা.",
-  "Σ uᵢvᵢ: loop হিসাবে লেখা.",
-  "uᵀv: paper গুলোর প্রিয় লেখা.",
-  "⟨u, v⟩: ভারী বইয়ে inner product. চার রকম লেখা, একই 11.",
+  "4.1 এর দুইটা list। ঘরে ঘরে গুণ, তারপর যোগ: 11।",
+  "u · v: dot দিয়ে লেখা।",
+  "Σ uᵢvᵢ: loop হিসাবে লেখা।",
+  "uᵀv: paper গুলোর প্রিয় লেখা।",
+  "⟨u, v⟩: ভারী বইয়ে inner product। চার রকম লেখা, একই 11।",
 ];
 
 export function FourSpellings() {
@@ -2078,10 +2078,10 @@ const F11_DOTS = (() => {
   return out;
 })();
 const F11_SAY = [
-  "দুইটা উপকরণ, u আর v.",
-  "মিশিয়ে কোথায় কোথায় পৌঁছানো যায়? এই সবটার নাম span.",
-  "তৃতীয় উপকরণ w, u আর v দিয়েই বানানো. তাই বাড়তি. এই প্রশ্নের নাম independence.",
-  "সবচেয়ে কম কয়টা লাগে? এখানে দুইটা, u আর v. এর নাম basis.",
+  "দুইটা উপকরণ, u আর v।",
+  "মিশিয়ে কোথায় কোথায় পৌঁছানো যায়? এই সবটার নাম span।",
+  "তৃতীয় উপকরণ w, u আর v দিয়েই বানানো। তাই বাড়তি। এই প্রশ্নের নাম independence।",
+  "সবচেয়ে কম কয়টা লাগে? এখানে দুইটা, u আর v। এর নাম basis।",
 ];
 
 export function SpanRecipe() {
@@ -2128,9 +2128,9 @@ const F11B_CLOUD = [
   [18, 92], [30, 84], [42, 79], [52, 70], [64, 66], [74, 57], [88, 52], [98, 43], [110, 38], [122, 30], [36, 76], [80, 61], [104, 46], [60, 72],
 ] as const;
 const F11B_SAY = [
-  "একটা list আর x: একটা box, একটা number.",
-  "অনেকগুলো list একসাথে সাজালে matrix.",
-  "Matrix মানে একসাথে একগাদা box, একগাদা number.",
+  "একটা list আর x: একটা dot product, একটা number.",
+  "অনেকগুলো list একসাথে সাজালে matrix।",
+  "Matrix মানে একসাথে একগাদা dot product, একগাদা number।",
   "আর আমার data র আসলে কয়টা direction লাগে?",
 ];
 
@@ -2186,11 +2186,11 @@ export function MatrixBoxes() {
 //      differs; পেট ভরা goes with a প্রাণী, পচা with a খাবার.
 
 const F3A_SAY = [
-  "নিয়মটা একবার মিললো, একবার মিললো না.",
-  "অথচ দুইটা বাক্যেই গরু আর খড় একই জায়গায় বসা.",
-  "বদলেছে শুধু শেষের কথাটা.",
-  "পেট ভরা হয় প্রাণীর.",
-  "পচা হয় খাবার.",
+  "নিয়মটা একবার মিললো, একবার মিললো না।",
+  "অথচ দুইটা বাক্যেই গরু আর খড় একই জায়গায় বসা।",
+  "বদলেছে শুধু শেষের কথাটা।",
+  "পেট ভরা হয় প্রাণীর।",
+  "পচা হয় খাবার।",
 ];
 /** where the ending starts in each of R3's sentences */
 const F3A_END = [6, 6];
@@ -2263,12 +2263,12 @@ const F10Q_APPS: F10Q[] = [
 ];
 const F10Q_TONE = [A_BLUE, A_TEAL, A_SLATE];
 const F10Q_SAY = [
-  "Search engine: আপনার প্রশ্ন একটা arrow. প্রতিটা page ও একটা arrow.",
-  "প্রশ্নের সাথে যে page সবচেয়ে একই দিকে, সেটা উঠে আসে সবার উপরে.",
-  "Film এর app: আপনার পছন্দের film একটা arrow, বাকি film গুলোও.",
-  "যে film সবচেয়ে একই দিকে, সেটাই আসে আপনার সামনে.",
-  "Chatbot: আপনার প্রশ্ন একটা arrow, প্রতিটা paragraph একটা arrow.",
-  "যে paragraph প্রশ্নের সাথে সবচেয়ে একই দিকে, উত্তর খোঁজে ওখানে.",
+  "Search engine: আপনার প্রশ্ন একটা arrow। প্রতিটা page ও একটা arrow।",
+  "প্রশ্নের সাথে যে page সবচেয়ে একই দিকে, সেটা উঠে আসে সবার উপরে।",
+  "Film এর app: আপনার পছন্দের film একটা arrow, বাকি film গুলোও।",
+  "যে film সবচেয়ে একই দিকে, সেটাই আসে আপনার সামনে।",
+  "Chatbot: আপনার প্রশ্ন একটা arrow, প্রতিটা paragraph একটা arrow।",
+  "যে paragraph প্রশ্নের সাথে সবচেয়ে একই দিকে, উত্তর খোঁজে ওখানে।",
 ];
 
 function F10Q_Item({ kind, tone, lit }: { kind: F10Q["item"]; tone: string; lit: boolean }) {

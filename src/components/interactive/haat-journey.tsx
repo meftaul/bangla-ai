@@ -72,7 +72,7 @@ function Lists({ rows }: { rows: [label: string, v: readonly number[]][] }) {
 }
 
 // ---------------------------------------------------------------------------
-// 1 · মামা-মামীর বাজি. The day's five jobs beside the box. The reader picks
+// 1 · মামা-মামীর বাজি। The day's five jobs beside the box. The reader picks
 //     the ones they think it can do and seals the bet, never marked here: the
 //     finale's table settles it. This is the question the journey answers.
 
@@ -633,7 +633,7 @@ export function SelfDot() {
 }
 
 // ---------------------------------------------------------------------------
-// 8 · এবার আপনার পালা. Five new jobs, one card at a time, into "box এর কাজ"
+// 8 · এবার আপনার পালা। Five new jobs, one card at a time, into "box এর কাজ"
 //     or "box এর কাজ না". Wrong tries bounce; each right one leaves its
 //     reason behind, so the numbers actually get read.
 

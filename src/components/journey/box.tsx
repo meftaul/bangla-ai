@@ -108,8 +108,8 @@ function useRun(steps: number, ms: number, key: string, el: HTMLElement | null) 
 }
 
 const WORDS = {
-  bn: { build: "box তৈরি", each: "ঘরে ঘরে গুণ", sum: "সব যোগ", lone: "জোড়া নাই" },
-  en: { build: "the box, opening", each: "slot by slot", sum: "add them up", lone: "no partner" },
+  bn: { build: "জোড়া মেলানো", each: "ঘরে ঘরে গুণ", sum: "সব যোগ", lone: "জোড়া নাই" },
+  en: { build: "pairing up", each: "slot by slot", sum: "add them up", lone: "no partner" },
 };
 export type BoxLang = keyof typeof WORDS;
 

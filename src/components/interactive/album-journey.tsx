@@ -277,7 +277,7 @@ export function FilterBet() {
   const act = usePlay(800);
   const seal = (i: number) => {
     setBet(i);
-    act.play(3, () => pass("বাজি সিল হলো. আগে দুইটা filter."));
+    act.play(3, () => pass("বাজি সিল হলো। আগে দুইটা filter।"));
   };
   // beats of the acted bet: 1 the chips do what the claim says, 2 its "?", 3 sealed
   const k = bet === null ? 0 : act.running ? act.k : 3;
@@ -291,7 +291,7 @@ export function FilterBet() {
         )}
       </div>
       <div className="mt-1.5 h-5 text-center text-sm text-muted">
-        {bet !== null && k >= 1 ? <span className={`${FADE} font-semibold text-foreground`}>{B1_SAY[bet]}</span> : "প্রতিটা ছবি, 50 টা filter, একটার পর একটা."}
+        {bet !== null && k >= 1 ? <span className={`${FADE} font-semibold text-foreground`}>{B1_SAY[bet]}</span> : "প্রতিটা ছবি, 50 টা filter, একটার পর একটা।"}
       </div>
       <div className="mt-2 grid gap-2">
         {B1_OPTS.map((o, i) => (
@@ -307,7 +307,7 @@ export function FilterBet() {
           </Choice>
         ))}
       </div>
-      <Task done={bet !== null && k >= 3}>50 টা filter পরপর চালালে আসলে কী হয়? একটায় বাজি ধরুন. উত্তর শেষে.</Task>
+      <Task done={bet !== null && k >= 3}>50 টা filter পরপর চালালে আসলে কী হয়? একটায় বাজি ধরুন। উত্তর শেষে।</Task>
     </>
   );
 }
@@ -399,7 +399,7 @@ export function TwoFilters() {
           </button>
         </div>
       )}
-      <Task done={phase >= 3}>আগে দুইটা filter পরপর চালান. তারপর দড়ি দুইটা পাঠান, আর নতুন filter টা এক লাফে চালান.</Task>
+      <Task done={phase >= 3}>আগে দুইটা filter পরপর চালান। তারপর দড়ি দুইটা পাঠান, আর নতুন filter টা এক লাফে চালান।</Task>
     </>
   );
 }
@@ -427,7 +427,7 @@ export function FiftyIntoOne() {
   const fold = () => {
     if (round >= 6) return;
     setRound(round + 1);
-    if (round + 1 === 6) pass("পঞ্চাশটা linear filter = একটা.");
+    if (round + 1 === 6) pass("পঞ্চাশটা linear filter = একটা।");
   };
   const f = FI_F;
   const pts = bounds(round).map((i) => PTS[i]);
@@ -477,7 +477,7 @@ export function FiftyIntoOne() {
           </button>
         )}
       </div>
-      <Task done={done}>পাশাপাশি দুইটা করে জোড়া লাগান, যতক্ষণ না একটা থাকে. ছবির রং শেষে কোথায় থামে, দেখুন.</Task>
+      <Task done={done}>পাশাপাশি দুইটা করে জোড়া লাগান, যতক্ষণ না একটা থাকে। ছবির রং শেষে কোথায় থামে, দেখুন।</Task>
     </>
   );
 }
@@ -493,9 +493,9 @@ const TB_F = makeFrame(-0.3, 4.3, -0.3, 4.3, 26, 8);
 const TB_OPTS = ["ঢুকে যাবে, বাকিদের মতোই", "ঢুকবে না", "ঢুকবে, তবে ছবি কালো হয়ে যাবে"];
 const TB_RIGHT = 1;
 const TB_NOPE = [
-  "Straight grid টা contrast এর ঘরের সাথে মিললো না. (3, 3) এর ছবি দুই জায়গায় গেলো: লাল ফাঁকটা দেখুন.",
+  "Straight grid টা contrast এর ঘরের সাথে মিললো না। (3, 3) এর ছবি দুই জায়গায় গেলো: লাল ফাঁকটা দেখুন।",
   "",
-  "ছবি কালো হয়নি. ঘরগুলো অসমান হলো, কোনাকুনি দাগ বেঁকে গেলো. কোনো straight grid এর সাথে মিলে না.",
+  "ছবি কালো হয়নি। ঘরগুলো অসমান হলো, কোনাকুনি দাগ বেঁকে গেলো। কোনো straight grid এর সাথে মিলে না।",
 ];
 const TB_TEST: XY = [3, 3];
 const TB_S = bend(1);
@@ -509,7 +509,7 @@ export function TheBend() {
     if (p.running) return;
     p.play(3, () => {
       setRan(true);
-      pass("Bend থাকলে আর এক হয় না.");
+      pass("Bend থাকলে আর এক হয় না।");
     });
   };
   const beat = ran ? 3 : p.k;
@@ -535,7 +535,7 @@ export function TheBend() {
         </Plane>
       </div>
       <div className="mt-1 h-5 text-center text-xs text-muted">
-        {beat >= 3 ? "(3, 3) এর ছবি: contrast এ এক জায়গায়, straight grid এ আরেক জায়গায়." : beat >= 2 ? "সবচেয়ে কাছের straight grid, কালো ডট ডট দাগ." : beat >= 1 ? "মাঝের ঘর চওড়া, কিনারার ঘর সরু." : "চালানোর আগে guess দিন."}
+        {beat >= 3 ? "(3, 3) এর ছবি: contrast এ এক জায়গায়, straight grid এ আরেক জায়গায়।" : beat >= 2 ? "সবচেয়ে কাছের straight grid, কালো ডট ডট দাগ।" : beat >= 1 ? "মাঝের ঘর চওড়া, কিনারার ঘর সরু।" : "চালানোর আগে guess দিন।"}
       </div>
       {guess === null && <div className="mt-2 text-sm font-medium text-muted">Contrast কি বাকি filter গুলোর সাথে জোড়া লাগবে?</div>}
       <div className="mt-1.5 grid gap-1.5">
@@ -553,7 +553,7 @@ export function TheBend() {
         </div>
       )}
       {ran && guess !== null && guess !== TB_RIGHT && <Nope>{TB_NOPE[guess]}</Nope>}
-      <Task done={ran}>আগে guess দিন. তারপর contrast কে একটা straight grid এ মেলানোর চেষ্টা করুন.</Task>
+      <Task done={ran}>আগে guess দিন। তারপর contrast কে একটা straight grid এ মেলানোর চেষ্টা করুন।</Task>
     </>
   );
 }
@@ -585,7 +585,7 @@ export function AllPhotos() {
   };
   const all = () => {
     setPhase(2);
-    pass("সব ছবি এক গুণে: batch.");
+    pass("সব ছবি এক গুণে: batch।");
   };
   const moved = phase >= 2 ? 300 : phase === 1 ? AP_ONE_BY_ONE : p.k;
   const f = AP_F;
@@ -640,7 +640,7 @@ export function AllPhotos() {
           <div className={`${FADE} font-mono text-sm font-semibold`}>X @ Wᵀ: 300 টা ছবি, একটা গুণ</div>
         )}
       </div>
-      <Task done={phase >= 2}>আগে একটা একটা করে চালান. তারপর পুরা table টা একসাথে.</Task>
+      <Task done={phase >= 2}>আগে একটা একটা করে চালান। তারপর পুরা table টা একসাথে।</Task>
     </>
   );
 }
@@ -741,9 +741,9 @@ const SF_OPTS: [number, number][] = [
 ];
 const SF_RIGHT = 1;
 const SF_NOPE = [
-  "2 × 2 হলো ভেতরের দুইটা, যেগুলো মিলে গায়েব হয়. থাকে বাইরের দুইটা: A এর 4 row, B এর 3 column.",
+  "2 × 2 হলো ভেতরের দুইটা, যেগুলো মিলে গায়েব হয়। থাকে বাইরের দুইটা: A এর 4 row, B এর 3 column।",
   "",
-  "4 × 2 তো A এর নিজের shape. B এর 3 টা column কোথায় গেলো? ফল B এর প্রতিটা column এর জন্য একটা করে column পায়.",
+  "4 × 2 তো A এর নিজের shape। B এর 3 টা column কোথায় গেলো? ফল B এর প্রতিটা column এর জন্য একটা করে column পায়।",
 ];
 
 function SF_Icon({ r, c }: { r: number; c: number }) {
@@ -778,7 +778,7 @@ export function ShapeFits() {
     setPlayed(false);
     p.play(3, () => {
       setPlayed(true);
-      if (i === SF_RIGHT) pass("ভেতরের দুইটা মিলতে হবে, বাইরের দুইটা থাকে.");
+      if (i === SF_RIGHT) pass("ভেতরের দুইটা মিলতে হবে, বাইরের দুইটা থাকে।");
       else setMiss((x) => x + 1);
     });
   };
@@ -836,7 +836,7 @@ export function ShapeFits() {
           {over && pick !== SF_RIGHT && <Nope key={miss}>{SF_NOPE[pick]}</Nope>}
         </>
       )}
-      <Task done={over && pick === SF_RIGHT}>আগে ছবির table আর filter মেলান. তারপর বইয়ের A আর B: ফল কোন shape, বেছে নিন.</Task>
+      <Task done={over && pick === SF_RIGHT}>আগে ছবির table আর filter মেলান। তারপর বইয়ের A আর B: ফল কোন shape, বেছে নিন।</Task>
     </>
   );
 }
@@ -875,8 +875,8 @@ const SG_PAIRS: Pair[] = [
 ];
 const sgNope = ([[m, n], [n2, p]]: Pair) =>
   n === n2
-    ? `ভেতরের ${n} আর ${n2} মিলে গেলো. তাই গুণ হয়, ফল ${m} × ${p}.`
-    : `${n} টা number খাওয়াচ্ছেন এমন কিছুকে, যে খায় ${n2} টা. ভেতরের দুইটা মেলেনি.`;
+    ? `ভেতরের ${n} আর ${n2} মিলে গেলো। তাই গুণ হয়, ফল ${m} × ${p}.`
+    : `${n} টা number খাওয়াচ্ছেন এমন কিছুকে, যে খায় ${n2} টা। ভেতরের দুইটা মেলেনি।`;
 
 export function ShapeGame() {
   const pass = useGate();
@@ -895,7 +895,7 @@ export function ShapeGame() {
     p.play(3, () => {
       setPlayed(true);
       if (v !== legal) setMiss((x) => x + 1);
-      else if (last) pass("ভেতরের সংখ্যা মিললেই গুণ হয়.");
+      else if (last) pass("ভেতরের সংখ্যা মিললেই গুণ হয়।");
     });
   };
   const next = () => {
@@ -940,7 +940,7 @@ export function ShapeGame() {
           </button>
         </div>
       )}
-      <Task done={doneAll}>ছয়টা জোড়া. প্রতিটায় বলুন গুণ হয় কি না. হলে ফলের shape দেখে নিন.</Task>
+      <Task done={doneAll}>ছয়টা জোড়া। প্রতিটায় বলুন গুণ হয় কি না। হলে ফলের shape দেখে নিন।</Task>
     </>
   );
 }
@@ -1032,7 +1032,7 @@ export function TryLayerSize() {
           100 output
         </text>
       </svg>
-      <div className="text-center text-xs text-muted">প্রতিটা dot 10 টা number. প্রতিটা তার একটা weight.</div>
+      <div className="text-center text-xs text-muted">প্রতিটা dot 10 টা number। প্রতিটা তার একটা weight।</div>
       <div className="mt-2 flex items-end justify-center gap-3">
         <TL_Step label="W এর row" value={rows} set={change(setRows)} disabled={p.running} />
         <span className="pb-2 font-mono text-lg text-muted">×</span>
@@ -1048,12 +1048,12 @@ export function TryLayerSize() {
       )}
       {ran && !right && (
         <Nope key={miss}>
-          {cols !== 300 && `column ${cols} টা মানে W ${cols} টা input চায়. layer দেয় 300 টা. `}
-          {rows !== 100 && `row ${rows} টা মানে ${rows} টা output. layer দেয় 100 টা. `}
-          লাল তারগুলো কোথাও লাগেনি.
+          {cols !== 300 && `column ${cols} টা মানে W ${cols} টা input চায়। layer দেয় 300 টা। `}
+          {rows !== 100 && `row ${rows} টা মানে ${rows} টা output. layer দেয় 100 টা। `}
+          লাল তারগুলো কোথাও লাগেনি।
         </Nope>
       )}
-      <Task done={ran && right}>W কয় row, কয় column? ঠিক করে চালান. একটা তারও যেন ঝুলে না থাকে.</Task>
+      <Task done={ran && right}>W কয় row, কয় column? ঠিক করে চালান। একটা তারও যেন ঝুলে না থাকে।</Task>
     </>
   );
 }
@@ -1073,7 +1073,7 @@ export function AlbumDone() {
     if (p.running || ran) return;
     p.play(20, () => {
       setRan(true);
-      pass("একটা filter, একটা বাঁক. album শেষ.");
+      pass("একটা filter, একটা বাঁক। album শেষ।");
     });
   };
   const k = ran ? 20 : p.k;
@@ -1132,7 +1132,7 @@ export function AlbumDone() {
           </button>
         </div>
       )}
-      <Task done={ran}>পুরা album চালান. দুইটা দাগ পাশাপাশি দেখুন.</Task>
+      <Task done={ran}>পুরা album চালান। দুইটা দাগ পাশাপাশি দেখুন।</Task>
     </>
   );
 }
@@ -1143,9 +1143,9 @@ export function AlbumDone() {
 //      halfway), then marks the card. All three open → the bet is settled.
 
 const BO_CARDS: [string, boolean, string][] = [
-  ["50 রকম সুন্দর", false, "50 টা থাকে না. জোড়া লেগে 1 টা."],
-  ["আসলে একটাই filter", true, "ঠিক. 50 টা মিলে একটাই filter."],
-  ["মাঝামাঝি, কয়েকটার সমান", false, "মাঝপথে থামে না. একদম 1 এ গিয়ে থামে."],
+  ["50 রকম সুন্দর", false, "50 টা থাকে না। জোড়া লেগে 1 টা।"],
+  ["আসলে একটাই filter", true, "ঠিক। 50 টা মিলে একটাই filter।"],
+  ["মাঝামাঝি, কয়েকটার সমান", false, "মাঝপথে থামে না। একদম 1 এ গিয়ে থামে।"],
 ];
 
 export function BetOpen() {
@@ -1160,7 +1160,7 @@ export function BetOpen() {
       const next = [...open, i];
       setOpen(next);
       setNow(null);
-      if (next.length === 3) pass("পঞ্চাশটা filter ছিল একটা, বাঁক টাই আসল কাজ.");
+      if (next.length === 3) pass("পঞ্চাশটা filter ছিল একটা, বাঁক টাই আসল কাজ।");
     });
   };
   const round = p.running ? p.k : open.length ? 6 : 0;
@@ -1192,7 +1192,7 @@ export function BetOpen() {
           );
         })}
       </div>
-      <Task done={open.length === 3}>তিনটা বাজি একটা একটা করে খুলুন.</Task>
+      <Task done={open.length === 3}>তিনটা বাজি একটা একটা করে খুলুন।</Task>
     </>
   );
 }
@@ -1288,9 +1288,9 @@ export function WeddingCorner({}: Story) {
           <A_ScreenBar x={150} y={150} done={k >= 1 ? 4 : 3} />
         </A_Desk>
         <Person who="samin" x={k >= 2 ? 236 : 360} y={150} facing={-1} walking={k === 2} label />
-        {k === 2 && <Bubble x={236} y={84} side="left" lines={["পঞ্চাশটা লাগবে না.", "একটাতেই হবে."]} />}
-        {k === 3 && <Bubble x={96} y={84} side="right" lines={["পঞ্চাশটা filter,", "পঞ্চাশ রকম সুন্দর."]} />}
-        {k >= 4 && <Bubble x={96} y={84} side="right" lines={["সময় তো লাগবোই."]} />}
+        {k === 2 && <Bubble x={236} y={84} side="left" lines={["পঞ্চাশটা লাগবে না।", "একটাতেই হবে।"]} />}
+        {k === 3 && <Bubble x={96} y={84} side="right" lines={["পঞ্চাশটা filter,", "পঞ্চাশ রকম সুন্দর।"]} />}
+        {k >= 4 && <Bubble x={96} y={84} side="right" lines={["সময় তো লাগবোই।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1320,7 +1320,7 @@ export function SaminOpensList({}: Story) {
             ))}
         </A_Desk>
         <Person who="samin" x={218} y={150} facing={-1} label arm={k >= 1 ? "point" : "down"} />
-        {k >= 3 && <Bubble x={218} y={84} side="left" lines={["আগে দুইটা."]} />}
+        {k >= 3 && <Bubble x={218} y={84} side="left" lines={["আগে দুইটা।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1347,8 +1347,8 @@ export function ContrastSlider({}: Story) {
           <circle cx={knob} cy={111} r={2.6} fill="#e2e8f0" className="transition-[cx] duration-700 motion-reduce:transition-none" />
         </A_Desk>
         <Person who="samin" x={236} y={150} facing={-1} label />
-        {k === 2 && <Bubble x={96} y={84} side="right" lines={["অন্ধকার আরো অন্ধকার.", "আলো আরো আলো."]} />}
-        {k >= 3 && <Bubble x={236} y={84} side="left" lines={["এইটাও জোড়া লাগাই."]} />}
+        {k === 2 && <Bubble x={96} y={84} side="right" lines={["অন্ধকার আরো অন্ধকার।", "আলো আরো আলো।"]} />}
+        {k >= 3 && <Bubble x={236} y={84} side="left" lines={["এইটাও জোড়া লাগাই।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1367,15 +1367,15 @@ export function MikeCall({}: Story) {
         <path d="M40 150V56" stroke="#a16207" strokeWidth={3} />
         <path d="M40 60l18 -10v24Z" fill="#94a3b8" stroke={INK} strokeOpacity={0.4} />
         {k >= 1 && <path d="M64 52q6 10 0 20M70 48q9 14 0 28" fill="none" stroke={INK} strokeOpacity={0.45} className={FADE} />}
-        {k === 1 && <Bubble x={60} y={46} side="right" lines={["বরপক্ষ খেতে বসছে."]} />}
+        {k === 1 && <Bubble x={60} y={46} side="right" lines={["বরপক্ষ খেতে বসছে।"]} />}
         <A_Photographer x={130} y={150} arm={k >= 2 ? "hold" : "down"} />
         {k >= 2 && <circle cx={139} cy={106} r={2.4} fill="#fde047" stroke={INK} strokeWidth={0.6} className={POP} />}
-        {k === 2 && <Bubble x={130} y={84} side="mid" tone="think" lines={["300 টা.", "একটা একটা করে?"]} />}
+        {k === 2 && <Bubble x={130} y={84} side="mid" tone="think" lines={["300 টা।", "একটা একটা করে?"]} />}
         <A_Desk x={190} y={150}>
           <A_ScreenBar x={190} y={150} done={0} />
         </A_Desk>
         <Person who="samin" x={258} y={150} facing={-1} label />
-        {k >= 3 && <Bubble x={258} y={84} side="left" lines={["সবগুলা একসাথে."]} />}
+        {k >= 3 && <Bubble x={258} y={84} side="left" lines={["সবগুলা একসাথে।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1523,7 +1523,7 @@ export function NanaAlbum({}: Story) {
 // 1½ · One photo through fifty filters, one after another; then 300 photos.
 //      Stopped at "?": does it really take fifty?
 
-const X1_SAY = ["একটা ছবি. সামনে 50 টা filter.", "একটা একটা করে পার হয়.", "এক ছবিতেই 50 বার.", "300 টা ছবি: 15,000 বার.", "সত্যিই কি 50 বার লাগে?"];
+const X1_SAY = ["একটা ছবি। সামনে 50 টা filter।", "একটা একটা করে পার হয়।", "এক ছবিতেই 50 বার।", "300 টা ছবি: 15,000 বার।", "সত্যিই কি 50 বার লাগে?"];
 
 export function FiftyInARow() {
   const s = useScene(4, [600, 1400, 1400, 1800, 2200]);
@@ -1564,11 +1564,11 @@ export function FiftyInARow() {
 
 const X2_F = makeFrame(-0.4, 4.6, -0.4, 2.6, 26, 6);
 const X2_SAY = [
-  "ছবির রং (1, 1).",
-  "গরম: (2, 1). তারপর উজ্জ্বল: (4, 2).",
-  "দড়ি থেকে বানানো একটা filter: এক লাফে (4, 2).",
-  "W₂(W₁x) = (W₂W₁)x. দুই লাফ আর এক লাফ, একই জায়গা.",
-  "6.6 এ তিনটা, এখানে দুইটা. শেষে একটাই matrix.",
+  "ছবির রং (1, 1)।",
+  "গরম: (2, 1)। তারপর উজ্জ্বল: (4, 2)।",
+  "দড়ি থেকে বানানো একটা filter: এক লাফে (4, 2)।",
+  "W₂(W₁x) = (W₂W₁)x. দুই লাফ আর এক লাফ, একই জায়গা।",
+  "6.6 এ তিনটা, এখানে দুইটা। শেষে একটাই matrix।",
 ];
 
 export function TwoHopsOneHop() {
@@ -1599,7 +1599,7 @@ export function TwoHopsOneHop() {
 // 3½ · A network: five linear layers with nothing between them. They slide
 //      together into one set of wires; "fifty, still one".
 
-const X3_SAY = ["5 টা layer. মাঝে কিছু নাই, শুধু matrix.", "মাঝের layer গুলো জোড়া লাগে.", "5 টা মিলে 1 টা layer.", "50 টা হলেও 1 টা. দেখতে গভীর, কাজে এক layer."];
+const X3_SAY = ["5 টা layer। মাঝে কিছু নাই, শুধু matrix।", "মাঝের layer গুলো জোড়া লাগে।", "5 টা মিলে 1 টা layer।", "50 টা হলেও 1 টা। দেখতে গভীর, কাজে এক layer।"];
 
 export function LayersCollapse() {
   const s = useScene(3, [600, 1600, 1800, 2400]);
@@ -1648,7 +1648,7 @@ export function LayersCollapse() {
 const X4_F = makeFrame(-0.4, 5, -0.4, 5, 19, 6);
 /** the same contrast bend, stretched to 0 … 5 so the moved grid stays where it bends one way */
 const bend5 = (v: number) => 2.5 - 2.5 * Math.cos((Math.PI * Math.min(5, Math.max(0, v))) / 5);
-const X4_SAY = ["কাগজ, সোজা ঘর.", "W: মেশায়. grid হেলে যায়, তবু সোজা আর সমান.", "+ b: পুরা কাগজ সরে. খুঁটিও সরে, যেটা matrix পারে না.", "bend: ঘর অসমান, দাগ বাঁকা. এটা আর জোড়া লাগে না.", "তিন কাজ মিলে একটা layer: bend(Wx + b)."];
+const X4_SAY = ["কাগজ, সোজা ঘর।", "W: মেশায়। grid হেলে যায়, তবু সোজা আর সমান।", "+ b: পুরা কাগজ সরে। খুঁটিও সরে, যেটা matrix পারে না।", "bend: ঘর অসমান, দাগ বাঁকা। এটা আর জোড়া লাগে না।", "তিন কাজ মিলে একটা layer: bend(Wx + b)।"];
 const X4_B: XY = [0.6, 0.4];
 
 export function ThreeJobs() {
@@ -1677,7 +1677,7 @@ export function ThreeJobs() {
 // 5½ · The table X, row by row, through one W: each row goes in and comes out
 //      changed; then all of them together, one multiplication.
 
-const X5_SAY = ["X এর প্রতিটা row একটা ছবির রং.", "row 1 W এর ভেতর দিয়ে গেলো.", "row 2, row 3: একই W, একই হিসাব.", "কেউ কারো জন্য বসে থাকে না. তাই সবগুলা একসাথে: একটা গুণ."];
+const X5_SAY = ["X এর প্রতিটা row একটা ছবির রং।", "row 1 W এর ভেতর দিয়ে গেলো।", "row 2, row 3: একই W, একই হিসাব।", "কেউ কারো জন্য বসে থাকে না। তাই সবগুলা একসাথে: একটা গুণ।"];
 
 export function RowsThroughOne() {
   const s = useScene(3, [600, 1600, 1800, 2400]);
@@ -1708,7 +1708,7 @@ export function RowsThroughOne() {
 //       (Wx); code stacks photos as rows before Wᵀ (X @ Wᵀ). The same sums,
 //       turned sideways.
 
-const X5B_SAY = ["বইয়ে: W এর পরে একটা ছবি, খাড়া column: Wx.", "Code এ: ছবি শোয়ানো row, সবার আগে: X @ Wᵀ.", "একই হিসাব, দুই পাশই কাত করা. 6.1 এর ᵀ."];
+const X5B_SAY = ["বইয়ে: W এর পরে একটা ছবি, খাড়া column: Wx।", "Code এ: ছবি শোয়ানো row, সবার আগে: X @ Wᵀ।", "একই হিসাব, দুই পাশই কাত করা। 6.1 এর ᵀ।"];
 
 export function ColumnOrRow() {
   const s = useScene(2, [600, 1800, 2400]);
@@ -1762,11 +1762,11 @@ const X6_B = [
 ];
 const X6_C = X6_A.map((r) => [0, 1, 2].map((j) => r[0] * X6_B[0][j] + r[1] * X6_B[1][j]));
 const X6_SAY = [
-  "A: 4 × 2. B: 2 × 3. ফল হবে 4 × 3.",
+  "A: 4 × 2. B: 2 × 3. ফল হবে 4 × 3।",
   "row 1 · প্রতিটা column: 14, 8, 10.",
   "row 2: 4, 3, 3. row 3: 9, 8, 7.",
   "row 4: 4, 3, 3. আবার?",
-  "A এর row 2 আর row 4 এক. তাই C এরও.",
+  "A এর row 2 আর row 4 এক। তাই C এরও।",
 ];
 
 function X6_Grid({ x, y, rows, lit, shown }: { x: number; y: number; rows: number[][]; lit: number[]; shown: number }) {
@@ -1811,7 +1811,7 @@ export function BookC() {
 // 7½ · A layer 768 → 512 as its matrix: one row per output, one column per
 //      input; the count of its numbers.
 
-const X7_SAY = ["একটা layer: 768 টা number ঢোকে, 512 টা বের হয়.", "প্রতিটা output এর এক row: 512 টা row.", "প্রতিটা row তে প্রতিটা input এর এক weight: 768 টা column.", "512 × 768: 393,216 টা number, এক layer এই."];
+const X7_SAY = ["একটা layer: 768 টা number ঢোকে, 512 টা বের হয়।", "প্রতিটা output এর এক row: 512 টা row।", "প্রতিটা row তে প্রতিটা input এর এক weight: 768 টা column।", "512 × 768: 393,216 টা number, এক layer এই।"];
 
 export function LayerMatrix() {
   const s = useScene(3, [600, 1800, 1800, 2400]);
@@ -1850,7 +1850,7 @@ export function LayerMatrix() {
 
 // 8½ · One output and its wires: one row of W, 300 weights; then all 100.
 
-const X8_SAY = ["একটা output.", "তার তার: প্রতিটা input থেকে একটা. 300 টা weight, W এর এক row.", "100 টা output, 100 টা row: 100 × 300."];
+const X8_SAY = ["একটা output.", "তার তার: প্রতিটা input থেকে একটা। 300 টা weight, W এর এক row.", "100 টা output, 100 টা row: 100 × 300."];
 
 export function RowPerOutput() {
   const s = useScene(2, [600, 1800, 2200]);
@@ -1880,7 +1880,7 @@ export function RowPerOutput() {
 // 10½ · The recap: fifty chips fold into one; the bend added after it; the
 //       300 photos through both in one multiplication.
 
-const X10_SAY = ["50 টা linear filter.", "জোড়া লেগে একটা.", "তার পরে একটা বাঁক: contrast.", "300 ছবি, এক গুণে, তারপর বাঁক. album শেষ."];
+const X10_SAY = ["50 টা linear filter.", "জোড়া লেগে একটা।", "তার পরে একটা বাঁক: contrast।", "300 ছবি, এক গুণে, তারপর বাঁক। album শেষ।"];
 
 export function AlbumRecap() {
   const s = useScene(3, [600, 1400, 1600, 2400]);

@@ -42,7 +42,7 @@ import {
 // Screens for "Math for AI 7.3 — Two lenses, one lens", told as a Journey in
 // the author's Bangla-English. The plan is 07_journey_specs.md, block 7.3.
 //
-// গায়ে হলুদের দুপুর at নানাবাড়ি. Last night's lens G = [[2, 1], [1, 2]] cracked
+// গায়ে হলুদের দুপুর at নানাবাড়ি। Last night's lens G = [[2, 1], [1, 2]] cracked
 // in the dew (7.2's bridge). The লাইট ভাই has two small spares, Z = [[−1, 1],
 // [2, 1]] and W = [[0, 1], [1, 1]], and the machine has one slot. বাজারের কাঁচের
 // দোকান can cut one new lens before সন্ধ্যা from four numbers; the machine's
@@ -412,7 +412,7 @@ export function LensBet() {
   const seal = () => {
     if (pick === null || sealed) return;
     setSealed(true);
-    act.play(3, () => pass("বাজি সিল হলো. আগে দুই lens পরপর চালাই."));
+    act.play(3, () => pass("বাজি সিল হলো। আগে দুই lens পরপর চালাই।"));
   };
   return (
     <>
@@ -433,7 +433,7 @@ export function LensBet() {
           এই বাজি সিল
         </button>
       </div>
-      <Task done={k >= 3}>কার কথা ঠিক? একটা card বেছে বাজি সিল করুন. উত্তর শেষে.</Task>
+      <Task done={k >= 3}>কার কথা ঠিক? একটা card বেছে বাজি সিল করুন। উত্তর শেষে।</Task>
     </>
   );
 }
@@ -460,7 +460,7 @@ export function ThroughBoth() {
       run.run(() => {
         if (phase < 3) {
           setPhase(3);
-          pass("দুই lens পরপর = আগের G এর কাজ.");
+          pass("দুই lens পরপর = আগের G এর কাজ।");
         }
       });
   };
@@ -493,7 +493,7 @@ export function ThroughBoth() {
         </button>
       </div>
       <Task done={phase === 3}>
-        {phase < 2 ? "রিনার দাগের dot টা আগে Z, তারপর W দিয়ে চালান. কোথায় থামে দেখুন." : "এবার শুধু একটা dot না, পুরা দেয়ালের grid চালান."}
+        {phase < 2 ? "রিনার দাগের dot টা আগে Z, তারপর W দিয়ে চালান। কোথায় থামে দেখুন।" : "এবার শুধু একটা dot না, পুরা দেয়ালের grid চালান।"}
       </Task>
     </>
   );
@@ -509,8 +509,8 @@ const X3_CARDS: { who: string; cols: Cols }[] = [
   { who: "নাসিবের ঘরে ঘরে গুণ", cols: CELL },
 ];
 const X3_NOPE = [
-  "করিমের lens dot টা পাঠালো (1, 5) এ. দুই lens পরপর পাঠায় (3, 3) এ. পুরা grid ও অন্য দিকে হেলে গেলো.",
-  "নাসিবের lens dot টা পাঠালো (1, 3) এ. (3, 3) থেকে দুই ঘর বামে. Grid ও মিললো না.",
+  "করিমের lens dot টা পাঠালো (1, 5) এ। দুই lens পরপর পাঠায় (3, 3) এ। পুরা grid ও অন্য দিকে হেলে গেলো।",
+  "নাসিবের lens dot টা পাঠালো (1, 3) এ। (3, 3) থেকে দুই ঘর বামে। Grid ও মিললো না।",
 ];
 
 export function TryTheCards() {
@@ -524,7 +524,7 @@ export function TryTheCards() {
     run.run(() => {
       const nt = tried.map((v, j) => v || j === i);
       setTried(nt);
-      if (nt.every(Boolean) && !tried.every(Boolean)) pass("যোগও না, ঘরে ঘরে গুণও না.");
+      if (nt.every(Boolean) && !tried.every(Boolean)) pass("যোগও না, ঘরে ঘরে গুণও না।");
     });
   };
   const cols = pick === null ? null : X3_CARDS[pick].cols;
@@ -551,7 +551,7 @@ export function TryTheCards() {
         ))}
       </div>
       {settled && pick !== null && <Nope key={`${pick}${tried.join()}`}>{X3_NOPE[pick]}</Nope>}
-      <Task done={tried.every(Boolean)}>দুইটা card ই app এ চালান. নীল দাগের সাথে মিলে কি না দেখুন.</Task>
+      <Task done={tried.every(Boolean)}>দুইটা card ই app এ চালান। নীল দাগের সাথে মিলে কি না দেখুন।</Task>
     </>
   );
 }
@@ -580,9 +580,9 @@ const X4_ALL: XY[] = (() => {
   return out;
 })();
 const X4_NOPE = [
-  "একটা dot এ হয় না. নীল grid আর লাল grid, দুইটাই (1, 1) কে (3, 3) এ পাঠায়. বাকি দেয়াল দুই রকম. কোনটা ঠিক, এক dot বলতে পারে না.",
+  "একটা dot এ হয় না। নীল grid আর লাল grid, দুইটাই (1, 1) কে (3, 3) এ পাঠায়। বাকি দেয়াল দুই রকম। কোনটা ঠিক, এক dot বলতে পারে না।",
   "",
-  `হলো ঠিকই. কিন্তু ${X4_ALL.length} টা dot চালাতে হলো. এত লাগে না. 6.3 এ দুইটা দড়ি দিয়েই পুরা আলপনা বসেছিল.`,
+  `হলো ঠিকই। কিন্তু ${X4_ALL.length} টা dot চালাতে হলো। এত লাগে না। 6.3 এ দুইটা দড়ি দিয়েই পুরা আলপনা বসেছিল।`,
 ];
 const X4_ROPES: { e: XY; name: string; tone: "amber" | "teal" }[] = [
   { e: E1, name: "e₁", tone: "amber" },
@@ -628,7 +628,7 @@ export function FollowTheRopes() {
       const ns = sent.map((v, q) => v || q === j);
       setSent(ns);
       setCur(null);
-      if (ns.every(Boolean)) pass("দুই দড়ির মাথা দুইবার সরালেই পুরা move.");
+      if (ns.every(Boolean)) pass("দুই দড়ির মাথা দুইবার সরালেই পুরা move।");
     });
   };
   const t = guess === null ? 0 : act.running ? act.k / N : 1;
@@ -726,7 +726,7 @@ export function FollowTheRopes() {
         </div>
       )}
       <Task done={sent.every(Boolean)}>
-        {ok ? "দুইটা দড়ির মাথাই পাঠান: আগে Z, তারপর W. কোথায় থামে দেখুন." : "আগে guess: কম করে কয়টা dot চালালেই চলে? বেছে নিন."}
+        {ok ? "দুইটা দড়ির মাথাই পাঠান: আগে Z, তারপর W। কোথায় থামে দেখুন।" : "আগে guess: কম করে কয়টা dot চালালেই চলে? বেছে নিন।"}
       </Task>
     </>
   );
@@ -759,7 +759,7 @@ export function LensByColumns() {
     if (!lens || run.running) return;
     run.run(() => {
       setRan(true);
-      if (sameCols(lens, WZ)) pass("WZ এর column = Z এর column, W দিয়ে চালানো.");
+      if (sameCols(lens, WZ)) pass("WZ এর column = Z এর column, W দিয়ে চালানো।");
       else setMiss((m) => m + 1);
     });
   };
@@ -827,8 +827,8 @@ export function LensByColumns() {
           </button>
         )}
       </div>
-      {ran && !right && <Nope key={miss}>Grid মিললো না. Amber আর সবুজ লাইন উল্টা দিকে গেলো. প্রথম column এ বসে e₁ এর মাথা.</Nope>}
-      <Task done={ran && right}>দুই দড়ির মাথা এক lens এর দুই column এ বসান. তারপর চালিয়ে নীল দাগের সাথে মেলান.</Task>
+      {ran && !right && <Nope key={miss}>Grid মিললো না। Amber আর সবুজ লাইন উল্টা দিকে গেলো। প্রথম column এ বসে e₁ এর মাথা।</Nope>}
+      <Task done={ran && right}>দুই দড়ির মাথা এক lens এর দুই column এ বসান। তারপর চালিয়ে নীল দাগের সাথে মেলান।</Task>
     </>
   );
 }
@@ -877,7 +877,7 @@ export function RowMeetsColumn() {
         )}
       </div>
       <div className="mt-2 min-h-24">{cur !== null && <DotBox key={cur} a={X6_WR[i]} b={Z[j]} k={k} dense={false} />}</div>
-      <Task done={filled.every(Boolean)}>WZ এর একটা ফাঁকা ঘরে tap করুন. W এর row আর Z এর column মিলে ঘরটা ভরবে. চারটা ঘরই ভরুন.</Task>
+      <Task done={filled.every(Boolean)}>WZ এর একটা ফাঁকা ঘরে tap করুন। W এর row আর Z এর column মিলে ঘরটা ভরবে। চারটা ঘরই ভরুন।</Task>
     </>
   );
 }
@@ -890,9 +890,9 @@ export function RowMeetsColumn() {
 
 const X7_TILES = ["দুইটা কাজ, এক lens", "Z যা দেয়, W তা নেয়", "প্রতিটা ঘর row · column"];
 const X7_SAY = [
-  ["রিনার dot, (1, 1).", "Z এর পরে (0, 3).", "W এর পরে (3, 3).", "WZ এক লাফেই (3, 3). দুইটা কাজ একসাথে."],
-  ["Z আর W, দুইটা বাক্স.", "(1, 1) ঢুকলো Z এ.", "Z বের করলো দুইটা সংখ্যা, (0, 3). W এর মুখও দুইটা.", "W দিলো (3, 3). মাপ মিললো বলেই জোড়া লাগলো."],
-  ["WZ, চারটা ঘর.", "row 1 · column 1 = 2.", "row 2 · column 1 = 1.", "বাকি দুইটাও একই ভাবে. এর বাইরে কিছু নাই."],
+  ["রিনার dot, (1, 1)।", "Z এর পরে (0, 3)।", "W এর পরে (3, 3)।", "WZ এক লাফেই (3, 3)। দুইটা কাজ একসাথে।"],
+  ["Z আর W, দুইটা বাক্স।", "(1, 1) ঢুকলো Z এ।", "Z বের করলো দুইটা সংখ্যা, (0, 3)। W এর মুখও দুইটা।", "W দিলো (3, 3)। মাপ মিললো বলেই জোড়া লাগলো।"],
+  ["WZ, চারটা ঘর।", "row 1 · column 1 = 2.", "row 2 · column 1 = 1.", "বাকি দুইটাও একই ভাবে। এর বাইরে কিছু নাই।"],
 ];
 
 function X7_Pipe({ k }: { k: number }) {
@@ -970,7 +970,7 @@ export function WhyThisRule() {
     act.play(3, () => {
       const ns = seen.map((v, q) => v || q === i);
       setSeen(ns);
-      if (ns.every(Boolean) && !seen.every(Boolean)) pass("Rule টা বানানো হয়নি, বের হয়ে এসেছে.");
+      if (ns.every(Boolean) && !seen.every(Boolean)) pass("Rule টা বানানো হয়নি, বের হয়ে এসেছে।");
     });
   };
   const k = open === null ? 0 : act.running ? act.k : 3;
@@ -978,7 +978,7 @@ export function WhyThisRule() {
     <>
       <div className="min-h-[11rem]">
         {open === null ? (
-          <div className="grid h-[11rem] place-items-center text-sm text-muted">নিচের তিনটা কারণ, একটা একটা করে খুলুন.</div>
+          <div className="grid h-[11rem] place-items-center text-sm text-muted">নিচের তিনটা কারণ, একটা একটা করে খুলুন।</div>
         ) : (
           <div key={open} className={FADE}>
             <X7_Picture tile={open} k={k} />
@@ -993,7 +993,7 @@ export function WhyThisRule() {
           </Choice>
         ))}
       </div>
-      <Task done={seen.every(Boolean)}>এত ঝামেলার নিয়মটাই কেন? তিনটা কারণই tap করে দেখুন.</Task>
+      <Task done={seen.every(Boolean)}>এত ঝামেলার নিয়মটাই কেন? তিনটা কারণই tap করে দেখুন।</Task>
     </>
   );
 }
@@ -1036,13 +1036,13 @@ export function YourOneLens() {
     setRan(false);
     run.run(() => {
       setRan(true);
-      if (sameCols(lens, DS)) pass("দড়ি ধরে এক lens: আগে S, তারপর D.");
+      if (sameCols(lens, DS)) pass("দড়ি ধরে এক lens: আগে S, তারপর D।");
       else setMiss((q) => q + 1);
     });
   };
   const t = run.running ? run.t : ran ? 1 : 0;
   const bad = [!same(lens[0], DS[0]), !same(lens[1], DS[1])];
-  const nope = bad[0] && bad[1] ? "দুইটা লাইনের কোনোটাই মিললো না. দুই দড়ির মাথা আগে S, তারপর D দিয়ে পাঠিয়ে দেখুন, কোথায় থামে." : bad[0] ? "Amber লাইন মিললো না. e₁ এর মাথা যেখানে থামার কথা, সেখানে নীল গোল দাগ. Column 1 ঠিক করুন." : "সবুজ লাইন মিললো না. e₂ এর মাথা যেখানে থামার কথা, সেখানে নীল গোল দাগ. Column 2 ঠিক করুন.";
+  const nope = bad[0] && bad[1] ? "দুইটা লাইনের কোনোটাই মিললো না। দুই দড়ির মাথা আগে S, তারপর D দিয়ে পাঠিয়ে দেখুন, কোথায় থামে।" : bad[0] ? "Amber লাইন মিললো না। e₁ এর মাথা যেখানে থামার কথা, সেখানে নীল গোল দাগ। Column 1 ঠিক করুন।" : "সবুজ লাইন মিললো না। e₂ এর মাথা যেখানে থামার কথা, সেখানে নীল গোল দাগ। Column 2 ঠিক করুন।";
   return (
     <>
       <div className="mb-2 flex flex-wrap justify-center gap-1.5">
@@ -1071,7 +1071,7 @@ export function YourOneLens() {
         </button>
       </div>
       {ran && !ok && <Nope key={miss}>{nope}</Nope>}
-      <Task done={ok}>আগে S, তারপর D. দুইটার কাজ একটা lens এ লিখুন, তারপর চালিয়ে নীল দাগের সাথে মেলান.</Task>
+      <Task done={ok}>আগে S, তারপর D। দুইটার কাজ একটা lens এ লিখুন, তারপর চালিয়ে নীল দাগের সাথে মেলান।</Task>
     </>
   );
 }
@@ -1095,9 +1095,9 @@ const X9_ROWS = rowsOf(BA);
 const X9_OPTS = [2, 4, 0];
 const X9_RIGHT = 1;
 const X9_NOPE = [
-  "Dot থামলো (3, 2) এ. কিন্তু দুই lens পরপর e₁ কে নিলো (3, 4) এ. ঘরটা row 2, column 1 এর: B এর row 2, A এর column 1.",
+  "Dot থামলো (3, 2) এ। কিন্তু দুই lens পরপর e₁ কে নিলো (3, 4) এ। ঘরটা row 2, column 1 এর: B এর row 2, A এর column 1.",
   "",
-  "Dot থামলো (3, 0) এ, পেরেকের সারিতে. 0 আসে ঘরে ঘরে গুণ করলে, 0 × 2. দুই lens পরপর e₁ যায় (3, 4) এ.",
+  "Dot থামলো (3, 0) এ, পেরেকের সারিতে। 0 আসে ঘরে ঘরে গুণ করলে, 0 × 2। দুই lens পরপর e₁ যায় (3, 4) এ।",
 ];
 const X9_MID = apply(A_LENS, E1);
 const X9_END = apply(B_LENS, X9_MID);
@@ -1153,7 +1153,7 @@ export function TryOneCell() {
         })}
       </div>
       {done && pick !== X9_RIGHT && pick !== null && <Nope key={miss}>{X9_NOPE[pick]}</Nope>}
-      <Task done={done && pick === X9_RIGHT}>ফাঁকা ঘরে কোন সংখ্যা? বেছে নিন. Dot যেখানে থামে, দুই lens ও কি e₁ কে সেখানে নেয়?</Task>
+      <Task done={done && pick === X9_RIGHT}>ফাঁকা ঘরে কোন সংখ্যা? বেছে নিন। Dot যেখানে থামে, দুই lens ও কি e₁ কে সেখানে নেয়?</Task>
     </>
   );
 }
@@ -1232,8 +1232,8 @@ export function NoonSpares({}: Story) {
             <LJ_Glass x={268} y={96} which="W" r={5.5} />
           </g>
         )}
-        {k === 2 && <Bubble x={280} y={84} side="left" lines={["দুইটা কাঁচ,", "এক খোপ."]} />}
-        {k >= 3 && <Bubble x={280} y={84} side="left" lines={["দুইটার কাজ", "একটায় হয় না."]} />}
+        {k === 2 && <Bubble x={280} y={84} side="left" lines={["দুইটা কাঁচ,", "এক খোপ।"]} />}
+        {k >= 3 && <Bubble x={280} y={84} side="left" lines={["দুইটার কাজ", "একটায় হয় না।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1243,10 +1243,10 @@ export function NoonSpares({}: Story) {
 //      hand, the machine's app open).
 
 const FI_SAY: { who: "karim" | "nasib" | "som" | "samin"; x: number; lines: string[]; side: "left" | "mid" | "right" }[] = [
-  { who: "karim", x: 44, lines: ["W + Z.", "যোগ করে দাও."], side: "right" },
-  { who: "nasib", x: 110, lines: ["ঘরে ঘরে গুণ."], side: "mid" },
-  { who: "som", x: 176, lines: ["একটায় হবে না.", "দুইটা লাগবেই."], side: "mid" },
-  { who: "samin", x: 250, lines: ["একটা matrix আছে.", "খুঁজে বের করতে হবে."], side: "left" },
+  { who: "karim", x: 44, lines: ["W + Z.", "যোগ করে দাও।"], side: "right" },
+  { who: "nasib", x: 110, lines: ["ঘরে ঘরে গুণ।"], side: "mid" },
+  { who: "som", x: 176, lines: ["একটায় হবে না।", "দুইটা লাগবেই।"], side: "mid" },
+  { who: "samin", x: 250, lines: ["একটা matrix আছে।", "খুঁজে বের করতে হবে।"], side: "left" },
 ];
 
 export function FourIdeas({}: Story) {
@@ -1318,14 +1318,14 @@ export function SomNoAll({}: Story) {
         <Person who="rina" x={150} y={150} facing={-1} label arm="point" />
         <Person who="som" x={222} y={150} facing={-1} label arm={k >= 2 ? "point" : "down"} />
         <Projector x={286} y={150} lens="empty" />
-        {k === 1 && <Bubble x={150} y={84} side="mid" lines={["সব ঘর চালাতে", "সন্ধ্যা হয়ে যাবে."]} />}
-        {k >= 2 && <Bubble x={222} y={84} side="mid" lines={["সব লাগবে না."]} />}
+        {k === 1 && <Bubble x={150} y={84} side="mid" lines={["সব ঘর চালাতে", "সন্ধ্যা হয়ে যাবে।"]} />}
+        {k >= 2 && <Bubble x={222} y={84} side="mid" lines={["সব লাগবে না।"]} />}
       </Stage>
     </StoryFrame>
   );
 }
 
-// 10a · সন্ধ্যা. The shop's new lens in the slot; the light grid and আপার three
+// 10a · সন্ধ্যা। The shop's new lens in the slot; the light grid and আপার three
 //      hearts on the wall; the stage finished; আপা in yellow steps up.
 
 export function HoludShow({}: Story) {
@@ -1397,7 +1397,7 @@ export function OtherOrder({}: Story) {
 // 1½ · The stake: last night's lens cracked; two small spares; they both go
 //      for the one slot and only one fits; the shop wants four numbers, "?".
 
-const X1B_SAY = ["কাল রাতের lens. মাঝখান দিয়ে চিড়.", "চিড় খাওয়া lens বাদ. হাতে Z আর W.", "খোপ একটাই. দুইটা একসাথে ঢোকে না.", "দোকান চায় চারটা সংখ্যা. সন্ধ্যার আগে. কোন চারটা?"];
+const X1B_SAY = ["কাল রাতের lens। মাঝখান দিয়ে চিড়।", "চিড় খাওয়া lens বাদ। হাতে Z আর W।", "খোপ একটাই। দুইটা একসাথে ঢোকে না।", "দোকান চায় চারটা সংখ্যা। সন্ধ্যার আগে। কোন চারটা?"];
 
 export function OneSlot() {
   const s = useScene(3, [600, 1600, 1800, 2600]);
@@ -1444,7 +1444,7 @@ export function OneSlot() {
 // 2½ · Two steps, one grid: the plain grid, bent by Z, then by W; last night's
 //      lens's grid drops on top, dashed, line for line.
 
-const X2B_SAY = ["সোজা grid. খোপে Z, হাতে W.", "Z এর পরে grid এক রকম বাঁকা.", "তারপর W. আরেকবার বাঁকা.", "নীল দাগ: কাল রাতের lens এর grid. একটা দাগও আলাদা না."];
+const X2B_SAY = ["সোজা grid। খোপে Z, হাতে W।", "Z এর পরে grid এক রকম বাঁকা।", "তারপর W। আরেকবার বাঁকা।", "নীল দাগ: কাল রাতের lens এর grid। একটা দাগও আলাদা না।"];
 
 export function TwoStepsOneGrid() {
   const s = useScene(3, [600, 1600, 1600, 2600]);
@@ -1467,7 +1467,7 @@ export function TwoStepsOneGrid() {
 //      also looks at (1, 1), (1, 2); added tip to tail, (1, 5). But W really
 //      looks at Z's light, (0, 3), and sends it to (3, 3).
 
-const X3B_SAY = ["রিনার dot, (1, 1).", "Z দেখে (1, 1). পাঠায় (0, 3) এ.", "W ও দেখে সেই (1, 1). পাঠায় (1, 2) এ.", "দুইটা যোগ: (1, 5). করিমের lens এর dot.", "কিন্তু আসলে W দেখে Z এর আলো, (0, 3). পাঠায় (3, 3) এ."];
+const X3B_SAY = ["রিনার dot, (1, 1)।", "Z দেখে (1, 1)। পাঠায় (0, 3) এ।", "W ও দেখে সেই (1, 1)। পাঠায় (1, 2) এ।", "দুইটা যোগ: (1, 5)। করিমের lens এর dot।", "কিন্তু আসলে W দেখে Z এর আলো, (0, 3)। পাঠায় (3, 3) এ।"];
 
 export function KarimAdds() {
   const s = useScene(4, [600, 1800, 1800, 2200, 2800]);
@@ -1497,7 +1497,7 @@ export function KarimAdds() {
 //      both lenses e₁ stands at (2, 1), e₂ at (1, 2); put them tip to tail and
 //      the dot lands at (3, 3).
 
-const X4B_SAY = ["(1, 1) মানে একবার e₁, তারপর একবার e₂.", "দুই lens এর পরে e₁ দাঁড়ায় (2, 1) এ.", "e₂ দাঁড়ায় (1, 2) এ. ওকে জুড়ে দিলাম e₁ এর মাথায়.", "(3, 3). রান্না একই, উপকরণ নতুন."];
+const X4B_SAY = ["(1, 1) মানে একবার e₁, তারপর একবার e₂।", "দুই lens এর পরে e₁ দাঁড়ায় (2, 1) এ।", "e₂ দাঁড়ায় (1, 2) এ। ওকে জুড়ে দিলাম e₁ এর মাথায়।", "(3, 3). রান্না একই, উপকরণ নতুন।"];
 
 export function RopesRecipe() {
   const s = useScene(3, [600, 1800, 2000, 2400]);
@@ -1521,7 +1521,7 @@ export function RopesRecipe() {
 
 // 5½ · Z's columns go through W and stand up as WZ's columns.
 
-const X5B_SAY = ["Z এর দুইটা column: (−1, 2) আর (1, 1).", "প্রথমটা গেলো W এর ভেতর দিয়ে. বের হলো (2, 1).", "দ্বিতীয়টা: (1, 1) থেকে (1, 2).", "দুইটা পাশাপাশি দাঁড় করালেই WZ. কাল রাতের lens."];
+const X5B_SAY = ["Z এর দুইটা column: (−1, 2) আর (1, 1)।", "প্রথমটা গেলো W এর ভেতর দিয়ে। বের হলো (2, 1)।", "দ্বিতীয়টা: (1, 1) থেকে (1, 2)।", "দুইটা পাশাপাশি দাঁড় করালেই WZ। কাল রাতের lens।"];
 
 export function ColsStandUp() {
   const s = useScene(3, [600, 1800, 1800, 2400]);
@@ -1592,10 +1592,10 @@ function LJ_ReadCol({ col, second, lines, label, s }: { col: XY; second: Cols; l
 }
 
 const X6B_SAY = [
-  "Z এর column 1, (−1, 2). দেয়ালে একটা arrow.",
-  "W এর ভেতর দিয়ে গেলো. থামলো (2, 1) এ.",
+  "Z এর column 1, (−1, 2)। দেয়ালে একটা arrow।",
+  "W এর ভেতর দিয়ে গেলো। থামলো (2, 1) এ।",
   "কত ঘর ডানে? 2. W এর row 1 · Z এর column 1 ও 2.",
-  "কত ঘর উপরে? 1. row 2 · column 1 ও 1. দুইটাই WZ এর column 1.",
+  "কত ঘর উপরে? 1. row 2 · column 1 ও 1। দুইটাই WZ এর column 1।",
 ];
 
 export function RowIsReading() {
@@ -1604,10 +1604,10 @@ export function RowIsReading() {
 }
 
 const X9B_SAY = [
-  "A এর column 1, (1, 2). মানে e₁ প্রথম lens এর পরে.",
-  "B এর ভেতর দিয়ে গেলো. থামলো (3, 4) এ.",
-  "কত ঘর ডানে? 3. উপরের ঘরটা.",
-  "কত ঘর উপরে? 4. B এর row 2 · A এর column 1. ফাঁকা ঘরটা.",
+  "A এর column 1, (1, 2)। মানে e₁ প্রথম lens এর পরে।",
+  "B এর ভেতর দিয়ে গেলো। থামলো (3, 4) এ।",
+  "কত ঘর ডানে? 3. উপরের ঘরটা।",
+  "কত ঘর উপরে? 4. B এর row 2 · A এর column 1। ফাঁকা ঘরটা।",
 ];
 
 export function CellIsHeight() {
@@ -1624,11 +1624,11 @@ const BO_ROWS: [string, boolean][] = [
   ["সামিন: একটা matrix আছে", true],
 ];
 const BO_SAY = [
-  "চারটা card.",
-  "করিমের যোগ dot টা নিলো (1, 5) এ. মিললো না.",
-  "নাসিবের ঘরে ঘরে গুণ নিলো (1, 3) এ. মিললো না.",
-  "সোম বলেছিল একটায় হবে না. হলো. এক কাঁচেই.",
-  "সামিনের matrix: দড়ি ধরে পাওয়া WZ. জিতলো.",
+  "চারটা card।",
+  "করিমের যোগ dot টা নিলো (1, 5) এ। মিললো না।",
+  "নাসিবের ঘরে ঘরে গুণ নিলো (1, 3) এ। মিললো না।",
+  "সোম বলেছিল একটায় হবে না। হলো। এক কাঁচেই।",
+  "সামিনের matrix: দড়ি ধরে পাওয়া WZ। জিতলো।",
 ];
 
 function LJ_Mark({ ok }: { ok: boolean }) {

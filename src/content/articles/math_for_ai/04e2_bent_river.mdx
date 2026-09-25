@@ -1,6 +1,6 @@
 export const metadata = {
   title: "Math for AI 4.6 — The river bends, where does the shadow's head land",
-  description: "On a straight river the shadow was just a slot. The river bends, and now it has to be worked out: cut the river into parts, count the steps, and find both numbers hiding in the box.",
+  description: "On a straight river the shadow was just a slot. The river bends, and now it has to be worked out: cut the river into parts, count the steps, and find both numbers hiding in the dot product.",
   type: "article",
 };
 
@@ -20,30 +20,36 @@ export const metadata = {
     taken apart one piece per screen: the foot by hand (FindFoot), what share
     of the river that is (ShareWalk), where the 7 comes from (SevenFromBox),
     where the 13 comes from (ThirteenFromRiver), and only then the whole
-    machine. Every screen carries the same legend — blue নদী, red দড়ি. The
-    screens live in components/interactive/bentriver-journey.tsx. */}
+    machine. Every screen carries the same legend — blue নদী, red দড়ি। The
+    screens live in components/interactive/bentriver-journey.tsx.
 
-import { Journey, Step, Then } from "@/components/journey/journey";
+    Screen 5 carries a side quest that is a journey of its own (5 steps, SQ in
+    the tsx): why dividing by v · v gives the share, shown without cos θ —
+    turn the paper until the river is flat, and the dot product is plainly
+    shadow × river length. */}
+
+import { Journey, Step, Then, SideQuest } from "@/components/journey/journey";
 import { BoxRecall, FindFoot, ShareWalk, SevenFromBox, ThirteenFromRiver, ShareToPoint, ShadowRecipe, YourShadow, KeepShadows, TapFoot } from "@/components/interactive/bentriver-journey";
 import { ZeroAnySlots, RiverBend, BendsAhead, SevenThirteen, WhySeven, RiverSquare, KhataDot, ShrinkBoth, BakiPull, AnyRiver, SecondBend, HalfwayWhy, FahimIdea, OnePoint, FewNumbers, GhatRiddle, DabTreat, LibraryTwo, BendNear, TwoDivides, RecapBend } from "@/components/interactive/bentriver-journey";
+import { TurnPaper, FlatDot, DivideCount, TurnAndRead, NightKhata, KeepsTurning, ShadowTimesRiver, FormulaTurns, TurnRecap } from "@/components/interactive/bentriver-journey";
 
 <Journey title="Dot product · বাঁকা নদী">
 
 <Step>
 
-নৌকা এখনো চলছে. সামনের বাঁকটা কাছে চলে এসেছে.
+নৌকা এখনো চলছে। সামনের বাঁকটা কাছে চলে এসেছে।
 
 <BendNear story />
 
-নদী বাঁকে ঢোকার আগে box এর একটা কথা মনে করে নেই.
+নদী বাঁকে ঢোকার আগে dot product এর একটা কথা মনে করে নেই।
 
 <BoxRecall />
 
 <Then>
 
-2 × (−1) + 1 × 2 = −2 + 2 = 0. Box এ 0 মানে right angle. slot যতগুলাই থাকুক না কেন.
+2 × (−1) + 1 × 2 = −2 + 2 = 0. Dot product 0 মানে right angle. slot যতগুলাই থাকুক না কেন।
 
-এই একটা কথা দিয়েই আজকের পুরা হিসাবটা দাঁড়িয়ে আছে.
+এই একটা কথা দিয়েই আজকের পুরা হিসাবটা দাঁড়িয়ে আছে।
 
 <ZeroAnySlots />
 
@@ -53,21 +59,21 @@ import { ZeroAnySlots, RiverBend, BendsAhead, SevenThirteen, WhySeven, RiverSqua
 
 <Step>
 
-সামনে নদী বাঁক নিয়েছে. এখন নদী গেছে $v = (2, 3)$ বরাবর. দড়ির টান $w = (2, 1)$. সোজা নদীতে shadow টা চোখেই দেখা যেত, first number. এখন আর যায় না.
+সামনে নদী বাঁক নিয়েছে। এখন নদী গেছে $v = (2, 3)$ বরাবর। দড়ির টান $w = (2, 1)$। সোজা নদীতে shadow টা চোখেই দেখা যেত, first number। এখন আর যায় না।
 
-মাঝি চাচা পাড় থেকে উঁচু গলায় বললেন, ফাহিম, বাঁক নেওনের পরে টানের কতটুকু কামে লাগে, কও তো? সন্ধ্যার আগে ঘাটে পৌঁছাইতে হইবো.
+মাঝি চাচা পাড় থেকে উঁচু গলায় বললেন, ফাহিম, বাঁক নেওনের পরে টানের কতটুকু কামে লাগে, কও তো? সন্ধ্যার আগে ঘাটে পৌঁছাইতে হইবো।
 
 <RiverBend story />
 
-নদী বরাবর একটা point slide করুন. এমন জায়গা খুঁজে বের করুন, যেখানে দড়ির মাথা থেকে নামা line টা নদীর সাথে right angle এ মিলে.
+নদী বরাবর একটা point slide করুন। এমন জায়গা খুঁজে বের করুন, যেখানে দড়ির মাথা থেকে নামা line টা নদীর সাথে right angle এ মিলে।
 
 <FindFoot />
 
 <Then>
 
-মাথাটা পাওয়া গেলো. কিন্তু মাঝি চাচাকে একদম exact নাম্বার বলতে হবে. মাঝি চাচাকে বলতে হবে, নদী বরাবর ঠিক কতদূর.
+মাথাটা পাওয়া গেলো। কিন্তু মাঝি চাচাকে একদম exact নাম্বার বলতে হবে। মাঝি চাচাকে বলতে হবে, নদী বরাবর ঠিক কতদূর।
 
-আর slide করে করে খোঁজা? ওটাতো আর calculation না.অনেকটা অন্ধের মত হাতড়ানো. প্রতিবার নদী বাঁক নিলে তো আর slide করে করে খোঁজা যাবে না.
+আর slide করে করে খোঁজা? ওটাতো আর calculation না।অনেকটা অন্ধের মত হাতড়ানো। প্রতিবার নদী বাঁক নিলে তো আর slide করে করে খোঁজা যাবে না।
 
 <BendsAhead />
 
@@ -79,15 +85,15 @@ import { ZeroAnySlots, RiverBend, BendsAhead, SevenThirteen, WhySeven, RiverSqua
 
 <Step>
 
-একটা সহজ কায়দা আছে. নদীর arrow টাকেই সমান ভাগে কেটে ফেলুন. তারপর গুনুন, মাথাটা কয় ভাগ দূরে.
+একটা সহজ কায়দা আছে। নদীর arrow টাকেই সমান ভাগে কেটে ফেলুন। তারপর গুনুন, মাথাটা কয় ভাগ দূরে।
 
 <ShareWalk />
 
 <Then>
 
-13 ভাগ করলে একটা দাগ ঠিক মাথার উপরে পড়ে. কোনটা? 7 নম্বর দাগ. তারমানে shadow এর length নদীর arrow এর length এর **7/13 অংশ**. এবার এটা একটা সংখ্যা.
+13 ভাগ করলে একটা দাগ ঠিক মাথার উপরে পড়ে। কোনটা? 7 নম্বর দাগ। তারমানে shadow এর length নদীর arrow এর length এর **7/13 অংশ**। এবার এটা একটা সংখ্যা।
 
-কিন্তু 13 ভাগ করার কথা আমার মাথায় আসলো কেন? আর গুনে 7 পাওয়ার মানেই বা কী? প্রতিবার দাগ কেটে গুনতে বসলে তো হবে না. দুইটা সংখ্যাই আসলে লুকিয়ে আছে চেনা এক জায়গায়. কোথায়, বলুন তো?
+কিন্তু 13 ভাগ করার কথা আমার মাথায় আসলো কেন? আর গুনে 7 পাওয়ার মানেই বা কী? প্রতিবার দাগ কেটে গুনতে বসলে তো হবে না। দুইটা সংখ্যাই আসলে লুকিয়ে আছে চেনা এক জায়গায়। কোথায়, বলুন তো?
 
 <SevenThirteen />
 
@@ -97,15 +103,15 @@ import { ZeroAnySlots, RiverBend, BendsAhead, SevenThirteen, WhySeven, RiverSqua
 
 <Step>
 
-7 দিয়েই শুরু করি. দড়ি আর নদী — এই দুইটাকে box এ ফেলে দেখুন তো কী আসে.
+7 দিয়েই শুরু করি। দড়ি আর নদী — এই দুইটার dot product করে দেখুন তো কী আসে।
 
 <SevenFromBox />
 
 <Then>
 
-Box বললো 7 আর  আপনি হেঁটেছিলেনও 7 ধাপ. একই সংখ্যা.এটা কি co-incidence? না.
+Dot product বললো 7 আর  আপনি হেঁটেছিলেনও 7 ধাপ। একই সংখ্যা।এটা কি co-incidence? না।
 
-4.3 এ দেখেছিলেন, shadow এর length হলো $\|w\| \cos\theta$. আর $w \cdot v = \|v\| \, \|w\| \cos\theta$. মানে box এর ভিতরে shadow এর length-টা বসেই আছে. সাথে বাড়তি একটা $\|v\|$. তাই box এর সংখ্যাটা নদীর length দিয়ে ভাগ দিলেই shadow এর length বেরিয়ে আসে.
+4.3 এ দেখেছিলেন, shadow এর length হলো $\|w\| \cos\theta$। আর $w \cdot v = \|v\| \, \|w\| \cos\theta$। মানে dot product এর ভিতরে shadow এর length-টা বসেই আছে। সাথে বাড়তি একটা $\|v\|$। তাই dot product এর সংখ্যাটা নদীর length দিয়ে ভাগ দিলেই shadow এর length বেরিয়ে আসে।
 
 <WhySeven />
 
@@ -115,19 +121,39 @@ Box বললো 7 আর  আপনি হেঁটেছিলেনও 7 ধ�
 
 <Step>
 
-তাহলে 13? ওটা কোথা থেকে এলো? নদীর arrow টার দিকেই তাকান, ওটা নিজেই বলে দিবে.
+তাহলে 13? ওটা কোথা থেকে এলো? নদীর arrow টার দিকেই তাকান, ওটা নিজেই বলে দিবে।
 
 <ThirteenFromRiver />
 
 <Then>
 
-$v \cdot v = 4 + 9 = 13$. নদীর নিজের সাথে নিজের box. আর 4.1 এ দেখেছিলেন, নিজের সাথে box মানেই length এর বর্গ — $\|v\|^2 = v \cdot v$.
+$v \cdot v = 4 + 9 = 13$. নদীর নিজের সাথে নিজের dot product। আর 4.1 এ দেখেছিলেন, নিজের সাথে dot product মানেই length এর বর্গ — $\|v\|^2 = v \cdot v$।
 
 <RiverSquare />
 
-এজন্যই ভাগটা 13-এ গিয়ে মিললো. Shadow এর length বের করতে একবার $\|v\|$ দিয়ে ভাগ দিয়েছিলাম. ওটা নদীর arrow এর কত **অংশ**? সেটা জানতে আরেকবার ভাগ. মোট $\|v\|^2$, মানে $v \cdot v$, মানে 13.
+এজন্যই ভাগটা 13-এ গিয়ে মিললো। Shadow এর length বের করতে একবার $\|v\|$ দিয়ে ভাগ দিয়েছিলাম। ওটা নদীর arrow এর কত **অংশ**? সেটা জানতে আরেকবার ভাগ। মোট $\|v\|^2$, মানে $v \cdot v$, মানে 13।
 
 <TwoDivides />
+
+<SideQuest title="ভাগ দিলে shadow আসে কেন? কাগজ ঘুরিয়ে দেখি" journey>
+
+<Step>
+
+সেদিন রাতে load-shedding। হারিকেনের আলোয় ফাহিম খাতা খুলে বসলো। খাতায় বাঁকা নদী, দড়ি, আর নিচে লেখা 7 ÷ 13।
+
+<NightKhata story />
+
+হিসাব মিলছে। কিন্তু ভাগ দিলে shadow কেন আসে, ফাহিম জানে না। আপা একটা পাতলা কাগজে arrow দুইটা আঁকলেন। খাতার উপরে রেখে বললেন, কাগজটা ঘুরা। নদী সোজা করে ফেল।
+
+<TurnPaper />
+
+<Then>
+
+খেয়াল করেছেন? কাগজ ঘুরালে দুইটা list ই বদলে গেলো। কিন্তু dot product নড়লো না, 7 ই থাকলো। কারণ ঘুরালে arrow দুইটার length বদলায় না। মাঝের angle ও বদলায় না। আর 4.3 এ দেখেছিলেন, dot product শুধু এই দুইটা জিনিসের উপরেই দাঁড়িয়ে থাকে।
+
+<KeepsTurning />
+
+আর নদী সোজা হতেই দড়ির first number হয়ে গেলো shadow। ঠিক 4.6 এর সোজা নদীর মত।
 
 </Then>
 
@@ -135,21 +161,95 @@ $v \cdot v = 4 + 9 = 13$. নদীর নিজের সাথে নিজে
 
 <Step>
 
-7/13 অংশ. ফাহিম খাতায় বাঁকা নদীটা আঁকলো, 2 ঘর ডানে, 3 ঘর উপরে. এবার shadow এর মাথায় একটা dot বসাতে হবে. কলম থেমে রইলো. খাতায় dot বসাতে ঠিকানা লাগে. কয় ঘর ডানে, কয় ঘর উপরে?
+এবার সোজা নদীতে দড়ি আর নদীর dot product চালান। কোন slot কী দিচ্ছে, দেখুন।
+
+<FlatDot />
+
+<Then>
+
+First slot এ দড়ির first number, মানে shadow, গুণ হলো নদীর length দিয়ে। Second slot এ নদীর number 0। তাই দড়ির বাকি টুকরা যত বড়ই হোক, কিছুই যোগ হলো না।
+
+তাহলে **dot product = shadow × নদীর length**. 7 = 1.94 × 3.61. আর কাগজ ঘুরালে dot product বদলায় না। তাই বাঁকা নদীর 7 ও এই একই গুণফল।
+
+<ShadowTimesRiver />
+
+</Then>
+
+</Step>
+
+<Step>
+
+7 এর ভিতরে তাহলে shadow আছে, সাথে নদীর length। কিন্তু মাঝি চাচা জানতে চান নদীর কত অংশ। নদীর length দিয়ে কয়বার ভাগ দিলে নৌকা ঠিক মাথায় গিয়ে থামবে?
+
+<DivideCount />
+
+<Then>
+
+একবার ভাগ দিলে পাওয়া যায় shadow এর length, 1.94 ঘর। কিন্তু ওটা ঘর দিয়ে মাপা, অংশ না। অংশ মানে shadow টা নদীর কত ভাগ। সেটা জানতে আরেকবার নদীর length দিয়ে ভাগ।
+
+<TwoDivides />
+
+দুইবার 3.61 দিয়ে ভাগ মানে একবারে 3.61 × 3.61 দিয়ে ভাগ, মানে 13। আর 13 তো নদীর নিজের dot product। সোজা নদী (3.61, 0) এর বেলায় দেখুন: 3.61 × 3.61 + 0 × 0. এজন্যই ভাগটা v · v দিয়ে।
+
+</Then>
+
+</Step>
+
+<Step>
+
+এবার আপনার turn। নতুন নদী $(4, 3)$, নতুন দড়ি $(2, 4)$। কাগজ ঘুরিয়ে নদী সোজা করুন। তারপর বলুন, shadow এর মাথা নদীর কত অংশে পড়ে।
+
+<TurnAndRead />
+
+<Then>
+
+সোজা নদীর length 5। দড়ির first number, মানে shadow, 4। তাই 4/5। এবার কাগজ না ঘুরিয়ে dot product দিয়ে করি: দড়ি · নদী = 8 + 12 = 20। নদী · নদী = 16 + 9 = 25। 20/25, মানে সেই 4/5।
+
+<FormulaTurns />
+
+মানে $\frac{w \cdot v}{v \cdot v}$ হিসাবটা আপনার হয়ে কাগজটা ঘুরিয়ে দেয়। প্রতিবার আর হাতে ঘুরাতে হয় না।
+
+</Then>
+
+</Step>
+
+<Step>
+
+## শেষ! 7 ÷ 13 এর রহস্য খুললো
+
+<TurnRecap story />
+
+প্রশ্ন ছিল, 7 কে 13 দিয়ে ভাগ দিলে shadow আসে কেন। কাগজ ঘুরিয়ে নদী সোজা করলাম। তখন দেখা গেলো, dot product আসলে shadow × নদীর length। নদীর length দিয়ে একবার ভাগে shadow এর length। আরেকবার ভাগে নদীর কত অংশ। দুইবারের ভাগ একসাথে নদীর নিজের dot product, 13।
+
+এক line এ: **দড়ি · নদী = shadow × নদীর length। তাই নদী · নদী দিয়ে ভাগ দিলে পাওয়া যায় shadow নদীর কত অংশ।**
+
+এবার দুপুরের নৌকায় ফিরে যাই। মাঝি চাচা তখনো উত্তরের অপেক্ষায়।
+
+</Step>
+
+</SideQuest>
+
+</Then>
+
+</Step>
+
+<Step>
+
+7/13 অংশ। ফাহিম খাতায় বাঁকা নদীটা আঁকলো, 2 ঘর ডানে, 3 ঘর উপরে। এবার shadow এর মাথায় একটা dot বসাতে হবে। কলম থেমে রইলো। খাতায় dot বসাতে ঠিকানা লাগে। কয় ঘর ডানে, কয় ঘর উপরে?
 
 <KhataDot story />
 
-মাঝি চাচা পাড় থেকে বললেন, আধা পথে কই থাকো, আগে হেইডা কও.
+মাঝি চাচা পাড় থেকে বললেন, আধা পথে কই থাকো, আগে হেইডা কও।
 
 <ShareToPoint />
 
 <Then>
 
-খেয়াল করেছেন? নদীর উপরে থাকতে হলে নৌকাকে নদীর ঢং মেনে চলতে হয়. প্রতি 2 ঘর ডানে, 3 ঘর উপরে. আধা পথ গেলে দুইটাই আধা আর 7/13 পথ গেলে দুইটাই 7/13 অংশ হবে (2,3) এর.
+খেয়াল করেছেন? নদীর উপরে থাকতে হলে নৌকাকে নদীর ঢং মেনে চলতে হয়। প্রতি 2 ঘর ডানে, 3 ঘর উপরে। আধা পথ গেলে দুইটাই আধা আর 7/13 পথ গেলে দুইটাই 7/13 অংশ হবে (2,3) এর।
 
 <ShrinkBoth />
 
-এজন্যই shadow = (7 ÷ 13) × (2, 3). একই অংশ দিয়ে দুইটা slot কেই গুণ: $(14/13, 21/13)$. দশমিকে প্রায় $(1.08, 1.62)$. মানে shadow এর মাথা 1.08 ঘর ডানে, 1.62 ঘর উপরে. ফাহিমের dot ওখানেই বসলো.
+এজন্যই shadow = (7 ÷ 13) × (2, 3)। একই অংশ দিয়ে দুইটা slot কেই গুণ: $(14/13, 21/13)$। দশমিকে প্রায় $(1.08, 1.62)$. মানে shadow এর মাথা 1.08 ঘর ডানে, 1.62 ঘর উপরে। ফাহিমের dot ওখানেই বসলো।
 
 </Then>
 
@@ -157,7 +257,7 @@ $v \cdot v = 4 + 9 = 13$. নদীর নিজের সাথে নিজে
 
 <Step>
 
-দুইটা সংখ্যাই হাতে. এবার পুরা হিসাবটা এক machine এ সাজাই. চালান এক step এক step করে.
+দুইটা সংখ্যাই হাতে। এবার পুরা হিসাবটা এক machine এ সাজাই। চালান এক step এক step করে।
 
 <ShadowRecipe />
 
@@ -167,13 +267,13 @@ Arrow হিসাবে লিখলে shadow টা হলো:
 
 $$\text{shadow} = \frac{w \cdot v}{v \cdot v} \, v$$
 
-জোরে জোরে বলুন: দুইটা box, একটা division, এরপর নদীর arrow টাকে ওই অংশ অনুযায়ী টেনে লম্বা করা. Root লাগে না, চাঁদাও লাগে না.
+জোরে জোরে বলুন: দুইটা dot product, একটা division, এরপর নদীর arrow টাকে ওই অংশ অনুযায়ী টেনে লম্বা করা। Root লাগে না, চাঁদাও লাগে না।
 
-বাকিটা কী? টান থেকে shadow সরালে যেটুকু থাকে. 4.6 এর সেই হলুদ part. নৌকাকে যেটা শুধু পাড়ের দিকে টানে.
+বাকিটা কী? টান থেকে shadow সরালে যেটুকু থাকে। 4.6 এর সেই হলুদ part। নৌকাকে যেটা শুধু পাড়ের দিকে টানে।
 
 <BakiPull />
 
-আর শেষ line টাই আসল line. বাকি part আর নদীর মধ্যে box চালান. কত আসে? 0. শুধু এই দড়ির বেলায় না. যেকোনো টান আর যেকোনো নদীর বেলায়:
+আর শেষ line টাই আসল line। বাকি part আর নদীর মধ্যে dot product চালান। কত আসে? 0. শুধু এই দড়ির বেলায় না। যেকোনো টান আর যেকোনো নদীর বেলায়:
 
 $$w = \underbrace{\text{the shadow}}_{\text{along } v} + \underbrace{\text{the rest}}_{\text{at a right angle to } v}$$
 
@@ -187,19 +287,19 @@ $$w = \underbrace{\text{the shadow}}_{\text{along } v} + \underbrace{\text{the r
 
 ## Try it
 
-বিকাল পড়ে এসেছে. ঘাটের আগে নদী আরেকবার বাঁক নিলো. মাঝি চাচা দড়ি টানতে টানতেই বললেন, আরেকটা বাঁক আইলো. এইবার জলদি কও.
+বিকাল পড়ে এসেছে। ঘাটের আগে নদী আরেকবার বাঁক নিলো। মাঝি চাচা দড়ি টানতে টানতেই বললেন, আরেকটা বাঁক আইলো। এইবার জলদি কও।
 
 <SecondBend story />
 
-নতুন একটা বাঁক, নতুন একটা টান. নদী গেছে $(3, 1)$ বরাবর. দড়ির টান $(1, 2)$. নদীটা এবার আগেই 10 ভাগে কাটা আছে.
+নতুন একটা বাঁক, নতুন একটা টান। নদী গেছে $(3, 1)$ বরাবর। দড়ির টান $(1, 2)$। নদীটা এবার আগেই 10 ভাগে কাটা আছে।
 
 <TapFoot />
 
 <Then>
 
-দড়ি · নদী = 3 + 2 = 5. নদী · নদী = 9 + 1 = 10. তাই মাথাটা পড়ে 5/10 অংশে. মানে ঠিক মাঝখানে.
+দড়ি · নদী = 3 + 2 = 5। নদী · নদী = 9 + 1 = 10। তাই মাথাটা পড়ে 5/10 অংশে। মানে ঠিক মাঝখানে।
 
-অন্য দাগে tap করেছিলেন যারা, তাদের line টা নদীর সাথে হেলে ছিল. box 0 হয় নাই. আর box 0 না হওয়া মানেই right angle না.
+অন্য দাগে tap করেছিলেন যারা, তাদের line টা নদীর সাথে হেলে ছিল। Dot product 0 হয় নাই। আর dot product 0 না হওয়া মানেই right angle না।
 
 <HalfwayWhy />
 
@@ -209,17 +309,17 @@ $$w = \underbrace{\text{the shadow}}_{\text{along } v} + \underbrace{\text{the r
 
 <Step>
 
-সূর্য ডোবার আগেই নৌকা ঘাটে পৌঁছালো. ঘাটে নৌকা বাঁধা হচ্ছে. মাঝি চাচা হাসতে হাসতে একটা ধাঁধা দিলেন. দড়ির টান $(4, 2)$, আর ঘাটের সিঁড়ি উঠে গেছে $(1, 1)$ বরাবর. টানের কতটুকু সিঁড়ি বরাবর, আর কতটুকু বাকি থাকে?
+সূর্য ডোবার আগেই নৌকা ঘাটে পৌঁছালো। ঘাটে নৌকা বাঁধা হচ্ছে। মাঝি চাচা হাসতে হাসতে একটা ধাঁধা দিলেন। দড়ির টান $(4, 2)$, আর ঘাটের সিঁড়ি উঠে গেছে $(1, 1)$ বরাবর। টানের কতটুকু সিঁড়ি বরাবর, আর কতটুকু বাকি থাকে?
 
 <GhatRiddle story />
 
-এখন আপনার turn.
+এখন আপনার turn।
 
 <YourShadow />
 
 <Then>
 
-$(4, 2) = (3, 3) + (1, -1)$. একটা টুকরা সিঁড়ি বরাবর. আরেকটা ওটার সাথে right angle এ. সত্যিই right angle এ? box চালিয়ে আপনি নিজেই check করলেন. মাঝি চাচা কিছু বললেন না. একটা ডাব কেটে ফাহিমের হাতে দিলেন.
+$(4, 2) = (3, 3) + (1, -1)$. একটা টুকরা সিঁড়ি বরাবর। আরেকটা ওটার সাথে right angle এ। সত্যিই right angle এ? Dot product চালিয়ে আপনি নিজেই check করলেন। মাঝি চাচা কিছু বললেন না। একটা ডাব কেটে ফাহিমের হাতে দিলেন।
 
 <DabTreat />
 
@@ -229,7 +329,7 @@ $(4, 2) = (3, 3) + (1, -1)$. একটা টুকরা সিঁড়ি ব
 
 <Step>
 
-ঘাটে নামার আগে ফাহিমের মাথায় একটা idea আসলো. হাতে তখনো মাঝি চাচার ডাব. Shadow নিলে একটা arrow একটা number এ নেমে আসে: নদী বরাবর কতদূর. এখন একগাদা point যদি মোটামুটি একটা line বরাবর ছড়িয়ে থাকে? সবার shadow ওই line এর উপরে নিয়ে নিলে কী হারাবেন?
+ঘাটে নামার আগে ফাহিমের মাথায় একটা idea আসলো। হাতে তখনো মাঝি চাচার ডাব। Shadow নিলে একটা arrow একটা number এ নেমে আসে: নদী বরাবর কতদূর। এখন একগাদা point যদি মোটামুটি একটা line বরাবর ছড়িয়ে থাকে? সবার shadow ওই line এর উপরে নিয়ে নিলে কী হারাবেন?
 
 <FahimIdea story />
 
@@ -237,11 +337,11 @@ $(4, 2) = (3, 3) + (1, -1)$. একটা টুকরা সিঁড়ি ব
 
 <Then>
 
-ছড়ানোর line এ shadow নিলে? প্রতিটা point দুই number থেকে এক number এ নামলো. হারালো বড়জোর 0.4. Right angle এর line এ নিলে? সবাই এক জায়গায় গাদাগাদি করে বসলো.
+ছড়ানোর line এ shadow নিলে? প্রতিটা point দুই number থেকে এক number এ নামলো। হারালো বড়জোর 0.4. Right angle এর line এ নিলে? সবাই এক জায়গায় গাদাগাদি করে বসলো।
 
 <OnePoint />
 
-এটাই **PCA** (principal component analysis) এর মূল কথা. Data এর প্রতিটা point হয়তো 300 টা number. কিন্তু ছড়িয়ে আছে মাত্র কয়েকটা direction বরাবর. ওই কয়েকটাতে shadow নিন. বাকিটা ফেলে দিন.
+এটাই **PCA** (principal component analysis) এর মূল কথা। Data এর প্রতিটা point হয়তো 300 টা number। কিন্তু ছড়িয়ে আছে মাত্র কয়েকটা direction বরাবর। ওই কয়েকটাতে shadow নিন। বাকিটা ফেলে দিন।
 
 <FewNumbers />
 
@@ -253,35 +353,35 @@ $(4, 2) = (3, 3) + (1, -1)$. একটা টুকরা সিঁড়ি ব
 
 ## শেষ! বাঁকা নদীতেও মাথা খুঁজে পাওয়া গেলো
 
-শুরুতে প্রশ্ন ছিল, নদী বাঁকা হলে shadow এর মাথা কোথায় পড়ে. মাঝি চাচা জানতে চেয়েছিলেন, বাঁক নেয়ার পরে টানের কতটুকু কাজে লাগে. Slide করে খুঁজে বের করেছিলাম. তারপর সেটাকে সংখ্যায় এনেছি: নদীকে 13 ভাগ করে 7 ধাপ. এরপর দেখা গেলো, 7 আর 13 দুইটাই box থেকেই আসে. একটা দড়ি আর নদীর box. আরেকটা নদীর নিজের box.
+শুরুতে প্রশ্ন ছিল, নদী বাঁকা হলে shadow এর মাথা কোথায় পড়ে। মাঝি চাচা জানতে চেয়েছিলেন, বাঁক নেয়ার পরে টানের কতটুকু কাজে লাগে। Slide করে খুঁজে বের করেছিলাম। তারপর সেটাকে সংখ্যায় এনেছি: নদীকে 13 ভাগ করে 7 ধাপ। এরপর দেখা গেলো, 7 আর 13 দুইটাই dot product থেকেই আসে। একটা দড়ি আর নদীর dot product। আরেকটা নদীর নিজের dot product।
 
 <RecapBend story />
 
-এক line এ: **যেকোনো arrow কে যেকোনো direction এর সাপেক্ষে দুই টুকরা করা যায় — ওই direction বরাবর ওর shadow, আর বাকিটা right angle এ.**
+এক line এ: **যেকোনো arrow কে যেকোনো direction এর সাপেক্ষে দুই টুকরা করা যায় — ওই direction বরাবর ওর shadow, আর বাকিটা right angle এ।**
 
 <Table
   head={["যেটা দেখবেন", "যেভাবে বলবেন"]}
   rows={[
-    ["w · v", "দড়ি আর নদীর box — কয় ধাপ"],
-    ["v · v", "নদীর নিজের box — কয় ভাগ"],
+    ["w · v", "দড়ি আর নদীর dot product — কয় ধাপ"],
+    ["v · v", "নদীর নিজের dot product — কয় ভাগ"],
     ["((w · v) ÷ (v · v)) v", "v এর উপরে w এর shadow, arrow হিসাবে"],
     ["w − shadow", "বাকিটা, v এর সাথে right angle এ"],
     ["(w − shadow) · v = 0", "বাকিটা সবসময় right angle এ থাকে"],
   ]}
 />
 
-সন্ধ্যাবেলা ফাহিম গেলো গ্রামের library তে. লাইব্রেরির আপুর নতুন একটা computer আসছে, তাতে দুইটা search machine বসানো. ফাহিম “মাছ” লিখে search দিলো.
+সন্ধ্যাবেলা ফাহিম গেলো গ্রামের library তে। লাইব্রেরির আপুর নতুন একটা computer আসছে, তাতে দুইটা search machine বসানো। ফাহিম “মাছ” লিখে search দিলো।
 
-একটা machine মাছের একটা ছোট চিঠির উপরে তুলে দিলো মোটা একটা বই. বইটা আসলে নৌকা আর ধান নিয়ে লেখা, মাছের কথা আছে মোটে তিনবার. আরেকটা machine চিঠিটাকেই রাখলো উপরে. চিঠিটা পুরাটাই মাছ নিয়ে. একই বই, একই word, উত্তর দুইরকম. আপু কোন machine টা রাখবেন?
+একটা machine মাছের একটা ছোট চিঠির উপরে তুলে দিলো মোটা একটা বই। বইটা আসলে নৌকা আর ধান নিয়ে লেখা, মাছের কথা আছে মোটে তিনবার। আরেকটা machine চিঠিটাকেই রাখলো উপরে। চিঠিটা পুরাটাই মাছ নিয়ে। একই বই, একই word, উত্তর দুইরকম। আপু কোন machine টা রাখবেন?
 
 <LibraryTwo story />
 
 <LessonLink
   href="/dashboard/articles/math_for_ai/04f_library_search"
   eyebrow="পরের lesson"
-  title="Library র search, box নাকি cosine"
+  title="Library র search, dot product নাকি cosine"
 >
-  দুইটা search machine, দুইরকম উত্তর. কোনটা রাখা উচিত, আর কখন আরেকটা লাগে.
+  দুইটা search machine, দুইরকম উত্তর। কোনটা রাখা উচিত, আর কখন আরেকটা লাগে।
 </LessonLink>
 
 </Step>
