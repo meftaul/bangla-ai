@@ -525,7 +525,10 @@ export function ThirteenFromRiver() {
 // ---------------------------------------------------------------------------
 // 6 · The recipe, step by step: w · v = 7, v · v = 13, so the shadow is 7/13
 //     of v, (14/13, 21/13); the leftover w − shadow is (12/13, −8/13); and the
-//     leftover's box with the river is 24/13 − 24/13 = 0.
+//     leftover's box with the river is 24/13 − 24/13 = 0. The বাকি tap plays
+//     out: the leftover glows where it sits, a copy slides down to (0, 0), and
+//     its two legs grow — 2 − 1.08 = 0.92 right, 1 − 1.62 = −0.62 down — so the
+//     reader sees where (0.92, −0.62) comes from before the line lands.
 
 // Each line carries `say`: what it means in plain words, shown under the sheet
 // for the line just run, so the reader never meets a number without its story.
@@ -537,14 +540,31 @@ const RECIPE: { btn: string; line: string; say: string; box?: [readonly number[]
   { btn: "বাকি · নদী", line: "বাকি · v = 24/13 − 24/13 = 0", say: "বাকিটা নদীর সাথে right angle এ. সামনের দিকে এক ফোঁটাও টানে না." },
 ];
 const FR = makeFrame(-0.5, 3, -1, 3.5, 36);
+// the বাকি tap's play, one caption per phase; phase 4 is the line itself
+const X6_REST: XY = [12 / 13, -8 / 13];
+const X6_PH = [
+  "এই হলুদ টুকরাটাই বাকি: shadow এর মাথা থেকে দড়ির মাথা পর্যন্ত.",
+  "বাকিটাকে তুলে (0, 0) তে বসাই. তাহলে এর ঠিকানা পড়া যায়.",
+  "ডানে কত? দড়ি 2 ঘর, shadow 1.08 ঘর. বাকি 2 − 1.08 = 0.92.",
+  "উপরে কত? দড়ি 1 ঘর, shadow 1.62 ঘর. 1 − 1.62 = −0.62. মানে 0.62 ঘর নিচে.",
+];
 
 export function ShadowRecipe() {
   const pass = useGate();
   const [k, setK] = useSeed("k", 0);
   const shadow: XY = [(7 / 13) * 2, (7 / 13) * 3];
+  // the বাকি tap's play: 0 glow, 1 slide to (0, 0), 2 right leg, 3 down leg, 4 the line
+  const play = usePlay(1500);
+  const [rest] = useSeed("ph", 4);
+  const ph = k < 4 ? 0 : k > 4 ? 4 : play.running ? play.k : play.k || rest;
+  const [rx, ry] = useTween(ph >= 1 ? [0, 0] : [shadow[0], shadow[1]], 1000);
+  const [lx, ly] = useTween([ph >= 2 ? X6_REST[0] : 0, ph >= 3 ? X6_REST[1] : 0], 800);
+  const busy = k === 4 && ph < 4;
 
   const step = () => {
+    if (play.running) return;
     setK(k + 1);
+    if (k + 1 === 4) play.play(4);
     if (k + 1 === RECIPE.length) pass("Shadow এর formula: (w · v ÷ v · v) × v.");
   };
 
@@ -561,16 +581,43 @@ export function ShadowRecipe() {
               shadow
             </Label>
           )}
-          {k >= 4 && <Arrow f={FR} from={shadow} to={W} tone="amber" w={2} dashed />}
+          {/* the leftover glows where it sits while its tap plays out */}
+          {k === 4 && (
+            <path
+              d={`M${FR.sx(shadow[0])} ${FR.sy(shadow[1])}L${FR.sx(W[0])} ${FR.sy(W[1])}`}
+              strokeWidth={9}
+              strokeLinecap="round"
+              className={`pointer-events-none stroke-[#f59e0b] transition-opacity duration-700 motion-reduce:transition-none ${ph === 0 ? "opacity-45" : "opacity-20"} ${FADE}`}
+            />
+          )}
+          {k >= 4 && <Arrow f={FR} from={shadow} to={W} tone="amber" w={2} dashed draw={busy} />}
           {k >= 4 && (
             <Label f={FR} at={[(shadow[0] + W[0]) / 2, (shadow[1] + W[1]) / 2]} dx={2} dy={-8} anchor="start" size={9} weight={700} className={`fill-[#b45309] ${FADE}`}>
               বাকি
             </Label>
           )}
+          {/* a copy set down at (0, 0), its two legs read off the axes */}
+          {k === 4 && ph >= 2 && (
+            <path d={`M${FR.sx(0)} ${FR.sy(0)}H${FR.sx(lx)}`} strokeWidth={4} strokeLinecap="round" className="pointer-events-none stroke-cat-teal/70" />
+          )}
+          {k === 4 && ph >= 2 && (
+            <Label f={FR} at={[X6_REST[0], 0]} dx={3} dy={-3} anchor="start" size={8.5} weight={700} className={`fill-[#0f766e] font-mono ${FADE}`}>
+              0.92
+            </Label>
+          )}
+          {k === 4 && ph >= 3 && (
+            <path d={`M${FR.sx(X6_REST[0])} ${FR.sy(0)}V${FR.sy(ly)}`} strokeWidth={4} strokeLinecap="round" className="pointer-events-none stroke-cat-violet/60" />
+          )}
+          {k === 4 && ph >= 3 && (
+            <Label f={FR} at={X6_REST} dx={5} dy={4} anchor="start" size={8.5} weight={700} className={`fill-[#6d28d9] font-mono ${FADE}`}>
+              −0.62
+            </Label>
+          )}
+          {k >= 4 && ph >= 1 && <Arrow f={FR} from={[rx, ry]} to={[rx + X6_REST[0], ry + X6_REST[1]]} tone="amber" w={2.2} faint={k > 4} />}
           {k >= 5 && <T_Square f={FR} at={shadow} a={[-2 / Math.sqrt(13), -3 / Math.sqrt(13)]} b={[3 / Math.sqrt(13), -2 / Math.sqrt(13)]} size={0.3} />}
         </Plane>
         <div className="grid min-w-0 flex-1 gap-0.5 text-[0.82rem] leading-snug">
-          {RECIPE.slice(0, k).map((r, i) =>
+          {RECIPE.slice(0, busy ? 3 : k).map((r, i) =>
             // the last box run stays open; the earlier one folds back to its answer
             r.box && i === k - 1 ? (
               <BoxRun key={i} a={r.box[0]} b={r.box[1]} aName={r.box[2]} bName={r.box[3]} dense />
@@ -580,17 +627,28 @@ export function ShadowRecipe() {
               </div>
             ),
           )}
+          {/* the leftover's address, slot by slot: rope minus shadow */}
+          {k === 4 && ph >= 2 && (
+            <div className={`${FADE} text-[0.75rem] text-cat-teal`}>
+              ডানে: <span className="font-mono">2 − 1.08 = 0.92</span>
+            </div>
+          )}
+          {k === 4 && ph >= 3 && (
+            <div className={`${FADE} text-[0.75rem] text-cat-violet`}>
+              উপরে: <span className="font-mono">1 − 1.62 = −0.62</span>
+            </div>
+          )}
           {k === 0 && <div className="text-sm text-muted">দড়ি w = (2, 1), নদী v = (2, 3)</div>}
         </div>
       </div>
       <div className="mt-2 min-h-10 text-center text-[0.9rem] leading-snug">
         {k > 0 && (
-          <span key={k} className={FADE}>
-            {RECIPE[k - 1].say}
+          <span key={busy ? `p${ph}` : k} className={FADE}>
+            {busy ? X6_PH[ph] : RECIPE[k - 1].say}
           </span>
         )}
       </div>
-      {k < RECIPE.length && (
+      {k < RECIPE.length && !busy && (
         <div className="mt-2 flex justify-center">
           <button type="button" onClick={step} className={primaryBtn}>
             {RECIPE[k].btn}
@@ -1357,7 +1415,7 @@ export function RiverBend({}: Story) {
             </text>
           </g>
         )}
-        {k >= 5 && <Bubble x={men[0] + 10} y={men[1] - 6} side="right" lines={["বাঁকের পরে টানের", "কতটুকু কামে লাগে?"]} />}
+        {k >= 5 && <Bubble x={men[0] + 10} y={men[1] - 6} side="right" lines={["বাঁক নেওনের পরে টানের", "কতটুকু কামে লাগে?"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1379,7 +1437,7 @@ const X3A_SAY = [
   "Shadow এর মাথা পড়লো ঠিক নদীর arrow এর 7/13 অংশে.",
   "নদীর arrow টাকে 13 টুকরা করলে shadow এর মাথা বসে 7 নম্বর দাগে.",
   "কিন্তু 13 ভাগ করার কথা মাথায় আসলো কেন?",
-  "আর গুনে 7 পাওয়াটাই বা কী?",
+  "আর গুনে 7 পাওয়ার মানেই বা কী?",
   "দুইটা সংখ্যাই লুকিয়ে আছে চেনা এক জায়গায়.",
 ];
 
@@ -2041,7 +2099,7 @@ const X2_SAY = [
   "এই বাঁকে slide করে করে মাথাটা পাওয়া গেলো.",
   "কিন্তু ঘাটের আগে নদী আরো কয়েকবার বাঁক নিবে.",
   "আর সূর্য নামছে. মাঝি চাচা সন্ধ্যার আগে ঘাটে পৌঁছাতে চান.",
-  "প্রতিটা বাঁকে নতুন করে slide করতে বসলে সন্ধ্যা পার. দরকার একটা হিসাব.",
+  "প্রতিটা বাঁকে নতুন করে slide করতে বসলে সন্ধ্যা পার হয়ে যাবে. দরকার একটা হিসাব.",
 ];
 const X2_RIVER = "M-6 104H62Q80 104 88 86L104 48Q112 30 130 30H166Q184 30 192 48L202 70Q210 88 228 88H290";
 const X2_BENDS: XY[] = [
@@ -2471,7 +2529,7 @@ export const fixtures: Fixtures = {
   SevenFromBox: { start: {}, ran: { ran: true }, matched: { ran: true, matched: true } },
   ThirteenFromRiver: { start: {}, one: { sq: [0] }, both: { sq: [0, 1] }, added: { sq: [0, 1], added: true } },
   FindFoot: { start: {}, near: { lam: 0.45 }, found: { lam: FOOT, found: true } },
-  ShadowRecipe: { start: {}, box: { k: 2 }, half: { k: 3 }, all: { k: 5 } },
+  ShadowRecipe: { start: {}, box: { k: 2 }, half: { k: 3 }, glow: { k: 4, ph: 0 }, slid: { k: 4, ph: 1 }, legs: { k: 4, ph: 3 }, baki: { k: 4 }, all: { k: 5 } },
   ShareToPoint: { start: {}, half: { seen: [0, 1], last: 1 }, wrong: { seen: [0, 1], last: 1, pick: 0 }, right: { seen: [0, 1], last: 1, pick: 1 } },
   KhataDot: { rest: { k: 0 }, ask: { k: 1 }, done: {} },
   ShrinkBoth: { rest: { k: 0 }, half: { k: 1 }, done: {} },
