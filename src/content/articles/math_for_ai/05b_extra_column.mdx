@@ -1,0 +1,292 @@
+export const metadata = {
+  title: "Math for AI 5.2 — The extra column, what a bathroom is worth",
+  description:
+    "Two flats, one extra bathroom, 4000 taka apart. The dalal's app priced a bathroom at +3000 in the morning and −2000 by evening, on the same khata. Abbu signs tonight — which number should he believe?",
+  type: "article",
+};
+
+{/* Told as a Brilliant-style journey, like 1.1 and 2.3, in the author's
+    Banglish (like 4.5 and 4.6): screen 1 seals the reader's bet on which of
+    the app's two bathroom prices means anything, and the bet is not settled
+    until RerunApp, seven screens later, after AreaTwice (a copy column),
+    TotalColumn (a column built from the others), TwoKnobSets and YourShuffle
+    (the knobs swing), SpotTheExtra (Your turn) and FreeBath (Try it). 8 steps.
+    Each screen opens by reacting to the last; explanations sit in <Then>, one
+    phone screen each with a watch-only figure, and asides (multicollinearity,
+    nearly-copies, the notation) sit in <SideQuest> cards. The screens live in
+    components/interactive/rent-journey.tsx.
+
+    The zero-walk test, the untidy remote and the third button were once the
+    second half of this journey. They are 5.2b now (05b2_walk_home), with
+    Nasib's three-button remote as its question. Second of the "span,
+    independence, basis" journeys (Article 5); the plan is in
+    05_journey_specs.md. */}
+
+import { Journey, Step, Then, SideQuest } from "@/components/journey/journey";
+import {
+  RemoteBRecall,
+  DalalArrives,
+  TwoAnswers,
+  BothFit,
+  KhataOpens,
+  AreaTwice,
+  ThreeFacts,
+  SaminSquints,
+  TotalColumn,
+  BuiltRowByRow,
+  KnobCards,
+  TwoKnobSets,
+  KnobShuffle,
+  TwoApps,
+  YourShuffle,
+  SlowSum,
+  ThirdSet,
+  BagPages,
+  SpotTheExtra,
+  TrapPage,
+  FreeRefresh,
+  FreeBath,
+  KnobFamily,
+  AbbuSigns,
+  RerunApp,
+  NoRoomToShuffle,
+  NearCopyWobble,
+  NasibAtDoor,
+} from "@/components/interactive/rent-journey";
+
+<Journey title="বাড়তি column · 5.2">
+
+<Step>
+
+বাসা বদলের সপ্তাহ, দ্বিতীয় দিন। কালকের চারটা remote এখনো টেবিলের উপর পড়ে আছে, যমজ remote B-ও আছে ওখানে। ওটার দুইটা button-ই ঠেলে একই হেলানো line বরাবর। তাই পুরা floor-এ ওর দৌড় ওই এক line পর্যন্ত। কথাটা মাথায় রাখুন।
+
+<RemoteBRecall story />
+
+আজ দালাল ভাই আবার আসছেন, এবার হাতে ভাড়ার খাতা।
+
+ফাহিমদের নতুন বাসা খোঁজা চলছে। লিস্টে টিকে আছে দুইটা flat। একই সাইজ। একই তলা। একই এলাকা। শুধু flat B-তে একটা বাথরুম বেশি, আর ভাড়া মাসে 4000 টাকা বেশি।
+
+আব্বু চায়ের কাপ নামিয়ে রাখলেন। শান্ত গলায় বললেন, একটা বাথরুমের দাম কত?
+
+দালাল ভাইয়ের phone-এ একটা rent app। খাতার সব flat ওতে তোলা। সকালে app বলেছিল, একটা বাথরুম 3000 টাকা। দুপুরে খাতায় আরেকটা flat উঠলো। সন্ধ্যায় একই app বললো, −2000।
+
+<DalalArrives story />
+
+আব্বু আজ রাতেই sign করবেন। App তৃতীয়বার মত বদলানো পর্যন্ত বসে থাকার সময় নাই।
+
+<TwoAnswers />
+
+<Then>
+
+বিচার করার আগে app-এর প্রতি একটু fair হই। App কি মিথ্যা বলেছে? কোনোবারই না। যখন যে দাম বলেছে, খাতার প্রতিটা flat-এর ভাড়া ওই দামে মিলে যায়। টাকায় টাকায়। একই প্রশ্নের দুইটা নিখুঁত উত্তর।
+
+তাহলে গোলমালটা কোথায়? খাতার ভিতরেই। বের করার একটাই উপায়। খাতাটা column ধরে ধরে পড়া। কোন বাজি জিতলো, আর কেন? জানবেন শেষ screen-এ।
+
+<BothFit />
+
+</Then>
+
+</Step>
+
+<Step>
+
+3.7 এ একই ব্যাগের ওজন ছিল 1200 gram, আবার 1.2 kilogram. একই কথা, শুধু নতুন জামা। কথাটা পকেটে রাখুন।
+
+সামিন খাতাটা খুললো। প্রথম পাতায় প্রতিটা flat-এর area। একবার square feet-এ লেখা, একবার square metre-এ। পাশাপাশি দুইটা column। দুইটাকেই বেশ দরকারি দেখায়।
+
+<KhataOpens story />
+
+<AreaTwice />
+
+<Then>
+
+পাতায় ছয়টা সংখ্যা। তথ্য কয়টা? মাত্র তিনটা। sq m column যা বলতে পারতো, sq ft column সেটা আগেই বলে দিয়েছে। 10.76 দিয়ে ভাগ দিন। নতুন column টা হুবহু ফেরত আসে, সারির পর সারি। এমন column আসলে পুরানো column-ই। নতুন জামা পরে এসেছে। ঠিক 3.7 এর ব্যাগের মতো।
+
+দ্বিতীয় পাতার চালাকিটা আরেকটু সূক্ষ্ম।
+
+<ThreeFacts />
+
+</Then>
+
+</Step>
+
+<Step>
+
+দ্বিতীয় পাতায় flat-গুলা নিজেই। Bed, bath, মোট ঘর, আর ভাড়া। সামিন চোখ কুঁচকে মোট ঘরের column টা দেখলো। এটা bed-এর কপি না। bath-এরও কপি না। Flat বদলালে এটাও বদলায়, যেন নিজের কিছু জানে। তাহলে এটা কি নতুন তথ্য?
+
+<SaminSquints story />
+
+<TotalColumn />
+
+<Then>
+
+কী এসেছে? প্রতিটা সারিতে মোট ঘর = bed + bath। কপি না। কিন্তু বানানো বাকি দুইটা column জোড়া দিয়ে, শেষ ঘরটা পর্যন্ত। প্রথম পাতার জামার চেয়ে এটা সূক্ষ্ম। Column টা বদলায়। ব্যস্তও দেখায়। তবু ওকে কিছু জিজ্ঞেস করলে? ওর নিজের কোনো উত্তর নাই। ও যা বলবে, bed আর bath সেটা আগেই ঠিক করে রেখেছে।
+
+এমন column-কে এখন থেকে একটা নাম দিয়ে ডাকবো: **বাড়তি column** (extra column)।
+
+<BuiltRowByRow />
+
+</Then>
+
+</Step>
+
+<Step>
+
+3.3 এ tiffin-এর recipe মনে আছে? move ছিল মাত্র দুইটা। একটা সংখ্যা দিয়ে গুণ। আর যোগ। Rent app-এর প্রতিটা knob ঠিক এই দুইটা move, খোলাখুলি।
+
+দালাল ভাই phone টা টেবিলে রাখলেন। হাসিমুখে বললেন, মেশিনের হিসাব ভাই, ভুল হয় না।
+
+আব্বু বললেন, তাহলে দুইবার দুই দাম কেন?
+
+ফাহিম phone টা হাতে নিলো। App-এর history-তে দুইটা knob card। একটা সকালের, একটা সন্ধ্যার।
+
+<KnobCards story />
+
+App প্রতিটা column-কে একটা knob বানায়। knob মানে ওই column এর একটার দাম। সকালের knob: প্রতি bed 5, প্রতি bath 3, মোট ঘরে 0। সব হাজার টাকায়। সন্ধ্যায়? knob ঘুরে গেছে অন্য জায়গায়: 0, −2, 5। দুইটা set-ই খাতার সব flat-এ চালান।
+
+<TwoKnobSets />
+
+<Then>
+
+<KnobShuffle />
+
+App knob-গুলার মধ্যে credit এদিক ওদিক করতে পারে। Bed আর bath-এর knob থেকে $c$ কমান। সেই $c$ তুলে দিন মোট ঘরের knob-এ। ভাড়া নড়লো? একটা flat-এরও না। কারণ, মোট ঘর মানেই bed + bath। যা কমলো, ঠিক তাই ফেরত আসে। মোট ঘরের column যা পায়, সবই ধার করা টাকা।
+
+দুইটা knob-set। দুইটাই সব flat-এ নিখুঁত মেলে। একটাকে বাছবেন কোন data দিয়ে? কোনো data দিয়েই না।
+
+<SideQuest title="Multicollinearity: statistician-রা একে কী বলে">
+
+Statistician-রা এটাকে বলে **multicollinearity**। মানে, কোনো column বাকিদের দিয়ে বানানো যায়। এই ব্যাপারে ওনারা সোজাসাপ্টা। ভালো app হলে দাম বলতেই রাজি হবে না। নয়তো চুপচাপ একটা set বেছে নেবে। আর আশা করবে সব ঠিক আছে। দালাল ভাইয়ের app? বেছে নিয়েছে। সকালে 3000। সন্ধ্যায় −2000।
+
+<TwoApps />
+
+</SideQuest>
+
+</Then>
+
+</Step>
+
+<Step>
+
+App নিজে নিজে shuffle করলো। এবার knob আপনার হাতে। টেবিলে flat 1। হাতে সকালের knob। Bed-এর knob থেকে 1 কমান। bath-এর knob থেকেও 1। তারপর শুধু মোট ঘরের knob দিয়ে ভাড়াটা বাঁচান।
+
+<YourShuffle />
+
+<Then>
+
+Calculation টা ধীরে ধীরে:
+
+<SlowSum />
+
+কোথায় এসে থামলেন, খেয়াল করেছেন? এটা সকালের set। শুধু $c = 1$ বসিয়ে। আগের figure-এ যে পরিবারটা slide করছিল, তারই আরেক সদস্য। তাই এটাও সব flat-এ মেলে, একই কারণে। App-এর কাছে ছিল দুইটা set। আপনি হাতে বানালেন তৃতীয়টা। খাতার কোনো কিছুই আপনাদের আলাদা করতে পারবে না।
+
+<ThirdSet />
+
+</Then>
+
+</Step>
+
+<Step>
+
+সামিন ততক্ষণে দালাল ভাইয়ের ব্যাগ খুলে ফেলেছে। ভিতরে পাঁচটা আলগা পাতা। প্রতিটায় ছোট একটা table, একেকটা একেক জিনিসের।
+
+দালাল ভাই কড়া গলায় বললেন, ওইগুলা ধইরো না মিয়া, পুরান কাগজ।
+
+সামিন পাতাগুলা মেঝেতে মেলে ধরলো।
+
+<BagPages story />
+
+এবার আপনার পালা। আমাদের কোনো সাহায্য ছাড়া। প্রতিটা পাতায় একটা column খুঁজুন, যেটাকে বাকিরা বানিয়ে দিতে পারে। সেটায় tap করুন। কোনোটাই বাড়তি মনে হচ্ছে না? সাহস করে সেটাই বলুন। পাঁচটার একটা পাতা ফাঁদ।
+
+<SpotTheExtra />
+
+<Then>
+
+ফাঁদ ছিল কোথায়? শেষ পাতায়। Bed আর তলার মধ্যে কোনো নিয়ম নাই। দুইটাই সৎ তথ্য। কোনোটাই বাড়তি না। বাকি প্রতিটা পাতায়? একটা column চুপচাপ অন্যদের information পড়ে শোনাচ্ছিল।
+
+আর এটাই পুরা skill টা। মনে রাখার মতো। কোনো table-কে বিশ্বাস করার আগে দেখে নিন। ওর কোনো column কি শুধু অন্যদের information পড়ে শোনাচ্ছে?
+
+<TrapPage />
+
+</Then>
+
+</Step>
+
+<Step>
+
+## Try it
+
+আব্বু কলম খুঁজছেন। ফাহিম phone টা নিয়ে নাড়াচাড়া করছিল। একবার refresh দিতেই app বললো, বাথরুমের দাম 0 টাকা। বাথরুম ফ্রি।
+
+<FreeRefresh story />
+
+মেশিন এবার কোন knob-set তুলে নিলো? তিনটা card-এর একটা বেছে app চালান। যেটায় ছয়টা flat-এর ভাড়াই খাতার সাথে মিলে, ওটাই।
+
+<FreeBath />
+
+<Then>
+
+$(5 - c, \; 3 - c, \; c)$ তে $c = 3$ বসালেই $(2, 0, 3)$। Bed আর bath থেকে 3 করে কমলো। মোট ঘর প্রতি ঘরে 3 ফেরত দিলো।
+
+শুধু bath-এর knob 0 করেছিলেন? তাহলে ওই 3 হাজার কেউ ফেরত দেয় নাই। তাই প্রতিটা bar ছোট পড়লো।
+
+পুরা পরিবারটা একসাথে দেখুন। সকাল, আপনার set, ফ্রি বাথরুম, সন্ধ্যা, সবাই এক লাইনে।
+
+<KnobFamily />
+
+</Then>
+
+</Step>
+
+<Step>
+
+## The end! বাথরুমের দাম 3000
+
+সন্ধ্যা। টেবিলে contract। আব্বুর হাতে কলম। দালাল ভাই হাসিমুখে বসে আছেন।
+
+আব্বু কলমটা নামিয়ে রাখলেন। বললেন, sign-এর আগে খাতায় ছোট একটা অপারেশন।
+
+<AbbuSigns story />
+
+<RerunApp />
+
+<Then>
+
+<NoRoomToShuffle />
+
+বাজির ফল? কোনো সংখ্যারই মানে ছিল না। দুইটা knob-set-ই মিলতো। app শুধু একটা তুলে নিচ্ছিল। আর column টা বাদ দেওয়ার পর? 3000. প্রতিবার।
+
+মনে রাখার নিয়ম: **যে column-কে বাকিরা বানিয়ে দিতে পারে, সে নতুন কিছু যোগ করে না। শুধু knob-গুলাকে দোলায়।**
+
+<SideQuest title="প্রায়-কপি column, আর বইয়ে কীভাবে লেখে">
+
+একটা প্রায়-কপি column (bed + bath, সাথে একটু এদিক ওদিক) দামটাকে যেকোনো দিকে ঘুরিয়ে দেয় না। তবে কাঁপায়।
+
+<NearCopyWobble />
+
+<Table
+  head={["আমরা যা বললাম", "বইয়ে যেভাবে লেখে"]}
+  rows={[
+    ["বাড়তি column", "a column that is a combination of the others"],
+    ["বাড়তি column-এ knob দোলা", "multicollinearity"],
+    ["column বাদ দিয়ে app আবার চালানো", "drop the feature, refit"],
+  ]}
+/>
+
+Article 8, 9 আর 10 এই একই কথাকে আরো তিনটা বাহারি জামায় আনবে: একটা determinant যেটা শূন্য আসে, একটা inverse যেটা থাকে না, আর অসংখ্য solution। শেষেরটা আপনি আজকেই দেখলেন। knob-set-এর পুরা পরিবার।
+
+</SideQuest>
+
+দালাল ভাই যেতেই দরজায় নাসিব। হাতে তিন button-এর নতুন একটা remote। তিন নম্বর button টা কারো কপি না। তাহলে ওটা কি সত্যিই কাজের?
+
+<NasibAtDoor />
+
+<LessonLink href="/dashboard/articles/math_for_ai/05b2_walk_home" eyebrow="পরের lesson" title="বাড়তি button, চোখে না দেখে ধরা">
+  নাসিবের তিন button-এর remote: তিন নম্বর button টা কি 50 টাকার দাম রাখে?
+</LessonLink>
+
+</Then>
+
+</Step>
+
+</Journey>

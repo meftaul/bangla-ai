@@ -1,0 +1,240 @@
+export const metadata = {
+  title: "Math for AI 5.5b — Same arrow, new numbers",
+  description:
+    "At tiffin, Fahim's new bench-mate Karim finds two cards for one school, (2, 3) on the map and (−1, 3) on the roads, and Pythagoras on them gives two different distances. How far is the school really, and is one of the cards lying?",
+  type: "article",
+};
+
+{/* Told as a Brilliant-style journey in the author's Bangla-English, like 1.1
+    and 2.3: screen 1 seals the reader's bet on how far the school really is,
+    and the bet is not settled until TapeReveal, six screens later, after
+    SameSchool (the arrow never moves, only the grid), LaneBlock (a lane block
+    is 1.41), RoadCorner (the roads don't meet at a right angle), YourDistance
+    and the TryWhichGrid exercise have shown that a card belongs to its arrow
+    and its grid together, and that Pythagoras only works on square roads.
+    7 steps. Each screen opens by reacting to the last; explanations sit in
+    <Then>, one phone screen each with a watch-only figure, and asides (square
+    roads need no solving, the notation) sit in <SideQuest> cards.
+
+    Split off from 5.5 (05e_school_lanes), which finds the road card; this
+    one asks what the two cards mean. The screens live in
+    components/interactive/twocard-journey.tsx, the shared map pieces in
+    lanes-kit.tsx. The plan is in 05_journey_specs.md. */}
+
+import { Journey, Step, Then, SideQuest } from "@/components/journey/journey";
+import {
+  TiffinSums,
+  DistanceBet,
+  BothArrive,
+  SameSchool,
+  BasisPair,
+  AssemblyLines,
+  TapeOut,
+  LaneBlock,
+  DiagonalBlock,
+  RoadCorner,
+  TwoTapes,
+  ShadowRoads,
+  YourDistance,
+  BazaarTape,
+  KarimObjects,
+  TryWhichGrid,
+  ReachPaint,
+  TapeOnMap,
+  TapeReveal,
+  NameTheCard,
+  LandlordRoof,
+} from "@/components/interactive/twocard-journey";
+
+<Journey title="এক স্কুল, দুইটা card · 5.5b">
+
+<Step>
+
+টিফিনের ঘণ্টা পড়লো। ফাহিমের পাশের বেঞ্চে করিম। লম্বা ছেলে। Assembly তে লাইনের একদম শেষে দাঁড়ায়। টিফিন বক্সে পরোটা আর ডিম।
+
+ফাহিমের খাতায় সকালের দুইটা card। Map এ স্কুল (2, 3)। রাস্তায় (−1, 3)। করিম কিছুক্ষণ তাকিয়ে রইল। তারপর কলম টেনে নিয়ে দুইটাতেই Pythagoras চালালো, 3.4 এর মতো: দুই সংখ্যা বর্গ, যোগ, তারপর root।
+
+<TiffinSums story />
+
+একটায় আসলো 3.61 block, আরেকটায় 3.16. করিম শান্ত গলায় বললো, একটা card নিশ্চয়ই ভুল।
+
+স্কুল আসলে কত দূরে?
+
+<DistanceBet />
+
+<Then>
+
+দুইটা হিসাবই একই নিয়মে করা। আর দুইটা card-ই স্কুলে পৌঁছায়। map এর card map এ। রাস্তার card আজ সকালে, রিকশায়। তবু দূরত্ব আসলো দুইরকম।
+
+গোলমালটা কোথায়? এই journey তে সেটাই খুঁজবো।
+
+<BothArrive />
+
+</Then>
+
+</Step>
+
+<Step>
+
+প্রথম প্রশ্ন। দুইটা card কি আসলে দুইটা আলাদা জায়গা দেখাচ্ছে? বাসা থেকে স্কুল পর্যন্ত একটা arrow আঁকি। তারপর বদলাই নিচের grid টা। arrow নড়বে কি? আগে ভাবুন।
+
+<SameSchool />
+
+<Then>
+
+arrow টা নড়লো? একচুলও না। বদলেছে শুধু নিচের grid টা। আর grid এর সাথে বদলেছে সংখ্যাগুলা। আমাদের দুই রাস্তার মতো এরকম এক জোড়া direction কে বলে **basis**। 3.3 আর 5.3 এর সেই শব্দ। তাই একটা card একা কিছু বোঝায় না। ওর লাগে ওর arrow। আর ওর basis।
+
+<BasisPair />
+
+ফাহিম আজ সকালে assembly তেই এটা টের পেয়েছে। পুরানো স্কুলের লাইনে সে ছিল সবচেয়ে লম্বা। এখানে সে মাঝখানে।
+
+<AssemblyLines />
+
+</Then>
+
+</Step>
+
+<Step>
+
+Arrow একটাই। তাহলে দূরত্বও একটাই। তারমানে দুইটা হিসাবের একটা মিথ্যা বলছে। কোনটা?
+
+ফাহিমের ব্যাগে এখনো 3.4 এর সেই মাপার ফিতা। করিম ওটা টেনে বের করলো।
+
+<TapeOut story />
+
+Pythagoras ধরে নেয় card এর প্রতিটা block ঠিক 1 লম্বা। আগে সেটাই check করি। দুই রাস্তার এক block করে মাপুন।
+
+<LaneBlock />
+
+<Then>
+
+বড় রাস্তার block ঠিক 1। গলির block? 1.41. কেন? গলি কোনাকুনি যায়। গলির এক block আসলে map এর একটা ছোট square এর কোনাকুনি। তাই লম্বা।
+
+করিমের হিসাব (−1, 3) এর 3 কে ধরেছিল 3 × 1। আসলে ওটা 3 × 1.41 = 4.24 লম্বা পথ।
+
+এক নম্বর গোলমাল ধরা পড়লো।
+
+<DiagonalBlock />
+
+</Then>
+
+</Step>
+
+<Step>
+
+আরো একটা শর্ত আছে। Pythagoras খাটে শুধু right angle এর কোণায়। তাহলে দেখি, দুই grid এর দুই রাস্তা কোণায় গিয়ে কীভাবে মিলে। কোণ check করবো কী দিয়ে? মনে আছে তো, 4.2 এর dot product. Dot product 0 মানে right angle.
+
+<RoadCorner />
+
+<Then>
+
+Map grid এর কোণায় dot product 0. right angle. block ও 1 লম্বা। তাই (2, 3) এ Pythagoras চলে: √(2² + 3²) = 3.61.
+
+রাস্তার grid এ? dot product 1. কোণটা হেলে আছে। আর গলির block 1.41. দুইটা শর্তই ভাঙা। তাই road card এ বর্গ করে কিছুই মাপা হয় না।
+
+<TwoTapes />
+
+<SideQuest title="Square রাস্তা: solve করারও দরকার নাই">
+
+রাস্তা right angle এ মিলে, আর প্রতিটা block 1 লম্বা? তাহলে card বের করতে solve করাও লাগে না। Card এর প্রতিটা সংখ্যা একটা shadow। 4.3 এর torch গুলার মতো। বইতে এরকম grid কে বলে **orthonormal basis**। মানে, কোণ right angle, block 1 লম্বা। বাঁকা রাস্তায় shadow দিয়ে card পাওয়া যায় না। তাই সেখানে solve করতে হয়।
+
+<ShadowRoads />
+
+</SideQuest>
+
+</Then>
+
+</Step>
+
+<Step>
+
+এবার আপনার পালা, আমাদের কোনো সাহায্য ছাড়া। আম্মুর বাজারের road card ছিল (3, 1)। বাজার বাসা থেকে সোজা line এ কত দূরে?
+
+<YourDistance />
+
+<Then>
+
+Road card কে আগে map এর card বানাতে হয়। গলিতে 1 block মানে (1, 1)। বড় রাস্তায় 3 block মানে (3, 0)। যোগ করলে (4, 1)। Map এর grid square. block 1 লম্বা। তাই এখানে Pythagoras খাটে: √17 = 4.12.
+
+3.16 বেছেছেন? করিমের ভুলটাই করেছেন। আর 4.41 হলো রিকশার পুরা পথ, রাস্তা ধরে ধরে। সোজা line এর দূরত্ব সবসময় এর চেয়ে কম।
+
+<BazaarTape />
+
+</Then>
+
+</Step>
+
+<Step>
+
+## Try it
+
+করিম এবার অন্য কথা তুললো। বললো, তাহলে বাঁকা রাস্তা মানেই বাজে grid। Square না হলে আবার grid কীসের?
+
+<KarimObjects story />
+
+নিচে তিনটা পাড়ার map। কোনগুলায় রিকশা বাসা থেকে যেকোনো জায়গায় যেতে পারে?
+
+<TryWhichGrid />
+
+<Then>
+
+রাস্তাগুলাকে right angle এ মিলতেই হবে? এমন কোনো কথা নাই। শুধু দুইটা আলাদা দিকে যেতে হবে। বাঁকা রাস্তা যায়। square রাস্তাও যায়। আর পাশাপাশি রাস্তা? দুইটা একই দিকে যায়। তাই ওরা যেখানে যেতে পারে, সবই একটা line এর উপরে। স্কুল ওই line এ নাই।
+
+তাই basis কে square হতে হয় না। শুধু রাস্তা দুইটা পাশাপাশি হলে চলবে না।
+
+**করিমের এই কথাটাও টিকলো না:** square লাগে Pythagoras এর জন্য, basis এর জন্য না।
+
+<ReachPaint />
+
+</Then>
+
+</Step>
+
+<Step>
+
+## শেষ! ফিতা বললো কত দূর
+
+টিফিন শেষ হতে পাঁচ মিনিট বাকি। ফাহিম map টা বেঞ্চের উপরে বিছালো। ফিতার বাক্সটা চেপে ধরলো বাসার উপরে। করিম ফিতা টেনে নিয়ে গেলো স্কুল পর্যন্ত।
+
+<TapeOnMap story />
+
+এবার বাজি খোলার পালা। ফিতাটা বাসা থেকে টেনে স্কুল পর্যন্ত নিন।
+
+<TapeReveal />
+
+<Then>
+
+বাজির মীমাংসা? স্কুল 3.61 block দূরে। দুইটা card-ই সত্যি। দুইটাই একই arrow। মিথ্যা বলছিল কে? শুধু road card এর উপরে চালানো Pythagoras। “দুইটাই ঠিক, grid বদলালে দূরত্বও বদলায়” ছিল ফাঁদ। grid বদলালে বদলায় শুধু card এর সংখ্যা। arrow বদলায় না। ওর length ও না।
+
+মনে রাখার নিয়ম: **সংখ্যাগুলা arrow আর grid, দুইটার একসাথে।**
+
+<NameTheCard />
+
+<SideQuest title="বইতে যেভাবে লেখে">
+
+<Table
+  head={["আমরা যা বললাম", "বইতে যেভাবে লেখে"]}
+  rows={[
+    ["দুই রাস্তা, সোজা আর বাঁকা", "a basis B = {w, z}, with w = (1, 0) and z = (1, 1)"],
+    ["map এর card (2, 3)", "v = (2, 3), in the standard basis e₁, e₂"],
+    ["রাস্তার card (−1, 3)", "[v]_B = (−1, 3), v's coordinates in the basis B"],
+    ["এক slot এক slot করে, north আগে", "solving a system of linear equations"],
+    ["square রাস্তা, প্রতিটা block 1 লম্বা", "an orthonormal basis: the numbers are dot products"],
+  ]}
+/>
+
+</SideQuest>
+
+সেই সন্ধ্যায় বাড়িওয়ালা চাচা মুশকিলে পড়লেন। ছাদে নতুন একটা flat বানিয়েছেন। ভাড়া কত চাইবেন, কোনো ধারণা নাই।
+
+<LandlordRoof />
+
+<LessonLink href="/dashboard/articles/math_for_ai/05f_rooftop_rent" eyebrow="পরের lesson" title="ছাদের flat এর ভাড়া, নতুন একটা basis">
+  চাচার khata ভর্তি সংখ্যা। নতুন একটা grid কি ওগুলাকে এমন একটা সংখ্যায় আনতে পারে, যেটার সত্যিই কোনো মানে আছে?
+</LessonLink>
+
+</Then>
+
+</Step>
+
+</Journey>

@@ -38,6 +38,17 @@ What makes a deck engaging here, in order of impact:
 - **Close with an opinion `Poll` + full-bleed statement slides** for the takeaway.
 - ≤5 bullets per slide, one idea each, optional `.sub` detail line under a `strong` lead.
 - Reveal bullets as **fragments**, in step with a `Terminal` animation beside them.
+- **Explain after the activity, not before.** The "why" behind a `Quiz` goes on the
+  slide after it, or in a `<Verdict fragment>` the presenter reveals once answers are
+  in. Never put it above the question, where it gives the answer away.
+- **Tell it as a story from Bengali life, in plain English** (the voice in
+  `pathshala-journey` §2 and `pathshala-voice`): a scene and a stake the room has lived
+  (a tea stall, a cricket match, the haat), Bengali names, money in taka. Slide text,
+  Terminal lines and activity options are short spoken sentences, not formula shorthand
+  (`Final position = sum of the two walks` is what to avoid).
+- **Show it moving.** Prefer a fragment-stepped diagram or `Terminal` animation to a
+  static bullet list, and a `DragDrop` or `Quiz` with a picture on the slide to a
+  text-only question.
 
 ## 3 · Theming — write a delta, not a stylesheet
 

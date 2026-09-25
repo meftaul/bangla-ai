@@ -1,0 +1,301 @@
+export const metadata = {
+  title: "Math for AI 4.7 — The library search, the dot product or cosine",
+  description: "Two search machines in the village library: type “fish” and they give two different answers. Which does the library apu keep, and when is the other one right?",
+  type: "article",
+};
+
+{/* Told as a Brilliant-style journey, like 1.1 and 2.3: step 2 seals the
+    reader's bet on which search machine লাইব্রেরির আপু should keep, and the
+    bet is not settled until the finale, after LengthIsNews and PickTool have
+    shown when each is right. 11 steps. Each screen opens by reacting to the
+    last; the explanation sits in <Then> and shows only once the task is done.
+    The screens live in components/interactive/library-journey.tsx.
+
+    The recall at the door (RopeRecallPick) is 4.6's rope, on a picture. Steps
+    3, 7 and 10 are visual exercises: the dot product picked and played out, 3.6's
+    notebook normalised in front of the reader, and a newspaper search for
+    "ইলিশ" re-sorted by the measure the reader picks. The story runs over an
+    evening and the next afternoon: the library, the film quarrel at home, the
+    list আপু hands ফাহিম, and a month later the district catalogue that
+    freezes machine B — the bridge to 4.8 (04f1_million_books). The seventh of
+    the "Dot product" journeys (Article 4); the plan is in
+    04_journey_specs.md. */}
+
+import { Journey, Step, Then, SideQuest } from "@/components/journey/journey";
+import {
+  RopeRecallPick,
+  TwoMachines,
+  OneHotPick,
+  DotRanking,
+  CosRanking,
+  LoudForBoth,
+  SpenderPick,
+  LengthIsNews,
+  PickTool,
+  NewsSearch,
+  RopeRecall,
+  LibraryEvening,
+  SameCounts,
+  OneHotBox,
+  WordTiles,
+  SlantWins,
+  UnitFan,
+  LoudFilmHome,
+  LongestArrow,
+  MiddleDirection,
+  SpenderErase,
+  CowNews,
+  PopularPull,
+  ListHandover,
+  ThreeQuestions,
+  NewsShrink,
+  KeepBoth,
+  CatalogueFreeze,
+  WordSqueeze,
+  NoiseJobs,
+  NewsCupboard,
+} from "@/components/interactive/library-journey";
+
+<Journey title="Dot product · 4.7">
+
+<Step>
+
+Library তে যাওয়ার আগে নদীর ঘাট থেকে একটা প্রশ্ন। দড়ি লম্বা হলে টানের বেশিটা যায় কোথায়?
+
+<RopeRecallPick />
+
+<Then>
+
+লম্বা দড়ি মানে ছোট angle। আর ছোট angle এ shadow প্রায় পুরা টানটাই। 4 metre এ সামনে গিয়েছিল 6.6. 15 metre এ 9.8. ছোট দড়িতে? বাকিটা চলে যায় পাড়ের দিকে।
+
+<RopeRecall />
+
+</Then>
+
+</Step>
+
+<Step>
+
+সন্ধ্যাবেলা। গ্রামের library। দুইটা আলমারি ভর্তি বই। টেবিলে নতুন একটা computer। লাইব্রেরির আপু তাতে দুইটা search machine বসিয়েছেন। দুইটাই বানিয়ে দিয়েছে আপুর ভাই। সে শহরে থাকে।
+
+Machine দুইটা প্রতিটা বইকে দেখে একটা list হিসাবে — (মাছ, নৌকা, ধান)। মানে বইয়ে কোন word কয়বার আছে।
+
+ফাহিম আবার “মাছ” লিখে দুইটাতেই search দিলো। এবার পুরা list টা দেখা গেলো।
+
+<LibraryEvening story />
+
+<TwoMachines />
+
+<Then>
+
+বাজি ধরা হয়ে গেলো। দুইটা machine একই বই দেখছে। একই count দেখছে। Code এ কোনো bug ও নাই। তবু উত্তর আলাদা। আর ঝামেলা ঠিক তিন নম্বর বইটা নিয়ে। মাছ খুঁজতে গিয়ে নৌকা আর ধানের বই দুই নম্বরে উঠে আসে কেন?
+
+<SameCounts />
+
+</Then>
+
+</Step>
+
+<Step>
+
+Machine A চালানোর আগে হাটের dot product টা একবার ঝালাই করে নেই।
+
+<OneHotPick />
+
+<Then>
+
+First slot এ 1 × 4 = 4। বাকি দুইটা slot এ 0 দিয়ে গুণ। তাই 0। সব যোগ করলে 4।
+
+13 বেছেছেন যারা? গুণ না করেই বইয়ের সব slot যোগ করে ফেলেছেন। আর (4, 0, 0) বেছেছেন যারা, তারা গুণ ঠিকই করেছেন। শেষের যোগটা বাকি রেখেছেন।
+
+<OneHotBox />
+
+</Then>
+
+</Step>
+
+<Step>
+
+Machine A এর নিয়মটা ফাহিমের পুরানো বন্ধু। হাটের dot product. Query “মাছ” মানে $(1, 0, 0)$ — মাছের slot এ 1, আর কিছু না। প্রতিটা বইয়ের সাথে dot product চালান।
+
+<DotRanking />
+
+<Then>
+
+মোটা বই পেলো 20। ঠিকই আছে, ওটা মাছে ভর্তি। কিন্তু নৌকা-ধানের বই পেলো 3। আর মাছের চিঠি? মোটে 2। অথচ চিঠিটা পুরাটাই মাছ নিয়ে। বইটায় মাছ প্রায় নাই বললেই চলে।
+
+<WordTiles />
+
+কাহিনী কী? Dot product এখানে মাপছে বইটা কত লম্বা। বইটা কী নিয়ে, সেটা না। 4.2 এর কুলির কথা মনে আছে তো? পিছনে যথেষ্ট জোর থাকলে বাঁকা ধাক্কাও জিতে যায়।
+
+<SlantWins />
+
+</Then>
+
+</Step>
+
+<Step>
+
+Machine B একই dot product চালায়। তারপর দুইটা length দিয়ে ভাগ দেয়। এটাই 4.5 এর cosine similarity. Query র length 1। তাই আসলে ভাগ দিতে হয় শুধু বইয়ের length দিয়ে। মাছের চিঠি এবার কোথায় উঠবে, বলুন তো?
+
+<CosRanking />
+
+<Then>
+
+মাছের দুইটা বই-ই পেলো প্রায় 1। বই ছোট হোক বা মোটা, দুইটাই একদম মাছের দিকে তাক করা। আর নৌকা-ধানের বই নেমে গেলো 0.42 এ। প্রায় 65° দূরে।
+
+<UnitFan />
+
+এখানে length মানে “কয়টা word লেখা হয়েছে”। মাছ খোঁজার সাথে ওটার কোনো সম্পর্ক নাই। Length ভাগ দিয়ে ফেলে দিলে? বইগুলা লড়ে শুধু একটা জিনিস নিয়ে। বইটা কী নিয়ে।
+
+<WordSqueeze />
+
+</Then>
+
+</Step>
+
+<Step>
+
+রাতে বাসায় ফিরে ফাহিম দেখলো মামা-মামি নতুন একটা ছবি নিয়ে হুলুস্থুল বাধিয়ে বসে আছেন। ছবির নামও হুলুস্থুল। Score $(5, 5)$ — কান্নাও সবচেয়ে বেশি, হাসিও সবচেয়ে বেশি।
+
+দুইজনই ছবিটা দেখবেন। দুইজন দুই কারণে।
+
+<LoudFilmHome story />
+
+দুইটা নিয়মেই দেখুন। কোন ছবি কার কাছে জেতে?
+
+<LoudForBoth />
+
+<Then>
+
+Dot product এ হুলুস্থুল জিতলো দুইজনের কাছেই। কান্নার মানুষ আর হাসির মানুষ, পেলো একই ছবি!
+
+যে ছবি সবার কাছে জেতে, সে মানানসই বলে জেতে না। জেতে কেন? কারণ, ওর arrow সবচেয়ে লম্বা। $\|(5, 5)\| \approx 7.07$.
+
+<LongestArrow />
+
+Cosine এ প্রত্যেকে পেলো নিজের ধরনের ছবি। হুলুস্থুল দুইজনের কাছেই দুই নম্বরে। কারণ, ওটা point করে দুইয়ের মাঝামাঝি কোথাও।
+
+<MiddleDirection />
+
+</Then>
+
+</Step>
+
+<Step>
+
+হুলুস্থুল জিতেছিল লম্বা হয়ে। এবার 3.6 এর সামিনের দোকানের খাতা থেকে একটা প্রশ্ন।
+
+<SpenderPick />
+
+<Then>
+
+Normalise করলে length মুছে যায়। আর এখানে length টাই হলো কত টাকা খরচ হয়েছে। তাই বড় ক্রেতা খুঁজতে normalise করা মানে? নিজের উত্তর নিজেই মুছে ফেলা।
+
+<SpenderErase />
+
+</Then>
+
+</Step>
+
+<Step>
+
+তাহলে dot product কি সবসময় খারাপ, আর cosine সবসময় ভালো? 3.6 এর শেষে সামিনের খাতার কথা মনে করুন। Length কখনো ঝামেলা, কখনো আসল information।
+
+ছয়টা কাজ আসছে। প্রতিটার জন্য বলুন, কোন মাপ লাগবে।
+
+<LengthIsNews />
+
+<Then>
+
+প্রশ্ন একটাই: **length কি এখানে আসল information?** গরুর দামে গরুর ওজনটাই দাম। ভাগ দিয়ে ফেলে দিলে উত্তরটাই হারায়। ভ্যানের মোট ধাক্কায় জোরটাই আসল।
+
+<CowNews />
+
+অন্যদিকে বই খোঁজা, word এর মানে মেলানো, “এরকম আরো দেখাও”। এসবে length শুধু noise। তাই search আর chatbot এর খোঁজাখুঁজিতে প্রায় সবসময় cosine ই চলে।
+
+<NoiseJobs />
+
+<SideQuest title="শেষ কাজটা: জনপ্রিয় ছবি কেন dot product এ">
+
+শেষ কাজটা একটু দুষ্টু। বড় বড় streaming app এ ছবির arrow গুলা machine নিজেই শেখে। আর জনপ্রিয় ছবির arrow প্রায়ই লম্বা হয়ে যায়। সেখানে লম্বা arrow এর দিকে dot product এর ঝোঁকটা আসলেই কাজে লাগে। জনপ্রিয় ছবি সবাইকে একটু বেশি দেখানো হয়। তবে এটা বেছে নিতে হয় জেনে-বুঝে।
+
+<PopularPull />
+
+</SideQuest>
+
+</Then>
+
+</Step>
+
+<Step>
+
+পরদিন বিকালে ফাহিম আবার library তে গেলো। বন্ধ করার আগে আপু ওর হাতে একটা কাগজ ধরিয়ে দিলেন। পাঁচটা কাজ লেখা।
+
+আপু বললেন, কোন কাজে কোন মাপ, এইটুকু লিখে দিয়ে যাও।
+
+<ListHandover story />
+
+এবার আপনার পালা।
+
+<PickTool />
+
+<Then>
+
+তিনটা মাপ, তিনটা প্রশ্ন। কত বড়? length ও যখন information, dot product। কী ধরনের? শুধু direction জানতে চাইলে, cosine। আর কে কোথায় দাঁড়িয়ে? জায়গাটাই যখন প্রশ্ন, distance।
+
+<ThreeQuestions />
+
+</Then>
+
+</Step>
+
+<Step>
+
+## Try it
+
+আপুর পত্রিকার আলমারিতেও একটা search বসবে। কিছু খবর দুই লাইনের, কিছু দশ পাতার। কেউ “ইলিশ” লিখে search দিলো।
+
+<NewsCupboard story />
+
+<NewsSearch />
+
+<Then>
+
+Cosine similarity. কেন? Dot product এ লম্বা খবর উপরে ওঠে শুধু লম্বা হওয়ার জোরে। অন্য বিষয়ের খবর হলেও। ঠিক যেমন নৌকা-ধানের বই মাছের চিঠিকে টপকে গিয়েছিল। Length ভাগ দিলে খবরগুলা লড়ে শুধু বিষয় নিয়ে।
+
+<NewsShrink />
+
+Dot product বেছেছেন যারা, তাদের যুক্তি ফেলনা না। লম্বা খবরে আসলেই বেশি থাকে। কিন্তু search জানতে চাইছে না “কোন খবরে সবচেয়ে বেশি আছে”। জানতে চাইছে “কোন খবরটা আমার বিষয় নিয়ে”।
+
+</Then>
+
+</Step>
+
+<Step>
+
+## শেষ! আপু রাখলেন machine B
+
+আপু machine B টাই রাখলেন। মাছ খুঁজতে cosine। কারণ, এখানে length মানে শুধু “কয়টা word লেখা হয়েছে”। Machine B তে বাজি ধরে থাকলে আপনি জিতেছেন। কিন্তু machine A কেও ফেলে দেয়া হলো না। দাম, মোট, জনপ্রিয়তা। যেখানে length টাই information, সেখানে dot product ই ঠিক জিনিস।
+
+<KeepBoth story />
+
+এক line এ: **length যদি আসল information হয়, dot product। শুধু জিনিসটা কী ধরনের জানতে চাইলে, cosine।**
+
+মাসখানেক পরে আপুর কাছে একটা চিঠি আসলো। জেলার সব library র catalogue এই computer এ উঠবে। লাখ লাখ বই।
+
+Catalogue উঠলো। ফাহিম মাছ লিখে search দিলো। Machine B প্রতিটা বইয়ের জন্য একটা root নেয়, একটা ভাগ দেয়। প্রতিটা search এ, প্রতিটা বইয়ে। Computer এর পাখা শোঁ শোঁ করে ঘুরছে। Screen আটকে আছে।
+
+<CatalogueFreeze story />
+
+<LessonLink
+  href="/dashboard/articles/math_for_ai/04f1_million_books"
+  eyebrow="পরের lesson"
+  title="লাখ লাখ বই, একটা search"
+>
+  Dot product চোখের পলকে চলে। Cosine এর লাগে root আর ভাগ, প্রতিটা বইয়ে। Cosine কে dot product এর মতো সস্তা বানানো যায় কীভাবে?
+</LessonLink>
+
+</Step>
+
+</Journey>

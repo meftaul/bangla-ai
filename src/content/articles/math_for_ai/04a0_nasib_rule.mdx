@@ -1,0 +1,296 @@
+export const metadata = {
+  title: "Math for AI 4.0 — নাসিবের rule, ঘরে ঘরে গুণ কেন",
+  description: "মেলার আগের রাত। নাসিবের দরকার এমন একটা rule, যেটা দুইটা card থেকে একটা number বানাবে। সামিন বলে যা খুশি করলেই চলে। যোগ, ভাগ, আড়াআড়ি গুণ, একটা একটা করে চালিয়ে দেখুন কোনটা টেকে, আর কেন।",
+  type: "article",
+};
+
+{/* Journey like 1.1 and 2.3: screen 1 seals the reader's bet on সামিনের
+    claim (any rule that gives a number will do); settled in the ending,
+    ten screens later, after five rules have fallen. The discovery story
+    before 4.1: why the club's box multiplies slot by slot and then adds, and
+    where the name dot product comes from. 11 steps. Screens in
+    components/interactive/rule-journey.tsx. */}
+
+import { Journey, Step, Then, SideQuest } from "@/components/journey/journey";
+import {
+  NightClub,
+  RuleBet,
+  TwoInOne,
+  FilmOnly,
+  OneCardOut,
+  SaminAdds,
+  AddTaste,
+  SameOrder,
+  SaminDivides,
+  DivideKnob,
+  FunnierLoses,
+  RinaWishes,
+  PatchPlay,
+  AddVsTimes,
+  SaminWires,
+  WirePick,
+  NonsensePair,
+  BhanuBox,
+  PileOrMultiply,
+  SameSquares,
+  BuildBean,
+  TwentyTwoAgain,
+  LongBoard,
+  ShortenIt,
+  GibbsBoard,
+  DotTimeline,
+  TryRina,
+  ThinComedy,
+  DawnMama,
+  FiveFell,
+} from "@/components/interactive/rule-journey";
+
+<Journey title="Dot product · 4.0">
+
+<Step>
+
+মেলায় club মামাকে দুইটা number দেখিয়েছিল। Mr. Bean 22, Titanic 20. number দুইটা এসেছিল একটা black box থেকে, ঘরে ঘরে গুণ করে যোগ। কিন্তু box-টা বানালো কে? আর এভাবেই কেন? গল্পটা মেলার আগের রাতের।
+
+রাত তখন অনেক। নাসিবদের club-ঘরে আলো জ্বলছে। টেবিলে ছবির বাক্স, প্রতিটার গায়ে একটা score card, (drama, comedy)। কাল যে আসবে, সে-ও নিজের পছন্দ বলবে একটা card-এ। ফাহিম বলে রেখেছে, তার মামা আসবেন। comedy-পাগল মানুষ, card (2, 5).
+
+নাসিবের দরকার একটা rule। দুইটা card ঢুকবে, বের হবে একটা number। যে ছবির number বড়, সেটা মানুষটার হাতে যাবে।
+
+সামিন খাতা থেকে মুখ তুললো। বললো, এত ভাবার কী আছে। যোগ কর, ভাগ কর, যা খুশি কর। number একটা আসলেই হলো।
+
+<NightClub story />
+
+সামিনের কথা কি ঠিক?
+
+<RuleBet />
+
+<Then>
+
+সামিনের কথার অর্ধেক তো ঠিক। দুইটা card থেকে একটা number বানানোর উপায় অনেক। যোগ, ভাগ, আরো কত কী।
+
+কিন্তু number-টার একটা কাজ আছে। ছবিগুলোকে লাইনে দাঁড় করানো। মানুষটার সাথে যে ছবি বেশি মেলে, সে সামনে। কোন rule এই কাজ পারে? আজ রাতে একটা একটা করে চালিয়ে দেখবো।
+
+<TwoInOne />
+
+</Then>
+
+</Step>
+
+<Step>
+
+প্রথম চেষ্টা নাসিবের নিজের। সবচেয়ে সোজা rule: ছবির card-এর দুইটা number যোগ। রিনা drama ভালোবাসে, তার card (5, 1)। মামারটা (2, 5)।
+
+<FilmOnly />
+
+<Then>
+
+খেয়াল করেছেন? রিনা খুশি, মামা না। অথচ rule হিসাবে কোনো ভুল করেনি। ভুলটা অন্য জায়গায়। rule-এ মামার card ঢোকেইনি। যে-ই আসুক, Titanic 7, Bean 5। তাই সবার হাতে Titanic।
+
+<OneCardOut />
+
+তাহলে প্রথম কথা: number বানাতে **দুইটা card-ই লাগবে**। মানুষেরটা আর ছবিরটা।
+
+</Then>
+
+</Step>
+
+<Step>
+
+সামিন উঠে বোর্ডের কাছে গেলো। বললো, সোজা। মানুষের card-ও যোগ করে দে। চারটা number, সব যোগ।
+
+<SaminAdds story />
+
+<AddTaste />
+
+<Then>
+
+মামার card যা-ই দিন, দুইটা bar একসাথে ওঠে, একসাথে নামে। Bean সবসময় 2 পিছিয়ে। কারণ মামার number সব ছবির সাথে একই পরিমাণে যোগ হয়। ছবির number-এর সাথে মেশে না, শুধু পাশে বসে থাকে।
+
+<SameOrder />
+
+মানুষের card ঢোকালেই তাই হবে না। **মানুষের number-কে ছবির number-এর সাথে মিশতে হবে।** সামিনের প্রথম rule টিকলো না।
+
+</Then>
+
+</Step>
+
+<Step>
+
+সামিন হার মানার লোক না। যোগটা মুছে লিখলো ভাগ। ছবির drama ভাগ মামার drama, ছবির comedy ভাগ মামার comedy। তারপর যোগ। বললো, এবার তো মিশলো।
+
+<SaminDivides story />
+
+<DivideKnob />
+
+<Then>
+
+মামা comedy যত বেশি চাইলেন, Bean তত পিছিয়ে গেলো। হওয়ার কথা ছিল উল্টা। ভাগে যেটা দিয়ে ভাগ করি, সেটা যত বড়, উত্তর তত ছোট। আর কেউ drama একদম না চাইলে? 0 দিয়ে ভাগ, হিসাবই ভেঙে পড়ে।
+
+উল্টা দিক থেকে ভাগ করলেও বাঁচা নাই। তখন উল্টা চলে ছবির দিকটা।
+
+<FunnierLoses />
+
+**সামিনের দ্বিতীয় rule-ও টিকলো না।**
+
+</Then>
+
+</Step>
+
+<Step>
+
+রিনা এতক্ষণ চুপ ছিল। এবার বোর্ডের কাছে গেলো। বললো, একটা slot ধরে ভাবো। মামা comedy কতটা চান, আর ছবিতে comedy কতটা আছে। দুইটাই বাড়লে number বাড়বে। যেকোনো একটা 0 হলে number-ও 0।
+
+<RinaWishes story />
+
+তারপর বোর্ডে একটা খোপ আঁকলো। চওড়া, ছবিতে যতটা আছে। উঁচু, মামা যতটা চান।
+
+<PatchPlay />
+
+<Then>
+
+রিনার দুইটা শর্তই খোপ মেনে চলে। একটা side 0 হলে খোপ গায়েব। একটা side দ্বিগুণ হলে খোপও দ্বিগুণ। খোপে square কয়টা? প্রতি সারিতে চওড়ার সমান, আর সারি আছে উঁচুর সমান। তাই চওড়া × উঁচু। মানে **গুণ**।
+
+যোগ কেন না? যোগে প্রথম শর্তটাই ভাঙে। কেউ comedy একদম না চাইলেও 0 + 4 = 4।
+
+<AddVsTimes />
+
+</Then>
+
+</Step>
+
+<Step>
+
+গুণ তো পাওয়া গেলো। কিন্তু কার সাথে কার? মামার card-এ দুইটা number, ছবির card-এও দুইটা। সামিন চক নিয়ে আড়াআড়ি দাগ টানলো। বললো, আড়াআড়ি দিলে কী সমস্যা?
+
+<SaminWires story />
+
+<WirePick />
+
+<Then>
+
+আড়াআড়ি তারে মামার comedy-র চাওয়া গুণ হয় Titanic-এর drama-র সাথে। মামা হাসতে চান বলে কান্নার ছবি number পায়। এই জোড়ার কোনো মানে নাই।
+
+<NonsensePair />
+
+আর সবাই সবার সাথে? তখন মামার প্রতিটা number গুণ হয় ছবির প্রতিটা number-এর সাথে। মানে মামার total গুণ ছবির total। মামার total সব ছবিতে একই, তাই order ঠিক করে শুধু ছবির total। প্রথম চেষ্টার মতো। তাই গুণ হবে **একই slot-এ: drama-র সাথে drama, comedy-র সাথে comedy।** ঘরে ঘরে গুণ।
+
+</Then>
+
+</Step>
+
+<Step>
+
+প্রতিটা slot-এ একটা করে খোপ হলো। drama-র খোপ, comedy-র খোপ। কিন্তু ছবি পিছু number তো একটাই চাই। খোপ দুইটা মেলাবো কীভাবে?
+
+রিনা club-এর বাক্স ঘেঁটে একটা পুরানো ছবি বের করলো। ভানু পেল লটারি, card (0, 6)। বললো, পুরা comedy। drama একফোঁটাও নাই।
+
+<BhanuBox story />
+
+<PileOrMultiply />
+
+<Then>
+
+দুই খোপই square দিয়ে বানানো। একই জিনিস। তাই জমা করা যায়, যেমন দুই থলের মার্বেল এক থলেতে ঢালা যায়। জমা করা মানে **যোগ**।
+
+<SameSquares />
+
+গুণ করলে একটা খালি খোপ পুরা ছবিটাকেই 0 বানিয়ে দেয়। ভানুর drama নাই বলে comedy-পাগল মামা তাকে পাবেন না? উল্টা কথা।
+
+</Then>
+
+</Step>
+
+<Step>
+
+এবার পুরা rule আপনার হাতে। কোনো সাহায্য নাই।
+
+<BuildBean />
+
+<Then>
+
+22. মেলার দিন সকালে মামা এই number-টাই দেখেছিলেন। Titanic-এর খোপ দুইটা 10 আর 10, তাই 20।
+
+<TwentyTwoAgain />
+
+এতদিনের black box-এর ভেতরে তাহলে কী? প্রতিটা slot-এ কতটা চাই গুণ কতটা আছে। তারপর সব খোপ জমা। ব্যস।
+
+</Then>
+
+</Step>
+
+<Step>
+
+rule তো দাঁড়ালো। নাসিব বোর্ডে পুরাটা কথায় লিখলো। মামার drama গুণ ছবির drama, যোগ মামার comedy গুণ ছবির comedy। লাইনটা বোর্ড ছাড়িয়ে গেলো।
+
+সামিন বললো, slot দশটা হলে? বোর্ডে ধরবে?
+
+<LongBoard story />
+
+<ShortenIt />
+
+<Then>
+
+নাসিব এখানে প্রথম না। 1881 সালে আমেরিকার Yale-এ Josiah Willard Gibbs নামে physics-এর এক শিক্ষক ঠিক এই ঝামেলায় পড়েছিলেন। বারবার একই গুণ-যোগ। তিনিও ছোট করে লিখলেন, দুই অক্ষরের মাঝে একটা dot, $a \cdot b$। মুখে বলি a dot b। সেই dot থেকেই পরে নাম হলো **dot product**।
+
+<GibbsBoard />
+
+<SideQuest title="গুণ-যোগটা কত পুরানো">
+
+হাটের দোকানদার হাজার বছর ধরে এটা করছে। পরিমাণ গুণ দাম, তারপর যোগ। নাম ছাড়াই। 1800-এর মাঝামাঝি জার্মানির স্কুলশিক্ষক Hermann Grassmann এর নাম দিয়েছিলেন inner product। বইতে এই নামও পাবেন। Gibbs শুধু dot-টা বসালেন, আর সেটাই টিকে গেলো।
+
+<DotTimeline />
+
+</SideQuest>
+
+</Then>
+
+</Step>
+
+<Step>
+
+## একটু ঝালিয়ে নিন
+
+রিনার card (5, 1)। drama-পাগল, হাসি প্রায় চায় না। টেবিলে তিনটা ছবি।
+
+<TryRina />
+
+<Then>
+
+হীরক রাজার দেশে-র card সবচেয়ে ভারী, তবু হারলো। rule শুধু ছবির দিকে তাকায় না, রিনার দিকেও তাকায়। রিনা যা চান না, সেখানে ছবির score যত বড়ই হোক, খোপটা সরু থাকে।
+
+<ThinComedy />
+
+</Then>
+
+</Step>
+
+<Step>
+
+## শেষ! সামিনের দাবির ফয়সালা
+
+রাত শেষ হলো। বোর্ডে থাকলো শুধু এক লাইন। সকালে মেলা বসলো। club-এর stall-এ প্রথম যে মানুষটা এলেন, তিনি ফাহিমের মামা।
+
+<DawnMama story />
+
+বাজির মীমাংসা: সামিন বলেছিল, যা খুশি করলেই চলবে। চললো না। পাঁচটা rule পড়ে গেলো, প্রত্যেকটা মামা বা রিনার সামনে। টিকলো একটাই। আপনার বাজিটা এবার মিলিয়ে দেখুন।
+
+<FiveFell />
+
+**প্রতিটা slot-এ কতটা চাই গুণ কতটা আছে। তারপর সব যোগ।** নাম dot product:
+
+$$t \cdot f = t_1 f_1 + t_2 f_2 + \dots + t_n f_n$$
+
+গুণ, কারণ দুইটাই বাড়লে বাড়ে, একটা 0 হলে 0। ঘরে ঘরে, কারণ অন্য জোড়ার কোনো মানে নাই। যোগ, কারণ সব খোপ একই square দিয়ে বানানো।
+
+কয়দিন পর, শীতের ছুটিতে, ফাহিম এই গল্প করবে মামীকে। মামী হেসে বলবেন, এ তো দোকানের বিলের হিসাব। এ দিয়ে আর কী হয়?
+
+<LessonLink
+  href="/dashboard/articles/math_for_ai/04a_haat_dot"
+  eyebrow="পরের পাঠ"
+  title="ঘরে ঘরে গুণ, হাটের হিসাব"
+>
+  মামী বলেন এটা শুধু দোকানের বিল। মামা বলেন হাটের পাঁচটা কাজই এতে হয়। শুক্রবারের হাটে মিলিয়ে দেখুন।
+</LessonLink>
+
+</Step>
+
+</Journey>

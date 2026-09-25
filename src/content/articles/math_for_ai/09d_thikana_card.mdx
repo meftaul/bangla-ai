@@ -1,0 +1,198 @@
+export const metadata = {
+  title: "Math for AI 9.4 — দুলাভাইয়ের ঠিকানা, এক গুণে card",
+  description: "দুলাভাইয়ের গ্রামে রাস্তা মাত্র দুইটা: সোজা পাকা রাস্তা আর হেলানো বাঁধ। Map বলে বাড়ি (5, 2)। ভ্যানওয়ালা চায় card: কয় ঘর সোজা, কয় ঘর বাঁধ ধরে। নানার card এ কী লেখা হবে? আর বাকি সবার card, প্রতিবার হিসাব না করে?",
+  type: "article",
+};
+
+{/* Told as a Brilliant-style journey, like 1.1 and 2.3: screen 1 seals the
+    reader's bet on four cards for নানা (দুলাভাই's map numbers, Nasib's run
+    through the road lens, Karim's swap, Samin's), and the bet is opened on
+    screen 7 (BetOpen). 8 steps. The screens live in
+    components/interactive/address-journey.tsx; the road map pieces come from
+    lanes-kit.tsx (5.5), Shiku from arrow-journey.tsx, the লাইট ভাই from
+    light-kit.tsx (all read-only). The plan is block 9.4 of
+    09_journey_specs.md. Opens the morning after 9.3's bridge (দুলাভাই drew
+    his village for the মামারা); ends on the লাইট ভাই's ঝাপসা lens, 9.5. */}
+
+import { Journey, Step, Then, SideQuest } from "@/components/journey/journey";
+import { CardBet, WalkTheCard, LensMakesMap, UndoWritesCard, YourCards, TryRoads, BetOpen } from "@/components/interactive/address-journey";
+import { LeavingMorning, NasibLens, LensOnMap, SomsKhataAgain, WhoGoesWhere, MamiVillage, NanaPocket, CardStack, LastLens } from "@/components/interactive/address-journey";
+import { CardStake, TwoPapers, LensColumns, HouseMoved, WhyMinus, BookSlip } from "@/components/interactive/address-journey";
+
+<Journey title="দুলাভাইয়ের ঠিকানা, এক গুণে card · 9.4">
+
+<Step>
+
+যাওয়ার দিন। সকাল। বারান্দায় দুলাভাই। হাতে একতাড়া সাদা card আর একটা কলম। টেবিলে কাল রাতের কাগজ। তাঁর গ্রামের map।
+
+Map এ বাজার (0, 0)। দুলাভাইয়ের বাড়ি (5, 2): 5 ঘর পূর্বে, 2 ঘর উত্তরে। কিন্তু গ্রামে রাস্তা মাত্র দুইটা। পাকা রাস্তা, সোজা পূর্বে: (1, 0)। আর বাঁধ, হেলানো: (1, 1)। উত্তরে সোজা কোনো রাস্তা নাই।
+
+গেটে ভ্যানওয়ালা। যন্ত্র নিতে সকাল সকাল এসেছেন। তাঁর বাড়ি দুলাভাইয়ের গ্রামের বাজারেই। বললেন, ম্যাপ আমি বুঝি না, দুলাভাই। বাজার থেইকা কয় ঘর সোজা, কয় ঘর বাঁধ ধইরা, এইটা লেইখা দেন।
+
+দুলাভাই প্রথম card টা লিখবেন নানার জন্য। কলম card এর উপর। বললেন, map এ যা, card এও তা। (5, 2).
+
+<LeavingMorning story />
+
+নাসিব টেবিল থেকে লাইট ভাইয়ের হেলানো lens টা তুললো, $\begin{bmatrix}1&1\\0&1\end{bmatrix}$. এর দুই column (1, 0) আর (1, 1)। ঠিক দুইটা রাস্তা। নাসিব বললো, roads এর lens তো এইটাই। Map এর সংখ্যা এই lens দিয়ে চালান, card বের হবে।
+
+<NasibLens story />
+
+করিম বললো, বাঁধেই বেশি হাঁটা। সামিন কিছু বললো না। চুপচাপ একটা card লিখলো।
+
+নানার card এ কী লেখা হবে?
+
+<CardBet />
+
+<Then>
+
+নানা আগে কখনো ও গ্রামে যান নাই। বাসে এসে বাজারে নামবেন। তারপর ভ্যান। ভ্যানওয়ালা card ধরে চালাবেন, একটুও এদিক ওদিক না। Card ভুল হলে নানা নামবেন কারো ধানক্ষেতের আলে। আর দুলাভাইয়ের হাতে আরো card বাকি। সবার জন্য একটা একটা করে।
+
+<CardStake />
+
+আগে Shiku কে দিয়ে হাঁটিয়ে দেখি।
+
+</Then>
+
+</Step>
+
+<Step>
+
+Shiku ভ্যানের মতোই চলে। আগে পাকা রাস্তা ধরে সোজা, তারপর বাঁধ ধরে। প্রথমে দুলাভাইয়ের card, (5, 2), দিয়ে হাঁটান।
+
+<WalkTheCard />
+
+<Then>
+
+খেয়াল করেছেন? বাঁধের প্রতিটা ঘর উত্তরে নেয় এক ঘর। কিন্তু পূর্বেও নেয় এক ঘর। তাই 5 ঘর সোজা গেলে বাঁধ শেষে বাড়ি ছাড়িয়ে যায়। সোজা লাগে কম: 3।
+
+বাড়ি একটাই। কিন্তু নাম দুইটা। Map এর কাগজে (5, 2)। রাস্তার কাগজে (3, 2)। 5.5 এ স্কুলের card ঠিক এভাবেই বের হয়েছিলো। **Card মানে রাস্তার কাগজে ঠিকানা।**
+
+<TwoPapers />
+
+</Then>
+
+</Step>
+
+<Step>
+
+নাসিব lens টা map এর উপর ধরে আছে। সোম পাশে এসে বসলো। শান্ত গলায় বললো, lens টা কোন দিকে চলে, আগে দেখো। Card দিলে কী বের হয়?
+
+<LensOnMap story />
+
+Road lens এ একটা জিনিস দিলে আরেকটা বের হয়। কোনটা দিলে কোনটা? আগে guess দিন।
+
+<LensMakesMap />
+
+<Then>
+
+Card (3, 2) দিলে বের হলো (5, 2)। Map এর বাড়ি। কারণ lens এর দুই column দুইটা রাস্তা। Card বলে প্রথম column 3 বার, দ্বিতীয়টা 2 বার। যেখানে পৌঁছায়, সেটাই map। 7.x এর row × column আর 5.5 এর রিকশা একই কাজ করে। **Road lens card থেকে map বানায়।**
+
+<LensColumns />
+
+নাসিব দিয়েছিলো উল্টা জিনিস। Map এর (5, 2) ঢুকালো, বের হলো (7, 2)। Card না। Lens বাড়িটাকে সরালে যেখানে পড়তো, সেই জায়গা। 6.7 এর ভাষায়: নাসিব arrow সরিয়েছে, কাগজ বদলায় নাই।
+
+<HouseMoved />
+
+</Then>
+
+</Step>
+
+<Step>
+
+তাহলে উল্টা পথ লাগবে। Map দিলে card। মানে road lens যা করে, তার ফেরা।
+
+সোম খাতা উল্টালো। গতকালের পাতা। কোনা বদলাও, বাকি দুইটার সাইন উল্টাও, det দিয়ে ভাগ।
+
+<SomsKhataAgain story />
+
+সোমের যন্ত্রে road lens দিন। তারপর বাড়ির map (5, 2)।
+
+<UndoWritesCard />
+
+<Then>
+
+বের হলো (3, 2)। Shiku কে হাঁটিয়ে যে card পাওয়া গিয়েছিলো, সেটাই। Road lens কে B বললে, **card = B⁻¹ × map**। বইয়ে লেখে $[v]_{new} = B^{-1}v$. 5.5 এ একটা card এর জন্য দুইটা লাইন মিলাতে হয়েছিলো। এখন যেকোনো ঠিকানা, এক গুণে।
+
+রাস্তা দিয়েও কারণটা দেখা যায়। উত্তরে যায় শুধু বাঁধ। তাই বাঁধ 2 ঘর। কিন্তু বাঁধ 2 ঘর পূর্বেও নিয়ে যায়। তাই সোজা 5 − 2 = 3।
+
+<WhyMinus />
+
+</Then>
+
+</Step>
+
+<Step>
+
+## এবার আপনার পালা
+
+নানার card লেখা হলো। এবার সবাই চায়। মামা যাবেন ঘাটে, মাছ ধরতে। নানা জুম্মায় যাবেন মসজিদে। করিম স্কুল মাঠে, ফুটবল নিয়ে। আম্মু দিঘির পাড়ে। সবাই শুরু করবেন বাজার থেকে।
+
+<WhoGoesWhere story />
+
+প্রতিটা জায়গার card লিখুন। তারপর Shiku কে হাঁটিয়ে মিলিয়ে নিন।
+
+<YourCards />
+
+</Step>
+
+<Step>
+
+## Try it
+
+মামী শুনছিলেন। বললেন, আমার বাপের বাড়ির রাস্তা আরো সোজা। একটা রাস্তা পূর্বে, একটা উত্তরে। শুধু পূর্বের রাস্তার এক ঘর, map এ দুই ঘর।
+
+<MamiVillage story />
+
+Map এ মামীর বাপের বাড়ি (6, 3)। কোন card এ Shiku ঠিক ওখানে থামবে?
+
+<TryRoads />
+
+</Step>
+
+<Step>
+
+নানা card টা হাতে নিলেন। চশমা নামিয়ে পড়লেন। তারপর ভাঁজ করে পাঞ্জাবির পকেটে রাখলেন। পকেটের উপর একবার হাত বুলালেন।
+
+<NanaPocket story />
+
+এবার বাজির card গুলো খুলুন। প্রতিটা card ধরে Shiku কে বাজার থেকে হাঁটান।
+
+<BetOpen />
+
+</Step>
+
+<Step>
+
+## শেষ! এক গুণে card
+
+দুলাভাই ছয়টা card একসাথে করলেন। উপরে একটা রাবার ব্যান্ড। তাড়াটা নানার হাতে দিলেন।
+
+<CardStack story />
+
+বাজির হিসাব। দুলাভাইয়ের (5, 2) এ Shiku থামলো (7, 2) এ, বাড়ি ছাড়িয়ে। নাসিবের (7, 2) গেলো আরো দূরে, (9, 2)। করিমের (2, 3) উঠে গেলো (5, 3) এ, ধানক্ষেতে। জিতলো সামিনের (3, 2)। আপনার বাজির সাথে মিলিয়ে নিন।
+
+এক line এ: **Road lens card কে map বানায়। তার ফেরার lens map কে card বানায়।**
+
+AI তে এটা বারবার আসে। কোনো paper এ $B^{-1}x$ দেখলে বুঝবেন: জিনিস সরছে না। নতুন রাস্তায় তার নতুন নাম লেখা হচ্ছে। Module 3 এর PCA ঠিক এই কাজ করে।
+
+<SideQuest title="বইয়েরও ভুল হয়">
+
+বই §5 এ এই road lens দিয়েই কথা শেষ করে। বলে, (2, 3) এর নতুন ঠিকানা ছিল (5, 3)। তারপর ফেরার lens দিয়ে গুণ করে (2, 3) ফেরত আনে। হিসাব ঠিক। নামটা ভুল। (5, 3) হলো lens দিয়ে (2, 3) কে সরালে যেখানে পড়ে। নাসিবের ভুলটাই। নতুন রাস্তায় (2, 3) এর card $B^{-1}(2, 3) = (-1, 3)$. 5.5 এর স্কুলের card। বই arrow সরিয়েছে, কাগজ বদলায় নাই।
+
+<BookSlip />
+
+</SideQuest>
+
+উঠানে লাইট ভাই যন্ত্র গোছাচ্ছেন। Lens গুলো একটা একটা করে কাপড়ে মুড়ে বাক্সে রাখছেন। শেষ lens টা হাতে নিয়ে থামলেন। ঝাপসা কাঁচ। প্রায় চ্যাপ্টা।
+
+রিনা দেয়ালের দিকে দেখালো। বললো, এইটা দিয়েই তো আমার heart টা আঁকছিলেন। দেয়ালে সেই heart। সরু, হেলানো। তার উপর একটা ছোট কালো দাগ। কাল একটা মাছি বসে ছিলো।
+
+<LastLens story />
+
+<LessonLink href="/dashboard/articles/math_for_ai/09e_jhapsa_lens" eyebrow="পরের lesson" title="ঝাপসা lens, ফেরাতে গেলে বিপদ">
+  ফেরার lens আছে। তাহলে মাছির দাগসহ heart কি ঠিকঠাক ফিরবে?
+</LessonLink>
+
+</Step>
+
+</Journey>

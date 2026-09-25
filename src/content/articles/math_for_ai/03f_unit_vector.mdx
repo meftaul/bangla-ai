@@ -1,0 +1,492 @@
+export const metadata = {
+  title: "Math for AI 3.6 — শুধু দিক, movie club-এর গোলমাল",
+  description: "মামা Comedy মুভি চেয়েছেন, club-এর হিসাব তাকে Titanic ধরিয়ে দিতে যাচ্ছে। মামা বাড়ি ফেরার আগে নিয়মটা ঠিক করতে হবে। দোষ মুভির ধরনের না, arrow-এর length এর ।",
+  type: "article",
+};
+
+{/* Told as a Brilliant-style journey, like 1.1 and 2.3: screen 1 puts a real
+    stake on the table (মামা is waiting, and the rule is about to hand him the
+    wrong film) and the question stays open until FairFight, five screens
+    later. BigSpender then gives the honest limit, the way 2.3 owns up to its
+    own ≈. Each screen opens by reacting to the last; the explanation sits in
+    <Then> and shows only once the task is done. The screens live in
+    components/interactive/unit-journey.tsx. The sixth of seven
+    "Vector-এর অঙ্ক" journeys (Article 3); the plan is in 03_journey_specs.md.
+    The club's scoring rule is a black box here; Article 4 (dot product)
+    opens it. */}
+
+import { Journey, Step, Check, Then } from "@/components/journey/journey";
+import {
+  LoudFilm,
+  WhyLoud,
+  ShrinkToOne,
+  HatCheck,
+  OnTheRing,
+  FairFight,
+  BigSpender,
+  SongTips,
+  DoubleBatch,
+  DroneRing,
+  TasteCompass,
+  HatFlow,
+  OddTie,
+  BlackBox,
+  LongNotNear,
+  OwnLength,
+  SameLine,
+  TwoTapes,
+  HatOn,
+  DivideIsStretch,
+  StillAndMerged,
+  ZeroQuestion,
+  ClearWin,
+  TwinCards,
+  CosineName,
+  TenTimesGone,
+  NoiseOrNews,
+  WrongHats,
+  MamaAtClub,
+  TooSmallDoubt,
+  ClubSack,
+  ThreeFilms,
+  SaminKhata,
+  MamaGoesHome,
+  TwinMixup,
+} from "@/components/interactive/unit-journey";
+
+<Journey title="Vector-এর অঙ্ক · ৩.৬">
+
+<Step>
+
+Movie club-এ যাওয়ার আগে সামিন কি পরিমাণ হাঁটে সেটা মনে করি।
+
+<Check
+  question="(−2, 5)-এর L1 length কত?"
+  options={[
+    "3",
+    "5",
+    "7",
+  ]}
+  answer={2}
+  hint="পশ্চিমে 2 ঘর হাঁটাও তো 2 ঘর হাঁটা।"
+  praise="Minus বাদ দিয়ে যোগ: 2 + 5 = 7।"
+>
+
+পশ্চিমে 2 ঘরও 2 ঘর হাঁটা, তাই minus বাদ দিয়ে যোগ, 2 + 5 = 7। যারা 3 বেছেছিলেন, তারা minus রেখেই যোগ করেছিলেন।
+
+</Check>
+
+</Step>
+
+<Step>
+
+নাসিবের movie club মেলায় একটা মজার service দিচ্ছে। আপনি কী ধরনের মুভি পছন্দ করেন বললে club আপনাকে একটা মুভি বেছে দেবে। প্রতিটা মুভির একটা score card আছে, (drama, comedy)।
+
+সকাল সকালই হাজির ফাহিমের মামা। 
+
+<MamaAtClub story />
+
+<LoudFilm />
+
+<Then>
+
+হিসাবে কোনো ভুল নাই, 22 আর 20 দুইটাই ঠিক। তবু কেমন যেন একটা খটকা লাগে, তাই না? মামা Comedy মুভির পাগল, আর Titanic-এ হাসার মতো জিনিস তো খুব একটা বেশি নাই। অথচ নিয়মটা বলছে দুইটা মুভিই মামার জন্য প্রায় সমান মানানসই।
+
+<OddTie />
+
+এই নিয়মটা, মানে ঘরে ঘরে গুণ করে যোগ, আপাতত একটা black box হিসেবেই নিন। এটা কেন কাজ করে, সেই গল্পটা পরের কোনো journey-তে আসবে।
+
+<BlackBox />
+
+</Then>
+
+</Step>
+
+<Step>
+
+বক্সটা পরে খলা হবে। কিন্তু মামা তো দাঁড়িয়ে আছেন।
+
+<Check
+  question="ব্যবধান মাত্র 2 নম্বর। আজ Titanic-এর comedy score একটু বাড়লে, মামার জন্য কোন মুভি জিতবে?"
+  options={[
+    "Mr. Bean-ই।",
+    "Titanic।",
+    "কেউ না, সমান সমান।",
+  ]}
+  answer={1}
+  hint="নিয়মটা ঘরে ঘরে গুণ করে যোগ করে। Titanic-এর একটা ঘর বাড়লে তার নম্বরের কী হয়?"
+  praise="নিয়ম বদলাতে হবে score না বদলে।"
+/>
+
+<Then>
+
+মামা stall-এর সামনে দাঁড়িয়ে আছেন, আর মাত্র 2 নম্বরের ব্যবধান। আজ Titanic-এ নতুন comedy score যোগ হলে, কাল থেকেই মামা Mr. Bean এর বদলে Titanic নিয়ে বাড়ি ফিরবেন। 
+
+<SongTips />
+
+তাই মামা যাওয়ার আগেই নিয়মটা ঠিক করতে হবে, আর সেটা করতে হবে মুভির কোনো score না বদলে। পারবেন?
+
+</Then>
+
+</Step>
+
+<Step>
+
+আমরা তো জানি, প্রতিটা score card আসলে graph paper-এর একটা arrow। দোষটা কোথায় সেটা ধরতে মুভি দুইটাকে arrow হিসেবে এঁকে একটু খুঁটিয়ে দেখা যাক।
+
+<WhyLoud />
+
+<Then>
+
+খেয়াল করেছেন, Titanic-এর arrow শুধু অন্য দিকে তাক করা না, লম্বাও বেশি? তার দুইটা score-ই বড় বড়, 5 আর 2। আমাদের সেই black box এর নিয়ম টা গুণ করে, তাই সংখ্যা বড় মানেই নম্বর বেশি, মামা জিনিসটা পছন্দ করুক বা না করুক। Titanic যে প্রায় জিতে যাচ্ছিল, সেটা তার **ধরনের** জোরে না, **length** এর জোরে।
+
+<LongNotNear />
+
+</Then>
+
+</Step>
+
+<Step>
+
+Titanic জিতছিল length এর জোরে। এবার তার score দ্বিগুণ করে দেখি।
+
+<Check
+  question="Titanic-এর সব score দ্বিগুণ করলে মুভির ধরন কি বদলায়?"
+  options={[
+    "হ্যাঁ, আরও বেশি drama-র মুভি হয়ে যায়।",
+    "হ্যাঁ, arrow-এর দিক ঘুরে যায়।",
+    "না, দিক একই থাকে, শুধু arrow লম্বা হয়।",
+  ]}
+  answer={2}
+  hint="শরবতের পুরো recipe দ্বিগুণ করলে স্বাদ কি বদলেছিল?"
+  praise="পুরো card দ্বিগুণ মানে loud film।"
+/>
+
+<Then>
+
+শরবতের কথা মনে আছে? পুরো recipe দ্বিগুণ করলে স্বাদ একই থাকে, শুধু শরবত বেশি হয়। এখানেও দ্বিগুণ হয়ে যাওয়া Titanic এর Genre একই আছে, দিকও একই, কিন্তু score দ্বিগুণ। বাস্তবে এমনটা হরদম হয়। কোনো মুভিতে সবকিছুই “বেশি বেশি”, বা কোনো reviewer সবকিছুতেই বেশি নম্বর দেন। 
+
+<DoubleBatch />
+
+রোগটা ধরা পড়লো, কিন্তু সারলো না। মামা এখনো দাঁড়িয়ে আছেন। তাহলে solution টা কি মাথায় আসছে? সব মুভির length যদি সমান করে দেওয়া যায়, তখন মুভিগুলো fight করবে শুধু দিক দিয়ে।
+
+</Then>
+
+</Step>
+
+<Step>
+
+Arrowছোট করার আগে শরবতের knob-টার কথা একবার মনে করি।
+
+<Check
+  question="(4, 2)-কে 0.5 দিয়ে stretch করলে কী পাবো?"
+  options={[
+    "(8, 4)",
+    "(2, 1)",
+    "(4.5, 2.5)",
+  ]}
+  answer={1}
+  hint="প্রতিটা ঘর 0.5 দিয়ে গুণ।"
+  praise="0.5 দিয়ে গুণ: অর্ধেক লম্বা, দিক একই।"
+>
+
+প্রতিটা ঘর 0.5 দিয়ে গুণ: 4 হয়ে যায় 2, 2 হয়ে যায় 1। 1-এর চেয়ে ছোট সংখ্যায় গুণ করলে arrowছোট হয়, দিক একই থাকে। যারা (4.5, 2.5) বেছেছিলেন, তারা গুণের জায়গায় যোগ করেছিলেন।
+
+</Check>
+
+</Step>
+
+<Step>
+
+length সমান করতে নতুন কোনো চাল লাগবে না। শরবতের সেই λ-knob দিয়েই arrowছোট করা যায়। কতটাছোট? চলুন, সবার length 1 বানাই।
+
+<ShrinkToOne />
+
+<Then>
+
+Table-টার দিকে একবার তাকান। $(3, 4)$ এর length ছিল 5, তাই লাগলো পাঁচ ভাগের এক ভাগ। $(1.5, 2)$ এর length ছিল 2.5, তাই লাগলো 2.5 ভাগের এক ভাগ। মানে যেকোনো arrow-এর length 1 বানাতে হলে **তার নিজের length দিয়ে ভাগ** করলেই হয়। বেশি লম্বা হলে বেশি ভাগ, কম লম্বা হলে কম।
+
+<OwnLength />
+
+আর দুইটা arrow একই বিন্দুতে এসে থামলো কেন? কারণ দুইটা শুরু থেকেই একই দিকে তাক করা ছিল, শুধু একটা আরেকটার অর্ধেক। আর λ দিয়ে গুণ করলে arrow যে নিজের লাইন ছাড়ে না, সেটা তো আগেই দেখেছি। তাই length এর  পার্থক্যটা ঘুচে যেতেই দুইজন হুবহু এক হয়ে গেল। এই কাজটার নাম **normalise** করা।
+
+<SameLine />
+
+</Then>
+
+</Step>
+
+<Step>
+
+মামাকে এই হিসাব ধরিয়ে দেওয়ার আগে একটা জিনিস নিজেদের মিলিয়ে নেওয়া দরকার। $(0.6, 0.8)$ দেখে একটু সন্দেহ হতে পারে। এত ছোট দুইটা সংখ্যা, এর length সত্যিই 1? নাকি slider-টা আমাদের ফাঁকি দিলো?
+
+<TooSmallDoubt story />
+
+<HatCheck />
+
+<Then>
+
+দশমিক দেখে ঘাবড়ে যাওয়াটা স্বাভাবিক। 0.6 আর 0.8, দুইটাই 1-এর চেয়ে ছোট, অথচ বর্গ করে যোগ করলে ঠিক 1। ঘর দুইটা সরাসরি যোগ করলে আসতো 1.4, কিন্তু সেটা সামিন মোট কি পরিমাণ হাঁটল তার পরিমাণ। একে Manhattan Distance ও বলে। এটা ভুল না, কিন্তু আজ আমরা মাপার জন্য যে ফিতাটা use করব সেটা L2 হিসেবে already শিখে এসেছি।
+
+<TwoTapes />
+
+</Then>
+
+</Step>
+
+<Step>
+
+Slider-এ যা করলেন, সেটা একটা পুরানো চালের সাথে মিলিয়ে দেখুন।
+
+<Check
+  question="(3, 4)-কে তার length 5 দিয়ে ভাগ করলাম। এটা আসলে কোন stretch?"
+  options={[
+    "5 দিয়ে stretch।",
+    "1/5 দিয়ে stretch।",
+    "কোনো stretch না, ভাগ আলাদা জিনিস।",
+  ]}
+  answer={1}
+  hint="5 দিয়ে ভাগ করা আর কোন সংখ্যা দিয়ে গুণ করা একই কথা?"
+  praise="1/‖v‖ দিয়ে stretch করলে v-hat।"
+/>
+
+<Then>
+
+এরকম যেসব arrow-এর length এক তাদেরকে বলে **unit vector**। কোনো vector $v$-কে তার নিজের length দিয়ে ভাগ করলে যে unit vector পাই, তাকে লেখা হয় $v$-এর মাথায় একটা ছোট্ট টুপি পরিয়ে:
+
+$$\hat{v} = \frac{v}{\|v\|}$$
+
+<HatOn />
+
+পড়তে হয় “v-hat”। ভাগ দেখে ভয় পাওয়ার কিছু নাই, 5 দিয়ে ভাগ আর $\frac{1}{5}$ দিয়ে গুণ তো একই কথা। তাই $\hat{v}$ আসলে সেই পুরানো stretch, শুধু λ-টা বাছা হয়েছে এমন ভাবে যেন length 1 হয়।
+
+<DivideIsStretch />
+
+</Then>
+
+</Step>
+
+<Step>
+
+দুইটা মুভি তো হলো। কিন্তু club-এর collection এ অনেক মুভি আছে, আর নিয়মটা সবগুলোর ওপরই খাটতে হবে। তাই graph paper-এ একগাদা arrow নিই, কেউ লম্বা, কেউছোট, একেকজন একেক দিকে। সবার length একসাথে 1 বানালে সেটা কেমন দাঁড়াবে?
+
+<ClubSack story />
+
+<OnTheRing />
+
+<Then>
+
+সব arrow এসে বসল একটা গোল রিংয়ের ওপর। unit vector মানে এই রিংয়ের ওপর কোনো একটা point, আর রিংয়ের প্রতিটা point মানে এক একটা দিক। length বলে আর কিছু থাকল না, আছে শুধু কম্পাসের কাঁটা কোন দিকে সেই information।
+
+<DroneRing />
+
+</Then>
+
+</Step>
+
+<Step>
+
+রিংয়ের ওপর দুইটা arrow-এর দিকে খেয়াল করুন।
+
+<Check
+  question="(1, 1) আর (3, 3)-এর length 1 বানালে কী হয়?"
+  options={[
+    "দুইজন রিংয়ের একই বিন্দুতে গিয়ে পড়ে।",
+    "দুইজন রিংয়ের দুই জায়গায় পড়ে।",
+    "(3, 3) রিংয়ের বাইরে থেকে যায়।",
+  ]}
+  answer={0}
+  hint="দুইটা arrow কি একই দিকে তাক করা? রিংয়ের প্রতিটা বিন্দু মানে একটা দিক।"
+  praise="e₁, e₂ জন্ম থেকেই 1 লম্বা।"
+/>
+
+<Then>
+
+শুধু $e_1$ আর $e_2$ নড়েনি। Shiku-র remote-এর এই দুইটা button মানে ছিল পূর্বে এক step আর উত্তরে এক step। এক step মানেই length 1, তাই ওরা জন্ম থেকেই unit vector। আর $(1, 1)$ আর $(3, 3)$-কে খেয়াল করেছেন? দুইজন একই point এ গিয়ে পড়ল। Length নাই করে দিলে একই দিকের সব arrow একটা arrow হয়ে যায়।
+
+<StillAndMerged />
+
+আসেন একটু confuse করে দেই। । $(0, 0)$-কে কি normalise করা যাবে? তার length কত, আর তাকে কী দিয়ে ভাগ করতে হবে, নিজেই ভেবে দেখুন।
+
+<ZeroQuestion />
+
+</Then>
+
+</Step>
+
+<Step>
+
+The weapon is ready, আর মামা এখনো দাঁড়িয়ে আছেন। এবার আসল পরীক্ষা। Titanic, দ্বিগুণ নম্বরের Titanic, আর Mr. Bean, তিনজনেরই length 1 বানিয়ে club-এর rule-টা  আবার run করলে কী দাঁড়াবে?
+
+<ThreeFilms story />
+
+<FairFight />
+
+<Then>
+
+এবার আর  হাড্ডাহাড্ডি লড়াই হল না, Mr. Bean জিতলো স্পষ্ট ব্যবধানে। **মামা Comedy মুভি নিয়েই বাড়ি গেলেন**, আর মুভির কোনো score একবারও বদলাতে হয়নি। শুধু মাপার নিয়মটা বদলেছে।
+
+<ClearWin />
+
+আর দ্বিগুণ হয়ে যাওয়া Titanic? একটা নম্বরও বেশি পেল না। 1 unit লম্বা হওয়ার পর তার card আর সাধারণ Titanic-এর card হুবহু এক, কারণ দুইজন তো একই দিকে তাক করা ছিল। বাড়তি জোরটুকু normalise করার সময়ই মুছে গেছে।
+
+<TwinCards />
+
+</Then>
+
+</Step>
+
+<Step>
+
+মামা তো বাড়ি গেলেন। নিয়মটা এখন আসলে কী মাপছে?
+
+<Check
+  question="সব মুভি 1 unit লম্বা হওয়ার পর club-এর নিয়ম আসলে কী মাপছে?"
+  options={[
+    "মুভিটা কতটা loud।",
+    "মুভিটা মামার পছন্দের সাথে কতটা aligned",
+    "মুভির মোট score।",
+  ]}
+  answer={1}
+  hint="দ্বিগুণ Titanic একটা নম্বরও বেশি পেল না। তাহলে জোর কি আর গোনা হচ্ছে?"
+  praise="Normalise-এর পর মাপ শুধু দিকের।"
+/>
+
+<Then>
+
+মানে club-এর নিয়ম এখন শুধু একটা প্রশ্নের উত্তর দিচ্ছে: মুভিটা মামার পছন্দের সাথে কতটা aligned? মুভিটা কতটা “loud”, সেটা নিয়ে আর মাথা ঘামাতে হচ্ছে না।
+
+<TasteCompass />
+
+বড় বড় recommendation system, Google-এর search, ChatGPT-র মতো model-এর ভেতরে শব্দের vector তুলনা, সবখানেই এই technique চলে। আর মামার পছন্দের vector-টাকেও যদি normalise করে নিই, তাহলে যে হিসাবটা দাঁড়ায়, তার একটা নাম আছে: **cosine similarity**। তবে সেই গল্পটা পরের কোন journey তে আসবে। 
+
+<CosineName />
+
+</Then>
+
+</Step>
+
+<Step>
+
+নিয়মটা এখন মাপে শুধু দিক। এর ঠিক উল্টো একটা কাজ আপনি ২.৪-এ করেছিলেন।
+
+<Check
+  question="Velocity থেকে দিক ফেলে দিলে কী থাকে?"
+  options={[
+    "শুধু speed, একটা সংখ্যা",
+    "আরেকটা arrow",
+    "কিছুই থাকে না",
+  ]}
+  answer={0}
+  hint="বাস ঘণ্টায় 60-এ চলছে, কোন দিকে সেটা বাদ দিলে।"
+  praise="দিক ফেলে দিলে থাকে speed।"
+>
+
+Velocity থেকে দিক ফেলে দিলে থাকে speed, একটা scalar। আজ করলাম ঠিক উল্টোটা: length ফেলে দিয়ে রাখলাম শুধু দিক।
+
+</Check>
+
+</Step>
+
+<Step>
+
+মামা খুশি, নাসিবও। তাই নাসিব ঠিক করলো, এখন থেকে stall-এর সব হিসাবেই normalise চালাবে। সামিন খাতা নিয়ে এলো।
+
+<SaminKhata story />
+
+খাতায় লেখা, প্রতিটা ক্রেতা (চা, শরবত)-এ কত টাকা খরচ করলো। এখানে কৌশলটা চালালে কী হয়, একবার দেখে নেওয়া যাক।
+
+<BigSpender />
+
+<Then>
+
+এখানে হাল ছেড়ে দেওয়াটাই ঠিক উত্তর। করিম আর আপা, দুইজনই চায়ে শরবতের দ্বিগুণ খরচ করেন, তাই দুইটা arrow একই দিকে তাক করা। Normalise করলে দুইজনই হয়ে যান $(0.89, 0.45)$, হুবহু এক। দুইজন একিদিকে বোঝা যাচ্ছে, কিন্তু একজন যে দশ গুণ বেশি টাকা খরচ করেন, সেই information-টা নাই হয়ে গেল ।
+
+<TenTimesGone />
+
+তাই নাসিবের নতুন নিয়মটা ভুল। **Normalise করলে lengthটা সত্যিই হারায়, ওটা কোথাও জমা থাকে না।** প্রশ্নটা তাই “normalise করা ভালো না কি খারাপ” না, প্রশ্নটা হলো length-টা আপনার কাজের জন্য ঝামেলার, নাকি সেটা কোন value add করছে।
+
+</Then>
+
+</Step>
+
+<Step>
+
+তাহলে normalise কখন করবো, আর কখন না?
+
+<Check
+  question="সামিন জানতে চায় stall-এর সবচেয়ে বড় ক্রেতা কে। এখানে normalise করা কি ঠিক?"
+  options={[
+    "হ্যাঁ, normalise সবসময় ভালো।",
+    "না, lengthটাই এখানে আসল information।",
+    "হ্যাঁ, তাতে হিসাব সহজ হয়।",
+  ]}
+  answer={1}
+  hint="Normalise করলে করিম আর আপার কোন informationটা মুছে গিয়েছিল?"
+  praise="length যখন information, normalise না।"
+/>
+
+<Then>
+
+মামার মুভি বাছাইয়ে মুভির loudness-টাই ছিল ঝামেলা, তাই মুছে ফেলাই ছিল ঠিক কাজ। কিন্তু সামিন যদি জানতে চায় সবচেয়ে বড় ক্রেতা কে, তখন ঠিক ওই lengthটাই আসল information, আর তখন normalise করা মানে নিজের উত্তরটাই মুছে ফেলা।
+
+<NoiseOrNews />
+
+</Then>
+
+</Step>
+
+<Step>
+
+## একটু ঝালিয়ে নিন
+
+<Check
+  question="Card (5, 12)। এর unit vector কত?"
+  options={["(5/13, 12/13)", "(5/17, 12/17)", "(1, 1)"]}
+  answer={0}
+  hint="আগে দর্জির ফিতায় lengthটা মাপুন: বর্গ, যোগ, root।"
+>
+
+$\sqrt{25 + 144} = \sqrt{169} = 13$, তাই দুইটা ঘরকেই 13 দিয়ে ভাগ: $(5/13, 12/13) \approx (0.38, 0.92)$। মিলিয়ে দেখুন, $0.38^2 + 0.92^2$ প্রায় 1।
+
+<HatFlow />
+
+যারা $(5/17, 12/17)$ বেছেছিলেন, তারা $5 + 12 = 17$ দিয়ে ভাগ করেছেন, মানে সামিনের হাঁটার মাপে। তাতে যা পাওয়া যায় সেটাও কাজের জিনিস, কিন্তু দর্জির ফিতায় তার length 1 না। আর $(1, 1)$ দেখতে যতই “এক এক” লাগুক, তার length $\sqrt{2}$।
+
+<WrongHats />
+
+</Check>
+
+</Step>
+
+<Step>
+
+## শেষ! মামা মুভি নিয়ে বাড়ি গেলেন
+
+<MamaGoesHome story />
+
+শুরুতে সমস্যাটা মনে হয়েছিল club-এর rule-এর দোষে । শেষে দেখা গেল রুলে হাত দিতেই হয়নি, মুভির score-এও না। যা করতে হয়েছে, তা হলো প্রতিটা arrow থেকে একটা জিনিস ছাঁটাই, তার length।
+
+এক লাইনে ধরলে: **নিজের length দিয়ে ভাগ করলে arrow-এর দিকটা রয়ে যায়, lengthটা চলে যায়।**
+
+$$\hat{v} = \frac{v}{\|v\|}, \qquad \|\hat{v}\| = 1$$
+
+আর সাথে একটা শর্তও শিখে রাখলেন, যেটা নাসিব প্রায় ভুলে গিয়েছিল। length ঝামেলা হলে মুছে দিন, আর lengthটাই information হলে হাত দেবেন না। একই কৌশল এক জায়গায় ওষুধ, আরেক জায়গায় রোগ।
+
+মেলা প্রায় শেষের দিকে। কত দূর আর কোন দিকে, দুই রকম মাপজোখই এখন হাতে। কিন্তু শেষ বিকেলে ডাক্তার আপার stall-এ বাধলো আরেক গোলমাল। “তোমার twin কে?” খেলায় একজন volunteer ওজন লিখে ফেলেছে kg-র বদলে gram-এ, আর সাথে সাথে সবার twin বদলে গেল! মানুষগুলো তো একই আছে, তাহলে উত্তর বদলালো কেন? আর যদি unit বদলালেই উত্তর বদলায়, তাহলে machine-এর কোন উত্তরটা বিশ্বাস করবো?
+
+<TwinMixup story />
+
+এই ফাঁদটা একদম শুরু থেকেই আমাদের পিছু পিছু ঘুরছে। পরের journey-তে এর একটা ফয়সালা করবো।
+
+<LessonLink
+  href="/dashboard/articles/math_for_ai/03g_grams_trap"
+  eyebrow="পরের পাঠ"
+  title="গ্রামের ফাঁদ, ডাক্তার আপার stall"
+>
+  Unit বদলালেই twin বদলে যায় কেন, আর প্রতিটা feature-কে তার নিজের scale এ মাপার কৌশল।
+</LessonLink>
+
+</Step>
+
+</Journey>

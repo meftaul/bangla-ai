@@ -1,0 +1,236 @@
+export const metadata = {
+  title: "Math for AI 5.5 — The road to school, a card for the rickshaw mama",
+  description:
+    "Fahim's first day at the new school. The map says the school is (2, 3) from home, but the new neighbourhood has only a straight main road and slanting lanes, and no road north. The rickshaw mama wants the trip as blocks straight and blocks slanting. Which card should Fahim give him, before the bell?",
+  type: "article",
+};
+
+{/* Told as a Brilliant-style journey in the author's Bangla-English, like 1.1
+    and 2.3: screen 1 seals the reader's bet on the school's road card, and the
+    bet is not settled until BetOpened, six screens later, after NoNorthRoad
+    (the map's own numbers overshoot, then the reader pedals to the gate),
+    WhyMinus, PeelEquations (two lines matched on a picture), YourErrand and
+    the SpotTheSlip exercise have shown how to find the card and why a minus
+    turns up. 7 steps. Each screen opens by reacting to the last; explanations
+    sit in <Then>, one phone screen each with a watch-only figure.
+
+    This is the first half of the old 5.5. The second idea — one arrow, two
+    cards; nothing moved, only the grid; Pythagoras needs square roads; a
+    basis needn't be square — is its own journey, 05e2_two_cards (5.5b),
+    which picks up at tiffin the same day. The screens live in
+    components/interactive/lanes-journey.tsx, the shared map pieces in
+    lanes-kit.tsx. Fifth of the "span, independence, basis" journeys
+    (Article 5). The plan is in 05_journey_specs.md. */}
+
+import { Journey, Step, Then, SideQuest } from "@/components/journey/journey";
+import {
+  LastNight,
+  FirstDay,
+  SchoolBet,
+  TwoGrids,
+  FahimReads,
+  NoNorthRoad,
+  CardFills,
+  WhyBack,
+  WhyMinus,
+  LaneForced,
+  PeelEquations,
+  PeelOrder,
+  SystemBrace,
+  AmmuErrands,
+  YourErrand,
+  MosqueMinus,
+  NasibCard,
+  SpotTheSlip,
+  StallCheck,
+  BellRings,
+  BetOpened,
+  NoWayTrap,
+  TwoCardsTease,
+} from "@/components/interactive/lanes-journey";
+
+<Journey title="স্কুলের রাস্তা · 5.5">
+
+<Step>
+
+কাল রাতে khata র ছয়টা flat গিয়ে বসেছিল একটা flat sheet এর উপরে। শেষ box টা সিঁড়ি দিয়ে তুলেছিল নাসিব।
+
+<LastNight story />
+
+আজ ফাহিমের নতুন স্কুলের প্রথম দিন। সকাল সাতটা চল্লিশ। ঘণ্টা পড়বে আটটায়। পিঠে নতুন ব্যাগ। প্রথম দিনেই দেরি করে ঢুকতে কেউ চায় না।
+
+আম্মুর phone এর map বলছে স্কুল বাসা থেকে (2, 3): 2 block east, 3 block north। কিন্তু এই পাড়ায় রাস্তা মাত্র দুই রকম। বড় রাস্তাগুলা সব সোজা east এ গেছে। গলিগুলা সব বাঁকা, north-east এ উঠে গেছে। সোজা north এ যাওয়ার কোনো রাস্তা নাই।
+
+<FirstDay story />
+
+গেটে রিকশাওয়ালা মামা দাঁড়িয়ে আছেন। মামা map পড়েন না। তিনি চান একটা card: বড় রাস্তায় কয় block সোজা, আর গলিতে কয় block বাঁকা। ফাহিম মামাকে কোন card দিবে?
+
+<SchoolBet />
+
+<Then>
+
+সমস্যাটা এক ছবিতে দেখি। Map আঁকা square কাগজে। east আর north। রাস্তাগুলা? তা না। বড় রাস্তায় এক block মানে (1, 0)। গলিতে এক block মানে (1, 1)। একসাথে east এও এক, north এও এক। আর শুধু north? এমন কোনো রাস্তা list এ নাই।
+
+তাহলে ফাহিম মামাকে কী বলবে? বাজিটা ধরে রাখুন। উত্তর দিবে রিকশা নিজেই।
+
+<TwoGrids />
+
+</Then>
+
+</Step>
+
+<Step>
+
+ফাহিম রিকশায় উঠলো। যে কথাটা সবার আগে মাথায় আসে, সেটাই বললো। মামা, 2 সোজা, 3 বাঁকা। Map এর সংখ্যা দুইটাই।
+
+মামা কিছু বললেন না। প্যাডেল চাপলেন।
+
+<FahimReads story />
+
+এরপর প্যাডেল আপনার হাতে। প্রতি চাপে এক block, সামনে বা পিছনে, যেকোনো এক রাস্তায়।
+
+<NoNorthRoad />
+
+<Then>
+
+কী হলো? Map এর সংখ্যা রাস্তায় চালালে রিকশা স্কুল ছাড়িয়ে চলে যায় 3 block east এ। আর আপনি শেষ করলেন কোন card এ? দেখুন। গলিতে 3 block। বড় রাস্তায় −1।
+
+Road card এ minus কোনো ভুল না। মানে শুধু উল্টা দিকে। এক block পিছনে, west এ। বড় রাস্তায় মামা হরদম পিছনে ঘুরেন।
+
+<CardFills />
+
+</Then>
+
+</Step>
+
+<Step>
+
+কিন্তু পিছনে কেন? রিকশাকে তো কেউ বেশি দূরে যেতে বলে নাই।
+
+ফাহিম জিজ্ঞেস করলো, মামা, পিছনে যাচ্ছেন কেন? মামা প্যাডেল থামালেন না। নির্বিকার গলায় বললেন, গলিরে জিগান, আমারে না।
+
+<WhyBack story />
+
+ট্রিপটা এবার slowly চালাই। চোখ রাখি map এর দুইটা সংখ্যার উপরে। কতদূর east। আর কতদূর north।
+
+<WhyMinus />
+
+<Then>
+
+north এ ওঠে কে? শুধু গলি। তাই গলিতে কয় block, সেটা north একাই ঠিক করে দেয়। 2 block দিলে? এক কম পড়ে। বাকি একটা আর কোনো রাস্তা দিয়ে যোগ করা যায় না। 4 দিলে? এক বেশি। তাই 3-ই লাগবে।
+
+কিন্তু গলির প্রতিটা block সাথে এক block east এও ঠেলে। 3 block ঠেলে 3 east। অথচ স্কুল মাত্র 2 east। তাই বড় রাস্তা এক block ফেরত নেয়, পিছনে।
+
+Minus টা আসে এখান থেকেই।
+
+<LaneForced />
+
+</Then>
+
+</Step>
+
+<Step>
+
+কাল সকালে মামা হয়তো ফাহিম বসার আগেই জিজ্ঞেস করবেন। তাই card টা বের করি রিকশা না চালিয়েই। কাগজে। এক slot এক slot করে।
+
+স্কুলের (2, 3) কে দুইটা line এ ভাঙা যায়। North এর line: 3 = 0 × সোজা + 1 × বাঁকা। সোজা কেন 0? কারণ, বড় রাস্তা north এ যায় না। East এর line: 2 = 1 × সোজা + 1 × বাঁকা। দুইটা সংখ্যা ঘুরান। কোন line আগে মিলবে? দেখুন।
+
+<PeelEquations />
+
+<Then>
+
+north এর line টা আগে মিললো। কেন, খেয়াল করেছেন? বড় রাস্তা কখনো north এ যায় না। তাই north এর line এ অজানা একটাই। বাঁকা। ওই line টা সাথে সাথে উত্তর দিয়ে দিলো। এরপর east এর line এও অজানা থাকলো একটাই। দুইটা line। দুইটা অজানা। একটা একটা করে খুলে ফেলা গেলো।
+
+<PeelOrder />
+
+<SideQuest title="দুই line, দুই অজানা: system of equations">
+
+কয়েকটা অজানা, কয়েকটা equation দিয়ে বাঁধা। এর নাম **system of linear equations**। আমাদেরটা সহজে খুলে গেছে। কারণ, একটা line এ অজানা ছিল একটাই। যেকোনো size এর system কীভাবে solve করতে হয়? সেটা Article 10 এ।
+
+<SystemBrace />
+
+</SideQuest>
+
+</Then>
+
+</Step>
+
+<Step>
+
+এবার আপনার পালা, আমাদের কোনো সাহায্য ছাড়া। বের হওয়ার সময় গেটেই আম্মু ফাহিমের হাতে বিকালের list টা দিয়েছিলেন: বাজার (4, 1), আর মসজিদ (0, 2)। দুইটাই map এ বাসা থেকে গোনা, স্কুলের মতোই।
+
+<AmmuErrands story />
+
+প্রতিটা card এক slot এক slot করে বের করুন, বসান, তারপর মামাকে চালাতে দিন।
+
+<YourErrand />
+
+<Then>
+
+মসজিদটাই একটু অদ্ভুত, ঠিক তো? ওটা বাসার ঠিক north এ। মাত্র 2 block। কিন্তু north এ তো রাস্তা নাই। তাই রিকশা গলিতে 2 block ওঠে। তাতে 2 block east এও চলে যায়। তারপর বড় রাস্তায় 2 block ফেরত আসে: (−2, 2)।
+
+এই রাস্তাগুলায় বাসার ঠিক north এর যেকোনো জায়গায় যেতে একটা minus লাগবেই।
+
+<MosqueMinus />
+
+</Then>
+
+</Step>
+
+<Step>
+
+## Try it
+
+রিকশায় ফাহিমের পাশে নাসিব। সে-ও এই স্কুলে ভর্তি হয়েছে। ছুটির পরে ফুচকা খাবে। ফুচকার দোকান map এ (1, 2)। নাসিব খাতা খুলে দুই মিনিটে card বানিয়ে ফেললো: (3, 2)।
+
+মামা ঘাড় ঘুরিয়ে একবার দেখলেন।
+
+<NasibCard story />
+
+<SpotTheSlip />
+
+<Then>
+
+ভুলটা কোথায়? তিন নম্বর line এ। 1 = সোজা + 2। এখান থেকে সোজা বের করতে হলে 1 থেকে 2 বাদ দিতে হয়: সোজা = 1 − 2 = −1। নাসিব যোগ করে ফেলেছে। তাই ওর card রিকশাকে নিয়ে গেলো (5, 2) এ। দোকান ছাড়িয়ে 4 block east এ। ঠিক card (−1, 2).
+
+প্রথম দুইটা line যারা ধরেছিলেন, খেয়াল করুন। line দুইটা ঠিকই ছিল। গোলমাল হয়েছে শেষ হিসাবে।
+
+<StallCheck />
+
+</Then>
+
+</Step>
+
+<Step>
+
+## শেষ! ঘণ্টার আগেই স্কুলে
+
+স্কুলের গেটে এসে মামা বেল বাজালেন। ফাহিম লাফ দিয়ে নামলো। দৌড়ে ঢুকলো। ঠিক তখনই স্কুলের ঘণ্টা পড়লো। আটটা।
+
+<BellRings story />
+
+এবার বাজি খোলার পালা। একটা একটা card এ tap করুন, মামা ওটা রাস্তায় চালিয়ে দেখাবেন।
+
+<BetOpened />
+
+<Then>
+
+বাজির মীমাংসা? (−1, 3) জিতেছে। “যাওয়াই যাবে না” ছিল ফাঁদ। North এ রাস্তা নাই। তাই বলে north এ যাওয়ার উপায় নাই? আছে। গলি north এ যায়। আর বাড়তি east টা বড় রাস্তা ফেরত নেয়।
+
+মনে রাখার নিয়ম: **নতুন রাস্তায় card বের করতে, আগে সেই slot টা ভরুন যেখানে একটাই রাস্তা কাজ করে। বাকিটা তারপর নিজেই খুলে যায়।**
+
+<NoWayTrap />
+
+টিফিনের সময় ফাহিম খাতায় স্কুলের দুইটা card পাশাপাশি লিখলো। পাশের বেঞ্চের করিম ঝুঁকে দেখলো। ভুরু কুঁচকালো।
+
+<TwoCardsTease />
+
+<LessonLink href="/dashboard/articles/math_for_ai/05e2_two_cards" eyebrow="পরের lesson" title="এক স্কুল, দুইটা card">
+  করিম দুইটা card এই Pythagoras চালায়, আর দূরত্ব আসে দুইরকম। স্কুল আসলে কত দূরে?
+</LessonLink>
+
+</Then>
+
+</Step>
+
+</Journey>

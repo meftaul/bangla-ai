@@ -1,0 +1,251 @@
+export const metadata = {
+  title: "Math for AI 7.3 — দুই lens, এক খোপ",
+  description: "কাল রাতের lens চিড় খেয়েছে। লাইট ভাইয়ের হাতে দুইটা ছোট কাঁচ, যন্ত্রে খোপ একটা। দুইটা কাঁচ পরপর যা করে, একটা কাঁচে কি তা হয়? দুই দড়ির মাথা ধরে বের করুন, matrix গুণ আসলে কী।",
+  type: "article",
+};
+
+{/* Told as a Brilliant-style journey, like 1.1 and 2.3: screen 1 seals the
+    reader's bet on four cards (Karim's W + Z, Nasib's entry by entry, Som's
+    "one won't do", Samin's "there is a matrix"), and the bet is opened on the
+    last screen. 10 steps. The screens live in
+    components/interactive/lens-journey.tsx; the wall and the machine come from
+    light-kit.tsx (read-only). The plan is block 7.3 of 07_journey_specs.md.
+    Opens on 7.2's hand-off (the cracked lens); ends on the lenses swapped,
+    7.4's question. */}
+
+import { Journey, Step, Then, SideQuest } from "@/components/journey/journey";
+import { LensBet, ThroughBoth, TryTheCards, FollowTheRopes, LensByColumns, RowMeetsColumn, WhyThisRule, YourOneLens, TryOneCell } from "@/components/interactive/lens-journey";
+import { NoonSpares, FourIdeas, HandHeld, SomNoAll, HoludShow, OtherOrder } from "@/components/interactive/lens-journey";
+import { OneSlot, TwoStepsOneGrid, KarimAdds, RopesRecipe, ColsStandUp, RowIsReading, CellIsHeight, BetOpen } from "@/components/interactive/lens-journey";
+
+<Journey title="দুই lens, এক খোপ · 7.3">
+
+<Step>
+
+গায়ে হলুদের দুপুর। উঠানে মঞ্চ অর্ধেক বানানো। মাদুরে হলুদের বাটি।
+
+কাল রাতের lens টা ভোরের শিশিরে চিড় খেয়েছে। লাইট ভাইয়ের হাতে দুইটা ছোট বাড়তি কাঁচ। একটার গায়ে খোদাই করা Z, আরেকটায় W। যন্ত্রে খোপ একটা।
+
+লাইট ভাই কাঁচ দুইটা রোদের দিকে তুলে ধরলেন। বললেন, দুইটা কাঁচ, এক খোপ। দুইটার কাজ একটায় হয় না।
+
+<NoonSpares story />
+
+Z এর পাতে লেখা (−1, 2) আর (1, 1), মানে $Z = \begin{bmatrix}-1&1\\2&1\end{bmatrix}$. W এর পাতে (0, 1) আর (1, 1), মানে $W = \begin{bmatrix}0&1\\1&1\end{bmatrix}$.
+
+বাজারের কাঁচের দোকান সন্ধ্যার আগে একটা নতুন lens কেটে দিতে পারে। চারটা সংখ্যা বলে দিলেই হয়। সামিনের ফোনে যন্ত্রের app। যেকোনো চারটা সংখ্যা লিখলে app দেখায় দেয়ালে আলো কোথায় পড়বে।
+
+কোন চারটা? চারজনের চার কথা।
+
+করিম বললো, W + Z। যোগ করে দাও।
+
+নাসিব বললো, ঘরে ঘরে গুণ।
+
+সোম মাথা নাড়লো। একটায় হবে না। দুইটা লাগবেই।
+
+সামিন ফোন থেকে চোখ তুললো। একটা matrix আছে। খুঁজে বের করতে হবে।
+
+<FourIdeas story />
+
+কার কথা ঠিক?
+
+<LensBet />
+
+<Then>
+
+বাজি সিল হলো। শেষে মিলিয়ে দেখবো।
+
+সন্ধ্যায় হলুদ। দেয়ালে আলো না থাকলে আপার মঞ্চের পেছনে শুধু সাদা চুনকাম। দোকান lens কাটবে একটাই, একবারই। ভুল চারটা সংখ্যা দিলে ভুল ছবি। তারপর আর সময় নাই।
+
+<OneSlot />
+
+</Then>
+
+</Step>
+
+<Step>
+
+লাইট ভাই Z টা খোপে বসালেন। রিনাকে ডাকলেন। রিনা W টা ধরে দাঁড়ালো যন্ত্রের মুখের সামনে। আলো আগে যাবে Z এর ভেতর দিয়ে, তারপর W এর।
+
+লাইট ভাই switch টিপলেন। তারপর বললেন, সারা রাইত কে ধইরা রাখবো?
+
+<HandHeld story />
+
+দেয়ালে (1, 1) এ রিনার চকের একটা ছোট গোল দাগ। ওই dot টা চালান। আগে Z, তারপর W।
+
+<ThroughBoth />
+
+<Then>
+
+খেয়াল করেছেন? Z dot টাকে নিলো (0, 3) এ। W সেই (0, 3) কে নিলো (3, 3) এ। আর (3, 3)? 7.2 এ কাল রাতের lens (1, 1) কে ঠিক ওখানেই পাঠাতো।
+
+শুধু এক dot না। পুরা grid দুইবার বাঁকলো। শেষে যা দাঁড়ালো, সেটা কাল রাতের lens এর grid। লিখলে $W(Zv)$: আগে $Z$, তার ফল নিয়ে $W$।
+
+<TwoStepsOneGrid />
+
+</Then>
+
+</Step>
+
+<Step>
+
+সামিন app এ করিমের card এর চারটা সংখ্যা লিখলো। তারপর নাসিবের। নীল দাগের grid হলো দুই কাঁচ পরপর যা করে। দুইটা card ই চালান।
+
+<TryTheCards />
+
+<Then>
+
+করিমের যোগ কেন মিললো না? যোগ মানে দুইটা কাঁচই একই dot এর দিকে তাকায়, আলাদা আলাদা। তারপর দুইজনের উত্তর যোগ হয়। কিন্তু যন্ত্রে W দেখে Z এর আলো। Z আগে dot সরায়, W পায় সরানো dot টা।
+
+<KarimAdds />
+
+নাসিবের ঘরে ঘরে গুণে কোনো কাঁচ অন্যটার আলো দেখেই না। Z এর এক কোণার সংখ্যা গুণ হয় W এর একই কোণার সংখ্যার সাথে, ব্যস। একটার পর আরেকটা চালানোর কথা সেখানে কোথাও নাই। তাই দুইটা card এর কোনোটাই দেয়ালে মিললো না।
+
+</Then>
+
+</Step>
+
+<Step>
+
+সময় যাচ্ছে। রিনা চক হাতে দেয়ালের সামনে দাঁড়ালো। বললো, সব ঘর চালাতে সন্ধ্যা হয়ে যাবে।
+
+সোম বললো, সব লাগবে না।
+
+<SomNoAll story />
+
+আগে guess: সবচেয়ে কম কয়টা dot চালালেই চলে?
+
+<FollowTheRopes />
+
+<Then>
+
+দুইটা দড়ির মাথাই যথেষ্ট। 6.3 এর কথা মনে আছে? যেকোনো dot হলো কয়বার e₁ আর কয়বার e₂। (1, 1) মানে একবার e₁, একবার e₂। দুই কাঁচের পরেও তাই: নতুন e₁ একবার, নতুন e₂ একবার। রান্না একই, উপকরণ নতুন।
+
+<RopesRecipe />
+
+আর 6.4 বলেছিল, দড়ির মাথা যেখানে দাঁড়ায়, সেগুলোই matrix এর column। তাহলে এক lens এর column দুইটা কী?
+
+</Then>
+
+</Step>
+
+<Step>
+
+দুই দড়ির মাথা এক lens এর দুই column এ বসান। তারপর app এ চালান।
+
+<LensByColumns />
+
+<Then>
+
+মিলে গেলো, দাগে দাগে। e₁ এর মাথা প্রথম column, e₂ এর মাথা দ্বিতীয়। মানে Z এর প্রতিটা column কে W দিয়ে চালালাম। যেখানে থামলো, সেটাই নতুন column।
+
+<ColsStandUp />
+
+এই নতুন matrix কে লেখে $WZ$, আর এই কাজের নাম **matrix multiplication**: $WZ = \begin{bmatrix}2&1\\1&2\end{bmatrix}$. দুইটা move পরপর যা করে, একটা matrix এ তাই। সংখ্যা চারটা কাল রাতের lens এর সাথে হুবহু এক। আর পরে যেটা চলে, সেটা বামে কেন লেখা হয়? পরের lesson এ।
+
+</Then>
+
+</Step>
+
+<Step>
+
+প্রতিবার দড়ি পাঠাতে হবে? না। একটা ঘর আলাদা করেও বের করা যায়। W এর একটা row আর Z এর একটা column, 4.1 এর dot product দিয়ে।
+
+<RowMeetsColumn />
+
+<Then>
+
+চারটা ঘর, আর আবারও $\begin{bmatrix}2&1\\1&2\end{bmatrix}$. কেন মিলে? 7.1 এ দেখেছি, matrix এর প্রতিটা row একটা করে সংখ্যা বানায়। দেয়ালে row 1 বানায় ডানে কত ঘর, row 2 উপরে কত ঘর। Z এর column 1 W দিয়ে গিয়ে থামে (2, 1) এ। তাই W এর row 1 · Z এর column 1 ঠিক ওই "ডানে কত ঘর".
+
+<RowIsReading />
+
+বইয়ে লেখে $c_{ij} = \sum_k w_{ik} z_{kj}$. মানে ঘর (i, j) = W এর row i আর Z এর column j এর dot product.
+
+</Then>
+
+</Step>
+
+<Step>
+
+করিম তখনও মানে না। বললো, এত ঝামেলার নিয়ম কেন? যোগ করলেই তো সোজা।
+
+নিয়মটা কেউ বানায় নাই। তিনটা কারণ দেখুন।
+
+<WhyThisRule />
+
+</Step>
+
+<Step>
+
+## এবার আপনার পালা
+
+লাইট ভাইয়ের ব্যাগে আরো দুইটা পুরানো কাঁচ। S সব কিছু ডানে হেলায়, 6.7 এর মতো। D সব কিছু দুইগুণ চওড়া করে। যন্ত্রের গায়ে চক দিয়ে লেখা: আগে S, তারপর D।
+
+দুইটার কাজ এক lens এ লিখুন।
+
+<YourOneLens />
+
+</Step>
+
+<Step>
+
+## Try it
+
+ব্যাগের শেষ দুইটা কাঁচ, A আর B। আগে A, তারপর B। সামিন এক lens এর তিনটা ঘর বের করে ফেলেছে। একটা বাকি।
+
+<TryOneCell />
+
+<Then>
+
+ফাঁকা ঘরটা row 2, column 1 এর। Column 1 মানে e₁ কোথায় যায়। Row 2 মানে সেখানে কত ঘর উপরে। e₁ A এর পরে (1, 2) এ, B এর পরে (3, 4) এ। উপরে 4 ঘর।
+
+<CellIsHeight />
+
+</Then>
+
+</Step>
+
+<Step>
+
+## শেষ! একটা lens এই হয়
+
+বিকালে দোকানের ছেলে সাইকেলে করে কাঁচ দিয়ে গেলো। newspaper এ মোড়ানো। সামিনের দেওয়া চারটা সংখ্যা: 2, 1, 1, 2।
+
+সন্ধ্যা নামলো। লাইট ভাই নতুন lens খোপে বসালেন। Switch টিপলেন।
+
+দেয়ালে আলো। তিনটা heart। আপা হলুদ শাড়িতে মঞ্চে উঠলো। রিনার হাত খালি।
+
+<HoludShow story />
+
+বাজির হিসাব। করিমের যোগ আর নাসিবের ঘরে ঘরে গুণ, দুইটাই dot কে ভুল জায়গায় নিয়েছিল। সোম বলেছিল একটায় হবে না। হলো, এক কাঁচেই। **লাইট ভাইয়ের "দুইটার কাজ একটায় হয় না" টিকলো না।** জিতলো সামিনের card: একটা matrix আছে, আর সেটা দড়ি ধরেই পাওয়া যায়।
+
+<BetOpen story />
+
+এক line এ: **দুই matrix গুণ মানে দুই move পরপর, একটা matrix এ।** Column গুলো পেতে দড়ির মাথা দুই move দিয়ে পাঠান। একটা ঘর লাগলে row · column।
+
+<SideQuest title="বইয়ে যেভাবে লেখে">
+
+<Table
+  head={["যেটা দেখবেন", "যেভাবে বলবেন"]}
+  rows={[
+    ["WZ", "আগে Z, তারপর W: দুই move পরপর, একটা matrix এ"],
+    ["(WZ)v = W(Zv)", "এক lens এ চালানো আর দুই lens পরপর চালানো একই"],
+    ["WZ এর column j", "Z এর column j কে W দিয়ে চালালে যা আসে"],
+    ["cᵢⱼ = Σₖ wᵢₖ zₖⱼ", "ঘর (i, j) = W এর row i · Z এর column j"],
+  ]}
+/>
+
+</SideQuest>
+
+অনেক রাতে show শেষ। লাইট ভাই পুরানো কাঁচ দুইটা ব্যাগে তুলছিলেন। কী মনে করে আবার লাগালেন। এবার উল্টা। W খোপে, Z সামনে।
+
+দেয়ালে কি একই ছবি আসবে?
+
+<OtherOrder story />
+
+<LessonLink href="/dashboard/articles/math_for_ai/07d_holud_order" eyebrow="পরের lesson" title="হলুদ আগে না গোসল আগে">
+  একই দুইটা কাঁচ, উল্টা order এ। দেয়ালের ছবি কি একই থাকে?
+</LessonLink>
+
+</Step>
+
+</Journey>

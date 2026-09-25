@@ -62,7 +62,8 @@ export default function DashboardShell({
   return (
     <div className="flex min-h-[100dvh] flex-col">
       {/* Top bar (all breakpoints) */}
-      <header className="sticky top-0 z-40 flex h-14 shrink-0 items-center justify-between border-b border-border bg-background/85 px-4 backdrop-blur-md print:hidden">
+      {/* On a phone a journey (components/journey) takes the whole screen and has its own × back to the library. */}
+      <header className="sticky top-0 z-40 flex h-14 max-sm:[body:has([data-journey])_&]:hidden shrink-0 items-center justify-between border-b border-border bg-background/85 px-4 backdrop-blur-md print:hidden">
         <div className="flex items-center gap-2">
           {!guest && (
             <button

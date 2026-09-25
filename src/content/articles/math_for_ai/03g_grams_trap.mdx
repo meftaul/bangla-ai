@@ -1,0 +1,584 @@
+export const metadata = {
+  title: "Math for AI 3.7 — গ্রামের ফাঁদ, ডাক্তার আপার stall",
+  description: "একই তিনজন মানুষ, একই program, অথচ ওজন gram-এ লিখতেই twin বদলে গেল। দুইটা laptop দুইটা উত্তর দিলে কোনটা বিশ্বাস করবেন? মেলার শেষ প্রশ্ন, আর module ৩-এর শেষ কথা।",
+  type: "article",
+};
+
+{/* Told as a Brilliant-style journey, like 1.1 and 2.3: screen 1 puts two
+    laptops side by side giving two different answers, and asks the question
+    the journey lives on — machine-এর উত্তর বিশ্বাস করবো কোন ভরসায়? — which is
+    left open on screen 2 and answered by the reader on «এবার আপনার পালা»,
+    after NotTheTruth. Each screen opens by reacting to the last; the
+    explanation sits in <Then> and shows only once the task is done. A <Then>
+    is kept to about one phone screen: where an explanation ran longer, its
+    second half got its own task (a <Check>), and side quests (Mars Climate
+    Orbiter, the other classroom, the two tables) sit in <SideQuest> cards. The
+    screens live in components/interactive/yardstick-journey.tsx. The last of
+    seven "Vector-এর অঙ্ক" journeys (Article 3); the plan is in
+    03_journey_specs.md. The spread is shown as "বর্গের average, তারপর root" so
+    the reader never meets ÷ √n (spec open question 1). */}
+
+import { Journey, Step, Check, Then, SideQuest } from "@/components/journey/journey";
+import {
+  TwinStall,
+  WaysToWeigh,
+  AlwaysKg,
+  FiveHeights,
+  BackToABC,
+  TanvirGrams,
+  DataFrom,
+  OneWordTwoStalls,
+  KgVsGram,
+  GramStretch,
+  UnitDial,
+  MarsMiss,
+  TwoCrowds,
+  NewStudent,
+  SpreadMachine,
+  WhySquare,
+  Yardstick,
+  UnitsCancel,
+  EveryUnit,
+  ZScore,
+  ZRelabel,
+  NotTheTruth,
+  TwoNormalises,
+  Finale,
+  OneChange,
+  WhichTwin,
+  EqualPrice,
+  TenKgSpan,
+  DataStick,
+  LengthVsSpread,
+  TwoSticks,
+  StickSteps,
+  SameTwinNow,
+  OneLine,
+  TwoSchools,
+  ApaWeight,
+  TrustAnswer,
+  RowVsColumn,
+  InchPound,
+  ThreeTools,
+  HiddenChoice,
+  WhoDecides,
+} from "@/components/interactive/yardstick-journey";
+
+<Journey title="Vector-এর অঙ্ক · ৩.৭">
+
+<Step>
+
+ডাক্তার আপার stall-এ যাওয়ার আগে মামার ছবির হিসাবটা মনে করি।
+
+<Check
+  question="(3, 4)-এর length 1 বানালে কী পাবো?"
+  options={[
+    "(0.3, 0.4)",
+    "(3/7, 4/7)",
+    "(0.6, 0.8)",
+  ]}
+  answer={2}
+  hint="নিজের length দিয়ে ভাগ। (3, 4)-এর length কত?"
+  praise="length 5 দিয়ে ভাগ: (0.6, 0.8)।"
+>
+
+(3, 4)-এর length 5, তাই দুইটা ঘরকেই 5 দিয়ে ভাগ। যারা (3/7, 4/7) বেছেছিলেন, তারা 3 + 4 = 7 দিয়ে ভাগ করেছিলেন, মানে সামিনের হাঁটার মাপ দিয়ে।
+
+</Check>
+
+</Step>
+
+<Step>
+
+মেলার শেষ বিকেল। সবচেয়ে বেশি ভিড় এখন ডাক্তার আপার health stall-এ, খেলার নাম “তোমার twin কে?”। আপনার উচ্চতা আর ওজন দিলে program খুঁজে বের করবে, stall-এর খাতায় আপনার সবচেয়ে কাছাকাছি গড়নের মানুষটা কে।
+
+আমরা সবাই একটা কথা মানি: কম্পিউটার নিরপেক্ষ, সংখ্যা মিথ্যা বলে না। কিন্তু ভিড় সামলাতে দুইটা laptop বসানো হয়েছে, আর দুইটা laptop বলছে দুই রকম কথা।
+
+<TwinStall story />
+
+<KgVsGram />
+
+<Then>
+
+দুইটা program-ই নিখুঁত হিসাব করেছে। বর্গ, যোগ, root, কোথাও একটা দশমিকও ভুল নাই। তবুও সামিনের laptop বলছে A-এর twin C, আর তানভীরের laptop বলছে B। মানুষ তিনজন কিন্তু যেমন ছিল তেমনই আছে। বদলেছে শুধু একটা জিনিস, তানভীর ওজন লিখেছে gram-এ।
+
+<OneChange />
+
+</Then>
+
+</Step>
+
+<Step>
+
+আর এখানেই একটা অস্বস্তিকর প্রশ্ন এসে পড়ে, যেটা আজকের পুরো journey-র আসল প্রশ্ন। দুইটা নিখুঁত program যদি দুইটা আলাদা উত্তর দিতে পারে, তাহলে কোনো একটাকে “ঠিক” বলার অধিকার আমাদের আছে কি? A-এর আসল twin কে, B না C? আর সেটা বের করে ফেললেও, machine-এর পরের উত্তরটা বিশ্বাস করবো কোন ভরসায়?
+
+<WhichTwin story />
+
+<Check
+  question="দুইটা নিখুঁত program, দুইটা আলাদা twin। এই মুহূর্তে কোনটাকে ভুল বলা যায়?"
+  options={[
+    "কোনোটাকেই না, দুইটাই নিখুঁত হিসাব করেছে।",
+    "সামিনেরটা, kg-ই তো আসল unit।",
+    "তানভীরেরটা, gram-এ হিসাব বেশি সূক্ষ্ম।",
+  ]}
+  answer={0}
+  hint="kg-কে “আসল” unit বলার কোনো কারণ আছে কি? মানুষগুলো তো একই আছে, বদলেছে শুধু লেখার unit।"
+  praise="উত্তর বদলালো unit বদলে।"
+/>
+
+<Then>
+
+তাহলে “সংখ্যা মিথ্যা বলে না” কথাটা পুরোপুরি সত্যি না। সংখ্যা মিথ্যা বলে না ঠিকই, কিন্তু সংখ্যাগুলো কোন unit-এ লেখা হবে, সেটা ঠিক করি আমরা। দুপুরে এই stall-এই ফাঁদটার প্রথম আভাস পেয়েছিলাম, শুধু ওজনের ঘরটা 1000 দিয়ে গুণ করতেই কে কার কাছাকাছি সেটা বদলে গিয়েছিল।
+
+<GramStretch />
+
+প্রশ্নটা এখন open রেখে দিচ্ছি। ফাঁদটা কোথায় সেটা আগে খুঁজে বের করি, তারপর একদম শেষে প্রশ্নটায় ফিরবো। উত্তরটা যতটা সহজ ভাবছেন, ততটা না।
+
+</Then>
+
+</Step>
+
+<Step>
+
+Gram-এ লিখতেই twin বদলে গেল। এমন একটা কাণ্ড আপনি শরবতের stall-এও দেখেছিলেন।
+
+<Check
+  question="৩.২-এ শুধু ওজনের ঘরটা 1000 দিয়ে গুণ করলে কী হয়েছিল?"
+  options={[
+    "সবার দূরত্ব 1000 গুণ, twin একই",
+    "Map বেঁকে গেল, twin বদলে গেল",
+    "কিছুই বদলায়নি",
+  ]}
+  answer={1}
+  hint="এক ঘর একা গুণ করা কি stretch?"
+  praise="এক ঘর একা টানলে map বেঁকে যায়।"
+>
+
+পুরো card টানলে সবার দূরত্ব একসাথে বাড়ে, twin একই থাকে। কিন্তু এক ঘর একা টানলে সেটা stretch না, map-টাই বেঁকে যায়। Gram-এ লেখা মানে ঠিক এটাই: ওজনের ঘরটা একা 1000 গুণ।
+
+</Check>
+
+</Step>
+
+<Step>
+
+kg আর gram তো মাত্র দুইটা unit। ওজন মাপার আরও কত উপায় আছে। পুরানো দিনে ধান-চাল মাপা হতো মণে, আর বিদেশি ওষুধের box এ  লেখা থাকে pound। চলুন, ওজনের unit-টা একটা dial-এ বসিয়ে ঘুরিয়ে দেখি।
+
+<WaysToWeigh story />
+
+<UnitDial />
+
+<Then>
+
+দূরত্বের formula-টা আরেকবার ভাবুন। দূরত্ব বের করতে আমরা উচ্চতার পার্থক্যের বর্গ আর ওজনের পার্থক্যের বর্গ যোগ করি। এই যোগের ভেতরে একটা কথা চুপচাপ ধরে নেওয়া আছে: **উচ্চতার 1 ঘর আর ওজনের 1 ঘর সমান দামি।** ওজন kg-তে থাকলে 1 cm আর 1 kg সমান। gram-এ থাকলে 1 cm আর 1 gram সমান। কেউ কাউকে জিজ্ঞেস করেনি, formula নিজে থেকেই এটা ধরে নিয়েছে।
+
+<EqualPrice />
+
+তাই দূরত্বটা শুধু মানুষগুলোকে মাপছিল না, আমরা কোন unit বেছেছি সেটাকেও মাপছিল। gram-এ C-এর 10 kg পার্থক্য হয়ে যায় 10,000, আর তার পাশে B-এর 18 cm একদম হারিয়ে যায়।
+
+<SideQuest title="Mars Climate Orbiter: সংখ্যা ঠিক, unit ভুল">
+
+একটু side quest দেই। Unit-এর এই গোলমাল শুধু মেলার খেলায় হয় না। ১৯৯৯ সালে NASA-র **Mars Climate Orbiter** মঙ্গল গ্রহে পৌঁছে হারিয়ে যায়। এক দলের software হিসাব দিচ্ছিল pound-এর unit-এ, আর আরেক দলের software সেটা পড়ছিল metric unit ধরে নিয়ে। সংখ্যাগুলো ঠিকই ছিল, শুধু unit মেলেনি। Spaceship-টা মঙ্গলের অনেক কাছে চলে গিয়েছিল, আর তার খোঁজ আর পাওয়া যায়নি।
+
+<MarsMiss />
+
+</SideQuest>
+
+</Then>
+
+</Step>
+
+<Step>
+
+তাহলে সমাধান কী? “সবসময় kg-তে লিখবো” বললে তো হলো না, cm আর kg-কে সমান দাম দেওয়ার পেছনেও কোনো যুক্তি নাই। আসল প্রশ্নটা অন্য জায়গায়: 10 kg পার্থক্য কি অনেক, নাকি অল্প?
+
+<AlwaysKg story />
+
+<TwoCrowds />
+
+<Then>
+
+একই 10 kg, অথচ উত্তর দুই রকম। Class seven-এর সবার ওজন মোটামুটি কাছাকাছি, সেখানে 10 kg মানে অনেক বড় difference। কিন্তু class one-এর বাচ্চা থেকে শিক্ষক পর্যন্ত সবাইকে ধরলে 10 kg প্রায় কিছুই না।
+
+<TenKgSpan />
+
+মানে কোনো পার্থক্য বড় না ছোট, সেটা unit বলে দিতে পারে না। বলে দিতে পারে **দলটা সাধারণত কতটা ছড়ানো।** প্রতিটা feature-এর জন্য যদি এমন একটা সংখ্যা পাই, যেটা বলে “এই দলে এই feature-এর জন্য normal difference এতটুকু”, তাহলে সেটাকেই scale বানানো যায়। বাজারের দাঁড়িপাল্লার বাটখারা না, data থেকেই বানানো একটা scale।
+
+<DataStick />
+
+<SideQuest title="Height-এ 2–3 cm, weight-এ 10 kg">
+
+মেলার বাইরের আরেকটা classroom ধরেন। সেই class-এর পাঁচজনের height: 160, 162, 161, 159 আর 158 cm। পাঁচজনেই 158 থেকে 162-এর মধ্যে — মাঝখানে 160, মানে সবারই 2–3 cm এদিক-সেদিক। এটাই এই দলে height-এর normal difference।
+
+এখন ধরেন নতুন কেউ এই দলে ঢুকলো, height 170 cm। বাকি পাঁচজনের কেউই ওর কাছাকাছি না — দলের normal range-এর বেশ দূরে।
+
+<NewStudent />
+
+আর feature বদলালে ছবিটাও বদলে যায়। একই পাঁচজনের weight-এর normal difference হতে পারে প্রায় 10 kg। তাই height-এর scale আর weight-এর scale এক হতে হবে এমন কথা নাই — প্রতিটা feature-এর scale আসবে তার নিজের data থেকেই।
+
+</SideQuest>
+
+</Then>
+
+</Step>
+
+<Step>
+
+স্কুলের পাঁচজনের মাপ নিয়ে চলুন সেই scale  বানাই। খেয়াল করুন, এবার আমরা একজন মানুষের card দেখছি না। দেখছি সবার উচ্চতা একসাথে, মানে table-এর একটা পুরো **column**।
+
+<FiveHeights story />
+
+<SpreadMachine />
+
+<Then>
+
+মেশিনটা আসলে একটা প্রশ্নের উত্তর দিলো: average থেকে সবাই সাধারণত কতটা দূরে? প্রথমে প্রত্যেকের পার্থক্য, তারপর বর্গ করে minus চিহ্ন দূর, তারপর average, আর শেষে root নিয়ে আবার cm-এ ফেরা। “বর্গ করে আবার root কেন?”, এই প্রশ্নের এটা আরেকটা উত্তর। বর্গ না করলে $-15$ আর $+15$ মিলে শূন্য হয়ে যেত।
+
+<WhySquare />
+
+</Then>
+
+</Step>
+
+<Step>
+
+মেশিনের ধাপগুলো আরেকবার দেখুন: পার্থক্য, বর্গ, average, root। এই হিসাবটা কিন্তু আমরা আগেও করেছি।
+
+<Check
+  question="বর্গ করে যোগ, তারপর root। এই হিসাবটা আগে কোথায় করেছি?"
+  options={[
+    "একটা arrow-এর length মাপতে।",
+    "দুইটা card যোগ করতে।",
+    "একটা card-কে stretch করতে।",
+  ]}
+  answer={0}
+  hint="কাকের মাপটা মনে করুন। কাক সোজা উড়ে গেলে কতদূর যায়, সেটা কীভাবে বের করতাম?"
+  praise="scale ও আসলে একটা length।"
+/>
+
+<Then>
+
+চেনা চেনা লাগছে? বর্গ, যোগ, root, এটা তো পার্থক্যগুলোর column-এর **length**, $\|v\|$। শুধু যোগের জায়গায় average নিয়েছি, যাতে পাঁচজনের বদলে পাঁচশো জন হলেও সংখ্যাটা অকারণে ফুলেফেঁপে না ওঠে। বইপত্রে এটাকে লেখা হয় length ÷ $\sqrt{n}$, তবে সংখ্যা একই আসে।
+
+<LengthVsSpread />
+
+এই scale র একটা বিখ্যাত নাম আছে: **standard deviation**। এখানে উচ্চতায় সেটা 10 cm, আর ওজনে 12 kg।
+
+<TwoSticks />
+
+</Then>
+
+</Step>
+
+<Step>
+
+হাতে এখন দুইটা scale । এবার A, B আর C-এর কাছে ফিরি। প্রতিটা পার্থক্যকে আর cm বা kg-তে না মেপে জিজ্ঞেস করি, এটা কয়টা scale র সমান?
+
+<BackToABC story />
+
+<Yardstick />
+
+<Then>
+
+B-এর 18 cm শুনতে তেমন কিছু মনে হয় না, কিন্তু উচ্চতার scale এ সেটা প্রায় দুই ধাপ, মানে সত্যিই অনেকটা লম্বা। আর C-এর 10 kg শুনতে বড়, অথচ ওজনের scale এ সেটা এক ধাপও না। তাই twin হলো C।
+
+<StickSteps />
+
+খেয়াল করেছেন, $1.8$ আর $0.83$-এর পাশে কোনো unit নাই? 18 cm ÷ 10 cm-এ cm কেটে যায়, 10 kg ÷ 12 kg-এ kg কেটে যায়। দুইটাই এখন শুধু “কয় ধাপ”।
+
+</Then>
+
+</Step>
+
+<Step>
+
+আসল পরীক্ষাটা এখনো বাকি। তানভীর তো ওজন gram-এ লিখবেই। সেই dial-টা আবার ঘোরানো যাক, এবার পাশে scale র হিসাবটাও রেখে।
+
+<TanvirGrams story />
+
+<UnitsCancel />
+
+<Then>
+
+Distance dial ঘোরাতেই নাচানাচি শুরু করে, অথচ scale র দূরত্ব এক চুলও নড়ে না। কারণ ওজন gram-এ লিখলে scale ও gram-এ বানাতে হয়, 12,000 g। তখন 10,000 g ÷ 12,000 g, gram কেটে গিয়ে থাকে সেই একই 0.83। মণ, pound, তোলা, যা-ই লিখুন, ভাগ করার সময় unit নিজেই নিজেকে কেটে দেয়।
+
+<EveryUnit />
+
+তানভীর আর সামিনের laptop এখন একই twin দেখাবে। **Unit বেছে নেওয়াটা ছিল আমাদের খেয়ালখুশি, আর সেই খেয়ালখুশি এখন হিসাব থেকে উধাও।**
+
+<SameTwinNow />
+
+</Then>
+
+</Step>
+
+<Step>
+
+Ruler-এ শূন্য বসবে average-এর জায়গায়। তাই আগে টিফিনের poster-এর হিসাবটা একবার।
+
+<Check
+  question="তিনজনের ওজন 50, 60 আর 70 kg। Average কত?"
+  options={[
+    "60",
+    "180",
+    "70",
+  ]}
+  answer={0}
+  hint="সব যোগ, তারপর 1/3 দিয়ে stretch।"
+  praise="যোগ 180, তারপর ⅓: 60।"
+>
+
+50 + 60 + 70 = 180, তারপর 1/3 দিয়ে stretch, 60। যারা 180 বেছেছিলেন, তারা যোগ করে থেমে গিয়েছিলেন।
+
+</Check>
+
+</Step>
+
+<Step>
+
+এতক্ষণ আমরা শুধু পার্থক্যকে scale  দিয়ে ভাগ করেছি। কিন্তু একজন মানুষের নিজের মাপটাকেও তো একইভাবে লেখা যায়। ধরেন ruler-টায় cm-এর বদলে scale  দিয়ে দাগ কাটা, আর শূন্য বসানো average-এর জায়গায়।
+
+<ZScore />
+
+<Then>
+
+নিচের ruler-টা নতুন কিছু মাপছে না, ওপরের cm ruler-টাকেই নতুন করে দাগ কেটেছে। শূন্য সরে গেছে average-এ, মানে 170 cm-এ, আর প্রতিটা ঘর এখন 10 cm। সামিন $-1.5$ মানে সে average-এর চেয়ে দেড় scale ছোট। কোনো cm নাই, kg নাই, শুধু “average থেকে কয় step দূরে”।
+
+<ZRelabel />
+
+$$z = \frac{\text{মান} - \text{average}}{\text{scale }}$$
+
+এই সংখ্যাটার নাম **z-score**, আর পুরো কাজটাকে বলে **standardisation**। Machine learning-এ data হাতে পেলে প্রথম দিকেই যে কাজগুলো করা হয়, এটা তার একটা। Python-এর scikit-learn library-তে এটা এক লাইনের জিনিস, নাম `StandardScaler`। এখন আপনি জানেন, সেই এক লাইন ভেতরে ঠিক কী করে, আর কেন করে।
+
+<OneLine />
+
+</Then>
+
+</Step>
+
+<Step>
+
+এখানে এসে মনে হতে পারে, যাক, এবার আসল সত্যিটা পেলাম, A-এর আসল twin C। একটু দাঁড়ান। scale টা কিন্তু এসেছিল এই পাঁচজনের data থেকে। Data অন্য রকম হলে?
+
+<DataFrom story />
+
+<NotTheTruth />
+
+<Then>
+
+scale  12 kg হলে twin C, আর 5 kg হলে B। কোনটা ঠিক? আসলে দুইটাই। যে দলে সবার ওজন খুব কাছাকাছি, সেখানে 10 kg পার্থক্য সত্যিই অস্বাভাবিক, তাই C-এর সাথে A-এর মিল কম। Data আমাদের বলছে, “এই দলে এটা বড় ব্যাপার।”
+
+<TwoSchools />
+
+</Then>
+
+</Step>
+
+<Step>
+
+scale  data থেকে আসে, আর data বদলালে twin-ও বদলায়। তাহলে মানুষের কি কিছু বলার নাই? ডাক্তার আপা এবার নিজের একটা মত দিলেন।
+
+<Check
+  question="ডাক্তার আপা বললেন, রোগ বোঝার জন্য ওজনের পার্থক্য বেশি জরুরি, তাই ওজনকে একটু বাড়তি weight দেবেন। এটা কি চলে?"
+  options={[
+    "না, data থেকে বানানো scale ই একমাত্র ঠিক।",
+    "না, সব feature-এর দাম সবসময় সমান হতেই হবে।",
+    "হ্যাঁ, যতক্ষণ তিনি জেনেশুনে বাছাইটা করছেন।",
+  ]}
+  answer={2}
+  hint="5 kg আর 12 kg, দুইটা scale ই নিজের দলের জন্য ঠিক ছিল। তাহলে “একমাত্র ঠিক” scale  বলে কিছু আছে কি?"
+  praise="Scaling সত্য দেয় না, যুক্তি দেয়।"
+/>
+
+<Then>
+
+তাই scaling কোনো universal truth খুঁজে দেয় না। এটা just একটা logical scale (এই group-এ feature-টা কতটা spread out) বসিয়ে দেয়। আর কখনো কখনো data-র চেয়ে মানুষ ভালো জানে। ডাক্তার আপা হয়তো বলবেন, কোনো একটা রোগ বোঝার জন্য উচ্চতার চেয়ে ওজনের পার্থক্য বেশি জরুরি, তাই ওজনকে একটু বাড়তি weight দেবেন। সেটাও ঠিক আছে।
+
+<ApaWeight />
+
+আসল লাভটা হলো, **সিদ্ধান্তটা এখন চোখের সামনে।** আগে gram না kg, এরকম একটা confusion চুপচাপ উত্তর বদলে দিতো। এখন যে-ই scale  বাছুক, জেনেশুনে বাছছে।
+
+</Then>
+
+</Step>
+
+<Step>
+
+## এবার আপনার পালা
+
+একদম শুরুতে যে open question-টা রেখেছিলাম, তার উত্তর এখন আপনার হাতে।
+
+<Check
+  question="দুইটা নিখুঁত program দুইটা আলাদা twin দেখালো। Machine-এর উত্তর তাহলে বিশ্বাস করবো কোন ভরসায়?"
+  options={[
+    "Machine ভুল করে না, তাই যা বলে তা-ই বিশ্বাস করবো।",
+    "দুইটা উত্তর এসেছে, তাই কোনোটাই বিশ্বাস করা যায় না।",
+    "আগে দেখে নেবো, উত্তরটা কোন scale এ মাপা।",
+  ]}
+  answer={2}
+  hint="5 kg আর 12 kg-এর scale এ twin আলাদা হলো, অথচ দুইটাই ঠিক ছিল। উত্তরটা তাহলে কীসের ওপর দাঁড়িয়ে আছে?"
+  praise="আগে জানুন কোন scale এ মাপা।"
+/>
+
+<Then>
+
+শুরুর সেই অস্বস্তিকর প্রশ্নটা মনে আছে? Machine-এর উত্তর বিশ্বাস করবো কোন ভরসায়? উত্তরটা এই: **একটা উত্তর বিশ্বাস করার আগে জানতে হবে সেটা কোন scale এ মাপা।** Machine যা বলে, সেটা কখনোই শুধু data-র কথা না, সেটা data আর আমাদের বেছে নেওয়া scale , দুইটা মিলে একটা উত্তর। তাই “A-এর আসল twin কে?” প্রশ্নটার একটা মাত্র উত্তর নাই, আর সেটা program-এর weakness না।
+
+<TrustAnswer />
+
+ফাঁদটা তাহলে gram-এ ছিল না। ফাঁদটা ছিল ignorance, একটা scale বেছে নেওয়া হয়েছে সেটা না জানা। তানভীর জানতোই না সে কিছু বেছেছে, তাই তার উত্তরটা ছিল একটা accident। আজকের পর আপনি জানেন, তাই আপনার উত্তরটা একটা decision।
+
+</Then>
+
+</Step>
+
+<Step>
+
+ঝুলি গোছানোর আগে একটা শব্দের গোলমাল মিটিয়ে নেওয়া দরকার, নাহলে পরে ঠকতে হবে। মামার ছবি বাছতে আমরা card-গুলোকে “normalise” করেছিলাম। আজ যা করলাম, library-গুলো প্রায়ই সেটাকেও normalise বলে। দুইটা কি একই কাজ?
+
+<OneWordTwoStalls story />
+
+<TwoNormalises />
+
+<Then>
+
+নাম এক, কিন্তু কাজ আলাদা। Movie club-এ ভাগ করেছিলাম একটা **row**, মানে একটা ছবির পুরো card, তার নিজের length দিয়ে। তাতে মুভির loudness নাই হয়ে গিয়েছিল, রয়ে গিয়েছিল শুধু দিক। আজ ভাগ করলাম একটা **column**, মানে সবার ওজন, সেই feature-এর scale  দিয়ে। তাতে মুছে গেল unit, আর প্রতিটা feature সমান সুযোগ পেল।
+
+<RowVsColumn />
+
+তাই কেউ যদি জিজ্ঞেস করে “data normalise করেছো?”, পাল্টা জিজ্ঞেস করাটাই ঠিক: কোনটা?
+
+<SideQuest title="দুই normalise, পাশাপাশি এক table-এ">
+
+<Table
+  head={["", "Row normalise (৩.৬)", "Column scaling (৩.৭)"]}
+  rows={[
+    ["কীসের ওপর", "একটা row, একটা জিনিস", "একটা column, একটা feature"],
+    ["কী দিয়ে ভাগ", "row-এর নিজের length", "feature-এর scale "],
+    ["কী মুছে যায়", "loudness, মোট আকার ", "unit"],
+    ["কাজ শেষে", "প্রতিটা card-এর length 1", "প্রতিটা feature-এর scale  1"],
+    ["কোথায় লাগে", "দিক তুলনা, cosine", "ন্যায্য দূরত্ব, বেশির ভাগ model"],
+  ]}
+/>
+
+</SideQuest>
+
+</Then>
+
+</Step>
+
+<Step>
+
+## একটু ঝালিয়ে নিন
+
+<Check
+  question="Standardise করার পর তানভীর উচ্চতা লিখলো inch-এ আর ওজন pound-এ। scale ও সে একই unit-এ বানালো। A-এর twin এখন কে হবে?"
+  options={[
+    "C-ই থাকবে, scale র দূরত্ব একটুও বদলাবে না।",
+    "B হয়ে যাবে, কারণ pound-এ twin B ছিল।",
+    "বলা যায় না, দুইটা unit একসাথে বদলালে সব এলোমেলো।",
+  ]}
+  answer={0}
+  hint="প্রতিটা পার্থক্যকে যখন তার scale  দিয়ে ভাগ করেন, inch ÷ inch আর pound ÷ pound-এ কী পড়ে থাকে?"
+>
+
+উচ্চতার পার্থক্য inch-এ, scale ও inch-এ, তাই ভাগ করলে inch কেটে যায়। ওজনে কেটে যায় pound। দুইটা ঘরেই পড়ে থাকে সেই আগের “কয় ধাপ”, 1.8 আর 0.08, 0.1 আর 0.83। তাই দূরত্বও আগের মতোই, twin C।
+
+</Check>
+
+<Then>
+
+<InchPound />
+
+যারা B বেছেছিলেন, তারা মনে রেখেছিলেন dial-এর কাঁচা দূরত্ব, যেখানে pound-এ twin সত্যিই B হয়েছিল। কিন্তু সেটা ছিল scale  আসার আগের গল্প।
+
+Unit-এর ফাঁদ থেকে তো বের হয়ে আসা গেল। এবার পুরো মেলার ঝুলিটা একবার উপুড় করে দেখি।
+
+</Then>
+
+</Step>
+
+<Step>
+
+## মেলা শেষ, ঝুলিতে কী কী উঠলো?
+
+সাতটা stall ঘুরে সাতটা জিনিস হাতে এসেছে। একটা একটা করে বের করুন।
+
+<Finale />
+
+<Then>
+
+সাতটা lesson জুড়ে vector নিয়ে আসলে দুইটা চাল শিখেছি, যোগ আর stretch, আর একটা মাপ, length। বাকি সব এদের থেকেই বানানো। বিয়োগ হলো উল্টে দিয়ে যোগ, average হলো যোগ করে stretch, দূরত্ব হলো বিয়োগের length, আর দুই রকম normalise হলো length বা scale  দিয়ে ভাগ।
+
+<ThreeTools />
+
+আর একটা কথা সাতটা lesson জুড়েই ফিরে ফিরে এসেছে, আজকের screen-টায় এসে সেটা পরিষ্কার হলো। প্রতিটা calculation-এর ভেতরে একটা choice লুকিয়ে থাকে: কোন basis, কোন ফিতা, কোন scale । choice-টা চোখে না পড়লে মনে হয় সংখ্যাগুলো নিজের মত করে উত্তর দিচ্ছে। Notice  করলে বোঝা যায়, **সংখ্যা আমাদের choice এর basis এ উত্তর দেয়।**
+
+<HiddenChoice />
+
+</Then>
+
+</Step>
+
+<Step>
+
+ঝুলি গোছানো শেষ। শুধু movie club-এর একটা box এখনো খোলা হয়নি।
+
+<Check
+  question="নাসিবের movie club-এর সেই black boxটা মনে আছে? দুইটা card পেলে boxটা কী করতো?"
+  options={[
+    "ঘরে ঘরে যোগ করতো।",
+    "প্রতিটা card-কে তার length দিয়ে ভাগ করতো।",
+    "ঘরে ঘরে গুণ করে যোগ করতো।",
+  ]}
+  answer={2}
+  hint="boxটা দুইটা card থেকে একটাই সংখ্যা ফেরত দিতো, মিলের score। যোগ করলে তো আরেকটা card আসে, একটা সংখ্যা না।"
+  praise="ঘরে ঘরে গুণ করে যোগ, একটা সংখ্যা।"
+/>
+
+<Then>
+
+শেষ প্রশ্নটার উত্তর কিন্তু পুরোটা দেইনি। দুইটা vector-কে এমনভাবে গুণ করা যায়, যাতে ফেরত আসে একটাই সংখ্যা, আর সেই সংখ্যা বলে দেয় দুইটা arrow কতটা একই দিকে তাক করা। নাসিবের movie club-এর সেই black box, “ঘরে ঘরে গুণ করে যোগ”, সেটা আসলে এই গুণই। এর নাম **dot product**, আর সেই গল্পটা পরের কোনো journey-তে আসবে। মজার ব্যাপার হলো, সেই গল্পের অর্ধেক হাতিয়ার, $\|v\|$ আর $\hat{v}$, এর মধ্যেই আপনার ঝুলিতে আছে।
+
+একটা প্রশ্ন সাথে নিয়ে যান। ডাক্তার আপা ওজনকে বাড়তি weight দিতে চাইলেন। কিন্তু কোন feature এর weight কত বেশি, সেটা ঠিক করবে কে? ডাক্তার, data, নাকি model নিজেই শিখে নেবে?
+
+<WhoDecides />
+
+<SideQuest title="বইপত্রের symbol, সব এক জায়গায়">
+
+বইপত্রে এগুলো যেসব symbol দিয়ে লেখা থাকে, সব এক জায়গায়:
+
+<Table
+  head={["দেখবেন", "মুখে বলবেন"]}
+  rows={[
+    ["u + v", "u, তারপর v; ঘরে ঘরে যোগ"],
+    ["u − v", "v থেকে u-তে যাওয়ার arrow"],
+    ["λv", "v-কে lambda গুণ টানা বা গুটানো"],
+    ["−v", "v, উল্টো দিকে মুখ করে"],
+    ["λ₁v₁ + … + λₖvₖ", "linear combination, প্রতিটা উপকরণ কিছুটা করে"],
+    ["e₁, e₂", "প্রতিটা axis ধরে এক পা"],
+    ["|−3|", "3, minus চিহ্ন ছাড়া"],
+    ["‖v‖ বা ‖v‖₂", "v-এর length, কাকের মাপ"],
+    ["‖v‖₁", "পথিকের মাপ, minus ছাড়া ঘরগুলোর যোগ"],
+    ["‖v‖∞", "রাজার মাপ, সবচেয়ে বড় ঘর"],
+    ["‖a − b‖", "a আর b-এর দূরত্ব"],
+    ["v̂ = v ÷ ‖v‖", "v-hat, একই দিকের arrow যার length 1"],
+    ["(x − average) ÷ scale ", "z-score, average থেকে কয় ধাপ"],
+  ]}
+/>
+
+</SideQuest>
+
+<LessonLink
+  href="/dashboard/articles/math_for_ai/04a0_nasib_rule"
+  eyebrow="পরের পাঠ"
+  title="নাসিবের rule, ঘরে ঘরে গুণ কেন"
+>
+  মেলার আগের রাত। movie club-এর black box কে বানালো, আর কেন ঠিক এভাবেই।
+</LessonLink>
+
+</Then>
+
+</Step>
+
+</Journey>

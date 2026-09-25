@@ -1,0 +1,225 @@
+export const metadata = {
+  title: "Math for AI 5.6b — Turn the grid, what stays real",
+  description:
+    "Nasib says a new grid changes every number, even how far apart two flats are. Measure it three ways, shrink Fahim's buttons, turn the grid under 2.3's words, and find which numbers belong to the grid and which are real.",
+  type: "article",
+};
+
+{/* Told as a Brilliant-style journey, like 1.1 and 2.3, in the author's
+    Bangla-English: screen 1 seals the reader's bet on how far apart two
+    flats will be on Fahim's grid, and the bet is not opened until the
+    finale, six screens later. NasibTape makes the obvious wrong answer look
+    right (Pythagoras on Fahim's cards says 1.41); ShrinkButtons finds why
+    (his steps are 1.41 long) and plays orthonormal before naming it;
+    SpinTheGrid turns a fair grid under 2.3's words (numbers move, distance
+    and cosine don't); BestTurn plays PCA on the khata's flats; TryFairGrid
+    picks the grid whose cards tell the truth. 7 steps. Explanations sit in
+    <Then>, one phone screen each with a watch-only figure.
+
+    The second half of 5.6 (05f_rooftop_rent), split off so the rent bet and
+    "what is real" each get their own spine. It carries what the old 10-step
+    5.6 had after the rent: Nasib's objection, the orthonormal note,
+    SpinTheGrid, PCA, the Article 5 recap and the notation table. The last
+    journey of Article 5; it bridges to Article 6 in words. The screens live
+    in components/interactive/fairgrid-journey.tsx (shared bits in
+    rooftop-parts.tsx). */}
+
+import { Journey, Step, Then, SideQuest } from "@/components/journey/journey";
+import {
+  RoofLate,
+  FairBet,
+  TwoFlatsTape,
+  NasibTape,
+  StepLength,
+  ShrinkButtons,
+  ShrinkToOne,
+  NasibTurns,
+  SpinTheGrid,
+  SameArrows,
+  BestTurn,
+  MachineVsFahim,
+  TryFairGrid,
+  TwoChecks,
+  LastJilapi,
+  BetOpened,
+  PcaWords,
+  NasibSums,
+  Slot137,
+  RiverIdeaAgain,
+  ThreeGridsDrawn,
+  GridLifted,
+} from "@/components/interactive/fairgrid-journey";
+
+<Journey title="কোনটা আসল · 5.6b">
+
+<Step>
+
+ছাদের flat এর দুইটা card। bed আর bath এ (4, 2)। ফাহিমের grid এ (3, 1)। flat কিন্তু একটাই।
+
+রাত দশটা। ভাড়াটিয়া চলে গেছে। ছাদে শুধু ফাহিম আর নাসিব। দুইজনের হাতে আধা আধা জিলাপি। নাসিব খাতাটা আবার খুললো। গম্ভীর গলায় বললো, যেকোনো grid নে, যেকোনো সংখ্যা পাবি। তাহলে এই সংখ্যার কোনটা আসল? দুইটা flat কতদূরে, সেটাও grid এর মর্জি।
+
+<RoofLate story />
+
+খাতার দুইটা flat নিন। (3, 1) আর (3, 3)। বলুন তো, ফাহিমের grid এ গেলে ওরা কতদূরে থাকবে?
+
+<FairBet />
+
+<Then>
+
+বাজি ধরা হলো। প্রশ্নটা আসলে আরো বড়। grid বদলালে কোন সংখ্যা বদলায়? আর কোনটা grid চাইলেও বদলাতে পারে না? নাসিব বলছে, সবই বদলায়। দূরত্বও।
+
+<TwoFlatsTape />
+
+</Then>
+
+</Step>
+
+<Step>
+
+নাসিব নিজেই মাপতে বসলো। আগে খাতার card দিয়ে, তারপর ফাহিমের card দিয়ে। দুইবারই 3.4 এর Pythagoras। ফাহিম পকেট থেকে একটা ফিতা বের করলো।
+
+<NasibSums story />
+
+<NasibTape />
+
+<Then>
+
+কাগজের ফিতা কোনো grid চিনে না। ও বললো 2। তাহলে গোলমাল কোথায়? হিসাবে। ফাহিমের card এ Pythagoras চালালে আসে 1.41. অথচ flat দুইটা এক চুলও নড়ে নাই। কেন? দেখুন, ফাহিমের এক ধাপ কাগজে কত লম্বা।
+
+<StepLength />
+
+</Then>
+
+</Step>
+
+<Step>
+
+ফাহিমের button গুলা একটু ছোট করে দেখি। ছোট ধাপ মানে card এ বড় সংখ্যা। কতটা ছোট করলে হিসাব আর ফিতা এক কথা বলবে?
+
+<ShrinkButtons />
+
+<Then>
+
+একটা সৎ কথা বলে রাখি। Flat (3, 2) এর card এর 2.5 গুনে কী? size এর ধাপ। room না। কারণ, প্রতিটা size ধাপে দুইটা room। কাগজে ওই ধাপ প্রায় 1.41 লম্বা। 1 না।
+
+3.6 এর unit vector এর মতো দুইটা button কেই 1 লম্বা বানিয়ে ফেলুন। card হয়ে যায় $(3.54, 0.71)$. যে ধাপ গুলা right angle এ, আর প্রতিটা 1 লম্বা, ওদের বলে **orthonormal**। তখন দুইটা সংখ্যাই বসে এক scale এ। 3.7 এ scaling করে যে fairness পেয়েছিলাম, সেটাই।
+
+<ShrinkToOne />
+
+</Then>
+
+</Step>
+
+<Step>
+
+নাসিব তবু ছাড়লো না। পাতাটা হাতে নিয়ে ঘুরালো।
+
+<NasibTurns story />
+
+ন্যায্য প্রশ্ন। 2.3 এর word map টা নিন। king, queen, man আর woman সহ। ওটার নিচে একটা square grid ঘুরান। প্রতিটা ধাপ 1 লম্বা।
+
+<SpinTheGrid />
+
+<Then>
+
+কী বদলালো? প্রতিটা slot এর সংখ্যা। আর দূরত্ব, cosine? নড়লোই না। একটুও না। ওরা word গুলার নিজের জিনিস। Slot এর সংখ্যা গুলা grid এর।
+
+<SameArrows />
+
+এতে শোধ হলো 2.3 এর একটা পুরানো দেনা। মনে আছে? কেউ জানে না একটা word এর slot 137 মানে কী। Model কখনো অর্থওয়ালা কোনো grid বেছে নেয় নাই।
+
+**সংখ্যা গুলা grid এর। দূরত্ব গুলা আসল।**
+
+<Slot137 />
+
+</Then>
+
+</Step>
+
+<Step>
+
+তাহলে 1 লম্বা, right angle এর যেকোনো grid এ দূরত্ব ঠিক থাকে। এত grid, নিবো কোনটা? ফাহিম বেছেছিল চোখে দেখে। একটা machine কি নিজে নিজে বেছে নিতে পারে?
+
+ধরেন প্রতিটা flat এর রাখবেন শুধু প্রথম সংখ্যাটা। দ্বিতীয়টা ফেলে দিবেন। তাহলে কেমন line চাই? যেখানে ফেলে দেয়া অংশটা সবচেয়ে ছোট।
+
+<BestTurn />
+
+<Then>
+
+Machine এর line পড়লো প্রায় 35° এ। ফাহিমের size এর line ছিল 45°। কাছাকাছি। তবে এক না। কেন? ফাহিম grid বেছেছিল ভাড়া দেখে। এই হিসাব ভাড়া দেখেই নাই। দেখেছে শুধু flat গুলা কোনদিকে সবচেয়ে বেশি ছড়ানো।
+
+<MachineVsFahim />
+
+Data থেকেই এভাবে grid খুঁজে বের করা। প্রথম direction এ সবচেয়ে বেশি ছড়ানো। তারপর বাকিটা ফেলে দেয়া। এটাই **PCA** (principal component analysis) এর মূল কথা। নদীর গল্পে (4.6) ফাহিমের idea টা মনে আছে তো? ঠিক ওইটাই।
+
+<RiverIdeaAgain />
+
+</Then>
+
+</Step>
+
+<Step>
+
+## Try it
+
+নাসিবের শেষ চেষ্টা। খাতার পিছনে সে তিনটা grid আঁকলো। একটা ফাহিমের। একটা 30° ঘুরানো, ধাপ 1। আরেকটা 5.5 এর রিকশার রাস্তা।
+
+<ThreeGridsDrawn story />
+
+<TryFairGrid />
+
+<Then>
+
+ফাহিমের grid square। কিন্তু ধাপ 1.41 লম্বা। তাই হিসাব কম বলে। রিকশার রাস্তা? দুইটা right angle এ না। তাই Pythagoras খাটেই না। হিসাব বেশি বলে।
+
+5.5 এ এটাই দেখেছিলেন। Pythagoras চায় square রাস্তা। আজ দেখলেন আরেকটা শর্ত। প্রতিটা ধাপ 1 লম্বা।
+
+<TwoChecks />
+
+</Then>
+
+</Step>
+
+<Step>
+
+## শেষ! নাসিবের বাজির মীমাংসা
+
+শেষ জিলাপিটা নাসিবের মুখে গেলো। ঠোঙাটা সে ভাঁজ করে পকেটে রাখলো।
+
+<LastJilapi story />
+
+<BetOpened />
+
+<Then>
+
+2 এর কম যা এসেছিল, সেটা লম্বা ধাপের হিসাব। নাসিবের কথা টিকলো অর্ধেক। slot এর সংখ্যা grid এর। দূরত্বেরটা টিকলো না। Rule: **সংখ্যা grid এর। দূরত্ব আর angle আসল, grid square আর 1 লম্বা হলে।**
+
+<PcaWords />
+
+এতক্ষণ grid নড়েছে। arrow থেকেছে জায়গায়। পুরা grid টাই যদি একটা machine তুলে নড়ায়? আর চাচার খাতা, প্রতি flat এক row। সেটাও একটা জিনিস। দুইটারই নাম **matrix**। সেটা Article 6.
+
+<GridLifted />
+
+<SideQuest title="বইয়ে এই article টা যেভাবে লেখে">
+
+<Table
+  head={["যেটা দেখবেন", "যেভাবে বলবেন"]}
+  rows={[
+    ["span{v, w}", "v আর w একসাথে যেখানে যেখানে যেতে পারে, সবটা"],
+    ["e₁, e₂ (বইয়ে i, j ও লেখে)", "সাধারণ grid এর button, (1, 0) আর (0, 1)"],
+    ["c₁v₁ + … + cₙvₙ = 0", "zero test: কিছুই বাড়তি না হলে, শুধু সব-শূন্য চাপেই বাড়ি ফেরা যায়"],
+    ["dim(V)", "V এর dimension: এর যেকোনো basis এ কয়টা button"],
+    ["V ⊆ ℝⁿ", "V হলো ℝⁿ এর একটা subspace: 0 এর মধ্য দিয়ে যাওয়া একটা সমান পাতা, যোগ আর টেনে লম্বা করায় যেটা থেকে বের হওয়া যায় না"],
+    ["B = {w, z}", "একটা basis, নাম দেয়া হলো যাতে বলা যায় কোন grid এর কথা হচ্ছে"],
+    ["[v]_B", "basis B তে v এর card, যেমন [school]_B = (−1, 3)"],
+    ["orthonormal", "button গুলা right angle এ, প্রতিটা 1 লম্বা"],
+  ]}
+/>
+
+</SideQuest>
+
+</Then>
+
+</Step>
+
+</Journey>

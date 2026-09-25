@@ -1,0 +1,282 @@
+export const metadata = {
+  title: "Math for AI 4.8 — A million books, normalise once",
+  description: "Ten lakh books are coming onto the village library's computer, and machine B measures a length, takes a root and divides for every book on every search. Can cosine be made as cheap as the plain dot product, without changing a single answer?",
+  type: "article",
+};
+
+{/* Told as a Brilliant-style journey, like 1.1 and 2.3: screen 2 seals the
+    reader's bet on আপুর ভাই's claim — machine B can be made as fast as
+    machine A without changing one answer — and the bet is not settled until
+    BoxOnShelved, four screens later, and closed by name in the finale.
+    10 steps.
+
+    Screen 1 is the recall at the door: 4.7's lesson that machine B's score
+    doesn't move when a book gets longer, which is also why normalising a
+    card can't change B's answer. Then the old way fails (CostRace: 4 jobs a
+    book against 1), the reason shows (SameLength: the lengths never change
+    between searches), the fix is done by hand (ShelveOnce: normalise once, at
+    shelving) and pays off (BoxOnShelved: the plain dot product on 1-long cards gives
+    machine B's numbers exactly, at machine A's speed). TipGap adds that
+    distance gives the same order. YourCos is the unaided check (0.96) and
+    TryShelve a new book, (6, 8, 0).
+
+    Split out of the old 4.8 (04f2_attention_box), which now carries only
+    Som's ChatGPT claim; this journey's ending is Som's phone call that opens
+    it. The screens live in components/interactive/millionbooks-journey.tsx. */}
+
+import { Journey, Step, Then, SideQuest } from "@/components/journey/journey";
+import { RecallTwice, SpeedBet, CostRace, SameLength, ShelveOnce, BoxOnShelved, TipGap, YourCos, TryShelve } from "@/components/interactive/millionbooks-journey";
+import { CatalogueArrives, MachineInsides, HundredSearches, SameTwenty, BhaiShelves, OnceNotEvery, HatFormula, StoreOnce, FahimAsks, SameOrderThree, CloseTips, SixEightTwoWays, NightCall, HeavierThanFour, FahimLog, BetSettled } from "@/components/interactive/millionbooks-journey";
+
+<Journey title="Dot product · 4.8">
+
+<Step>
+
+আজকের গল্পের আগে library র একটা কথা মনে করে নেই।
+
+Machine B কোনো বইকে score দেয় কীভাবে? আগে dot product। তারপর বইয়ের length দিয়ে ভাগ। এবার মাছের মোটা বইটার প্রতিটা সংখ্যা দ্বিগুণ করা হলো। বইটা যেন দ্বিগুণ মোটা।
+
+<RecallTwice />
+
+</Step>
+
+<Step>
+
+দুইদিন পর ফাহিম আবার library তে গেলো। বিকাল। জানালা দিয়ে রোদ এসে পড়েছে টেবিলে। লাইব্রেরির আপু computer এর সামনে বসা।
+
+আপুর ভাই আসলেন শহর থেকে। Machine দুইটা তাঁরই বানানো। হাতে ছোট একটা pen drive। ভাই শান্ত গলায় বললেন, উপজেলা library র সব বইয়ের card এখানে। দশ লাখ বই। সামনের মাস থেকে পুরা উপজেলার ছেলেমেয়েরা এখানে এসে search দিবে।
+
+আপু কিছুক্ষণ চুপ করে থাকলেন। তারপর বললেন, machine B তো প্রতিটা বইয়ের length মাপে, root নেয়, ভাগ দেয়। তিনটা বইয়ে টের পাই নাই। দশ লাখ বইয়ে?
+
+ভাই বললেন, machine B-কে machine A র মতোই দ্রুত করা যায়। একটা উত্তরও না বদলে।
+
+ফাহিম আপুর দিকে তাকালো। আপু ভাইয়ের দিকে।
+
+<CatalogueArrives story />
+
+<SpeedBet />
+
+<Then>
+
+বাজি ধরা হয়ে গেলো। শেষে মিলিয়ে দেখবো।
+
+তার আগে machine দুইটার ভিতরটা একবার খুলে দেখি। একটা বই ঢুকলো। Machine A কী করে? শুধু dot product. Machine B? সেই একই dot product। তারপর বইয়ের length মাপে। প্রতিটা সংখ্যার বর্গ, যোগ, তারপর root। শেষে ভাগ।
+
+<MachineInsides />
+
+</Then>
+
+</Step>
+
+<Step>
+
+তাহলে machine B আসলে কতটা slow? প্রথমে library র 3 টা বই। তারপর 1,000। তারপর উপজেলার 10 লাখ। প্রতিবার দুইটা machine এই “মাছ” search দিন।
+
+<CostRace />
+
+<Then>
+
+কী এসেছে? 3 টা বইয়ে machine B করলো 12 টা কাজ। টেরই পাওয়া যায় না। 10 লাখ বইয়ে? 40 লাখ কাজ। Machine A র চার গুণ। তাও মাত্র একটা search এ।
+
+চার গুণ, ঠিক তো? আসলে তারও বেশি। কারণ, root আর ভাগ computer এর জন্যও ভারি কাজ। গুণ-যোগের চেয়ে ভারি।
+
+<HeavierThanFour />
+
+আর দিনে তো একজন search দিবে না।
+
+<HundredSearches />
+
+</Then>
+
+</Step>
+
+<Step>
+
+ফাহিম machine B র খাতাটা খুলে বসলো। কোন search এ কোন বইয়ের জন্য কী হিসাব হলো, সব লেখা থাকে সেখানে।
+
+<FahimLog story />
+
+তিনটা আলাদা word দিয়ে search দিন। তারপর খাতার দিকে তাকান।
+
+<SameLength />
+
+<Then>
+
+Search এর word বদলালে dot product বদলায়। কিন্তু length? মোটা বইটার length তিনবারই 20.02. বই তো shelf এ বসে আছে। ওর একটা শব্দও বদলায় নাই। তাহলে length বদলাবে কেন?
+
+তার মানে? machine B প্রতিটা search এ 10 লাখ বইয়ের length নতুন করে মাপছে। আর প্রতিবার পাচ্ছে ঠিক আগের উত্তরটাই।
+
+<SameTwenty />
+
+</Then>
+
+</Step>
+
+<Step>
+
+আপুর ভাই খাতাটা দেখলেন। তারপর shelf থেকে মাছের ছোট note টা নামালেন। Card এ লেখা $(2, 0, 0)$।
+
+ভাই বললেন, length যখন বদলায়ই না, বারবার মাপার দরকার কী? বই shelf এ তোলার সময় একবার মেপে ফেলো। তারপর card এর প্রতিটা সংখ্যা ওই length দিয়ে ভাগ দিয়ে রাখো। সব card হয়ে যাবে 1 লম্বা।
+
+<BhaiShelves story />
+
+<ShelveOnce />
+
+<Then>
+
+প্রতিটা card এখন 1 লম্বা। এই কাজটার নাম মনে আছে তো? 3.6 এ শিখেছিলেন। **normalise**. নিজের length দিয়ে ভাগ, ব্যস।
+
+এতে machine B র উত্তর বদলাবে? না। কারণ, আজকের শুরুতেই দেখেছেন। length বদলালে B র score বদলায় না।
+
+আর কাজটা হয় একবারই। shelf এ তোলার সময়। তারপর search যতবারই হোক, length আর মাপতে হয় না।
+
+<OnceNotEvery />
+
+</Then>
+
+</Step>
+
+<Step>
+
+এবার search এর পালা। Card গুলো এখন 1 লম্বা। এগুলোর উপরে চালান সাদামাটা machine A। শুধু dot product। পাশে লেখা আছে machine B আগে কোন বইকে কত দিয়েছিল। মিলবে কি?
+
+<BoxOnShelved />
+
+<Then>
+
+কী এসেছে? Dot product আর machine B র cosine, হুবহু একই সংখ্যা।
+
+কাহিনী কী? Cosine মানে dot product, তারপর দুইটা length দিয়ে ভাগ। এখানে দুইটা card-ই 1 লম্বা। তাই ভাগ 1 × 1 দিয়ে। আর 1 দিয়ে ভাগে কিছুই বদলায় না।
+
+$$\cos\theta = \hat{u} \cdot \hat{v}$$
+
+<HatFormula />
+
+আসল search system গুলাও এটাই করে। জমা রাখার সময় একবার normalise। তারপর প্রতিটা search এ শুধু dot product। GPU চালায় লাখ লাখ dot product, একসাথে। GPU মানে computer এর একটা chip। একসাথে অনেক গুণ-যোগ করতে পারে।
+
+<StoreOnce />
+
+</Then>
+
+</Step>
+
+<Step>
+
+ফাহিম বললো, শহরের search গুলা নাকি সবচেয়ে কাছের বই খোঁজে। Distance দিয়ে। তাহলে ওটার জন্য আবার আলাদা হিসাব লাগবে?
+
+ভাই বললেন, মেপে দেখো।
+
+<FahimAsks story />
+
+দুইটা card। দুইটাই 1 লম্বা। দ্বিতীয়টা ঘুরিয়ে দেখুন। Dot product যখন কমে, মাথা দুইটার দূরত্ব তখন কী করে?
+
+<TipGap />
+
+<Then>
+
+Dot product যত বড়, মাথা দুইটা তত কাছে। 1 লম্বা দুইটা arrow এর বেলায় distance আর cosine একসাথে বাঁধা:
+
+$$\|\hat{u} - \hat{v}\|^2 = 2 - 2\cos\theta$$
+
+তার মানে? normalise করার পর “সবচেয়ে কাছের বই” আর “সবচেয়ে একই দিকের বই” একই কথা। আলাদা হিসাব লাগবে না।
+
+অনেক software এ তাই থাকে **cosine distance**, $1 - \cos\theta$. 0 মানে হুবহু এক।
+
+<SameOrderThree />
+
+<SideQuest title="Dot product, cosine আর distance, এক table এ">
+
+<Table
+  head={["", "dot product", "cosine", "distance"]}
+  rows={[
+    ["হিসাব", "u · v", "(u · v) ÷ (‖u‖ ‖v‖)", "‖u − v‖"],
+    ["বড় সংখ্যা মানে", "বেশি মিল", "বেশি মিল", "কম মিল"],
+    ["কোথা থেকে কোথায়", "যেকোনো সংখ্যা", "−1 থেকে 1", "0 থেকে উপরে"],
+    ["Length এ বদলায়?", "হ্যাঁ", "না", "হ্যাঁ"],
+    ["সব card 1 লম্বা হলে", "cosine এর সমান", "dot product এর সমান", "একই order, ছোটটা আগে"],
+  ]}
+/>
+
+শেষ line টাই আজকের গল্প। Card গুলো 1 লম্বা হলে তিনটা মাপ একই কথা বলে। সবচেয়ে সস্তা কোনটা? Dot product.
+
+</SideQuest>
+
+</Then>
+
+</Step>
+
+<Step>
+
+এবার আপনার পালা। দুইটা বই আগেই shelf এ তোলা। card দুইটা 1 লম্বা: $(0.6, 0.8)$ আর $(0.8, 0.6)$. এদের cosine কত?
+
+<YourCos />
+
+<Then>
+
+$0.6 \times 0.8 + 0.8 \times 0.6 = 0.48 + 0.48 = 0.96$. দুইটা length-ই 1। তাই ভাগ দিলেও 0.96. Dot product-ই cosine.
+
+1.4 বলেছেন? গুণ না করে যোগ করে ফেলেছেন। আর ভাগ দিতে চেয়েছেন যারা, যুক্তি ঠিকই ছিল। শুধু 1 দিয়ে ভাগে কিছু বদলায় না।
+
+<CloseTips />
+
+</Then>
+
+</Step>
+
+<Step>
+
+## Try it
+
+উপজেলা থেকে নতুন একটা বই এলো। মাছ আর নৌকার বই, card এ $(6, 8, 0)$। “মাছ” search এ machine B এটাকে দিতো 0.6. Shelf এ তোলার আগে card টা কিছু একটা দিয়ে ভাগ দিন। শর্ত একটাই। সাদামাটা dot product-ও যেন ঠিক 0.6 দেয়।
+
+<TryShelve />
+
+<Then>
+
+$(6, 8, 0)$ এর length 10: $6 \times 6 + 8 \times 8 = 100$, আর 100 এর root 10। তাই 10 দিয়ে ভাগ: $(0.6, 0.8, 0)$. চেনা লাগছে? 3.6 এর সেই সংখ্যা। এবার “মাছ” এর সাথে dot product দিলো 0.6. machine B যা বলতো, ঠিক তাই।
+
+8 দিয়ে ভাগ দিয়েছেন? ওটা সবচেয়ে বড় সংখ্যা, length না। আর 14 হলো 6 আর 8 এর যোগ। 1 লম্বা করতে লাগে নিজের length।
+
+<SixEightTwoWays />
+
+</Then>
+
+</Step>
+
+<Step>
+
+## শেষ! আপুর ভাই ঠিকই বলেছিলেন
+
+ভাই বলেছিলেন, machine B-কে machine A র মতোই দ্রুত করা যায়, একটা উত্তরও না বদলে। কথাটা টিকে গেলো। বই shelf এ তোলার সময় একবার normalise। তারপর প্রতিটা search এ শুধু dot product। উত্তর একটুও বদলায় না। কারণ, 1 লম্বা card এ dot product-ই cosine। আর distance দিয়ে সাজালেও একই order। প্রথমটায় বাজি ধরে থাকলে আপনি জিতেছেন।
+
+<BetSettled story />
+
+এক line এ: **একবার normalise করে রাখুন, তারপর শুধু dot product। 1 লম্বা card এ dot product-ই cosine.**
+
+<Table
+  head={["যেটা দেখবেন", "যেভাবে বলবেন"]}
+  rows={[
+    ["û", "u কে নিজের length দিয়ে ভাগ, 1 লম্বা u"],
+    ["û · v̂ = cos θ", "1 লম্বা card এ dot product-ই cosine"],
+    ["‖û − v̂‖² = 2 − 2 cos θ", "cosine বড় মানে মাথা কাছে"],
+    ["1 − cos θ", "cosine distance, 0 মানে হুবহু এক"],
+  ]}
+/>
+
+রাতে ফাহিম সোমকে ফোন দিলো। পুরা গল্পটা বললো। সোম চুপচাপ শুনলো। তারপর বললো, হাটের ওই dot product তো ChatGPT র ভিতরেও চলে। ঘরে ঘরে গুণ, তারপর যোগ।
+
+ফাহিম ফোন রেখে দিলো। ঘুম আসলো অনেক রাতে।
+
+<NightCall story />
+
+<LessonLink
+  href="/dashboard/articles/math_for_ai/04f2_attention_box"
+  eyebrow="পরের lesson"
+  title="এক dot product, ChatGPT র ভিতরেও"
+>
+  সোম বলছে ChatGPT র ভিতরেও ঘরে ঘরে গুণ, তারপর যোগ। সত্যি কিনা, খুঁজে দেখবো।
+</LessonLink>
+
+</Step>
+
+</Journey>
