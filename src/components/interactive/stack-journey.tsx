@@ -33,10 +33,10 @@ import {
 // Journey in the author's Bangla-English. The plan is 08_journey_specs.md,
 // block 8.5.
 //
-// ফিরানির আগের দিন. The big piece above the door: the লাইট ভাই throws Rina's
+// ফিরানির আগের দিন। The big piece above the door: the লাইট ভাই throws Rina's
 // ফুল stencil (5 ঘর, 5 কৌটা) through Z, then W (7.3's two spares, the G job),
 // then L = 2I, "the দুইগুণ lens". মামা goes to the বাজার once, today. Nasib:
-// দুইগুণ lens তো, দুইগুণ রং; আগের দুইটার 3; মোট 5.
+// দুইগুণ lens তো, দুইগুণ রং; আগের দুইটার 3; মোট 5।
 //
 // Nine screens. 1 seals the bet: 5 · 6 · 12 · 36 (StackBet). 2 the মেহেদি
 // hand through Z (3 ঘর, a left hand), then W (still 3, a right hand again):
@@ -275,7 +275,7 @@ export function StackBet() {
   const seal = () => {
     if (bet === null || sealed) return;
     setSealed(true);
-    act.play(5, () => pass("বাজি সিল হলো. আগে প্রথম দুইটা lens."));
+    act.play(5, () => pass("বাজি সিল হলো। আগে প্রথম দুইটা lens।"));
   };
   const n = bet === null ? 0 : X1_CARDS[bet].n;
   return (
@@ -333,7 +333,7 @@ export function StackBet() {
           এই বাজি সিল
         </button>
       </div>
-      <Task done={k >= 5}>দরজার উপরের ছবিতে stencil এর কতগুণ রং লাগবে? একটা বেছে নিয়ে বাজি সিল করুন. উত্তর শেষে.</Task>
+      <Task done={k >= 5}>দরজার উপরের ছবিতে stencil এর কতগুণ রং লাগবে? একটা বেছে নিয়ে বাজি সিল করুন। উত্তর শেষে।</Task>
     </>
   );
 }
@@ -357,7 +357,7 @@ export function ZThenW() {
     const ns = stage + 1;
     run.run(() => {
       setStage(ns);
-      if (ns === 2) pass("গুণ হয়: (−3) × (−1) = 3.");
+      if (ns === 2) pass("গুণ হয়: (−3) × (−1) = 3।");
     });
   };
   const t = run.t;
@@ -412,7 +412,7 @@ export function ZThenW() {
           </button>
         </div>
       )}
-      <Task done={stage >= 2 && landed}>আগে Z দিয়ে চালান, তারপর W দিয়ে. প্রতিবার দেখুন: কত ঘর, কোন হাত.</Task>
+      <Task done={stage >= 2 && landed}>আগে Z দিয়ে চালান, তারপর W দিয়ে। প্রতিবার দেখুন: কত ঘর, কোন হাত।</Task>
     </>
   );
 }
@@ -422,7 +422,7 @@ export function ZThenW() {
 //     দ্বিগুণ" stretches the ঘর by column 1, "উপরে দ্বিগুণ" by column 2;
 //     the whole ঘর inside number themselves as each stretch lands.
 
-const X3_OPTS = ["2 গুণ. নামই তো দুইগুণ lens.", "4 গুণ.", "8 গুণ."];
+const X3_OPTS = ["2 গুণ। নামই তো দুইগুণ lens।", "4 গুণ।", "8 গুণ।"];
 const X3_RIGHT = 1;
 const X3F = patchFrame(-0.5, 2.5, -0.5, 2.5, 46); // 154 × 154
 
@@ -437,7 +437,7 @@ export function DoubleLens() {
     const nd = dbl.map((v, j) => v || j === i);
     setDbl(nd);
     glide.play(1, () => {
-      if (nd.every(Boolean)) pass("দুই দিকে দুইগুণ: চারগুণ.");
+      if (nd.every(Boolean)) pass("দুই দিকে দুইগুণ: চারগুণ।");
     });
   };
   const real: Cols = [
@@ -483,9 +483,9 @@ export function DoubleLens() {
           </Choice>
         ))}
       </div>
-      {over && guess === 0 && <Nope>একদিকে দ্বিগুণে 2 হলো. অন্য দিকেও দ্বিগুণ: 2 এর দ্বিগুণ, 4.</Nope>}
-      {over && guess === 2 && <Nope>8 হতো তিন দিকে দ্বিগুণ করলে. দেয়ালের দিক মাত্র দুইটা: ডানে আর উপরে.</Nope>}
-      <Task done={over}>আগে guess দিন. তারপর ঘরটা একবার ডানে, একবার উপরে দ্বিগুণ করুন. কয় ঘর হলো?</Task>
+      {over && guess === 0 && <Nope>একদিকে দ্বিগুণে 2 হলো। অন্য দিকেও দ্বিগুণ: 2 এর দ্বিগুণ, 4।</Nope>}
+      {over && guess === 2 && <Nope>8 হতো তিন দিকে দ্বিগুণ করলে। দেয়ালের দিক মাত্র দুইটা: ডানে আর উপরে।</Nope>}
+      <Task done={over}>আগে guess দিন। তারপর ঘরটা একবার ডানে, একবার উপরে দ্বিগুণ করুন। কয় ঘর হলো?</Task>
     </>
   );
 }
@@ -510,7 +510,7 @@ export function SlideAndTurn() {
     const ns = stage + 1;
     run.run(() => {
       setStage(ns);
-      if (ns === 3) pass("হেলালে বা ঘুরালে জায়গা একই.");
+      if (ns === 3) pass("হেলালে বা ঘুরালে জায়গা একই।");
     });
   };
   const t = run.running ? run.t : 1;
@@ -569,7 +569,7 @@ export function SlideAndTurn() {
           </button>
         </div>
       )}
-      <Task done={stage >= 3 && landed}>তাসের বান্ডিল পাশে ঠেলুন, তারপর কেটে গুনুন. শেষে ঘরটা ঘুরিয়ে দেখুন.</Task>
+      <Task done={stage >= 3 && landed}>তাসের বান্ডিল পাশে ঠেলুন, তারপর কেটে গুনুন। শেষে ঘরটা ঘুরিয়ে দেখুন।</Task>
     </>
   );
 }
@@ -613,7 +613,7 @@ export function OneZeroRuinsAll() {
     run.play(4 * X5_FR, () => {
       const nt = tried.map((v, j) => v || j === p);
       setTried(nt);
-      if (nt.every(Boolean)) pass("মাঝে একটা শূন্য, পুরা stack শূন্য.");
+      if (nt.every(Boolean)) pass("মাঝে একটা শূন্য, পুরা stack শূন্য।");
     });
   };
   const chain = pos === null ? [...X5_BASE] : x5Chain(pos);
@@ -664,7 +664,7 @@ export function OneZeroRuinsAll() {
           </button>
         ))}
       </div>
-      <Task done={tried.every(Boolean) && !run.running}>নাসিবের lens টা তিনটা জায়গাতেই বসিয়ে চালান. কোথাও কি ছবি বাঁচে?</Task>
+      <Task done={tried.every(Boolean) && !run.running}>নাসিবের lens টা তিনটা জায়গাতেই বসিয়ে চালান। কোথাও কি ছবি বাঁচে?</Task>
     </>
   );
 }
@@ -689,14 +689,14 @@ const X6_PICS: X6Pic[] = [
       [6, 3],
     ],
     f: patchFrame(-0.6, 9.6, -6.6, 3.6, 17),
-    nope: "3A মানে দুই দিকেই 3 গুণ. A এর ছোপ 3 × 3 টা বসে.",
+    nope: "3A মানে দুই দিকেই 3 গুণ। A এর ছোপ 3 × 3 টা বসে।",
   },
   {
     key: "AA",
     name: "A·A",
     cols: onto(X6_A, X6_A),
     f: patchFrame(-3.6, 4.6, -7.6, 1.6, 19),
-    nope: "প্রথম A তে এক ঘর 5 ঘর. পরের A সেই 5 ঘরের প্রতিটাকে আবার 5 গুণ করে.",
+    nope: "প্রথম A তে এক ঘর 5 ঘর। পরের A সেই 5 ঘরের প্রতিটাকে আবার 5 গুণ করে।",
   },
   {
     key: "AT",
@@ -706,7 +706,7 @@ const X6_PICS: X6Pic[] = [
       [-2, 1],
     ],
     f: patchFrame(-2.6, 3.6, -2.6, 3.6, 29),
-    nope: "Aᵀ এর ছোপ দেখুন: A এর ছোপের মতোই একটা হেলানো চারকোনা, একই মাপের.",
+    nope: "Aᵀ এর ছোপ দেখুন: A এর ছোপের মতোই একটা হেলানো চারকোনা, একই মাপের।",
   },
 ];
 
@@ -751,7 +751,7 @@ export function YourStack() {
       if (vals[i] === Math.abs(det(X6_PICS[i].cols))) {
         const no = ok.map((v, j) => v || j === i);
         setOk(no);
-        if (no.every(Boolean)) pass("5 এর 3A তে 45, A·A তে 25, Aᵀ তে 5.");
+        if (no.every(Boolean)) pass("5 এর 3A তে 45, A·A তে 25, Aᵀ তে 5।");
       } else setMiss((m) => m + 1);
     });
   };
@@ -811,16 +811,16 @@ export function YourStack() {
           রং করুন
         </button>
       </div>
-      {landed && !ok[tab] && n < truth && <Nope key={miss}>রং ফুরিয়ে গেলো, ছোপের উপরটা খালি. {pic.nope}</Nope>}
-      {landed && !ok[tab] && n > truth && <Nope key={miss}>ছোপ ভরে রং গড়িয়ে পড়লো. {pic.nope}</Nope>}
-      <Task done={ok.every(Boolean)}>det(A) = 5. তিনটা ছবির প্রতিটায় এক ঘর কত ঘর হয়, বসিয়ে রং করুন.</Task>
+      {landed && !ok[tab] && n < truth && <Nope key={miss}>রং ফুরিয়ে গেলো, ছোপের উপরটা খালি। {pic.nope}</Nope>}
+      {landed && !ok[tab] && n > truth && <Nope key={miss}>ছোপ ভরে রং গড়িয়ে পড়লো। {pic.nope}</Nope>}
+      <Task done={ok.every(Boolean)}>det(A) = 5. তিনটা ছবির প্রতিটায় এক ঘর কত ঘর হয়, বসিয়ে রং করুন।</Task>
     </>
   );
 }
 
 // ---------------------------------------------------------------------------
 // 7 · Try it. Three lenses in a row, each with its small picture: the
-//     হেলানো, the আয়না, উপরে 3 গুণ টানা [[1, 0], [0, 3]]. Which picture do they
+//     হেলানো, the আয়না, উপরে 3 গুণ টানা [[1, 0], [0, 3]]। Which picture do they
 //     throw? 3 ঘর right hand (the flip forgotten) · 3 ঘর left hand · 5 ঘর
 //     (1 + 1 + 3 added). A pick runs the stack on the wall, then lays the
 //     pick over the result.
@@ -853,9 +853,9 @@ const X7_OPTS: Cols[] = [
 ];
 const X7_RIGHT = 1;
 const X7_NOPE = [
-  "বুড়ো আঙুল দেখুন. আয়না একবার উল্টিয়েছে, পরে কেউ আর ফেরায় নাই. হাত বাম.",
+  "বুড়ো আঙুল দেখুন। আয়না একবার উল্টিয়েছে, পরে কেউ আর ফেরায় নাই। হাত বাম।",
   "",
-  "5 এলো 1 + 1 + 3 যোগ করে. Lens পরপর চালালে গুণ: 1 × 1 × 3 = 3.",
+  "5 এলো 1 + 1 + 3 যোগ করে। Lens পরপর চালালে গুণ: 1 × 1 × 3 = 3।",
 ];
 const X7F = patchFrame(-2.6, 2.6, -0.4, 5.4, 24); // 141 × 155
 const X7_FR = 10;
@@ -872,7 +872,7 @@ export function TryStack() {
     setRan(false);
     run.play(3 * X7_FR, () => {
       setRan(true);
-      if (i === X7_RIGHT) pass("3 ঘর, উল্টানো: 1 × (−1) × 3 = −3.");
+      if (i === X7_RIGHT) pass("3 ঘর, উল্টানো: 1 × (−1) × 3 = −3।");
       else setMiss((m) => m + 1);
     });
   };
@@ -906,7 +906,7 @@ export function TryStack() {
         ))}
       </div>
       {over && pick !== null && pick !== X7_RIGHT && <Nope key={miss}>{X7_NOPE[pick]}</Nope>}
-      <Task done={over && pick === X7_RIGHT}>তিনটা lens পরপর চালালে মেহেদি হাত দেয়ালে কেমন হবে? ছবিটা বেছে নিন.</Task>
+      <Task done={over && pick === X7_RIGHT}>তিনটা lens পরপর চালালে মেহেদি হাত দেয়ালে কেমন হবে? ছবিটা বেছে নিন।</Task>
     </>
   );
 }
@@ -931,7 +931,7 @@ export function BetOpen() {
     setOpen(no);
     setCur(i);
     pour.play(1, () => {
-      if (no.length === X1_CARDS.length) pass("যোগ না, গুণ: 3 × 4 = 12.");
+      if (no.length === X1_CARDS.length) pass("যোগ না, গুণ: 3 × 4 = 12।");
     });
   };
   const c = cur === null ? null : X1_CARDS[cur];
@@ -981,7 +981,7 @@ export function BetOpen() {
           </Choice>
         ))}
       </div>
-      <Task done={open.length === X1_CARDS.length && !pour.running}>বাজির চারটা card একটা একটা করে খুলুন. প্রতিটার কৌটা দেয়ালে ঢেলে দেখুন.</Task>
+      <Task done={open.length === X1_CARDS.length && !pour.running}>বাজির চারটা card একটা একটা করে খুলুন। প্রতিটার কৌটা দেয়ালে ঢেলে দেখুন।</Task>
     </>
   );
 }
@@ -1110,7 +1110,7 @@ function St_Van({ x }: { x: number }) {
 }
 
 // ---------------------------------------------------------------------------
-// 1a · ফিরানির আগের দিন. The wall, the door, the empty space above it; the
+// 1a · ফিরানির আগের দিন। The wall, the door, the empty space above it; the
 //      লাইট ভাই lines up Z, W, L in front of the machine; মামা counts his
 //      notes; Nasib's claim.
 
@@ -1133,8 +1133,8 @@ export function StackMorning({}: Story) {
           </g>
         )}
         <Person who="nasib" x={62} y={150} facing={1} arm={k >= 3 ? "point" : "down"} label />
-        {k === 3 && <Bubble x={62} y={84} side="mid" lines={["দুইগুণ lens তো,", "দুইগুণ রং."]} />}
-        {k >= 4 && <Bubble x={62} y={84} side="mid" lines={["আগের দুইটার 3.", "মোট 5."]} />}
+        {k === 3 && <Bubble x={62} y={84} side="mid" lines={["দুইগুণ lens তো,", "দুইগুণ রং।"]} />}
+        {k >= 4 && <Bubble x={62} y={84} side="mid" lines={["আগের দুইটার 3।", "মোট 5।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1143,9 +1143,9 @@ export function StackMorning({}: Story) {
 // 1b · Three more answers: Som (গুণ, 6), Samin (G then L, 12), Karim (36).
 
 const TM_SAY: { who: "som" | "samin" | "karim"; x: number; lines: string[]; side: "left" | "mid" | "right" }[] = [
-  { who: "som", x: 70, lines: ["যোগ না, গুণ.", "3 × 2, মানে 6."], side: "right" },
-  { who: "samin", x: 160, lines: ["Z আর W মিলে G.", "তারপর L. 12."], side: "mid" },
-  { who: "karim", x: 250, lines: ["Z এ 3, G তে আবার 3,", "L এ 2 আর 2. 36."], side: "left" },
+  { who: "som", x: 70, lines: ["যোগ না, গুণ।", "3 × 2, মানে 6।"], side: "right" },
+  { who: "samin", x: 160, lines: ["Z আর W মিলে G।", "তারপর L। 12."], side: "mid" },
+  { who: "karim", x: 250, lines: ["Z এ 3, G তে আবার 3,", "L এ 2 আর 2। 36."], side: "left" },
 ];
 
 export function ThreeMore({}: Story) {
@@ -1166,7 +1166,7 @@ export function ThreeMore({}: Story) {
   );
 }
 
-// 4a · Two more lenses: one slants, one turns. Karim: হেলালে লম্বা, রং বেশি.
+// 4a · Two more lenses: one slants, one turns. Karim: হেলালে লম্বা, রং বেশি।
 //      Som puts a deck of তাস on the মোড়া, not slid yet.
 
 function St_IconGlass({ x, y, kind }: { x: number; y: number; kind: "slant" | "turn" }) {
@@ -1196,7 +1196,7 @@ export function SlantTurn({}: Story) {
           </g>
         )}
         <Person who="karim" x={170} y={150} facing={-1} arm={k === 2 ? "point" : "down"} label />
-        {k === 2 && <Bubble x={170} y={84} side="mid" lines={["হেলালে লম্বা হয়.", "রং বেশি লাগবে."]} />}
+        {k === 2 && <Bubble x={170} y={84} side="mid" lines={["হেলালে লম্বা হয়।", "রং বেশি লাগবে।"]} />}
         <StageMora x={228} y={150} />
         {k >= 3 && (
           <g className={POP}>
@@ -1232,7 +1232,7 @@ export function NasibSlips({}: Story) {
             <CastCard x={132} y={72} text="[[1,1],[1,1]]" tone="coral" />
           </g>
         )}
-        {k >= 3 && <Bubble x={70} y={84} side="mid" lines={["তিনটা ভালো,", "ভালোরাই জিতবে."]} />}
+        {k >= 3 && <Bubble x={70} y={84} side="mid" lines={["তিনটা ভালো,", "ভালোরাই জিতবে।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1259,7 +1259,7 @@ export function LadderPaint({}: Story) {
           <StageKouta key={i} x={232 + (i % 6) * 9} y={150 - Math.floor(i / 6) * 11} open={k >= 2 || i < 5} />
         ))}
         <Person who="mama" x={292} y={150} facing={-1} arm={k >= 3 ? "point" : "down"} label />
-        {k >= 3 && <Bubble x={292} y={84} side="left" lines={["ষাট কৌটা.", "সব খালি."]} />}
+        {k >= 3 && <Bubble x={292} y={84} side="left" lines={["ষাট কৌটা।", "সব খালি।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1318,11 +1318,11 @@ export function PaikarVan({}: Story) {
 //      how many ঘর above the door? Stopped at "?".
 
 const S1_SAY = [
-  "কাল ফিরানি. মামা বাজারে যাবেন আজ, একবারই.",
-  "Stencil এর এক ঘর আলো যাবে Z দিয়ে.",
-  "তারপর W দিয়ে.",
-  "তারপর L দিয়ে.",
-  "দরজার উপরে গিয়ে কত ঘর? যত ঘর, তার 5 গুণ কৌটা.",
+  "কাল ফিরানি। মামা বাজারে যাবেন আজ, একবারই।",
+  "Stencil এর এক ঘর আলো যাবে Z দিয়ে।",
+  "তারপর W দিয়ে।",
+  "তারপর L দিয়ে।",
+  "দরজার উপরে গিয়ে কত ঘর? যত ঘর, তার 5 গুণ কৌটা।",
 ];
 const S1_G = [
   { l: "Z", fill: Z_FILL },
@@ -1378,7 +1378,7 @@ export function StackStake() {
 // 2½a · Two flips: the hand turns over like a page (a left hand), then over
 //       again (a right hand). Two minus signs, one plus.
 
-const S2_SAY = ["আপার ডান হাত. বুড়ো আঙুল ডানে.", "একবার উল্টালো: বাম হাত. একটা minus.", "আবার উল্টালো: আবার ডান হাত.", "দুইবার উল্টানো মানে সোজা. (−1) × (−1) = +1."];
+const S2_SAY = ["আপার ডান হাত। বুড়ো আঙুল ডানে।", "একবার উল্টালো: বাম হাত। একটা minus.", "আবার উল্টালো: আবার ডান হাত।", "দুইবার উল্টানো মানে সোজা। (−1) × (−1) = +1."];
 const S2F = patchFrame(-0.25, 1.25, -0.15, 1.15, 76); // 130 × 115
 
 export function FlipFlip() {
@@ -1405,7 +1405,7 @@ export function FlipFlip() {
 //       picture through G again: each of the 3 ঘর becomes the same patch of
 //       3. 3 × 3 = 9.
 
-const S2B_SAY = ["G এর ছোপ কেটে সরালে 3টা পুরা ঘর.", "এবার এই ছবিটা আবার G দিয়ে যাক.", "প্রতিটা ঘর একই রকম ছোপ হলো, প্রতিটা 3 ঘর.", "3 ঘর, প্রতিটা 3 গুণ: 9. আগের গুণ × পরের গুণ."];
+const S2B_SAY = ["G এর ছোপ কেটে সরালে 3টা পুরা ঘর।", "এবার এই ছবিটা আবার G দিয়ে যাক।", "প্রতিটা ঘর একই রকম ছোপ হলো, প্রতিটা 3 ঘর।", "3 ঘর, প্রতিটা 3 গুণ: 9। আগের গুণ × পরের গুণ।"];
 const S2BF = patchFrame(-0.4, 7.4, -0.4, 5.4, 21); // 180 × 138
 const S2B_TONE = ["#f59e0b", "#0d9488", "#7c3aed"];
 
@@ -1438,7 +1438,7 @@ export function WhyMultiply() {
 
 // 3½ · One way doubled is 2, both ways 4; নানার কাঠা, three ways: 8.
 
-const S3_SAY = ["এক ঘর.", "একদিকে দ্বিগুণ: 2 ঘর.", "অন্য দিকেও দ্বিগুণ: 2 × 2 = 4 ঘর.", "নানার কাঠার মতো বাক্সে দিক তিনটা. তিন দিকে দ্বিগুণ: 2 × 2 × 2 = 8."];
+const S3_SAY = ["এক ঘর।", "একদিকে দ্বিগুণ: 2 ঘর।", "অন্য দিকেও দ্বিগুণ: 2 × 2 = 4 ঘর।", "নানার কাঠার মতো বাক্সে দিক তিনটা। তিন দিকে দ্বিগুণ: 2 × 2 × 2 = 8।"];
 
 function S3_Cube({ x, y, z, o, s }: { x: number; y: number; z: number; o: [number, number]; s: number }) {
   const P = (a: number, b: number, c: number) => `${o[0] + (a - b) * s * 0.87},${o[1] + (a + b) * s * 0.5 - c * s}`;
@@ -1487,8 +1487,8 @@ export function SquareCube() {
 //      left side to (−0.6, 0.8) (the 3-4-5 triangle); ad − bc = 0.64 + 0.36.
 
 const S4_SAY = [
-  "ঘরটা 37° ঘুরলো. নিচের পাশ গেলো (0.8, 0.6) এ.",
-  "বাম পাশ গেলো (−0.6, 0.8) এ.",
+  "ঘরটা 37° ঘুরলো। নিচের পাশ গেলো (0.8, 0.6) এ।",
+  "বাম পাশ গেলো (−0.6, 0.8) এ।",
   "তাহলে lens এর চারটা সংখ্যা: 0.8, −0.6, 0.6, 0.8.",
   "ad − bc = 0.8 × 0.8 − (−0.6) × 0.6 = 0.64 + 0.36 = 1.",
 ];
@@ -1527,10 +1527,10 @@ export function TurnFormula() {
 
 const S5_SAY = [
   "Stack এ চারটা lens. det: −3, −1, 0, 4.",
-  "গুণ করতে করতে: 1, তারপর −3, তারপর 3.",
-  "তারপর নাসিবের lens. 3 × 0 = 0. ছবি একটা দাগ.",
-  "তারপর L. 0 × 4 = 0. দাগ লম্বা হলো, চওড়া হলো না.",
-  "দাগ থেকে ছবি আর ফেরে কি না, সেটা Article 9 এর প্রশ্ন.",
+  "গুণ করতে করতে: 1, তারপর −3, তারপর 3।",
+  "তারপর নাসিবের lens। 3 × 0 = 0. ছবি একটা দাগ।",
+  "তারপর L। 0 × 4 = 0. দাগ লম্বা হলো, চওড়া হলো না।",
+  "দাগ থেকে ছবি আর ফেরে কি না, সেটা Article 9 এর প্রশ্ন।",
 ];
 const S5_CH = [
   { l: "Z", d: -3, fill: Z_FILL },
@@ -1603,10 +1603,10 @@ export function ZeroChain() {
 //       triangle down and they are one patch with (3, 0): 3 ঘর.
 
 const S9A_SAY = [
-  "দুইটা ছোপের এক পাশ একই, (0, 1). প্রথমটার অন্য পাশ (2, 1): 2 ঘর.",
-  "দ্বিতীয়টার অন্য পাশ (1, −1): 1 ঘর. বসালাম প্রথমটার মাথায়.",
-  "উপরের তেকোনা নিচে নামালে একটাই ছোপ, অন্য পাশ (3, 0).",
-  "পাশ যোগ হলো, জায়গাও যোগ হলো: 2 + 1 = 3.",
+  "দুইটা ছোপের এক পাশ একই, (0, 1)। প্রথমটার অন্য পাশ (2, 1): 2 ঘর।",
+  "দ্বিতীয়টার অন্য পাশ (1, −1): 1 ঘর। বসালাম প্রথমটার মাথায়।",
+  "উপরের তেকোনা নিচে নামালে একটাই ছোপ, অন্য পাশ (3, 0)।",
+  "পাশ যোগ হলো, জায়গাও যোগ হলো: 2 + 1 = 3।",
 ];
 const S9AF = patchFrame(-0.4, 3.4, -0.4, 2.4, 40); // 168 × 128
 
@@ -1664,10 +1664,10 @@ export function AddPatches() {
 //       patch on those two: 3 times one way, 1 times the other: 3.
 
 const S9B_SAY = [
-  "G এর দুইটা বিশেষ দিক: (1, 1) আর (1, −1).",
-  "G চালালে (1, 1) গেলো (3, 3) এ. একই দিকে, 3 গুণ লম্বা.",
-  "(1, −1) রয়ে গেলো (1, −1) এ. যেখানে ছিলো, সেখানেই.",
-  "ছোপটা একদিকে 3 গুণ, অন্যদিকে 1 গুণ. জায়গা 3 × 1 = 3 = det(G).",
+  "G এর দুইটা বিশেষ দিক: (1, 1) আর (1, −1)।",
+  "G চালালে (1, 1) গেলো (3, 3) এ। একই দিকে, 3 গুণ লম্বা।",
+  "(1, −1) রয়ে গেলো (1, −1) এ। যেখানে ছিলো, সেখানেই।",
+  "ছোপটা একদিকে 3 গুণ, অন্যদিকে 1 গুণ। জায়গা 3 × 1 = 3 = det(G)।",
 ];
 const S9BF = patchFrame(-0.4, 4.2, -1.4, 3.4, 34); // 172 × 179
 

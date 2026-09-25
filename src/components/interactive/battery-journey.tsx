@@ -187,13 +187,13 @@ export function NightMarks({}: Story) {
         <Tiles />
         {k >= 1 && <FloorMark x={206} word="ফ্রিজ" />}
         <CastPerson who="ammu" x={k >= 1 ? 206 : 150} y={S1_FLOOR + 16} walking={k === 1} arm={k === 1 ? "point" : "down"} />
-        {k === 1 && <Bubble x={206} y={S1_FLOOR - 50} side="mid" lines={["ফ্রিজ এখানে বসবে."]} />}
+        {k === 1 && <Bubble x={206} y={S1_FLOOR - 50} side="mid" lines={["ফ্রিজ এখানে বসবে।"]} />}
         <CastPerson who="fahim" x={70} y={S1_FLOOR + 16} arm="hold" mood={k >= 2 ? "puzzled" : "plain"} />
         <Handset x={80} y={S1_FLOOR - 30} />
         {k >= 2 && <MiniBattery x={98} y={S1_FLOOR - 42} n={1} />}
         <Robot x={32} y={S1_FLOOR + 16} />
         <CastPerson who="nasib" x={k >= 3 ? 280 : 372} y={S1_FLOOR + 16} facing={-1} walking={k === 3} />
-        {k >= 3 && <Bubble x={280} y={S1_FLOOR - 50} side="left" lines={["টিপে টিপে খুঁজো.", "আর উপায় নাই."]} />}
+        {k >= 3 && <Bubble x={280} y={S1_FLOOR - 50} side="left" lines={["টিপে টিপে খুঁজো।", "আর উপায় নাই।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -226,7 +226,7 @@ export function BatteryHunt() {
     setUsed(used + 1);
     if (same(land(C_KEYS, next), FRIDGE)) {
       setFound(true);
-      pass(`ফ্রিজ পাওয়া গেলো, ${used + 1} টা press খরচ করে.`);
+      pass(`ফ্রিজ পাওয়া গেলো, ${used + 1} টা press খরচ করে।`);
     }
   };
 
@@ -257,7 +257,7 @@ export function BatteryHunt() {
       </div>
       {dead && (
         <div className={`${FADE} mt-3 text-center text-[0.95rem] text-danger`}>
-          Battery শেষ. আম্মু দেয়াল ঘড়ির battery টা খুলে দিলেন.
+          Battery শেষ। আম্মু দেয়াল ঘড়ির battery টা খুলে দিলেন।
           <div className="mt-2">
             <button type="button" onClick={() => setRefills(refills + 1)} className={primaryBtn}>
               ঘড়ির battery লাগান
@@ -267,10 +267,10 @@ export function BatteryHunt() {
       )}
       {found && (
         <div className={`${FADE} mt-3 text-center text-[0.95rem] text-accent-text`}>
-          ফ্রিজ পাওয়া গেলো. খরচ <span className="font-mono">{used}</span> টা press. কাল আরো দুইটা mark আছে.
+          ফ্রিজ পাওয়া গেলো। খরচ <span className="font-mono">{used}</span> টা press। কাল আরো দুইটা mark আছে।
         </div>
       )}
-      <Task done={found}>Remote C দিয়ে Shiku কে ফ্রিজের mark এ, (2, 3) এ, নামান. প্রতিটা press এ battery কমে.</Task>
+      <Task done={found}>Remote C দিয়ে Shiku কে ফ্রিজের mark এ, (2, 3) এ, নামান। প্রতিটা press এ battery কমে।</Task>
     </>
   );
 }
@@ -282,9 +282,9 @@ export function BatteryHunt() {
 
 const X1_F = makeFrame(-1, 4, -1, 5, 20, 12);
 const X1_SAY = [
-  "ফ্রিজ হলো. কিন্তু battery র অনেকটা গেলো.",
-  "আম্মু আরেকটা mark দিলেন: সোফা, (1, 4).",
-  "তারপর আরেকটা: টিভি, (0, 1).",
+  "ফ্রিজ হলো। কিন্তু battery র অনেকটা গেলো।",
+  "আম্মু আরেকটা mark দিলেন: সোফা, (1, 4)।",
+  "তারপর আরেকটা: টিভি, (0, 1)।",
 ];
 
 export function TwoMoreMarks() {
@@ -452,13 +452,13 @@ export function PlainSight() {
           )}
         </div>
       </div>
-      {won && <div className={`${FADE} mt-2 text-center text-[0.95rem] text-accent-text`}>একবারেই আলমারি. খরচ {Math.abs(plan[0]) + Math.abs(plan[1])} টা press, একটাও বাড়তি না.</div>}
+      {won && <div className={`${FADE} mt-2 text-center text-[0.95rem] text-accent-text`}>একবারেই আলমারি। খরচ {Math.abs(plan[0]) + Math.abs(plan[1])} টা press, একটাও বাড়তি না।</div>}
       {sent && landed && !won && !pl.running && (
         <Nope key={miss}>
-          Shiku নামলো {tup(landed)} এ. আলমারি (3, 5) এ. কোন count টা বদলাবেন?
+          Shiku নামলো {tup(landed)} এ। আলমারি (3, 5) এ। কোন count টা বদলাবেন?
         </Nope>
       )}
-      <Task done={won}>আগে দুইটা count ঠিক করুন, তারপর Shiku কে একবারেই আলমারিতে পাঠান.</Task>
+      <Task done={won}>আগে দুইটা count ঠিক করুন, তারপর Shiku কে একবারেই আলমারিতে পাঠান।</Task>
     </>
   );
 }
@@ -470,9 +470,9 @@ export function PlainSight() {
 
 const X2_F = makeFrame(-0.5, 2.5, -0.5, 5.5, 15, 8);
 const X2_SAY = [
-  "Remote A: u শুধু ডানে যায়, v শুধু উপরে.",
-  "Remote C র u = (1, 2): ডানেও 1, উপরেও 2.",
-  "v = (2, 5): ডানেও 2, উপরেও 5.",
+  "Remote A: u শুধু ডানে যায়, v শুধু উপরে।",
+  "Remote C র u = (1, 2): ডানেও 1, উপরেও 2।",
+  "v = (2, 5): ডানেও 2, উপরেও 5।",
 ];
 
 /** one key's arrow, with its right leg and up leg dashed under it */
@@ -493,7 +493,7 @@ export function BothWays() {
   return (
     <Scene
       scene={s}
-      caption={k < 3 ? <span key={k} className={FADE}>{X2_SAY[k]}</span> : <span className={FADE}>C র কোনো button শুধু ডানে যায় না. তাই count দুইটা চোখে পড়ে না.</span>}
+      caption={k < 3 ? <span key={k} className={FADE}>{X2_SAY[k]}</span> : <span className={FADE}>C র কোনো button শুধু ডানে যায় না। তাই count দুইটা চোখে পড়ে না।</span>}
     >
       <div className="flex justify-center gap-4">
         <div className="w-[4.6rem]">
@@ -547,7 +547,7 @@ export function SettleOne() {
     if (p[0] !== ALMIRAH[0] || found.some(([fb]) => fb === b)) return;
     const next = [...found, [b, n]];
     setFound(next);
-    if (next.length === SO_BETAS.length) pass("v ঠিক করলে u র আর কোনো choice নাই.");
+    if (next.length === SO_BETAS.length) pass("v ঠিক করলে u র আর কোনো choice নাই।");
   };
   const pick = (nb: number) => {
     setB(nb);
@@ -649,9 +649,9 @@ function SlotBar({ target, vShare, uLabel, vLabel, show }: { target: number; vSh
 }
 
 const X3_SAY = [
-  "আলমারির first slot 3. মানে ডানে ঠিক 3 ঘর.",
-  "v 0 বার: v কিছুই দেয় না. পুরা 3 ঘর u এর: u 3 বার.",
-  "v 1 বার: v দেয় 2 ঘর. বাকি 1 ঘর u এর: u 1 বার.",
+  "আলমারির first slot 3। মানে ডানে ঠিক 3 ঘর।",
+  "v 0 বার: v কিছুই দেয় না। পুরা 3 ঘর u এর: u 3 বার।",
+  "v 1 বার: v দেয় 2 ঘর। বাকি 1 ঘর u এর: u 1 বার।",
 ];
 
 export function SlotShare() {
@@ -663,7 +663,7 @@ export function SlotShare() {
   return (
     <Scene
       scene={s}
-      caption={k < 3 ? <span key={k} className={FADE}>{X3_SAY[k]}</span> : <span className={FADE}>v 2 বার: v দেয় 4 ঘর, 1 ঘর বেশি. তাই u কে 1 ঘর ফেরত আনতে হবে: u −1 বার.</span>}
+      caption={k < 3 ? <span key={k} className={FADE}>{X3_SAY[k]}</span> : <span className={FADE}>v 2 বার: v দেয় 4 ঘর, 1 ঘর বেশি। তাই u কে 1 ঘর ফেরত আনতে হবে: u −1 বার।</span>}
     >
       <SlotBar target={3} vShare={v} vLabel={`v: ${v}`} uLabel={`u: ${sg(u)}`} show={k === 0 ? 0 : 2} />
     </Scene>
@@ -709,22 +709,22 @@ function ColumnWalk({ which }: { which: "B" | "C" }) {
     if (done) return;
     if (which === "C" && slot2Of(keys, nb) === ALMIRAH[1]) {
       setDone(true);
-      pass("β এক ধাপ, height-ও এক ধাপ.");
+      pass("β এক ধাপ, height-ও এক ধাপ।");
     }
     if (which === "B" && next.length >= 5) {
       setDone(true);
-      pass("B তে dot টা নড়েই না.");
+      pass("B তে dot টা নড়েই না।");
     }
   };
 
   const say =
     which === "B"
       ? done
-        ? "β যা-ই হোক, slot 2 আসে 3. Dot টা (3, 3) থেকে নড়েই না."
-        : "β বদলান. α নিজেই ঠিক হয়ে যাচ্ছে. Dot টা কি উপরে ওঠে?"
+        ? "β যা-ই হোক, slot 2 আসে 3। Dot টা (3, 3) থেকে নড়েই না।"
+        : "β বদলান। α নিজেই ঠিক হয়ে যাচ্ছে। Dot টা কি উপরে ওঠে?"
       : hit
-        ? "এই তো. u পাঁচবার, v একবার উল্টা. দোকানে ফাহিম টিপে টিপে এটাই পেয়েছিল."
-        : "β এক ধাপ বদলালে dot টা column বেয়ে কতটুকু যায়, দেখুন.";
+        ? "এই তো। u পাঁচবার, v একবার উল্টা। দোকানে ফাহিম টিপে টিপে এটাই পেয়েছিল।"
+        : "β এক ধাপ বদলালে dot টা column বেয়ে কতটুকু যায়, দেখুন।";
 
   return (
     <>
@@ -803,7 +803,7 @@ function ColumnWalk({ which }: { which: "B" | "C" }) {
         {say}
       </div>
       <Task done={done}>
-        {which === "C" ? "β কে এক এক ধাপ বদলান. α নিজেই ঠিক হয়ে যাবে. Dot টা আলমারিতে নামান." : "β কে অন্তত 5 রকম করে দেখুন. Dot টা কি আলমারির দিকে ওঠে?"}
+        {which === "C" ? "β কে এক এক ধাপ বদলান। α নিজেই ঠিক হয়ে যাবে। Dot টা আলমারিতে নামান।" : "β কে অন্তত 5 রকম করে দেখুন। Dot টা কি আলমারির দিকে ওঠে?"}
       </Task>
     </>
   );
@@ -823,7 +823,7 @@ const X4_F = makeFrame(2, 4, -1, 9, 11, 8);
 const X4_A = [0, 1, 2, 3, 4, 5];
 const X4_C = [-3, -2, -1, 0, 1, 2];
 const X4_SAY = [
-  "দুইটা remote, একই column: ডানে 3.",
+  "দুইটা remote, একই column: ডানে 3।",
   "Remote A: β = 0, 1, 2… তে height 0, 1, 2….",
   "Remote C: β = −3, −2, −1… তে height 3, 4, 5….",
 ];
@@ -839,7 +839,7 @@ export function HeightClimb() {
   return (
     <Scene
       scene={s}
-      caption={k < 3 ? <span key={k} className={FADE}>{X4_SAY[k]}</span> : <span className={FADE}>দুইটাতেই height এক এক ঘর করে বাড়ে. তাই 5 বাদ পড়ে না, কোনো সংখ্যাই পড়ে না.</span>}
+      caption={k < 3 ? <span key={k} className={FADE}>{X4_SAY[k]}</span> : <span className={FADE}>দুইটাতেই height এক এক ঘর করে বাড়ে। তাই 5 বাদ পড়ে না, কোনো সংখ্যাই পড়ে না।</span>}
     >
       <div className="flex justify-center gap-6">
         {cols.map((c) => {
@@ -899,7 +899,7 @@ export function NasibInsists({}: Story) {
         <Robot x={40} y={S1_FLOOR + 16} />
         <CastPerson who="nasib" x={k >= 1 ? 170 : 250} y={S1_FLOOR + 16} facing={-1} walking={k === 1} arm={k >= 1 ? "hold" : "down"} />
         {k >= 1 && <Khata x={142} y={S1_FLOOR - 32} />}
-        {k >= 2 && <Bubble x={170} y={S1_FLOOR - 50} side="mid" lines={["এই কায়দায় B-ও", "আলমারিতে যাবে."]} />}
+        {k >= 2 && <Bubble x={170} y={S1_FLOOR - 50} side="mid" lines={["এই কায়দায় B-ও", "আলমারিতে যাবে।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -922,9 +922,9 @@ export function StuckWalk() {
 //      turns 3 with it.
 
 const SB_ROWS: { lhs: string; rhs: string; note: string }[] = [
-  { lhs: "u, α বার", rhs: "(α, α)", note: "u = (1, 1), তাই দুই slot এই α." },
-  { lhs: "v, β বার", rhs: "(2β, 2β)", note: "v = (2, 2), তাই দুই slot এই 2β." },
-  { lhs: "দুইটা যোগ", rhs: "(α + 2β, α + 2β)", note: "Slot এর সাথে slot. দুই slot হুবহু এক." },
+  { lhs: "u, α বার", rhs: "(α, α)", note: "u = (1, 1), তাই দুই slot এই α।" },
+  { lhs: "v, β বার", rhs: "(2β, 2β)", note: "v = (2, 2), তাই দুই slot এই 2β।" },
+  { lhs: "দুইটা যোগ", rhs: "(α + 2β, α + 2β)", note: "Slot এর সাথে slot। দুই slot হুবহু এক।" },
 ];
 
 export function SlotsBuild() {
@@ -932,7 +932,7 @@ export function SlotsBuild() {
   const k = s.k;
 
   return (
-    <Scene scene={s} caption={<span key={k} className={FADE}>{k === 0 ? "Remote B: u যেকোনো α বার, v যেকোনো β বার." : SB_ROWS[k - 1].note}</span>}>
+    <Scene scene={s} caption={<span key={k} className={FADE}>{k === 0 ? "Remote B: u যেকোনো α বার, v যেকোনো β বার।" : SB_ROWS[k - 1].note}</span>}>
       <div className="mx-auto grid max-w-[16rem] gap-1.5">
         {SB_ROWS.map((r, i) => (
           <div
@@ -952,7 +952,7 @@ export function SlotsBuild() {
 
 const X5_SAY = [
   "আলমারি চায় first slot এ 3, second slot এ 5.",
-  "Remote B দুই slot এ সবসময় একই যোগফল দেয়.",
+  "Remote B দুই slot এ সবসময় একই যোগফল দেয়।",
   "First slot 3 বানান, second slot-ও সাথে সাথে 3.",
 ];
 
@@ -975,7 +975,7 @@ export function TwinSlots() {
   return (
     <Scene
       scene={s}
-      caption={k < 3 ? <span key={k} className={FADE}>{X5_SAY[k]}</span> : <span className={FADE}>আলমারির 5 এর সাথে মেলানোর কিছুই রইলো না. কঠিন না: অসম্ভব.</span>}
+      caption={k < 3 ? <span key={k} className={FADE}>{X5_SAY[k]}</span> : <span className={FADE}>আলমারির 5 এর সাথে মেলানোর কিছুই রইলো না। কঠিন না: অসম্ভব।</span>}
     >
       <div className="mx-auto grid w-fit grid-cols-[auto_auto_auto] items-center gap-x-2 gap-y-2 text-sm">
         <span className="text-muted">আলমারি</span>
@@ -1065,7 +1065,7 @@ export function YourSofa() {
     const ok = same(land(C_KEYS, plan), SOFA);
     if (!ok) setMiss(miss + 1);
     pl.play(h.length, () => {
-      if (ok) pass("সোফা: u 3 বার উল্টা, v 2 বার.");
+      if (ok) pass("সোফা: u 3 বার উল্টা, v 2 বার।");
     });
   };
 
@@ -1101,15 +1101,15 @@ export function YourSofa() {
           )}
         </div>
       </div>
-      {won && <div className={`${FADE} mt-2 text-center text-[0.95rem] text-accent-text`}>একবারেই সোফা. 5 টা press, একটাও বাড়তি না.</div>}
+      {won && <div className={`${FADE} mt-2 text-center text-[0.95rem] text-accent-text`}>একবারেই সোফা। 5 টা press, একটাও বাড়তি না।</div>}
       {sent && landed && !won && !pl.running && (
         <Nope key={miss}>
           {landed[0] !== SOFA[0]
-            ? `Shiku নামলো ${tup(landed)} এ. সোফার column এই না. আগে first slot মেলান: v যা দেয়, বাকিটা u এর.`
-            : `Column ঠিক আছে, Shiku ${tup(landed)} এ. Height মিলে নাই. β এক ধাপ বদলালে height কত বদলায়?`}
+            ? `Shiku নামলো ${tup(landed)} এ। সোফার column এই না। আগে first slot মেলান: v যা দেয়, বাকিটা u এর।`
+            : `Column ঠিক আছে, Shiku ${tup(landed)} এ। Height মিলে নাই। β এক ধাপ বদলালে height কত বদলায়?`}
         </Nope>
       )}
-      <Task done={won}>খাতায় হিসাব করে u আর v এর count ঠিক করুন. তারপর Shiku কে একবারেই সোফায়, (1, 4) এ, পাঠান.</Task>
+      <Task done={won}>খাতায় হিসাব করে u আর v এর count ঠিক করুন। তারপর Shiku কে একবারেই সোফায়, (1, 4) এ, পাঠান।</Task>
     </>
   );
 }
@@ -1121,9 +1121,9 @@ export function YourSofa() {
 
 const X6_F = makeFrame(-1, 4, -1, 11, 10, 8);
 const X6_SAY = [
-  "β = 0 দিয়ে শুরু. First slot 1 রাখতে u 1 বার. Height আসে 2.",
-  "সোফা চায় height 4. দুই ধাপ বেশি. তাই β = 2.",
-  "β = 2: v first slot এ দেয় 4. 1 এ নামতে u দিবে −3. তাই α = −3.",
+  "β = 0 দিয়ে শুরু। First slot 1 রাখতে u 1 বার। Height আসে 2.",
+  "সোফা চায় height 4। দুই ধাপ বেশি। তাই β = 2।",
+  "β = 2: v first slot এ দেয় 4. 1 এ নামতে u দিবে −3। তাই α = −3।",
 ];
 
 export function SofaPlan() {
@@ -1134,7 +1134,7 @@ export function SofaPlan() {
   return (
     <Scene
       scene={s}
-      caption={k < 3 ? <span key={k} className={FADE}>{X6_SAY[k]}</span> : <span className={FADE}>−3·(1, 2) + 2·(2, 5) = (1, 4). সোফা, একবারেই.</span>}
+      caption={k < 3 ? <span key={k} className={FADE}>{X6_SAY[k]}</span> : <span className={FADE}>−3·(1, 2) + 2·(2, 5) = (1, 4). সোফা, একবারেই।</span>}
     >
       <div className="mx-auto flex items-center justify-center gap-4">
         <div className="w-[4.4rem] shrink-0">
@@ -1169,11 +1169,11 @@ export function SofaPlan() {
 
 const X6B_F = makeFrame(-1, 4, -1, 6, 14, 8);
 const X6B_SAY = [
-  "আলমারির বেলায় বই লেখে এই line.",
-  "α: first button কয়বার চাপা.",
-  "β: second button কয়বার চাপা.",
-  "ডান পাশে সেই একটা dot: আলমারি.",
-  "সোফার বেলায় ডান পাশে শুধু (1, 4).",
+  "আলমারির বেলায় বই লেখে এই line।",
+  "α: first button কয়বার চাপা।",
+  "β: second button কয়বার চাপা।",
+  "ডান পাশে সেই একটা dot: আলমারি।",
+  "সোফার বেলায় ডান পাশে শুধু (1, 4)।",
 ];
 
 export function BookLine() {
@@ -1232,8 +1232,8 @@ export function NasibKhata({}: Story) {
         <Robot x={34} y={S1_FLOOR + 16} />
         <CastPerson who="nasib" x={160} y={S1_FLOOR + 16} arm="hold" mood={k >= 2 ? "smug" : "plain"} />
         <Khata x={170} y={S1_FLOOR - 32} />
-        {k === 1 && <Bubble x={160} y={S1_FLOOR - 50} side="mid" lines={["দাঁড়াও, হিসাব করি."]} />}
-        {k >= 2 && <Bubble x={160} y={S1_FLOOR - 50} side="mid" lines={["দেখলে? টিভিতে", "যাওয়াই যায় না."]} />}
+        {k === 1 && <Bubble x={160} y={S1_FLOOR - 50} side="mid" lines={["দাঁড়াও, হিসাব করি।"]} />}
+        {k >= 2 && <Bubble x={160} y={S1_FLOOR - 50} side="mid" lines={["দেখলে? টিভিতে", "যাওয়াই যায় না।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1250,7 +1250,7 @@ export function NasibKhata({}: Story) {
 
 const NS_F = makeFrame(-1.6, 5, -1, 10, 12, 10);
 const NS_LINES: { text: ReactNode; ok: boolean; why: string }[] = [
-  { text: <>β = 1 ধরি. মানে v একবার.</>, ok: true, why: "β যেকোনোটা ধরা যায়. এই line ঠিক আছে." },
+  { text: <>β = 1 ধরি। মানে v একবার।</>, ok: true, why: "β যেকোনোটা ধরা যায়। এই line ঠিক আছে।" },
   {
     text: (
       <>
@@ -1267,16 +1267,16 @@ const NS_LINES: { text: ReactNode; ok: boolean; why: string }[] = [
       </>
     ),
     ok: true,
-    why: "2·2 + 1·5 সত্যিই 9. যোগে ভুল নাই. কিন্তু প্রথম 2 টা আসলো কোথা থেকে?",
+    why: "2·2 + 1·5 সত্যিই 9। যোগে ভুল নাই। কিন্তু প্রথম 2 টা আসলো কোথা থেকে?",
   },
   {
     text: (
       <>
-        <span className="font-mono">9 ≠ 1</span>. তাই টিভিতে যাওয়া যায় না.
+        <span className="font-mono">9 ≠ 1</span>. তাই টিভিতে যাওয়া যায় না।
       </>
     ),
     ok: true,
-    why: "9 আর 1 আসলেই আলাদা. ভুলটা ঢুকেছে আরো আগে.",
+    why: "9 আর 1 আসলেই আলাদা। ভুলটা ঢুকেছে আরো আগে।",
   },
 ];
 const NS_RIGHT = 1;
@@ -1309,7 +1309,7 @@ export function NasibSum() {
       pl.play(NS_WRONG[i].length);
       return;
     }
-    pl.play(NS_FIXED.length, () => pass("নাসিব minus টা ফেলে দিয়েছে: α = −2."));
+    pl.play(NS_FIXED.length, () => pass("নাসিব minus টা ফেলে দিয়েছে: α = −2।"));
   };
   const look = (i: number): Look => (i === pick ? (won ? "right" : "picked") : won ? "dim" : "idle");
 
@@ -1377,9 +1377,9 @@ export function NasibSum() {
       </div>
       {wrongOver && <Nope key={miss}>{NS_LINES[pick].why}</Nope>}
       {won && !pl.running && (
-        <div className={`${FADE} mt-2 text-center text-[0.95rem] text-accent-text`}>α = −2 নিলে: −2·(1, 2) + 1·(2, 5) = (0, 1). টিভি.</div>
+        <div className={`${FADE} mt-2 text-center text-[0.95rem] text-accent-text`}>α = −2 নিলে: −2·(1, 2) + 1·(2, 5) = (0, 1)। টিভি।</div>
       )}
-      <Task done={won && !pl.running}>নাসিবের হিসাবের যে line এ ভুল, সেটায় tap করুন.</Task>
+      <Task done={won && !pl.running}>নাসিবের হিসাবের যে line এ ভুল, সেটায় tap করুন।</Task>
     </>
   );
 }
@@ -1390,9 +1390,9 @@ export function NasibSum() {
 //      α = 2 goes 2 further instead, and slot 1 lands on 4.
 
 const X7_SAY = [
-  "টিভির first slot 0. মানে ডানে একটুও না.",
-  "v একবার: v ডানে দেয় 2 ঘর.",
-  "0 তে ফিরতে u কে 2 ঘর ফেরত আনতে হবে: α = −2.",
+  "টিভির first slot 0। মানে ডানে একটুও না।",
+  "v একবার: v ডানে দেয় 2 ঘর।",
+  "0 তে ফিরতে u কে 2 ঘর ফেরত আনতে হবে: α = −2।",
 ];
 
 export function TvFixed() {
@@ -1402,7 +1402,7 @@ export function TvFixed() {
   return (
     <Scene
       scene={s}
-      caption={k < 3 ? <span key={k} className={FADE}>{X7_SAY[k]}</span> : <span className={FADE}>নাসিব লিখেছিল α = 2. তাতে u আরো 2 ঘর ডানে নেয়: first slot 4, 0 না.</span>}
+      caption={k < 3 ? <span key={k} className={FADE}>{X7_SAY[k]}</span> : <span className={FADE}>নাসিব লিখেছিল α = 2। তাতে u আরো 2 ঘর ডানে নেয়: first slot 4, 0 না।</span>}
     >
       {k < 3 ? (
         <SlotBar target={0} vShare={2} vLabel="v: 2" uLabel="u: −2" show={k === 0 ? 0 : k === 1 ? 1 : 2} />
@@ -1441,7 +1441,7 @@ export function BatteryLeft({}: Story) {
         <CastPerson who="nasib" x={26} y={S1_FLOOR + 16} arm="hold" />
         <Khata x={34} y={S1_FLOOR - 32} />
         {k >= 4 && <CastPerson who="ammu" x={300} y={S1_FLOOR + 16} facing={-1} />}
-        {k >= 4 && <Bubble x={300} y={S1_FLOOR - 50} side="left" lines={["কাল সকালে দালাল", "ভাই আসবেন."]} />}
+        {k >= 4 && <Bubble x={300} y={S1_FLOOR - 50} side="left" lines={["কাল সকালে দালাল", "ভাই আসবেন।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1458,10 +1458,10 @@ const X8_F = makeFrame(2, 4, -1, 9, 11, 8);
 const X8_BETAS = [-3, -2, -1, 0, 1, 2];
 const X8_SAY = [
   "টিপার আগেই কি বলা যায়, কোন button কয়বার?",
-  "একটা count ঠিক করুন.",
-  "বাকি count টা ঠিক করে দেয় first slot.",
-  "Remote C তে height বাড়ে এক এক করে. তাই সব জায়গায় পৌঁছায়.",
-  "Remote B তে height নড়েই না.",
+  "একটা count ঠিক করুন।",
+  "বাকি count টা ঠিক করে দেয় first slot।",
+  "Remote C তে height বাড়ে এক এক করে। তাই সব জায়গায় পৌঁছায়।",
+  "Remote B তে height নড়েই না।",
 ];
 
 function X8Chip({ name, value, tone, on }: { name: string; value: string; tone: string; on: boolean }) {

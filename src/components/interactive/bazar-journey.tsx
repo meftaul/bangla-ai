@@ -387,14 +387,14 @@ export function ListBet() {
   const act = usePlay(750);
   const seal = (i: number) => {
     setBet(i);
-    act.play(3, () => pass("বাজি সিল হলো. আগে এক ডেকচি করে দেখি."));
+    act.play(3, () => pass("বাজি সিল হলো। আগে এক ডেকচি করে দেখি।"));
   };
   // beats of the acted bet: 1 the bags swell to the pick, 2 its "?", 3 sealed
   const k = bet === null ? 0 : act.running ? act.k : 3;
   return (
     <>
       <div className="mb-1 text-center text-sm">
-        বাবুর্চির order: পোলাও <b className="font-mono">3</b> ডেকচি, কাচ্চি <b className="font-mono">2</b> ডেকচি.
+        বাবুর্চির order: পোলাও <b className="font-mono">3</b> ডেকচি, কাচ্চি <b className="font-mono">2</b> ডেকচি।
       </div>
       <B1_Bags size={bet !== null && k >= 1 ? B1_SIZE[bet] : [1, 1]} q={k >= 2} />
       <div className="mt-3 grid gap-2">
@@ -407,7 +407,7 @@ export function ListBet() {
           </Choice>
         ))}
       </div>
-      <Task done={bet !== null && k >= 3}>কার হিসাবে বেশি আসবে? একটার উপর বাজি ধরুন. উত্তর শেষে.</Task>
+      <Task done={bet !== null && k >= 3}>কার হিসাবে বেশি আসবে? একটার উপর বাজি ধরুন। উত্তর শেষে।</Task>
     </>
   );
 }
@@ -436,7 +436,7 @@ export function DekchiWalk() {
     walk.play(hops(G_COLS, a).length, () => {
       const g: [boolean, boolean] = [got[0] || same(a, [1, 1]), got[1] || same(a, [3, 2])];
       setGot(g);
-      if (g[0] && g[1] && !(got[0] && got[1])) pass("যত ডেকচি, তত বার হাঁটা. থামলেই list.");
+      if (g[0] && g[1] && !(got[0] && got[1])) pass("যত ডেকচি, তত বার হাঁটা। থামলেই list।");
     });
   };
   const dial = (v: XY) => {
@@ -465,7 +465,7 @@ export function DekchiWalk() {
       <div className="mt-1 min-h-6 text-center text-sm">
         {land && !walk.running && (
           <span className={FADE}>
-            থামলো <b className="font-mono"><Tup v={land} of={ITEM} /></b>: চাল {land[0]} কেজি, মাংস {land[1]} কেজি.
+            থামলো <b className="font-mono"><Tup v={land} of={ITEM} /></b>: চাল {land[0]} কেজি, মাংস {land[1]} কেজি।
           </span>
         )}
       </div>
@@ -475,13 +475,13 @@ export function DekchiWalk() {
           ["3 পোলাও + 2 কাচ্চি", got[1]],
         ]}
       />
-      <Task done={got[0] && got[1]}>ডেকচি ঠিক করে Shiku কে হাঁটান. আগে 1 + 1, তারপর বাবুর্চির order, 3 + 2.</Task>
+      <Task done={got[0] && got[1]}>ডেকচি ঠিক করে Shiku কে হাঁটান। আগে 1 + 1, তারপর বাবুর্চির order, 3 + 2।</Task>
     </>
   );
 }
 
 // ---------------------------------------------------------------------------
-// 3 · মামার way. The table, the order (3, 2), মামার list. Tap a row: it sits
+// 3 · মামার way। The table, the order (3, 2), মামার list. Tap a row: it sits
 //     on the order, the box pairs পোলাও with পোলাও and কাচ্চি with কাচ্চি,
 //     multiplies, adds, and the item's number drops into the list.
 
@@ -496,7 +496,7 @@ export function BazarRows() {
     run.play(3, () => {
       const d: [boolean, boolean] = r === 0 ? [true, done[1]] : [done[0], true];
       setDone(d);
-      if (d[0] && d[1]) pass("এক row, এক জিনিস. হিসাবটা dot product.");
+      if (d[0] && d[1]) pass("এক row, এক জিনিস। হিসাবটা dot product.");
     });
   };
   const k = run.running ? run.k : 3;
@@ -520,7 +520,7 @@ export function BazarRows() {
       <div className="mt-2">
         <B_Slip names={ITEM} vals={vals} />
       </div>
-      <Task done={done[0] && done[1]}>চাল এর row এ tap করুন, তারপর মাংসের row এ. দেখুন মামার list এ কী ওঠে.</Task>
+      <Task done={done[0] && done[1]}>চাল এর row এ tap করুন, তারপর মাংসের row এ। দেখুন মামার list এ কী ওঠে।</Task>
     </>
   );
 }
@@ -552,7 +552,7 @@ export function TwoWaysOneList() {
       if (runs.includes(key)) return;
       const next = [...runs, key];
       setRuns(next);
-      if (next.length === 3) pass("একই গুণ, একই যোগ. শুধু গোছানো আলাদা.");
+      if (next.length === 3) pass("একই গুণ, একই যোগ। শুধু গোছানো আলাদা।");
     });
   };
   const dial = (v: XY) => {
@@ -589,13 +589,13 @@ export function TwoWaysOneList() {
           Shiku থামলো <b className="font-mono"><Tup v={stop} of={ITEM} /></b>, মামার list <b className="font-mono"><Tup v={ring} of={ITEM} /></b>.
         </div>
       )}
-      <Task done={over}>আগে একটা বেছে নিন. তারপর তিনটা আলাদা order দিয়ে দুই হিসাব চালান.</Task>
+      <Task done={over}>আগে একটা বেছে নিন। তারপর তিনটা আলাদা order দিয়ে দুই হিসাব চালান।</Task>
     </>
   );
 }
 
 // ---------------------------------------------------------------------------
-// 5 · ঘি. The table grows a third row; the same order (3, 2) now gives three
+// 5 · ঘি। The table grows a third row; the same order (3, 2) now gives three
 //     numbers, each item's count laid out as squares, one per কেজি. Then a
 //     third dish, জর্দা: the table has no column for it and the box jams.
 
@@ -638,7 +638,7 @@ export function ThirdItem() {
   const jam = () => {
     if (run.running) return;
     setStage(2);
-    run.play(4, () => pass("Column কয়টা, order এ কয়টা: সমান হতেই হবে."));
+    run.play(4, () => pass("Column কয়টা, order এ কয়টা: সমান হতেই হবে।"));
   };
   const upto = stage >= 1 ? 3 : run.running ? run.k : 0;
   const lit = stage === 0 && run.running && run.k > 0 ? run.k - 1 : null;
@@ -674,14 +674,14 @@ export function ThirdItem() {
           ঢুকলো 2 টা সংখ্যা, বের হলো 3 টা: <b className="font-mono"><Tup v={vals} of={ITEM3} /></b>
         </div>
       )}
-      <Task done={stage === 2 && !run.running}>ঘি সহ মামার list চালান. তারপর order এ জর্দাও 2 ডেকচি দিয়ে দেখুন.</Task>
+      <Task done={stage === 2 && !run.running}>ঘি সহ মামার list চালান। তারপর order এ জর্দাও 2 ডেকচি দিয়ে দেখুন।</Task>
     </>
   );
 }
 
 // ---------------------------------------------------------------------------
 // 6 · The copied row. Samin's table has the মাংস row as the khata writes it,
-//     কাচ্চি first: (2, 1). Check with (1, 1): Shiku (the বাবুর্চি's ডেকচি)
+//     কাচ্চি first: (2, 1)। Check with (1, 1): Shiku (the বাবুর্চি's ডেকচি)
 //     and Samin's ring agree. Check with (2, 3): Shiku stops at মাংস 8, the
 //     ring says 7. The reader taps the wrong row's cell; it flips; they agree.
 
@@ -723,7 +723,7 @@ export function WrongRow() {
       return;
     }
     setStage(3);
-    fix.play(2, () => pass("(1, 1) উল্টা ধরে না. মিলান অসমান সংখ্যায়."));
+    fix.play(2, () => pass("(1, 1) উল্টা ধরে না। মিলান অসমান সংখ্যায়।"));
   };
   return (
     <>
@@ -751,21 +751,21 @@ export function WrongRow() {
           (2, 3) দিয়ে
         </button>
       </div>
-      {stage === 1 && !walk.running && <div className={`mt-2 text-center text-sm text-accent-text ${FADE}`}>Shiku ঠিক দাগের ভেতরে: চাল 3, মাংস 3.</div>}
+      {stage === 1 && !walk.running && <div className={`mt-2 text-center text-sm text-accent-text ${FADE}`}>Shiku ঠিক দাগের ভেতরে: চাল 3, মাংস 3।</div>}
       {stage === 2 && !walk.running && miss === 0 && (
         <Nope>
-          Shiku থামলো মাংস <b>8</b> এ. সামিনের table বলে <b>7</b>. চাল দুইটাতেই 7. সামিনের table এর ভুল ঘরে tap করুন.
+          Shiku থামলো মাংস <b>8</b> এ। সামিনের table বলে <b>7</b>. চাল দুইটাতেই 7। সামিনের table এর ভুল ঘরে tap করুন।
         </Nope>
       )}
-      {stage === 2 && miss > 0 && <Nope key={miss}>চাল এর row ঠিক আছে, দুই হিসাবেই চাল 7. ফারাক শুধু উপর-নিচে, মানে মাংসে.</Nope>}
-      {stage === 3 && !fix.running && <div className={`mt-2 text-center text-sm text-accent-text ${FADE}`}>মাংসের row এখন (1, 2): আগে পোলাও, পরে কাচ্চি. চাল 7, মাংস 8.</div>}
+      {stage === 2 && miss > 0 && <Nope key={miss}>চাল এর row ঠিক আছে, দুই হিসাবেই চাল 7। ফারাক শুধু উপর-নিচে, মানে মাংসে।</Nope>}
+      {stage === 3 && !fix.running && <div className={`mt-2 text-center text-sm text-accent-text ${FADE}`}>মাংসের row এখন (1, 2): আগে পোলাও, পরে কাচ্চি। চাল 7, মাংস 8।</div>}
       <Ticks
         items={[
           ["(1, 1)", stage >= 1],
           ["(2, 3)", stage >= 3],
         ]}
       />
-      <Task done={stage === 3 && !fix.running}>আগে (1, 1) দিয়ে মিলান, তারপর (2, 3). না মিললে সামিনের table এর ভুল ঘরে tap করুন.</Task>
+      <Task done={stage === 3 && !fix.running}>আগে (1, 1) দিয়ে মিলান, তারপর (2, 3)। না মিললে সামিনের table এর ভুল ঘরে tap করুন।</Task>
     </>
   );
 }
@@ -804,7 +804,7 @@ export function YourList() {
     walk.play(n, () => {
       if (same(mine, Y7_RIGHT)) {
         setWon(true);
-        pass("চাল 5, চিনি 8. Row ধরেও, হেঁটেও.");
+        pass("চাল 5, চিনি 8। Row ধরেও, হেঁটেও।");
       } else setMiss(miss + 1);
     });
   };
@@ -841,12 +841,12 @@ export function YourList() {
       </div>
       {wrong && (
         <Nope key={miss}>
-          Shiku থামলো চাল 5, চিনি 8 এ. আপনার list এ{off[0] ? ` চাল ${list[0]}` : ""}
+          Shiku থামলো চাল 5, চিনি 8 এ। আপনার list এ{off[0] ? ` চাল ${list[0]}` : ""}
           {off[0] && off[1] ? "," : ""}
-          {off[1] ? ` চিনি ${list[1]}` : ""}. {off[1] ? "চিনির row: জর্দা প্রতি 2, ফিরনি প্রতি 1." : "চাল এর row: জর্দা প্রতি 1, ফিরনি প্রতি 1."}
+          {off[1] ? ` চিনি ${list[1]}` : ""}. {off[1] ? "চিনির row: জর্দা প্রতি 2, ফিরনি প্রতি 1।" : "চাল এর row: জর্দা প্রতি 1, ফিরনি প্রতি 1।"}
         </Nope>
       )}
-      <Task done={won}>মামার list বানান: চাল কত, চিনি কত. তারপর Shiku কে দিয়ে মিলিয়ে দেখুন.</Task>
+      <Task done={won}>মামার list বানান: চাল কত, চিনি কত। তারপর Shiku কে দিয়ে মিলিয়ে দেখুন।</Task>
     </>
   );
 }
@@ -879,7 +879,7 @@ export function TryNewDekchi() {
     if (walk.running || right) return;
     const q: XY = [clamp(Math.round(p[0]), 0, 18), clamp(Math.round(p[1]), 0, 11)];
     setPick(q);
-    if (same(q, T8_RIGHT)) walk.play(n, () => pass("(17, 10). দুই পথেই."));
+    if (same(q, T8_RIGHT)) walk.play(n, () => pass("(17, 10). দুই পথেই।"));
     else {
       setMiss(miss + 1);
       walk.play(n);
@@ -901,12 +901,12 @@ export function TryNewDekchi() {
       </div>
       {pick && !right && !walk.running && (
         <Nope key={miss}>
-          আপনার দাগ <span className="font-mono">{tup(pick)}</span> এ. Shiku ডেকচি ধরে হেঁটে থামলো অন্য জায়গায়.{" "}
-          {pick[0] !== 17 ? "পেঁয়াজ: রেজালার 4 ডেকচিতে 3 করে, আলু-গোশতের 5 ডেকচিতে 1 করে." : "আলু: রেজালায় আলু নাই, আলু-গোশতের 5 ডেকচিতে 2 করে."}
+          আপনার দাগ <span className="font-mono">{tup(pick)}</span> এ। Shiku ডেকচি ধরে হেঁটে থামলো অন্য জায়গায়।{" "}
+          {pick[0] !== 17 ? "পেঁয়াজ: রেজালার 4 ডেকচিতে 3 করে, আলু-গোশতের 5 ডেকচিতে 1 করে।" : "আলু: রেজালায় আলু নাই, আলু-গোশতের 5 ডেকচিতে 2 করে।"}
         </Nope>
       )}
-      {right && !walk.running && <div className={`mt-2 text-center text-sm font-semibold text-accent-text ${FADE}`}>পেঁয়াজ 17 কেজি, আলু 10 কেজি.</div>}
-      <Task done={right && !walk.running}>মামার list কাগজের কোথায় পড়বে? সেখানে tap করুন.</Task>
+      {right && !walk.running && <div className={`mt-2 text-center text-sm font-semibold text-accent-text ${FADE}`}>পেঁয়াজ 17 কেজি, আলু 10 কেজি।</div>}
+      <Task done={right && !walk.running}>মামার list কাগজের কোথায় পড়বে? সেখানে tap করুন।</Task>
     </>
   );
 }
@@ -978,7 +978,7 @@ export function WhoWasRight() {
     if (filled[i] || pour.running) return;
     const next = filled.map((f, j) => f || j === i);
     setFilled(next);
-    if (next.every(Boolean)) pour.play(2, () => pass("দুইজনের হিসাব একই. দুই দিক থেকে গোনা."));
+    if (next.every(Boolean)) pour.play(2, () => pass("দুইজনের হিসাব একই। দুই দিক থেকে গোনা।"));
     else pour.play(1);
   };
   return (
@@ -1008,11 +1008,11 @@ export function WhoWasRight() {
       </div>
       {all && !pour.running && (
         <div className={FADE}>
-          <div className="mt-2 text-center text-sm font-semibold text-accent-text">পাঁচ ডেকচি ভরলো. মাদুরে একটা দানাও বাকি নাই, কিছু কমও পড়লো না.</div>
+          <div className="mt-2 text-center text-sm font-semibold text-accent-text">পাঁচ ডেকচি ভরলো। মাদুরে একটা দানাও বাকি নাই, কিছু কমও পড়লো না।</div>
           <W9_Verdict />
         </div>
       )}
-      <Task done={all && !pour.running}>প্রত্যেক ডেকচিতে tap করুন. বাবুর্চির খাতা মতো জিনিস উঠবে. দেখুন মাদুরে কী থাকে.</Task>
+      <Task done={all && !pour.running}>প্রত্যেক ডেকচিতে tap করুন। বাবুর্চির খাতা মতো জিনিস উঠবে। দেখুন মাদুরে কী থাকে।</Task>
     </>
   );
 }
@@ -1082,12 +1082,12 @@ export function UthanDawn({}: Story) {
         <S_Khata x={64} y={118} w={22} />
         <S_Cycle x={296} y={162} />
         <Person who="mama" x={274} y={160} facing={-1} label />
-        {k === 2 && <Bubble x={54} y={94} side="right" lines={["পোলাও তিন ডেগ, কাচ্চি দুই.", "আমি ডেকচি ধইরা গুনি."]} />}
-        {k === 3 && <Bubble x={274} y={94} side="left" lines={["আমাকে বলেন,", "চাল কত, মাংস কত."]} />}
+        {k === 2 && <Bubble x={54} y={94} side="right" lines={["পোলাও তিন ডেগ, কাচ্চি দুই।", "আমি ডেকচি ধইরা গুনি।"]} />}
+        {k === 3 && <Bubble x={274} y={94} side="left" lines={["আমাকে বলেন,", "চাল কত, মাংস কত।"]} />}
         {k >= 4 && (
           <>
             <Person who="nasib" x={240} y={160} facing={-1} label mood="smug" />
-            <Bubble x={240} y={94} side="left" lines={["দুইজনের হিসাব মিলবে না.", "একজন বেশি কেনাবে."]} />
+            <Bubble x={240} y={94} side="left" lines={["দুইজনের হিসাব মিলবে না।", "একজন বেশি কেনাবে।"]} />
           </>
         )}
       </Stage>
@@ -1113,8 +1113,8 @@ export function BaburchiKhata({}: Story) {
         <Word x={190} y={176} text="কাচ্চি" fill="#be123c" />
         {k >= 1 && <Card x={130} y={122} text="(2, 1)" tone="amber" />}
         {k >= 2 && <Card x={190} y={122} text="(1, 2)" tone="coral" />}
-        {k === 1 && <Bubble x={60} y={94} side="right" lines={["পোলাওয়ে চাইল দুই কেজি,", "গোস্ত এক কেজি."]} />}
-        {k === 2 && <Bubble x={60} y={94} side="right" lines={["কাচ্চিতে উল্টা."]} />}
+        {k === 1 && <Bubble x={60} y={94} side="right" lines={["পোলাওয়ে চাইল দুই কেজি,", "গোস্ত এক কেজি।"]} />}
+        {k === 2 && <Bubble x={60} y={94} side="right" lines={["কাচ্চিতে উল্টা।"]} />}
         <Person who="fahim" x={262} y={160} facing={-1} label arm={k >= 3 ? "hold" : "down"} />
         {k >= 3 && (
           <g className={POP}>
@@ -1158,7 +1158,7 @@ export function MamaShop({}: Story) {
         <Person who="mama" x={k >= 1 ? 190 : 350} y={160} facing={-1} walking={k === 1} arm="hold" label />
         {k >= 1 && <Bag x={176} y={126} s={0.6} />}
         {k === 2 && <Bubble x={96} y={92} side="right" lines={["চাইল কয় কেজি দিমু?"]} />}
-        {k >= 3 && <Bubble x={190} y={94} side="left" tone="think" lines={["ডেকচি না,", "কেজি লাগবে."]} />}
+        {k >= 3 && <Bubble x={190} y={94} side="left" tone="think" lines={["ডেকচি না,", "কেজি লাগবে।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1184,8 +1184,8 @@ export function NasibLuck({}: Story) {
           </>
         )}
         <Person who="som" x={250} y={160} facing={-1} label />
-        {k === 2 && <Bubble x={160} y={74} lines={["দুইবারই (8, 7).", "এটা কপালে মিলছে."]} />}
-        {k >= 3 && <Bubble x={160} y={74} lines={["order বদলাও,", "দেখবা মিলবে না."]} />}
+        {k === 2 && <Bubble x={160} y={74} lines={["দুইবারই (8, 7)।", "এটা কপালে মিলছে।"]} />}
+        {k >= 3 && <Bubble x={160} y={74} lines={["order বদলাও,", "দেখবা মিলবে না।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1208,7 +1208,7 @@ export function MamiGhee({}: Story) {
         {k >= 3 && <path d="M70 118h8M83 118h8" stroke={BLUE} strokeWidth={1.2} className={POP} />}
         <Person who="mama" x={262} y={160} facing={-1} label />
         {k === 1 && <Bubble x={163} y={84} lines={["ঘির কথা", "কেউ বলছে?"]} />}
-        {k === 2 && <Bubble x={163} y={84} lines={["পোলাওয়ে এক কেজি.", "কাচ্চিতেও এক কেজি."]} />}
+        {k === 2 && <Bubble x={163} y={84} lines={["পোলাওয়ে এক কেজি।", "কাচ্চিতেও এক কেজি।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1245,8 +1245,8 @@ export function KhataCopy({}: Story) {
           )}
         </g>
         <Baburchi x={50} y={160} />
-        {k === 2 && <Bubble x={50} y={94} side="right" lines={["যেমনে লেখছি,", "তেমনে তুলো."]} />}
-        {k >= 3 && <Bubble x={240} y={94} side="left" lines={["মাংস: 2, 1."]} />}
+        {k === 2 && <Bubble x={50} y={94} side="right" lines={["যেমনে লেখছি,", "তেমনে তুলো।"]} />}
+        {k >= 3 && <Bubble x={240} y={94} side="left" lines={["মাংস: 2, 1।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1274,9 +1274,9 @@ export function SweetList({}: Story) {
             <Card x={190} y={122} text="(1, 1)" tone="coral" />
           </>
         )}
-        {k === 1 && <Bubble x={60} y={94} side="right" lines={["জর্দা তিন ডেগ,", "ফিরনি দুই ডেগ."]} />}
+        {k === 1 && <Bubble x={60} y={94} side="right" lines={["জর্দা তিন ডেগ,", "ফিরনি দুই ডেগ।"]} />}
         <Person who="mama" x={262} y={160} facing={-1} label />
-        {k >= 3 && <Bubble x={262} y={94} side="left" lines={["কাল সকালে যাবো."]} />}
+        {k >= 3 && <Bubble x={262} y={94} side="left" lines={["কাল সকালে যাবো।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1306,7 +1306,7 @@ export function RezalaNight({}: Story) {
         <Word x={230} y={176} text="আলু-গোশত" fill="#fecdd3" />
         {k >= 1 && <Card x={160} y={122} text="(3, 0)" tone="amber" />}
         {k >= 2 && <Card x={230} y={122} text="(1, 2)" tone="coral" />}
-        {k >= 3 && <Bubble x={60} y={94} side="right" lines={["রেজালায় আলু", "দেয় না কেউ."]} />}
+        {k >= 3 && <Bubble x={60} y={94} side="right" lines={["রেজালায় আলু", "দেয় না কেউ।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1338,8 +1338,8 @@ export function NoonUnpack({}: Story) {
         <S_Cycle x={k >= 1 ? 290 : 380} y={162} bag={false} />
         <Person who="mama" x={k >= 1 ? 262 : 360} y={160} facing={-1} walking={k === 1} label />
         <Baburchi x={60} y={160} arm={k >= 3 ? "point" : "down"} />
-        {k === 3 && <Bubble x={60} y={94} side="right" lines={["ডেগ ধইরা গুনমু."]} />}
-        {k >= 4 && <Bubble x={262} y={94} side="left" lines={["আমি গুনি", "জিনিস ধরে."]} />}
+        {k === 3 && <Bubble x={60} y={94} side="right" lines={["ডেগ ধইরা গুনমু।"]} />}
+        {k >= 4 && <Bubble x={262} y={94} side="left" lines={["আমি গুনি", "জিনিস ধরে।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1400,7 +1400,7 @@ export function LightVan({}: Story) {
         )}
         <Person who="rina" x={290} y={160} facing={-1} label arm={k >= 2 ? "wave" : "down"} />
         {k >= 2 && <path d="M250 44c-6 -8 -18 -2 -10 8l10 10l10 -10c8 -10 -4 -16 -10 -8Z" fill="none" stroke="#db2777" strokeWidth={1.6} strokeDasharray="3 2" className={POP} />}
-        {k === 2 && <Bubble x={290} y={94} side="left" lines={["হার্টটা", "ওইখানে চাই."]} />}
+        {k === 2 && <Bubble x={290} y={94} side="left" lines={["হার্টটা", "ওইখানে চাই।"]} />}
         {k >= 3 && <Draw d="M116 136L214 80" strokeWidth={3} ms={800} className="stroke-[#f59e0b]/80" />}
         {k >= 4 && (
           <text x={228} y={84} textAnchor="middle" fontSize={22} fontWeight={800} fill="#b45309" className={POP}>
@@ -1434,10 +1434,10 @@ const say = (lines: readonly string[], k: number) => (
 //      by item still blank, one trip to the বাজার.
 
 const C1 = [
-  "উঠানে পাঁচটা খালি ডেকচি. তিনটা পোলাওয়ের, দুইটা কাচ্চির.",
-  "বাবুর্চির খাতা ডেকচি ধরে: পোলাও 3, কাচ্চি 2.",
-  "মামার list জিনিস ধরে: চাল কত, মাংস কত. এখনো ফাঁকা.",
-  "বাজারে যাওয়া একবারই. কম আনলে ডেকচি খালি থাকবে.",
+  "উঠানে পাঁচটা খালি ডেকচি। তিনটা পোলাওয়ের, দুইটা কাচ্চির।",
+  "বাবুর্চির খাতা ডেকচি ধরে: পোলাও 3, কাচ্চি 2।",
+  "মামার list জিনিস ধরে: চাল কত, মাংস কত। এখনো ফাঁকা।",
+  "বাজারে যাওয়া একবারই। কম আনলে ডেকচি খালি থাকবে।",
 ];
 
 export function StakeFig() {
@@ -1484,10 +1484,10 @@ export function StakeFig() {
 //      table gets its row names: the matrix.
 
 const C2 = [
-  "এক ডেকচি পোলাও (2, 1), এক ডেকচি কাচ্চি (1, 2). দুইটা arrow.",
-  "পোলাওয়ের arrow খাড়া হয়ে বসলো: প্রথম column.",
-  "কাচ্চিরটা পাশে: দ্বিতীয় column.",
-  "দুই column মিলে একটা table, মানে matrix. পাশে লেখা কোন row কোন জিনিসের.",
+  "এক ডেকচি পোলাও (2, 1), এক ডেকচি কাচ্চি (1, 2)। দুইটা arrow।",
+  "পোলাওয়ের arrow খাড়া হয়ে বসলো: প্রথম column।",
+  "কাচ্চিরটা পাশে: দ্বিতীয় column।",
+  "দুই column মিলে একটা table, মানে matrix। পাশে লেখা কোন row কোন জিনিসের।",
 ];
 
 export function ColumnsStand() {
@@ -1556,10 +1556,10 @@ export function ColumnsStand() {
 //      multiplies, adds; the 8 drops into মামার list. The হাট's bill, again.
 
 const C3 = [
-  "চাল এর row: পোলাও প্রতি 2, কাচ্চি প্রতি 1. নিচে order: 3 আর 2.",
-  "Row নেমে order এর উপর বসলো. পোলাওয়ের উপর পোলাও, কাচ্চির উপর কাচ্চি.",
-  "ঘরে ঘরে গুণ: 2 × 3 = 6, 1 × 2 = 2.",
-  "যোগ করে 8. মামার list এ চাল 8. হাটের বিলও এভাবেই হয়: দাম গুণ কয়টা, তারপর যোগ.",
+  "চাল এর row: পোলাও প্রতি 2, কাচ্চি প্রতি 1। নিচে order: 3 আর 2।",
+  "Row নেমে order এর উপর বসলো। পোলাওয়ের উপর পোলাও, কাচ্চির উপর কাচ্চি।",
+  "ঘরে ঘরে গুণ: 2 × 3 = 6, 1 × 2 = 2।",
+  "যোগ করে 8। মামার list এ চাল 8। হাটের বিলও এভাবেই হয়: দাম গুণ কয়টা, তারপর যোগ।",
 ];
 
 export function RowOnOrder() {
@@ -1610,7 +1610,7 @@ export function RowOnOrder() {
 }
 
 // 4½ · The four heaps. (dish × count) gives four little heaps of squares, one
-//      per কেজি. The বাবুর্চি gathers them by column, মামা by row: the same
+//      per কেজি। The বাবুর্চি gathers them by column, মামা by row: the same
 //      four, so the same list.
 
 function B_Heaps({ label, rowNames, colNames, cols, amt, caps }: { label: string; rowNames: readonly string[]; colNames: readonly string[]; cols: readonly XY[]; amt: XY; caps: readonly string[] }) {
@@ -1677,11 +1677,11 @@ export function FourHeaps() {
       cols={G_COLS}
       amt={ORDER}
       caps={[
-        "(3, 2) order এ চারটা ছোট স্তূপ হয়. প্রতি কেজি একটা ঘর.",
-        "পোলাওয়ের চাল 6, কাচ্চির চাল 2. পোলাওয়ের মাংস 3, কাচ্চির মাংস 4.",
-        "বাবুর্চি গোনেন column ধরে: পোলাওয়ের ডেকচিতে (6, 3), কাচ্চির ডেকচিতে (2, 4).",
-        "মামা গোনেন row ধরে: চাল 6 + 2 = 8, মাংস 3 + 4 = 7.",
-        "স্তূপ একই চারটা. তাই দুই দিকেই (8, 7).",
+        "(3, 2) order এ চারটা ছোট স্তূপ হয়। প্রতি কেজি একটা ঘর।",
+        "পোলাওয়ের চাল 6, কাচ্চির চাল 2। পোলাওয়ের মাংস 3, কাচ্চির মাংস 4।",
+        "বাবুর্চি গোনেন column ধরে: পোলাওয়ের ডেকচিতে (6, 3), কাচ্চির ডেকচিতে (2, 4)।",
+        "মামা গোনেন row ধরে: চাল 6 + 2 = 8, মাংস 3 + 4 = 7।",
+        "স্তূপ একই চারটা। তাই দুই দিকেই (8, 7)।",
       ]}
     />
   );
@@ -1698,11 +1698,11 @@ export function FourHeapsRezala() {
       cols={T8_COLS}
       amt={T8_ORDER}
       caps={[
-        "রেজালা 4 ডেকচি, আলু-গোশত 5 ডেকচি. চারটা ঘর.",
-        "রেজালার পেঁয়াজ 12, আলু-গোশতের পেঁয়াজ 5. রেজালার আলু 0, আলু-গোশতের আলু 10.",
-        "Column ধরে: রেজালার ডেকচিতে (12, 0), আলু-গোশতের ডেকচিতে (5, 10).",
-        "Row ধরে: পেঁয়াজ 12 + 5 = 17, আলু 0 + 10 = 10.",
-        "খালি ঘরটাও একটা ঘর. দুই দিকেই (17, 10).",
+        "রেজালা 4 ডেকচি, আলু-গোশত 5 ডেকচি। চারটা ঘর।",
+        "রেজালার পেঁয়াজ 12, আলু-গোশতের পেঁয়াজ 5। রেজালার আলু 0, আলু-গোশতের আলু 10।",
+        "Column ধরে: রেজালার ডেকচিতে (12, 0), আলু-গোশতের ডেকচিতে (5, 10)।",
+        "Row ধরে: পেঁয়াজ 12 + 5 = 17, আলু 0 + 10 = 10।",
+        "খালি ঘরটাও একটা ঘর। দুই দিকেই (17, 10)।",
       ]}
     />
   );
@@ -1719,11 +1719,11 @@ const M4_ROWS = [
 ];
 const M4_X = [1, 2, 1];
 const C4b = [
-  "চারটা জিনিস, তিনটা dish. Order এ তিনটা সংখ্যা: (1, 2, 1).",
-  "Row 1 order এর উপর: 1×1 + 0×2 + 2×1 = 3. List এর ঘর 1.",
-  "Row 2: 2×1 + 1×2 + 0×1 = 4. ঘর 2.",
-  "Row 3: 0×1 + 3×2 + 1×1 = 7. ঘর 3.",
-  "Row 4: 1 + 2 + 1 = 4. Row যতগুলো, list এ ঘর ততগুলো.",
+  "চারটা জিনিস, তিনটা dish। Order এ তিনটা সংখ্যা: (1, 2, 1)।",
+  "Row 1 order এর উপর: 1×1 + 0×2 + 2×1 = 3. List এর ঘর 1।",
+  "Row 2: 2×1 + 1×2 + 0×1 = 4. ঘর 2।",
+  "Row 3: 0×1 + 3×2 + 1×1 = 7. ঘর 3।",
+  "Row 4: 1 + 2 + 1 = 4. Row যতগুলো, list এ ঘর ততগুলো।",
 ];
 
 export function ManyRows() {
@@ -1776,9 +1776,9 @@ function Block({ x, y, r, c, color }: { x: number; y: number; r: number; c: numb
 
 const C5 = [
   "Table এর shape 3 × 2: তিনটা row, দুইটা column. Order 2 × 1.",
-  "মাঝের দুইটা 2 মিলে গেলো: column দুইটা, order এর সংখ্যাও দুইটা.",
-  "মিলে গিয়ে মুছে যায়. বাকি থাকে 3 × 1: তিনটা জিনিসের list.",
-  "Order এ তিনটা dish দিলে 3 × 1. মাঝে 2 আর 3. মেলে না, গুণও হয় না.",
+  "মাঝের দুইটা 2 মিলে গেলো: column দুইটা, order এর সংখ্যাও দুইটা।",
+  "মিলে গিয়ে মুছে যায়। বাকি থাকে 3 × 1: তিনটা জিনিসের list।",
+  "Order এ তিনটা dish দিলে 3 × 1। মাঝে 2 আর 3। মেলে না, গুণও হয় না।",
 ];
 
 export function ShapesClick() {
@@ -1822,7 +1822,7 @@ export function ShapesClick() {
 // 5½b · For the side quest: the order laid before the table, x A. A 1 × 2 row
 //       against a 3 × 2 table: the inner 2 and 3 don't meet.
 
-const C5b = ["Order কে table এর বাঁ পাশে শুইয়ে দিলে: 1 × 2, তারপর 3 × 2.", "মাঝে 2 আর 3. মেলে না. এই গুণের কোনো মানেই হয় না."];
+const C5b = ["Order কে table এর বাঁ পাশে শুইয়ে দিলে: 1 × 2, তারপর 3 × 2।", "মাঝে 2 আর 3। মেলে না। এই গুণের কোনো মানেই হয় না।"];
 
 export function XaNo() {
   const s = useScene(1, [600, 2000]);
@@ -1854,10 +1854,10 @@ export function XaNo() {
 //      (1, 1) both make 3; with (2, 3) the real one makes 8, the copy 7.
 
 const C6 = [
-  "মাংসের দুইটা row: আসলটা (1, 2), সামিনেরটা (2, 1). হলুদ ঘর পোলাও থেকে, লাল কাচ্চি থেকে.",
-  "(1, 1) এ: আসলটায় 1 + 2, সামিনেরটায় 2 + 1. দুইটাই 3. উল্টালেও টের পাওয়া যায় না.",
-  "(2, 3) এ: আসলটায় 2 + 6 = 8. সামিনেরটায় 4 + 3 = 7.",
-  "এক কেজি মাংস কম. বাজারে গেলে কাচ্চির ডেকচি খালি থাকতো.",
+  "মাংসের দুইটা row: আসলটা (1, 2), সামিনেরটা (2, 1)। হলুদ ঘর পোলাও থেকে, লাল কাচ্চি থেকে।",
+  "(1, 1) এ: আসলটায় 1 + 2, সামিনেরটায় 2 + 1। দুইটাই 3। উল্টালেও টের পাওয়া যায় না।",
+  "(2, 3) এ: আসলটায় 2 + 6 = 8। সামিনেরটায় 4 + 3 = 7।",
+  "এক কেজি মাংস কম। বাজারে গেলে কাচ্চির ডেকচি খালি থাকতো।",
 ];
 
 export function OneOneHides() {

@@ -16,7 +16,7 @@ import { Post, STAGE_WALL_F, StageWall, WallBed, WallClip, WallGrid, byCols, par
 // between two slanted আল: from the corner খুঁটি one side runs (3, 1) শিকল
 // (east, north), the other (1, 2). The দলিল needs its area, and a field has no
 // chalk ঘর to count. The আমিন comes with his শিকল. মামা: এক পাশ মাপো, আরেক
-// পাশ মাপো, গুণ দাও.
+// পাশ মাপো, গুণ দাও।
 //
 // Nine screens. 1 seals the bet: 12 (করিম, the whole box) · 7 (মামা, side ×
 // side) · 6 (নাসিব, half the box) · 5 (সামিন, counted roughly) (PlotBet).
@@ -34,7 +34,7 @@ import { Post, STAGE_WALL_F, StageWall, WallBed, WallClip, WallGrid, byCols, par
 // (DolilBlank, HeightDrops, HalfABox, SidesToLens, BetOpen, ThreeBars).
 //
 // The নকশা is Rina's chalk grid again, drawn on paper: one ঘর = one শিকল by one
-// শিকল. East runs right, north runs up; the corner খুঁটি is (0, 0). The field
+// শিকল। East runs right, north runs up; the corner খুঁটি is (0, 0). The field
 // pieces are local; the light wall on screen 6 comes from light-kit.tsx
 // (read-only). The plot's first side is amber, the second teal, like the lens
 // columns of 7.x/8.1.
@@ -356,7 +356,7 @@ export function PlotBet() {
   const seal = () => {
     if (pick === null || sealed) return;
     setSealed(true);
-    act.play(2, () => pass("বাজি সিল হলো. আগে মামার নিয়ম."));
+    act.play(2, () => pass("বাজি সিল হলো। আগে মামার নিয়ম।"));
   };
   return (
     <>
@@ -391,7 +391,7 @@ export function PlotBet() {
           এই বাজি সিল
         </button>
       </div>
-      <Task done={k >= 2}>আপার জমি কত ঘর? একটা আন্দাজ বেছে বাজি সিল করুন. উত্তর শেষে.</Task>
+      <Task done={k >= 2}>আপার জমি কত ঘর? একটা আন্দাজ বেছে বাজি সিল করুন। উত্তর শেষে।</Task>
     </>
   );
 }
@@ -433,7 +433,7 @@ export function SideTimesSide() {
     setAt(i);
     const ns = seen.map((v, j) => v || j === i);
     setSeen(ns);
-    if (ns[0] && ns[3] && !(seen[0] && seen[3])) play.play(1, () => pass("হেলালে জায়গা কমে. মামার গুণ টের পায় না."));
+    if (ns[0] && ns[3] && !(seen[0] && seen[3])) play.play(1, () => pass("হেলালে জায়গা কমে। মামার গুণ টের পায় না।"));
     else play.play(1);
   };
   const done = seen[0] && seen[3];
@@ -451,7 +451,7 @@ export function SideTimesSide() {
         <div key={at} className={`${POP} inline-block font-mono text-lg font-bold text-cat-violet`}>
           3.16 × 2.24 = 7.07
         </div>
-        {at === 3 && <div className={`${FADE} text-sm text-muted`}>জমি প্রায় একটা দাগ. মামার গুণ তবু 7.07.</div>}
+        {at === 3 && <div className={`${FADE} text-sm text-muted`}>জমি প্রায় একটা দাগ। মামার গুণ তবু 7.07.</div>}
       </div>
       <div className="mt-2 flex flex-wrap justify-center gap-1.5">
         {X2_NAME.map((n, i) => (
@@ -460,7 +460,7 @@ export function SideTimesSide() {
           </button>
         ))}
       </div>
-      <Task done={done}>জমিটা একবার খাড়া করুন, একবার প্রায় শুইয়ে দিন. মামার গুণ কী করে, দেখুন.</Task>
+      <Task done={done}>জমিটা একবার খাড়া করুন, একবার প্রায় শুইয়ে দিন। মামার গুণ কী করে, দেখুন।</Task>
     </>
   );
 }
@@ -478,7 +478,7 @@ export function TheBox() {
     if (play.running || phase >= 3) return;
     const n = phase + 1;
     setPhase(n);
-    play.play(n === 1 ? 4 : n === 2 ? 3 : 12, n === 3 ? () => pass("বাক্স মাপা সোজা: লম্বা × চওড়া.") : undefined);
+    play.play(n === 1 ? 4 : n === 2 ? 3 : 12, n === 3 ? () => pass("বাক্স মাপা সোজা: লম্বা × চওড়া।") : undefined);
   };
   const east = phase === 1 && play.running ? play.k / 4 : phase >= 1 ? 1 : 0;
   const north = phase === 2 && play.running ? play.k / 3 : phase >= 2 ? 1 : 0;
@@ -516,7 +516,7 @@ export function TheBox() {
           {phase === 0 ? "পূবে শিকল টানুন" : phase === 1 ? "এবার উত্তরে টানুন" : "বাক্সের ঘর গুনুন"}
         </button>
       </div>
-      <Task done={counted}>আমিনের মতো শিকল টানুন: আগে পূবে, তারপর উত্তরে. তারপর বাক্সের ঘর গুনুন.</Task>
+      <Task done={counted}>আমিনের মতো শিকল টানুন: আগে পূবে, তারপর উত্তরে। তারপর বাক্সের ঘর গুনুন।</Task>
     </>
   );
 }
@@ -533,8 +533,8 @@ const X4_OPTS = [
 ];
 const X4_RIGHT = 2;
 const X4_NOPE = [
-  "6 ধরেছিলেন: ছয় টুকরা, ছয় ঘর. কিন্তু নিচের আর উপরের লম্বা ত্রিকোণ দেড় ঘর করে. বাদ গেলো 7.",
-  "7 ধরেছিলেন, মামার গুণ. কিন্তু বাক্স 12, কোনা মিলে 7. জমি থাকলো 5.",
+  "6 ধরেছিলেন: ছয় টুকরা, ছয় ঘর। কিন্তু নিচের আর উপরের লম্বা ত্রিকোণ দেড় ঘর করে। বাদ গেলো 7।",
+  "7 ধরেছিলেন, মামার গুণ। কিন্তু বাক্স 12, কোনা মিলে 7। জমি থাকলো 5।",
   "",
 ];
 const APA_PIECES = piecesOf(APA_A, APA_B);
@@ -552,7 +552,7 @@ export function CutCorners() {
     play.play(1, () => {
       setGone(ng);
       setLift(-1);
-      if (ng.every(Boolean)) pass("বাক্স থেকে কোনা বাদ: 5 ঘর.");
+      if (ng.every(Boolean)) pass("বাক্স থেকে কোনা বাদ: 5 ঘর।");
     });
   };
   const cut = APA_PIECES.reduce((s, p, i) => s + (gone[i] ? p.area : 0), 0);
@@ -580,7 +580,7 @@ export function CutCorners() {
         <span className="text-sm text-muted"> ঘর</span>
       </div>
       {over && guess !== null && guess !== X4_RIGHT && <Nope>{X4_NOPE[guess]}</Nope>}
-      <Task done={over}>{guess === null ? "আগে guess: কোনা বাদ দিলে কত ঘর থাকবে?" : "এবার টুকরাগুলোয় একটা একটা করে tap করুন. বাক্স থেকে বাদ যাবে."}</Task>
+      <Task done={over}>{guess === null ? "আগে guess: কোনা বাদ দিলে কত ঘর থাকবে?" : "এবার টুকরাগুলোয় একটা একটা করে tap করুন। বাক্স থেকে বাদ যাবে।"}</Task>
     </>
   );
 }
@@ -621,7 +621,7 @@ export function LettersNotNumbers() {
     if (play.running || stage >= 4) return;
     const n = stage + 1;
     setStage(n);
-    play.play(1, n === 4 ? () => pass("হেলানো জমি = ad − bc.") : undefined);
+    play.play(1, n === 4 ? () => pass("হেলানো জমি = ad − bc।") : undefined);
   };
   const gone = [0, 1, 2, 3, 4, 5].map((i) => X5_GROUP.slice(0, stage + 1).some((g) => g.includes(i)));
   const next = stage < 4 ? X5_GROUP[stage + 1] : [];
@@ -677,7 +677,7 @@ export function LettersNotNumbers() {
           </button>
         </div>
       )}
-      <Task done={done}>অক্ষর দিয়ে আমিনের কাটা চালান: আগে বাক্স, তারপর টুকরাগুলো. কী বাকি থাকে দেখুন.</Task>
+      <Task done={done}>অক্ষর দিয়ে আমিনের কাটা চালান: আগে বাক্স, তারপর টুকরাগুলো। কী বাকি থাকে দেখুন।</Task>
     </>
   );
 }
@@ -733,7 +733,7 @@ export function BackToTheWall() {
     run.run(() =>
       strip.play(3, () => {
         setDone(nd);
-        if (nd.every(Boolean) && !done.every(Boolean)) pass("গুনতে হলো না. চারটা সংখ্যাই যথেষ্ট.");
+        if (nd.every(Boolean) && !done.every(Boolean)) pass("গুনতে হলো না। চারটা সংখ্যাই যথেষ্ট।");
       }),
     );
   };
@@ -787,10 +787,10 @@ export function BackToTheWall() {
             {sk >= 3 && <AJ_Mark ok />}
           </>
         ) : (
-          <span className="text-sm text-muted">একটা lens বেছে নিন.</span>
+          <span className="text-sm text-muted">একটা lens বেছে নিন।</span>
         )}
       </div>
-      <Task done={done.every(Boolean)}>তিনটা lens ই চালান. দেয়ালে গোনা সংখ্যা আর ad − bc মিলে কি না দেখুন.</Task>
+      <Task done={done.every(Boolean)}>তিনটা lens ই চালান। দেয়ালে গোনা সংখ্যা আর ad − bc মিলে কি না দেখুন।</Task>
     </>
   );
 }
@@ -823,7 +823,7 @@ export function YourPlot() {
   const measure = () => {
     if (play.running) return;
     setRan(true);
-    if (right) play.play(8, () => pass("পুকুরপাড়ের জমি: 10 ঘর."));
+    if (right) play.play(8, () => pass("পুকুরপাড়ের জমি: 10 ঘর।"));
     else {
       setMiss(miss + 1);
       play.play(2);
@@ -885,7 +885,7 @@ export function YourPlot() {
       </div>
       {settled && !right && (
         <Nope key={miss}>
-          আপনার আল গিয়ে থামলো <Tup v={a} of={AJ_SLOTS} /> আর <Tup v={b} of={AJ_SLOTS} /> এ. লাল দাগ দেখায় খুঁটি কত দূরে. কোনার খুঁটি থেকে খুঁটি 1 পূবে কত ঘর, উত্তরে কত, নকশায় গুনে দেখুন.
+          আপনার আল গিয়ে থামলো <Tup v={a} of={AJ_SLOTS} /> আর <Tup v={b} of={AJ_SLOTS} /> এ। লাল দাগ দেখায় খুঁটি কত দূরে। কোনার খুঁটি থেকে খুঁটি 1 পূবে কত ঘর, উত্তরে কত, নকশায় গুনে দেখুন।
         </Nope>
       )}
       <div className="mt-2 flex justify-center">
@@ -893,7 +893,7 @@ export function YourPlot() {
           আমিনের মাপ চালান
         </button>
       </div>
-      <Task done={ran && right && !play.running}>নকশা থেকে দুই আলের চারটা সংখ্যা বসান. তারপর মাপ চালান: জমি কত ঘর?</Task>
+      <Task done={ran && right && !play.running}>নকশা থেকে দুই আলের চারটা সংখ্যা বসান। তারপর মাপ চালান: জমি কত ঘর?</Task>
     </>
   );
 }
@@ -913,8 +913,8 @@ const X8_PLOTS: { a: XY; b: XY }[] = [
 ];
 const X8_RIGHT = 2;
 const X8_NOPE = [
-  "বাক্স 4 × 4 = 16. কোনা মিলে 8. এই জমি 8 ঘর, 7 না.",
-  "এই জমির দুই পাশ গুণ দিলে প্রায় 7 আসে, মামার নিয়মে. কিন্তু বাক্স 12, কোনা 7. জমি 5.",
+  "বাক্স 4 × 4 = 16। কোনা মিলে 8। এই জমি 8 ঘর, 7 না।",
+  "এই জমির দুই পাশ গুণ দিলে প্রায় 7 আসে, মামার নিয়মে। কিন্তু বাক্স 12, কোনা 7। জমি 5।",
   "",
 ];
 
@@ -926,7 +926,7 @@ export function TryPlot() {
   const choose = (i: number) => {
     if (play.running) return;
     setPick(i);
-    play.play(8, () => (i === X8_RIGHT ? pass("বাক্স থেকে কোনা বাদ দিলেই 7.") : setMiss((x) => x + 1)));
+    play.play(8, () => (i === X8_RIGHT ? pass("বাক্স থেকে কোনা বাদ দিলেই 7।") : setMiss((x) => x + 1)));
   };
   const k = pick === null ? 0 : play.running ? play.k : 8;
   const P = pick === null ? null : X8_PLOTS[pick];
@@ -968,7 +968,7 @@ export function TryPlot() {
         ))}
       </div>
       {settled && pick !== null && pick !== X8_RIGHT && <Nope key={miss}>{X8_NOPE[pick]}</Nope>}
-      <Task done={settled && pick === X8_RIGHT}>কোন নকশাটা 7 ঘরের জমি? একটায় tap করুন, আমিন মেপে দেখাবেন.</Task>
+      <Task done={settled && pick === X8_RIGHT}>কোন নকশাটা 7 ঘরের জমি? একটায় tap করুন, আমিন মেপে দেখাবেন।</Task>
     </>
   );
 }
@@ -1065,8 +1065,8 @@ export function AminPegs({}: Story) {
         <Person who="mama" x={150} y={162} facing={-1} arm="hold" label />
         <AJ_Sheet x={133} y={120} flip={k >= 2} />
         <Robot x={272} y={124} />
-        {k === 3 && <Bubble x={150} y={96} side="mid" lines={["এক পাশ মাপো,", "আরেক পাশ মাপো."]} />}
-        {k >= 4 && <Bubble x={150} y={96} side="mid" lines={["গুণ দাও. জমি মাপা", "আবার কঠিন কী."]} />}
+        {k === 3 && <Bubble x={150} y={96} side="mid" lines={["এক পাশ মাপো,", "আরেক পাশ মাপো।"]} />}
+        {k >= 4 && <Bubble x={150} y={96} side="mid" lines={["গুণ দাও। জমি মাপা", "আবার কঠিন কী।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1143,7 +1143,7 @@ export function SomLetters({}: Story) {
             </g>
           ))}
         </g>
-        {k >= 3 && <Bubble x={70} y={84} side="right" lines={["অক্ষরে করলে", "সব জমিতে খাটবে."]} />}
+        {k >= 3 && <Bubble x={70} y={84} side="right" lines={["অক্ষরে করলে", "সব জমিতে খাটবে।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1169,7 +1169,7 @@ export function WallEvening({}: Story) {
         </StageWall>
         <Person who="rina" x={200} y={150} facing={-1} label />
         <Person who="samin" x={k >= 1 ? 250 : 330} y={150} facing={-1} arm="hold" walking={k === 1} label />
-        {k >= 2 && <Bubble x={250} y={84} side="left" lines={["গুনে পেয়েছিলাম.", "এবার গুনবো না."]} />}
+        {k >= 2 && <Bubble x={250} y={84} side="left" lines={["গুনে পেয়েছিলাম।", "এবার গুনবো না।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1202,7 +1202,7 @@ export function PukurPlot({}: Story) {
           })}
         <Person who="nana" x={k >= 1 ? 176 : 214} y={166} facing={-1} arm={k >= 1 ? "point" : "down"} walking={k === 1} label />
         <AJ_Amin x={52} y={170} arm={k >= 3 ? "point" : "hold"} />
-        {k >= 2 && <Bubble x={176} y={100} side="mid" lines={["এইটা লেখা হবে", "মামীর নামে."]} />}
+        {k >= 2 && <Bubble x={176} y={100} side="mid" lines={["এইটা লেখা হবে", "মামীর নামে।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1319,11 +1319,11 @@ export function SaminMinus({}: Story) {
 
 const DF = makeFrame(-0.3, 4.3, -0.3, 3.3, 22, 4);
 const X1B_SAY = [
-  "আপার জমি, নকশায়. দুইটা হেলানো আল.",
-  "দলিলে একটা ঘর ফাঁকা: জমির পরিমাণ.",
-  "কম লিখলে কাগজে আপার জমি ছোট হয়ে গেলো.",
-  "বেশি লিখলে কাগজের জমি পাশের জমিতে ঢুকলো. পরে মামলা.",
-  "তাই আন্দাজ না. ঠিক সংখ্যাটা লাগবে: ?",
+  "আপার জমি, নকশায়। দুইটা হেলানো আল।",
+  "দলিলে একটা ঘর ফাঁকা: জমির পরিমাণ।",
+  "কম লিখলে কাগজে আপার জমি ছোট হয়ে গেলো।",
+  "বেশি লিখলে কাগজের জমি পাশের জমিতে ঢুকলো। পরে মামলা।",
+  "তাই আন্দাজ না। ঠিক সংখ্যাটা লাগবে: ?",
 ];
 
 export function DolilBlank() {
@@ -1387,10 +1387,10 @@ export function DolilBlank() {
 
 const HF = makeFrame(-0.4, 5.5, -0.4, 2.7, 38, 6);
 const X2B_SAY = [
-  "খাড়া জমি. উল্টা দিকের আল প্রথম আল থেকে 2.24 শিকল উঁচুতে.",
-  "হেলালাম. পাশ এখনো 2.24. কিন্তু উল্টা দিকের আল নেমে এলো.",
-  "আরো হেলালে আরো নিচে. জমি চ্যাপ্টা.",
-  "মামার গুণ দেখে শুধু পাশ দুইটা. আল কতটা নেমে এলো, সেটা দেখে না.",
+  "খাড়া জমি। উল্টা দিকের আল প্রথম আল থেকে 2.24 শিকল উঁচুতে।",
+  "হেলালাম। পাশ এখনো 2.24. কিন্তু উল্টা দিকের আল নেমে এলো।",
+  "আরো হেলালে আরো নিচে। জমি চ্যাপ্টা।",
+  "মামার গুণ দেখে শুধু পাশ দুইটা। আল কতটা নেমে এলো, সেটা দেখে না।",
 ];
 
 export function HeightDrops() {
@@ -1433,11 +1433,11 @@ export function HeightDrops() {
 
 const QF = makeFrame(-0.3, 5.3, -0.3, 2.3, 40, 6);
 const X4B_SAY = [
-  "বাক্সের নিচের ত্রিকোণ. পূবে 3, উত্তরে 1.",
-  "একই রকম আরেকটা, উল্টা করে পাশে বসালাম.",
-  "দুইটা মিলে একটা সোজা ঘর: 3 × 1, মানে 3 ঘর.",
-  "তাই একটা ত্রিকোণ তার অর্ধেক: 1.5 ঘর.",
-  "খাড়া ত্রিকোণ একই ভাবে 1 × 2 এর অর্ধেক: 1 ঘর.",
+  "বাক্সের নিচের ত্রিকোণ। পূবে 3, উত্তরে 1।",
+  "একই রকম আরেকটা, উল্টা করে পাশে বসালাম।",
+  "দুইটা মিলে একটা সোজা ঘর: 3 × 1, মানে 3 ঘর।",
+  "তাই একটা ত্রিকোণ তার অর্ধেক: 1.5 ঘর।",
+  "খাড়া ত্রিকোণ একই ভাবে 1 × 2 এর অর্ধেক: 1 ঘর।",
 ];
 
 export function HalfABox() {
@@ -1487,11 +1487,11 @@ export function HalfABox() {
 
 const CF = makeFrame(-0.3, 4.3, -0.3, 3.3, 20, 3);
 const X5B_SAY = [
-  "জমির দুই পাশ: (a, c) আর (b, d).",
-  "প্রথম পাশ দাঁড়ালো প্রথম column হয়ে.",
-  "দ্বিতীয় পাশ দ্বিতীয় column.",
-  "এক কোনাকুনি: a আর d. গুণ, ad.",
-  "আরেক কোনাকুনি: b আর c. বাদ দিলে ad − bc.",
+  "জমির দুই পাশ: (a, c) আর (b, d)।",
+  "প্রথম পাশ দাঁড়ালো প্রথম column হয়ে।",
+  "দ্বিতীয় পাশ দ্বিতীয় column।",
+  "এক কোনাকুনি: a আর d। গুণ, ad।",
+  "আরেক কোনাকুনি: b আর c। বাদ দিলে ad − bc।",
 ];
 
 export function SidesToLens() {
@@ -1544,11 +1544,11 @@ const BO_ROWS: [string, boolean][] = [
   ["সামিন: 5", true],
 ];
 const BO_SAY = [
-  "চারটা card.",
-  "করিমের 12 পুরা বাক্স. কোনাগুলো আপার না.",
-  "মামার 7 শুধু পাশ দেখে, হেলানো দেখে না.",
-  "নাসিবের 6 আন্দাজ. কোনা বাদ গেলো 7, 6 না.",
-  "সামিনের 5. বাক্স থেকে কোনা বাদ, 12 − 7 = 5.",
+  "চারটা card।",
+  "করিমের 12 পুরা বাক্স। কোনাগুলো আপার না।",
+  "মামার 7 শুধু পাশ দেখে, হেলানো দেখে না।",
+  "নাসিবের 6 আন্দাজ। কোনা বাদ গেলো 7, 6 না।",
+  "সামিনের 5। বাক্স থেকে কোনা বাদ, 12 − 7 = 5।",
 ];
 
 export function BetOpen({}: Story) {
@@ -1573,10 +1573,10 @@ export function BetOpen({}: Story) {
 //      ‖v‖, double bars round an arrow, is its length (3.x).
 
 const X9Q_SAY = [
-  "দুই পাশে খাড়া দাগ, ভেতরে matrix: determinant.",
-  "আপার জমির lens: 3·2 − 1·1 = 5.",
-  "দাগের ভেতরে একটা সংখ্যা: minus টা ফেলে দাও. 3.",
-  "দুইটা করে দাগ, ভেতরে arrow: arrow কত লম্বা. 3.16.",
+  "দুই পাশে খাড়া দাগ, ভেতরে matrix: determinant।",
+  "আপার জমির lens: 3·2 − 1·1 = 5।",
+  "দাগের ভেতরে একটা সংখ্যা: minus টা ফেলে দাও। 3.",
+  "দুইটা করে দাগ, ভেতরে arrow: arrow কত লম্বা। 3.16.",
 ];
 
 export function ThreeBars() {

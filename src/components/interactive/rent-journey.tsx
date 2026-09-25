@@ -125,7 +125,7 @@ export function DalalArrives({}: Story) {
         <NameTag x={96} y={S1_GROUND + 14} name="দালাল ভাই" />
         <PhoneCard x={124} y={S1_GROUND - 44} says={k === 0 ? "rent app" : k === 1 ? "+3000" : "−2000"} />
         {k >= 2 && <CastCard x={142} y={S1_GROUND - 20} text="+1 flat" tone="amber" />}
-        {k === 1 && <Bubble x={96} y={S1_GROUND - 68} side="mid" lines={["একটা বাথরুম,", "তিন হাজার টাকা."]} />}
+        {k === 1 && <Bubble x={96} y={S1_GROUND - 68} side="mid" lines={["একটা বাথরুম,", "তিন হাজার টাকা।"]} />}
         {k === 2 && <Bubble x={96} y={S1_GROUND - 68} side="mid" lines={["একটা flat বাড়াইলাম,", "এখন কয় −2000!"]} />}
         <CastPerson who="mama" x={184} y={S1_GROUND} facing={-1} mood={k >= 2 ? "puzzled" : "plain"} />
         <NameTag x={184} y={S1_GROUND + 14} name="আব্বু" />
@@ -145,10 +145,10 @@ const R1B_U = 17;
 const r1bx = (x: number) => 16 + x * R1B_U;
 const r1by = (y: number) => 100 - y * R1B_U;
 const R1B_SAY = [
-  "কালকের যমজ remote B. দুইটা button: (1, 1) আর (2, 2).",
-  "দুইটা button-ই ঠেলে একই হেলানো line বরাবর.",
-  "যতই চাপুন, remote B থামে ওই line-এর উপরেই.",
-  "পুরা floor-এ ওর দৌড় ওই এক line পর্যন্ত. বাকিটা ওর নাগালের বাইরে.",
+  "কালকের যমজ remote B। দুইটা button: (1, 1) আর (2, 2)।",
+  "দুইটা button-ই ঠেলে একই হেলানো line বরাবর।",
+  "যতই চাপুন, remote B থামে ওই line-এর উপরেই।",
+  "পুরা floor-এ ওর দৌড় ওই এক line পর্যন্ত। বাকিটা ওর নাগালের বাইরে।",
 ];
 
 /** an arrow from the floor's corner to (x, y), drawn in */
@@ -223,7 +223,7 @@ export function TwoAnswers() {
 
   const seal = () => {
     setSealed(true);
-    pass("বাজি সিল হলো. এবার খাতাটা খুলি.");
+    pass("বাজি সিল হলো। এবার খাতাটা খুলি।");
   };
 
   // what the bet claims, acted on the two price cards (never marked right or wrong):
@@ -262,7 +262,7 @@ export function TwoAnswers() {
           </div>
         ))}
       </div>
-      <div className="mt-2 text-sm font-medium leading-snug text-muted">একই খাতা, একই app. আব্বু আজ রাতেই sign করবেন. কোন সংখ্যাটা বিশ্বাস করবেন?</div>
+      <div className="mt-2 text-sm font-medium leading-snug text-muted">একই খাতা, একই app। আব্বু আজ রাতেই sign করবেন। কোন সংখ্যাটা বিশ্বাস করবেন?</div>
       <div className="mt-2 grid gap-1.5">
         {BET.map((o, i) => (
           <div key={o} className="relative">
@@ -289,10 +289,10 @@ export function TwoAnswers() {
       ) : null}
       {sealed ? (
         <div className={`${FADE} mt-2 text-center text-[0.9rem] leading-snug text-muted`}>
-          সিল হলো. উত্তরটা খাতার ভিতরেই লুকিয়ে আছে. এক screen এক screen করে বের করবো, মিলাবো একদম শেষে.
+          সিল হলো। উত্তরটা খাতার ভিতরেই লুকিয়ে আছে। এক screen এক screen করে বের করবো, মিলাবো একদম শেষে।
         </div>
       ) : null}
-      <Task done={sealed}>একটা উত্তর বেছে সিল করে দিন. ঠিক না ভুল, সেটা জানবেন অনেক পরে.</Task>
+      <Task done={sealed}>একটা উত্তর বেছে সিল করে দিন। ঠিক না ভুল, সেটা জানবেন অনেক পরে।</Task>
     </>
   );
 }
@@ -304,10 +304,10 @@ export function TwoAnswers() {
 //      the khata itself, whose columns are still a "?".
 
 const S1F_SAY = [
-  "প্রতিটা দাম সেই সময়ের খাতার সব flat দিয়ে check করা হলো.",
-  "সকাল: প্রতি বাথরুম +3000 ধরলে ছয়টা flat-ই মিলে যায়, টাকায় টাকায়.",
-  "সন্ধ্যা: −2000 ধরলে সাতটাই মিলে যায়, টাকায় টাকায়.",
-  "দুইটা নিখুঁত উত্তর. তাহলে গোলমাল খাতার ভিতরে. Column ধরে ধরে দেখতে হবে.",
+  "প্রতিটা দাম সেই সময়ের খাতার সব flat দিয়ে check করা হলো।",
+  "সকাল: প্রতি বাথরুম +3000 ধরলে ছয়টা flat-ই মিলে যায়, টাকায় টাকায়।",
+  "সন্ধ্যা: −2000 ধরলে সাতটাই মিলে যায়, টাকায় টাকায়।",
+  "দুইটা নিখুঁত উত্তর। তাহলে গোলমাল খাতার ভিতরে। Column ধরে ধরে দেখতে হবে।",
 ];
 
 export function BothFit() {
@@ -436,9 +436,9 @@ const SQM = (n: number) => r1(n / 10.76);
 const AREA_OPT = ["650", `${SQM(650)}`, "325"];
 const AREA_RIGHT = 1;
 const AREA_NOPE = [
-  "আবার 650? Unit বদলালে সংখ্যাও বদলাতে হবে. নইলে তো একই জামা.",
+  "আবার 650? Unit বদলালে সংখ্যাও বদলাতে হবে। নইলে তো একই জামা।",
   "",
-  "650-এর অর্ধেক? অর্ধেক করা মানে unit বদলানো না. Machine ভাগ দেয় 10.76 দিয়ে.",
+  "650-এর অর্ধেক? অর্ধেক করা মানে unit বদলানো না। Machine ভাগ দেয় 10.76 দিয়ে।",
 ];
 
 export function AreaTwice() {
@@ -462,7 +462,7 @@ export function AreaTwice() {
     if (filled.includes(i)) return;
     const next = [...filled, i];
     setFilled(next);
-    if (next.length === AREA_FT.length) pass("sq m column: একই তথ্য, নতুন জামা.");
+    if (next.length === AREA_FT.length) pass("sq m column: একই তথ্য, নতুন জামা।");
   };
 
   return (
@@ -502,7 +502,7 @@ export function AreaTwice() {
       </div>
       {filled.length === 0 ? (
         <>
-          <div className="mt-3 text-sm font-medium text-muted">প্রথম সারিটা নিজে করুন. 1 sq m মানে 10.76 sq ft, তাই machine ভাগ দেয়. প্রথম sq m ঘরে কত বসবে?</div>
+          <div className="mt-3 text-sm font-medium text-muted">প্রথম সারিটা নিজে করুন। 1 sq m মানে 10.76 sq ft, তাই machine ভাগ দেয়। প্রথম sq m ঘরে কত বসবে?</div>
           <div className="mt-2 grid grid-cols-3 gap-2">
             {AREA_OPT.map((o, i) => (
               <Choice key={o} n={i} look={wrong === i ? "wrong" : "idle"} disabled={false} onClick={() => pick(i)}>
@@ -518,14 +518,14 @@ export function AreaTwice() {
           {filled.includes(2) ? `${AREA_FT[2]} ÷ 10.76 = ${SQM(AREA_FT[2]).toFixed(1)}` : ""}
         </div>
       )}
-      {filled.length > 1 && !done ? <div className="text-center text-sm text-muted">Flat টা দেখারও দরকার পড়ে নাই.</div> : null}
+      {filled.length > 1 && !done ? <div className="text-center text-sm text-muted">Flat টা দেখারও দরকার পড়ে নাই।</div> : null}
       {wrong !== null && !filled.length ? <Nope key={miss}>{AREA_NOPE[wrong]}</Nope> : null}
       {done ? (
         <div className={`${FADE} mx-auto mt-3 max-w-sm rounded-2xl bg-accent/10 px-4 py-2.5 text-center text-[0.95rem] text-accent-text`}>
-          ছয়টা সংখ্যা, তথ্য তিনটা. sq m column যা বলতে পারতো, sq ft column সেটা আগেই বলে দিয়েছে.
+          ছয়টা সংখ্যা, তথ্য তিনটা। sq m column যা বলতে পারতো, sq ft column সেটা আগেই বলে দিয়েছে।
         </div>
       ) : null}
-      <Task done={done}>sq m column টা ভরে ফেলুন. প্রথম সারি নিজে, বাকি দুইটা machine-কে দিয়ে.</Task>
+      <Task done={done}>sq m column টা ভরে ফেলুন। প্রথম সারি নিজে, বাকি দুইটা machine-কে দিয়ে।</Task>
     </>
   );
 }
@@ -536,10 +536,10 @@ export function AreaTwice() {
 //      column and the sq ft column rebuilds it, ÷ 10.76, row after row.
 
 const S2F_SAY = [
-  "প্রথম পাতায় ছয়টা সংখ্যা.",
-  "কিন্তু প্রতিটা সারি একটা flat-এর একটাই কথা বলে: ওর সাইজ. মানে তথ্য তিনটা.",
-  "sq m column টা ঢেকে দিন. sq ft-কে 10.76 দিয়ে ভাগ দিলে হুবহু ফেরত আসে.",
-  "নতুন কিছু নাই. পুরানো column, নতুন জামায়.",
+  "প্রথম পাতায় ছয়টা সংখ্যা।",
+  "কিন্তু প্রতিটা সারি একটা flat-এর একটাই কথা বলে: ওর সাইজ। মানে তথ্য তিনটা।",
+  "sq m column টা ঢেকে দিন। sq ft-কে 10.76 দিয়ে ভাগ দিলে হুবহু ফেরত আসে।",
+  "নতুন কিছু নাই। পুরানো column, নতুন জামায়।",
 ];
 
 export function ThreeFacts() {
@@ -599,7 +599,7 @@ const S3A_COLS = [
   { x: 160, head: "ভাড়া", key: "rent" },
 ] as const;
 
-const S3A_THINK: string[][] = [[], ["bed-এর কপি না."], ["bath-এরও কপি না."], ["flat বদলালে", "এটাও বদলায়."], ["তাহলে এটা কি", "নতুন তথ্য?"]];
+const S3A_THINK: string[][] = [[], ["bed-এর কপি না।"], ["bath-এরও কপি না।"], ["flat বদলালে", "এটাও বদলায়।"], ["তাহলে এটা কি", "নতুন তথ্য?"]];
 
 export function SaminSquints({}: Story) {
   const s = useScene(4, [700, 2000, 2000, 2200, 2200]);
@@ -608,7 +608,7 @@ export function SaminSquints({}: Story) {
 
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="room" label="খাতার দ্বিতীয় পাতা: bed, bath, মোট ঘর, ভাড়া. সামিন মোট ঘরের column টা দেখছে: bed-এর কপি না, bath-এর কপি না, flat বদলালে বদলায়. তাহলে কি নতুন তথ্য?">
+      <Stage backdrop="room" label="খাতার দ্বিতীয় পাতা: bed, bath, মোট ঘর, ভাড়া। সামিন মোট ঘরের column টা দেখছে: bed-এর কপি না, bath-এর কপি না, flat বদলালে বদলায়। তাহলে কি নতুন তথ্য?">
         <rect x={16} y={10} width={168} height={128} rx={3} fill="#fbf6e9" stroke="#c9b98f" strokeWidth={1} />
         {S3A_COLS.map((c) => (
           <g key={c.key}>
@@ -659,10 +659,10 @@ export function SaminSquints({}: Story) {
 //     it: a wrong rule breaks on flat 1, the right one ticks down all six.
 
 const RULES = [
-  { label: "bed × 2", note: "Flat 1: 2 × 2 = 4. কিন্তু খাতায় লেখা 3." },
+  { label: "bed × 2", note: "Flat 1: 2 × 2 = 4. কিন্তু খাতায় লেখা 3।" },
   { label: "bed + bath", note: "" },
-  { label: "bath + 1", note: "Flat 1: 1 + 1 = 2. কিন্তু খাতায় লেখা 3." },
-  { label: "কোনো নিয়মই নাই", note: "Flat 1-এর মোট ঘর 3. কিছু একটা তো এটা ঠিক করে দিয়েছে. কী সেটা?" },
+  { label: "bath + 1", note: "Flat 1: 1 + 1 = 2. কিন্তু খাতায় লেখা 3।" },
+  { label: "কোনো নিয়মই নাই", note: "Flat 1-এর মোট ঘর 3। কিছু একটা তো এটা ঠিক করে দিয়েছে। কী সেটা?" },
 ];
 
 /** what a rule says for flat f, or null when it claims nothing */
@@ -676,7 +676,7 @@ export function TotalColumn() {
 
   const run = (i: number) => {
     setRule(i);
-    if (i === 1) pass("কপি না, তবু বাকি দুইটা দিয়েই বানানো.");
+    if (i === 1) pass("কপি না, তবু বাকি দুইটা দিয়েই বানানো।");
   };
 
   return (
@@ -735,10 +735,10 @@ export function TotalColumn() {
       {rule !== null && !done ? <Nope key={rule}>{RULES[rule].note}</Nope> : null}
       {done ? (
         <div className={`${FADE} mx-auto mt-2 max-w-sm rounded-2xl bg-accent/10 px-3 py-1.5 text-center text-[0.85rem] leading-snug text-accent-text`}>
-          ছয় সারি, ছয়বারই মিললো. মোট ঘরের column কারো কপি না. তবু bed আর bath মিলে ওকে পুরাটা বানিয়ে দেয়.
+          ছয় সারি, ছয়বারই মিললো। মোট ঘরের column কারো কপি না। তবু bed আর bath মিলে ওকে পুরাটা বানিয়ে দেয়।
         </div>
       ) : null}
-      <Task done={done}>মোট ঘরের column কোন নিয়ম মানে, খুঁজে বের করুন. প্রতিটা সারিতে check হবে.</Task>
+      <Task done={done}>মোট ঘরের column কোন নিয়ম মানে, খুঁজে বের করুন। প্রতিটা সারিতে check হবে।</Task>
     </>
   );
 }
@@ -749,10 +749,10 @@ export function TotalColumn() {
 //      time, and the name "extra column" lands on it last.
 
 const S3F_SAY = [
-  "ছয়টা flat-এর bed আর bath. মোট ঘরের column ফাঁকা থাকুক.",
+  "ছয়টা flat-এর bed আর bath। মোট ঘরের column ফাঁকা থাকুক।",
   "সারি ধরে ধরে bed + bath: 3, 5, 4 …",
-  "… 4, 6, 2. একটা flat-ও না দেখে সবগুলা মোট ঘর ফেরত আসলো.",
-  "যে column-কে বাকিরা বানিয়ে দিতে পারে, এখন থেকে ওর নাম বাড়তি column.",
+  "… 4, 6, 2. একটা flat-ও না দেখে সবগুলা মোট ঘর ফেরত আসলো।",
+  "যে column-কে বাকিরা বানিয়ে দিতে পারে, এখন থেকে ওর নাম বাড়তি column।",
 ];
 
 export function BuiltRowByRow() {
@@ -808,7 +808,7 @@ export function KnobCards({}: Story) {
       <Stage backdrop="room" label="দালাল ভাই বললেন মেশিনের হিসাব ভুল হয় না; আব্বু জিজ্ঞেস করলেন তাহলে দুই দাম কেন; ফাহিম phone হাতে নিলো, history-তে দুইটা knob card">
         <CastPerson who="karim" x={70} y={S1_GROUND} facing={1} arm={k === 1 ? "point" : "down"} mood={k >= 2 ? "puzzled" : "smug"} />
         <NameTag x={70} y={S1_GROUND + 14} name="দালাল ভাই" />
-        {k === 1 && <Bubble x={70} y={S1_GROUND - 68} side="right" lines={["মেশিনের হিসাব ভাই,", "ভুল হয় না."]} />}
+        {k === 1 && <Bubble x={70} y={S1_GROUND - 68} side="right" lines={["মেশিনের হিসাব ভাই,", "ভুল হয় না।"]} />}
         <CastPerson who="fahim" x={k >= 3 ? 124 : 172} y={S1_GROUND} facing={-1} walking={k === 3} arm={k >= 3 ? "hold" : "down"} mood="plain" label />
         {k >= 3 && <PhoneCard x={104} y={S1_GROUND - 36} says="knob" />}
         <CastPerson who="mama" x={250} y={S1_GROUND} facing={-1} mood={k >= 2 ? "puzzled" : "plain"} />
@@ -849,7 +849,7 @@ export function TwoKnobSets() {
     }
     if (!done) {
       setDone(true);
-      pass("দুইটা knob-set, ভাড়া হুবহু একই.");
+      pass("দুইটা knob-set, ভাড়া হুবহু একই।");
     }
   };
 
@@ -880,10 +880,10 @@ export function TwoKnobSets() {
       <Ticks items={FLATS.map((_, i) => [`flat ${i + 1}`, i < at || done] as [string, boolean])} />
       {done ? (
         <div className={`${FADE} mx-auto mt-3 max-w-sm rounded-2xl bg-accent/10 px-4 py-2.5 text-center text-[0.95rem] text-accent-text`}>
-          ছয়টা flat, এক টাকারও পার্থক্য নাই. কোন knob-set আসল, app সেটা বলতেই পারে না. তাই এক বেলা বলে 3000, আরেক বেলা −2000.
+          ছয়টা flat, এক টাকারও পার্থক্য নাই। কোন knob-set আসল, app সেটা বলতেই পারে না। তাই এক বেলা বলে 3000, আরেক বেলা −2000।
         </div>
       ) : null}
-      <Task done={done}>দুইটা knob-set ছয়টা flat-এই চালান. চোখ রাখুন ভাড়ার উপর.</Task>
+      <Task done={done}>দুইটা knob-set ছয়টা flat-এই চালান। চোখ রাখুন ভাড়ার উপর।</Task>
     </>
   );
 }
@@ -904,11 +904,11 @@ export function KnobShuffle() {
       scene={s}
       caption={
         k === 0 ? (
-          "Flat 1-এ সকালের knob: প্রতি bed 5, প্রতি bath 3, মোট ঘরে 0. ভাড়া 13."
+          "Flat 1-এ সকালের knob: প্রতি bed 5, প্রতি bath 3, মোট ঘরে 0। ভাড়া 13।"
         ) : k < 3 ? (
-          "Credit সরান: bed আর bath থেকে কমিয়ে মোট ঘরে তুলে দিন. যত খুশি."
+          "Credit সরান: bed আর bath থেকে কমিয়ে মোট ঘরে তুলে দিন। যত খুশি।"
         ) : (
-          <span className={FADE}>সন্ধ্যার knob (0, −2, 5). Flat 1-এর ভাড়া টেরও পেলো না. কোনো flat-এরই পায় না.</span>
+          <span className={FADE}>সন্ধ্যার knob (0, −2, 5)। Flat 1-এর ভাড়া টেরও পেলো না। কোনো flat-এরই পায় না।</span>
         )
       }
     >
@@ -941,10 +941,10 @@ export function KnobShuffle() {
 //      picks a set: 3000 in the morning, −2000 in the evening.
 
 const S4Q_SAY = [
-  "একই খাতা, দুইটা app.",
-  "ভালো app হলে দাম বলতেই রাজি হবে না.",
-  "দালাল ভাইয়ের app চুপচাপ একটা set বেছে নিলো. সকালে 3000.",
-  "সন্ধ্যায় −2000. আশা করে বসে আছে, সব ঠিক আছে.",
+  "একই খাতা, দুইটা app।",
+  "ভালো app হলে দাম বলতেই রাজি হবে না।",
+  "দালাল ভাইয়ের app চুপচাপ একটা set বেছে নিলো। সকালে 3000।",
+  "সন্ধ্যায় −2000। আশা করে বসে আছে, সব ঠিক আছে।",
 ];
 
 function S4QPhone({ x, name, says, tone }: { x: number; name: string; says: string; tone: string }) {
@@ -1014,7 +1014,7 @@ export function YourShuffle() {
     setKnobs(next);
     if (next.every((k, j) => k === SHUF_GOAL[j])) {
       setDone(true);
-      pass("3 হাজার কমালেন, মোট ঘর 3 ফেরত দিলো.");
+      pass("3 হাজার কমালেন, মোট ঘর 3 ফেরত দিলো।");
     }
   };
 
@@ -1056,12 +1056,12 @@ export function YourShuffle() {
             {!done ? (
               <div className="mt-1 text-center text-[0.85rem] font-medium leading-snug text-muted">
                 {!moved
-                  ? "এবার bed-এর knob থেকে 1 কমান, bath-এর knob থেকেও 1."
+                  ? "এবার bed-এর knob থেকে 1 কমান, bath-এর knob থেকেও 1।"
                   : gap === 0
-                    ? "আবার 13. তবে এটা 2-আর-2 এর shuffle, আপনার 1-আর-1 না."
+                    ? "আবার 13। তবে এটা 2-আর-2 এর shuffle, আপনার 1-আর-1 না।"
                     : gap > 0
-                      ? `13 থেকে ${gap} কম. মোট ঘরের knob-এর কাছে ${gap} পাওনা.`
-                      : `13 থেকে ${-gap} বেশি হয়ে গেলো.`}
+                      ? `13 থেকে ${gap} কম। মোট ঘরের knob-এর কাছে ${gap} পাওনা।`
+                      : `13 থেকে ${-gap} বেশি হয়ে গেলো।`}
               </div>
             ) : null}
           </>
@@ -1069,11 +1069,11 @@ export function YourShuffle() {
       </div>
       {done ? (
         <div className={`${FADE} mx-auto mt-2 max-w-sm rounded-2xl bg-accent/10 px-4 py-2.5 text-center text-[0.95rem] leading-snug text-accent-text`}>
-          প্রতি bed −1 নিলো 2, প্রতি bath −1 নিলো 1. মোট ঘরের knob 3 ঘর × 1 দিয়ে তিনটাই ফেরত দিলো. ভাড়া আবার 13.
+          প্রতি bed −1 নিলো 2, প্রতি bath −1 নিলো 1। মোট ঘরের knob 3 ঘর × 1 দিয়ে তিনটাই ফেরত দিলো। ভাড়া আবার 13।
         </div>
       ) : null}
       <Ticks items={[["সকালের হিসাব", ran], ["shuffle করে 13", done]]} />
-      <Task done={done}>আগে সকালের knob চালান. তারপর 1-আর-1 shuffle করুন, আর শুধু মোট ঘরের knob দিয়ে ভাড়াটা বাঁচান.</Task>
+      <Task done={done}>আগে সকালের knob চালান। তারপর 1-আর-1 shuffle করুন, আর শুধু মোট ঘরের knob দিয়ে ভাড়াটা বাঁচান।</Task>
     </>
   );
 }
@@ -1085,11 +1085,11 @@ export function YourShuffle() {
 //      blocks back. The captions are the author's slow sum, beat by beat.
 
 const S5F_SAY = [
-  "Flat 1-এ সকালের knob: 2 bed-এর জন্য 10, 1 bath-এর জন্য 3, মোট ঘরে 0. ভাড়া 13.",
-  "প্রতি bed −1, আর flat টায় bed দুইটা. তাই 2 কমলো.",
-  "প্রতি bath −1, আরো 1 কমলো. মোট 3 হাজার গায়েব.",
-  "মোট ঘরের knob টাকা দেয় ঘর গুনে. flat 1-এ ঘর কয়টা? 3টা. প্রতি ঘরে 1 দিলেই তিনটাই ফেরত.",
-  "আপনার set (4, 2, 1)-ও flat 1-এর ভাড়া বলে 13, টাকায় টাকায়.",
+  "Flat 1-এ সকালের knob: 2 bed-এর জন্য 10, 1 bath-এর জন্য 3, মোট ঘরে 0। ভাড়া 13।",
+  "প্রতি bed −1, আর flat টায় bed দুইটা। তাই 2 কমলো।",
+  "প্রতি bath −1, আরো 1 কমলো। মোট 3 হাজার গায়েব।",
+  "মোট ঘরের knob টাকা দেয় ঘর গুনে। flat 1-এ ঘর কয়টা? 3টা। প্রতি ঘরে 1 দিলেই তিনটাই ফেরত।",
+  "আপনার set (4, 2, 1)-ও flat 1-এর ভাড়া বলে 13, টাকায় টাকায়।",
 ];
 
 /** one row of blocks: `have` shown, `gone` of them struck off at the end, `add` new ones popping in */
@@ -1146,9 +1146,9 @@ export function SlowSum() {
 //      can't tell the three apart.
 
 const S5Q_SAY = [
-  "App-এর কাছে ছিল দুইটা set. দুইটাই ছয়টা flat-এ মিলে.",
-  "আপনি হাতে বানালেন তৃতীয়টা, (4, 2, 1). এটাও ছয়টাতেই মিলে.",
-  "খাতার কোনো কিছুই এই তিনটাকে আলাদা করতে পারবে না.",
+  "App-এর কাছে ছিল দুইটা set। দুইটাই ছয়টা flat-এ মিলে।",
+  "আপনি হাতে বানালেন তৃতীয়টা, (4, 2, 1)। এটাও ছয়টাতেই মিলে।",
+  "খাতার কোনো কিছুই এই তিনটাকে আলাদা করতে পারবে না।",
 ];
 
 export function ThirdSet() {
@@ -1239,14 +1239,14 @@ export function BagPages({}: Story) {
       <Stage backdrop="room" label="সামিন দালাল ভাইয়ের ব্যাগ খুললো, ভিতরে পাঁচটা আলগা পাতা, প্রতিটায় ছোট একটা table">
         <CastPerson who="karim" x={62} y={S1_GROUND} facing={1} arm={k === 2 ? "point" : "down"} mood={k >= 2 ? "shout" : "plain"} />
         <NameTag x={62} y={S1_GROUND + 14} name="দালাল ভাই" />
-        {k === 2 && <Bubble x={62} y={S1_GROUND - 68} side="right" lines={["ওইগুলা ধইরো না মিয়া,", "পুরান কাগজ."]} />}
+        {k === 2 && <Bubble x={62} y={S1_GROUND - 68} side="right" lines={["ওইগুলা ধইরো না মিয়া,", "পুরান কাগজ।"]} />}
         <BagProp x={128} y={S1_GROUND} open={k >= 1} />
         {k >= 1 &&
           [-2, -1, 0, 1, 2].map((d, i) => (
             <LoosePage key={d} x={k >= 3 ? 112 + i * 26 : 128 + d * 9} y={k >= 3 ? 30 : S1_GROUND - 40 + Math.abs(d) * 3} tilt={k >= 3 ? 0 : d * 14} />
           ))}
         <CastPerson who="samin" x={k >= 1 ? 172 : 250} y={S1_GROUND} facing={-1} walking={k === 1} arm={k >= 3 ? "hold" : "down"} mood="plain" label />
-        {k >= 3 && <Bubble x={172} y={S1_GROUND - 68} side="right" lines={["পাঁচটা পাতা.", "পাঁচটা table."]} />}
+        {k >= 3 && <Bubble x={172} y={S1_GROUND - 68} side="right" lines={["পাঁচটা পাতা।", "পাঁচটা table।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1268,7 +1268,7 @@ const PAGES: { name: string; head: string[]; rows: number[][]; extra: number[]; 
       [8000, 8],
     ],
     extra: [0, 1],
-    recipe: "× 1000. একই ভাড়া, মোটা জামায়. যেকোনো একটা column বাদ দিলেই চলে.",
+    recipe: "× 1000. একই ভাড়া, মোটা জামায়। যেকোনো একটা column বাদ দিলেই চলে।",
     wrongCol: "",
   },
   {
@@ -1280,8 +1280,8 @@ const PAGES: { name: string; head: string[]; rows: number[][]; extra: number[]; 
       [1, 1, 2],
     ],
     extra: [2],
-    recipe: "bed + bath. এই পুরা journey যে column নিয়ে.",
-    wrongCol: "ওটা তো নিজের মতো বদলায়. বাকি দুইটা ওকে ঠিক করে দেয় না.",
+    recipe: "bed + bath. এই পুরা journey যে column নিয়ে।",
+    wrongCol: "ওটা তো নিজের মতো বদলায়। বাকি দুইটা ওকে ঠিক করে দেয় না।",
   },
   {
     name: "স্কুলের পাতা",
@@ -1292,7 +1292,7 @@ const PAGES: { name: string; head: string[]; rows: number[][]; extra: number[]; 
       [48, 52],
     ],
     extra: [0, 1],
-    recipe: "দুইটা মিলে সবসময় 100. একটা জানলেই আরেকটা বানানো যায়.",
+    recipe: "দুইটা মিলে সবসময় 100। একটা জানলেই আরেকটা বানানো যায়।",
     wrongCol: "",
   },
   {
@@ -1304,7 +1304,7 @@ const PAGES: { name: string; head: string[]; rows: number[][]; extra: number[]; 
       [0, 0, 1, 0],
     ],
     extra: [0, 1, 2, 3],
-    recipe: "প্রতিটা সারির যোগফল 1. যেকোনো একটা column বাদ দিন, বাকিরা ওকে বানিয়ে দিবে.",
+    recipe: "প্রতিটা সারির যোগফল 1। যেকোনো একটা column বাদ দিন, বাকিরা ওকে বানিয়ে দিবে।",
     wrongCol: "",
   },
   {
@@ -1316,8 +1316,8 @@ const PAGES: { name: string; head: string[]; rows: number[][]; extra: number[]; 
       [1, 4],
     ],
     extra: [],
-    recipe: "দুইটার মধ্যে কোনো নিয়ম নাই. এই পাতায় কেউ বাড়তি না.",
-    wrongCol: "কোন column ওকে ঠিক করে দেয়? কেউ না.",
+    recipe: "দুইটার মধ্যে কোনো নিয়ম নাই। এই পাতায় কেউ বাড়তি না।",
+    wrongCol: "কোন column ওকে ঠিক করে দেয়? কেউ না।",
   },
 ];
 
@@ -1343,7 +1343,7 @@ export function SpotTheExtra() {
     setShown(true);
     if (at === PAGES.length - 1 && !done) {
       setDone(true);
-      pass("বাড়তি মানে: বাকিরা ওকে বানিয়ে দিতে পারে.");
+      pass("বাড়তি মানে: বাকিরা ওকে বানিয়ে দিতে পারে।");
     }
   };
   const next = () => {
@@ -1408,7 +1408,7 @@ export function SpotTheExtra() {
       </div>
       {miss > 0 && !shown ? (
         <Nope key={`${at}-${miss}`}>
-          {p.wrongCol && bad !== -1 ? p.wrongCol : miss === 1 ? "এই পাতার একটা column কখনো চমকায় না. ওটা খুঁজুন." : "আরেকবার দেখুন: একটা column-কে বাকিরা বেঁধে রেখেছে."}
+          {p.wrongCol && bad !== -1 ? p.wrongCol : miss === 1 ? "এই পাতার একটা column কখনো চমকায় না। ওটা খুঁজুন।" : "আরেকবার দেখুন: একটা column-কে বাকিরা বেঁধে রেখেছে।"}
         </Nope>
       ) : null}
       {shown ? (
@@ -1423,7 +1423,7 @@ export function SpotTheExtra() {
           ) : null}
         </>
       ) : null}
-      <Task done={done}>পাঁচটা পাতা. প্রতিটায় যে column-কে বাকিরা বানিয়ে দিতে পারে, সেটায় tap করুন. নয়তো বলুন কোনোটাই বাড়তি না.</Task>
+      <Task done={done}>পাঁচটা পাতা। প্রতিটায় যে column-কে বাকিরা বানিয়ে দিতে পারে, সেটায় tap করুন। নয়তো বলুন কোনোটাই বাড়তি না।</Task>
     </>
   );
 }
@@ -1435,10 +1435,10 @@ export function SpotTheExtra() {
 //      jumps about: 1, −2, 3. Two honest facts.
 
 const TP9_SAY = [
-  "দালাল ভাইয়ের পাতা আর শেষ পাতা, পাশাপাশি.",
-  "দালালের পাতায় মোট ঘর থেকে (bed + bath) বাদ দিলে 0, 0, 0. ওই column কখনো চমকায় না.",
-  "শেষ পাতায় তলা থেকে bed বাদ দিলে 1, তারপর −2, তারপর 3. লাফাচ্ছে.",
-  "Bed আর তলার মধ্যে কোনো নিয়ম নাই. দুইটাই সৎ তথ্য, কোনোটাই বাড়তি না.",
+  "দালাল ভাইয়ের পাতা আর শেষ পাতা, পাশাপাশি।",
+  "দালালের পাতায় মোট ঘর থেকে (bed + bath) বাদ দিলে 0, 0, 0। ওই column কখনো চমকায় না।",
+  "শেষ পাতায় তলা থেকে bed বাদ দিলে 1, তারপর −2, তারপর 3। লাফাচ্ছে।",
+  "Bed আর তলার মধ্যে কোনো নিয়ম নাই। দুইটাই সৎ তথ্য, কোনোটাই বাড়তি না।",
 ];
 
 function MiniPage({ head, rows, test, on, good }: { head: string[]; rows: number[][]; test: (r: number[]) => number; on: boolean; good: boolean }) {
@@ -1521,7 +1521,7 @@ export function FreeRefresh({}: Story) {
               0
             </text>
             <text x={248} y={79} textAnchor="middle" fontSize={9} fontWeight={700} fill="#0f766e">
-              টাকা. ফ্রি.
+              টাকা। ফ্রি।
             </text>
             <path d="M206 80L164 98" stroke="#0f172a" strokeWidth={1} strokeDasharray="2 2" />
           </g>
@@ -1545,9 +1545,9 @@ const X7_SETS: number[][] = [
 ];
 const X7_RIGHT = 1;
 const X7_NOPE = [
-  "শুধু bath-এর knob 0 করলেন. ওই 3 হাজার কেউ ফেরত দিলো না. তাই প্রতিটা flat ছোট পড়লো, যত bath তত হাজার.",
+  "শুধু bath-এর knob 0 করলেন। ওই 3 হাজার কেউ ফেরত দিলো না। তাই প্রতিটা flat ছোট পড়লো, যত bath তত হাজার।",
   "",
-  "Bed আর bath থেকে 3 করে কমালেন, কিন্তু মোট ঘর ফেরত দিলো 2 করে. প্রতিটা flat ঘর প্রতি 1 হাজার ছোট পড়লো.",
+  "Bed আর bath থেকে 3 করে কমালেন, কিন্তু মোট ঘর ফেরত দিলো 2 করে। প্রতিটা flat ঘর প্রতি 1 হাজার ছোট পড়লো।",
 ];
 const X7_Y = (rent: number) => 104 - rent * 3.3;
 
@@ -1580,7 +1580,7 @@ export function FreeBath() {
   const choose = (i: number) => {
     if (right) return;
     setPick(i);
-    if (i === X7_RIGHT) pass("বাথরুম 0 টাকা, তবু ছয়টা ভাড়াই মিললো.");
+    if (i === X7_RIGHT) pass("বাথরুম 0 টাকা, তবু ছয়টা ভাড়াই মিললো।");
     else setMiss((m) => m + 1);
   };
 
@@ -1628,10 +1628,10 @@ export function FreeBath() {
       {pick !== null && !right ? <Nope key={miss}>{X7_NOPE[pick]}</Nope> : null}
       {right ? (
         <div className={`${FADE} mx-auto mt-2 max-w-sm rounded-2xl bg-accent/10 px-3 py-1.5 text-center text-[0.85rem] leading-snug text-accent-text`}>
-          Bed আর bath থেকে 3 করে কমলো, মোট ঘর প্রতি ঘরে 3 ফেরত দিলো. বাথরুম ফ্রি, তবু একটা ভাড়াও নড়ে নাই.
+          Bed আর bath থেকে 3 করে কমলো, মোট ঘর প্রতি ঘরে 3 ফেরত দিলো। বাথরুম ফ্রি, তবু একটা ভাড়াও নড়ে নাই।
         </div>
       ) : null}
-      <Task done={right}>কোন knob-set (bed, bath, মোট ঘর) চালালে ছয়টা bar-ই খাতার দাগে গিয়ে থামে? বেছে app চালান.</Task>
+      <Task done={right}>কোন knob-set (bed, bath, মোট ঘর) চালালে ছয়টা bar-ই খাতার দাগে গিয়ে থামে? বেছে app চালান।</Task>
     </>
   );
 }
@@ -1643,11 +1643,11 @@ export function FreeBath() {
 //      slides from +3000 to −2000 while every set still fits every flat.
 
 const X7F_SAY = [
-  "সকালের set, c = 0. একটা বাথরুম +3000.",
-  "c = 1: আপনার হাতে বানানো set. বাথরুম +2000.",
-  "c = 3: এইমাত্রের ফ্রি বাথরুম.",
-  "c = 5: সন্ধ্যার set. বাথরুম −2000.",
-  "প্রতিটা set ছয়টা flat-এই হুবহু মিলে. মাঝের ভগ্নাংশগুলাও মিলে. App যেকোনোটা তুলে নিতে পারে.",
+  "সকালের set, c = 0। একটা বাথরুম +3000।",
+  "c = 1: আপনার হাতে বানানো set। বাথরুম +2000।",
+  "c = 3: এইমাত্রের ফ্রি বাথরুম।",
+  "c = 5: সন্ধ্যার set। বাথরুম −2000।",
+  "প্রতিটা set ছয়টা flat-এই হুবহু মিলে। মাঝের ভগ্নাংশগুলাও মিলে। App যেকোনোটা তুলে নিতে পারে।",
 ];
 
 export function KnobFamily() {
@@ -1736,10 +1736,10 @@ export function AbbuSigns({}: Story) {
       <Stage backdrop="evening" label="সন্ধ্যা: আব্বুর হাতে কলম, দালাল ভাই অপেক্ষা করছেন, ফাহিম খাতা থেকে মোট ঘরের column কেটে দিলো">
         <CastPerson who="mama" x={96} y={S1_GROUND} facing={1} arm="hold" mood="plain" />
         <NameTag x={96} y={S1_GROUND + 14} name="আব্বু" />
-        {k === 1 && <Bubble x={96} y={S1_GROUND - 68} side="mid" lines={["sign-এর আগে খাতায়", "ছোট একটা অপারেশন."]} />}
+        {k === 1 && <Bubble x={96} y={S1_GROUND - 68} side="mid" lines={["sign-এর আগে খাতায়", "ছোট একটা অপারেশন।"]} />}
         <CastPerson who="fahim" x={184} y={S1_GROUND} facing={-1} arm={k >= 2 ? "hold" : "down"} mood="plain" label />
         {k >= 2 && <PaperTag x={184} y={S1_GROUND - 80} text="মোট ঘর" />}
-        {k === 2 && <Bubble x={184} y={S1_GROUND - 92} side="mid" lines={["এইটা. বাদ."]} />}
+        {k === 2 && <Bubble x={184} y={S1_GROUND - 92} side="mid" lines={["এইটা। বাদ।"]} />}
         <CastPerson who="karim" x={252} y={S1_GROUND} facing={-1} mood={k >= 3 ? "puzzled" : "smug"} />
         <NameTag x={252} y={S1_GROUND + 14} name="দালাল ভাই" />
         {k >= 3 && <Bubble x={252} y={S1_GROUND - 68} side="left" lines={["ঘর বাদ দিলে", "ভাড়া কমবো নাকি?"]} />}
@@ -1762,7 +1762,7 @@ export function RerunApp() {
   const run = () => setRuns(runs + 1);
   const settle = () => {
     setSettled(true);
-    pass("Column বাদ, এখন প্রতিবার 3000.");
+    pass("Column বাদ, এখন প্রতিবার 3000।");
   };
 
   return (
@@ -1825,7 +1825,7 @@ export function RerunApp() {
               <span>A: 3 bed, 1 bath · 18000</span>
               <span>B: 3 bed, 2 bath · 22000</span>
             </div>
-            <div className="mt-0.5 text-[0.8rem] text-muted">একটা বাথরুম বেশি, দাম 4000 বেশি. বাথরুমের দাম 3000. তাহলে B-র দামের 1000 শুধু শুধু চাওয়া. আব্বু A নিলেন.</div>
+            <div className="mt-0.5 text-[0.8rem] text-muted">একটা বাথরুম বেশি, দাম 4000 বেশি। বাথরুমের দাম 3000। তাহলে B-র দামের 1000 শুধু শুধু চাওয়া। আব্বু A নিলেন।</div>
           </div>
           {!settled ? (
             <div className="mt-1.5 flex justify-center">
@@ -1835,12 +1835,12 @@ export function RerunApp() {
             </div>
           ) : (
             <div className={`${FADE} mx-auto mt-1.5 max-w-sm rounded-2xl bg-accent/10 px-3 py-1.5 text-center text-[0.85rem] leading-snug text-accent-text`}>
-              কোনো সংখ্যারই মানে ছিল না. দুইটা knob-set-ই মিলতো, app শুধু একটা তুলে নিচ্ছিল. Column বাদ দেওয়ার পর: 3000, প্রতিবার.
+              কোনো সংখ্যারই মানে ছিল না। দুইটা knob-set-ই মিলতো, app শুধু একটা তুলে নিচ্ছিল। Column বাদ দেওয়ার পর: 3000, প্রতিবার।
             </div>
           )}
         </>
       ) : null}
-      <Task done={settled}>বাড়তি column টা বাদ দিন, app তিনবার চালান, তারপর বাজি মিলান.</Task>
+      <Task done={settled}>বাড়তি column টা বাদ দিন, app তিনবার চালান, তারপর বাজি মিলান।</Task>
     </>
   );
 }
@@ -1851,9 +1851,9 @@ export function RerunApp() {
 //      nothing pays it back — so the knobs slide home to (5, 3).
 
 const S11F_SAY = [
-  "মোট ঘরের column নাই, তাই knob-গুলার credit সরানোর জায়গাও নাই.",
-  "Bed আর bath থেকে 1 কমান. flat 1 নেমে যায় 10-এ. ফেরত দিবে কে? মোট ঘরের knob তো নাই.",
-  "App তাই প্রতিবার (5, 3)-এ ফেরে: একটা বাথরুম ঠিক 3000.",
+  "মোট ঘরের column নাই, তাই knob-গুলার credit সরানোর জায়গাও নাই।",
+  "Bed আর bath থেকে 1 কমান। flat 1 নেমে যায় 10-এ। ফেরত দিবে কে? মোট ঘরের knob তো নাই।",
+  "App তাই প্রতিবার (5, 3)-এ ফেরে: একটা বাথরুম ঠিক 3000।",
 ];
 
 export function NoRoomToShuffle() {
@@ -1901,10 +1901,10 @@ export function NoRoomToShuffle() {
 //      small band around 3000. The band's width is drawn, not measured.
 
 const S8Q_SAY = [
-  "দুইটা খাতা. একটায় মোট ঘর হুবহু bed + bath. আরেকটায় bed + bath, সাথে একটু এদিক ওদিক.",
-  "হুবহু বাড়তি column: দাম +3000 থেকে −2000, যেকোনো দিকে যায়.",
-  "প্রায়-কপি column দামটাকে যেকোনো দিকে ঘুরিয়ে দেয় না.",
-  "তবে কাঁপায়.",
+  "দুইটা খাতা। একটায় মোট ঘর হুবহু bed + bath। আরেকটায় bed + bath, সাথে একটু এদিক ওদিক।",
+  "হুবহু বাড়তি column: দাম +3000 থেকে −2000, যেকোনো দিকে যায়।",
+  "প্রায়-কপি column দামটাকে যেকোনো দিকে ঘুরিয়ে দেয় না।",
+  "তবে কাঁপায়।",
 ];
 
 const s8x = (p: number) => 18 + ((p + 3000) / 7000) * 172;

@@ -299,7 +299,7 @@ export function TwoAnswersBet() {
   const act = usePlay(750);
   const seal = (i: number) => {
     setBet(i);
-    act.play(3, () => pass("বাজি সিল হলো. দুইটা আবার চালিয়ে দেখি."));
+    act.play(3, () => pass("বাজি সিল হলো। দুইটা আবার চালিয়ে দেখি।"));
   };
   // beats of the acted bet: 1 the mark drawn on the pages, 2 its "?", 3 sealed
   const k = bet === null ? 0 : act.running ? act.k : 3;
@@ -307,7 +307,7 @@ export function TwoAnswersBet() {
   return (
     <>
       <P_TwoPages marks={marks} q={k >= 2} />
-      <div className="mt-2 text-center text-xs text-muted">দুই পাতাতেই দুইটা arrow: (1, 0) আর (1, 1).</div>
+      <div className="mt-2 text-center text-xs text-muted">দুই পাতাতেই দুইটা arrow: (1, 0) আর (1, 1)।</div>
       <div className="mt-3 grid grid-cols-2 gap-2">
         {B1_OPTS.map((o, i) => (
           <Choice key={o} n={i} look={bet === i ? "picked" : bet !== null ? "dim" : "idle"} disabled={bet !== null} onClick={() => seal(i)}>
@@ -319,7 +319,7 @@ export function TwoAnswersBet() {
           </Choice>
         ))}
       </div>
-      <Task done={bet !== null && k >= 3}>কোনটা ভুল? একটার উপরে বাজি ধরুন. উত্তর শেষে.</Task>
+      <Task done={bet !== null && k >= 3}>কোনটা ভুল? একটার উপরে বাজি ধরুন। উত্তর শেষে।</Task>
     </>
   );
 }
@@ -337,7 +337,7 @@ export function ReplaySchool() {
     setT(v);
     if (v >= 1 && !done) {
       setDone(true);
-      pass("School নড়েনি. কাগজ বদলেছে.");
+      pass("School নড়েনি। কাগজ বদলেছে।");
     }
   };
   const end = t >= 1;
@@ -376,7 +376,7 @@ export function ReplaySchool() {
           </div>
         </div>
       </div>
-      <Task done={end}>Slider টা ডানে টেনে map এর grid কে রাস্তার grid বানান. স্কুলের দিকে চোখ রাখুন.</Task>
+      <Task done={end}>Slider টা ডানে টেনে map এর grid কে রাস্তার grid বানান। স্কুলের দিকে চোখ রাখুন।</Task>
     </>
   );
 }
@@ -397,7 +397,7 @@ export function ShearTheFlower() {
     setRx(snapped);
     if (snapped === 1 && !done) {
       setDone(true);
-      pass("এবার ফুলটা সত্যিই সরে গেলো.");
+      pass("এবার ফুলটা সত্যিই সরে গেলো।");
     }
   };
   const cols: Cols = [
@@ -439,7 +439,7 @@ export function ShearTheFlower() {
           <div className="font-mono text-lg font-bold text-cat-amber">{tupN(tip)}</div>
         </div>
       </div>
-      <Task done={rx === 1}>দ্বিতীয় দড়ির মাথা টেনে (1, 1) এর ক্রসে নিন. গাঁদা ফুলটা কোথায় যায়, দেখুন.</Task>
+      <Task done={rx === 1}>দ্বিতীয় দড়ির মাথা টেনে (1, 1) এর ক্রসে নিন। গাঁদা ফুলটা কোথায় যায়, দেখুন।</Task>
     </>
   );
 }
@@ -468,7 +468,7 @@ const PA_GHOST: [Cols, Cols][] = [
   [SHEAR, PA_LEFT],
   [PA_ID, SHEAR],
 ];
-const PA_NOPE = ["", "দুইটা grid ই হেললো একই দিকে, গলির দিকে.", "Map এর grid ও বসে থাকেনি. দুইটাই হেললো, একই রকম."];
+const PA_NOPE = ["", "দুইটা grid ই হেললো একই দিকে, গলির দিকে।", "Map এর grid ও বসে থাকেনি। দুইটাই হেললো, একই রকম।"];
 
 /** the guessed end grid, dashed, over a sheet: the lines that lean (the second family) */
 function PA_Ghost({ f, cols, sheet, tone }: { f: Frame; cols: Cols; sheet: boolean; tone: string }) {
@@ -524,7 +524,7 @@ export function PaperOrArrow() {
   const [t] = useTween([played ? 1 : 0], 1400);
   const go = () => {
     setPlayed(true);
-    run.play(1, () => pass("একটায় arrow নড়ে, আরেকটায় কাগজ."));
+    run.play(1, () => pass("একটায় arrow নড়ে, আরেকটায় কাগজ।"));
   };
   const m = partway(byCols(SHEAR), t);
   const tip = m(P_TIP);
@@ -583,7 +583,7 @@ export function PaperOrArrow() {
           </Choice>
         ))}
       </div>
-      <Task done={played}>আগে একটা guess দিন. তারপর দুইটা ছবি একসাথে চালান.</Task>
+      <Task done={played}>আগে একটা guess দিন। তারপর দুইটা ছবি একসাথে চালান।</Task>
     </>
   );
 }
@@ -612,7 +612,7 @@ export function SameMatrixBack() {
   };
   const go = () => {
     setRan(true);
-    if (hit) run.play(1, () => pass("একই grid: নতুন card থেকে পুরানো card এ ফেরত."));
+    if (hit) run.play(1, () => pass("একই grid: নতুন card থেকে পুরানো card এ ফেরত।"));
     else {
       run.play(1);
       setMiss((n) => n + 1);
@@ -650,11 +650,11 @@ export function SameMatrixBack() {
       </div>
       {over && !hit && (
         <Nope key={miss}>
-          {same(p, P_TIP) ? "(2, 3) গিয়ে পড়লো (5, 3) এ. প্রথম দিনের রিকশার মতো, স্কুল ছাড়িয়ে 3 ঘর. " : `${tup(p)} গিয়ে পড়লো ${tup(land)} এ. `}
-          হেলানোতে দ্বিতীয় সংখ্যা যতো, point ততো ঘর ডানে যায়.
+          {same(p, P_TIP) ? "(2, 3) গিয়ে পড়লো (5, 3) এ। প্রথম দিনের রিকশার মতো, স্কুল ছাড়িয়ে 3 ঘর। " : `${tup(p)} গিয়ে পড়লো ${tup(land)} এ। `}
+          হেলানোতে দ্বিতীয় সংখ্যা যতো, point ততো ঘর ডানে যায়।
         </Nope>
       )}
-      <Task done={over && hit}>কাগজের কোন point হেলানোর পরে ঠিক স্কুলের উপর পড়ে? খুঁজে বের করুন.</Task>
+      <Task done={over && hit}>কাগজের কোন point হেলানোর পরে ঠিক স্কুলের উপর পড়ে? খুঁজে বের করুন।</Task>
     </>
   );
 }
@@ -670,29 +670,29 @@ export function SameMatrixBack() {
 /** `claim`: what the wrong pick just drew, said before the truth (`why`) */
 type P_Tale = { text: string; cols: Cols; moved: boolean; why: string; claim: string };
 const YS_TALES: P_Tale[] = [
-  { text: "মোড়ের আলপনাটা এক পাক ঘুরিয়ে আঁকা হলো, রাস্তার বাঁকের সাথে মিলিয়ে.", cols: turnCols(90), moved: true, why: "রাস্তার ঘর যেখানে ছিল সেখানেই. মাছটা ঘুরে গেছে.", claim: "এখানে ঘুরলো grid, মাছ বসে রইলো." },
+  { text: "মোড়ের আলপনাটা এক পাক ঘুরিয়ে আঁকা হলো, রাস্তার বাঁকের সাথে মিলিয়ে।", cols: turnCols(90), moved: true, why: "রাস্তার ঘর যেখানে ছিল সেখানেই। মাছটা ঘুরে গেছে।", claim: "এখানে ঘুরলো grid, মাছ বসে রইলো।" },
   {
-    text: "ফাহিমের height 150 cm. স্কুলের খাতায় লেখা হলো 1.5 m.",
+    text: "ফাহিমের height 150 cm। স্কুলের খাতায় লেখা হলো 1.5 m.",
     cols: [
       [1.6, 0],
       [0, 1.6],
     ],
     moved: false,
-    why: "ফাহিম একটুও লম্বা হয়নি. শুধু মাপার ঘর বড় হয়েছে.",
-    claim: "এখানে ফাহিম নিজেই বড় হয়ে গেলো.",
+    why: "ফাহিম একটুও লম্বা হয়নি। শুধু মাপার ঘর বড় হয়েছে।",
+    claim: "এখানে ফাহিম নিজেই বড় হয়ে গেলো।",
   },
-  { text: "5.6b: word map এর নিচে grid ঘুরানো হলো. Word গুলো যেখানে ছিল, সেখানেই.", cols: turnCols(30), moved: false, why: "Word গুলো নড়েনি. ঘুরেছে শুধু grid.", claim: "এখানে word গুলোই ঘুরে গেলো." },
+  { text: "5.6b: word map এর নিচে grid ঘুরানো হলো। Word গুলো যেখানে ছিল, সেখানেই।", cols: turnCols(30), moved: false, why: "Word গুলো নড়েনি। ঘুরেছে শুধু grid।", claim: "এখানে word গুলোই ঘুরে গেলো।" },
   {
-    text: "আর্ট স্যারের notebook: মাছটা আয়নার মতো উল্টিয়ে আঁকা হলো.",
+    text: "আর্ট স্যারের notebook: মাছটা আয়নার মতো উল্টিয়ে আঁকা হলো।",
     cols: [
       [-1, 0],
       [0, 1],
     ],
     moved: true,
-    why: "মাছ উল্টে গেছে, অন্য দিকে মুখ. রাস্তার ঘর একই.",
-    claim: "এখানে উল্টালো grid, মাছ বসে রইলো.",
+    why: "মাছ উল্টে গেছে, অন্য দিকে মুখ। রাস্তার ঘর একই।",
+    claim: "এখানে উল্টালো grid, মাছ বসে রইলো।",
   },
-  { text: "প্রথম দিনের রিকশা: স্কুল map এ (2, 3), রাস্তার card এ (−1, 3).", cols: SHEAR, moved: false, why: "স্কুল এক ইঞ্চিও সরেনি. বদলেছে রাস্তার grid.", claim: "এখানে স্কুলটাই সরে গেলো." },
+  { text: "প্রথম দিনের রিকশা: স্কুল map এ (2, 3), রাস্তার card এ (−1, 3)।", cols: SHEAR, moved: false, why: "স্কুল এক ইঞ্চিও সরেনি। বদলেছে রাস্তার grid।", claim: "এখানে স্কুলটাই সরে গেলো।" },
 ];
 
 const YS_F = makeFrame(-2.2, 2.2, -1.6, 2.2, 22, 6);
@@ -789,7 +789,7 @@ export function YourStories() {
       )}
       {landed && !right && (
         <Nope key={miss}>
-          উঁহু. {tale.claim} {tale.why}
+          উঁহু। {tale.claim} {tale.why}
         </Nope>
       )}
       {landed && right && <div className={`mt-2 text-[0.95rem] text-accent-text ${FADE}`}>{tale.why}</div>}
@@ -805,7 +805,7 @@ export function YourStories() {
           </button>
         )}
       </div>
-      <Task done={landed && right && round === YS_TALES.length - 1}>পাঁচটা ঘটনা. প্রত্যেকটায় বলুন: arrow নড়েছে, নাকি কাগজ বদলেছে?</Task>
+      <Task done={landed && right && round === YS_TALES.length - 1}>পাঁচটা ঘটনা। প্রত্যেকটায় বলুন: arrow নড়েছে, নাকি কাগজ বদলেছে?</Task>
     </>
   );
 }
@@ -848,7 +848,7 @@ export function TryMoveOrRename() {
     setRan(true);
     run.play(1, () => {
       if (ok) {
-        if (round === 1) pass("সরালে গুণ 2. নাম বদলালে ভাগ 2.");
+        if (round === 1) pass("সরালে গুণ 2। নাম বদলালে ভাগ 2।");
       } else setMiss((n) => n + 1);
     });
   };
@@ -920,12 +920,12 @@ export function TryMoveOrRename() {
       {over && !ok && (
         <Nope key={miss}>
           {round === 0
-            ? `ফুল গেলো ${tupN(TM_MOVE)} এ. আপনার pin ${tupN(pin ?? [0, 0])} এ. কেন? প্রথম দড়ি এখন 2 ঘর লম্বা.`
-            : `কাগজের ${tupN(dot ?? [0, 0])} গিয়ে পড়লো ${tupN(landed ?? [0, 0])} এ, হলুদ ঘরে না. x টা দুইগুণ হয়ে যায়.`}
+            ? `ফুল গেলো ${tupN(TM_MOVE)} এ। আপনার pin ${tupN(pin ?? [0, 0])} এ। কেন? প্রথম দড়ি এখন 2 ঘর লম্বা।`
+            : `কাগজের ${tupN(dot ?? [0, 0])} গিয়ে পড়লো ${tupN(landed ?? [0, 0])} এ, হলুদ ঘরে না। x টা দুইগুণ হয়ে যায়।`}
         </Nope>
       )}
       <Task done={round === 1 && over && ok}>
-        {round === 0 ? "কাগজের (5, 3) এর ফুল দড়ি টানার পরে কোথায় যাবে? সেখানে pin বসান, তারপর টানুন." : "টানার পরে ফুল যেন হলুদ ঘরে, রাস্তার (5, 3) এ পড়ে. কাগজে ফুলটা কোথায় বসাবেন?"}
+        {round === 0 ? "কাগজের (5, 3) এর ফুল দড়ি টানার পরে কোথায় যাবে? সেখানে pin বসান, তারপর টানুন।" : "টানার পরে ফুল যেন হলুদ ঘরে, রাস্তার (5, 3) এ পড়ে। কাগজে ফুলটা কোথায় বসাবেন?"}
       </Task>
     </>
   );
@@ -940,12 +940,12 @@ export function TryMoveOrRename() {
 
 type P_Use = { name: string; shape: string; verb: boolean; why: string };
 const TF_USES: P_Use[] = [
-  { name: "ক্লাসের data: প্রতি row এ একজন student", shape: "10000 × 300", verb: false, why: "Row মানে student, column মানে feature. এটা জমা রাখা." },
-  { name: "Neural network এর একটা layer", shape: "512 × 768", verb: true, why: "Layer প্রতিটা vector কে নতুন জায়গায় পাঠায়. এটা একটা move." },
-  { name: "একটা greyscale ছবি", shape: "28 × 28", verb: false, why: "প্রতিটা ঘরে একটা pixel. ছবিটাই table." },
-  { name: "PCA এর rotation", shape: "300 × 300", verb: true, why: "PCA grid ঘুরায়. 5.6b তে দেখেছেন. এটা একটা move." },
-  { name: "Embedding table: প্রতি word এ একটা row", shape: "50000 × 300", verb: false, why: "প্রতি row এ একটা word এর সংখ্যা. জমা রাখা." },
-  { name: "System of equations, 5.5 এর দুই line এর মতো", shape: "2 × 2", verb: true, why: "প্রতিটা row একটা line. Matrix টা card কে map এ নামায়. এটা move." },
+  { name: "ক্লাসের data: প্রতি row এ একজন student", shape: "10000 × 300", verb: false, why: "Row মানে student, column মানে feature। এটা জমা রাখা।" },
+  { name: "Neural network এর একটা layer", shape: "512 × 768", verb: true, why: "Layer প্রতিটা vector কে নতুন জায়গায় পাঠায়। এটা একটা move।" },
+  { name: "একটা greyscale ছবি", shape: "28 × 28", verb: false, why: "প্রতিটা ঘরে একটা pixel। ছবিটাই table।" },
+  { name: "PCA এর rotation", shape: "300 × 300", verb: true, why: "PCA grid ঘুরায়। 5.6b তে দেখেছেন। এটা একটা move।" },
+  { name: "Embedding table: প্রতি word এ একটা row", shape: "50000 × 300", verb: false, why: "প্রতি row এ একটা word এর সংখ্যা। জমা রাখা।" },
+  { name: "System of equations, 5.5 এর দুই line এর মতো", shape: "2 × 2", verb: true, why: "প্রতিটা row একটা line। Matrix টা card কে map এ নামায়। এটা move." },
 ];
 
 export function TwoFacesSort() {
@@ -1026,8 +1026,8 @@ export function TwoFacesSort() {
           </button>
         </div>
       )}
-      {wrong !== null && <Nope key={miss}>উঁহু. {use.why}</Nope>}
-      {done && <div className={`mt-3 text-center text-[0.95rem] text-accent-text ${FADE}`}>ছয়টাই জায়গামতো. একই জিনিস, দুই চেহারা.</div>}
+      {wrong !== null && <Nope key={miss}>উঁহু। {use.why}</Nope>}
+      {done && <div className={`mt-3 text-center text-[0.95rem] text-accent-text ${FADE}`}>ছয়টাই জায়গামতো। একই জিনিস, দুই চেহারা।</div>}
       <Task done={done}>প্রতিটা matrix কোন দিকে যাবে? জমা রাখা table, নাকি কিছু একটা করা move?</Task>
     </>
   );
@@ -1101,8 +1101,8 @@ export function RoofEve({}: Story) {
           </>
         )}
         <Person who="nasib" x={k >= 3 ? 160 : 360} y={150} facing={-1} walking={k === 3} label={k >= 3} />
-        {k === 3 && <Bubble x={160} y={84} lines={["একই দুই arrow.", "একই (2, 3)."]} />}
-        {k >= 4 && <Bubble x={160} y={84} lines={["দুইটার একটা ভুল."]} />}
+        {k === 3 && <Bubble x={160} y={84} lines={["একই দুই arrow।", "একই (2, 3)।"]} />}
+        {k >= 4 && <Bubble x={160} y={84} lines={["দুইটার একটা ভুল।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1130,7 +1130,7 @@ export function FahimsPage({}: Story) {
           />
         </g>
         <Person who="fahim" x={88} y={150} label arm={k === 1 ? "point" : k >= 3 ? "hold" : "down"} />
-        {k === 1 && <Bubble x={88} y={84} side="right" lines={["ওই গলি দিয়েই", "প্রথম দিন গেছি."]} />}
+        {k === 1 && <Bubble x={88} y={84} side="right" lines={["ওই গলি দিয়েই", "প্রথম দিন গেছি।"]} />}
         <Person who="rina" x={230} y={150} facing={-1} label />
         {k === 2 && <Bubble x={230} y={84} side="left" lines={["কোনটা আসল", "ঠিকানা?"]} />}
         {k >= 2 && (
@@ -1165,8 +1165,8 @@ export function ArtSirRope({}: Story) {
         <Person who="nana" x={60} y={168} facing={1} arm={k === 2 ? "wave" : "down"} />
         <P_Name x={60} y={168} text="আর্ট স্যার" />
         <Person who="karim" x={k >= 1 ? 140 : 360} y={168} facing={-1} walking={k === 1} label arm={k >= 1 ? "hold" : "down"} />
-        {k === 2 && <Bubble x={60} y={100} side="right" lines={["দড়িডা গলির দিকে টানো.", "দেহো ফুলডা কোম্মে যায়."]} />}
-        {k >= 3 && <Bubble x={140} y={100} side="left" lines={["ধরলাম, স্যার."]} />}
+        {k === 2 && <Bubble x={60} y={100} side="right" lines={["দড়িডা গলির দিকে টানো।", "দেহো ফুলডা কোম্মে যায়।"]} />}
+        {k >= 3 && <Bubble x={140} y={100} side="left" lines={["ধরলাম, স্যার।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1222,8 +1222,8 @@ export function NasibSideBySide({}: Story) {
           </>
         )}
         <Person who="rina" x={272} y={150} facing={-1} label />
-        {k === 2 && <Bubble x={110} y={84} side="right" lines={["দুইটা একসাথে চালাও."]} />}
-        {k >= 3 && <Bubble x={110} y={84} side="right" lines={["একই দুই দড়ি.", "দেখি কী হয়."]} />}
+        {k === 2 && <Bubble x={110} y={84} side="right" lines={["দুইটা একসাথে চালাও।"]} />}
+        {k >= 3 && <Bubble x={110} y={84} side="right" lines={["একই দুই দড়ি।", "দেখি কী হয়।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1249,7 +1249,7 @@ export function SomStacks({}: Story) {
         <Person who="fahim" x={260} y={150} facing={-1} label />
         <Person who="rina" x={60} y={150} label />
         {k === 2 && <Bubble x={150} y={84} side="right" lines={["প্রথমে মামাকে", "কোন card দিছিলা?"]} />}
-        {k === 3 && <Bubble x={260} y={84} side="left" lines={["(2, 3). Map এর."]} />}
+        {k === 3 && <Bubble x={260} y={84} side="left" lines={["(2, 3). Map এর।"]} />}
         {k >= 4 && (
           <>
             <Bubble x={150} y={84} side="right" lines={["রিকশা থামলো কই?"]} />
@@ -1323,7 +1323,7 @@ export function ArtSirStretch({}: Story) {
             <P_Sheet x={298} y={62} text="(0, 1)" tone="#0f766e" />
           </>
         )}
-        {k === 3 && <Bubble x={220} y={96} side="left" lines={["দুইগুণ চওড়া হইবো.", "ফুলডা থাকবো (5, 3)."]} />}
+        {k === 3 && <Bubble x={220} y={96} side="left" lines={["দুইগুণ চওড়া হইবো।", "ফুলডা থাকবো (5, 3)।"]} />}
         {k >= 4 && <Bubble x={70} y={84} side="right" lines={["কোন কাগজের", "(5, 3), স্যার?"]} />}
       </Stage>
     </StoryFrame>
@@ -1397,11 +1397,11 @@ const BS_BETS: [string, "no" | "yes"][] = [
   ["দুইটাই ঠিক", "yes"],
 ];
 const BS_SAY = [
-  "চারটা বাজি.",
-  "(−1, 3) ঠিক: স্কুল নড়েনি, শুধু রাস্তার ভাষায় লেখা.",
-  "(5, 3) ঠিক: ফুলটা সত্যিই সরে গেছে.",
-  "তাই দুইটাই ভুল হতে পারে না.",
-  "দুইটাই ঠিক. প্রশ্ন ছিল দুইটা. নাসিবের একটা ভুল টিকলো না.",
+  "চারটা বাজি।",
+  "(−1, 3) ঠিক: স্কুল নড়েনি, শুধু রাস্তার ভাষায় লেখা।",
+  "(5, 3) ঠিক: ফুলটা সত্যিই সরে গেছে।",
+  "তাই দুইটাই ভুল হতে পারে না।",
+  "দুইটাই ঠিক। প্রশ্ন ছিল দুইটা। নাসিবের একটা ভুল টিকলো না।",
 ];
 
 function P_Mark({ ok }: { ok: boolean }) {
@@ -1444,7 +1444,7 @@ export function BetSettled({}: Story) {
 // 1½ · The same three things on both pages: the two arrows, the (2, 3), and
 //      then two different answers, each left as a "?" of which is right.
 
-const X1_SAY = ["দুইটা পাতা.", "দুই পাতাতেই একই দুইটা arrow: (1, 0) আর (1, 1).", "দুই পাতাতেই একই (2, 3).", "উত্তর দুই রকম. কোনটা ভুল? শেষে দেখবো."];
+const X1_SAY = ["দুইটা পাতা।", "দুই পাতাতেই একই দুইটা arrow: (1, 0) আর (1, 1)।", "দুই পাতাতেই একই (2, 3)।", "উত্তর দুই রকম। কোনটা ভুল? শেষে দেখবো।"];
 
 export function SameArrows() {
   const s = useScene(3, [600, 1800, 1600, 2400]);
@@ -1485,7 +1485,7 @@ export function SameArrows() {
 //      3 north on the square grid; then the road grid, and 3 up the lane and
 //      1 back reach the very same school.
 
-const X2_SAY = ["স্কুল, map এ.", "Square grid এ: 2 ঘর east, 3 ঘর north. (2, 3).", "এবার রাস্তার grid. স্কুল জায়গায়.", "গলিতে 3, বড় রাস্তায় 1 পিছনে: (−1, 3). একই স্কুল."];
+const X2_SAY = ["স্কুল, map এ।", "Square grid এ: 2 ঘর east, 3 ঘর north. (2, 3).", "এবার রাস্তার grid। স্কুল জায়গায়।", "গলিতে 3, বড় রাস্তায় 1 পিছনে: (−1, 3)। একই স্কুল।"];
 
 export function OnePlaceTwoNames() {
   const s = useScene(3, [600, 1800, 1400, 2400]);
@@ -1515,7 +1515,7 @@ export function OnePlaceTwoNames() {
 //      With the ropes leaned, 2 × (1, 0) then 3 × (1, 1) walk from the pillar
 //      to (5, 3), read on the road's own squares.
 
-const X3_SAY = ["পাতায় ফুল: প্রথম দড়ি 2 বার, দ্বিতীয় দড়ি 3 বার.", "হেলানো রাস্তায় প্রথম দড়ি (1, 0): 2 বার, (2, 0).", "দ্বিতীয় দড়ি (1, 1): 3 বার. প্রতিবার এক ঘর ডানে, এক ঘর উপরে.", "রাস্তার ঘরে পৌঁছালাম (5, 3)."];
+const X3_SAY = ["পাতায় ফুল: প্রথম দড়ি 2 বার, দ্বিতীয় দড়ি 3 বার।", "হেলানো রাস্তায় প্রথম দড়ি (1, 0): 2 বার, (2, 0)।", "দ্বিতীয় দড়ি (1, 1): 3 বার। প্রতিবার এক ঘর ডানে, এক ঘর উপরে।", "রাস্তার ঘরে পৌঁছালাম (5, 3)।"];
 
 export function FlowerRecipe() {
   const s = useScene(3, [600, 1800, 2200, 1800]);
@@ -1543,7 +1543,7 @@ const X4_ROWS: [string, string, string][] = [
   ["সংখ্যা বদলায়, কারণ", "জিনিস বদলেছে", "বর্ণনা বদলেছে"],
   ["প্রশ্নটা", "কোথায় গেলো?", "নতুন grid এ ঠিকানা কী?"],
 ];
-const X4_SAY = ["দুই রকম move.", "একটায় arrow নড়ে, আরেকটায় কাগজ.", "Active এ arrow সত্যিই সরে. Passive এ বসে থাকে.", "সংখ্যা দুই জায়গাতেই বদলায়. কারণ আলাদা.", "প্রশ্নও আলাদা. তাই উত্তরও আলাদা."];
+const X4_SAY = ["দুই রকম move।", "একটায় arrow নড়ে, আরেকটায় কাগজ।", "Active এ arrow সত্যিই সরে। Passive এ বসে থাকে।", "সংখ্যা দুই জায়গাতেই বদলায়। কারণ আলাদা।", "প্রশ্নও আলাদা। তাই উত্তরও আলাদা।"];
 
 export function ActivePassive() {
   const s = useScene(4, [600, 1600, 1800, 1800, 2200]);
@@ -1577,7 +1577,7 @@ const X4B_WORDS: { w: string; at: XY }[] = [
   { w: "king", at: [-1.9, 2.4] },
   { w: "queen", at: [2.4, 2.3] },
 ];
-const X4B_SAY = ["5.6b এর word map: king, queen, man, woman.", "নিচের grid ঘুরালাম.", "আরো ঘুরালাম. Word গুলো যেখানে ছিল, সেখানেই.", "নড়েছে শুধু কাগজ. ওটা ছিল passive."];
+const X4B_SAY = ["5.6b এর word map: king, queen, man, woman.", "নিচের grid ঘুরালাম।", "আরো ঘুরালাম। Word গুলো যেখানে ছিল, সেখানেই।", "নড়েছে শুধু কাগজ। ওটা ছিল passive।"];
 const X4B_F = makeFrame(-4, 4, -3.4, 3.4, 15, 6);
 
 export function WordsStayPut() {
@@ -1619,7 +1619,7 @@ export function WordsStayPut() {
 //       turns into the road grid (the school's address becomes (−1, 3)) and
 //       back into squares (it is (2, 3) again). Nothing is lost on the way.
 
-const X4C_SAY = ["ফাহিমের map. স্কুলের ঠিকানা (2, 3).", "কাগজ বদলালাম: রাস্তার grid. একই স্কুল, ঠিকানা (−1, 3).", "এবার উল্টা দিকে চালালাম. কাগজ আবার square.", "ঠিকানা আবার (2, 3). কিছুই হারায়নি. পুরোপুরি ফেরত আনা গেলো."];
+const X4C_SAY = ["ফাহিমের map। স্কুলের ঠিকানা (2, 3)।", "কাগজ বদলালাম: রাস্তার grid। একই স্কুল, ঠিকানা (−1, 3)।", "এবার উল্টা দিকে চালালাম। কাগজ আবার square।", "ঠিকানা আবার (2, 3)। কিছুই হারায়নি। পুরোপুরি ফেরত আনা গেলো।"];
 
 export function LeanAndBack() {
   const s = useScene(3, [600, 1800, 1600, 2400]);
@@ -1653,7 +1653,7 @@ export function LeanAndBack() {
 //      passive question runs it backwards: which card goes in so that (2, 3)
 //      comes out? (−1, 3).
 
-const X5_SAY = ["রিনার grid: দুইটা column, দুইটা দড়ি.", "Active: (2, 3) ঢুকলো, বের হলো (5, 3). ফুল সরলো.", "Passive: কোন card ঢোকালে (2, 3) বের হয়?", "(−1, 3). একই যন্ত্র, উল্টা দিক থেকে পড়া."];
+const X5_SAY = ["রিনার grid: দুইটা column, দুইটা দড়ি।", "Active: (2, 3) ঢুকলো, বের হলো (5, 3)। ফুল সরলো।", "Passive: কোন card ঢোকালে (2, 3) বের হয়?", "(−1, 3). একই যন্ত্র, উল্টা দিক থেকে পড়া।"];
 
 function X5_Grid({ x, y }: { x: number; y: number }) {
   const r = rowsOf(SHEAR);
@@ -1706,10 +1706,10 @@ export function MachineBothWays() {
 //       (The 45° turn and the ×2 are this figure's own, not the book's.)
 
 const X5B_SAY = [
-  "একটা move: গোলটাকে হেলানো দিকে টেনে লম্বা করা. Square grid এ দেখতে জটিল.",
-  "আগে কাগজ বদলান: grid ঘুরিয়ে টানার দিকে মিলান.",
-  "সহজ grid এ move টা করেন: শুধু প্রথম দিকে দুইগুণ.",
-  "তারপর কাগজ আবার আগের মতো. সেই হেলানো লম্বা shape টাই.",
+  "একটা move: গোলটাকে হেলানো দিকে টেনে লম্বা করা। Square grid এ দেখতে জটিল।",
+  "আগে কাগজ বদলান: grid ঘুরিয়ে টানার দিকে মিলান।",
+  "সহজ grid এ move টা করেন: শুধু প্রথম দিকে দুইগুণ।",
+  "তারপর কাগজ আবার আগের মতো। সেই হেলানো লম্বা shape টাই।",
 ];
 const X5B_F = makeFrame(-2.6, 2.6, -2.6, 2.6, 18, 6);
 
@@ -1749,7 +1749,7 @@ export function SwapPaper() {
 //      the same squares; renaming halves it, because the new squares are two
 //      wide.
 
-const X7_SAY = ["দড়ি (2, 0): প্রতি ঘর এখন 2 চওড়া.", "সরালে: (5, 3) যায় (10, 3) এ. x দুইগুণ.", "নাম বদলালে: ফুল বসে থাকে (5, 3) এ.", "নতুন ঘর গুনলে 2.5 টা: card (2.5, 3). x অর্ধেক."];
+const X7_SAY = ["দড়ি (2, 0): প্রতি ঘর এখন 2 চওড়া।", "সরালে: (5, 3) যায় (10, 3) এ। x দুইগুণ।", "নাম বদলালে: ফুল বসে থাকে (5, 3) এ।", "নতুন ঘর গুনলে 2.5 টা: card (2.5, 3). x অর্ধেক।"];
 
 export function DoubleHalf() {
   const s = useScene(3, [600, 1800, 1600, 2400]);
@@ -1779,12 +1779,12 @@ export function DoubleHalf() {
 
 const X8_THINGS = [
   "Matrix: m × n সংখ্যার table. Row মানে জিনিস, column মানে feature.",
-  "Matrix একটা move ও: পুরা plane একসাথে, pillar জায়গায় রেখে.",
-  "Column গুলো বলে দড়ি দুইটা কোথায় গিয়ে পড়ে.",
-  "m × n matrix n সংখ্যা নেয়, m সংখ্যা দেয়. চ্যাপ্টা হলে আর ফেরা নাই.",
-  "Linear: আগে যোগ পরে move, বা উল্টা, একই. Slide আর square পারে না.",
+  "Matrix একটা move ও: পুরা plane একসাথে, pillar জায়গায় রেখে।",
+  "Column গুলো বলে দড়ি দুইটা কোথায় গিয়ে পড়ে।",
+  "m × n matrix n সংখ্যা নেয়, m সংখ্যা দেয়। চ্যাপ্টা হলে আর ফেরা নাই।",
+  "Linear: আগে যোগ পরে move, বা উল্টা, একই। Slide আর square পারে না।",
 ];
-const X8_SAY = ["Article 6 থেকে পাঁচটা কথা.", "এক: 6.1 এর register.", "দুই: 6.2 এর আলপনা.", "তিন: 6.3 আর 6.4 এর দড়ি.", "চার: 6.5 এর চ্যাপ্টা মোড়.", "পাঁচ: 6.6 এর club এর যন্ত্র."];
+const X8_SAY = ["Article 6 থেকে পাঁচটা কথা।", "এক: 6.1 এর register.", "দুই: 6.2 এর আলপনা।", "তিন: 6.3 আর 6.4 এর দড়ি।", "চার: 6.5 এর চ্যাপ্টা মোড়।", "পাঁচ: 6.6 এর club এর যন্ত্র।"];
 
 export function FiveThings() {
   const s = useScene(5, [600, 1800, 1800, 1800, 1800, 1800]);
@@ -1807,7 +1807,7 @@ export function FiveThings() {
 //       lean does its sum row by row, and two moves run one after the other,
 //       in both orders. No answer is shown.
 
-const X8B_SAY = ["রিনার যন্ত্র: (2, 3) ঢুকলো, (5, 3) বের হলো.", "কিন্তু ভেতরে হিসাবটা row ধরে ধরে কীভাবে হয়?", "আগে হেলানো, তারপর দুইগুণ চওড়া. ফুল কোথায় যায়?", "উল্টা order এ চালালে? একই জায়গায়? Article 7 এ."];
+const X8B_SAY = ["রিনার যন্ত্র: (2, 3) ঢুকলো, (5, 3) বের হলো।", "কিন্তু ভেতরে হিসাবটা row ধরে ধরে কীভাবে হয়?", "আগে হেলানো, তারপর দুইগুণ চওড়া। ফুল কোথায় যায়?", "উল্টা order এ চালালে? একই জায়গায়? Article 7 এ।"];
 
 /** a move as a small box: the lean (slanted lines) or the stretch (wide squares), named under it */
 function X8B_Box({ x, y, lean }: { x: number; y: number; lean: boolean }) {

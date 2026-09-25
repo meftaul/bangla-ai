@@ -441,10 +441,10 @@ export function StairsBet({}: Story) {
         {k >= 3 && <Sign x={200} y={GR - 36} text="যে হারবে" tone="coral" />}
         <CastPerson who="samin" x={64} y={GR} arm="hold" mood={k === 2 ? "smug" : "plain"} label />
         <Sign x={84} y={GR - 44} text="খাতা" tone="amber" />
-        {k === 2 && <Bubble x={64} y={GR - 66} side="right" lines={["একটা flat sheet.", "দুই direction এই হয়."]} />}
+        {k === 2 && <Bubble x={64} y={GR - 66} side="right" lines={["একটা flat sheet.", "দুই direction এই হয়।"]} />}
         <CastPerson who="nasib" x={140} y={GR} facing={-1} arm={k === 1 || k === 3 ? "point" : "down"} mood={k === 1 || k === 3 ? "smug" : k === 2 ? "puzzled" : "plain"} label />
-        {k === 1 && <Bubble x={140} y={GR - 66} lines={["তিনটা column.", "তাহলে তিন direction."]} />}
-        {k === 3 && <Bubble x={140} y={GR - 66} lines={["যে হারবে, বাক্স", "সে উপরে তুলবে."]} />}
+        {k === 1 && <Bubble x={140} y={GR - 66} lines={["তিনটা column.", "তাহলে তিন direction।"]} />}
+        {k === 3 && <Bubble x={140} y={GR - 66} lines={["যে হারবে, বাক্স", "সে উপরে তুলবে।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -520,7 +520,7 @@ export function SheetBet() {
   const [sealed, setSealed] = useSeed("sealed", false);
   const seal = () => {
     setSealed(true);
-    pass("বাজি পাকা. যে হারবে, বাক্স তার.");
+    pass("বাজি পাকা। যে হারবে, বাক্স তার।");
   };
   return (
     <>
@@ -546,8 +546,8 @@ export function SheetBet() {
           </button>
         </div>
       ) : null}
-      {sealed ? <div className={`${FADE} mt-2 text-center text-[0.9rem] leading-snug text-muted`}>পাকা. শেষ না হওয়া পর্যন্ত বাক্সটা সিঁড়ির গোড়াতেই থাকবে.</div> : null}
-      <Task done={sealed}>একটা উত্তর বেছে বাজি পাকা করুন. শেষে মিলিয়ে দেখবো.</Task>
+      {sealed ? <div className={`${FADE} mt-2 text-center text-[0.9rem] leading-snug text-muted`}>পাকা। শেষ না হওয়া পর্যন্ত বাক্সটা সিঁড়ির গোড়াতেই থাকবে।</div> : null}
+      <Task done={sealed}>একটা উত্তর বেছে বাজি পাকা করুন। শেষে মিলিয়ে দেখবো।</Task>
     </>
   );
 }
@@ -558,10 +558,10 @@ export function SheetBet() {
 //      then the question, "?".
 
 const X1_SAY = [
-  "খাতা দিয়ে বানানো একটা ঘর: এক direction bed, এক direction bath, আর উপরের দিকে total room.",
-  "Flat 1: 2 bed, 1 bath, মোট 3 room. Bed বরাবর 2 ধাপ, bath বরাবর 1, তারপর 3 উপরে. ওটাই ওর dot.",
-  "ছয়টা flat এর জন্যই একই কাজ: ঘরে ছয়টা dot.",
-  "ছয়টা dot এর কি পুরা ঘরটাই লাগে? বাজিটা এটা নিয়েই.",
+  "খাতা দিয়ে বানানো একটা ঘর: এক direction bed, এক direction bath, আর উপরের দিকে total room।",
+  "Flat 1: 2 bed, 1 bath, মোট 3 room. Bed বরাবর 2 ধাপ, bath বরাবর 1, তারপর 3 উপরে। ওটাই ওর dot।",
+  "ছয়টা flat এর জন্যই একই কাজ: ঘরে ছয়টা dot।",
+  "ছয়টা dot এর কি পুরা ঘরটাই লাগে? বাজিটা এটা নিয়েই।",
 ];
 
 export function SixDots() {
@@ -616,9 +616,9 @@ export function ThreeBoards({}: Story) {
         {k >= 1 && <Sign x={88} y={86} text="তক্তা" />}
         {k >= 1 && <Sign x={126} y={46} text="তাক" />}
         <CastPerson who="nasib" x={214} y={GR} facing={-1} arm={k === 2 ? "point" : "down"} mood={k === 2 ? "smug" : k === 3 ? "puzzled" : "plain"} label />
-        {k === 2 && <Bubble x={214} y={GR - 66} lines={["মেঝে, তক্তা, তাক.", "সবই তো flat sheet."]} />}
+        {k === 2 && <Bubble x={214} y={GR - 66} lines={["মেঝে, তক্তা, তাক।", "সবই তো flat sheet."]} />}
         <CastPerson who="samin" x={276} y={GR} facing={-1} arm={k === 3 ? "wave" : "down"} label />
-        {k === 3 && <Bubble x={276} y={GR - 66} side="left" lines={["Flat, ঠিক আছে.", "কিন্তু span কি?"]} />}
+        {k === 3 && <Bubble x={276} y={GR - 66} side="left" lines={["Flat, ঠিক আছে।", "কিন্তু span কি?"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -658,13 +658,13 @@ export function FloorInRoom() {
     if (l !== 0 || zero[board]) return;
     const z = zero.map((v, i) => v || i === board);
     setZero(z);
-    if (z.every(Boolean)) pass("যেকোনো span দরজার কোণা ছুঁয়ে থাকে.");
+    if (z.every(Boolean)) pass("যেকোনো span দরজার কোণা ছুঁয়ে থাকে।");
   };
   const say = on
     ? `× ${lam}: মাথাটা ${tup(tipNow.map(r2))} এ, এখনো ${BOARDS[board].on}.`
     : lam === 0
-      ? "× 0: মাথাটা চলে এলো দরজার কোণায়, একদম মেঝেতে. তাক তো 1.5 উপরে. পড়ে গেলো!"
-      : `× ${lam}: মাথাটা ${r2(tipNow[2])} উপরে, কিন্তু তাক 1.5 এ. পড়ে গেলো!`;
+      ? "× 0: মাথাটা চলে এলো দরজার কোণায়, একদম মেঝেতে। তাক তো 1.5 উপরে। পড়ে গেলো!"
+      : `× ${lam}: মাথাটা ${r2(tipNow[2])} উপরে, কিন্তু তাক 1.5 এ। পড়ে গেলো!`;
 
   return (
     <>
@@ -704,7 +704,7 @@ export function FloorInRoom() {
         {say}
       </div>
       <Ticks items={BOARDS.map((b, i): [string, boolean] => [`${b.name} × 0`, zero[i]])} />
-      <Task done={done}>তিনটা জিনিসই একে একে বেছে arrow টা stretch করুন, × 0 সহ. মাথাটা কি জায়গামত থাকে?</Task>
+      <Task done={done}>তিনটা জিনিসই একে একে বেছে arrow টা stretch করুন, × 0 সহ। মাথাটা কি জায়গামত থাকে?</Task>
     </>
   );
 }
@@ -715,10 +715,10 @@ export function FloorInRoom() {
 //      the floor and the plank hold that corner, the shelf is 1.5 above it.
 
 const Z2_SAY = [
-  "মেঝে, তক্তা আর তাক. প্রতিটার উপরে দরজার কোণা থেকে একটা arrow.",
-  "তিনটাকেই × 0: তিনটা মাথাই চলে এলো দরজার কোণায়.",
-  "মেঝে আর তক্তা দরজার কোণা ছুঁয়ে আছে. মাথাটা এখনো ওদের উপরে.",
-  "তাক কোণা থেকে 1.5 উপরে. মাথাটা তাকের উপরে নাই. নাসিবের তাক বাদ.",
+  "মেঝে, তক্তা আর তাক। প্রতিটার উপরে দরজার কোণা থেকে একটা arrow।",
+  "তিনটাকেই × 0: তিনটা মাথাই চলে এলো দরজার কোণায়।",
+  "মেঝে আর তক্তা দরজার কোণা ছুঁয়ে আছে। মাথাটা এখনো ওদের উপরে।",
+  "তাক কোণা থেকে 1.5 উপরে। মাথাটা তাকের উপরে নাই। নাসিবের তাক বাদ।",
 ];
 const Z2_TONE: Tone3[] = ["blue", "coral", "violet"];
 
@@ -770,11 +770,11 @@ export function ZeroHome() {
 //      subspace in a room, one after another, all through the door corner.
 
 const X2_SAY = [
-  "একটা ঘরের ভিতরে subspace হয় মাত্র চার রকম. চারটাই দরজার কোণা ছুঁয়ে থাকে.",
-  "শুধু দরজার কোণাটা: zero button যেখানে পৌঁছায়.",
-  "কোণা দিয়ে যাওয়া একটা line: একটা button যেখানে পৌঁছায়.",
-  "কোণা দিয়ে যাওয়া একটা sheet: দুইটা button যেখানে পৌঁছায়.",
-  "পুরা ঘর: তিনটা আলাদা দিকে যাওয়া তিনটা button.",
+  "একটা ঘরের ভিতরে subspace হয় মাত্র চার রকম। চারটাই দরজার কোণা ছুঁয়ে থাকে।",
+  "শুধু দরজার কোণাটা: zero button যেখানে পৌঁছায়।",
+  "কোণা দিয়ে যাওয়া একটা line: একটা button যেখানে পৌঁছায়।",
+  "কোণা দিয়ে যাওয়া একটা sheet: দুইটা button যেখানে পৌঁছায়।",
+  "পুরা ঘর: তিনটা আলাদা দিকে যাওয়া তিনটা button।",
 ];
 
 export function FourKinds() {
@@ -831,10 +831,10 @@ export function ChalkClubs({}: Story) {
           </g>
         )}
         <CastPerson who="nasib" x={250} y={GR} facing={-1} arm={k === 1 ? "point" : "down"} mood={k === 1 ? "puzzled" : "plain"} label />
-        {k === 1 && <Bubble x={250} y={GR - 66} side="left" lines={["দুইটা flat যোগ করলে?", "Sheet থেকে পড়ে যাবে."]} />}
+        {k === 1 && <Bubble x={250} y={GR - 66} side="left" lines={["দুইটা flat যোগ করলে?", "Sheet থেকে পড়ে যাবে।"]} />}
         <CastPerson who="samin" x={k >= 2 ? 150 : 190} y={GR} facing={k >= 2 ? -1 : 1} walking={k === 2} arm={k >= 2 ? "hold" : "down"} ms={1000} label />
         {k >= 2 && <Sign x={166} y={GR - 44} text="chalk" tone="amber" />}
-        {k === 3 && <Bubble x={150} y={GR - 66} lines={["প্রতিটা একটা club.", "বের হয়ে দেখাও."]} />}
+        {k === 3 && <Bubble x={150} y={GR - 66} lines={["প্রতিটা একটা club।", "বের হয়ে দেখাও।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -851,9 +851,9 @@ export function ChalkClubs({}: Story) {
 const CF = makeFrame(-2.6, 2.6, -2.6, 2.6, 30, 10);
 const CLUBS: { name: string; tick: string; a: XY; b: XY; inside: (p: XY) => boolean; why: string }[] = [
   { name: "পুরা মেঝে", tick: "পুরা মেঝে", a: [1, 1], b: [1, -2], inside: () => true, why: "" },
-  { name: "মেঝে, কিন্তু দরজার কোণায় টব", tick: "টব বাদে", a: [1, 1], b: [-1, -1], inside: (p) => p[0] !== 0 || p[1] !== 0, why: "ওটা দরজার কোণা, টবের জায়গা. Club এ ওই জায়গাটা নাই." },
+  { name: "মেঝে, কিন্তু দরজার কোণায় টব", tick: "টব বাদে", a: [1, 1], b: [-1, -1], inside: (p) => p[0] !== 0 || p[1] !== 0, why: "ওটা দরজার কোণা, টবের জায়গা। Club এ ওই জায়গাটা নাই।" },
   { name: "3.6 এর ring, সব arrow ঠিক 1 লম্বা", tick: "ring", a: [1, 0], b: [0, 1], inside: (p) => Math.abs(Math.hypot(p[0], p[1]) - 1) < 1e-9, why: "" },
-  { name: "কোনো minus নাই, word count এর মত", tick: "minus নাই", a: [1, 1], b: [1, 0], inside: (p) => p[0] >= 0 && p[1] >= 0, why: "Minus সংখ্যা চলে এসেছে." },
+  { name: "কোনো minus নাই, word count এর মত", tick: "minus নাই", a: [1, 1], b: [1, 0], inside: (p) => p[0] >= 0 && p[1] >= 0, why: "Minus সংখ্যা চলে এসেছে।" },
 ];
 const MOVES: { say: string; go: (a: XY, b: XY) => XY }[] = [
   { say: "a + b", go: (a, b) => plus(a, b) },
@@ -897,7 +897,7 @@ function ClubPlay({ ids, note, task }: { ids: number[]; note: string; task: stri
     setTried(t);
     if (ids.every((i) => clubDone(i, t[i]))) pass(note);
   };
-  const why = (r: XY) => (club === 2 ? `ওটা ${r2(Math.hypot(r[0], r[1]))} লম্বা, 1 না.` : C.why);
+  const why = (r: XY) => (club === 2 ? `ওটা ${r2(Math.hypot(r[0], r[1]))} লম্বা, 1 না।` : C.why);
 
   return (
     <>
@@ -944,7 +944,7 @@ function ClubPlay({ ids, note, task }: { ids: number[]; note: string; task: stri
         ))}
       </div>
       <div key={`${club} ${move}`} className={`${FADE} mx-auto mt-1.5 min-h-10 max-w-sm text-center text-[0.9rem] leading-snug ${inside ? "text-muted" : "text-danger"}`}>
-        {res === null ? "একটা move বেছে দেখুন কোথায় গিয়ে পড়ে." : inside ? `${MOVES[move!].say} = ${tup(res)}. এখনো club এর ভিতরে.` : `${MOVES[move!].say} = ${tup(res)}. ${why(res)} পড়ে গেলো!`}
+        {res === null ? "একটা move বেছে দেখুন কোথায় গিয়ে পড়ে।" : inside ? `${MOVES[move!].say} = ${tup(res)}. এখনো club এর ভিতরে।` : `${MOVES[move!].say} = ${tup(res)}. ${why(res)} পড়ে গেলো!`}
       </div>
       <Task done={all}>{task}</Task>
     </>
@@ -952,11 +952,11 @@ function ClubPlay({ ids, note, task }: { ids: number[]; note: string; task: stri
 }
 
 export function EasyClubs() {
-  return <ClubPlay ids={[2, 3]} note="যোগ বা stretch করেই club থেকে বের হওয়া যায়." task="দুইটা club থেকেই বের হওয়ার একটা করে move খুঁজে বের করুন." />;
+  return <ClubPlay ids={[2, 3]} note="যোগ বা stretch করেই club থেকে বের হওয়া যায়।" task="দুইটা club থেকেই বের হওয়ার একটা করে move খুঁজে বের করুন।" />;
 }
 
 export function LastClubs() {
-  return <ClubPlay ids={[1, 0]} note="বের হওয়ার রাস্তা নাই: এটাই vector space." task="দুইটা club থেকেই বের হওয়ার চেষ্টা করুন. যেটা থেকে পারবেন না, সেটায় তিনটা move ই try করুন." />;
+  return <ClubPlay ids={[1, 0]} note="বের হওয়ার রাস্তা নাই: এটাই vector space।" task="দুইটা club থেকেই বের হওয়ার চেষ্টা করুন। যেটা থেকে পারবেন না, সেটায় তিনটা move ই try করুন।" />;
 }
 
 // ---------------------------------------------------------------------------
@@ -965,10 +965,10 @@ export function LastClubs() {
 //      and the landing left as "?" (AddFlats answers it, four screens later).
 
 const X3Q_SAY = [
-  "খাতার ছয়টা flat, আবার সেই ঘরে.",
-  "নাসিব দুইটা বাছলো: flat 1 আর flat 2.",
-  "Flat 1 এর মাথা থেকে flat 2 এর arrow টা আরেকবার হাঁটুন.",
-  "যোগফল গিয়ে পড়লো কোথাও. কিন্তু sheet এর উপরে কি? এখনো জানি না.",
+  "খাতার ছয়টা flat, আবার সেই ঘরে।",
+  "নাসিব দুইটা বাছলো: flat 1 আর flat 2।",
+  "Flat 1 এর মাথা থেকে flat 2 এর arrow টা আরেকবার হাঁটুন।",
+  "যোগফল গিয়ে পড়লো কোথাও। কিন্তু sheet এর উপরে কি? এখনো জানি না।",
 ];
 
 export function SumWhere() {
@@ -1001,11 +1001,11 @@ export function SumWhere() {
 
 const FC = makeFrame(-3.2, 3.2, -3.2, 3.2, 20, 8);
 const X3_SAY = [
-  "পুরা মেঝে: এর উপরের যেকোনো arrow ই member.",
-  "যেকোনো দুইটা member নিন, a আর b.",
-  "যোগ করুন: (2, −1). এখনো মেঝেতেই.",
-  "এবার ওটাকে −1.5 দিয়ে stretch করুন, minus সহ: (−3, 1.5). এখনো মেঝেতেই.",
-  "বের হওয়ার রাস্তা নাই. এমন দলকে বলে vector space.",
+  "পুরা মেঝে: এর উপরের যেকোনো arrow ই member।",
+  "যেকোনো দুইটা member নিন, a আর b।",
+  "যোগ করুন: (2, −1)। এখনো মেঝেতেই।",
+  "এবার ওটাকে −1.5 দিয়ে stretch করুন, minus সহ: (−3, 1.5). এখনো মেঝেতেই।",
+  "বের হওয়ার রাস্তা নাই। এমন দলকে বলে vector space।",
 ];
 
 export function FloorClub() {
@@ -1088,10 +1088,10 @@ function S4I_Pic({ x, f, k = 1 }: { x: number; f: (r: number, c: number) => numb
   );
 }
 const S4I_SAY = [
-  "দুইটা 28 × 28 ছবি.",
-  "যোগ করুন, pixel এর সাথে pixel: আরেকটা 28 × 28 ছবি.",
-  "× 0.5 দিয়ে stretch করুন: এটাও একটা ছবি. দল থেকে বের হওয়া গেলো না.",
-  "Polynomial, ছবি, network এর weight: সবাই একই নিয়ম মানে. তাই maths ও একই.",
+  "দুইটা 28 × 28 ছবি।",
+  "যোগ করুন, pixel এর সাথে pixel: আরেকটা 28 × 28 ছবি।",
+  "× 0.5 দিয়ে stretch করুন: এটাও একটা ছবি। দল থেকে বের হওয়া গেলো না।",
+  "Polynomial, ছবি, network এর weight: সবাই একই নিয়ম মানে। তাই maths ও একই।",
 ];
 
 export function AlsoSpaces() {
@@ -1159,10 +1159,10 @@ const S4S_U: XY = [S4S_C[0] + S4S_R * Math.SQRT1_2, S4S_C[1] - S4S_RY * Math.SQR
 const S4S_W: XY = [S4S_C[0] + S4S_R * Math.SQRT1_2, S4S_C[1] + S4S_RY * Math.SQRT1_2];
 const S4S_SUM: XY = [S4S_C[0] + S4S_R * Math.SQRT2, S4S_C[1]];
 const S4S_SAY = [
-  "Unit sphere: এর উপরের সব arrow ঠিক 1 লম্বা. মাঝের দাগটা 3.6 এর সেই ring.",
-  "Ring এর দুইটা member: (1, 0) আর (0, 1).",
-  "যোগ করুন: 1.41 লম্বা. Sphere এর বাইরে.",
-  "তাই sphere হলো একটা surface, vector space না.",
+  "Unit sphere: এর উপরের সব arrow ঠিক 1 লম্বা। মাঝের দাগটা 3.6 এর সেই ring।",
+  "Ring এর দুইটা member: (1, 0) আর (0, 1)।",
+  "যোগ করুন: 1.41 লম্বা। Sphere এর বাইরে।",
+  "তাই sphere হলো একটা surface, vector space না।",
 ];
 
 export function SphereOff() {
@@ -1250,7 +1250,7 @@ export function FlatSheet() {
       setMs(300);
       setYaw(edgeYaw(KN, next));
       setFlat(true);
-      pass("তিনটা column, কিন্তু একটাই flat sheet.");
+      pass("তিনটা column, কিন্তু একটাই flat sheet।");
     } else {
       setMs(80);
       setYaw(next);
@@ -1265,9 +1265,9 @@ export function FlatSheet() {
       </Room3>
       <TurnBar yaw={yaw} onYaw={go} off={flat} />
       <div key={String(flat)} className={`${FADE} mx-auto mt-1.5 min-h-10 max-w-sm text-center text-[0.9rem] leading-snug ${flat ? "text-accent-text" : "text-muted"}`}>
-        {flat ? "কিনারা বরাবর! ছয়টা dot ই এক line এ দাঁড়িয়ে. পাশ থেকে দেখলে বোঝা যায়, সব একটা flat sheet এর উপরে." : "ছবিটা, বা নিচের slider টা টেনে ঘরটা ঘুরান."}
+        {flat ? "কিনারা বরাবর! ছয়টা dot ই এক line এ দাঁড়িয়ে। পাশ থেকে দেখলে বোঝা যায়, সব একটা flat sheet এর উপরে।" : "ছবিটা, বা নিচের slider টা টেনে ঘরটা ঘুরান।"}
       </div>
-      <Task done={flat}>ঘরটা ঘুরাতে থাকুন, যতক্ষণ না ছয়টা dot এক line এ আসে.</Task>
+      <Task done={flat}>ঘরটা ঘুরাতে থাকুন, যতক্ষণ না ছয়টা dot এক line এ আসে।</Task>
     </>
   );
 }
@@ -1278,11 +1278,11 @@ export function FlatSheet() {
 //      floor, and its height is forced, 3 + 2 = 5, right onto the sheet.
 
 const X4_SAY = [
-  "ছয়টা dot, আবার সামনে থেকে.",
-  "দরজার কোণা দিয়ে যাওয়া একটা flat sheet, ছয়টাই ওটার উপরে.",
-  "Flat 2: 3 bed আর 2 bath. মেঝে বরাবর 3 আর 2 হাঁটুন.",
-  "ওর height ইচ্ছামত হবে না: total = 3 + 2 = 5. একদম sheet এর উপরে.",
-  "প্রতিটা flat এর height হলো bed + bath. তাই কোনো dot sheet ছেড়ে যেতে পারে না.",
+  "ছয়টা dot, আবার সামনে থেকে।",
+  "দরজার কোণা দিয়ে যাওয়া একটা flat sheet, ছয়টাই ওটার উপরে।",
+  "Flat 2: 3 bed আর 2 bath। মেঝে বরাবর 3 আর 2 হাঁটুন।",
+  "ওর height ইচ্ছামত হবে না: total = 3 + 2 = 5। একদম sheet এর উপরে।",
+  "প্রতিটা flat এর height হলো bed + bath। তাই কোনো dot sheet ছেড়ে যেতে পারে না।",
 ];
 
 export function SheetThrough() {
@@ -1348,7 +1348,7 @@ export function SheetFromButtons() {
     paint.play(12, () => {
       if (all) {
         setWon(true);
-        pass("দুইটা button দিয়েই পুরা খাতা রং হয়ে যায়.");
+        pass("দুইটা button দিয়েই পুরা খাতা রং হয়ে যায়।");
       } else setMiss((x) => x + 1);
     });
   };
@@ -1377,13 +1377,13 @@ export function SheetFromButtons() {
       </div>
       <div className="mt-0.5 text-center text-xs text-muted">প্রতিটা button একটা ধাপ: (bed, bath, total).</div>
       {pair && !paint.running && !won ? (
-        <Nope key={miss}>উঁহু. dot গুলা কোথায়? বাইরে ভাসছে. এই sheet এ খাতার flat পড়ে না. আরেক জোড়া try করুন.</Nope>
+        <Nope key={miss}>উঁহু। dot গুলা কোথায়? বাইরে ভাসছে। এই sheet এ খাতার flat পড়ে না। আরেক জোড়া try করুন।</Nope>
       ) : (
         <div key={String(won)} className={`${FADE} mx-auto mt-1.5 min-h-10 max-w-sm text-center text-[0.9rem] leading-snug ${won ? "text-accent-text" : "text-muted"}`}>
-          {won ? "এক bed (1, 0, 1) আর এক bath (0, 1, 1): এদের রং প্রতিটা flat কে ঢেকে দিলো." : "দুইটা button বাছুন. ওরা যেখানে যেখানে পৌঁছায়, ঘরের সেখানে রং হবে."}
+          {won ? "এক bed (1, 0, 1) আর এক bath (0, 1, 1): এদের রং প্রতিটা flat কে ঢেকে দিলো।" : "দুইটা button বাছুন। ওরা যেখানে যেখানে পৌঁছায়, ঘরের সেখানে রং হবে।"}
         </div>
       )}
-      <Task done={won}>দুইটা button বাছুন. ওদের রং যেন ছয়টা flat কেই ঢেকে দেয়.</Task>
+      <Task done={won}>দুইটা button বাছুন। ওদের রং যেন ছয়টা flat কেই ঢেকে দেয়।</Task>
     </>
   );
 }
@@ -1394,10 +1394,10 @@ export function SheetFromButtons() {
 //      presses, and all six flats among the mixes.
 
 const X5_SAY = [
-  "দুইটা button: bed এর (1, 0, 1), আর bath এর (0, 1, 1).",
-  "এই দুইটার যেকোনো mix গিয়ে পড়ে sheet এর উপরে.",
-  "Flat 2 মানে 3 বার bed চাপা আর 2 বার bath চাপা: (3, 2, 5).",
-  "ছয়টা flat ই এমন mix. দুইটা button, পুরা খাতা.",
+  "দুইটা button: bed এর (1, 0, 1), আর bath এর (0, 1, 1)।",
+  "এই দুইটার যেকোনো mix গিয়ে পড়ে sheet এর উপরে।",
+  "Flat 2 মানে 3 বার bed চাপা আর 2 বার bath চাপা: (3, 2, 5)।",
+  "ছয়টা flat ই এমন mix। দুইটা button, পুরা খাতা।",
 ];
 const MIXES: V3[] = [0, 1, 2, 3, 4].flatMap((a) => [0, 1, 2].map((b) => kd(plus3(times3(a, BED_BTN), times3(b, BATH_BTN)))));
 
@@ -1439,10 +1439,10 @@ export function NasibTries({}: Story) {
         <MoveBox x={k >= 1 ? 108 : 130} y={GR} />
         <CastPerson who="samin" x={56} y={GR} arm="hold" mood={k === 2 ? "smug" : "plain"} label />
         <Sign x={76} y={GR - 44} text="খাতা" tone="amber" />
-        {k === 2 && <Bubble x={56} y={GR - 66} side="right" lines={["করো."]} />}
+        {k === 2 && <Bubble x={56} y={GR - 66} side="right" lines={["করো।"]} />}
         <CastPerson who="nasib" x={k >= 1 ? 150 : 170} y={GR} facing={-1} walking={k === 1} arm={k === 1 ? "point" : "down"} mood={k === 3 ? "smug" : "plain"} ms={1000} label />
-        {k === 1 && <Bubble x={150} y={GR - 66} lines={["দুইটা flat যোগ করি.", "দেখি কী হয়."]} />}
-        {k === 3 && <Bubble x={150} y={GR - 66} side="left" tone="think" lines={["একটা না একটা", "পড়বেই."]} />}
+        {k === 1 && <Bubble x={150} y={GR - 66} lines={["দুইটা flat যোগ করি।", "দেখি কী হয়।"]} />}
+        {k === 3 && <Bubble x={150} y={GR - 66} side="left" tone="think" lines={["একটা না একটা", "পড়বেই।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1454,7 +1454,7 @@ export function NasibTries({}: Story) {
 //     the room turns edge-on, and the sum stands in line with the six. Three
 //     different pairs, three landings on the sheet.
 
-const NASIB_SAYS = ["নাসিব: দাঁড়াও, আরেকটা.", "নাসিব: শেষবার.", "নাসিব চুপ."];
+const NASIB_SAYS = ["নাসিব: দাঁড়াও, আরেকটা।", "নাসিব: শেষবার।", "নাসিব চুপ।"];
 
 export function AddFlats() {
   const pass = useGate();
@@ -1479,7 +1479,7 @@ export function AddFlats() {
       if (tries.includes(key)) return;
       const t = [...tries, key];
       setTries(t);
-      if (t.length === 3) pass("যোগ করলেও sheet ছেড়ে যাওয়া যায় না.");
+      if (t.length === 3) pass("যোগ করলেও sheet ছেড়ে যাওয়া যায় না।");
     });
   };
 
@@ -1510,14 +1510,14 @@ export function AddFlats() {
       <div key={`${picks.join()} ${landed}`} className={`${FADE} mx-auto mt-1.5 min-h-10 max-w-sm text-center text-[0.9rem] leading-snug ${landed ? "text-accent-text" : "text-muted"}`}>
         {landed && sum ? (
           <>
-            যোগফল {tup(sum)}. Total {sum[2]}, আর {sum[0]} + {sum[1]} = {sum[2]}. পাশ থেকে দেখুন: sheet এর উপরেই.
+            যোগফল {tup(sum)}. Total {sum[2]}, আর {sum[0]} + {sum[1]} = {sum[2]}. পাশ থেকে দেখুন: sheet এর উপরেই।
             {tries.length > 0 && <span className="block text-muted">{NASIB_SAYS[Math.min(tries.length, 3) - 1]}</span>}
           </>
         ) : (
-          "নাসিবের হয়ে দুইটা flat বাছুন. প্রথমটার মাথা থেকে দ্বিতীয়টা হাঁটবে."
+          "নাসিবের হয়ে দুইটা flat বাছুন। প্রথমটার মাথা থেকে দ্বিতীয়টা হাঁটবে।"
         )}
       </div>
-      <Task done={tries.length >= 3}>তিন জোড়া আলাদা flat যোগ করে দেখুন, যোগফল sheet থেকে পড়ে কিনা. ({Math.min(tries.length, 3)}/3)</Task>
+      <Task done={tries.length >= 3}>তিন জোড়া আলাদা flat যোগ করে দেখুন, যোগফল sheet থেকে পড়ে কিনা। ({Math.min(tries.length, 3)}/3)</Task>
     </>
   );
 }
@@ -1528,10 +1528,10 @@ export function AddFlats() {
 //      (3 bed, 2 bath), and the total: 5 bed, 3 bath, a mix, on the sheet.
 
 const X7P_SAY = [
-  "দুইটা button: bed এর (1, 0, 1), আর bath এর (0, 1, 1).",
+  "দুইটা button: bed এর (1, 0, 1), আর bath এর (0, 1, 1)।",
   "Flat 1 মানে 2 বার bed, 1 বার bath.",
-  "ওখান থেকে flat 2: আরো 3 বার bed, 2 বার bath.",
-  "মোট 5 বার bed, 3 বার bath: (5, 3, 8). এটাও দুই button এর mix. তাই sheet এর উপরেই.",
+  "ওখান থেকে flat 2: আরো 3 বার bed, 2 বার bath।",
+  "মোট 5 বার bed, 3 বার bath: (5, 3, 8)। এটাও দুই button এর mix। তাই sheet এর উপরেই।",
 ];
 const X7P_ONE: V3[] = [[0, 0, 0], [1, 0, 1], [2, 0, 2], [2, 1, 3]];
 const X7P_TWO: V3[] = [[2, 1, 3], [3, 1, 4], [4, 1, 5], [5, 1, 6], [5, 2, 7], [5, 3, 8]];
@@ -1629,7 +1629,7 @@ const PAGES: Page[] = [
     raw: KHATA.map((f): V3 => [f[0], f[1], 2 * f[0] + f[1]]),
     uses: 2,
     n: [2, 1, -1],
-    right: "একটা sheet. প্রতিটা bedroom এ 2 টা bulb, প্রতিটা bathroom এ 1 টা. তাই bulb আসে bed আর bath থেকেই.",
+    right: "একটা sheet। প্রতিটা bedroom এ 2 টা bulb, প্রতিটা bathroom এ 1 টা। তাই bulb আসে bed আর bath থেকেই।",
   },
   {
     title: "bed · bath · কয়তলা",
@@ -1643,14 +1643,14 @@ const PAGES: Page[] = [
       [1, 1, 6],
     ],
     uses: 3,
-    right: "পুরা ঘর. Flat কয়তলায়, তার সাথে bed বা bath এর কোনো সম্পর্ক নাই.",
+    right: "পুরা ঘর। Flat কয়তলায়, তার সাথে bed বা bath এর কোনো সম্পর্ক নাই।",
   },
   {
     title: "ভাড়া · advance · বছরের ভাড়া",
     names: ["rent", "advance", "yearly"],
     raw: RENT.map((r): V3 => [r, 2 * r, 12 * r]),
     uses: 1,
-    right: "একটা line. Advance হলো 2 মাসের ভাড়া, বছর হলো 12 মাসের. একই কথা, তিনভাবে বলা.",
+    right: "একটা line। Advance হলো 2 মাসের ভাড়া, বছর হলো 12 মাসের। একই কথা, তিনভাবে বলা।",
   },
 ];
 const UBOX: V3 = [5.4, 5.4, 5.4];
@@ -1732,7 +1732,7 @@ export function YourCloud() {
       }
       const s = solved.map((x, j) => x || j === page);
       setSolved(s);
-      if (s.every(Boolean)) pass("Column না, dot কী ব্যবহার করে সেটা গুনুন.");
+      if (s.every(Boolean)) pass("Column না, dot কী ব্যবহার করে সেটা গুনুন।");
       return;
     }
     setMiss((x) => x + 1);
@@ -1756,14 +1756,14 @@ export function YourCloud() {
     pick === null || right
       ? null
       : pick === 0
-        ? "কোণা দিয়ে যাওয়া কোনো line এ সবগুলা ধরে না. লাল ফাঁকগুলা দেখছেন?"
+        ? "কোণা দিয়ে যাওয়া কোনো line এ সবগুলা ধরে না। লাল ফাঁকগুলা দেখছেন?"
         : pick === 1 && pg.uses === 1
-          ? "একটা sheet এ বসে ঠিকই, কিন্তু ওই sheet এর ভিতরে একটা line এর উপরে. সবচেয়ে ছোট shape টাই উত্তর."
+          ? "একটা sheet এ বসে ঠিকই, কিন্তু ওই sheet এর ভিতরে একটা line এর উপরে। সবচেয়ে ছোট shape টাই উত্তর।"
           : pick === 1
-            ? "যেকোনো sheet নেন, কিছু dot বাইরে থেকে যায়: লাল ফাঁকগুলা দেখুন. যতই ঘুরান, কখনো চ্যাপ্টা হয় না."
+            ? "যেকোনো sheet নেন, কিছু dot বাইরে থেকে যায়: লাল ফাঁকগুলা দেখুন। যতই ঘুরান, কখনো চ্যাপ্টা হয় না।"
             : pg.uses === 2
-              ? "কিনারা বরাবর ঘুরালে dot গুলা এক line এ দাঁড়ায়. সব একটা sheet এ, পুরা ঘর লাগে না."
-              : "যেভাবে খুশি ঘুরান: dot গুলা একটা line ছেড়ে কোথাও যায় না.";
+              ? "কিনারা বরাবর ঘুরালে dot গুলা এক line এ দাঁড়ায়। সব একটা sheet এ, পুরা ঘর লাগে না।"
+              : "যেভাবে খুশি ঘুরান: dot গুলা একটা line ছেড়ে কোথাও যায় না।";
 
   return (
     <>
@@ -1808,7 +1808,7 @@ export function YourCloud() {
           {nope ? <Nope key={miss}>{nope}</Nope> : right ? <div className={`${FADE} mt-1.5 text-center text-[0.9rem] leading-snug text-accent-text`}>{pg.right}</div> : null}
         </>
       )}
-      <Task done={all}>প্রতিটা পাতার dot গুলা ঘুরিয়ে দেখুন, তারপর বাছুন ওরা কী ব্যবহার করে: একটা line, একটা sheet, না পুরা ঘর.</Task>
+      <Task done={all}>প্রতিটা পাতার dot গুলা ঘুরিয়ে দেখুন, তারপর বাছুন ওরা কী ব্যবহার করে: একটা line, একটা sheet, না পুরা ঘর।</Task>
     </>
   );
 }
@@ -1818,10 +1818,10 @@ export function YourCloud() {
 //      one per beat, each with the shape it uses drawn in.
 
 const X6_SAY = [
-  "তিনটা পাতা, প্রতিটায় তিনটা column.",
-  "ভাড়া, advance, বছরের ভাড়া: একটা line. একই কথা, তিনভাবে বলা.",
-  "Bed, bath, bulb: একটা sheet, খাতার মতই.",
-  "Bed, bath, কয়তলা: পুরা ঘর. তিনটা কথা, কেউ কারো উপরে নির্ভর করে না.",
+  "তিনটা পাতা, প্রতিটায় তিনটা column।",
+  "ভাড়া, advance, বছরের ভাড়া: একটা line। একই কথা, তিনভাবে বলা।",
+  "Bed, bath, bulb: একটা sheet, খাতার মতই।",
+  "Bed, bath, কয়তলা: পুরা ঘর। তিনটা কথা, কেউ কারো উপরে নির্ভর করে না।",
 ];
 
 export function ThreePages() {
@@ -1921,7 +1921,7 @@ export function TryNearlyFlat() {
     setPick(i);
     setMs(1100);
     setYaw(NEAR_EDGE);
-    if (i === X7_RIGHT) pass("Real data থাকে একটা sheet এর কাছাকাছি.");
+    if (i === X7_RIGHT) pass("Real data থাকে একটা sheet এর কাছাকাছি।");
     else setMiss((x) => x + 1);
   };
 
@@ -1949,15 +1949,15 @@ export function TryNearlyFlat() {
       {pick !== null && !right ? (
         <Nope key={miss}>
           {pick === 0
-            ? "কিনারা বরাবর দেখলে একটা পাতলা পট্টি, এক line না. প্রতিটা dot sheet থেকে একটু সরে আছে: লাল ফাঁকগুলা দেখুন."
-            : "কিনারা বরাবর দেখলে একটা পাতলা পট্টি. পুরা ঘর জোড়ার ধারেকাছেও না."}
+            ? "কিনারা বরাবর দেখলে একটা পাতলা পট্টি, এক line না। প্রতিটা dot sheet থেকে একটু সরে আছে: লাল ফাঁকগুলা দেখুন।"
+            : "কিনারা বরাবর দেখলে একটা পাতলা পট্টি। পুরা ঘর জোড়ার ধারেকাছেও না।"}
         </Nope>
       ) : right ? (
         <div className={`${FADE} mt-1.5 text-center text-[0.9rem] leading-snug text-accent-text`}>
-          Sheet এর কাছে. প্রতি bedroom এ মোটামুটি 300 square feet, প্রতি bathroom এ 150. রান্নাঘরের সাইজ মিলিয়ে একটু কম বেশি.
+          Sheet এর কাছে। প্রতি bedroom এ মোটামুটি 300 square feet, প্রতি bathroom এ 150। রান্নাঘরের সাইজ মিলিয়ে একটু কম বেশি।
         </div>
       ) : null}
-      <Task done={right}>Dot গুলা ঘুরিয়ে দেখুন, তারপর সৎ ছবিটা বাছুন.</Task>
+      <Task done={right}>Dot গুলা ঘুরিয়ে দেখুন, তারপর সৎ ছবিটা বাছুন।</Task>
     </>
   );
 }
@@ -1977,10 +1977,10 @@ const PANCAKE: V3[] = Array.from({ length: 40 }, (_, i) =>
   plus3(plus3(times3(0.8 + 4.2 * wob(i), NEAR_U), times3(0.8 + 4.2 * wob(i + 100), NEAR_W)), times3((wob(i + 200) - 0.5) * 0.5, PAN_NU)),
 );
 const X7F_SAY = [
-  "আরো বড় একটা খাতা: চল্লিশটা flat, তিনটা column.",
-  "সামনে থেকে dot গুলা একটা মেঘের মত.",
-  "কিনারা বরাবর ঘুরান: পাতলা একটা রুটি.",
-  "Column তিনটা, কিন্তু real direction মোটামুটি দুইটা. Real data প্রায়ই এমন.",
+  "আরো বড় একটা খাতা: চল্লিশটা flat, তিনটা column।",
+  "সামনে থেকে dot গুলা একটা মেঘের মত।",
+  "কিনারা বরাবর ঘুরান: পাতলা একটা রুটি।",
+  "Column তিনটা, কিন্তু real direction মোটামুটি দুইটা। Real data প্রায়ই এমন।",
 ];
 
 export function Pancake() {
@@ -2007,9 +2007,9 @@ const S9R_COLS = 300;
 const S9R_DIRS = 20;
 const S9R_SAY = [
   "একটা real table: 300 টা column.",
-  "কিন্তু real direction হয়তো মাত্র 20 টা.",
-  "ওই আসল সংখ্যাটার নাম rank.",
-  "আপনার data র আসলে কয়টা direction লাগে? Column না, direction গুনুন.",
+  "কিন্তু real direction হয়তো মাত্র 20 টা।",
+  "ওই আসল সংখ্যাটার নাম rank।",
+  "আপনার data র আসলে কয়টা direction লাগে? Column না, direction গুনুন।",
 ];
 
 export function RankCount() {
@@ -2068,10 +2068,10 @@ export function LastBox({}: Story) {
         {!up && <MoveBox x={196} y={GR} />}
         <CastPerson who="samin" x={64} y={GR} arm="hold" mood={k >= 1 ? "happy" : "plain"} label />
         <Sign x={84} y={GR - 44} text="খাতা" tone="amber" />
-        {k === 1 && <Bubble x={64} y={GR - 66} side="right" lines={["দুই direction.", "বাক্স তোমার."]} />}
+        {k === 1 && <Bubble x={64} y={GR - 66} side="right" lines={["দুই direction.", "বাক্স তোমার।"]} />}
         <CastPerson who="nasib" x={nx} y={ny} facing={up ? 1 : -1} walking={up} arm={up ? "hold" : "down"} mood={k >= 2 ? "sad" : "plain"} ms={1600} label={!up} />
         {up && <MoveBox x={nx + 16} y={ny - 22} />}
-        {k === 2 && <Bubble x={150} y={GR - 66} lines={["Column তিনটা,", "direction দুইটা."]} />}
+        {k === 2 && <Bubble x={150} y={GR - 66} lines={["Column তিনটা,", "direction দুইটা।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -2083,9 +2083,9 @@ export function LastBox({}: Story) {
 //     paints the sheet from the two buttons, 1 draws a line and the gaps.
 
 const VERDICT = [
-  "কিনারা বরাবর ঘুরালে ছয়টা dot এক line এ. Third direction টা কখনো লাগেই না.",
-  "দুইটা button, (1, 0, 1) আর (0, 1, 1), এমন একটা sheet রং করে যেটায় ছয়টাই আছে.",
-  "কোণা দিয়ে যাওয়া কোনো একটা line এ সবগুলা ধরে না. লাল ফাঁকগুলা দেখছেন?",
+  "কিনারা বরাবর ঘুরালে ছয়টা dot এক line এ। Third direction টা কখনো লাগেই না।",
+  "দুইটা button, (1, 0, 1) আর (0, 1, 1), এমন একটা sheet রং করে যেটায় ছয়টাই আছে।",
+  "কোণা দিয়ে যাওয়া কোনো একটা line এ সবগুলা ধরে না। লাল ফাঁকগুলা দেখছেন?",
 ];
 
 export function BetSettled() {
@@ -2104,7 +2104,7 @@ export function BetSettled() {
     if (opened.includes(i)) return;
     const o = [...opened, i];
     setOpened(o);
-    if (o.length === 3) pass("দুই direction. বাক্স তুলবে নাসিব.");
+    if (o.length === 3) pass("দুই direction। বাক্স তুলবে নাসিব।");
   };
 
   return (
@@ -2127,9 +2127,9 @@ export function BetSettled() {
         ))}
       </div>
       <div key={String(cur)} className={`${FADE} mx-auto mt-1.5 min-h-10 max-w-sm text-center text-[0.9rem] leading-snug ${cur === 1 ? "text-accent-text" : cur === null ? "text-muted" : "text-danger"}`}>
-        {cur === null ? "একটা দাবিতে tap করুন, ছয়টা dot এর উপরে test হবে." : VERDICT[cur]}
+        {cur === null ? "একটা দাবিতে tap করুন, ছয়টা dot এর উপরে test হবে।" : VERDICT[cur]}
       </div>
-      <Task done={done}>তিনটা দাবিই খুলুন, তারপর নিজের বাজির সাথে মিলিয়ে দেখুন.</Task>
+      <Task done={done}>তিনটা দাবিই খুলুন, তারপর নিজের বাজির সাথে মিলিয়ে দেখুন।</Task>
     </>
   );
 }
@@ -2139,10 +2139,10 @@ export function BetSettled() {
 //      of them only bed + bath, so two directions.
 
 const X8_SAY = [
-  "খাতায় column তিনটা.",
-  "কিন্তু total তো শুধু bed + bath.",
-  "তাই flat গুলা ব্যবহার করে দুইটা direction: bed আর bath.",
-  "Data র column না, data যে কয়টা direction ব্যবহার করে সেটা গুনুন.",
+  "খাতায় column তিনটা।",
+  "কিন্তু total তো শুধু bed + bath।",
+  "তাই flat গুলা ব্যবহার করে দুইটা direction: bed আর bath।",
+  "Data র column না, data যে কয়টা direction ব্যবহার করে সেটা গুনুন।",
 ];
 
 export function ColumnsNotDirections() {
@@ -2196,9 +2196,9 @@ export function ColumnsNotDirections() {
 const S10_F = { x0: 40, y0: 112, u: 28 };
 const s10 = (x: number, y: number): XY => [S10_F.x0 + x * S10_F.u, S10_F.y0 - y * S10_F.u];
 const S10_SAY = [
-  "Map বলছে স্কুল বাসা থেকে 2 ঘর east আর 3 ঘর north এ.",
-  "এই পাড়ার বড় রাস্তাগুলা east এ যায়.",
-  "কিন্তু সোজা north এ যায় এমন কোনো রাস্তাই নাই.",
+  "Map বলছে স্কুল বাসা থেকে 2 ঘর east আর 3 ঘর north এ।",
+  "এই পাড়ার বড় রাস্তাগুলা east এ যায়।",
+  "কিন্তু সোজা north এ যায় এমন কোনো রাস্তাই নাই।",
   "তাহলে ফাহিম রিকশাওয়ালা মামাকে স্কুলটা কোথায় বলবে কীভাবে?",
 ];
 

@@ -179,7 +179,7 @@ export function TwoRecipes() {
         </Plane>
         <div className="grid min-w-0 flex-1 gap-2 text-sm">
           <div className="rounded-xl border-2 border-cat-amber/40 bg-cat-amber/5 px-2.5 py-1.5">
-            <div className="font-semibold">ফাহিমের box</div>
+            <div className="font-semibold">ফাহিমের dot product</div>
             <div className="font-mono">
               <BoxRun a={V} b={W} inline />
             </div>
@@ -498,7 +498,7 @@ export function TwoTests() {
 
   return (
     <>
-      {round === 1 && <div className="text-center text-sm text-accent-text">✓ প্রথম জোড়া: box 6, মামা 6.0।</div>}
+      {round === 1 && <div className="text-center text-sm text-accent-text">✓ প্রথম জোড়া: dot product 6, মামা 6.0।</div>}
       <div key={round} className={`${FADE} flex items-center gap-3`}>
         <Plane f={t.f} ticks={1} label={`v ${tupN(t.v)}, w ${tupN(t.w)}`} className="max-w-[8.5rem] shrink-0">
           {k >= 3 && <Arc f={t.f} a={t.v} b={t.w} r={0.9} />}
@@ -541,7 +541,7 @@ export function TwoTests() {
           ["বাজির জোড়া", round === 1 && over],
         ]}
       />
-      <Task done={round === 1 && over}>মামার হিসাবটা চালান, এক মাপ এক মাপ করে। তারপর box এর উত্তরের সাথে মিলিয়ে দেখুন।</Task>
+      <Task done={round === 1 && over}>মামার হিসাবটা চালান, এক মাপ এক মাপ করে। তারপর dot product এর উত্তরের সাথে মিলিয়ে দেখুন।</Task>
     </>
   );
 }
@@ -736,7 +736,7 @@ export function NoCrossTalk() {
 }
 
 // ---------------------------------------------------------------------------
-// 8 · এবার আপনার পালা. Three new pairs. Before মামা measures, the reader says
+// 8 · এবার আপনার পালা। Three new pairs. Before মামা measures, the reader says
 //     what his tape and protractor will give, from the box alone. Every pick
 //     plays মামা measuring on the sheet (tape along u, tape along v, then v's
 //     shadow on u) and his number lands beside the reader's: a wrong try
@@ -775,7 +775,7 @@ export function YourPair() {
     play.play(3, () => {
       setTried(null);
       setDone(done + 1);
-      if (done + 1 === PAIRS.length) pass("চাঁদা-ফিতা আর box একই সংখ্যা দেয়।");
+      if (done + 1 === PAIRS.length) pass("চাঁদা-ফিতা আর dot product একই সংখ্যা দেয়।");
     });
   };
 
@@ -827,7 +827,7 @@ export function YourPair() {
               </button>
             ))}
           </div>
-          {miss !== null && (tried === null || k >= 3) && <Nope key={miss}>উঁহু। মামার মাপ লাগবে না। boxটা চালান। ঘরে ঘরে গুণ, তারপর যোগ।</Nope>}
+          {miss !== null && (tried === null || k >= 3) && <Nope key={miss}>উঁহু। মামার মাপ লাগবে না। Dot productটা করুন। ঘরে ঘরে গুণ, তারপর যোগ।</Nope>}
         </>
       ) : null}
       {prev && !m && (
@@ -873,12 +873,12 @@ export function AlwaysBet() {
       <div className="grid grid-cols-3 gap-2 text-center">
         {ALWAYS_DONE.map((d) => (
           <div key={d.n} className="grid content-start gap-1 rounded-xl border-2 border-accent/50 bg-accent/10 px-1 py-1.5">
-            <Plane f={FAB} label={`${tupN(d.v)} আর ${tupN(d.w)}: box ${d.n}, মামা ${d.n}`} className="mx-auto my-0! max-w-[4.5rem]">
+            <Plane f={FAB} label={`${tupN(d.v)} আর ${tupN(d.w)}: dot product ${d.n}, মামা ${d.n}`} className="mx-auto my-0! max-w-[4.5rem]">
               <Arrow f={FAB} from={O} to={d.v} tone="blue" w={2.2} />
               <Arrow f={FAB} from={O} to={d.w} tone="coral" w={2.2} />
             </Plane>
             <div className="flex items-center justify-center gap-1 text-xs">
-              <S_Tick /> box {d.n}, মামা {d.n}
+              <S_Tick /> dot product {d.n}, মামা {d.n}
             </div>
           </div>
         ))}
@@ -887,7 +887,7 @@ export function AlwaysBet() {
           <div className="text-xs">বাকি সব জোড়া</div>
         </div>
       </div>
-      <div className="mt-3 text-sm font-medium text-muted">মামা বলছেন তাঁর হিসাব আর box সবসময় একই উত্তর দেবে। আপনার কী মনে হয়?</div>
+      <div className="mt-3 text-sm font-medium text-muted">মামা বলছেন তাঁর হিসাব আর dot product সবসময় একই উত্তর দেবে। আপনার কী মনে হয়?</div>
       <div className="mt-2 grid gap-2">
         {RECIPE_BET.map((o, i) => (
           <Choice key={o} n={i} look={bet === i ? "picked" : bet !== null ? "dim" : "idle"} disabled={bet !== null} onClick={() => seal(i)}>
@@ -1293,7 +1293,7 @@ function S_Tape() {
   );
 }
 
-/** A চাঁদা (half-circle protractor), flat side down, centred at (0, 0) (4.2's চাঁদা). */
+/** A চাঁদা (half-circle protractor), flat side down, centred at (0, 0) (4.2's চাঁদা)। */
 function S_Protractor() {
   return (
     <g className="pointer-events-none">
@@ -1390,13 +1390,13 @@ function S_Stick({ x1, x2, y }: { x1: number; x2: number; y: number }) {
   );
 }
 
-/** The black box, bottom-centre at (x, SG), its lid tipped back when `open`. */
+/** The black box (labelled u · v, the dot product), bottom-centre at (x, SG), its lid tipped back when `open`. */
 function S_Box({ x, open }: { x: number; open: boolean }) {
   return (
     <g className="pointer-events-none">
       <rect x={x - 18} y={SG - 24} width={36} height={24} rx={2} fill="#1f2937" />
       <text x={x} y={SG - 9} textAnchor="middle" fontSize={9} fontWeight={800} fill="white">
-        box
+        u · v
       </text>
       <g
         style={{ transform: open ? "rotate(-40deg)" : "none", transformOrigin: `${x - 18}px ${SG - 24}px`, transformBox: "view-box" }}
@@ -1448,7 +1448,7 @@ export function RoofNoon({}: Story) {
   const k = s.k;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="field" label="দুপুরে ছাদে মামা চক দিয়ে (2, 3) আর (2, 1) আঁকলেন; ফাহিম box চালিয়ে 7 পেলো; মামা বললেন ফিতা আর চাঁদা দিয়ে গুণ ছাড়াই 7 দেবেন; ফাহিম ভাবছে একই সংখ্যা কেন">
+      <Stage backdrop="field" label="দুপুরে ছাদে মামা চক দিয়ে (2, 3) আর (2, 1) আঁকলেন; ফাহিম dot product করে 7 পেলো; মামা বললেন ফিতা আর চাঁদা দিয়ে গুণ ছাড়াই 7 দেবেন; ফাহিম ভাবছে একই সংখ্যা কেন">
         <S_Roof />
         {k >= 2 && <S_Chalk x={172} y={175} arrows={[V, W]} names={["v", "w"]} draw />}
         <Person who="mama" x={k >= 1 ? 128 : -24} y={SG} walking={k === 1} ms={1400} arm={k === 2 ? "point" : k >= 4 ? "hold" : "down"} mood={k >= 4 ? "smug" : "plain"} label={k >= 1} />
@@ -1467,7 +1467,7 @@ export function RoofNoon({}: Story) {
             </g>
           </>
         )}
-        {k === 3 && <Bubble x={262} y={SG - 66} side="left" lines={["box চালালাম:", "2 × 2 + 3 × 1 = 7"]} />}
+        {k === 3 && <Bubble x={262} y={SG - 66} side="left" lines={["Dot product করলাম:", "2 × 2 + 3 × 1 = 7"]} />}
         {k === 4 && <Bubble x={128} y={SG - 66} lines={["গুণ ছাড়াই এই 7 দেবো,", "শুধু ফিতা আর চাঁদায়!"]} />}
         {k === 5 && <Bubble x={262} y={SG - 66} side="left" tone="think" lines={["দুইটা আলাদা হিসাব,", "একই সংখ্যা দেবে কেন?"]} />}
       </Stage>
@@ -1771,7 +1771,7 @@ export function HalfTurn() {
 //      carry the same sign.
 
 const X3B_SAY = [
-  "বাঁয়ে লাঠির ছায়া, ডানে ৪.২-এর ভ্যানের box।",
+  "বাঁয়ে লাঠির ছায়া, ডানে ৪.২-এর ভ্যানের dot product।",
   "90°-এর কম: দুইটাই plus।",
   "ঠিক 90°: দুইটাই 0।",
   "90°-এর বেশি: দুইটাই minus।",
@@ -1804,7 +1804,7 @@ export function VanTable() {
       <div className="mx-auto grid w-full max-w-xs grid-cols-[auto_1fr_1fr] items-center gap-x-2 gap-y-1 text-sm">
         <span />
         <span className="text-center text-xs text-muted">লাঠির ছায়া</span>
-        <span className="text-center text-xs text-muted">৪.২-এর box</span>
+        <span className="text-center text-xs text-muted">৪.২-এর dot product</span>
         {X3B_ROWS.map((r, i) => (
           <div key={r.name} className="contents">
             <span className="flex items-center gap-1.5">
@@ -2183,9 +2183,9 @@ const X5_PAIRS: { v: XY; w: XY; shadow: string; len: string; prod: string; box: 
 const X5_SAY = [
   "প্রথম জোড়া: v = (2, 0), w = (3, 3)।",
   "w-এর যতটুকু v-এর দিকে যায়, মানে v-এর ওপর ছায়া: 3।",
-  "v-এর length 2, গুণ ছায়া 3: 6। box এ ও 6।",
+  "v-এর length 2, গুণ ছায়া 3: 6। Dot product এ ও 6।",
   "বাজির জোড়া: v-এর ওপর w-এর ছায়া 1.94।",
-  "v-এর length 3.61, গুণ ছায়া 1.94: 7.0। box এ ও 7।",
+  "v-এর length 3.61, গুণ ছায়া 1.94: 7.0। Dot product এ ও 7।",
   "v-এর length, গুণ v-এর ওপর w-এর ছায়া। এটাই মামার হিসাব।",
 ];
 
@@ -2229,7 +2229,7 @@ export function LengthTimesShadow() {
           {tape && <div className={`${FADE} font-mono font-bold`}>{p.prod}</div>}
           {tape && (
             <div className={`${FADE} flex items-center gap-1 text-xs text-accent-text`}>
-              <S_Tick /> box এ ও {p.box}
+              <S_Tick /> dot product এ ও {p.box}
             </div>
           )}
         </div>
@@ -2346,7 +2346,7 @@ export function RoadDebt() {
     <Scene scene={s} caption={say(X6_SAY, k)}>
       <div className="mx-auto flex max-w-xs items-center gap-3">
         <S_Sheet max="max-w-[9rem]">
-          <Plane f={FRD} ticks={1} label="রাস্তা (4, 3), ফাহিমের ধাক্কা রাস্তা বরাবর, ছায়া 5, box 25" className="my-0! max-w-none">
+          <Plane f={FRD} ticks={1} label="রাস্তা (4, 3), ফাহিমের ধাক্কা রাস্তা বরাবর, ছায়া 5, dot product 25" className="my-0! max-w-none">
             {k >= 2 && <S_Bar f={FRD} to={X6_ROAD} w={10} />}
             <Arrow f={FRD} from={O} to={X6_ROAD} tone="teal" w={3.2} />
             {k >= 1 && <Arrow f={FRD} from={X6_OFF} to={[4 + X6_OFF[0], 3 + X6_OFF[1]]} tone="coral" w={2.2} draw />}
@@ -2372,7 +2372,7 @@ export function RoadDebt() {
           {k >= 3 && <div className={`${FADE} font-mono font-bold`}>5 × 5 = 25</div>}
           {k >= 3 && (
             <div className={`${FADE} flex items-center gap-1 text-xs text-accent-text`}>
-              <S_Tick /> box এ ও 25
+              <S_Tick /> dot product এ ও 25
             </div>
           )}
         </div>
@@ -2410,7 +2410,7 @@ export function NotYetProof({}: Story) {
           >
             <div className="font-mono text-[0.65rem]">{d.pair}</div>
             <div className="flex items-center justify-center gap-1 text-xs">
-              <S_Tick /> box {d.n}, মামা {d.n}
+              <S_Tick /> dot product {d.n}, মামা {d.n}
             </div>
           </div>
         ))}
@@ -2486,8 +2486,8 @@ const FT = makeFrame(-1.5, 3.5, -0.5, 3.5, 28);
 const X9_SAY = [
   "পুরানো axis-এ address (2, 3)।",
   "নতুন দুইটা axis: দুইটাই 1 unit লম্বা, একটা আরেকটার সাথে ৯০ degree কোণে।",
-  "প্রথম নতুন axis (0.8, 0.6)-এর সাথে box: 2 × 0.8 + 3 × 0.6 = 3.4। ওর ওপর ছায়াও 3.4।",
-  "দ্বিতীয়টা (−0.6, 0.8)-এর সাথে box: 1.2। একই জায়গার নতুন address (3.4, 1.2)।",
+  "প্রথম নতুন axis (0.8, 0.6)-এর সাথে dot product: 2 × 0.8 + 3 × 0.6 = 3.4। ওর ওপর ছায়াও 3.4।",
+  "দ্বিতীয়টা (−0.6, 0.8)-এর সাথে dot product: 1.2। একই জায়গার নতুন address (3.4, 1.2)।",
 ];
 
 export function TiltedAddress() {
@@ -2889,7 +2889,7 @@ export function HiddenProtractor() {
   const k = s.k;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="field" label="মামী বললেন, box এর ভেতরে চাঁদা ছিল, শুধু লুকানো; box খুলতেই ভেতরে একটা চাঁদা">
+      <Stage backdrop="field" label="মামী বললেন, dot product এর হিসাবের ভেতরে চাঁদা ছিল, শুধু লুকানো; box খুলতেই ভেতরে একটা চাঁদা">
         <S_Roof />
         <Person who="mami" x={112} y={SG} mood={k >= 1 ? "smug" : "plain"} arm={k === 1 ? "point" : "down"} label />
         <Person who="mama" x={166} y={SG} mood={k >= 3 ? "happy" : "plain"} arm={k >= 3 ? "wave" : "down"} label />
@@ -2902,7 +2902,7 @@ export function HiddenProtractor() {
           </g>
         )}
         <Person who="fahim" x={280} y={SG} facing={-1} mood={k >= 3 ? "happy" : "plain"} label />
-        {k === 1 && <Bubble x={112} y={SG - 66} side="right" lines={["তাহলে box এর ভেতরে চাঁদা", "ছিল, শুধু লুকানো।"]} />}
+        {k === 1 && <Bubble x={112} y={SG - 66} side="right" lines={["তাহলে dot product এর", "হিসাবের ভেতরে চাঁদা", "ছিল, শুধু লুকানো।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -2949,9 +2949,9 @@ const X11: { v: XY; w: XY }[] = [
 const X11_SAY = [
   "তৃতীয় জোড়া: (2, 2) আর (−2, 2), মাঝে ঠিক 90°।",
   "খাড়া লাঠির মতো: ছায়া একটা বিন্দু, 0।",
-  "box ও 0। দুই হিসাবই বলছে ৯০ degree।",
+  "Dot product ও 0। দুই হিসাবই বলছে ৯০ degree।",
   "দ্বিতীয় জোড়ায় কোণ 90° পেরিয়ে গেছে: ছায়া পড়লো পেছনে, −1।",
-  "মামা: 3 × (−1) = −3। box ও −3। দুই হিসাবেই minus।",
+  "মামা: 3 × (−1) = −3। Dot product ও −3। দুই হিসাবেই minus।",
 ];
 
 export function ZeroAndMinus() {
@@ -3268,16 +3268,16 @@ const ZM_PIC: [number, number, number, number][] = [
 ];
 
 export function ZeroMeans({ children }: { children?: ReactNode }) {
-  const t = useTry(ZM_RIGHT, 3, "box এ 0 মানে ৯০ degree কোণ।");
+  const t = useTry(ZM_RIGHT, 3, "Dot product 0 মানে ৯০ degree কোণ।");
   const f = FVAN;
   const push = t.pick === null ? null : ZM_PUSH[t.pick];
   const off: XY = t.pick === 0 ? ZM_OFF : O;
   const n = push ? dot(VAN_ROAD, push) : 0;
   return (
     <>
-      <X_Ask>দুইটা arrow box এ দিলে 0 এলো। মানে কী?</X_Ask>
+      <X_Ask>দুইটা arrow এর dot product করলে 0 এলো। মানে কী?</X_Ask>
       <S_Sheet max="mt-2 max-w-[10.5rem]">
-        <Plane f={f} label="৪.২-এর রাস্তা (4, 3) আর একটা ধাক্কা; box যত বলে, ভ্যান তত এগোয় বা পেছায়" className="my-0! max-w-none">
+        <Plane f={f} label="৪.২-এর রাস্তা (4, 3) আর একটা ধাক্কা; dot product যত বলে, ভ্যান তত এগোয় বা পেছায়" className="my-0! max-w-none">
           <X_Road />
           <Arrow f={f} from={O} to={VAN_ROAD} tone="teal" w={2.4} />
           <Label f={f} at={[2.6, 1.95]} dx={6} dy={12} anchor="start" size={9} className="fill-cat-teal">
@@ -3295,7 +3295,7 @@ export function ZeroMeans({ children }: { children?: ReactNode }) {
       <div className="mt-1 min-h-10 text-center text-sm">
         {push && t.k >= 2 && (
           <span key={t.miss} className={FADE}>
-            box: <BoxRun a={VAN_ROAD} b={push} k={t.k >= 3 ? 3 : 2} inline />
+            dot product: <BoxRun a={VAN_ROAD} b={push} k={t.k >= 3 ? 3 : 2} inline />
           </span>
         )}
         {push && t.k >= 3 && <div className={`${FADE} text-xs text-muted`}>{n > 0 ? "ভ্যান সামনে এগোলো।" : n < 0 ? "ভ্যান পেছনে গেলো।" : "ভ্যান এক চুলও নড়লো না।"}</div>}
@@ -3316,10 +3316,10 @@ export function ZeroMeans({ children }: { children?: ReactNode }) {
       </X_Answer>
       {t.wrong && (
         <Nope key={t.miss}>
-          box এ এলো {fix(n, 0)}, 0 না। মামীর ধাক্কা পক্ষেও ছিল না, বিপক্ষেও না। কোন দিক থেকে ঠেলছিলেন?
+          Dot product এ এলো {fix(n, 0)}, 0 না। মামীর ধাক্কা পক্ষেও ছিল না, বিপক্ষেও না। কোন দিক থেকে ঠেলছিলেন?
         </Nope>
       )}
-      <Task done={t.won}>যে ছবিতে box এ 0 আসে, সেটাতে tap করুন।</Task>
+      <Task done={t.won}>যে ছবিতে dot product 0 আসে, সেটাতে tap করুন।</Task>
     </>
   );
 }
@@ -3408,7 +3408,7 @@ export function TapeThirteen({ children }: { children?: ReactNode }) {
   const at = (s: number): XY => [TT_U[0] * s, TT_U[1] * s];
   return (
     <>
-      <X_Ask>(2, 3)-কে box এ নিজের সাথে দিলে আসে 13। তাহলে (2, 3) arrow-টা কত লম্বা?</X_Ask>
+      <X_Ask>(2, 3)-এর নিজের সাথে dot product করলে আসে 13। তাহলে (2, 3) arrow-টা কত লম্বা?</X_Ask>
       <div className="mt-2 flex items-center gap-3">
         <S_Sheet max="max-w-[8.5rem]">
           <Plane f={f} ticks={1} label="(2, 3) arrow-এর ওপর বেছে নেওয়া length-এর ফিতা" className="my-0! max-w-none">
@@ -3463,7 +3463,7 @@ export function TapeThirteen({ children }: { children?: ReactNode }) {
       >
         {children}
       </X_Answer>
-      {t.wrong && <Nope key={t.miss}>মনে আছে ৪.১? Shiku-র (3, 4) নিজের সাথে box এ দিয়ে এসেছিল 25। আর ফিতা বলেছিল 5।</Nope>}
+      {t.wrong && <Nope key={t.miss}>মনে আছে ৪.১? Shiku-র (3, 4)-এর নিজের সাথে dot product করে এসেছিল 25। আর ফিতা বলেছিল 5।</Nope>}
       <Task done={t.won}>একটা length বেছে নিন। ফিতাটা (2, 3)-এর ওপর বিছিয়ে দেখুন।</Task>
     </>
   );
@@ -3483,7 +3483,7 @@ const RB_X = 96;
 const RB_FORMULA = ["5", "5 × 5 = 25", "5 + 5 = 10"];
 
 export function RoadBox() {
-  const t = useTry(RB_RIGHT, 3, "box মানে length গুণ ছায়া: 5 × 5।");
+  const t = useTry(RB_RIGHT, 3, "Dot product মানে length গুণ ছায়া: 5 × 5।");
   const w = 5 * RB_U;
   const bar = (x: number, y: number, teal: boolean, key: string, delay = 0) => (
     <rect key={key} x={x} y={y - 3} width={w} height={6} rx={3} fill={teal ? X_TEAL : "#475569"} className={POP} style={{ transitionDelay: `${delay}ms` }} />
@@ -3491,7 +3491,7 @@ export function RoadBox() {
   const built = t.pick === null || t.k < 1 ? [] : t.pick === 0 ? [bar(RB_X, 62, false, "s")] : t.pick === 2 ? [bar(RB_X, 62, true, "r"), bar(RB_X + w, 62, false, "s", 250)] : [0, 1, 2, 3, 4].map((j) => bar(RB_X, 52 + j * 8, false, `s${j}`, j * 120));
   return (
     <>
-      <X_Ask>৪.২-এর রাস্তার card (4, 3) ছিল 5 unit লম্বা। ফাহিমের ধাক্কার ছায়া রাস্তা বরাবর 5 unit। box এ কত আসার কথা?</X_Ask>
+      <X_Ask>৪.২-এর রাস্তার card (4, 3) ছিল 5 unit লম্বা। ফাহিমের ধাক্কার ছায়া রাস্তা বরাবর 5 unit। Dot product এ কত আসার কথা?</X_Ask>
       <svg viewBox="0 0 250 96" role="img" aria-label="রাস্তার length 5 আর ধাক্কার ছায়া 5 থেকে বেছে নেওয়া উত্তর গড়া হলো" className="mx-auto mt-2 block h-auto w-full max-w-[17rem]">
         <rect x={0.5} y={0.5} width={249} height={95} rx={8} fill="white" stroke="#cbd5e1" />
         <text x={8} y={18} fontSize={9} fill={S_INK}>
@@ -3522,14 +3522,14 @@ export function RoadBox() {
       <div className="mt-1 min-h-6 text-center text-sm">
         {t.k >= 3 && t.pick !== null && (
           <span key={t.miss} className={`${FADE} inline-flex items-center gap-1`}>
-            box: <BoxRun a={VAN_ROAD} b={VAN_ROAD} k={3} inline />
+            dot product: <BoxRun a={VAN_ROAD} b={VAN_ROAD} k={3} inline />
             {t.hit ? <S_Tick /> : <span className="text-danger">, আপনার {RB_OPTS[t.pick]}</span>}
           </span>
         )}
       </div>
       <X_Answer t={t} cols="grid-cols-3" picks={RB_OPTS.map((o, i) => <X_Pick key={o} t={t} i={i} label={o} />)} />
-      {t.wrong && <Nope key={t.miss}>box এর সাথে মিললো না। মামার হিসাবটা মনে করুন। রাস্তার length, গুণ ধাক্কার যতটুকু রাস্তার দিকে যায়।</Nope>}
-      <Task done={t.won}>একটা উত্তর বেছে নিন। box মিলিয়ে দেখবে।</Task>
+      {t.wrong && <Nope key={t.miss}>Dot product এর সাথে মিললো না। মামার হিসাবটা মনে করুন। রাস্তার length, গুণ ধাক্কার যতটুকু রাস্তার দিকে যায়।</Nope>}
+      <Task done={t.won}>একটা উত্তর বেছে নিন। Dot product মিলিয়ে দেখবে।</Task>
     </>
   );
 }
@@ -3555,7 +3555,7 @@ export function SixtyCheck({ children }: { children?: ReactNode }) {
   const formula = t.pick === 0 && t.k >= 2 ? "2 × 3 = 6" : t.pick === 1 && t.k >= 3 ? "3 × 0.5 = 1.5" : t.pick === 2 && t.k >= 3 ? "2 × 1.5 = 3" : shadow ? "w-এর ছায়া 1.5" : "";
   return (
     <>
-      <X_Ask>মামা মাপলেন: ‖v‖ = 2, ‖w‖ = 3, আর মাঝের কোণ 60°। box এ কত আসবে?</X_Ask>
+      <X_Ask>মামা মাপলেন: ‖v‖ = 2, ‖w‖ = 3, আর মাঝের কোণ 60°। Dot product এ কত আসবে?</X_Ask>
       <S_Sheet max="mt-2 max-w-[11.5rem]">
         <Plane f={f} grid={0.5} axes={false} label="v 2 লম্বা, w 3 লম্বা, মাঝে 60°; বেছে নেওয়া উত্তরের হিসাব" className="my-0! max-w-none">
           <path d={floorPath(f, -0.4, 3.4)} strokeWidth={1} strokeDasharray="3 4" className="pointer-events-none stroke-[#0f1b2d]/40" />
@@ -3801,7 +3801,7 @@ export function MamiRoad({ children }: { children?: ReactNode }) {
   const go = t.pick === null ? 0 : MR_GO[t.pick];
   return (
     <>
-      <X_Ask>৪.২-এর রাস্তা মনে আছে তো? রাস্তা (4, 3), মামী ঠেলছিলেন (−3, 4) দিক থেকে। box এ কত এসেছিল? আর তার মানে কী?</X_Ask>
+      <X_Ask>৪.২-এর রাস্তা মনে আছে তো? রাস্তা (4, 3), মামী ঠেলছিলেন (−3, 4) দিক থেকে। Dot product এ কত এসেছিল? আর তার মানে কী?</X_Ask>
       <div className="mt-2 flex items-center gap-3">
         <S_Sheet max="max-w-[9.5rem]">
           <Plane f={f} label="৪.২-এর রাস্তা (4, 3) আর মামীর ধাক্কা (−3, 4); বেছে নেওয়া উত্তর ভ্যানকে যেখানে পাঠায়" className="my-0! max-w-none">
@@ -3819,7 +3819,7 @@ export function MamiRoad({ children }: { children?: ReactNode }) {
         <div className="grid min-w-0 flex-1 gap-1 text-sm">
           {t.pick !== null && t.k >= 2 && (
             <span key={t.miss} className={FADE}>
-              box: <BoxRun a={VAN_ROAD} b={MR_PUSH} k={t.k >= 3 ? 3 : 2} inline />
+              dot product: <BoxRun a={VAN_ROAD} b={MR_PUSH} k={t.k >= 3 ? 3 : 2} inline />
             </span>
           )}
           {t.k >= 3 && t.pick !== null && <span className={`${FADE} text-xs text-muted`}>ভ্যান এক চুলও নড়েনি।</span>}
@@ -3855,7 +3855,7 @@ export function MamiRoad({ children }: { children?: ReactNode }) {
 const FNB = makeFrame(-0.6, 4.5, -0.5, 4.5, 26);
 const NB_V: XY = [1, 0];
 const NB_W: XY = [0, 4];
-const NB_OPTS = ["দুইটাই 0", "box 0, কিন্তু মামার হিসাব 4", "box 4, মামার হিসাব 0"];
+const NB_OPTS = ["দুইটাই 0", "dot product 0, কিন্তু মামার হিসাব 4", "dot product 4, মামার হিসাব 0"];
 const NB_SAY: XY[] = [
   [0, 0],
   [0, 4],
@@ -3881,7 +3881,7 @@ export function NinetyBoth({ children }: { children?: ReactNode }) {
   const drop = t.pick !== null && (t.pick === 1 ? t.k >= 3 : t.k >= 2);
   return (
     <>
-      <X_Ask>v = (1, 0) আর w = (0, 4)। box আর মামার হিসাব কী বলবে?</X_Ask>
+      <X_Ask>v = (1, 0) আর w = (0, 4)। Dot product আর মামার হিসাব কী বলবে?</X_Ask>
       <div className="mt-2 flex items-center gap-3">
         <S_Sheet max="max-w-[8rem]">
           <Plane f={f} ticks={1} label="v (1, 0) আর w (0, 4), মাঝে 90°; w-এর মাথা থেকে সোজা নিচে দাগ পড়ে কোণের বিন্দুতে" className="my-0! max-w-none">
@@ -3896,7 +3896,7 @@ export function NinetyBoth({ children }: { children?: ReactNode }) {
         </S_Sheet>
         <div className="grid min-w-0 flex-1 gap-2 text-sm">
           <div className="min-h-10">
-            <div className="text-xs font-semibold text-muted">box</div>
+            <div className="text-xs font-semibold text-muted">dot product</div>
             {said && t.k >= 1 && (
               <span key={t.miss} className={FADE}>
                 <BoxRun a={NB_V} b={NB_W} k={3} inline />

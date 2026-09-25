@@ -183,9 +183,9 @@ function RP_PaperDraw({ f, hi = null, ropes = true, fish = true }: { f: Frame; h
 //     Unmarked; the last screen settles it.
 
 const TB_OPTS: [string, string][] = [
-  ["প্রত্যেক পাপড়ির জন্য স্যার লাগবে.", "নাসিব"],
-  ["আরো কয়েকটা দাগ দিয়ে গেলে হতো.", "করিম"],
-  ["দুই দড়িই যথেষ্ট.", "রিনা"],
+  ["প্রত্যেক পাপড়ির জন্য স্যার লাগবে।", "নাসিব"],
+  ["আরো কয়েকটা দাগ দিয়ে গেলে হতো।", "করিম"],
+  ["দুই দড়িই যথেষ্ট।", "রিনা"],
 ];
 const TB_PAPER = makeFrame(-0.6, 6.4, -0.6, 5.6, 14, 4);
 const TB_ROAD = makeFrame(-1, 7, -1, 6, 17, 4);
@@ -253,7 +253,7 @@ export function TwoRopesBet() {
   const act = usePlay(650);
   const seal = (i: number) => {
     setBet(i);
-    act.play(3, () => pass("বাজি সিল হলো. স্যার ফেরার আগে পাঁচটা পাপড়ি."));
+    act.play(3, () => pass("বাজি সিল হলো। স্যার ফেরার আগে পাঁচটা পাপড়ি।"));
   };
   // beats of the acted bet: 1 the claim drawn, 2 its "?", 3 sealed
   const k = bet === null ? 0 : act.running ? act.k : 3;
@@ -298,7 +298,7 @@ export function TwoRopesBet() {
             <Draw key={j} d={`M${TB_PAPER.sx(t[0])} ${py + TB_PAPER.sy(t[1])}L${rx + TB_ROAD.sx(TB_Q[2][0]) - 6} ${TB_ROAD.sy(TB_Q[2][1]) - 8}`} delay={j * 90} ms={700} strokeWidth={1} className="stroke-[#f472b6]/70" />
           ))}
       </svg>
-      <div className="mt-1 text-center text-sm text-muted">কাগজে দড়ি এক ঘর করে. রাস্তায় স্যার টেনে নিয়েছেন নতুন জায়গায়.</div>
+      <div className="mt-1 text-center text-sm text-muted">কাগজে দড়ি এক ঘর করে। রাস্তায় স্যার টেনে নিয়েছেন নতুন জায়গায়।</div>
       <div className="mt-3 grid gap-2">
         {TB_OPTS.map(([t, who], i) => (
           <Choice key={t} n={i} look={bet === i ? "picked" : bet !== null ? "dim" : "idle"} disabled={bet !== null} onClick={() => seal(i)}>
@@ -311,7 +311,7 @@ export function TwoRopesBet() {
           </Choice>
         ))}
       </div>
-      <Task done={bet !== null && k >= 3}>স্যার ফেরার আগে পাঁচটা পাপড়ি রাস্তায় বসানো যাবে? একটার উপরে বাজি ধরুন.</Task>
+      <Task done={bet !== null && k >= 3}>স্যার ফেরার আগে পাঁচটা পাপড়ি রাস্তায় বসানো যাবে? একটার উপরে বাজি ধরুন।</Task>
     </>
   );
 }
@@ -338,7 +338,7 @@ export function GuessByEye() {
     if (mine) return;
     const q: XY = [clamp(Math.round(p[0] * 2) / 2, GE_F.x0, GE_F.x1), clamp(Math.round(p[1] * 2) / 2, GE_F.y0, GE_F.y1)];
     setMine(q);
-    walk.play(3, () => pass("চোখে মেপে সবাই আলাদা জায়গা বলে."));
+    walk.play(3, () => pass("চোখে মেপে সবাই আলাদা জায়গা বলে।"));
   };
   const shown = walk.running ? walk.k : 3;
   return (
@@ -364,8 +364,8 @@ export function GuessByEye() {
           </g>
         )}
       </RP_Road>
-      {mine && shown === 3 && <div className={`mt-2 text-center text-sm ${FADE}`}>চারজন, চার জায়গা. কারটা ঠিক, কেউ জানে না.</div>}
-      <Task done={mine !== null && shown === 3}>চোখে মেপে রাস্তায় একটা জায়গা tap করুন. তারপর দেখুন বাকিরা কোথায় রাখলো.</Task>
+      {mine && shown === 3 && <div className={`mt-2 text-center text-sm ${FADE}`}>চারজন, চার জায়গা। কারটা ঠিক, কেউ জানে না।</div>}
+      <Task done={mine !== null && shown === 3}>চোখে মেপে রাস্তায় একটা জায়গা tap করুন। তারপর দেখুন বাকিরা কোথায় রাখলো।</Task>
     </>
   );
 }
@@ -410,7 +410,7 @@ export function SameRecipe() {
     setAmt(v);
     if (!hit && eq(v, [2, 3])) {
       setHit(true);
-      conf.play(2, () => pass("একই recipe, নতুন উপকরণ: (7, 8)."));
+      conf.play(2, () => pass("একই recipe, নতুন উপকরণ: (7, 8)।"));
     }
   };
   const beat = conf.running ? conf.k : 2;
@@ -437,7 +437,7 @@ export function SameRecipe() {
       <div className="mt-2 text-center font-mono text-base">
         <span className="text-cat-amber">{amt[0]}</span>·(2, 1) + <span className="text-cat-teal">{amt[1]}</span>·(1, 2) = <b className={hit && eq(amt, [2, 3]) ? "text-accent-text" : ""}>{tup(land)}</b>
       </div>
-      <Task done={hit && beat >= 2}>কাগজে (2, 3) মানে হলুদ দড়ি দুইবার, সবুজ তিনবার. রাস্তার দড়িতেও ঠিক ওই কয়টা press দিন.</Task>
+      <Task done={hit && beat >= 2}>কাগজে (2, 3) মানে হলুদ দড়ি দুইবার, সবুজ তিনবার। রাস্তার দড়িতেও ঠিক ওই কয়টা press দিন।</Task>
     </>
   );
 }
@@ -454,7 +454,7 @@ const TC_TURNED: Cols = [
   [0, -1],
 ];
 const TC_BTN = ["দড়ি দুইটা উল্টা দিকে টানুন", "Recipe চালান: হলুদ 2, সবুজ 3", "এবার 6.2 এর মতো পুরা আলপনা ঘুরান"];
-const TC_SAY = ["দড়ি এখনো কাগজের মতো: (1, 0) আর (0, 1).", "হলুদ এখন (−1, 0), সবুজ (0, −1).", "2·(−1, 0) + 3·(0, −1) = (−2, −3). ক্রস দেওয়া হলো.", "পুরা আলপনা ঘুরলো. (2, 3) এর পাপড়ি থামলো ঠিক ক্রসে."];
+const TC_SAY = ["দড়ি এখনো কাগজের মতো: (1, 0) আর (0, 1)।", "হলুদ এখন (−1, 0), সবুজ (0, −1)।", "2·(−1, 0) + 3·(0, −1) = (−2, −3). ক্রস দেওয়া হলো।", "পুরা আলপনা ঘুরলো। (2, 3) এর পাপড়ি থামলো ঠিক ক্রসে।"];
 
 export function TurnCheck() {
   const pass = useGate();
@@ -470,7 +470,7 @@ export function TurnCheck() {
     const s = stage + 1;
     setStage(s);
     if (s === 2) walk.play(5);
-    if (s === 3) fin.play(1, () => pass("দড়ির হিসাব আর পুরা ঘুরানো: একই জায়গা."));
+    if (s === 3) fin.play(1, () => pass("দড়ির হিসাব আর পুরা ঘুরানো: একই জায়গা।"));
   };
   const tip = turn(LOTUS_TIPS[1]);
   return (
@@ -499,7 +499,7 @@ export function TurnCheck() {
           ["পুরা ঘুরানো", stage >= 3],
         ]}
       />
-      <Task done={stage >= 3}>আগে দড়ি দিয়ে হিসাব করুন, তারপর পুরা আলপনা ঘুরান. দুইটা কি এক জায়গায় থামে?</Task>
+      <Task done={stage >= 3}>আগে দড়ি দিয়ে হিসাব করুন, তারপর পুরা আলপনা ঘুরান। দুইটা কি এক জায়গায় থামে?</Task>
     </>
   );
 }
@@ -572,7 +572,7 @@ export function SlotFormula() {
             className={primaryBtn}
             onClick={() => {
               setLetters(true);
-              pass("দুই দড়ি থেকেই পুরা formula.");
+              pass("দুই দড়ি থেকেই পুরা formula।");
             }}
           >
             সংখ্যার জায়গায় g₁, g₂ বসান
@@ -585,7 +585,7 @@ export function SlotFormula() {
           ["সব পাপড়ির formula", letters],
         ]}
       />
-      <Task done={letters}>তিনটা আলাদা পাপড়ি বসিয়ে দেখুন, দুই slot এ কী আসে. তারপর সংখ্যার জায়গায় অক্ষর.</Task>
+      <Task done={letters}>তিনটা আলাদা পাপড়ি বসিয়ে দেখুন, দুই slot এ কী আসে। তারপর সংখ্যার জায়গায় অক্ষর।</Task>
     </>
   );
 }
@@ -603,7 +603,7 @@ const saKind = (v: XY): "turn" | "stretch" | "still" => {
   if (eq(w, v)) return "still";
   return v[0] * w[1] - v[1] * w[0] === 0 ? "stretch" : "turn";
 };
-const SA_VERDICT = { turn: "ঘুরে গেছে.", stretch: "ঘোরে নাই! একই লাইনে, 3 গুণ লম্বা.", still: "একটুও নড়ে নাই." };
+const SA_VERDICT = { turn: "ঘুরে গেছে।", stretch: "ঘোরে নাই! একই লাইনে, 3 গুণ লম্বা।", still: "একটুও নড়ে নাই।" };
 
 export function StubbornArrow() {
   const pass = useGate();
@@ -620,7 +620,7 @@ export function StubbornArrow() {
     const nf: [boolean, boolean] = [found[0] || k === "stretch", found[1] || k === "still"];
     if (nf[0] !== found[0] || nf[1] !== found[1]) {
       setFound(nf);
-      if (nf[0] && nf[1]) pass("দুইটা দিক ঘোরে না. একটা শুধু লম্বা হয়, একটা নড়েই না.");
+      if (nf[0] && nf[1]) pass("দুইটা দিক ঘোরে না। একটা শুধু লম্বা হয়, একটা নড়েই না।");
     }
   };
   const at = (p: XY) => put([clamp(Math.round(p[0]), -1, 1), clamp(Math.round(p[1]), -1, 1)]);
@@ -647,14 +647,14 @@ export function StubbornArrow() {
           {SA_VERDICT[kind]}
         </b>
       </div>
-      <div className="mt-0.5 text-center text-xs text-muted">সাদা দাগ: move এর আগে. গোলাপি: move এর পরে.</div>
+      <div className="mt-0.5 text-center text-xs text-muted">সাদা দাগ: move এর আগে। গোলাপি: move এর পরে।</div>
       <Ticks
         items={[
           ["শুধু লম্বা হয়", found[0]],
           ["একটুও নড়ে না", found[1]],
         ]}
       />
-      <Task done={found[0] && found[1]}>Arrow এর মাথা টেনে ঘুরান. খুঁজুন কোন arrow move এর পরেও নিজের লাইন ছাড়ে না.</Task>
+      <Task done={found[0] && found[1]}>Arrow এর মাথা টেনে ঘুরান। খুঁজুন কোন arrow move এর পরেও নিজের লাইন ছাড়ে না।</Task>
     </>
   );
 }
@@ -681,7 +681,7 @@ export function PaintThePetals() {
     if (eq(q, LOTUS_TIPS[at])) {
       setLast(null);
       setN(at + 1);
-      if (at + 1 === 5) pass("পাঁচটা পাপড়ি, শুধু দুই দড়ি দিয়ে.");
+      if (at + 1 === 5) pass("পাঁচটা পাপড়ি, শুধু দুই দড়ি দিয়ে।");
     } else {
       setLast(q);
       setMiss((m) => m + 1);
@@ -734,7 +734,7 @@ export function PaintThePetals() {
       </RP_Road>
       <div className="mt-2 text-center text-sm">
         {done ? (
-          <b className={`${POP} text-accent-text`}>পদ্মটা রাস্তায়. পাঁচটা পাপড়িই.</b>
+          <b className={`${POP} text-accent-text`}>পদ্মটা রাস্তায়। পাঁচটা পাপড়িই।</b>
         ) : (
           <>
             এখন: কাগজের পাপড়ি <b className="font-mono">{tup(LOTUS_TIPS[n])}</b>
@@ -743,10 +743,10 @@ export function PaintThePetals() {
       </div>
       {last && !done && !walk.running && (
         <Nope key={miss}>
-          ওই জায়গাটা কাগজের {tup(last)} থেকে আসে. দরকার {tup(LOTUS_TIPS[n])}: হলুদ দড়ি {LOTUS_TIPS[n][0]} বার, সবুজ {LOTUS_TIPS[n][1]} বার.
+          ওই জায়গাটা কাগজের {tup(last)} থেকে আসে। দরকার {tup(LOTUS_TIPS[n])}: হলুদ দড়ি {LOTUS_TIPS[n][0]} বার, সবুজ {LOTUS_TIPS[n][1]} বার।
         </Nope>
       )}
-      <Task done={done}>পাঁচটা পাপড়ির মাথা রাস্তায় tap করে বসান. কাগজের সংখ্যা দেখে, শুধু দুই দড়ি ধরে.</Task>
+      <Task done={done}>পাঁচটা পাপড়ির মাথা রাস্তায় tap করে বসান। কাগজের সংখ্যা দেখে, শুধু দুই দড়ি ধরে।</Task>
     </>
   );
 }
@@ -774,7 +774,7 @@ export function TryNewRopes() {
     const q: XY = [clamp(Math.round(p[0]), -3, 3), clamp(Math.round(p[1]), -1, 4)];
     setPick(q);
     // every tap walks the recipe, yellow once, green once; a right one lands on the mark
-    if (eq(q, TN_RIGHT)) walk.play(2, () => pass("(1, 1) গেলো (−2, 3) এ."));
+    if (eq(q, TN_RIGHT)) walk.play(2, () => pass("(1, 1) গেলো (−2, 3) এ।"));
     else {
       setMiss(miss + 1);
       walk.play(2);
@@ -813,11 +813,11 @@ export function TryNewRopes() {
       </RP_Road>
       {pick && !right && !walk.running && (
         <Nope key={miss}>
-          আপনার দাগ <span className="font-mono">{tup(pick)}</span> এ. দড়ি ধরে হাঁটলে: হলুদ একবার, তারপর সবুজ একবার. কোথায় থামলো দেখুন.
+          আপনার দাগ <span className="font-mono">{tup(pick)}</span> এ। দড়ি ধরে হাঁটলে: হলুদ একবার, তারপর সবুজ একবার। কোথায় থামলো দেখুন।
         </Nope>
       )}
-      {right && !walk.running && <div className={`mt-2 text-center text-sm font-semibold text-accent-text ${FADE}`}>হলুদ একবার (0, 3), সবুজ একবার (−2, 0). থামলো (−2, 3) এ.</div>}
-      <Task done={right && !walk.running}>কাগজের (1, 1) করিমের দড়িতে কোথায় যায়? রাস্তায় tap করুন.</Task>
+      {right && !walk.running && <div className={`mt-2 text-center text-sm font-semibold text-accent-text ${FADE}`}>হলুদ একবার (0, 3), সবুজ একবার (−2, 0)। থামলো (−2, 3) এ।</div>}
+      <Task done={right && !walk.running}>কাগজের (1, 1) করিমের দড়িতে কোথায় যায়? রাস্তায় tap করুন।</Task>
     </>
   );
 }
@@ -937,8 +937,8 @@ export function RopesTied({}: Story) {
         {k >= 4 && <S_Paper x={128} y={96} />}
         <Person who="nasib" x={248} y={142} facing={-1} label mood={k >= 4 ? "smug" : "plain"} arm={k >= 4 ? "point" : "down"} />
         <Robot x={290} y={142} />
-        {k === 3 && <Bubble x={70} y={76} side="right" lines={["দুই দড়ির মাথা কই গেলো,", "হেইডা জানলেই", "সব জানা হইলো."]} />}
-        {k >= 4 && <Bubble x={248} y={76} side="left" lines={["প্রত্যেক পাপড়ির জন্য", "স্যার লাগবে."]} />}
+        {k === 3 && <Bubble x={70} y={76} side="right" lines={["দুই দড়ির মাথা কই গেলো,", "হেইডা জানলেই", "সব জানা হইলো।"]} />}
+        {k >= 4 && <Bubble x={248} y={76} side="left" lines={["প্রত্যেক পাপড়ির জন্য", "স্যার লাগবে।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -959,10 +959,10 @@ export function EyeGuesses({}: Story) {
         <S_Rope to={[92, 170]} c={E2C} />
         <Person who="rina" x={62} y={142} label arm={k >= 1 ? "hold" : "down"} />
         {k >= 1 && <S_Paper x={66} y={96} />}
-        {k === 1 && <Bubble x={62} y={76} side="right" lines={["মাঝের পাশেরটা.", "(2, 3)."]} />}
+        {k === 1 && <Bubble x={62} y={76} side="right" lines={["মাঝের পাশেরটা।", "(2, 3)."]} />}
         <Person who="nasib" x={k >= 2 ? 150 : 200} y={k >= 2 ? 162 : 142} walking={k === 2} label facing={-1} />
         {k >= 2 && <S_Cross x={166} y={158} c="#fca5a5" />}
-        {k === 2 && <Bubble x={150} y={96} side="left" lines={["এইখানে."]} />}
+        {k === 2 && <Bubble x={150} y={96} side="left" lines={["এইখানে।"]} />}
         <Person who="karim" x={k >= 3 ? 205 : 250} y={k >= 3 ? 168 : 142} walking={k === 3} label facing={-1} />
         <Person who="som" x={k >= 3 ? 250 : 296} y={k >= 3 ? 156 : 142} walking={k === 3} label facing={-1} />
         {k >= 3 && (
@@ -994,7 +994,7 @@ export function SomRope({}: Story) {
         <Person who="som" x={k >= 1 ? 134 : 210} y={142} facing={-1} walking={k === 1} label arm={k >= 1 ? "hold" : "down"} />
         <Robot x={k >= 1 ? 70 : 300} y={146} walking={k === 1} ms={1600} />
         {k >= 1 && <rect x={76} y={112} width={3} height={9} rx={1} fill={CHALK} className={POP} />}
-        {k >= 2 && <Bubble x={134} y={76} lines={["কাগজে যে recipe,", "রাস্তাতেও সেইটা.", "দড়ি শুধু বদলেছে."]} />}
+        {k >= 2 && <Bubble x={134} y={76} lines={["কাগজে যে recipe,", "রাস্তাতেও সেইটা।", "দড়ি শুধু বদলেছে।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1013,11 +1013,11 @@ export function NasibTurn({}: Story) {
         <S_Pillar />
         <Person who="som" x={100} y={142} label />
         <Person who="nasib" x={200} y={142} facing={-1} label arm={k >= 2 ? "hold" : "down"} mood={k >= 1 ? "puzzled" : "plain"} />
-        {k >= 1 && k < 2 && <Bubble x={200} y={76} side="left" lines={["এটা তো", "বানানো হিসাব."]} />}
+        {k >= 1 && k < 2 && <Bubble x={200} y={76} side="left" lines={["এটা তো", "বানানো হিসাব।"]} />}
         {k >= 2 && (
           <>
             <Card x={210} y={104} text="180°" tone="coral" />
-            <Bubble x={200} y={76} side="left" lines={["কালকের ঘুরানোটা", "দিয়ে মিলাও."]} />
+            <Bubble x={200} y={76} side="left" lines={["কালকের ঘুরানোটা", "দিয়ে মিলাও।"]} />
           </>
         )}
         <Person who="samin" x={270} y={142} facing={-1} label />
@@ -1038,12 +1038,12 @@ export function SaminSlots({}: Story) {
         <S_Road />
         <S_Pillar />
         <Person who="rina" x={90} y={142} label arm={k >= 1 ? "wave" : "hold"} />
-        {k === 1 && <Bubble x={90} y={76} side="right" lines={["পাঁচটা পাপড়ি.", "পাঁচবার হাঁটা?"]} />}
+        {k === 1 && <Bubble x={90} y={76} side="right" lines={["পাঁচটা পাপড়ি।", "পাঁচবার হাঁটা?"]} />}
         <Person who="samin" x={220} y={142} facing={-1} label arm={k >= 2 ? "hold" : "down"} />
         {k >= 2 && (
           <>
             <Card x={236} y={104} text="( ? , ? )" tone="blue" />
-            <Bubble x={220} y={76} side="left" lines={["হাঁটা লাগবে না.", "একবার লিখে ফেলি."]} />
+            <Bubble x={220} y={76} side="left" lines={["হাঁটা লাগবে না।", "একবার লিখে ফেলি।"]} />
           </>
         )}
       </Stage>
@@ -1107,7 +1107,7 @@ export function MosqueOut({}: Story) {
           ))}
         <Person who="rina" x={80} y={142} label arm="hold" />
         <S_Paper x={84} y={96} />
-        {k >= 2 && <Bubble x={80} y={76} side="right" lines={["প্রথমটা (1, 2)."]} />}
+        {k >= 2 && <Bubble x={80} y={76} side="right" lines={["প্রথমটা (1, 2)।"]} />}
         <Robot x={140} y={148} />
         <rect x={146} y={116} width={3} height={9} rx={1} fill={CHALK} />
       </Stage>
@@ -1180,7 +1180,7 @@ export function SirReturns({}: Story) {
 
 const X1_P = makeFrame(-0.6, 6.4, -0.6, 5.6, 12, 4);
 const X1_R = makeFrame(-1, 7, -1, 6, 14, 4);
-const X1_SAY = ["কাগজে পাঁচটা পাপড়ি. প্রত্যেকটার মাথা একটা ঘরের কোণায়.", "রাস্তায় শুধু দুইটা ক্রস. দুই দড়ির মাথা.", "পাঁচটা মাথা রাস্তায় কোথায় বসবে? স্যার বলে যান নি."];
+const X1_SAY = ["কাগজে পাঁচটা পাপড়ি। প্রত্যেকটার মাথা একটা ঘরের কোণায়।", "রাস্তায় শুধু দুইটা ক্রস। দুই দড়ির মাথা।", "পাঁচটা মাথা রাস্তায় কোথায় বসবে? স্যার বলে যান নি।"];
 
 export function RopeStake() {
   const s = useScene(2, [600, 1800, 2200]);
@@ -1221,7 +1221,7 @@ export function RopeStake() {
 //      times, landing on the petal's tip.
 
 const X2_F = makeFrame(-0.6, 6.4, -0.6, 5.6, 17, 4);
-const X2_SAY = ["কাগজে (2, 3) এর পাপড়ি.", "হলুদ দড়ি, মানে e₁, দুইবার.", "তারপর সবুজ দড়ি, e₂, তিনবার.", "(2, 3) = 2·e₁ + 3·e₂. পাপড়ির মাথায় পৌঁছে গেলাম."];
+const X2_SAY = ["কাগজে (2, 3) এর পাপড়ি।", "হলুদ দড়ি, মানে e₁, দুইবার।", "তারপর সবুজ দড়ি, e₂, তিনবার।", "(2, 3) = 2·e₁ + 3·e₂. পাপড়ির মাথায় পৌঁছে গেলাম।"];
 
 export function PaperRecipe() {
   const s = useScene(3, [600, 1600, 1800, 2200]);
@@ -1243,7 +1243,7 @@ export function PaperRecipe() {
 
 const X3_P = makeFrame(-0.5, 4.5, -0.5, 4.5, 14, 4);
 const X3_R = makeFrame(-0.5, 8.5, -0.5, 8.5, 11, 4);
-const X3_SAY = ["একই recipe: 2 আর 3.", "কাগজে, ছোট দড়ি দিয়ে: (2, 3).", "রাস্তায়, লম্বা দড়ি দিয়ে: (7, 8).", "Recipe বদলায় নাই. বদলেছে শুধু উপকরণ."];
+const X3_SAY = ["একই recipe: 2 আর 3।", "কাগজে, ছোট দড়ি দিয়ে: (2, 3)।", "রাস্তায়, লম্বা দড়ি দিয়ে: (7, 8)।", "Recipe বদলায় নাই। বদলেছে শুধু উপকরণ।"];
 
 export function RecipeTwice() {
   const s = useScene(3, [600, 1800, 2000, 2200]);
@@ -1288,7 +1288,7 @@ function RP_TagText({ x, y, text, light = false }: { x: number; y: number; text:
 //      turns the 6.2 way and its (2, 3) petal comes to rest on that cross.
 
 const X4_F = makeFrame(-5.5, 5.5, -5.5, 5.5, 10, 4);
-const X4_SAY = ["(2, 3) এর পাপড়ি, আগের জায়গায়.", "দড়ির হিসাব: 2·(−1, 0) + 3·(0, −1) = (−2, −3).", "পুরা আলপনা 180° ঘুরলো, 6.2 এর মতো.", "দুই হিসাব, এক জায়গা. (2, 3) গেলো −(2, 3) এ."];
+const X4_SAY = ["(2, 3) এর পাপড়ি, আগের জায়গায়।", "দড়ির হিসাব: 2·(−1, 0) + 3·(0, −1) = (−2, −3)।", "পুরা আলপনা 180° ঘুরলো, 6.2 এর মতো।", "দুই হিসাব, এক জায়গা। (2, 3) গেলো −(2, 3) এ।"];
 
 export function TwoWaysOneSpot() {
   const s = useScene(3, [600, 2000, 1800, 2200]);
@@ -1317,7 +1317,7 @@ export function TwoWaysOneSpot() {
 //      slot, side by side; the arrow between them is 6.4's job.
 
 const X5_F = makeFrame(-0.5, 3.9, -0.5, 3, 20, 4);
-const X5_SAY = ["এক: দড়ি দুইটা কোথায় গেলো.", "দুই: প্রত্যেক slot এর formula.", "একই move, দুই রকম লেখা. একটা থেকে আরেকটা কীভাবে, পরের journey তে."];
+const X5_SAY = ["এক: দড়ি দুইটা কোথায় গেলো।", "দুই: প্রত্যেক slot এর formula।", "একই move, দুই রকম লেখা। একটা থেকে আরেকটা কীভাবে, পরের journey তে।"];
 
 export function TwoDescriptions() {
   const s = useScene(2, [600, 1800, 2400]);
@@ -1367,7 +1367,7 @@ const X6_FAN: XY[] = [
   [-1, 0],
   [0, -1],
 ];
-const X6_SAY = ["অনেকগুলো arrow, move এর আগে.", "Move এর পরে: প্রায় সবাই অন্য দিকে ঘুরে গেলো.", "দুইটা বাদে. (1, 1) গেলো (3, 3): একই লাইন, 3 গুণ.", "আর (1, −1) গেলো (1, −1) এ. যেখানে ছিল, সেখানেই."];
+const X6_SAY = ["অনেকগুলো arrow, move এর আগে।", "Move এর পরে: প্রায় সবাই অন্য দিকে ঘুরে গেলো।", "দুইটা বাদে। (1, 1) গেলো (3, 3): একই লাইন, 3 গুণ।", "আর (1, −1) গেলো (1, −1) এ। যেখানে ছিল, সেখানেই।"];
 
 export function ArrowFan() {
   const s = useScene(3, [600, 1600, 2200, 2200]);
@@ -1412,7 +1412,7 @@ export function ArrowFan() {
 //      tempting slip, (2, 3), is crossed out beside it: the minus dropped.
 
 const X8_F = makeFrame(-3.5, 3.5, -1, 4.5, 16, 4);
-const X8_SAY = ["করিমের দড়ি: (0, 3) আর (−2, 0).", "(1, 1) মানে হলুদ একবার: (0, 3).", "তারপর সবুজ একবার: (0, 3) + (−2, 0) = (−2, 3).", "(2, 3) বললে সবুজ দড়ির minus টা পড়ে গেছে."];
+const X8_SAY = ["করিমের দড়ি: (0, 3) আর (−2, 0)।", "(1, 1) মানে হলুদ একবার: (0, 3)।", "তারপর সবুজ একবার: (0, 3) + (−2, 0) = (−2, 3)।", "(2, 3) বললে সবুজ দড়ির minus টা পড়ে গেছে।"];
 
 export function KarimWalk() {
   const s = useScene(3, [600, 1600, 1800, 2400]);
@@ -1446,7 +1446,7 @@ const X9_BETS: [string, string, boolean][] = [
   ["করিম", "আরো দাগ", false],
   ["রিনা", "দুই দড়িই", true],
 ];
-const X9_SAY = ["তিনটা বাজি.", "নাসিব: স্যার ছাড়াই পাঁচটা পাপড়ি বসেছে.", "করিম: বাড়তি একটা দাগও লাগে নাই.", "রিনা: দুই দড়িই যথেষ্ট ছিল."];
+const X9_SAY = ["তিনটা বাজি।", "নাসিব: স্যার ছাড়াই পাঁচটা পাপড়ি বসেছে।", "করিম: বাড়তি একটা দাগও লাগে নাই।", "রিনা: দুই দড়িই যথেষ্ট ছিল।"];
 
 export function RopesBetSettled() {
   const s = useScene(3, [600, 1800, 1800, 2200]);
@@ -1504,7 +1504,7 @@ const X2B_MARKS: [XY, string][] = [
   [[5.5, 4.5], "#67e8f9"],
   [[3.5, 2.5], "#fcd34d"],
 ];
-const X2B_SAY = ["চারজন, চার জায়গা.", "কারো হাতে কোনো যুক্তি নাই, শুধু চোখ.", "পাঁচটা পাপড়ি এভাবে বসালে পদ্মটা বেঁকে যাবে."];
+const X2B_SAY = ["চারজন, চার জায়গা।", "কারো হাতে কোনো যুক্তি নাই, শুধু চোখ।", "পাঁচটা পাপড়ি এভাবে বসালে পদ্মটা বেঁকে যাবে।"];
 
 const x2bMove =
   ([deg, dx, dy]: [number, number, number]): Move =>
@@ -1549,7 +1549,7 @@ export function CrookedLotus() {
 //       get their name, basis, last. No petal: where they land is screen 7's.
 
 const X3B_F = makeFrame(-1, 5, -1, 5, 20, 4);
-const X3B_SAY = ["কাগজের দুই দড়ি: e₁ আর e₂. এক ঘর করে.", "টানার পরে: e₁* আর e₂*. তারা চিহ্ন মানে টানার পরে.", "দড়ি যেদিকে গেলো, পুরা grid ও সেদিকে.", "দুই দড়ির নাম basis. ওরা কোথায় গেলো জানলেই move টা জানা."];
+const X3B_SAY = ["কাগজের দুই দড়ি: e₁ আর e₂। এক ঘর করে।", "টানার পরে: e₁* আর e₂*। তারা চিহ্ন মানে টানার পরে।", "দড়ি যেদিকে গেলো, পুরা grid ও সেদিকে।", "দুই দড়ির নাম basis। ওরা কোথায় গেলো জানলেই move টা জানা।"];
 
 export function BasisFollows() {
   const s = useScene(3, [600, 1800, 1800, 2400]);
@@ -1591,7 +1591,7 @@ export function BasisFollows() {
 //       numbers stacked. The top pair (2 and 1) makes slot 1, the bottom pair
 //       (1 and 2) makes slot 2.
 
-const X5A_SAY = ["প্রথম slot এ কী আসে দেখুন.", "হলুদ দড়ির প্রথম সংখ্যা 2, সবুজের প্রথম সংখ্যা 1.", "তাই প্রথম slot = 2 × g₁ + 1 × g₂.", "দ্বিতীয় slot এ আসে দড়ি দুইটার দ্বিতীয় সংখ্যা, 1 আর 2."];
+const X5A_SAY = ["প্রথম slot এ কী আসে দেখুন।", "হলুদ দড়ির প্রথম সংখ্যা 2, সবুজের প্রথম সংখ্যা 1।", "তাই প্রথম slot = 2 × g₁ + 1 × g₂।", "দ্বিতীয় slot এ আসে দড়ি দুইটার দ্বিতীয় সংখ্যা, 1 আর 2।"];
 
 function X5A_Card({ x, name, nums, c, hi }: { x: number; name: string; nums: XY; c: string; hi: number }) {
   return (
@@ -1649,7 +1649,7 @@ export function SlotsFromRopes() {
 
 const X6B_R = makeFrame(-2.5, 2.5, -2.5, 2.5, 20, 4);
 const X6B_K = makeFrame(-2.5, 2.5, -2.5, 2.5, 20, 4);
-const X6B_SAY = ["এখানে ঘোরে না এমন দুইটা দিক: (1, 1) আর (1, −1).", "5.6 এ ফাহিমের ভাড়ার খাতা. size আর imbalance এর line.", "একই দুইটা দিক.", "এটা কাকতালীয় না. কেন, সেটা অনেক পরে."];
+const X6B_SAY = ["এখানে ঘোরে না এমন দুইটা দিক: (1, 1) আর (1, −1)।", "5.6 এ ফাহিমের ভাড়ার খাতা। size আর imbalance এর line.", "একই দুইটা দিক।", "এটা কাকতালীয় না। কেন, সেটা অনেক পরে।"];
 
 function X6B_Lines({ f, thick = 5 }: { f: Frame; thick?: number }) {
   return (
@@ -1728,7 +1728,7 @@ export function SizeImbalanceAgain() {
 //       stretches, 3 and 1, then their names: eigenvector, eigenvalue.
 
 const X6C_F = makeFrame(-1.5, 3.5, -2.2, 3.5, 20, 4);
-const X6C_SAY = ["যে দুইটা দিক ঘোরে না: (1, 1) আর (1, −1).", "(1, 1) এর দিক: move এর পরে 3 গুণ লম্বা.", "(1, −1) এর দিক: 1 গুণ, মানে যেমন ছিল.", "যে দিক ঘোরে না, তার নাম eigenvector.", "আর কত গুণ, 3 আর 1: eigenvalue."];
+const X6C_SAY = ["যে দুইটা দিক ঘোরে না: (1, 1) আর (1, −1)।", "(1, 1) এর দিক: move এর পরে 3 গুণ লম্বা।", "(1, −1) এর দিক: 1 গুণ, মানে যেমন ছিল।", "যে দিক ঘোরে না, তার নাম eigenvector।", "আর কত গুণ, 3 আর 1: eigenvalue।"];
 
 export function StretchNames() {
   const s = useScene(4, [600, 1600, 1800, 1800, 2200]);

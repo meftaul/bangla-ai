@@ -171,11 +171,11 @@ export function FirstDay({}: Story) {
         <Building x={4} y={150} w={60} h={112} color="#e7d7c1" />
         <L_Clock x={34} y={62} h={7} m={40} />
         <Person who="ammu" x={92} y={150} arm={k === 2 ? "hold" : k === 1 ? "wave" : "down"} mood="plain" />
-        {k === 1 && <Bubble x={92} y={84} side="right" lines={["আটটায় ঘণ্টা.", "দেরি করিস না."]} />}
+        {k === 1 && <Bubble x={92} y={84} side="right" lines={["আটটায় ঘণ্টা।", "দেরি করিস না।"]} />}
         {k >= 2 && <L_NamedCard x={112} y={70} name="map বলছে" text="(2, 3)" tone="amber" />}
         <Person who="fahim" x={k >= 1 ? 150 : 44} y={150} walking={k === 1} ms={1600} mood={k >= 4 ? "puzzled" : "plain"} />
         <L_BigRick x={250} y={150} />
-        {k === 3 && <Bubble x={270} y={86} side="left" lines={["ম্যাপ-ট্যাপ বুঝি না,", "মামা."]} />}
+        {k === 3 && <Bubble x={270} y={86} side="left" lines={["ম্যাপ-ট্যাপ বুঝি না,", "মামা।"]} />}
         {k >= 4 && <Bubble x={270} y={86} side="left" lines={["কয় ব্লক সোজা যামু,", "কয় ব্লক বাঁকা?"]} />}
       </Stage>
     </StoryFrame>
@@ -196,7 +196,7 @@ export function SchoolBet() {
 
   const seal = () => {
     setSealed(true);
-    pass("বাজি ধরা হলো. চলেন রিকশায় উঠি.");
+    pass("বাজি ধরা হলো। চলেন রিকশায় উঠি।");
   };
 
   return (
@@ -225,7 +225,7 @@ export function SchoolBet() {
         </Plane>
       </div>
       <div className="mt-1 text-center text-xs text-muted">
-        Card মানে (<span className="text-cat-blue">কয় block সোজা</span>, <span className="text-cat-coral">কয় block বাঁকা</span>). Minus মানে উল্টা দিকে.
+        Card মানে (<span className="text-cat-blue">কয় block সোজা</span>, <span className="text-cat-coral">কয় block বাঁকা</span>). Minus মানে উল্টা দিকে।
       </div>
       <div className="mt-2 text-sm font-medium text-muted">ফাহিম মামাকে কোন card দিবে?</div>
       <div className="mt-1.5 grid grid-cols-2 gap-1.5">
@@ -244,9 +244,9 @@ export function SchoolBet() {
           </div>
         )
       ) : (
-        <div className={`${FADE} mt-2.5 text-center text-[0.95rem] text-muted`}>বাজি ধরা হলো. উত্তর দিবে রিকশা নিজেই.</div>
+        <div className={`${FADE} mt-2.5 text-center text-[0.95rem] text-muted`}>বাজি ধরা হলো। উত্তর দিবে রিকশা নিজেই।</div>
       )}
-      <Task done={sealed}>আপনি হলে মামাকে কোন card দিতেন? বেছে নিয়ে বাজি ধরুন.</Task>
+      <Task done={sealed}>আপনি হলে মামাকে কোন card দিতেন? বেছে নিয়ে বাজি ধরুন।</Task>
     </>
   );
 }
@@ -259,9 +259,9 @@ export function SchoolBet() {
 const X1F = makeFrame(-1, 4, -1, 4, 22, 10);
 const X1_SAY = [
   "Map এ স্কুল 2 block east, 3 block north: (2, 3).",
-  "বড় রাস্তাগুলা সব east এ গেছে. সোজা এক block মানে (1, 0).",
-  "গলিগুলা সব বাঁকা, north-east এ. গলিতে এক block মানে (1, 1).",
-  "আর north এ কোনো রাস্তা নাই. তাহলে রাস্তায় স্কুলের card কী?",
+  "বড় রাস্তাগুলা সব east এ গেছে। সোজা এক block মানে (1, 0)।",
+  "গলিগুলা সব বাঁকা, north-east এ। গলিতে এক block মানে (1, 1)।",
+  "আর north এ কোনো রাস্তা নাই। তাহলে রাস্তায় স্কুলের card কী?",
 ];
 
 export function TwoGrids() {
@@ -313,7 +313,7 @@ export function FahimReads({}: Story) {
         {k === 0 && <Person who="fahim" x={108} y={150} mood="plain" />}
         {k >= 2 && <L_NamedCard x={98} y={58} name="map বলছে" text="(2, 3)" tone="amber" />}
         <L_BigRick x={rx} y={150} ms={1600} riders={k >= 1 ? ["fahim"] : []} />
-        {k === 2 && <Bubble x={rx - 10} y={84} side="right" lines={["মামা, 2 সোজা,", "3 বাঁকা."]} />}
+        {k === 2 && <Bubble x={rx - 10} y={84} side="right" lines={["মামা, 2 সোজা,", "3 বাঁকা।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -349,7 +349,7 @@ export function NoNorthRoad() {
     setAmt(next);
     if (!done && same(to, SCHOOL)) {
       setDone(true);
-      pass("North এ রাস্তা নাই, তবু স্কুল পাওয়া গেলো.");
+      pass("North এ রাস্তা নাই, তবু স্কুল পাওয়া গেলো।");
     }
   };
 
@@ -381,14 +381,14 @@ export function NoNorthRoad() {
       ) : (
         <>
           {same(amt as XY, MAP_CARD) && (
-            <div className={`${FADE} mt-1 text-center text-sm text-danger`}>মামা থামলেন (5, 3) এ. স্কুল ছাড়িয়ে আরো 3 block east এ.</div>
+            <div className={`${FADE} mt-1 text-center text-sm text-danger`}>মামা থামলেন (5, 3) এ। স্কুল ছাড়িয়ে আরো 3 block east এ।</div>
           )}
           <div className="mt-2">
             <L_Remote amt={amt} onAmt={press} f={M} disabled={done} />
           </div>
         </>
       )}
-      <Task done={done}>{tried ? "রাস্তার button চেপে চেপে রিকশাকে স্কুলের গেটে থামান." : "আগে ফাহিমের কথামতো মামাকে চালাতে দিন."}</Task>
+      <Task done={done}>{tried ? "রাস্তার button চেপে চেপে রিকশাকে স্কুলের গেটে থামান।" : "আগে ফাহিমের কথামতো মামাকে চালাতে দিন।"}</Task>
     </>
   );
 }
@@ -400,10 +400,10 @@ export function NoNorthRoad() {
 
 const X2F = makeFrame(-1, 4, -1, 4, 20, 10);
 const X2_SAY = [
-  "মামার card এ দুইটা slot: আগে সোজা, তারপর বাঁকা.",
-  "গলিতে 3 block. তাই slot 2 এ 3.",
-  "তারপর বড় রাস্তায় 1 block পিছনে. পিছনে যাওয়া লেখা হয় minus দিয়ে: −1.",
-  "(−1, 3). Minus টা ভুল না. এর মানে শুধু “উল্টা দিকে”.",
+  "মামার card এ দুইটা slot: আগে সোজা, তারপর বাঁকা।",
+  "গলিতে 3 block। তাই slot 2 এ 3।",
+  "তারপর বড় রাস্তায় 1 block পিছনে। পিছনে যাওয়া লেখা হয় minus দিয়ে: −1।",
+  "(−1, 3). Minus টা ভুল না। এর মানে শুধু “উল্টা দিকে”।",
 ];
 
 export function CardFills() {
@@ -457,7 +457,7 @@ export function WhyBack({}: Story) {
         <path d="M0 162H320" stroke="white" strokeWidth={2} strokeDasharray="10 8" opacity={0.7} />
         <L_BigRick x={k === 0 ? 96 : k === 1 ? 214 : 150} y={150} ms={1400} facing={k >= 2 ? -1 : 1} riders={["fahim"]} />
         {k === 2 && <Bubble x={162} y={92} side="right" lines={["মামা, পিছনে", "যাচ্ছেন কেন?"]} />}
-        {k >= 3 && <Bubble x={129} y={86} side="left" lines={["গলিরে জিগান,", "আমারে না."]} />}
+        {k >= 3 && <Bubble x={129} y={86} side="left" lines={["গলিরে জিগান,", "আমারে না।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -532,7 +532,7 @@ export function WhyMinus() {
     setX(nx);
     if (nx === SCHOOL[0]) {
       setFixed(true);
-      pass("গলি east এও ঠেলে. −1 সেটা কেটে দেয়.");
+      pass("গলি east এও ঠেলে। −1 সেটা কেটে দেয়।");
     }
   };
   const key = (e: KeyboardEvent<SVGSVGElement>) => {
@@ -573,15 +573,15 @@ export function WhyMinus() {
       )}
       {driven && !fixed && (
         <div className={`${FADE} mt-1.5 text-center text-[0.95rem]`}>
-          {x > SCHOOL[0] ? "North মিলে গেছে. East এ এখনো বেশি. রিকশাটা বড় রাস্তা ধরে টানুন." : "এবার east এ কম পড়ে গেছে. একটু ফেরত আনুন."}
+          {x > SCHOOL[0] ? "North মিলে গেছে। East এ এখনো বেশি। রিকশাটা বড় রাস্তা ধরে টানুন।" : "এবার east এ কম পড়ে গেছে। একটু ফেরত আনুন।"}
         </div>
       )}
       {fixed && (
         <div className={`${FADE} mt-1.5 text-center text-[0.95rem]`}>
-          Card <L_CardText c={CARD} hit />: north এর জন্য গলি, বাড়তি east কাটতে minus.
+          Card <L_CardText c={CARD} hit />: north এর জন্য গলি, বাড়তি east কাটতে minus।
         </div>
       )}
-      <Task done={fixed}>রিকশাকে গলিতে পাঠান. তারপর বড় রাস্তা ধরে টানুন, যতক্ষণ না east-ও মিলে.</Task>
+      <Task done={fixed}>রিকশাকে গলিতে পাঠান। তারপর বড় রাস্তা ধরে টানুন, যতক্ষণ না east-ও মিলে।</Task>
     </>
   );
 }
@@ -593,10 +593,10 @@ export function WhyMinus() {
 
 const X3F = makeFrame(-1, 5, -1, 5, 17, 8);
 const X3_SAY = [
-  "শুধু গলিই north এ ওঠে. তাহলে গলিতে কয় block?",
-  "2 block: north এ এক কম. বাকি একটা আর কোনো রাস্তা দিয়ে যোগ করা যায় না.",
-  "4 block: এক বেশি উঁচুতে.",
-  "3 block, একদম ঠিক. তারপর বড় রাস্তায় −1 বাড়তি east টা ফেরত নেয়.",
+  "শুধু গলিই north এ ওঠে। তাহলে গলিতে কয় block?",
+  "2 block: north এ এক কম। বাকি একটা আর কোনো রাস্তা দিয়ে যোগ করা যায় না।",
+  "4 block: এক বেশি উঁচুতে।",
+  "3 block, একদম ঠিক। তারপর বড় রাস্তায় −1 বাড়তি east টা ফেরত নেয়।",
 ];
 
 export function LaneForced() {
@@ -726,7 +726,7 @@ export function PeelEquations() {
       ) : (
         <div className={`${POP} mt-2 text-center font-mono text-sm font-semibold text-accent-text`}>−1 × (1, 0) + 3 × (1, 1) = (2, 3)</div>
       )}
-      <Task done={done}>দুইটা সংখ্যা ঘুরিয়ে দুইটা line-ই মিলান. কোন line টা আগে মিলানো সহজ, খেয়াল করুন.</Task>
+      <Task done={done}>দুইটা সংখ্যা ঘুরিয়ে দুইটা line-ই মিলান। কোন line টা আগে মিলানো সহজ, খেয়াল করুন।</Task>
     </>
   );
 }
@@ -739,10 +739,10 @@ export function PeelEquations() {
 //      straight = −1.
 
 const X4_SAY = [
-  "দুইটা line, প্রতিটায় দুইটা করে অজানা? আসলে না.",
-  "বড় রাস্তা কখনো north এ যায় না. তাই north এর line থেকে সোজা বাদ.",
-  "ওখানে অজানা বাকি একটাই: বাঁকা = 3.",
-  "3 টা উপরে নিয়ে যান. এবার east এর line এও অজানা একটা: সোজা = −1.",
+  "দুইটা line, প্রতিটায় দুইটা করে অজানা? আসলে না।",
+  "বড় রাস্তা কখনো north এ যায় না। তাই north এর line থেকে সোজা বাদ।",
+  "ওখানে অজানা বাকি একটাই: বাঁকা = 3।",
+  "3 টা উপরে নিয়ে যান। এবার east এর line এও অজানা একটা: সোজা = −1।",
 ];
 
 function L_Box({ tone, value }: { tone: "blue" | "coral"; value: string | null }) {
@@ -792,10 +792,10 @@ export function PeelOrder() {
 //      boxes empty, left for Article 10.
 
 const X4S_SAY = [
-  "দুইটা অজানা, সোজা আর বাঁকা. দুইটা equation দিয়ে বাঁধা.",
+  "দুইটা অজানা, সোজা আর বাঁকা। দুইটা equation দিয়ে বাঁধা।",
   "একসাথে বাঁধা এমন equation গুলাকে বলে system of linear equations.",
-  "আমাদেরটা সহজে খুলে গেছে. North এর line এ অজানা ছিল একটাই.",
-  "যেকোনো size এর system কীভাবে solve করতে হয়, সেটা Article 10 এ.",
+  "আমাদেরটা সহজে খুলে গেছে। North এর line এ অজানা ছিল একটাই।",
+  "যেকোনো size এর system কীভাবে solve করতে হয়, সেটা Article 10 এ।",
 ];
 
 function X4S_Box({ tone, dim = false, small = false }: { tone: "blue" | "coral" | "violet"; dim?: boolean; small?: boolean }) {
@@ -857,13 +857,13 @@ export function AmmuErrands({}: Story) {
       <Stage backdrop="street" label="Ammu at the gate with her afternoon list: the bazaar at (4, 1) and the mosque at (0, 2), and the rickshaw mama asking for a card for each">
         <Building x={4} y={150} w={56} h={112} color="#e7d7c1" />
         <Person who="ammu" x={84} y={150} arm={k >= 1 ? "hold" : "down"} mood="plain" />
-        {k === 1 && <Bubble x={84} y={84} side="right" lines={["বিকালে আমি", "বাজারে যাবো."]} />}
-        {k === 2 && <Bubble x={84} y={84} side="right" lines={["আসরের সময় তোর", "আব্বু মসজিদে."]} />}
+        {k === 1 && <Bubble x={84} y={84} side="right" lines={["বিকালে আমি", "বাজারে যাবো।"]} />}
+        {k === 2 && <Bubble x={84} y={84} side="right" lines={["আসরের সময় তোর", "আব্বু মসজিদে।"]} />}
         {k >= 1 && <L_NamedCard x={166} y={48} name="বাজার" text="(4, 1)" tone="amber" />}
         {k >= 2 && <L_NamedCard x={166} y={84} name="মসজিদ" text="(0, 2)" tone="teal" />}
         <Person who="fahim" x={128} y={150} mood={k >= 3 ? "puzzled" : "plain"} />
         <L_BigRick x={250} y={150} />
-        {k >= 3 && <Bubble x={270} y={86} side="left" lines={["দুইটারই কার্ড", "দেওন লাগবো."]} />}
+        {k >= 3 && <Bubble x={270} y={86} side="left" lines={["দুইটারই কার্ড", "দেওন লাগবো।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -917,7 +917,7 @@ export function YourErrand() {
       }
       const s = solved.map((v, j) => v || j === at);
       setSolved(s);
-      if (s.every(Boolean)) pass("বাজার (3, 1), মসজিদ (−2, 2).");
+      if (s.every(Boolean)) pass("বাজার (3, 1), মসজিদ (−2, 2)।");
     };
     if (t.pts.length > 1) play.play(t.pts.length - 1, finish);
     else finish();
@@ -930,9 +930,9 @@ export function YourErrand() {
 
   const nope = () => {
     if (!trip || !end) return "";
-    if (trip.off) return "এই card এ মামা map থেকেই বের হয়ে যান. ছোট সংখ্যা দিয়ে try করুন.";
-    const where = `মামা থামলেন ${tup(end)} এ. ${goal.name} ${tup(goal.at)} এ.`;
-    return end[1] !== goal.at[1] ? `${where} North মিলে নাই, তাই আগে বাঁকা slot টা ঠিক করুন.` : `${where} North ঠিক আছে. এবার সোজা slot টা ঠিক করুন.`;
+    if (trip.off) return "এই card এ মামা map থেকেই বের হয়ে যান। ছোট সংখ্যা দিয়ে try করুন।";
+    const where = `মামা থামলেন ${tup(end)} এ। ${goal.name} ${tup(goal.at)} এ।`;
+    return end[1] !== goal.at[1] ? `${where} North মিলে নাই, তাই আগে বাঁকা slot টা ঠিক করুন।` : `${where} North ঠিক আছে। এবার সোজা slot টা ঠিক করুন।`;
   };
 
   return (
@@ -970,7 +970,7 @@ export function YourErrand() {
         </>
       ) : (
         <div className={`${FADE} mt-2 text-center text-[0.95rem]`}>
-          <L_CardText c={goal.at[1] === 1 ? [3, 1] : [-2, 2]} hit /> দিয়ে মামা পৌঁছে গেলেন {goal.name} এ.
+          <L_CardText c={goal.at[1] === 1 ? [3, 1] : [-2, 2]} hit /> দিয়ে মামা পৌঁছে গেলেন {goal.name} এ।
           {at === 0 && (
             <div className="mt-2 flex justify-center">
               <button type="button" onClick={nextErrand} className={primaryBtn}>
@@ -987,7 +987,7 @@ export function YourErrand() {
           ["মসজিদ", solved[1]],
         ]}
       />
-      <Task done={solved.every(Boolean)}>প্রতিটা card এক slot এক slot করে বের করুন, বসান, তারপর মামাকে চালাতে দিন.</Task>
+      <Task done={solved.every(Boolean)}>প্রতিটা card এক slot এক slot করে বের করুন, বসান, তারপর মামাকে চালাতে দিন।</Task>
     </>
   );
 }
@@ -999,9 +999,9 @@ export function YourErrand() {
 
 const X6F = makeFrame(-1, 3, -1, 3, 22, 10);
 const X6_SAY = [
-  "মসজিদ বাসার ঠিক north এ, 2 block. কিন্তু north এ রাস্তা নাই.",
-  "গলিতে 2 block. North ঠিক, কিন্তু east এ 2 block বেশি.",
-  "বড় রাস্তায় 2 block ফেরত. Card (−2, 2).",
+  "মসজিদ বাসার ঠিক north এ, 2 block। কিন্তু north এ রাস্তা নাই।",
+  "গলিতে 2 block। North ঠিক, কিন্তু east এ 2 block বেশি।",
+  "বড় রাস্তায় 2 block ফেরত। Card (−2, 2).",
 ];
 
 export function MosqueMinus() {
@@ -1049,8 +1049,8 @@ export function NasibCard({}: Story) {
         <path d="M0 162H320" stroke="white" strokeWidth={2} strokeDasharray="10 8" opacity={0.7} />
         <L_BigRick x={k >= 1 ? 150 : 60} y={150} ms={1400} riders={["fahim", "nasib"]} />
         {k >= 2 && <L_NamedCard x={66} y={66} name="নাসিবের card" text="(3, 2)" tone="coral" />}
-        {k === 2 && <Bubble x={140} y={96} side="right" lines={["ছুটির পরে ফুচকা.", "Card বানিয়ে ফেলছি."]} />}
-        {k >= 3 && <Bubble x={171} y={92} side="right" lines={["এইডা দিয়া গেলে", "ফুচকা পাইবা না."]} />}
+        {k === 2 && <Bubble x={140} y={96} side="right" lines={["ছুটির পরে ফুচকা।", "Card বানিয়ে ফেলছি।"]} />}
+        {k >= 3 && <Bubble x={171} y={92} side="right" lines={["এইডা দিয়া গেলে", "ফুচকা পাইবা না।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1071,10 +1071,10 @@ const SL_LINES = ["north:  2 = বাঁকা", "east:  1 = সোজা + 2", 
 const SL_FIXED = ["north:  2 = বাঁকা", "east:  1 = সোজা + 2", "সোজা = 1 − 2 = −1", "card:  (−1, 2)"];
 const SL_WRONG = 2;
 const SL_WHY = [
-  "এই line টা ঠিক. North এ শুধু গলিই ওঠে, তাই বাঁকা = 2.",
-  "এটাও ঠিক. গলির 2 block east এও 2 ঠেলে, বাকিটা সোজা.",
+  "এই line টা ঠিক। North এ শুধু গলিই ওঠে, তাই বাঁকা = 2।",
+  "এটাও ঠিক। গলির 2 block east এও 2 ঠেলে, বাকিটা সোজা।",
   "",
-  "Card টা আগের line থেকেই এসেছে. ভুলটা তার আগে কোথাও.",
+  "Card টা আগের line থেকেই এসেছে। ভুলটা তার আগে কোথাও।",
 ];
 
 export function SpotTheSlip() {
@@ -1099,7 +1099,7 @@ export function SpotTheSlip() {
       return;
     }
     setFixed(true);
-    play.play(route(FIX).length - 1, () => pass("1 থেকে 2 বাদ: সোজা = −1."));
+    play.play(route(FIX).length - 1, () => pass("1 থেকে 2 বাদ: সোজা = −1।"));
   };
   const look = (i: number): Look => (pick !== i ? "idle" : i === SL_WRONG ? "right" : "wrong");
 
@@ -1126,7 +1126,7 @@ export function SpotTheSlip() {
           </button>
         </div>
       ) : (
-        !fixed && <div className={`${FADE} mt-1 text-center text-sm text-danger`}>মামা থামলেন (5, 2) এ. ফুচকা (1, 2) এ.</div>
+        !fixed && <div className={`${FADE} mt-1 text-center text-sm text-danger`}>মামা থামলেন (5, 2) এ। ফুচকা (1, 2) এ।</div>
       )}
       <div className="mx-auto mt-1.5 max-w-xs rounded-xl border border-border bg-surface p-1.5">
         <div className="px-1 pb-1 text-xs text-muted">নাসিবের খাতা</div>
@@ -1147,7 +1147,7 @@ export function SpotTheSlip() {
         </div>
       </div>
       {pick !== null && pick !== SL_WRONG && !fixed && <Nope key={miss}>{SL_WHY[pick]}</Nope>}
-      <Task done={fixed && settled}>{driven ? "নাসিবের খাতায় যে line এ ভুল, সেটায় tap করুন." : "আগে নাসিবের card টা মামাকে দিয়ে চালান."}</Task>
+      <Task done={fixed && settled}>{driven ? "নাসিবের খাতায় যে line এ ভুল, সেটায় tap করুন।" : "আগে নাসিবের card টা মামাকে দিয়ে চালান।"}</Task>
     </>
   );
 }
@@ -1159,10 +1159,10 @@ export function SpotTheSlip() {
 
 const X7F = makeFrame(-1, 5, -0.5, 3, 20, 10);
 const X7_SAY = [
-  "ঠিক card (−1, 2). মিলিয়ে দেখি.",
-  "গলিতে 2 block: (2, 2).",
-  "বড় রাস্তায় 1 block পিছনে: (1, 2). ফুচকার দোকান.",
-  "নাসিবের (3, 2) গেলে থামতো (5, 2) এ, দোকান থেকে 4 block দূরে.",
+  "ঠিক card (−1, 2)। মিলিয়ে দেখি।",
+  "গলিতে 2 block: (2, 2)।",
+  "বড় রাস্তায় 1 block পিছনে: (1, 2)। ফুচকার দোকান।",
+  "নাসিবের (3, 2) গেলে থামতো (5, 2) এ, দোকান থেকে 4 block দূরে।",
 ];
 
 export function StallCheck() {
@@ -1216,7 +1216,7 @@ export function BellRings({}: Story) {
         <L_Bell x={160} y={44} ringing={k >= 3} />
         <L_BigRick x={k >= 1 ? 96 : -70} y={150} />
         {k >= 1 && <Person who="fahim" x={k >= 2 ? 244 : 130} y={150} walking={k === 2} ms={1300} mood={k >= 3 ? "happy" : "plain"} />}
-        {k >= 3 && <Bubble x={250} y={84} side="right" lines={["বাঁচলাম."]} />}
+        {k >= 3 && <Bubble x={250} y={84} side="right" lines={["বাঁচলাম।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1234,10 +1234,10 @@ const BO_CARDS: XY[] = [
   [-1, 3],
 ];
 const BO_SAY = [
-  "(2, 3) হলো map এর সংখ্যা, রাস্তায় পড়া. মামা থামেন (5, 3) এ, স্কুল ছাড়িয়ে 3 block.",
-  "(2, 1) থামে (3, 1) এ. পুরা অন্য রাস্তা.",
-  "(−1, 3) থামে ঠিক স্কুলের গেটে.",
-  "“যাওয়াই যাবে না”? মামা তো আজ সকালেই গেলেন, (−1, 3) দিয়ে.",
+  "(2, 3) হলো map এর সংখ্যা, রাস্তায় পড়া। মামা থামেন (5, 3) এ, স্কুল ছাড়িয়ে 3 block।",
+  "(2, 1) থামে (3, 1) এ। পুরা অন্য রাস্তা।",
+  "(−1, 3) থামে ঠিক স্কুলের গেটে।",
+  "“যাওয়াই যাবে না”? মামা তো আজ সকালেই গেলেন, (−1, 3) দিয়ে।",
 ];
 
 export function BetOpened() {
@@ -1255,7 +1255,7 @@ export function BetOpened() {
     const next = tried.includes(i) ? tried : [...tried, i];
     play.play(route(BO_CARDS[i]).length - 1, () => {
       setTried(next);
-      if (next.length === 4 && tried.length < 4) pass("বাজি: (−1, 3) জিতেছে.");
+      if (next.length === 4 && tried.length < 4) pass("বাজি: (−1, 3) জিতেছে।");
     });
   };
   const look = (i: number): Look => (!tried.includes(i) ? (pick === i ? "picked" : "idle") : i === 2 ? "right" : "wrong");
@@ -1277,7 +1277,7 @@ export function BetOpened() {
             {BO_SAY[pick]}
           </span>
         ) : (
-          <span className="text-muted">একটা card এ tap করুন, মামা ওটা রাস্তায় চালাবেন.</span>
+          <span className="text-muted">একটা card এ tap করুন, মামা ওটা রাস্তায় চালাবেন।</span>
         )}
       </div>
       <div className="mt-1.5 grid grid-cols-2 gap-1.5">
@@ -1287,7 +1287,7 @@ export function BetOpened() {
           </Choice>
         ))}
       </div>
-      <Task done={tried.length === 4}>বাজি খুলুন: চারটা card-ই মামাকে দিয়ে চালিয়ে দেখুন.</Task>
+      <Task done={tried.length === 4}>বাজি খুলুন: চারটা card-ই মামাকে দিয়ে চালিয়ে দেখুন।</Task>
     </>
   );
 }
@@ -1300,9 +1300,9 @@ export function BetOpened() {
 
 const X7T = makeFrame(-1, 4, -1, 4, 20, 10);
 const X7T_SAY = [
-  "North এ রাস্তা নাই. তার মানে কি north এ যাওয়াই যাবে না?",
-  "North এ যায় একটাই রাস্তা, গলি. তাই আগে বাঁকা slot টা: 3.",
-  "বাকিটা নিজেই খুলে যায়. বাড়তি east টা বড় রাস্তা ফেরত নেয়: −1.",
+  "North এ রাস্তা নাই। তার মানে কি north এ যাওয়াই যাবে না?",
+  "North এ যায় একটাই রাস্তা, গলি। তাই আগে বাঁকা slot টা: 3।",
+  "বাকিটা নিজেই খুলে যায়। বাড়তি east টা বড় রাস্তা ফেরত নেয়: −1।",
 ];
 
 export function NoWayTrap() {

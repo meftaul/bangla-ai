@@ -2577,7 +2577,7 @@ export function PandaGibbon() {
 }
 
 // ---------------------------------------------------------------------------
-// 9 · এবার আপনার পালা. Four real jobs and no scaffolding: pick the tape for
+// 9 · এবার আপনার পালা। Four real jobs and no scaffolding: pick the tape for
 //     each one. Every job was met on an earlier screen, so this is where the
 //     journey's own question — একটা machine কোন ফিতা নেবে? — gets answered by
 //     the reader rather than by the page.

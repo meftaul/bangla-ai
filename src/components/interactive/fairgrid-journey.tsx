@@ -113,8 +113,8 @@ export function RoofLate({}: Story) {
         <NameTag x={236} y={GROUND + 13} name="নাসিব" />
         {k === 0 && <Jilapi x={222} y={GROUND - 28} s={0.8} half />}
         {k >= 1 && <rect x={250} y={GROUND - 46} width={11} height={14} rx={1} fill="#b91c1c" stroke="#7f1d1d" strokeWidth={0.6} className={POP} />}
-        {k === 1 && <Bubble x={236} y={GROUND - 68} side="left" lines={["যেকোনো grid নে,", "যেকোনো সংখ্যা পাবি."]} />}
-        {k >= 2 && <Bubble x={236} y={GROUND - 68} side="left" lines={["দুই flat কতদূরে,", "সেটাও grid এর মর্জি."]} />}
+        {k === 1 && <Bubble x={236} y={GROUND - 68} side="left" lines={["যেকোনো grid নে,", "যেকোনো সংখ্যা পাবি।"]} />}
+        {k >= 2 && <Bubble x={236} y={GROUND - 68} side="left" lines={["দুই flat কতদূরে,", "সেটাও grid এর মর্জি।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -148,7 +148,7 @@ export function FairBet() {
 
   const seal = () => {
     setSealed(true);
-    pass("বাজি সিল. শেষ screen এ খুলবো.");
+    pass("বাজি সিল। শেষ screen এ খুলবো।");
   };
 
   return (
@@ -175,7 +175,7 @@ export function FairBet() {
           </Plane>
         </div>
         <div className="min-w-0 flex-1 text-[0.85rem] leading-snug">
-          খাতার grid এ flat <b className="font-mono">(3, 1)</b> আর <b className="font-mono">(3, 3)</b> ঠিক 2 ঘর দূরে. ফাহিমের grid এ গেলে ওদের দূরত্ব কত হবে?
+          খাতার grid এ flat <b className="font-mono">(3, 1)</b> আর <b className="font-mono">(3, 3)</b> ঠিক 2 ঘর দূরে। ফাহিমের grid এ গেলে ওদের দূরত্ব কত হবে?
         </div>
       </div>
       <div className="mt-2 grid gap-1.5">
@@ -195,8 +195,8 @@ export function FairBet() {
           </button>
         </div>
       ) : null}
-      {sealed ? <div className={`${FADE} mt-2 text-center text-[0.9rem] leading-snug text-muted`}>সিল করা থাকলো. নাসিব ঠিক না ভুল, শেষে খুলবো.</div> : null}
-      <Task done={sealed}>একটা উত্তর বেছে নিয়ে বাজি সিল করুন. শেষের আগে কেউ বলবে না কে জিতলো.</Task>
+      {sealed ? <div className={`${FADE} mt-2 text-center text-[0.9rem] leading-snug text-muted`}>সিল করা থাকলো। নাসিব ঠিক না ভুল, শেষে খুলবো।</div> : null}
+      <Task done={sealed}>একটা উত্তর বেছে নিয়ে বাজি সিল করুন। শেষের আগে কেউ বলবে না কে জিতলো।</Task>
     </>
   );
 }
@@ -210,9 +210,9 @@ export function TwoFlatsTape() {
   const s = useScene(2, [700, 2200]);
   const k = s.k;
   const SAY = [
-    "দুইটা flat. দুইটাতেই 3 bed. একটায় 1 bath, আরেকটায় 3.",
-    "খাতার sheet এ ফিতা ধরলে 2. দুইটা flat ঠিক 2 bath আলাদা.",
-    "এবার উপরে ফাহিমের grid. একই দুইটা dot. ওর card এ হিসাব কত বলবে?",
+    "দুইটা flat। দুইটাতেই 3 bed। একটায় 1 bath, আরেকটায় 3।",
+    "খাতার sheet এ ফিতা ধরলে 2। দুইটা flat ঠিক 2 bath আলাদা।",
+    "এবার উপরে ফাহিমের grid। একই দুইটা dot। ওর card এ হিসাব কত বলবে?",
   ];
 
   return (
@@ -340,7 +340,7 @@ export function NasibTape() {
     if (seen.includes(h)) return;
     const next = [...seen, h];
     setSeen(next);
-    if (next.length === 3) pass("ফাহিমের card বললো 1.41, ফিতা বললো 2.");
+    if (next.length === 3) pass("ফাহিমের card বললো 1.41, ফিতা বললো 2।");
   };
 
   return (
@@ -385,8 +385,8 @@ export function NasibTape() {
             </div>
           ))}
       </div>
-      {all ? <div className={`${FADE} mt-1.5 text-center text-[0.85rem] font-medium`}>দুইটা flat এক চুলও নড়ে নাই. তাহলে মিথ্যা বলছে কে?</div> : null}
-      <Task done={all}>তিনভাবে মাপুন: খাতার card দিয়ে, ফাহিমের card দিয়ে, আর কাগজে ফিতা ধরে.</Task>
+      {all ? <div className={`${FADE} mt-1.5 text-center text-[0.85rem] font-medium`}>দুইটা flat এক চুলও নড়ে নাই। তাহলে মিথ্যা বলছে কে?</div> : null}
+      <Task done={all}>তিনভাবে মাপুন: খাতার card দিয়ে, ফাহিমের card দিয়ে, আর কাগজে ফিতা ধরে।</Task>
     </>
   );
 }
@@ -402,10 +402,10 @@ export function StepLength() {
   const s = useScene(3, [700, 1800, 2200]);
   const k = s.k;
   const SAY = [
-    "ফাহিমের একটা size ধাপ: (1, 1).",
-    "এক ঘর ডানে, এক ঘর উপরে. Pythagoras: √(1² + 1²).",
-    "মানে ফাহিমের এক ধাপ কাগজে 1.41 লম্বা. 1 না.",
-    "ওর card এ লেখা 1. কাগজে কিন্তু 1.41. Pythagoras এর হিসাব এটা জানে না.",
+    "ফাহিমের একটা size ধাপ: (1, 1)।",
+    "এক ঘর ডানে, এক ঘর উপরে। Pythagoras: √(1² + 1²).",
+    "মানে ফাহিমের এক ধাপ কাগজে 1.41 লম্বা। 1 না।",
+    "ওর card এ লেখা 1। কাগজে কিন্তু 1.41. Pythagoras এর হিসাব এটা জানে না।",
   ];
 
   return (
@@ -463,7 +463,7 @@ export function ShrinkButtons() {
   const pick = (i: number) => {
     setLi(i);
     setBump((b) => b + 1);
-    if (i === SB_RIGHT) pass("Button 1 লম্বা: হিসাব আর ফিতা মিলে গেলো.");
+    if (i === SB_RIGHT) pass("Button 1 লম্বা: হিসাব আর ফিতা মিলে গেলো।");
   };
 
   return (
@@ -499,9 +499,9 @@ export function ShrinkButtons() {
         <span className="text-muted">ফিতা</span>
         <span className="font-mono">2</span>
       </div>
-      {li === 3 ? <Nope key={bump}>এবার হিসাব বেশি বলছে, 2.5. Button বেশি ছোট হয়ে গেছে.</Nope> : null}
-      {right ? <div className={`${FADE} mt-1.5 text-center text-[0.85rem] font-medium text-accent-text`}>লাল ফিতা এখন ঠিক (3, 3) এ গিয়ে থামে.</div> : null}
-      <Task done={right}>Button দুইটার length বদলান. হিসাবের লাল ফিতা যখন ঠিক অন্য flat টায় গিয়ে থামবে, সেখানে থামুন.</Task>
+      {li === 3 ? <Nope key={bump}>এবার হিসাব বেশি বলছে, 2.5. Button বেশি ছোট হয়ে গেছে।</Nope> : null}
+      {right ? <div className={`${FADE} mt-1.5 text-center text-[0.85rem] font-medium text-accent-text`}>লাল ফিতা এখন ঠিক (3, 3) এ গিয়ে থামে।</div> : null}
+      <Task done={right}>Button দুইটার length বদলান। হিসাবের লাল ফিতা যখন ঠিক অন্য flat টায় গিয়ে থামবে, সেখানে থামুন।</Task>
     </>
   );
 }
@@ -518,8 +518,8 @@ export function ShrinkToOne() {
   const k = s.k;
   const [len] = useTween([k >= 1 ? 1 / R2 : 1], 1200);
   const SAY = [
-    "ফাহিমের button গুলা দুই room এর ধাপ, প্রতিটা প্রায় 1.41 লম্বা.",
-    "প্রতিটাকে 1.41 দিয়ে ভাগ করুন: দুইটাই গিয়ে বসে 1 length এর গোল দাগে.",
+    "ফাহিমের button গুলা দুই room এর ধাপ, প্রতিটা প্রায় 1.41 লম্বা।",
+    "প্রতিটাকে 1.41 দিয়ে ভাগ করুন: দুইটাই গিয়ে বসে 1 length এর গোল দাগে।",
     "ধাপ ছোট, তাই ধাপ লাগে বেশি: flat (3, 2) এর card হয়ে যায় (3.54, 0.71).",
   ];
 
@@ -568,8 +568,8 @@ export function NasibTurns({}: Story) {
           <rect x={168} y={90} width={28} height={28} fill="white" stroke="#b91c1c" strokeWidth={1} />
           <path d="M175 90V118M182 90V118M189 90V118M168 97H196M168 104H196M168 111H196" stroke="#94a3b8" strokeWidth={0.6} />
         </g>
-        {k === 1 && <Bubble x={220} y={GROUND - 68} side="left" lines={["ঠিক আছে, 1 লম্বা."]} />}
-        {k >= 2 && <Bubble x={220} y={GROUND - 68} side="left" lines={["কিন্তু grid তো", "যেদিকে খুশি ঘুরে."]} />}
+        {k === 1 && <Bubble x={220} y={GROUND - 68} side="left" lines={["ঠিক আছে, 1 লম্বা।"]} />}
+        {k >= 2 && <Bubble x={220} y={GROUND - 68} side="left" lines={["কিন্তু grid তো", "যেদিকে খুশি ঘুরে।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -666,7 +666,7 @@ export function SpinTheGrid() {
     if (seen.includes(next)) return;
     const all = [...seen, next];
     setSeen(all);
-    if (all.length === 4) pass("নতুন grid, নতুন সংখ্যা, দূরত্ব একই.");
+    if (all.length === 4) pass("নতুন grid, নতুন সংখ্যা, দূরত্ব একই।");
   };
 
   return (
@@ -702,7 +702,7 @@ export function SpinTheGrid() {
           <b className="font-mono">{COS.toFixed(2)}</b>
         </div>
       </div>
-      <Task done={enough}>Grid টা তিনবার ঘুরান. দেখুন কোন সংখ্যা নড়ে, আর কোনটা কখনো নড়ে না.</Task>
+      <Task done={enough}>Grid টা তিনবার ঘুরান। দেখুন কোন সংখ্যা নড়ে, আর কোনটা কখনো নড়ে না।</Task>
     </>
   );
 }
@@ -719,10 +719,10 @@ export function SameArrows() {
   const k = s.k;
   const deg = SA_ANG[k];
   const SAY = [
-    `Model ঘটনাচক্রে যে grid এ গিয়ে পড়েছে, সেটা. King এর সংখ্যা ${pair1(slots(W("king"), 20))}.`,
+    `Model ঘটনাচক্রে যে grid এ গিয়ে পড়েছে, সেটা। King এর সংখ্যা ${pair1(slots(W("king"), 20))}.`,
     "man থেকে king আর woman থেকে queen এর arrow: একই shape.",
-    "এবার grid টা ঘুরাই. প্রতিটা slot এর সংখ্যা বদলে যায়.",
-    `King এর সংখ্যা এখন ${pair1(slots(W("king"), -40))}. Arrow দুইটা তবুও মিলে: king − man + woman এখনো queen এ গিয়ে পড়ে.`,
+    "এবার grid টা ঘুরাই। প্রতিটা slot এর সংখ্যা বদলে যায়।",
+    `King এর সংখ্যা এখন ${pair1(slots(W("king"), -40))}. Arrow দুইটা তবুও মিলে: king − man + woman এখনো queen এ গিয়ে পড়ে।`,
   ];
 
   return (
@@ -786,10 +786,10 @@ export function Slot137() {
   const k = s.k;
   const turn = k >= 2 ? 1 : 0;
   const SAY = [
-    "2.3 এর king আর queen: প্রতিটা 300 টা slot এর list.",
-    "Slot 137 মানে কী? কেউ জানে না.",
-    "Grid টা একটু ঘুরাই. প্রতিটা slot এর সংখ্যা বদলে গেলো.",
-    "কিন্তু king থেকে queen এর দূরত্ব একই থাকলো. সংখ্যা গুলা grid এর. দূরত্ব গুলা আসল.",
+    "2.3 এর king আর queen: প্রতিটা 300 টা slot এর list।",
+    "Slot 137 মানে কী? কেউ জানে না।",
+    "Grid টা একটু ঘুরাই। প্রতিটা slot এর সংখ্যা বদলে গেলো।",
+    "কিন্তু king থেকে queen এর দূরত্ব একই থাকলো। সংখ্যা গুলা grid এর। দূরত্ব গুলা আসল।",
   ];
 
   return (
@@ -869,7 +869,7 @@ export function BestTurn() {
     setDeg(next);
     if (next === BT_BEST && !found) {
       setFound(true);
-      pass("প্রায় 35°: এখানে হারায় সবচেয়ে কম.");
+      pass("প্রায় 35°: এখানে হারায় সবচেয়ে কম।");
     }
   };
 
@@ -903,12 +903,12 @@ export function BestTurn() {
       </div>
       <div className="mx-auto mt-1 max-w-sm text-center text-[0.8rem] leading-snug text-muted">
         {found ? (
-          <span className={`${FADE} text-accent-text`}>35° এর আগে বা পরে, দুই দিকেই হারানো আবার বাড়ে.</span>
+          <span className={`${FADE} text-accent-text`}>35° এর আগে বা পরে, দুই দিকেই হারানো আবার বাড়ে।</span>
         ) : (
-          "লাল drop গুলাই প্রতিটা flat এর দ্বিতীয় সংখ্যা. প্রতিটা drop এর বর্গ, সব যোগ করে: এটাই হারানো."
+          "লাল drop গুলাই প্রতিটা flat এর দ্বিতীয় সংখ্যা। প্রতিটা drop এর বর্গ, সব যোগ করে: এটাই হারানো।"
         )}
       </div>
-      <Task done={found}>Line টা ঘুরিয়ে এমন জায়গায় আনুন, যেখানে হারানো সবচেয়ে কম.</Task>
+      <Task done={found}>Line টা ঘুরিয়ে এমন জায়গায় আনুন, যেখানে হারানো সবচেয়ে কম।</Task>
     </>
   );
 }
@@ -922,9 +922,9 @@ export function MachineVsFahim() {
   const s = useScene(2, [700, 2200]);
   const k = s.k;
   const SAY = [
-    "Machine এর line: প্রায় 35°. Flat গুলা এইদিকেই সবচেয়ে বেশি ছড়ানো.",
-    "ফাহিমের size এর line: 45°.",
-    "কাছাকাছি, কিন্তু এক না. ফাহিম দেখেছিল ভাড়া. Machine দেখেছে শুধু flat গুলা কোনদিকে ছড়ানো.",
+    "Machine এর line: প্রায় 35°. Flat গুলা এইদিকেই সবচেয়ে বেশি ছড়ানো।",
+    "ফাহিমের size এর line: 45°।",
+    "কাছাকাছি, কিন্তু এক না। ফাহিম দেখেছিল ভাড়া। Machine দেখেছে শুধু flat গুলা কোনদিকে ছড়ানো।",
   ];
 
   return (
@@ -982,10 +982,10 @@ export function RiverIdeaAgain() {
   const k = s.k;
   const [tl, tr] = useTween([k >= 1 ? 1 : 0, k >= 2 ? 1 : 0], 1000);
   const SAY = [
-    "বামে 4.6 এর নদীর ঘাট: ফাহিমের বারোটা point. ডানে আজকের খাতা.",
-    "ঘাটে ফাহিমের idea: সবার shadow ছড়ানোর line এ. প্রতিটা point এ থাকলো একটা number.",
-    "আজ machine ঠিক ওইটাই করলো: 35° এর line এ shadow, বাকিটা ফেলে দেয়া.",
-    "একই কাজ, দুই জায়গায়. এটাই PCA.",
+    "বামে 4.6 এর নদীর ঘাট: ফাহিমের বারোটা point। ডানে আজকের খাতা।",
+    "ঘাটে ফাহিমের idea: সবার shadow ছড়ানোর line এ। প্রতিটা point এ থাকলো একটা number।",
+    "আজ machine ঠিক ওইটাই করলো: 35° এর line এ shadow, বাকিটা ফেলে দেয়া।",
+    "একই কাজ, দুই জায়গায়। এটাই PCA।",
   ];
   const ln = (f: Frame, c: XY, e: XY, a: number) => `M${f.sx(c[0] - a * e[0])} ${f.sy(c[1] - a * e[1])}L${f.sx(c[0] + a * e[0])} ${f.sy(c[1] + a * e[1])}`;
 
@@ -1030,9 +1030,9 @@ export function RiverIdeaAgain() {
 const C30 = Math.cos(Math.PI / 6);
 const S30 = Math.sin(Math.PI / 6);
 const TG: { name: string; e1: XY; e2: XY; nope: string }[] = [
-  { name: "ফাহিমের grid", e1: [1, 1], e2: [1, -1], nope: "এই grid এ হিসাব বলে 1.41, ফিতা বলে 2. ঘর গুলা square ঠিকই. কিন্তু ধাপ? 1.41 লম্বা." },
+  { name: "ফাহিমের grid", e1: [1, 1], e2: [1, -1], nope: "এই grid এ হিসাব বলে 1.41, ফিতা বলে 2। ঘর গুলা square ঠিকই। কিন্তু ধাপ? 1.41 লম্বা।" },
   { name: "30° ঘুরানো, ধাপ 1", e1: [C30, S30], e2: [-S30, C30], nope: "" },
-  { name: "রিকশার রাস্তা", e1: [1, 0], e2: [1, 1], nope: "এই grid এ হিসাব বলে 2.83, ফিতা বলে 2. রাস্তা দুইটা right angle এ না." },
+  { name: "রিকশার রাস্তা", e1: [1, 0], e2: [1, 1], nope: "এই grid এ হিসাব বলে 2.83, ফিতা বলে 2। রাস্তা দুইটা right angle এ না।" },
 ];
 const TG_RIGHT = 1;
 const TG_F = makeFrame(-0.8, 0.8, -0.8, 0.8, 30, 4);
@@ -1046,7 +1046,7 @@ export function TryFairGrid() {
   const choose = (i: number) => {
     if (right) return;
     setPick(i);
-    if (i === TG_RIGHT) pass("Square আর 1 লম্বা: তবেই হিসাব সত্যি.");
+    if (i === TG_RIGHT) pass("Square আর 1 লম্বা: তবেই হিসাব সত্যি।");
     else setMiss((m) => m + 1);
   };
   const g = pick === null ? null : TG[pick];
@@ -1083,8 +1083,8 @@ export function TryFairGrid() {
         ))}
       </div>
       {pick !== null && !right ? <Nope key={miss}>{TG[pick].nope}</Nope> : null}
-      {right ? <div className={`${FADE} mt-1.5 text-center text-[0.85rem] font-medium text-accent-text`}>হিসাব বলে 2, ফিতাও বলে 2.</div> : null}
-      <Task done={right}>কোন grid এর card থেকে Pythagoras ঠিক দূরত্ব, মানে 2 দেয়? সেই grid এ tap করুন.</Task>
+      {right ? <div className={`${FADE} mt-1.5 text-center text-[0.85rem] font-medium text-accent-text`}>হিসাব বলে 2, ফিতাও বলে 2।</div> : null}
+      <Task done={right}>কোন grid এর card থেকে Pythagoras ঠিক দূরত্ব, মানে 2 দেয়? সেই grid এ tap করুন।</Task>
     </>
   );
 }
@@ -1146,9 +1146,9 @@ export function TwoChecks() {
   const b2: XY = [-S30, C30];
   const SAY = [
     "30° ঘুরানো grid এর দুইটা button: (0.87, 0.5) আর (−0.5, 0.87).",
-    "Box: 0.87 × (−0.5) + 0.5 × 0.87 = 0. তাই right angle.",
-    "1 length এর গোল দাগ: দুইটা button এর মাথাই ঠিক ওটার উপরে.",
-    "দুইটা check ই পাশ: orthonormal. এমন grid এর card এ হিসাব সবসময় ফিতার সাথে মিলে.",
+    "Dot product: 0.87 × (−0.5) + 0.5 × 0.87 = 0. তাই right angle.",
+    "1 length এর গোল দাগ: দুইটা button এর মাথাই ঠিক ওটার উপরে।",
+    "দুইটা check ই পাশ: orthonormal। এমন grid এর card এ হিসাব সবসময় ফিতার সাথে মিলে।",
   ];
   const p = (v: XY, t: number) => `${TK_F.sx(v[0] * t)} ${TK_F.sy(v[1] * t)}`;
 
@@ -1185,7 +1185,7 @@ export function LastJilapi({}: Story) {
         <NameTag x={226} y={GROUND + 13} name="নাসিব" />
         {k === 0 && <Jilapi x={212} y={GROUND - 28} s={0.8} half />}
         {k >= 1 && <path d="M205 112L212 126L219 112Z" fill="#fef3c7" stroke="#a16207" strokeWidth={0.8} className={POP} />}
-        {k === 1 && <Bubble x={226} y={GROUND - 68} side="left" lines={["ঠিক আছে.", "দূরত্ব আসল."]} />}
+        {k === 1 && <Bubble x={226} y={GROUND - 68} side="left" lines={["ঠিক আছে।", "দূরত্ব আসল।"]} />}
         {k >= 2 && <Bubble x={130} y={GROUND - 68} side="right" lines={["পুরা grid টাই যদি", "তুলে নড়াই?"]} />}
       </Stage>
     </StoryFrame>
@@ -1203,11 +1203,11 @@ const OPENED = [
   ["যেকোনো দিকে ঘুরানো fair grid", "2"],
 ];
 const FIVE = [
-  ["Span", "মানে নাগাল. আপনার button গুলা দিয়ে যেখানে যেখানে যাওয়া যায়, সবটা. ওখানে 0 সবসময় থাকে, আর ওটা আপনার ধারণার চেয়ে ছোটও হতে পারে."],
-  ["Independent", "কোনো button বাড়তি না. 0 তে ফেরার একটাই উপায়: কোনো button ই না চাপা."],
-  ["Basis", "সব জায়গায় যাওয়ার মতো যথেষ্ট button, একটাও বাড়তি না. প্রতিটা basis এ button এর সংখ্যা একই: ওটাই dimension."],
-  ["Coordinates", "সংখ্যা গুলা basis এর, arrow এর না. স্কুল ছিল (2, 3), আবার (−1, 3)."],
-  ["ভালো basis", "Data কে কথা বলায়. (3, 2) হলো (2.5, 0.5). ভাড়া বলতে লাগলো একটা সংখ্যা. Fair grid এ দূরত্বও ঠিক থাকে."],
+  ["Span", "মানে নাগাল। আপনার button গুলা দিয়ে যেখানে যেখানে যাওয়া যায়, সবটা। ওখানে 0 সবসময় থাকে, আর ওটা আপনার ধারণার চেয়ে ছোটও হতে পারে।"],
+  ["Independent", "কোনো button বাড়তি না। 0 তে ফেরার একটাই উপায়: কোনো button ই না চাপা।"],
+  ["Basis", "সব জায়গায় যাওয়ার মতো যথেষ্ট button, একটাও বাড়তি না। প্রতিটা basis এ button এর সংখ্যা একই: ওটাই dimension।"],
+  ["Coordinates", "সংখ্যা গুলা basis এর, arrow এর না। স্কুল ছিল (2, 3), আবার (−1, 3)।"],
+  ["ভালো basis", "Data কে কথা বলায়। (3, 2) হলো (2.5, 0.5). ভাড়া বলতে লাগলো একটা সংখ্যা। Fair grid এ দূরত্বও ঠিক থাকে।"],
 ];
 
 /** the three rows' grids: the khata's, Fahim's with its buttons made 1 long, and one turned 30° */
@@ -1231,7 +1231,7 @@ export function BetOpened() {
     if (seen.includes(i)) return;
     const next = [...seen, i];
     setSeen(next);
-    if (next.length === 5) pass("Slot এর সংখ্যা grid এর. দূরত্ব আসল.");
+    if (next.length === 5) pass("Slot এর সংখ্যা grid এর। দূরত্ব আসল।");
   };
   const unseal = () => {
     setOpen(true);
@@ -1274,7 +1274,7 @@ export function BetOpened() {
           ))}
           {shown >= 4 ? (
             <div className={`${FADE} mt-0.5 text-center text-[0.85rem] leading-snug font-semibold`}>
-              উত্তর: 2 ই থাকে. 1.41 বলেছিল লম্বা ধাপের হিসাব, flat না.
+              উত্তর: 2 ই থাকে। 1.41 বলেছিল লম্বা ধাপের হিসাব, flat না।
             </div>
           ) : null}
         </div>
@@ -1282,7 +1282,7 @@ export function BetOpened() {
       )}
       {shown >= 4 ? (
         <div className={FADE}>
-          <div className="mt-3 text-center text-xs text-muted">Article 5 থেকে সাথে নেয়ার পাঁচটা জিনিস. প্রতিটায় tap করুন.</div>
+          <div className="mt-3 text-center text-xs text-muted">Article 5 থেকে সাথে নেয়ার পাঁচটা জিনিস। প্রতিটায় tap করুন।</div>
           <div className="mt-1 flex justify-center gap-1.5">
             {FIVE.map(([name], i) => (
               <button key={name} type="button" onClick={() => read(i)} className={`${pill(at === i)} size-9 px-0! ${seen.includes(i) && at !== i ? "border-accent/60 text-accent-text" : ""}`}>
@@ -1292,7 +1292,7 @@ export function BetOpened() {
           </div>
           <div className="mx-auto mt-2 min-h-16 max-w-sm rounded-2xl border border-border px-3 py-1.5 text-center text-[0.85rem] leading-snug">
             {at === null ? (
-              <span className="text-muted">1 দিয়ে শুরু করুন.</span>
+              <span className="text-muted">1 দিয়ে শুরু করুন।</span>
             ) : (
               <span key={at} className={FADE}>
                 <b>{FIVE[at][0]}.</b> {FIVE[at][1]}
@@ -1301,7 +1301,7 @@ export function BetOpened() {
           </div>
         </div>
       ) : null}
-      <Task done={seen.length === 5}>বাজিটা খুলুন, তারপর পাঁচটা জিনিসেই tap করুন.</Task>
+      <Task done={seen.length === 5}>বাজিটা খুলুন, তারপর পাঁচটা জিনিসেই tap করুন।</Task>
     </>
   );
 }
@@ -1315,18 +1315,18 @@ const PCA = [
   ["একটা basis,", "5.3"],
   ["যার button গুলা right angle এ, প্রতিটা 1 লম্বা,", "4.2 · 3.6"],
   ["যার প্রথম direction এ data সবচেয়ে বেশি ছড়ানো, তারপর পরেরটা,", "4.5"],
-  ["আর শুধু প্রথম কয়েকটা রেখে দেয়.", "আজ"],
+  ["আর শুধু প্রথম কয়েকটা রেখে দেয়।", "আজ"],
 ];
 
 export function PcaWords() {
   const s = useScene(4, [700, 1400, 1400, 1800, 1800]);
   const k = s.k;
   const SAY = [
-    "এই course এর শেষে যে বড় idea টা অপেক্ষা করছে, এক line এ.",
-    "একটা basis: যথেষ্ট button, একটাও বাড়তি না.",
-    "Square আর 1 লম্বা: orthonormal, তাই সব সংখ্যা এক scale এ, আর দূরত্ব ঠিক থাকে.",
-    "Data যেদিকে সবচেয়ে বেশি ছড়ানো, সেই direction আগে. আজকের 35° এর line এর মতো.",
-    "প্রথম কয়েকটা রাখো, বাকিটা ফেলে দাও, imbalance ফেলে দেয়ার মতো. প্রতিটা শব্দ এখন আপনার চেনা.",
+    "এই course এর শেষে যে বড় idea টা অপেক্ষা করছে, এক line এ।",
+    "একটা basis: যথেষ্ট button, একটাও বাড়তি না।",
+    "Square আর 1 লম্বা: orthonormal, তাই সব সংখ্যা এক scale এ, আর দূরত্ব ঠিক থাকে।",
+    "Data যেদিকে সবচেয়ে বেশি ছড়ানো, সেই direction আগে। আজকের 35° এর line এর মতো।",
+    "প্রথম কয়েকটা রাখো, বাকিটা ফেলে দাও, imbalance ফেলে দেয়ার মতো। প্রতিটা শব্দ এখন আপনার চেনা।",
   ];
 
   return (
@@ -1356,11 +1356,11 @@ export function GridLifted() {
   const s = useScene(4, [700, 1800, 2200, 2000, 2000]);
   const k = s.k;
   const SAY = [
-    "এতক্ষণ: একটা arrow, নিচে একটা grid.",
-    "Grid ঘুরলো, arrow থাকলো জায়গায়.",
+    "এতক্ষণ: একটা arrow, নিচে একটা grid।",
+    "Grid ঘুরলো, arrow থাকলো জায়গায়।",
     "পুরা grid টাই যদি একটা machine তুলে নড়ায়?",
-    "আর চাচার খাতা: প্রতি flat এক row.",
-    "দুইটারই নাম matrix. সেটা Article 6.",
+    "আর চাচার খাতা: প্রতি flat এক row।",
+    "দুইটারই নাম matrix। সেটা Article 6.",
   ];
   const tf = k >= 2 ? "matrix(1.25, -0.35, 0.45, 0.85, 0, 0)" : `rotate(${k >= 1 ? -30 : 0}deg)`;
   const at = `${X7_F.sx(0)}px ${X7_F.sy(0)}px`;

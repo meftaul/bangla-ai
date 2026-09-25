@@ -40,7 +40,7 @@ import {
 // numbers scratched on each rim. The ones that keep a picture go to Rina; the
 // ones that crush it go in the পুকুর. Nobody can switch the machine on to
 // check. নাসিব sorts them by the size of their numbers: বড় সংখ্যার lens বড় ছবি
-// দেয়.
+// দেয়।
 //
 // Ten screens. 1 seals the bet: which of the six go in the পুকুর (BoxBet).
 // 2 7.2's old lens [[2, 4], [1, 2]] from memory: the ঘর's two sides land on
@@ -404,7 +404,7 @@ export function BoxBet() {
   const seal = () => {
     if (n === 0 || sealed) return;
     setSealed(true);
-    act.play(2, () => pass("বাজি সিল হলো. পুরানো lens টা দিয়ে শুরু."));
+    act.play(2, () => pass("বাজি সিল হলো। পুরানো lens টা দিয়ে শুরু।"));
   };
   let slot = 0;
   const at = picks.map((p, i) => (p ? X1_BANK[slot++] : X1_MAT[i]));
@@ -452,7 +452,7 @@ export function BoxBet() {
           এই বাজি সিল
         </button>
       </div>
-      <Task done={k >= 2}>যেগুলো ছবি পিষে ফেলে, সেগুলো tap করে পুকুরের দিকে পাঠান. তারপর বাজি সিল করুন. উত্তর শেষে.</Task>
+      <Task done={k >= 2}>যেগুলো ছবি পিষে ফেলে, সেগুলো tap করে পুকুরের দিকে পাঠান। তারপর বাজি সিল করুন। উত্তর শেষে।</Task>
     </>
   );
 }
@@ -481,7 +481,7 @@ export function SquashedSquare() {
     if (land.running || phase >= 2) return;
     const next = phase + 1;
     setPhase(next);
-    land.play(1, next === 2 ? () => pass("জায়গা শূন্য: দুই পাশ এক লাইনে.") : undefined);
+    land.play(1, next === 2 ? () => pass("জায়গা শূন্য: দুই পাশ এক লাইনে।") : undefined);
   };
   return (
     <>
@@ -516,7 +516,7 @@ export function SquashedSquare() {
           </button>
         )}
       </div>
-      <Task done={done}>ঘরের দুই পাশ একটা একটা করে পুরানো lens দিয়ে পাঠান. জায়গাটা দেখুন.</Task>
+      <Task done={done}>ঘরের দুই পাশ একটা একটা করে পুরানো lens দিয়ে পাঠান। জায়গাটা দেখুন।</Task>
     </>
   );
 }
@@ -529,13 +529,13 @@ export function SquashedSquare() {
 
 const X3F = makeFrame(-2.5, 7.5, -1.5, 4.2, 22, 4);
 const X3_TILES = [
-  { name: "দুই column এক লাইনে", from: "5.2", say: "Knob 1 দুই পাক সামনে, knob 2 এক পাক পেছনে. Dot আবার পেরেকে." },
-  { name: "পুরা grid চ্যাপ্টা", from: "6.x", say: "দেয়ালের পুরা grid চেপে একটা লাইন হয়ে গেলো." },
-  { name: "আলো শুধু এক লাইনে", from: "7.2", say: "Knob যেভাবেই ঘুরান, আলো এই লাইনের বাইরে যায় না." },
-  { name: "আলাদা বিন্দু, এক জায়গা", from: "6.5", say: "(2, 0), (0, 1), (−2, 2): তিনজনই গিয়ে পড়লো (4, 2) এ." },
-  { name: "উল্টা ফেরানো যায় না", from: "Article 9", say: "(4, 2) কে ফেরত পাঠাবো কোথায়? তিনটা জায়গাই হতে পারে." },
-  { name: "Ax = b এর উত্তর নাই", from: "Article 10", say: "তারাটা লাইনের বাইরে. কোনো পাকেই আলো ওখানে যায় না." },
-  { name: "একটা দিক মুছে গেলো", from: "Article 11", say: "(2, −1) দিকের arrow টা lens পার হয়ে চুপসে শূন্য." },
+  { name: "দুই column এক লাইনে", from: "5.2", say: "Knob 1 দুই পাক সামনে, knob 2 এক পাক পেছনে। Dot আবার পেরেকে।" },
+  { name: "পুরা grid চ্যাপ্টা", from: "6.x", say: "দেয়ালের পুরা grid চেপে একটা লাইন হয়ে গেলো।" },
+  { name: "আলো শুধু এক লাইনে", from: "7.2", say: "Knob যেভাবেই ঘুরান, আলো এই লাইনের বাইরে যায় না।" },
+  { name: "আলাদা বিন্দু, এক জায়গা", from: "6.5", say: "(2, 0), (0, 1), (−2, 2): তিনজনই গিয়ে পড়লো (4, 2) এ।" },
+  { name: "উল্টা ফেরানো যায় না", from: "Article 9", say: "(4, 2) কে ফেরত পাঠাবো কোথায়? তিনটা জায়গাই হতে পারে।" },
+  { name: "Ax = b এর উত্তর নাই", from: "Article 10", say: "তারাটা লাইনের বাইরে। কোনো পাকেই আলো ওখানে যায় না।" },
+  { name: "একটা দিক মুছে গেলো", from: "Article 11", say: "(2, −1) দিকের arrow টা lens পার হয়ে চুপসে শূন্য।" },
 ];
 const X3_INS: XY[] = [
   [2, 0],
@@ -628,7 +628,7 @@ export function AllSameFact() {
     const next = seen.map((s, j) => s || j === i);
     play.play(X3_FRAMES, () => {
       setSeen(next);
-      if (next.every(Boolean) && !all) pass("সাত রকম কথা, একটাই ঘটনা.");
+      if (next.every(Boolean) && !all) pass("সাত রকম কথা, একটাই ঘটনা।");
     });
   };
   return (
@@ -646,7 +646,7 @@ export function AllSameFact() {
           )}
         </LB_Wall>
       </div>
-      <div className="mt-1 min-h-10 text-center text-sm leading-snug">{cur === null ? <span className="text-muted">একটা কথায় tap করুন.</span> : say(X3_TILES.map((x) => x.say), cur)}</div>
+      <div className="mt-1 min-h-10 text-center text-sm leading-snug">{cur === null ? <span className="text-muted">একটা কথায় tap করুন।</span> : say(X3_TILES.map((x) => x.say), cur)}</div>
       <div className="mx-auto mt-1 grid max-w-[21rem] grid-cols-2 gap-1.5">
         {X3_TILES.map((x, i) => (
           <button
@@ -664,7 +664,7 @@ export function AllSameFact() {
           </button>
         ))}
       </div>
-      <Task done={all && !play.running}>সাতটা কথাই tap করে ছবিটা দেখুন. সবগুলো এই এক lens এর গল্প.</Task>
+      <Task done={all && !play.running}>সাতটা কথাই tap করে ছবিটা দেখুন। সবগুলো এই এক lens এর গল্প।</Task>
     </>
   );
 }
@@ -705,7 +705,7 @@ export function BigButZero() {
   const start = () => {
     if (guess === null || go.running) return;
     setRan(true);
-    go.run(() => pass("বড় সংখ্যা মানেই বড় ছবি না."));
+    go.run(() => pass("বড় সংখ্যা মানেই বড় ছবি না।"));
   };
   return (
     <>
@@ -755,8 +755,8 @@ export function BigButZero() {
           </button>
         </div>
       )}
-      {over && guess !== null && guess !== X4_RIGHT && <Nope>ঘরটা প্রথমে ফুললো ঠিকই. তারপর দুই পাশ গিয়ে বসলো একই জায়গায়, (100, 100) এ. ছোপ চ্যাপ্টা হয়ে দাগ.</Nope>}
-      <Task done={over}>আগে guess দিন: এক ঘরের আলো এই lens এ কেমন হবে? তারপর ঘরটা পাঠান.</Task>
+      {over && guess !== null && guess !== X4_RIGHT && <Nope>ঘরটা প্রথমে ফুললো ঠিকই। তারপর দুই পাশ গিয়ে বসলো একই জায়গায়, (100, 100) এ। ছোপ চ্যাপ্টা হয়ে দাগ।</Nope>}
+      <Task done={over}>আগে guess দিন: এক ঘরের আলো এই lens এ কেমন হবে? তারপর ঘরটা পাঠান।</Task>
     </>
   );
 }
@@ -785,7 +785,7 @@ export function TinyButFine() {
     if (play.running || phase >= 3) return;
     const next = phase + 1;
     setPhase(next);
-    play.play(1, next === 3 ? () => pass("ছোট মানে নষ্ট না. শুধু শূন্য হলেই নষ্ট.") : undefined);
+    play.play(1, next === 3 ? () => pass("ছোট মানে নষ্ট না। শুধু শূন্য হলেই নষ্ট।") : undefined);
   };
   const flower = FLOWER.map((p) => [p[0] * s, p[1] * s] as XY);
   // inside the loupe: wall point p sits at (lx, ly) + (p − look) · u · zoom
@@ -795,10 +795,10 @@ export function TinyButFine() {
   for (let i = -6; i <= 6; i += 1) tenth.push(i / 10);
   const BTN = ["পুঁচকে lens দিয়ে ফুল পাঠান", "কাছে গিয়ে দেখুন", "পেছনে 10 গুণ lens লাগান"];
   const SAY = [
-    "রিনার ফুল, 5 ঘর.",
-    "ফুলটা এখন পেরেকের পাশে একটা ফোঁটা. 0.05 ঘর.",
-    "10 গুণ কাছে: পুরা ফুল. পাঁচটা ঘর, একটাও হারায় নাই.",
-    "10 গুণ lens পেছনে: ফুল আবার 5 ঘর.",
+    "রিনার ফুল, 5 ঘর।",
+    "ফুলটা এখন পেরেকের পাশে একটা ফোঁটা। 0.05 ঘর।",
+    "10 গুণ কাছে: পুরা ফুল। পাঁচটা ঘর, একটাও হারায় নাই।",
+    "10 গুণ lens পেছনে: ফুল আবার 5 ঘর।",
   ];
   return (
     <>
@@ -844,7 +844,7 @@ export function TinyButFine() {
           </button>
         </div>
       )}
-      <Task done={done}>ফুলটা পুঁচকে lens দিয়ে পাঠান, কাছে গিয়ে দেখুন, তারপর ফিরিয়ে আনুন.</Task>
+      <Task done={done}>ফুলটা পুঁচকে lens দিয়ে পাঠান, কাছে গিয়ে দেখুন, তারপর ফিরিয়ে আনুন।</Task>
     </>
   );
 }
@@ -888,7 +888,7 @@ export function ExtraColumn() {
     setPair(next);
     if (next.length === 2) {
       const c: Cols = [X6_COLS[next[0]].v, X6_COLS[next[1]].v];
-      draw.play(1, flat(c) ? () => pass("বাড়তি column থাকলে det শূন্য. Code নিজেই ধরে.") : undefined);
+      draw.play(1, flat(c) ? () => pass("বাড়তি column থাকলে det শূন্য। Code নিজেই ধরে।") : undefined);
     }
   };
   return (
@@ -952,16 +952,16 @@ export function ExtraColumn() {
               )}
             </>
           ) : (
-            <span className="text-muted">দুইটা column এর মাথায় tap করুন.</span>
+            <span className="text-muted">দুইটা column এর মাথায় tap করুন।</span>
           )}
         </div>
       </div>
       {settled && !zero && (
         <Nope key={pair.join()}>
-          det {fmt(D ?? 0)}. দুই column দুই দিকে, মাঝে ছোপ আছে. তাই দুইটাই নিজের নিজের information দেয়.
+          det {fmt(D ?? 0)}. দুই column দুই দিকে, মাঝে ছোপ আছে। তাই দুইটাই নিজের নিজের information দেয়।
         </Nope>
       )}
-      <Task done={done}>খাতার দুইটা column বেছে app এ দিন. কোন জোড়ার det শূন্য আসে, খুঁজে বের করুন.</Task>
+      <Task done={done}>খাতার দুইটা column বেছে app এ দিন। কোন জোড়ার det শূন্য আসে, খুঁজে বের করুন।</Task>
     </>
   );
 }
@@ -991,9 +991,9 @@ const X7_POND: XY[] = [
 ];
 
 function X7_Nope({ l, side }: { l: Lens; side: 0 | 1 }) {
-  if (side === 0) return <>ছোপ চ্যাপ্টা হয়ে দাগ. {detLine(l.cols)}. এই lens ছবি পিষে ফেলে.</>;
-  if (l.key === "tiny") return <>ছোপ ছোট, তবু চারকোনা. {detLine(l.cols)}. শূন্য না.</>;
-  return <>ছোপ দাঁড়ালো {fmt(Math.abs(det(l.cols)))} ঘর. {detLine(l.cols)}. শূন্য না.</>;
+  if (side === 0) return <>ছোপ চ্যাপ্টা হয়ে দাগ। {detLine(l.cols)}. এই lens ছবি পিষে ফেলে।</>;
+  if (l.key === "tiny") return <>ছোপ ছোট, তবু চারকোনা। {detLine(l.cols)}. শূন্য না।</>;
+  return <>ছোপ দাঁড়ালো {fmt(Math.abs(det(l.cols)))} ঘর। {detLine(l.cols)}. শূন্য না।</>;
 }
 
 export function YourBox() {
@@ -1019,7 +1019,7 @@ export function YourBox() {
       setPlaced(next);
       setTried(null);
       setAt(at + 1);
-      if (at + 1 >= X7_ORDER.length) pass("ad − bc শূন্য হলে পুকুরে, না হলে রিনার.");
+      if (at + 1 >= X7_ORDER.length) pass("ad − bc শূন্য হলে পুকুরে, না হলে রিনার।");
     });
   };
   const wrong = cur && tried !== null && !go.running && (tried === 1) !== flat(cur.cols);
@@ -1088,7 +1088,7 @@ export function YourBox() {
           <X7_Nope l={cur} side={tried} />
         </Nope>
       )}
-      <Task done={all}>প্রতিটা lens এর ad − bc মনে মনে করুন. তারপর রাখুন, না হলে পুকুরে দিন.</Task>
+      <Task done={all}>প্রতিটা lens এর ad − bc মনে মনে করুন। তারপর রাখুন, না হলে পুকুরে দিন।</Task>
     </>
   );
 }
@@ -1117,7 +1117,7 @@ export function TryZero() {
   const choose = (i: number) => {
     if (land.running || done) return;
     setPick(i);
-    land.play(1, () => (i === X8_RIGHT ? pass("(2, 4) হলো (1, 2) এর দ্বিগুণ: শূন্য.") : setMiss(miss + 1)));
+    land.play(1, () => (i === X8_RIGHT ? pass("(2, 4) হলো (1, 2) এর দ্বিগুণ: শূন্য।") : setMiss(miss + 1)));
   };
   const cols: Cols = [s1, [2, d ?? 0]];
   return (
@@ -1177,10 +1177,10 @@ export function TryZero() {
       </div>
       {over && pick !== X8_RIGHT && (
         <Nope key={miss}>
-          ছোপ রইলো, {fmt(area)} ঘর. দুই পাশ দুই দিকে গেছে. সবুজ পাশটা কমলার লাইনে পড়তে হলে (1, 2) এর ঠিক দ্বিগুণ হতে হবে.
+          ছোপ রইলো, {fmt(area)} ঘর। দুই পাশ দুই দিকে গেছে। সবুজ পাশটা কমলার লাইনে পড়তে হলে (1, 2) এর ঠিক দ্বিগুণ হতে হবে।
         </Nope>
       )}
-      <Task done={done}>কোন সংখ্যা বসালে এই lens পুকুরে যাবে? একটা সংখ্যা বেছে ছোপটা দেখুন.</Task>
+      <Task done={done}>কোন সংখ্যা বসালে এই lens পুকুরে যাবে? একটা সংখ্যা বেছে ছোপটা দেখুন।</Task>
     </>
   );
 }
@@ -1205,7 +1205,7 @@ export function MorningRun() {
     const next = opened.map((o, j) => o || j === i);
     go.run(() => {
       setOpened(next);
-      if (next.every(Boolean) && !all) pass("নাসিবের রাখার ভাগেও দুইটা পুকুরের.");
+      if (next.every(Boolean) && !all) pass("নাসিবের রাখার ভাগেও দুইটা পুকুরের।");
     });
   };
   const l = cur === null ? null : BOX[cur];
@@ -1248,11 +1248,11 @@ export function MorningRun() {
       </div>
       {all && !go.running && (
         <div className={`${FADE} mx-auto mt-2 max-w-sm text-center text-sm leading-snug`}>
-          নাসিবের রাখার ভাগে পুরানো, একশ আর G. প্রথম দুইটাই চ্যাপ্টা. ফেলার ভাগের পুঁচকেটা রাখার মতো.
+          নাসিবের রাখার ভাগে পুরানো, একশ আর G। প্রথম দুইটাই চ্যাপ্টা। ফেলার ভাগের পুঁচকেটা রাখার মতো।
         </div>
       )}
       <Ticks items={[["ছয়টা lens চালানো", all]]} />
-      <Task done={all && !go.running}>ছয়টা lens একটা একটা করে যন্ত্রে দিন. আপনার বাজির সাথে মিলিয়ে দেখুন.</Task>
+      <Task done={all && !go.running}>ছয়টা lens একটা একটা করে যন্ত্রে দিন। আপনার বাজির সাথে মিলিয়ে দেখুন।</Task>
     </>
   );
 }
@@ -1304,9 +1304,9 @@ export function BoxNight({}: Story) {
             <circle r={5} fill="#bae6fd" stroke="#e2e8f0" strokeWidth={0.8} />
           </g>
         ))}
-        {k === 1 && <Bubble x={70} y={72} side="right" lines={["ছবি পিষা ফালায় যেগুলা,", "সেগুলা পুকুরে."]} />}
-        {k === 3 && <Bubble x={250} y={72} side="left" lines={["বড় সংখ্যার lens", "বড় ছবি দেয়."]} />}
-        {k >= 4 && <Bubble x={250} y={72} side="left" lines={["ছোট সংখ্যারটা", "ফালায় দেন."]} />}
+        {k === 1 && <Bubble x={70} y={72} side="right" lines={["ছবি পিষা ফালায় যেগুলা,", "সেগুলা পুকুরে।"]} />}
+        {k === 3 && <Bubble x={250} y={72} side="left" lines={["বড় সংখ্যার lens", "বড় ছবি দেয়।"]} />}
+        {k >= 4 && <Bubble x={250} y={72} side="left" lines={["ছোট সংখ্যারটা", "ফালায় দেন।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1328,7 +1328,7 @@ export function SomLine({}: Story) {
         </StageWall>
         <Person who="som" x={236} y={150} facing={-1} arm={k >= 1 ? "point" : "down"} />
         <LB_Name x={236} y={150} n="সোম" />
-        {k >= 2 && <Bubble x={236} y={86} side="left" lines={["এই দাগ তো", "আগেও দেখছি."]} />}
+        {k >= 2 && <Bubble x={236} y={86} side="left" lines={["এই দাগ তো", "আগেও দেখছি।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1353,7 +1353,7 @@ export function NasibHundred({}: Story) {
         )}
         <Person who="samin" x={250} y={138} facing={-1} />
         <LB_Name x={250} y={138} n="সামিন" />
-        {k >= 2 && <Bubble x={140} y={72} side="left" lines={["এইটা দিয়া", "দেয়াল ভরে যাবে."]} />}
+        {k >= 2 && <Bubble x={140} y={72} side="left" lines={["এইটা দিয়া", "দেয়াল ভরে যাবে।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1375,7 +1375,7 @@ export function NasibTiny({}: Story) {
             <LB_Disc x={136} y={70} r={20} cols={L_TINY} />
           </g>
         )}
-        {k >= 2 && <Bubble x={96} y={70} side="left" lines={["এইটা তো কিছুই না.", "ফালাও."]} />}
+        {k >= 2 && <Bubble x={96} y={70} side="left" lines={["এইটা তো কিছুই না।", "ফালাও।"]} />}
         <Person who="samin" x={236} y={138} facing={-1} arm="hold" />
         <LB_Name x={236} y={138} n="সামিন" />
         <g transform="translate(196 56)">
@@ -1438,7 +1438,7 @@ export function SaminKhata({}: Story) {
             </g>
           )}
         </g>
-        {k >= 2 && <Bubble x={78} y={74} side="mid" lines={["একই area,", "দুইবার লেখা."]} />}
+        {k >= 2 && <Bubble x={78} y={74} side="mid" lines={["একই area,", "দুইবার লেখা।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1587,7 +1587,7 @@ export function DoorPiece({}: Story) {
             <LB_Disc x={196} y={124} r={9} cols={L_W} />
           </g>
         )}
-        {k >= 2 && <Bubble x={224} y={70} side="left" lines={["উপরে আবার", "একটা দুইগুণ."]} />}
+        {k >= 2 && <Bubble x={224} y={70} side="left" lines={["উপরে আবার", "একটা দুইগুণ।"]} />}
         <Person who="rina" x={286} y={150} facing={-1} arm="hold" label />
         {k >= 3 && (
           <g className={POP}>
@@ -1607,10 +1607,10 @@ export function DoorPiece({}: Story) {
 //      into the পুকুর never comes back; a flat one kept spoils Rina's wall.
 
 const X1B_SAY = [
-  "Bulb কাটা. ছয়টা lens, একটাও চালিয়ে দেখার উপায় নাই.",
-  "পুকুরে গেলে lens আর ফেরে না.",
-  "ভালো lens টা গেলে? রিনার দেয়ালের ছবিটা আর হবে না.",
-  "পিষে ফেলা lens রেখে দিলে? কাল রিনা রং নিয়ে দাঁড়াবে, দেয়ালে পড়বে শুধু একটা দাগ.",
+  "Bulb কাটা। ছয়টা lens, একটাও চালিয়ে দেখার উপায় নাই।",
+  "পুকুরে গেলে lens আর ফেরে না।",
+  "ভালো lens টা গেলে? রিনার দেয়ালের ছবিটা আর হবে না।",
+  "পিষে ফেলা lens রেখে দিলে? কাল রিনা রং নিয়ে দাঁড়াবে, দেয়ালে পড়বে শুধু একটা দাগ।",
 ];
 
 export function LensStake() {
@@ -1657,10 +1657,10 @@ const X2B_B: XY[] = [
   [4, 2],
 ];
 const X2B_SAY = [
-  "দুই পাশ দুই দিকে: (2, 1) আর (1, 2). জায়গা 3.",
-  "দ্বিতীয় পাশ প্রথমটার দিকে হেলছে. জায়গা 1.5.",
-  "একদম কপি: দুই পাশই (2, 1). জায়গা 0.",
-  "কপি না, দ্বিগুণ: (4, 2). তবু একই লাইন. জায়গা 0.",
+  "দুই পাশ দুই দিকে: (2, 1) আর (1, 2)। জায়গা 3।",
+  "দ্বিতীয় পাশ প্রথমটার দিকে হেলছে। জায়গা 1.5.",
+  "একদম কপি: দুই পাশই (2, 1)। জায়গা 0।",
+  "কপি না, দ্বিগুণ: (4, 2)। তবু একই লাইন। জায়গা 0।",
 ];
 
 export function CopyColumn() {
@@ -1690,10 +1690,10 @@ export function CopyColumn() {
 
 const X3B_F = makeFrame(-0.5, 3.5, -0.5, 7.5, 18, 6);
 const X3B_SAY = [
-  "5.2b এর remote C. দুই button: (1, 2) আর (2, 5).",
-  "দুই button এর মাঝের ছোপ. সরু, তবু ছোপ.",
-  "1·5 − 2·2 = 1. শূন্য না.",
-  "তাই দুই button দুই দিকে. Independent. সেদিনের লম্বা পরীক্ষা, এক সংখ্যায়.",
+  "5.2b এর remote C। দুই button: (1, 2) আর (2, 5)।",
+  "দুই button এর মাঝের ছোপ। সরু, তবু ছোপ।",
+  "1·5 − 2·2 = 1. শূন্য না।",
+  "তাই দুই button দুই দিকে। Independent. সেদিনের লম্বা পরীক্ষা, এক সংখ্যায়।",
 ];
 
 export function RemoteC() {
@@ -1726,10 +1726,10 @@ export function RemoteC() {
 
 const X4B_F = makeFrame(-1, 5, -0.8, 4, 20, 4);
 const X4B_SAY = [
-  "দুইটা lens. একটায় চারটা 100. আরেকটায় 2, 1, 1, 2.",
-  "চারটা 100: ঘরটা দেয়াল ছাড়িয়ে গেলো, কিন্তু চ্যাপ্টা. জায়গা 0.",
-  "2, 1, 1, 2: ছোট সংখ্যা. ছোপ 3 ঘর.",
-  "সংখ্যা কত বড়, det সেটা বলে না. জায়গার কী হলো, সেটা বলে.",
+  "দুইটা lens। একটায় চারটা 100। আরেকটায় 2, 1, 1, 2।",
+  "চারটা 100: ঘরটা দেয়াল ছাড়িয়ে গেলো, কিন্তু চ্যাপ্টা। জায়গা 0।",
+  "2, 1, 1, 2: ছোট সংখ্যা। ছোপ 3 ঘর।",
+  "সংখ্যা কত বড়, det সেটা বলে না। জায়গার কী হলো, সেটা বলে।",
 ];
 
 export function BigVsSmall() {
@@ -1763,10 +1763,10 @@ export function BigVsSmall() {
 
 const X5B_F = makeFrame(-1.5, 3.5, -1.5, 2.5, 18, 4);
 const X5B_SAY = [
-  "দুইটা ছবি: পুঁচকে lens এর ফুল, আর পুরানো lens এর দাগ.",
-  "দুইটাকেই 10 গুণ lens দিয়ে পাঠাই.",
-  "ফুল ফিরে এলো. পুরা ফুল.",
-  "দাগ লম্বা হলো. তবু দাগ. যেই ফুল থেকে এসেছিলো, সেটা আর ফেরে না.",
+  "দুইটা ছবি: পুঁচকে lens এর ফুল, আর পুরানো lens এর দাগ।",
+  "দুইটাকেই 10 গুণ lens দিয়ে পাঠাই।",
+  "ফুল ফিরে এলো। পুরা ফুল।",
+  "দাগ লম্বা হলো। তবু দাগ। যেই ফুল থেকে এসেছিলো, সেটা আর ফেরে না।",
 ];
 
 export function SmallComesBack() {
@@ -1805,10 +1805,10 @@ export function SmallComesBack() {
 //      the computer's det, `== 0` says no, a tolerance says yes.
 
 const X5C_SAY = [
-  "দুই column একই লাইনে: (0.7, 2.1) আর (0.4, 1.2). det হওয়ার কথা 0.",
-  "Computer বললো −1.17e−16. মানে −0.000000000000000117. প্রায় শূন্য, তবু শূন্য না.",
-  "== 0 দিয়ে test করলে: False. ভুল উত্তর.",
-  "খুব ছোট কি না দেখলে: True. এভাবেই test করতে হয়.",
+  "দুই column একই লাইনে: (0.7, 2.1) আর (0.4, 1.2). det হওয়ার কথা 0।",
+  "Computer বললো −1.17e−16. মানে −0.000000000000000117. প্রায় শূন্য, তবু শূন্য না।",
+  "== 0 দিয়ে test করলে: False। ভুল উত্তর।",
+  "খুব ছোট কি না দেখলে: True। এভাবেই test করতে হয়।",
 ];
 
 export function NoisyZero() {
@@ -1853,9 +1853,9 @@ const X6B_A: XY = [2, 1];
 const X6B_B: XY = [2, 1.1];
 const X6B_SAY = [
   "কপি না, প্রায় কপি: (2, 1) আর (2, 1.1).",
-  "ছোপ আছে, কিন্তু সুতার মতো সরু. det 0.2.",
-  "Dot কে (4, 2.1) এ নিতে knob লাগে (1, 1).",
-  "Dot একটু উপরে, (4, 2.2) তে. Knob লাফ দিয়ে (0, 2). এটাই 5.2 এর কাঁপুনি.",
+  "ছোপ আছে, কিন্তু সুতার মতো সরু। det 0.2.",
+  "Dot কে (4, 2.1) এ নিতে knob লাগে (1, 1)।",
+  "Dot একটু উপরে, (4, 2.2) তে। Knob লাফ দিয়ে (0, 2)। এটাই 5.2 এর কাঁপুনি।",
 ];
 
 export function NearCopy() {

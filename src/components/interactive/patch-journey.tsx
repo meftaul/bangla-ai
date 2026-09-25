@@ -42,8 +42,8 @@ import {
 // The morning after বিদায়. Rina wants to paint the লাইট ভাই's light pattern
 // (her small ফুল stencil, 5 ঘর, thrown through 7.3's G = [[2, 1], [1, 2]])
 // on the wall for good before আপার ফিরানি. One chalk ঘর = one কৌটা রং. She
-// has 5 কৌটা. মামা goes to the বাজার once. The লাইট ভাই: লেন্সে দুই লেখা,
-// দুইগুণ.
+// has 5 কৌটা। মামা goes to the বাজার once. The লাইট ভাই: লেন্সে দুই লেখা,
+// দুইগুণ।
 //
 // Nine screens. 1 seals the bet: 2× · 3× · 4× · 6× (PatchBet). 2 one ঘর
 // through G, cut and slide: 3 (CountSquares). 3 predict, then the ফুল tile by
@@ -125,7 +125,7 @@ export function PatchBet() {
   const seal = () => {
     if (bet === null || sealed) return;
     setSealed(true);
-    act.play(2, () => pass("বাজি সিল হলো. আগে এক ঘর গুনি."));
+    act.play(2, () => pass("বাজি সিল হলো। আগে এক ঘর গুনি।"));
   };
   const n = bet === null ? 0 : X1_CARDS[bet].n;
   return (
@@ -162,7 +162,7 @@ export function PatchBet() {
           এই বাজি সিল
         </button>
       </div>
-      <Task done={k >= 2}>দেয়ালের ছবিতে stencil এর কতগুণ রং লাগবে? একটা বেছে নিয়ে বাজি সিল করুন. উত্তর শেষে.</Task>
+      <Task done={k >= 2}>দেয়ালের ছবিতে stencil এর কতগুণ রং লাগবে? একটা বেছে নিয়ে বাজি সিল করুন। উত্তর শেষে।</Task>
     </>
   );
 }
@@ -208,7 +208,7 @@ function useCutSlide(plan: PatchPlan, onAll: () => void) {
 
 export function CountSquares() {
   const pass = useGate();
-  const cs = useCutSlide(X2_PLAN, () => pass("এক ঘরের আলো lens পার হয়ে তিন ঘর."));
+  const cs = useCutSlide(X2_PLAN, () => pass("এক ঘরের আলো lens পার হয়ে তিন ঘর।"));
   return (
     <>
       <PatchWall f={X2F} label="G এর ছোপ, চকের দাগে কাটা; ঝুলে থাকা চারটা তেকোনা টুকরা, tap করলে ফাঁকা ঘরে সরে যায়; কয়টা ঘর পুরা হলো তার হিসাব" className="max-w-[13rem]">
@@ -229,7 +229,7 @@ export function CountSquares() {
           </>
         )}
       </div>
-      <Task done={cs.allIn}>ছোপটা চকের দাগে কাটুন. তারপর বেগুনি দাগের টুকরা গুলো tap করুন, ফাঁকা ঘরে সরে যাবে. কয় ঘর হলো?</Task>
+      <Task done={cs.allIn}>ছোপটা চকের দাগে কাটুন। তারপর বেগুনি দাগের টুকরা গুলো tap করুন, ফাঁকা ঘরে সরে যাবে। কয় ঘর হলো?</Task>
     </>
   );
 }
@@ -240,7 +240,7 @@ export function CountSquares() {
 //     ঘর of the stencil through G; it lands as the same patch, and the count
 //     goes up by 3. The ফুল's whole outline waits dashed on the wall.
 
-const X3_OPTS = ["15 এর কম. ফুল তো চারকোনা না.", "15. প্রতিটা ঘর 3.", "15 এর বেশি. পাপড়ি ছড়িয়ে যাবে."];
+const X3_OPTS = ["15 এর কম। ফুল তো চারকোনা না।", "15. প্রতিটা ঘর 3।", "15 এর বেশি। পাপড়ি ছড়িয়ে যাবে।"];
 const X3_RIGHT = 1;
 const X3F = patchFrame(-2.4, 5.4, -2.4, 5.4, 22); // 188 × 188
 
@@ -257,7 +257,7 @@ export function EveryShape() {
       const nr = ran.map((v, j) => v || j === i);
       setRan(nr);
       setCur(null);
-      if (nr.every(Boolean)) pass("এক ঘর যতগুণ, পুরা ছবি ততগুণ.");
+      if (nr.every(Boolean)) pass("এক ঘর যতগুণ, পুরা ছবি ততগুণ।");
     });
   };
   const count = 3 * ran.filter(Boolean).length;
@@ -309,8 +309,8 @@ export function EveryShape() {
           </Choice>
         ))}
       </div>
-      {over && guess !== null && guess !== X3_RIGHT && <Nope>ঠিক 15. পাঁচটা ঘর, প্রতিটা একই 3 ঘরের ছোপ. ফুল চারকোনা না হলেও হিসাব একই.</Nope>}
-      <Task done={over}>আগে guess দিন. তারপর stencil এর পাঁচটা ঘর একটা একটা করে tap করে দেয়ালে পাঠান.</Task>
+      {over && guess !== null && guess !== X3_RIGHT && <Nope>ঠিক 15। পাঁচটা ঘর, প্রতিটা একই 3 ঘরের ছোপ। ফুল চারকোনা না হলেও হিসাব একই।</Nope>}
+      <Task done={over}>আগে guess দিন। তারপর stencil এর পাঁচটা ঘর একটা একটা করে tap করে দেয়ালে পাঠান।</Task>
     </>
   );
 }
@@ -339,7 +339,7 @@ export function TwoMoreLenses() {
     run.run(() => {
       const nd = done.map((v, j) => v || j === i);
       setDone(nd);
-      if (nd.every(Boolean)) pass("গুণটা 1 এর কম হলে ছবি ছোট হয়.");
+      if (nd.every(Boolean)) pass("গুণটা 1 এর কম হলে ছবি ছোট হয়।");
     });
   };
   const t = which === null ? 0 : run.running ? run.t : 1;
@@ -381,7 +381,7 @@ export function TwoMoreLenses() {
           </button>
         ))}
       </div>
-      <Task done={done[0] && done[1]}>দুইটা lens ই এক ঘরের উপর চালান. প্রতিটায় এক ঘর কত ঘর হয়?</Task>
+      <Task done={done[0] && done[1]}>দুইটা lens ই এক ঘরের উপর চালান। প্রতিটায় এক ঘর কত ঘর হয়?</Task>
     </>
   );
 }
@@ -405,7 +405,7 @@ export function OnlyTheColumns() {
   const tap = (i: 0 | 1) => setLit(lit.map((v, j) => v || j === i));
   const set = (nc: XY) => {
     setC2(nc);
-    if (both && (nc[0] !== 1 || nc[1] !== 2)) pass("Patch এর দুই পাশ = lens এর দুই column.");
+    if (both && (nc[0] !== 1 || nc[1] !== 2)) pass("Patch এর দুই পাশ = lens এর দুই column।");
   };
   const side = (i: 0 | 1) => {
     const tip = cols[i];
@@ -449,7 +449,7 @@ export function OnlyTheColumns() {
           <Stepper label="column 2 এর নিচের সংখ্যা" value={c2[1]} min={1} max={3} onChange={(v) => set([c2[0], v])} />
         </div>
       )}
-      <Task done={both && changed}>ছোপের বেগুনি দুইটা পাশ tap করুন. তারপর app এ column 2 বদলে দেখুন ছোপ কী করে.</Task>
+      <Task done={both && changed}>ছোপের বেগুনি দুইটা পাশ tap করুন। তারপর app এ column 2 বদলে দেখুন ছোপ কী করে।</Task>
     </>
   );
 }
@@ -480,7 +480,7 @@ export function YourPatch() {
     if (!cs.allIn || brush.running) return;
     setPainted(true);
     brush.play(n, () => {
-      if (n === X6_N) pass("এই lens এ এক ঘর হয় 4 ঘর.");
+      if (n === X6_N) pass("এই lens এ এক ঘর হয় 4 ঘর।");
       else setMiss((m) => m + 1);
     });
   };
@@ -532,15 +532,15 @@ export function YourPatch() {
       )}
       {over && n < X6_N && (
         <Nope key={miss}>
-          {n} কৌটায় {n} ঘর রং হলো. লাল দাগের {X6_N - n} ঘর খালি পড়ে থাকলো.
+          {n} কৌটায় {n} ঘর রং হলো। লাল দাগের {X6_N - n} ঘর খালি পড়ে থাকলো।
         </Nope>
       )}
       {over && n > X6_N && (
         <Nope key={miss}>
-          সব ঘর রং হয়েও {n - X6_N} কৌটা বাড়তি. নিচে গড়িয়ে পড়লো. পুরা ঘর গুলো আবার গুনে দেখুন.
+          সব ঘর রং হয়েও {n - X6_N} কৌটা বাড়তি। নিচে গড়িয়ে পড়লো। পুরা ঘর গুলো আবার গুনে দেখুন।
         </Nope>
       )}
-      <Task done={over && n === X6_N}>ছোপ কাটুন, ঝুলে থাকা টুকরা সরান. তারপর যত কৌটা লাগবে, তত দিয়ে রং করুন.</Task>
+      <Task done={over && n === X6_N}>ছোপ কাটুন, ঝুলে থাকা টুকরা সরান। তারপর যত কৌটা লাগবে, তত দিয়ে রং করুন।</Task>
     </>
   );
 }
@@ -580,7 +580,7 @@ export function TryPaint() {
     setRan(false);
     pour.play(1, () => {
       setRan(true);
-      if (i === X7_RIGHT) pass("4 ঘরের ঘুড়ি, প্রতি ঘর 2: 8 কৌটা.");
+      if (i === X7_RIGHT) pass("4 ঘরের ঘুড়ি, প্রতি ঘর 2: 8 কৌটা।");
       else setMiss((m) => m + 1);
     });
   };
@@ -616,16 +616,16 @@ export function TryPaint() {
           </Choice>
         ))}
       </div>
-      {over && pick !== null && n < X7_NEED && <Nope key={miss}>6 কৌটায় ঘুড়ির নিচের দিকটাই রং হলো. উপরে খালি. ঘুড়ির 4 ঘরের প্রতিটা হয় 2 ঘর.</Nope>}
-      {over && pick !== null && n > X7_NEED && <Nope key={miss}>ঘুড়ি ভরে গেলো, তাও 4 কৌটা বাড়তি. গড়িয়ে পড়লো নিচে.</Nope>}
-      <Task done={over && pick === X7_RIGHT}>ঘুড়ির stencil 4 ঘর. মাদুরের কোন সারির কৌটা দেয়ালে নিলে ঠিক ঠিক রং হবে? বেছে নিন.</Task>
+      {over && pick !== null && n < X7_NEED && <Nope key={miss}>6 কৌটায় ঘুড়ির নিচের দিকটাই রং হলো। উপরে খালি। ঘুড়ির 4 ঘরের প্রতিটা হয় 2 ঘর।</Nope>}
+      {over && pick !== null && n > X7_NEED && <Nope key={miss}>ঘুড়ি ভরে গেলো, তাও 4 কৌটা বাড়তি। গড়িয়ে পড়লো নিচে।</Nope>}
+      <Task done={over && pick === X7_RIGHT}>ঘুড়ির stencil 4 ঘর। মাদুরের কোন সারির কৌটা দেয়ালে নিলে ঠিক ঠিক রং হবে? বেছে নিন।</Task>
     </>
   );
 }
 
 // ---------------------------------------------------------------------------
 // 8 · The bet opened on the ফুল. The ফুল through G is on the wall; Rina had
-//     5 কৌটা. Each card, tapped, pours its কৌটা: 2 গুণ = 10 stops short, 3 গুণ
+//     5 কৌটা। Each card, tapped, pours its কৌটা: 2 গুণ = 10 stops short, 3 গুণ
 //     = 15 fills it exactly, 4 গুণ = 20 leaves 5, 6 গুণ = 30 leaves 15.
 
 const X8F = patchFrame(-2.5, 5.5, -2.5, 5.5, 20); // 176 × 176
@@ -641,7 +641,7 @@ export function BetOpen() {
     setOpen(no);
     setCur(i);
     pour.play(1, () => {
-      if (no.length === X1_CARDS.length) pass("লাইট ভাইয়ের 2 ছিলো চার সংখ্যার একটা.");
+      if (no.length === X1_CARDS.length) pass("লাইট ভাইয়ের 2 ছিলো চার সংখ্যার একটা।");
     });
   };
   const c = cur === null ? null : X1_CARDS[cur];
@@ -691,7 +691,7 @@ export function BetOpen() {
           </Choice>
         ))}
       </div>
-      <Task done={open.length === X1_CARDS.length && !pour.running}>বাজির চারটা card একটা একটা করে খুলুন. প্রতিটার কৌটা দেয়ালে ঢেলে দেখুন.</Task>
+      <Task done={open.length === X1_CARDS.length && !pour.running}>বাজির চারটা card একটা একটা করে খুলুন। প্রতিটার কৌটা দেয়ালে ঢেলে দেখুন।</Task>
     </>
   );
 }
@@ -791,8 +791,8 @@ export function MorningWall({}: Story) {
         <LightBhai x={240} y={150} facing={-1} arm={k >= 2 ? "point" : "down"} />
         <St_Cycle x={296} y={150} />
         <Person who="mama" x={286} y={150} facing={-1} label />
-        {k === 2 && <Bubble x={240} y={84} side="mid" lines={["লেন্সে দুই লেখা আছে."]} />}
-        {k >= 3 && <Bubble x={240} y={84} side="mid" lines={["ছবি দুইগুণ হইবো.", "রংও দুইগুণ কিনেন."]} />}
+        {k === 2 && <Bubble x={240} y={84} side="mid" lines={["লেন্সে দুই লেখা আছে।"]} />}
+        {k >= 3 && <Bubble x={240} y={84} side="mid" lines={["ছবি দুইগুণ হইবো।", "রংও দুইগুণ কিনেন।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -802,9 +802,9 @@ export function MorningWall({}: Story) {
 //      (2 আর 2), Karim (the four numbers added).
 
 const FC_SAY: { who: "som" | "nasib" | "karim"; x: number; lines: string[]; side: "left" | "mid" | "right" }[] = [
-  { who: "som", x: 70, lines: ["তিনগুণের মতো", "লাগে."], side: "right" },
-  { who: "nasib", x: 150, lines: ["lens এ 2 আর 2.", "দুই দুগুণে চার."], side: "mid" },
-  { who: "karim", x: 230, lines: ["2, 1, 1, 2.", "যোগ করলে 6."], side: "left" },
+  { who: "som", x: 70, lines: ["তিনগুণের মতো", "লাগে।"], side: "right" },
+  { who: "nasib", x: 150, lines: ["lens এ 2 আর 2।", "দুই দুগুণে চার।"], side: "mid" },
+  { who: "karim", x: 230, lines: ["2, 1, 1, 2.", "যোগ করলে 6।"], side: "left" },
 ];
 
 export function FourCounts({}: Story) {
@@ -842,8 +842,8 @@ export function RinaStencil({}: Story) {
           </g>
         )}
         <Person who="nasib" x={214} y={150} facing={-1} arm={k >= 2 ? "point" : "down"} label />
-        {k === 2 && <Bubble x={214} y={84} side="left" lines={["এক ঘর তিনগুণ,", "ঠিক আছে."]} />}
-        {k >= 3 && <Bubble x={214} y={84} side="left" lines={["ফুল তো চারকোনা না.", "ফুলের হিসাব আলাদা."]} />}
+        {k === 2 && <Bubble x={214} y={84} side="left" lines={["এক ঘর তিনগুণ,", "ঠিক আছে।"]} />}
+        {k >= 3 && <Bubble x={214} y={84} side="left" lines={["ফুল তো চারকোনা না।", "ফুলের হিসাব আলাদা।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -932,7 +932,7 @@ export function EveningWall({}: Story) {
 }
 
 // 9b · The bridge to 8.2: নানা on the বারান্দা with his phone, calling the
-//      আমিন. The plot for আপা, a slanted field, drawn small behind.
+//      আমিন। The plot for আপা, a slanted field, drawn small behind.
 
 export function AminCall({}: Story) {
   const s = useScene(3, [600, 2000, 2200, 2400]);
@@ -946,8 +946,8 @@ export function AminCall({}: Story) {
         <path d="M10 70H120" stroke="#9f5a3a" strokeWidth={6} />
         <Person who="nana" x={78} y={150} facing={1} arm="hold" label />
         <rect x={84} y={90} width={5} height={9} rx={1} fill="#0f172a" />
-        {k === 1 && <Bubble x={78} y={84} side="right" lines={["আপার জমিটা হেলানো."]} />}
-        {k === 2 && <Bubble x={78} y={84} side="right" lines={["মাঠে তো চক দিয়ে", "ঘর কাটা নাই."]} />}
+        {k === 1 && <Bubble x={78} y={84} side="right" lines={["আপার জমিটা হেলানো।"]} />}
+        {k === 2 && <Bubble x={78} y={84} side="right" lines={["মাঠে তো চক দিয়ে", "ঘর কাটা নাই।"]} />}
         {k >= 3 && <Bubble x={78} y={84} side="right" lines={["গুনবেন কীভাবে?"]} />}
       </Stage>
     </StoryFrame>
@@ -959,9 +959,9 @@ export function AminCall({}: Story) {
 //      many: কৌটা never opened. How many, exactly? Stopped at "?".
 
 const S1_SAY = [
-  "মামা বাজারে যাবেন একবারই. রিনার হাতে 5 কৌটা.",
-  "কম আনলে: রং ফুরিয়ে যাবে. ফুল অর্ধেক রং হয়ে পড়ে থাকবে.",
-  "বেশি আনলে: কৌটা না খুলেই পড়ে থাকবে. টাকা নষ্ট.",
+  "মামা বাজারে যাবেন একবারই। রিনার হাতে 5 কৌটা।",
+  "কম আনলে: রং ফুরিয়ে যাবে। ফুল অর্ধেক রং হয়ে পড়ে থাকবে।",
+  "বেশি আনলে: কৌটা না খুলেই পড়ে থাকবে। টাকা নষ্ট।",
   "তাহলে ঠিক কত?",
 ];
 const S1F = patchFrame(-2.5, 7.5, -2.4, 5.4, 18); // 196 × 156
@@ -999,10 +999,10 @@ export function StakeFig() {
 //      them back: the same patch again. Nothing added, nothing lost.
 
 const S2_SAY = [
-  "রিনা newspaper থেকে ছোপের মাপে একটা টুকরা কাটলো.",
-  "তারপর কাঁচি দিয়ে চকের দাগ ধরে কাটলো.",
-  "ঝুলে থাকা টুকরা গুলো ফাঁকে বসালো. তিনটা পুরা ঘর.",
-  "উল্টা দিকে সরালে আবার আগের ছোপ. কাগজ বাড়ে নাই, কমে নাই.",
+  "রিনা newspaper থেকে ছোপের মাপে একটা টুকরা কাটলো।",
+  "তারপর কাঁচি দিয়ে চকের দাগ ধরে কাটলো।",
+  "ঝুলে থাকা টুকরা গুলো ফাঁকে বসালো। তিনটা পুরা ঘর।",
+  "উল্টা দিকে সরালে আবার আগের ছোপ। কাগজ বাড়ে নাই, কমে নাই।",
 ];
 const S2F = patchFrame(-0.4, 3.4, -0.4, 3.4, 34); // 145 × 145
 
@@ -1035,10 +1035,10 @@ export function CutPaper() {
 //      round ফুল is three times too.
 
 const S3_SAY = [
-  "গোল পাপড়ির একটা ফুল. চকের পুরা ঘরে মাপা যায় না.",
-  "ঘর গুলো ছোট করে কাটেন. এক ঘরের চার ভাগের এক ভাগ.",
-  "Lens পার হলে প্রতিটা ছোট ঘর একই রকম হেলানো ছোপ হয়.",
-  "প্রতিটা ছোট ঘর তিনগুণ. তাই গোল ফুলও তিনগুণ.",
+  "গোল পাপড়ির একটা ফুল। চকের পুরা ঘরে মাপা যায় না।",
+  "ঘর গুলো ছোট করে কাটেন। এক ঘরের চার ভাগের এক ভাগ।",
+  "Lens পার হলে প্রতিটা ছোট ঘর একই রকম হেলানো ছোপ হয়।",
+  "প্রতিটা ছোট ঘর তিনগুণ। তাই গোল ফুলও তিনগুণ।",
 ];
 const S3F = patchFrame(-0.4, 5, -0.4, 5, 30); // 178 × 178
 const S3_PETALS: XY[] = Array.from({ length: 72 }, (_, i) => {
@@ -1076,11 +1076,11 @@ export function TilesTriple() {
 // 4½ · Three lenses, three patches, three numbers; the name lands last.
 
 const S4_SAY = [
-  "তিনটা lens, প্রতিটার সামনে এক ঘর.",
-  "G: এক ঘর হয় 3 ঘর.",
-  "L: 4 ঘর.",
-  "H: চার ভাগের এক ভাগ.",
-  "প্রতিটা lens এর একটা করে সংখ্যা. নাম determinant.",
+  "তিনটা lens, প্রতিটার সামনে এক ঘর।",
+  "G: এক ঘর হয় 3 ঘর।",
+  "L: 4 ঘর।",
+  "H: চার ভাগের এক ভাগ।",
+  "প্রতিটা lens এর একটা করে সংখ্যা। নাম determinant.",
 ];
 const S4_LENS: { name: string; cols: Cols; n: string }[] = [
   { name: "G", cols: LENS_G, n: "3" },
@@ -1124,11 +1124,11 @@ export function ThreeLenses() {
 //      numbers without counting stays a "?".
 
 const S5_SAY = [
-  "এক ঘর. নিচের পাশ e₁, বাম পাশ e₂.",
-  "Lens এর প্রথম column (2, 1). e₁ গিয়ে দাঁড়ালো সেখানে.",
-  "দ্বিতীয় column (1, 2). e₂ গেলো সেখানে.",
-  "দুই পাশ ধরে বাকিটা আঁকা হয়ে গেলো. এটাই ছোপ.",
-  "চারটা সংখ্যাতেই সব আছে. গোনা ছাড়া পড়বো কীভাবে?",
+  "এক ঘর। নিচের পাশ e₁, বাম পাশ e₂।",
+  "Lens এর প্রথম column (2, 1). e₁ গিয়ে দাঁড়ালো সেখানে।",
+  "দ্বিতীয় column (1, 2)। e₂ গেলো সেখানে।",
+  "দুই পাশ ধরে বাকিটা আঁকা হয়ে গেলো। এটাই ছোপ।",
+  "চারটা সংখ্যাতেই সব আছে। গোনা ছাড়া পড়বো কীভাবে?",
 ];
 const S5F = patchFrame(-0.4, 3.4, -0.4, 3.4, 36); // 153 × 153
 
@@ -1156,7 +1156,7 @@ export function ColumnsDraw() {
 
 // 9½ · The recap: through G, one ঘর → 3; the ফুল 5 → 15; a round one, 3 গুণ.
 
-const S9_SAY = ["G তে এক ঘর: 3 ঘর.", "5 ঘরের ফুল: 15 ঘর.", "গোল কিছু হলেও: 3 গুণ.", "একটা lens, একটা গুণ. det(G) = 3."];
+const S9_SAY = ["G তে এক ঘর: 3 ঘর।", "5 ঘরের ফুল: 15 ঘর।", "গোল কিছু হলেও: 3 গুণ।", "একটা lens, একটা গুণ। det(G) = 3."];
 const S9F = patchFrame(-2.3, 5.3, -2.3, 5.3, 11); // 100 × 100
 
 export function RecapFig() {

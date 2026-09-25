@@ -138,7 +138,23 @@ type Saved = {
 
 const calm = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-export function Journey({ title, children }: { title?: string; children: ReactNode }) {
+/**
+ * What a Journey lends the <SideQuest>s inside it: the frame to take over (its
+ * root), and a way to say a side quest is on, so the frame behind it goes quiet.
+ */
+type DetourApi = { host: HTMLElement | null; away: (on: boolean) => void };
+const DetourCtx = createContext<DetourApi | null>(null);
+
+export function Journey({
+  title,
+  detour,
+  children,
+}: {
+  title?: string;
+  /** a side quest's own journey, run over its parent's frame; `onExit` goes back to it */
+  detour?: { onExit: () => void };
+  children: ReactNode;
+}) {
   // MDX can leave newline strings between the <Step>s; they are not screens.
   const steps = Children.toArray(children).filter((c) => !(typeof c === "string" && !c.trim()));
   const last = steps.length - 1;
@@ -167,6 +183,10 @@ export function Journey({ title, children }: { title?: string; children: ReactNo
   const [next, setNext] = useState<string | null>(null);
   // Said to a screen reader on a turn.
   const [said, setSaid] = useState("");
+  // The frame's root, which a side quest takes over, and whether one is on.
+  const [host, setHost] = useState<HTMLDivElement | null>(null);
+  const [away, setAway] = useState(false);
+  const detourApi = useMemo(() => ({ host, away: setAway }), [host]);
   const ids = useId();
   const scroller = useRef<HTMLDivElement>(null);
   const screen = useRef<HTMLDivElement>(null);
@@ -244,6 +264,7 @@ export function Journey({ title, children }: { title?: string; children: ReactNo
     setSaid(`ধাপ ${bn(at + 1)}, ${p < W ? "গল্প" : p === W ? "কাজের screen" : "ব্যাখ্যা"}`);
   };
   const finish = () => {
+    if (detour) return detour.onExit();
     setDir(1);
     setFinished(true);
     turned.current = true;
@@ -258,6 +279,12 @@ export function Journey({ title, children }: { title?: string; children: ReactNo
     turned.current = true;
     setFinished(false);
   };
+
+  // A side quest opens with its first screen in focus: the reader has stepped into it.
+  const isDetour = !!detour;
+  useEffect(() => {
+    if (isDetour) screen.current?.focus({ preventScroll: true });
+  }, [isDetour]);
 
   // Every screen starts at its top; one the reader turned to takes the focus, so
   // a screen reader reads on from the new screen, not from the button.
@@ -407,6 +434,8 @@ export function Journey({ title, children }: { title?: string; children: ReactNo
   // Pick up where this browser left off. A layout effect, so the saved screen
   // (not screen 1) is what gets painted first.
   useLayoutEffect(() => {
+    // A side quest starts fresh each time and is not kept: it is a short trip.
+    if (detour) return;
     const key = `journey:${window.location.pathname}`;
     saveKey.current = key;
     // The lesson after this one in its course, for the ending. Client-side because
@@ -432,7 +461,7 @@ export function Journey({ title, children }: { title?: string; children: ReactNo
     } catch {
       // storage blocked or corrupt: start from screen 1
     }
-  }, [last]);
+  }, [last, detour]);
   useEffect(() => {
     if (!saveKey.current) return;
     try {
@@ -539,13 +568,15 @@ export function Journey({ title, children }: { title?: string; children: ReactNo
   // → / Enter to continue, ← to go back. A screen that wants the arrow keys for
   // itself (driving the robot) takes them first and calls preventDefault().
   // The listener is installed once and reads the newest actions through a ref.
-  const nav = useRef({ forward, back });
+  // A side quest on top takes the keys; Escape leaves it.
+  const nav = useRef({ forward, back, away, exit: detour?.onExit });
   useEffect(() => {
-    nav.current = { forward, back };
+    nav.current = { forward, back, away, exit: detour?.onExit };
   });
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
+      if (nav.current.away || e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
+      if (e.key === "Escape" && nav.current.exit) return nav.current.exit();
       const t = e.target as HTMLElement | null;
       if (t?.closest?.("input, textarea, select, [contenteditable], [role=application]")) return;
       if (e.key === "ArrowRight" || (e.key === "Enter" && !t?.closest?.("button, a, [role=button]"))) nav.current.forward();
@@ -563,13 +594,30 @@ export function Journey({ title, children }: { title?: string; children: ReactNo
   const goBtn = "bg-accent text-accent-foreground shadow-lg shadow-accent/25 ring-4 ring-accent/20 hover:-translate-y-0.5 active:translate-y-0";
 
   return (
-    <div data-journey className="flex h-full min-h-0 flex-col">
+    <div ref={setHost} data-journey className="relative flex h-full min-h-0 flex-col">
+      <DetourCtx.Provider value={detourApi}>
       {/* ---- top bar: close, segmented progress, counter, the widget's task -- */}
-      <div className="shrink-0 border-b border-border px-4 pt-2.5 pb-3 sm:px-8 sm:pt-5">
-        {title ? (
+      <div inert={away} className="shrink-0 border-b border-border px-4 pt-2.5 pb-3 sm:px-8 sm:pt-5">
+        {detour ? (
+          // A side quest says so on every screen, phone included: this is a trip off the road.
+          <div className="mb-2 flex items-center gap-2 text-xs">
+            <span className="shrink-0 rounded-md bg-cat-amber/15 px-1.5 py-0.5 font-semibold text-cat-amber">Side quest</span>
+            <span className="min-w-0 truncate font-semibold">{title}</span>
+          </div>
+        ) : title ? (
           <div className="mb-2 hidden truncate text-xs font-semibold tracking-wider text-accent-text uppercase sm:block">{title}</div>
         ) : null}
         <div className="flex items-center gap-2.5">
+          {detour ? (
+            <button
+              type="button"
+              onClick={detour.onExit}
+              aria-label="মূল journey তে ফিরে যান"
+              className="group/x -ml-1.5 grid size-9 shrink-0 cursor-pointer place-items-center rounded-full text-2xl leading-none transition-colors hover:bg-foreground/5"
+            >
+              <span aria-hidden="true" className="text-muted group-hover/x:text-foreground">×</span>
+            </button>
+          ) : (
           <Link
             href="/dashboard/articles"
             aria-label="লাইব্রেরিতে ফিরে যান"
@@ -579,6 +627,7 @@ export function Journey({ title, children }: { title?: string; children: ReactNo
           >
             <span aria-hidden="true" className="text-muted group-hover/x:text-foreground">×</span>
           </Link>
+          )}
           <nav aria-label="ধাপগুলো" className="flex flex-1 gap-1">
             {steps.map((_, i) => (
               <button
@@ -590,9 +639,9 @@ export function Journey({ title, children }: { title?: string; children: ReactNo
                 onClick={() => go(i)}
                 className="group flex h-6 min-w-0 flex-1 cursor-pointer items-center disabled:cursor-default"
               >
-                <span className={`block h-2 w-full overflow-hidden rounded-full ${i <= furthest ? "bg-accent/25" : "bg-border"}`}>
+                <span className={`block h-2 w-full overflow-hidden rounded-full ${i > furthest ? "bg-border" : detour ? "bg-cat-amber/25" : "bg-accent/25"}`}>
                   <span
-                    className="block h-full rounded-full bg-accent transition-[width] duration-500 motion-reduce:transition-none"
+                    className={`block h-full rounded-full ${detour ? "bg-cat-amber" : "bg-accent"} transition-[width] duration-500 motion-reduce:transition-none`}
                     style={{ width: i < at ? "100%" : i === at ? `${(done / (lastPage + 1)) * 100}%` : "0%" }}
                   />
                 </span>
@@ -609,6 +658,7 @@ export function Journey({ title, children }: { title?: string; children: ReactNo
       {/* ---- the screen -------------------------------------------------------- */}
       <div
         ref={scroller}
+        inert={away}
         onPointerDownCapture={touch}
         onClickCapture={touch}
         onKeyDownCapture={touch}
@@ -676,7 +726,7 @@ export function Journey({ title, children }: { title?: string; children: ReactNo
       </div>
 
       {/* ---- bottom bar: what they found, back, Continue ------------------- */}
-      <div className="shrink-0 border-t border-border bg-surface px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:px-8 sm:pb-4">
+      <div inert={away} className="shrink-0 border-t border-border bg-surface px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:px-8 sm:pb-4">
         {/* a turn, said to a screen reader */}
         <div aria-live="polite" className="sr-only">
           {said}
@@ -756,11 +806,12 @@ export function Journey({ title, children }: { title?: string; children: ReactNo
             </button>
           ) : (
             <button type="button" onClick={finish} className={`${bigBtn} ${goBtn}`}>
-              শেষ করুন <span aria-hidden="true">✓</span>
+              {detour ? "মূল journey তে ফিরুন" : "শেষ করুন"} <span aria-hidden="true">✓</span>
             </button>
           )}
         </div>
       </div>
+      </DetourCtx.Provider>
     </div>
   );
 }
@@ -975,25 +1026,49 @@ export function Then({ children }: { children: ReactNode }) {
 }
 
 /**
- * A side quest: words worth keeping that the lesson does not need (a story from
- * the news, a reference table). One line in the explanation, and a tap opens
- * it in a sheet over the Journey, so it never makes an explanation longer than a
- * screen. The sheet sits on document.body, out of the Journey's zoom and split.
+ * A side quest: a short trip off the lesson's road (a "why" the lesson can
+ * skip, a story from the news, a reference table). One line in the
+ * explanation; a tap takes the reader into it as a journey of its own, over the
+ * lesson's frame: its own progress (amber), its own screens and tasks, × or
+ * the last screen's button back to the very screen they left. The lesson
+ * behind it stays mounted, with its state.
+ *
+ *   <SideQuest title="…">words and figures</SideQuest>     one step, paged like story screens
+ *   <SideQuest title="…" journey><Step>…</Step>…</SideQuest>  steps, as in a <Journey>
+ *
+ * Outside a Journey (a plain article) it opens in a sheet over the page.
  */
-export function SideQuest({ title, children }: { title: string; children: ReactNode }) {
+export function SideQuest({ title, journey = false, children }: { title: string; journey?: boolean; children: ReactNode }) {
+  const detour = useContext(DetourCtx);
   const [open, setOpen] = useState(false);
   const sheet = useRef<HTMLDialogElement>(null);
+  const card = useRef<HTMLButtonElement>(null);
   useEffect(() => {
-    if (open) sheet.current?.showModal();
-  }, [open]);
+    if (open && !detour) sheet.current?.showModal();
+  }, [open, detour]);
   const close = () => sheet.current?.close();
+
+  const start = () => {
+    setOpen(true);
+    detour?.away(true);
+  };
+  const exit = () => {
+    setOpen(false);
+    detour?.away(false);
+    requestAnimationFrame(() => card.current?.focus({ preventScroll: true }));
+  };
+  // Every block a screen of its own run of words: a figure here is watched, never the widget.
+  const pages = Children.toArray(children)
+    .filter((c) => !(typeof c === "string" && !c.trim()))
+    .map((c, i) => <div key={i}>{c}</div>);
 
   return (
     <div className="mt-4" data-nogrow>
       <button
+        ref={card}
         type="button"
-        onClick={() => setOpen(true)}
-        className="flex w-full cursor-pointer items-center gap-3 rounded-xl border border-dashed border-muted/50 px-3.5 py-2.5 text-left text-[0.95rem] leading-snug transition-colors duration-200 hover:border-accent hover:bg-accent/5 motion-reduce:transition-none"
+        onClick={start}
+        className="flex w-full cursor-pointer items-center gap-3 rounded-xl border border-dashed border-cat-amber/60 px-3.5 py-2.5 text-left text-[0.95rem] leading-snug transition-colors duration-200 hover:border-cat-amber hover:bg-cat-amber/5 motion-reduce:transition-none"
       >
         <span className="shrink-0 rounded-md bg-cat-amber/15 px-1.5 py-0.5 text-xs font-semibold text-cat-amber">Side quest</span>
         <span className="min-w-0 flex-1">{title}</span>
@@ -1001,7 +1076,17 @@ export function SideQuest({ title, children }: { title: string; children: ReactN
           →
         </span>
       </button>
-      {open
+      {open && detour?.host
+        ? createPortal(
+            <div role="region" aria-label={`Side quest: ${title}`} className={`absolute inset-0 z-30 flex flex-col bg-background ${enter(1)}`}>
+              <Journey title={title} detour={{ onExit: exit }}>
+                {journey ? children : <Step>{pages}</Step>}
+              </Journey>
+            </div>,
+            detour.host,
+          )
+        : null}
+      {open && !detour
         ? createPortal(
             <dialog
               ref={sheet}

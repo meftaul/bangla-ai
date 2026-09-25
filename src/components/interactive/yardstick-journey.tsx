@@ -2932,7 +2932,7 @@ export function InchPound() {
 }
 
 // ---------------------------------------------------------------------------
-// 10 · «মেলার ঝুলি». Seven stalls, one line each, then the last tap: can two
+// 10 · «মেলার ঝুলি»। Seven stalls, one line each, then the last tap: can two
 //      vectors be multiplied? No gate; the teaser points at Article 4.
 
 const BAG = [

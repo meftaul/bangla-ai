@@ -271,7 +271,7 @@ function LN_Race({ f, m, r, k, max, label }: { f: Frame; m: Move; r: Round; k: n
             <span className={`text-accent-text ${FADE}`}>দুই lane একই জায়গায়: {pt(R.end1)}.</span>
           ) : (
             <span className={`text-danger ${FADE}`}>
-              {pt(R.end1)} আর {pt(R.end2)}. দুই lane দুই জায়গায়.
+              {pt(R.end1)} আর {pt(R.end2)}. দুই lane দুই জায়গায়।
             </span>
           ))}
       </div>
@@ -314,7 +314,7 @@ export function MachineBet() {
   };
   const seal = () => {
     setSealed(true);
-    act.play(3, () => pass("বাজি সিল হলো. সামিনের কথা ঝুলে থাকলো."));
+    act.play(3, () => pass("বাজি সিল হলো। সামিনের কথা ঝুলে থাকলো।"));
   };
   // beats of the acted bet: 1 the picked cards go into the machine, 2 its screen says "?", 3 sealed
   const k = !sealed ? 0 : act.running ? act.k : 3;
@@ -325,7 +325,7 @@ export function MachineBet() {
       <svg viewBox="0 0 280 212" role="group" aria-label="Whiteboard এ চারটা নিয়ম; যেগুলো machine চালাতে পারবে বলে মনে হয়, সেগুলোতে tick দিন; tick দেওয়া নিয়মগুলো নিচে machine এর সামনে লাইনে দাঁড়ায়" className="mx-auto block h-auto w-full max-w-[20rem]">
         <rect x={3} y={3} width={274} height={144} rx={4} fill="white" stroke="#94a3b8" strokeWidth={3} />
         <text x={14} y={20} fontSize={9} fill="#64748b">
-          Machine শুধু matrix চালায়. (g₁, g₂) যাবে →
+          Machine শুধু matrix চালায়। (g₁, g₂) যাবে →
         </text>
         {MB_RULES.map(([who, rule], i) => {
           const y = 30 + i * 28;
@@ -390,14 +390,14 @@ export function MachineBet() {
       </svg>
       <div className="mt-3 flex justify-center">
         {sealed ? (
-          <span className={`text-sm text-muted ${FADE}`}>আপনার বাজি: চারটার {n} টা চলবে. মিলিয়ে দেখবো শেষে.</span>
+          <span className={`text-sm text-muted ${FADE}`}>আপনার বাজি: চারটার {n} টা চলবে। মিলিয়ে দেখবো শেষে।</span>
         ) : (
           <button type="button" className={primaryBtn} onClick={seal}>
             বাজি সিল করুন
           </button>
         )}
       </div>
-      <Task done={sealed && k >= 3}>Machine কোন নিয়মগুলো চালাতে পারবে? Tick দিয়ে বাজি সিল করুন.</Task>
+      <Task done={sealed && k >= 3}>Machine কোন নিয়মগুলো চালাতে পারবে? Tick দিয়ে বাজি সিল করুন।</Task>
     </>
   );
 }
@@ -430,7 +430,7 @@ export function TryToGrid() {
     setM(m.map((x, j) => (j === i ? v : x)));
     const t = touched.map((x, j) => x || j === i);
     setTouched(t);
-    if (t.every(Boolean) && !done) pass("কোনো matrix শূন্যকে সরাতে পারে না.");
+    if (t.every(Boolean) && !done) pass("কোনো matrix শূন্যকে সরাতে পারে না।");
   };
   return (
     <>
@@ -455,8 +455,8 @@ export function TryToGrid() {
       <div className="mt-2 text-center text-sm">
         খুঁটির কোণা: <span className="font-mono">(0, 0) → {pt(corner)}</span>. নাসিব চায় <span className="font-mono">(1, 1)</span>.
       </div>
-      {done && <div className={`mt-1 text-center text-sm text-danger ${FADE}`}>চার ঘরেই হাত দিলেন. কোণা একবারও নড়লো না.</div>}
-      <Task done={done}>চারটা ঘরই বদলে দেখুন. আলপনা কি ফুটকি দেওয়া জায়গায় যায়?</Task>
+      {done && <div className={`mt-1 text-center text-sm text-danger ${FADE}`}>চার ঘরেই হাত দিলেন। কোণা একবারও নড়লো না।</div>}
+      <Task done={done}>চারটা ঘরই বদলে দেখুন। আলপনা কি ফুটকি দেওয়া জায়গায় যায়?</Task>
     </>
   );
 }
@@ -479,7 +479,7 @@ export function TwoLanes() {
   const go = () => {
     const next = race.ran ? round + 1 : round;
     setRound(next);
-    race.go(next === 1 ? () => pass("যোগ আগে বা machine আগে, থামে একই জায়গায়.") : undefined);
+    race.go(next === 1 ? () => pass("যোগ আগে বা machine আগে, থামে একই জায়গায়।") : undefined);
   };
   return (
     <>
@@ -498,7 +498,7 @@ export function TwoLanes() {
           ["2 গুণের race", done],
         ]}
       />
-      <Task done={done}>Race চালান. দুই lane কোথায় থামে দেখুন. তারপর 2 গুণ দিয়ে আরেকবার.</Task>
+      <Task done={done}>Race চালান। দুই lane কোথায় থামে দেখুন। তারপর 2 গুণ দিয়ে আরেকবার।</Task>
     </>
   );
 }
@@ -517,7 +517,7 @@ export function SlideFails() {
     const t = tried.includes(c) ? tried : [...tried, c];
     race.go(() => {
       setTried(t);
-      if (t.includes(0) && t.includes(2) && !done) pass("Slide এ দুই lane দুই জায়গায় থামে.");
+      if (t.includes(0) && t.includes(2) && !done) pass("Slide এ দুই lane দুই জায়গায় থামে।");
     });
   };
   const pick = (v: number) => {
@@ -542,7 +542,7 @@ export function SlideFails() {
           ["0 গুণ", tried.includes(0)],
         ]}
       />
-      <Task done={done}>2 গুণ দিয়ে race চালান. তারপর 0 গুণ দিয়ে.</Task>
+      <Task done={done}>2 গুণ দিয়ে race চালান। তারপর 0 গুণ দিয়ে।</Task>
     </>
   );
 }
@@ -565,7 +565,7 @@ export function SquareFails() {
   const mv = partway(square, t);
   const toRoad = () => {
     setRoad(true);
-    p.play(1, () => pass("বর্গ করলে ঘর সমান থাকে না, লাইন বাঁকে."));
+    p.play(1, () => pass("বর্গ করলে ঘর সমান থাকে না, লাইন বাঁকে।"));
   };
   return (
     <>
@@ -596,14 +596,14 @@ export function SquareFails() {
           </button>
         )}
       </div>
-      {road && <div className={`mt-2 text-center text-sm text-muted ${FADE}`}>খাড়া দাগের ফাঁক আর সমান থাকলো না. কমলা দাগটা সোজা ছিল.</div>}
+      {road && <div className={`mt-2 text-center text-sm text-muted ${FADE}`}>খাড়া দাগের ফাঁক আর সমান থাকলো না। কমলা দাগটা সোজা ছিল।</div>}
       <Ticks
         items={[
           ["race", race.ran || road],
           ["পুরা রাস্তা", road],
         ]}
       />
-      <Task done={road}>আগে race চালান. তারপর করিমের নিয়ম পুরা রাস্তায় চালিয়ে দেখুন.</Task>
+      <Task done={road}>আগে race চালান। তারপর করিমের নিয়ম পুরা রাস্তায় চালিয়ে দেখুন।</Task>
     </>
   );
 }
@@ -638,7 +638,7 @@ const SK_MOVES: { name: string; cols: Cols }[] = [
     ],
   },
 ];
-const SK_OPTS = ["লাইন বাঁকবে. নতুন রকমের নকশা.", "আবার সমান ঘরের grid, খুঁটিতে বাঁধা.", "Grid ছিঁড়ে টুকরা টুকরা হবে."];
+const SK_OPTS = ["লাইন বাঁকবে। নতুন রকমের নকশা।", "আবার সমান ঘরের grid, খুঁটিতে বাঁধা।", "Grid ছিঁড়ে টুকরা টুকরা হবে।"];
 const SK_RIGHT = 1;
 
 /** Each guess as a small road: bent chalk lines, an even tilted grid on its pillar, a grid torn into pieces. */
@@ -709,7 +709,7 @@ export function StackThree() {
   const run = () =>
     p.play(3, () => {
       setRan(true);
-      pass("যত matrix ই জোড়াই, শেষে একটা matrix ই.");
+      pass("যত matrix ই জোড়াই, শেষে একটা matrix ই।");
     });
   return (
     <>
@@ -769,7 +769,7 @@ export function StackThree() {
           </Choice>
         ))}
       </div>
-      <Task done={ran}>আগে guess দিন. তারপর তিনটা move বেছে পরপর চালান.</Task>
+      <Task done={ran}>আগে guess দিন। তারপর তিনটা move বেছে পরপর চালান।</Task>
     </>
   );
 }
@@ -786,7 +786,7 @@ const YR: { name: string; tick: string; text: string; m: Move; lin: boolean }[] 
   { name: "খাতার নিয়ম 2", tick: "খাতা 2", text: "(−g₂, g₁)", m: ([x, y]) => [-y, x], lin: true },
   { name: "খাতার নিয়ম 3", tick: "খাতা 3", text: "(g₁ × g₂, 0)", m: ([x, y]) => [x * y, 0], lin: false },
 ];
-const YR_PASS = "Lane মিললে matrix, না মিললে না.";
+const YR_PASS = "Lane মিললে matrix, না মিললে না।";
 
 export function YourRules() {
   const pass = useGate();
@@ -844,11 +844,11 @@ export function YourRules() {
         )}
       </div>
       {wrong !== null && !ok && (
-        <Nope key={miss}>{wrong ? "উঁহু. দেখুন, দুই lane দুই জায়গায় থামলো." : "উঁহু. দুই lane একই জায়গায় থামলো."}</Nope>
+        <Nope key={miss}>{wrong ? "উঁহু। দেখুন, দুই lane দুই জায়গায় থামলো।" : "উঁহু। দুই lane একই জায়গায় থামলো।"}</Nope>
       )}
-      {ok && <div className={`mt-2 text-center text-sm text-accent-text ${FADE}`}>{rule.lin ? "ঠিক. Lane মিলেছে, এটা matrix." : "ঠিক. Lane মেলেনি, এটা matrix না."}</div>}
+      {ok && <div className={`mt-2 text-center text-sm text-accent-text ${FADE}`}>{rule.lin ? "ঠিক। Lane মিলেছে, এটা matrix." : "ঠিক। Lane মেলেনি, এটা matrix না।"}</div>}
       <Ticks items={YR.map((r, j) => [r.tick, j < i || (j === i && ok)] as [string, boolean])} />
-      <Task done={last && ok}>চারটা নিয়মেরই রায় দিন: matrix হয়, না হয় না.</Task>
+      <Task done={last && ok}>চারটা নিয়মেরই রায় দিন: matrix হয়, না হয় না।</Task>
     </>
   );
 }
@@ -865,11 +865,11 @@ const swirl: Move = ([x, y]) => {
   return [x * Math.cos(a) - y * Math.sin(a), x * Math.sin(a) + y * Math.cos(a)];
 };
 const TR: { m: Move; lin: boolean; why: string; name: string }[] = [
-  { name: "slide", m: ([x, y]) => [x, y - 1], lin: false, why: "খুঁটির কোণা এক ঘর নেমে গেছে. আর দুই lane এর বিন্দু দুই জায়গায়." },
+  { name: "slide", m: ([x, y]) => [x, y - 1], lin: false, why: "খুঁটির কোণা এক ঘর নেমে গেছে। আর দুই lane এর বিন্দু দুই জায়গায়।" },
   { name: "আয়না", m: ([x, y]) => [x, -y], lin: true, why: "" },
-  { name: "ঢেউ", m: ([x, y]) => [x, y + 0.6 * Math.sin(1.2 * x)], lin: false, why: "খুঁটি জায়গায় আছে. কিন্তু lane দুইটা মিললো না. লাইনগুলো ঢেউ খেলছে." },
+  { name: "ঢেউ", m: ([x, y]) => [x, y + 0.6 * Math.sin(1.2 * x)], lin: false, why: "খুঁটি জায়গায় আছে। কিন্তু lane দুইটা মিললো না। লাইনগুলো ঢেউ খেলছে।" },
   { name: "চ্যাপ্টা", m: ([x]) => [x, 0], lin: true, why: "" },
-  { name: "ঘূর্ণি", m: swirl, lin: false, why: "খুঁটি জায়গায় আছে. কিন্তু lane দুইটা মিললো না. দূরের point বেশি ঘোরে." },
+  { name: "ঘূর্ণি", m: swirl, lin: false, why: "খুঁটি জায়গায় আছে। কিন্তু lane দুইটা মিললো না। দূরের point বেশি ঘোরে।" },
   { name: "ঘুরানো", m: byCols(turnCols(90)), lin: true, why: "" },
 ];
 
@@ -923,7 +923,7 @@ export function TryRoadPictures() {
       if (TR[i].lin) {
         const f = found.map((x, j) => x || j === i);
         setFound(f);
-        if (f.filter(Boolean).length === need) pass("Race মিললেই matrix. দেখতে যেমনই হোক.");
+        if (f.filter(Boolean).length === need) pass("Race মিললেই matrix। দেখতে যেমনই হোক।");
       } else {
         setLast(i);
         setMiss((m) => m + 1);
@@ -956,8 +956,8 @@ export function TryRoadPictures() {
         </span>
       </div>
       {last !== null && <Nope key={miss}>{TR[last].why}</Nope>}
-      {last === null && got > 0 && got < need && <div className={`mt-2 text-center text-sm text-accent-text ${FADE}`}>দুই lane মিলেছে. আরো {need - got} টা বাকি.</div>}
-      <Task done={got === need}>যে তিনটা ছবি machine এর বানানো, সেগুলোতে tap করুন.</Task>
+      {last === null && got > 0 && got < need && <div className={`mt-2 text-center text-sm text-accent-text ${FADE}`}>দুই lane মিলেছে। আরো {need - got} টা বাকি।</div>}
+      <Task done={got === need}>যে তিনটা ছবি machine এর বানানো, সেগুলোতে tap করুন।</Task>
     </>
   );
 }
@@ -976,7 +976,7 @@ export function DropPlusOne() {
   const erase = () => {
     if (erased) return;
     setErased(true);
-    race.go(() => pass("+1 বাদ দিলে swap চলে. +1 টা আসলে b."));
+    race.go(() => pass("+1 বাদ দিলে swap চলে। +1 টা আসলে b।"));
   };
   return (
     <>
@@ -993,8 +993,8 @@ export function DropPlusOne() {
         </span>
       </div>
       <LN_Race f={DP_F} m={erased ? swap : somRule} r={{ kind: "scale", c: 2, v: [1, 1] }} k={race.k} max="max-w-[9.5rem]" label="সোমের নিয়মের race, (1, 1) কে 2 গুণ" />
-      {erased && race.ran && <div className={`mt-1 text-center text-sm text-muted ${FADE}`}>যা থাকলো, ওটা আয়না: matrix এর column (0, 1) আর (1, 0).</div>}
-      <Task done={erased && race.ran}>সোমের নিয়ম থেকে + 1 টা মুছে দিন. Race আবার চলবে.</Task>
+      {erased && race.ran && <div className={`mt-1 text-center text-sm text-muted ${FADE}`}>যা থাকলো, ওটা আয়না: matrix এর column (0, 1) আর (1, 0)।</div>}
+      <Task done={erased && race.ran}>সোমের নিয়ম থেকে + 1 টা মুছে দিন। Race আবার চলবে।</Task>
     </>
   );
 }
@@ -1111,8 +1111,8 @@ export function ClubRoom({}: Story) {
         <Person who="karim" x={k >= 1 ? 112 : 140} y={150} label facing={-1} walking={k === 1} arm={k === 1 ? "point" : "down"} mood={k >= 1 ? "smug" : "plain"} />
         <Person who="nasib" x={190} y={150} label facing={-1} arm={k === 2 ? "wave" : "down"} mood={k >= 2 ? "smug" : "plain"} />
         <Person who="som" x={276} y={150} label facing={-1} arm="hold" />
-        {k === 1 && <Bubble x={112} y={84} side="right" lines={["বর্গ করাও তো একটা নিয়ম.", "নিয়ম হইলেই চলবো."]} />}
-        {k === 2 && <Bubble x={190} y={84} side="left" lines={["আমারটা আরো সোজা.", "শুধু সরানো."]} />}
+        {k === 1 && <Bubble x={112} y={84} side="right" lines={["বর্গ করাও তো একটা নিয়ম।", "নিয়ম হইলেই চলবো।"]} />}
+        {k === 2 && <Bubble x={190} y={84} side="left" lines={["আমারটা আরো সোজা।", "শুধু সরানো।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1165,8 +1165,8 @@ export function SomLanes({}: Story) {
         <S_Proj />
         <Person who="karim" x={k >= 2 ? 196 : 150} y={150} label facing={-1} walking={k === 2} arm={k === 1 ? "point" : "down"} />
         <Person who="som" x={k >= 2 ? 96 : 280} y={150} label facing={-1} walking={k === 2} arm={k >= 2 ? "point" : "hold"} />
-        {k === 1 && <Bubble x={150} y={84} side="left" lines={["0 এর বর্গ 0.", "খুঁটি নড়ে না."]} />}
-        {k >= 3 && <Bubble x={96} y={84} side="right" lines={["আগে যোগ, পরে machine.", "আরেক lane এ উল্টা."]} />}
+        {k === 1 && <Bubble x={150} y={84} side="left" lines={["0 এর বর্গ 0।", "খুঁটি নড়ে না।"]} />}
+        {k >= 3 && <Bubble x={96} y={84} side="right" lines={["আগে যোগ, পরে machine।", "আরেক lane এ উল্টা।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1187,7 +1187,7 @@ export function NasibSlide({}: Story) {
         <Person who="som" x={96} y={150} label facing={-1} arm={k >= 2 ? "point" : "down"} />
         <Person who="nasib" x={176} y={150} label facing={-1} arm={k >= 1 ? "down" : "hold"} />
         {k < 1 && <S_Cup x={168} y={122} />}
-        {k === 1 && <Bubble x={176} y={84} side="left" lines={["এবার আমারটা চালাও."]} />}
+        {k === 1 && <Bubble x={176} y={84} side="left" lines={["এবার আমারটা চালাও।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1206,7 +1206,7 @@ export function KarimSquare({}: Story) {
         <Person who="som" x={96} y={150} label facing={-1} arm={k >= 2 ? "point" : "down"} />
         <Person who="karim" x={186} y={150} label facing={-1} mood="smug" arm={k === 1 ? "point" : "down"} />
         <Person who="nasib" x={250} y={150} label facing={-1} />
-        {k === 1 && <Bubble x={186} y={84} side="left" lines={["আমারটায় খুঁটি", "নড়ে না. চালাও."]} />}
+        {k === 1 && <Bubble x={186} y={84} side="left" lines={["আমারটায় খুঁটি", "নড়ে না। চালাও।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1225,9 +1225,9 @@ export function SaminStacks({}: Story) {
         <S_Desk x={120} />
         <Person who="samin" x={108} y={150} label arm={k === 1 ? "point" : "hold"} />
         <Person who="som" x={236} y={150} label facing={-1} arm="hold" />
-        {k === 1 && <Bubble x={108} y={84} side="right" lines={["তিনটা matrix", "পরপর চালাই."]} />}
-        {k === 2 && <Bubble x={236} y={84} side="left" lines={["হবে না."]} />}
-        {k === 3 && <Bubble x={108} y={84} side="right" lines={["দেখি."]} />}
+        {k === 1 && <Bubble x={108} y={84} side="right" lines={["তিনটা matrix", "পরপর চালাই।"]} />}
+        {k === 2 && <Bubble x={236} y={84} side="left" lines={["হবে না।"]} />}
+        {k === 3 && <Bubble x={108} y={84} side="right" lines={["দেখি।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1394,7 +1394,7 @@ export function ClubAlbum({}: Story) {
 // 1½ · Four rules, one machine that reads only four numbers. Which rules can
 //      be written as four numbers is left as "?".
 
-const X1_SAY = ["চারটা নিয়ম, একটা machine.", "Machine নিয়ম পড়তে পারে না.", "ও চায় শুধু চারটা number, একটা matrix.", "কোন নিয়মকে চারটা number এ লেখা যায়?"];
+const X1_SAY = ["চারটা নিয়ম, একটা machine।", "Machine নিয়ম পড়তে পারে না।", "ও চায় শুধু চারটা number, একটা matrix।", "কোন নিয়মকে চারটা number এ লেখা যায়?"];
 
 export function RulesIntoMachine() {
   const s = useScene(3, [600, 1600, 2000, 2200]);
@@ -1452,7 +1452,7 @@ const X2_ROPES: Cols[] = [
     [-2, 0],
   ],
 ];
-const X2_SAY = ["খুঁটির কোণা মানে (0, 0).", "দড়ি (2, 1) আর (1, 2). 0 বার আর 0 বার হাঁটা: (0, 0).", "দড়ি অন্য দিকে. তবু 0 বার আর 0 বার: (0, 0).", "দড়ি যেখানেই যাক, শূন্য বার হাঁটলে খুঁটিতেই থাকা."];
+const X2_SAY = ["খুঁটির কোণা মানে (0, 0)।", "দড়ি (2, 1) আর (1, 2)। 0 বার আর 0 বার হাঁটা: (0, 0)।", "দড়ি অন্য দিকে। তবু 0 বার আর 0 বার: (0, 0)।", "দড়ি যেখানেই যাক, শূন্য বার হাঁটলে খুঁটিতেই থাকা।"];
 
 export function ZeroStays() {
   const s = useScene(3, [600, 2200, 2000, 2400]);
@@ -1478,7 +1478,7 @@ export function ZeroStays() {
 //      where moving (2, 1) whole puts it too.
 
 const X3_F = makeFrame(-0.5, 5.5, -0.5, 4.5, 26, 6);
-const X3_SAY = ["(2, 1): দুই বার প্রথম দড়ি, এক বার দ্বিতীয়.", "টুকরা করলাম: দুইটা e₁, একটা e₂.", "প্রত্যেক টুকরা তার দড়ির নতুন জায়গায়: (2, 1), (2, 1), (1, 2).", "জোড়া দিলে (5, 4). পুরাটা একবারে সরালেও (5, 4)."];
+const X3_SAY = ["(2, 1): দুই বার প্রথম দড়ি, এক বার দ্বিতীয়।", "টুকরা করলাম: দুইটা e₁, একটা e₂।", "প্রত্যেক টুকরা তার দড়ির নতুন জায়গায়: (2, 1), (2, 1), (1, 2)।", "জোড়া দিলে (5, 4)। পুরাটা একবারে সরালেও (5, 4)।"];
 
 export function SplitMoveJoin() {
   const s = useScene(3, [600, 1800, 2400, 2400]);
@@ -1524,7 +1524,7 @@ export function SplitMoveJoin() {
 //      where the pillar's corner went; lane 2 ends on the pillar.
 
 const X4_F = makeFrame(-1, 7.5, -1, 6.5, 22, 6);
-const X4_SAY = ["নাসিবের slide.", "পুরা রাস্তা এক ঘর ডানে, এক ঘর উপরে. খুঁটির কোণাও.", "Lane 1: 0 গুণ মানে খুঁটি থেকে শুরু. Machine তাকে পাঠালো কোণার নতুন জায়গায়.", "Lane 2 থামে খুঁটিতেই. 0 গুণের race আর খুঁটির পরীক্ষা একই জিনিস."];
+const X4_SAY = ["নাসিবের slide।", "পুরা রাস্তা এক ঘর ডানে, এক ঘর উপরে। খুঁটির কোণাও।", "Lane 1: 0 গুণ মানে খুঁটি থেকে শুরু। Machine তাকে পাঠালো কোণার নতুন জায়গায়।", "Lane 2 থামে খুঁটিতেই। 0 গুণের race আর খুঁটির পরীক্ষা একই জিনিস।"];
 
 export function CornerOff() {
   const s = useScene(3, [600, 1800, 2600, 2600]);
@@ -1552,7 +1552,7 @@ export function CornerOff() {
 // 5½ · Why the squares stop being equal: 0, 1, 2, 3 squared are 0, 1, 4, 9;
 //      the gaps become 1, 3, 5.
 
-const X5_SAY = ["সমান ফাঁকে 0, 1, 2, 3.", "প্রথম slot বর্গ করলে: 0, 1, 4, 9.", "ফাঁক 1, 3, 5. সমান থাকলো না. তাই ঘরও সমান থাকে না."];
+const X5_SAY = ["সমান ফাঁকে 0, 1, 2, 3।", "প্রথম slot বর্গ করলে: 0, 1, 4, 9।", "ফাঁক 1, 3, 5। সমান থাকলো না। তাই ঘরও সমান থাকে না।"];
 
 export function SquareGaps() {
   const s = useScene(2, [600, 2000, 2400]);
@@ -1598,7 +1598,7 @@ export function SquareGaps() {
 
 // 6½ · Three matrices fold into one; with a bend between them they don't.
 
-const X6_SAY = ["তিনটা matrix, পরপর.", "একসাথে একটাই matrix. 100 টা হলেও একটা.", "মাঝে একটা বাঁক রাখলে?", "আর এক হয় না. প্রত্যেক layer এর কাজ আলাদা থাকে."];
+const X6_SAY = ["তিনটা matrix, পরপর।", "একসাথে একটাই matrix। 100 টা হলেও একটা।", "মাঝে একটা বাঁক রাখলে?", "আর এক হয় না। প্রত্যেক layer এর কাজ আলাদা থাকে।"];
 
 function X6_Card({ x, y, text }: { x: number; y: number; text: string }) {
   return (
@@ -1650,7 +1650,7 @@ export function ThreeIntoOne() {
 // 8½ · Two traps side by side: the squash looks broken and passes; the wave
 //      keeps the pillar and fails. Lamps: pillar, then race.
 
-const X8_SAY = ["চ্যাপ্টা আর ঢেউ.", "খুঁটি: দুইটাতেই জায়গায়.", "Race: চ্যাপ্টা পাস. ঢেউ ফেল.", "দেখতে কেমন, তাতে কিছু যায় আসে না. Race যা বলে, তাই."];
+const X8_SAY = ["চ্যাপ্টা আর ঢেউ।", "খুঁটি: দুইটাতেই জায়গায়।", "Race: চ্যাপ্টা পাস। ঢেউ ফেল।", "দেখতে কেমন, তাতে কিছু যায় আসে না। Race যা বলে, তাই।"];
 
 function X8_Lamp({ on, bad, text }: { on: boolean; bad?: boolean; text: string }) {
   return (
@@ -1690,7 +1690,7 @@ const X9_BETS: [string, string, "no" | "half" | "yes"][] = [
   ["করিম", "ঘর বাঁকে", "no"],
   ["সোম", "+1 ছাড়া", "half"],
 ];
-const X9_SAY = ["চারটা নিয়ম.", "পদ্মের move: চলে.", "নাসিবের slide: চলে না. খুঁটির কোণা সরে.", "করিমের বর্গ: চলে না. ঘর সমান থাকে না.", "সোমের swap: +1 বাদে চলে. +1 টা আলাদা, b."];
+const X9_SAY = ["চারটা নিয়ম।", "পদ্মের move: চলে।", "নাসিবের slide: চলে না। খুঁটির কোণা সরে।", "করিমের বর্গ: চলে না। ঘর সমান থাকে না।", "সোমের swap: +1 বাদে চলে। +1 টা আলাদা, b।"];
 
 function X9_Mark({ kind }: { kind: "no" | "half" | "yes" }) {
   if (kind === "yes") return <path d="M-5 0l3.5 4l7 -8" fill="none" stroke="#0d9488" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round" />;
@@ -1732,7 +1732,7 @@ export function BetSettled() {
 //      (0, 1)); then + (1, 1) slides the whole road, pillar's corner and all.
 //      The two boxes read wx + b at the end.
 
-const X9C_SAY = ["আগে matrix, তারপর আলাদা করে + b.", "নাসিবের slide: matrix রাস্তা যেমন আছে তেমন রাখে.", "তারপর + (1, 1). পুরা রাস্তা এক ঘর ডানে, এক ঘর উপরে.", "4.1 এর wx + b এর b এটাই."];
+const X9C_SAY = ["আগে matrix, তারপর আলাদা করে + b।", "নাসিবের slide: matrix রাস্তা যেমন আছে তেমন রাখে।", "তারপর + (1, 1)। পুরা রাস্তা এক ঘর ডানে, এক ঘর উপরে।", "4.1 এর wx + b এর b এটাই।"];
 
 export function MatrixThenB() {
   const s = useScene(3, [600, 1800, 2200, 2200]);

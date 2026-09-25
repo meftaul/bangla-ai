@@ -236,7 +236,7 @@ export function AlpanaBet() {
   const play = usePlay(1400);
   const seal = (i: number) => {
     setBet(i);
-    play.play(1, () => pass("বাজি সিল হলো. আগে স্যারের নিয়মটা বুঝি."));
+    play.play(1, () => pass("বাজি সিল হলো। আগে স্যারের নিয়মটা বুঝি।"));
   };
   return (
     <>
@@ -258,7 +258,7 @@ export function AlpanaBet() {
           </Choice>
         ))}
       </div>
-      <Task done={bet !== null}>চারটার কোনটা স্যারের নিয়মে হয় না? একটার উপরে বাজি ধরুন.</Task>
+      <Task done={bet !== null}>চারটার কোনটা স্যারের নিয়মে হয় না? একটার উপরে বাজি ধরুন।</Task>
     </>
   );
 }
@@ -325,7 +325,7 @@ export function OnePointAtATime() {
         const next = placed.map((v, j) => v || j === held);
         setPlaced(next);
         setMiss(null);
-        if (next.every(Boolean)) pass("এক এক করে সরালে শেষ হয় না, আর পদ্মটা বেঁকে যায়.");
+        if (next.every(Boolean)) pass("এক এক করে সরালে শেষ হয় না, আর পদ্মটা বেঁকে যায়।");
       } else if (Math.hypot(s[0] - LOTUS_TIPS[OP_TIPS[held]][0], s[1] - LOTUS_TIPS[OP_TIPS[held]][1]) > 0.5) {
         setMiss({ i: held, to: s, n: (miss?.n ?? 0) + 1 });
       }
@@ -370,20 +370,20 @@ export function OnePointAtATime() {
       <div className="mt-2 text-center text-sm text-muted">
         {done < 3 ? (
           <>
-            সরানো হয়েছে <span className="font-mono font-semibold text-foreground">{done}</span> টা point. সাদা গোল্লা টেনে নিন.
+            সরানো হয়েছে <span className="font-mono font-semibold text-foreground">{done}</span> টা point। সাদা গোল্লা টেনে নিন।
           </>
         ) : (
           <span className={FADE}>
-            <span className="font-mono font-semibold text-foreground">3</span> টা point শেষ. পাপড়ির গা, পদ্মের মাঝখান, পুরা মাছ? সব এখনো আগের জায়গায়.
+            <span className="font-mono font-semibold text-foreground">3</span> টা point শেষ। পাপড়ির গা, পদ্মের মাঝখান, পুরা মাছ? সব এখনো আগের জায়গায়।
           </span>
         )}
       </div>
       {miss && !placed[miss.i] && (
         <Nope key={miss.n}>
-          {tup(miss.to)} না. {tup(LOTUS_TIPS[OP_TIPS[miss.i]])} এর দুইটা সংখ্যাকেই দ্বিগুণ করুন.
+          {tup(miss.to)} না। {tup(LOTUS_TIPS[OP_TIPS[miss.i]])} এর দুইটা সংখ্যাকেই দ্বিগুণ করুন।
         </Nope>
       )}
-      <Task done={done === 3}>তিনটা পাপড়ির মাথা টেনে দ্বিগুণ জায়গায় বসান. প্রত্যেকটা সংখ্যা দুই দিয়ে গুণ.</Task>
+      <Task done={done === 3}>তিনটা পাপড়ির মাথা টেনে দ্বিগুণ জায়গায় বসান। প্রত্যেকটা সংখ্যা দুই দিয়ে গুণ।</Task>
     </>
   );
 }
@@ -408,7 +408,7 @@ export function WholeGrid() {
     setDeg(d);
     if (d === 180 && !done) {
       setDone(true);
-      pass("একটা rule, সব point একসাথে.");
+      pass("একটা rule, সব point একসাথে।");
     }
   };
   return (
@@ -446,7 +446,7 @@ export function WholeGrid() {
           (3, 4) → {tup(m([3, 4]).map(r1))}
         </span>
       </div>
-      <Task done={done}>Slider টেনে পুরা রাস্তা খুঁটির চারপাশে 180° ঘুরান. নীল আর বেগুনি বিন্দু দুইটার সংখ্যা দেখুন.</Task>
+      <Task done={done}>Slider টেনে পুরা রাস্তা খুঁটির চারপাশে 180° ঘুরান। নীল আর বেগুনি বিন্দু দুইটার সংখ্যা দেখুন।</Task>
     </>
   );
 }
@@ -473,7 +473,7 @@ export function StraightStays() {
     setCur(i);
     const next = tried.map((v, j) => v || j === i);
     setTried(next);
-    if (next.every(Boolean) && !tried.every(Boolean)) pass("লাইন সোজা, ঘর সমান, খুঁটি নড়ে না.");
+    if (next.every(Boolean) && !tried.every(Boolean)) pass("লাইন সোজা, ঘর সমান, খুঁটি নড়ে না।");
   };
   const mv = cur === null ? null : SS_MOVES[cur];
   return (
@@ -490,7 +490,7 @@ export function StraightStays() {
       </div>
       {mv ? <A_LateLamps key={cur} lamps={mv.lamps} ms={900} /> : <A_Lamps lamps={null} />}
       <Ticks items={SS_MOVES.map((m, i) => [m.name, tried[i]] as [string, boolean])} />
-      <Task done={tried.every(Boolean)}>চারটা move একে একে চালান. প্রতিবার দেখুন কোন বাতি জ্বলে, কোনটা নেভে.</Task>
+      <Task done={tried.every(Boolean)}>চারটা move একে একে চালান। প্রতিবার দেখুন কোন বাতি জ্বলে, কোনটা নেভে।</Task>
     </>
   );
 }
@@ -528,7 +528,7 @@ export function SlideTheAlpana() {
   const play = usePlay(1150);
   const push = () => {
     setSlid(true);
-    play.play(1, () => pass("সরালে খুঁটির কোণাও সরে. তাই এটা হয় না."));
+    play.play(1, () => pass("সরালে খুঁটির কোণাও সরে। তাই এটা হয় না।"));
   };
   const landed = slid && !play.running;
   return (
@@ -562,7 +562,7 @@ export function SlideTheAlpana() {
           </Choice>
         ))}
       </div>
-      <Task done={landed}>আগে একটা guess দিন, তারপর পুরা রাস্তা এক ঘর ডানে ঠেলে দেখুন.</Task>
+      <Task done={landed}>আগে একটা guess দিন, তারপর পুরা রাস্তা এক ঘর ডানে ঠেলে দেখুন।</Task>
     </>
   );
 }
@@ -615,7 +615,7 @@ export function YourMoves() {
     const ok = v === yes(mv.lamps);
     if (!ok) setMiss(miss + 1);
     play.play(1, () => {
-      if (ok && round === YM_MOVES.length - 1) pass("খুঁটি নড়লেই বাদ. চ্যাপ্টা হলেও চলে.");
+      if (ok && round === YM_MOVES.length - 1) pass("খুঁটি নড়লেই বাদ। চ্যাপ্টা হলেও চলে।");
     });
   };
   const next = () => {
@@ -645,7 +645,7 @@ export function YourMoves() {
       )}
       {pick !== null && <A_LateLamps key={`${round}-${miss}-${right ? 1 : 0}`} lamps={mv.lamps} ms={1100} />}
       {pick !== null && !right && landed && (
-        <Nope key={miss}>{yes(mv.lamps) ? "তিনটা বাতিই জ্বলছে. লাইন সোজা, ঘর সমান, খুঁটির কোণা খুঁটিতেই." : mv.lamps[2] ? "লাইনগুলো দেখুন. সোজা আছে?" : "খুঁটির কোণাটা দেখুন. ওটা কোথায় গেলো?"}</Nope>
+        <Nope key={miss}>{yes(mv.lamps) ? "তিনটা বাতিই জ্বলছে। লাইন সোজা, ঘর সমান, খুঁটির কোণা খুঁটিতেই।" : mv.lamps[2] ? "লাইনগুলো দেখুন। সোজা আছে?" : "খুঁটির কোণাটা দেখুন। ওটা কোথায় গেলো?"}</Nope>
       )}
       {right && landed && round < YM_MOVES.length - 1 && (
         <div className={`mt-2 flex justify-center ${FADE}`}>
@@ -654,7 +654,7 @@ export function YourMoves() {
           </button>
         </div>
       )}
-      <Task done={right && landed && round === YM_MOVES.length - 1}>ছয়টা move. প্রত্যেকটা দেখে বলুন, স্যারের নিয়মে হয় কি-না.</Task>
+      <Task done={right && landed && round === YM_MOVES.length - 1}>ছয়টা move। প্রত্যেকটা দেখে বলুন, স্যারের নিয়মে হয় কি-না।</Task>
     </>
   );
 }
@@ -732,7 +732,7 @@ export function TryFinishTheGrid() {
     setPick(i);
     if (i !== TF_RIGHT) setMiss(miss + 1);
     play.play(1, () => {
-      if (i === TF_RIGHT) pass("দুইটা লাইন জানলে বাকি grid সমান তালে চলে.");
+      if (i === TF_RIGHT) pass("দুইটা লাইন জানলে বাকি grid সমান তালে চলে।");
     });
   };
   return (
@@ -758,8 +758,8 @@ export function TryFinishTheGrid() {
           </button>
         ))}
       </div>
-      {pick !== null && pick !== TF_RIGHT && landed && <Nope key={miss}>{pick === 0 ? "লাইন সোজা আছে. কিন্তু ডানের ঘরগুলো চিকন হয়ে গেলো." : "আড়াআড়ি লাইনগুলো বেঁকে গেছে."}</Nope>}
-      <Task done={pick === TF_RIGHT && landed}>হলুদ দুইটা লাইন রিনার টানা. বাকি grid কোনটা? নিচের তিনটা থেকে tap করুন.</Task>
+      {pick !== null && pick !== TF_RIGHT && landed && <Nope key={miss}>{pick === 0 ? "লাইন সোজা আছে। কিন্তু ডানের ঘরগুলো চিকন হয়ে গেলো।" : "আড়াআড়ি লাইনগুলো বেঁকে গেছে।"}</Nope>}
+      <Task done={pick === TF_RIGHT && landed}>হলুদ দুইটা লাইন রিনার টানা। বাকি grid কোনটা? নিচের তিনটা থেকে tap করুন।</Task>
     </>
   );
 }
@@ -863,8 +863,8 @@ export function GateEvening({}: Story) {
             <S_Sketch x={288} y={80} kind="slide" />
           </>
         )}
-        {k === 3 && <Bubble x={62} y={94} side="right" lines={["খুঁটি থেকে যা শুরু,", "খুঁটিতেই থাকে."]} />}
-        {k >= 4 && <Bubble x={62} y={94} side="right" lines={["চাইরটার একটা", "আমার নিয়মে হয় না."]} />}
+        {k === 3 && <Bubble x={62} y={94} side="right" lines={["খুঁটি থেকে যা শুরু,", "খুঁটিতেই থাকে।"]} />}
+        {k >= 4 && <Bubble x={62} y={94} side="right" lines={["চাইরটার একটা", "আমার নিয়মে হয় না।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -884,13 +884,13 @@ export function FahimChalks({}: Story) {
         <S_Grid />
         <Person who="nana" x={k >= 2 ? 340 : 80} y={160} walking={k === 2} ms={1400} />
         {k < 2 && <S_Name x={80} y={160} text="আর্ট স্যার" />}
-        {k === 1 && <Bubble x={80} y={94} side="right" lines={["বড়টা দিয়া শুরু করো.", "দ্বিগুণ."]} />}
+        {k === 1 && <Bubble x={80} y={94} side="right" lines={["বড়টা দিয়া শুরু করো।", "দ্বিগুণ।"]} />}
         <Person who="fahim" x={k >= 3 ? 250 : 140} y={160} label arm={k >= 3 ? "point" : "hold"} walking={k === 3} ms={900} />
         <Person who="rina" x={110} y={160} label arm="hold" />
         {dots.slice(0, k >= 4 ? 3 : k >= 3 ? 1 : 0).map((x) => (
           <circle key={x} cx={x} cy={148} r={3} fill="white" className={POP} />
         ))}
-        {k >= 4 && <Bubble x={110} y={94} side="right" lines={["এক. দুই. তিন."]} />}
+        {k >= 4 && <Bubble x={110} y={94} side="right" lines={["এক। দুই। তিন।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -931,7 +931,7 @@ export function SirTurnsPaper({}: Story) {
             <circle cx={250} cy={49} r={2} fill={INK} />
           </g>
         )}
-        {k >= 1 && <Bubble x={58} y={94} side="right" lines={["এক এক কইরা না."]} />}
+        {k >= 1 && <Bubble x={58} y={94} side="right" lines={["এক এক কইরা না।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -954,9 +954,9 @@ export function ThreeFingers({}: Story) {
         <S_Name x={70} y={160} text="আর্ট স্যার" />
         <Person who="nasib" x={230} y={160} facing={-1} label mood={k >= 2 ? "smug" : "plain"} arm={k === 2 ? "wave" : "down"} />
         <Person who="som" x={180} y={160} facing={-1} label />
-        {k === 2 && <Bubble x={230} y={94} side="left" lines={["তাহলে যা খুশি", "করা যায়."]} />}
+        {k === 2 && <Bubble x={230} y={94} side="left" lines={["তাহলে যা খুশি", "করা যায়।"]} />}
         {k >= 3 && <path d="M92 150L178 146" stroke="#a16207" strokeWidth={3} strokeLinecap="round" className={FADE} />}
-        {k >= 4 && <Bubble x={70} y={94} side="right" lines={["লাইন সোজা থাকবো.", "ঘর সমান থাকবো.", "খুঁটি নড়বো না."]} />}
+        {k >= 4 && <Bubble x={70} y={94} side="right" lines={["লাইন সোজা থাকবো।", "ঘর সমান থাকবো।", "খুঁটি নড়বো না।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -978,7 +978,7 @@ export function NasibPushes({}: Story) {
         <Person who="nasib" x={k >= 1 ? 130 : 200} y={160} facing={-1} label arm={k >= 1 ? "point" : "hold"} walking={k === 1} />
         <Person who="nana" x={280} y={160} facing={-1} />
         <S_Name x={280} y={160} text="আর্ট স্যার" />
-        {k >= 3 && <Bubble x={130} y={94} side="mid" lines={["দেখেন. লাইন সোজা.", "ঘর সমান."]} />}
+        {k >= 3 && <Bubble x={130} y={94} side="mid" lines={["দেখেন। লাইন সোজা।", "ঘর সমান।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1116,7 +1116,7 @@ export function TwoCrosses({}: Story) {
 // 1½ · The paper and the road. The small design on graph paper; the empty
 //      road, the grid chalked from the pillar's corner; a "?" between them.
 
-const X1_SAY = ["কাগজে ছোট একটা design.", "রাস্তায় খুঁটি. খুঁটির কোণা থেকে grid.", "মাঝখানে একটা নিয়ম দরকার.", "কোন নিয়মে কোনটা হয়, কোনটা হয় না?"];
+const X1_SAY = ["কাগজে ছোট একটা design।", "রাস্তায় খুঁটি। খুঁটির কোণা থেকে grid।", "মাঝখানে একটা নিয়ম দরকার।", "কোন নিয়মে কোনটা হয়, কোনটা হয় না?"];
 const X1_PAPER = makeFrame(0, 6.5, 0, 5.5, 9, 4);
 const X1_ROAD = makeFrame(-0.8, 8, -0.8, 6.2, 12, 4);
 
@@ -1156,7 +1156,7 @@ export function PaperToRoad() {
 // 2½ · Points without end. The lotus's outline, and dots along it: the 3
 //      the reader moved, then 15, 60, 240, until the outline is all dots.
 
-const X2_SAY = ["আপনি সরিয়েছেন তিনটা point.", "পাপড়ির গায়েও point আছে.", "আরো.", "আরো. একটা লাইনের উপরে point গুনে শেষ করা যায় না."];
+const X2_SAY = ["আপনি সরিয়েছেন তিনটা point।", "পাপড়ির গায়েও point আছে।", "আরো।", "আরো। একটা লাইনের উপরে point গুনে শেষ করা যায় না।"];
 const X2_F = makeFrame(0.5, 5.5, 0.6, 4.2, 40, 6);
 const X2_N = [3, 15, 60, 240];
 
@@ -1204,7 +1204,7 @@ export function CountPoints() {
 // 3½ · Four arrows, one rule. Four arrows from the pillar, and the grid under
 //      them, turn together: 90°, then 180°. Their old places stay faint.
 
-const X3_SAY = ["খুঁটি থেকে চারটা arrow. কোনোটার সাথে কোনোটার মিল নাই.", "নিয়ম একটাই: 180° ঘোরাও. প্রথমে অর্ধেক পথ.", "চারটাই একসাথে উল্টা দিকে.", "(2, 1) গেলো (−2, −1) এ. বাকি তিনটাও একই ভাবে."];
+const X3_SAY = ["খুঁটি থেকে চারটা arrow। কোনোটার সাথে কোনোটার মিল নাই।", "নিয়ম একটাই: 180° ঘোরাও। প্রথমে অর্ধেক পথ।", "চারটাই একসাথে উল্টা দিকে।", "(2, 1) গেলো (−2, −1) এ। বাকি তিনটাও একই ভাবে।"];
 const X3_F = makeFrame(-4, 4, -3, 3, 22, 8);
 const X3_V: XY[] = [
   [2, 1],
@@ -1255,12 +1255,12 @@ export function FourArrows() {
 //      to the whole road going through at once, and the name lands last.
 
 const X3B_SAY: ReactNode[] = [
-  "একটা নিয়ম. বাক্সটার নাম L.",
-  "ঢোকে একটা vector, (2, 1). দুই সংখ্যা.",
-  "বের হয় আরেকটা vector, (−2, −1). আবারও দুই সংখ্যা.",
-  "লেখা হয় L : ℝ² → ℝ². দুই সংখ্যা ঢোকে, দুই সংখ্যা বের হয়.",
+  "একটা নিয়ম। বাক্সটার নাম L।",
+  "ঢোকে একটা vector, (2, 1)। দুই সংখ্যা।",
+  "বের হয় আরেকটা vector, (−2, −1)। আবারও দুই সংখ্যা।",
+  "লেখা হয় L : ℝ² → ℝ²। দুই সংখ্যা ঢোকে, দুই সংখ্যা বের হয়।",
   <>
-    একটা arrow না, পুরা রাস্তা একসাথে ঢোকে. এমন নিয়মের নাম <b>transformation</b>.
+    একটা arrow না, পুরা রাস্তা একসাথে ঢোকে। এমন নিয়মের নাম <b>transformation</b>.
   </>,
 ];
 const X3B_F = makeFrame(-6.2, 6.2, -5.2, 5.2, 6, 3);
@@ -1331,7 +1331,7 @@ export function TwoInTwoOut() {
 //      the one thing its lamp forbids: the lines bend, the squares fan out,
 //      the corner leaves the pillar.
 
-const X4_SAY = ["স্যারের তিনটা বাতি, তিনটা রাস্তা.", "এক: লাইন বেঁকে গেলে প্রথম বাতি নেভে.", "দুই: ঘর ছোট-বড় হলে দ্বিতীয়টা.", "তিন: grid এর কোণা খুঁটি ছাড়লে তৃতীয়টা."];
+const X4_SAY = ["স্যারের তিনটা বাতি, তিনটা রাস্তা।", "এক: লাইন বেঁকে গেলে প্রথম বাতি নেভে।", "দুই: ঘর ছোট-বড় হলে দ্বিতীয়টা।", "তিন: grid এর কোণা খুঁটি ছাড়লে তৃতীয়টা।"];
 const X4_F = makeFrame(-0.8, 4.4, -0.8, 3.6, 16, 4);
 // The third road shrinks toward its own middle (2, 1.5), not the pillar: lines
 // straight, squares equal, but the corner leaves the pillar. (It used to slide
@@ -1377,10 +1377,10 @@ export function ThreeLamps() {
 //      stay on one line, and the sir's bamboo stick lies along them again.
 
 const X4B_SAY = [
-  "খুঁটি থেকে সোজা একটা লাইন. তার উপরে পাঁচটা বিন্দু.",
-  "প্রত্যেকটা বিন্দু আগেরটার সাথে একই step যোগ.",
-  "রাস্তা টানা হলো, একটু ঘুরলো. step টাও বদলে গেলো.",
-  "কিন্তু সব step বদলালো একই রকম. তাই বিন্দুগুলো এখনো এক লাইনে. কঞ্চি গায়ে গায়ে লাগে.",
+  "খুঁটি থেকে সোজা একটা লাইন। তার উপরে পাঁচটা বিন্দু।",
+  "প্রত্যেকটা বিন্দু আগেরটার সাথে একই step যোগ।",
+  "রাস্তা টানা হলো, একটু ঘুরলো। step টাও বদলে গেলো।",
+  "কিন্তু সব step বদলালো একই রকম। তাই বিন্দুগুলো এখনো এক লাইনে। কঞ্চি গায়ে গায়ে লাগে।",
 ];
 const X4B_F = makeFrame(-1.2, 7, -1, 5.4, 21, 6);
 const X4B_MOVE = byCols([
@@ -1421,7 +1421,7 @@ export function StickStays() {
 //      that sat on the pillar is left standing in the road. Then "+ b": the
 //      slide added on after, as its own step.
 
-const X5_SAY = ["Grid এর কোণা খুঁটির উপরে. (0, 0).", "এক ঘর ডানে ঠেলা. কোণা এখন (1, 0) তে.", "খুঁটি যেখানে ছিল, সেখানেই. কোণাটা নাই.", "তাই সরানোর কাজটা আলাদা: আগে wx, পরে + b."];
+const X5_SAY = ["Grid এর কোণা খুঁটির উপরে। (0, 0).", "এক ঘর ডানে ঠেলা। কোণা এখন (1, 0) তে।", "খুঁটি যেখানে ছিল, সেখানেই। কোণাটা নাই।", "তাই সরানোর কাজটা আলাদা: আগে wx, পরে + b।"];
 const X5_F = makeFrame(-1, 6, -1, 4, 26, 6);
 
 export function CornerWalksOff() {
@@ -1458,7 +1458,7 @@ export function CornerWalksOff() {
 //      marked; copies of it go along the road, then up, until the whole grid
 //      is there.
 
-const X7_SAY = ["রিনার দুইটা লাইন.", "ওদের মাঝে প্রথম ঘর. সাথে নিচের আর উপরের লাইন.", "পাশের ঘর হুবহু একই. তার পাশেরটাও.", "উপরেও একই. পুরা grid প্রথম ঘরের কপি."];
+const X7_SAY = ["রিনার দুইটা লাইন।", "ওদের মাঝে প্রথম ঘর। সাথে নিচের আর উপরের লাইন।", "পাশের ঘর হুবহু একই। তার পাশেরটাও।", "উপরেও একই। পুরা grid প্রথম ঘরের কপি।"];
 const X7_F = makeFrame(-2, 6, -0.8, 6.5, 26, 6);
 
 function X7_Square({ f, at, hi = false }: { f: Frame; at: XY; hi?: boolean }) {
@@ -1490,7 +1490,7 @@ export function CopySquares() {
 // 8½ · The bet, settled. The four proposals as small roads; a tick lands on
 //      three of them, a cross on Nasib's.
 
-const X8_SAY = ["চারটা প্রস্তাব.", "বড় করা: লাইন সোজা, ঘর সমান, খুঁটি জায়গায়.", "কাত করা: একই. উল্টা করা: একই.", "নাসিবের এক ঘর ডানে: grid এর কোণা খুঁটি ছাড়ে."];
+const X8_SAY = ["চারটা প্রস্তাব।", "বড় করা: লাইন সোজা, ঘর সমান, খুঁটি জায়গায়।", "কাত করা: একই। উল্টা করা: একই।", "নাসিবের এক ঘর ডানে: grid এর কোণা খুঁটি ছাড়ে।"];
 
 export function BetSettled() {
   const s = useScene(3, [600, 1600, 1800, 2200]);

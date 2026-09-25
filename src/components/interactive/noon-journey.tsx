@@ -221,7 +221,7 @@ function CardStrip({ v, w, deg }: { v: number; w: number; deg: number }) {
 function FahimBox({ lit = false }: { lit?: boolean }) {
   return (
     <div className={`rounded-xl border-2 px-3 py-2 text-center transition-colors duration-300 motion-reduce:transition-none ${lit ? "border-accent bg-accent/10" : "border-cat-amber/40 bg-cat-amber/5"}`}>
-      <div className="text-xs text-muted">ফাহিমের box</div>
+      <div className="text-xs text-muted">ফাহিমের dot product</div>
       <div className="font-mono text-sm">
         <BoxRun a={[2, 1]} b={[2, 3]} lang="bn" inline noSum />
       </div>
@@ -277,14 +277,14 @@ export function NoonCard({}: Story) {
   const k = s.k;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="field" label="দুপুরবেলা ছাদে. মামা চক দিয়ে দুইটা arrow আঁকলেন, v আর w. ফাহিম box চালিয়ে পেলো 7. মামা একটা card তুলে ধরলেন, তাতে দুইটা length আর একটা angle. বললেন শুধু card থেকেই 7 আনবেন. ফাহিম card টার দিকে তাকিয়ে থাকলো.">
+      <Stage backdrop="field" label="দুপুরবেলা ছাদে। মামা চক দিয়ে দুইটা arrow আঁকলেন, v আর w। ফাহিম dot product করে পেলো 7। মামা একটা card তুলে ধরলেন, তাতে দুইটা length আর একটা angle। বললেন শুধু card থেকেই 7 আনবেন। ফাহিম card টার দিকে তাকিয়ে থাকলো।">
         <Roof />
         {k >= 2 && <Chalk x={168} y={172} arrows={[V, W]} />}
         <Person who="mama" x={k >= 1 ? 118 : -24} y={SG} walking={k === 1} ms={1400} arm={k === 2 ? "point" : k >= 4 ? "hold" : "down"} mood={k >= 4 ? "smug" : "plain"} />
         <Person who="fahim" x={k >= 1 ? 262 : 344} y={SG} facing={-1} walking={k === 1} ms={1400} mood={k === 3 ? "happy" : k === 5 ? "puzzled" : "plain"} />
         {k >= 4 && <CastCard x={134} y={SG - 44} text="2.24 · 3.61 · 30°" tone="amber" />}
-        {k === 3 && <Bubble x={262} y={SG - 66} side="left" lines={["Box বলছে", "2 × 2 + 1 × 3 = 7."]} />}
-        {k === 4 && <Bubble x={118} y={SG - 66} side="right" lines={["Slot লাগবে না.", "এই card থেকেই 7 আনবো."]} />}
+        {k === 3 && <Bubble x={262} y={SG - 66} side="left" lines={["Dot product বলছে", "2 × 2 + 1 × 3 = 7."]} />}
+        {k === 4 && <Bubble x={118} y={SG - 66} side="right" lines={["Slot লাগবে না।", "এই card থেকেই 7 আনবো।"]} />}
         {k === 5 && <Bubble x={262} y={SG - 66} side="left" tone="think" lines={["দুইটা length আর", "একটা angle থেকে 7?"]} />}
       </Stage>
     </StoryFrame>
@@ -298,7 +298,7 @@ export function MamiPoles({}: Story) {
   const [tx, ty] = [150 + 70 * Math.cos(lean * RAD), SG - 70 * Math.sin(lean * RAD)];
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="field" label="মামি কাপড় শুকানোর জন্য বাঁশ নিয়ে আসলেন. ফাহিমকে একটা বাঁশ 60 degree হেলিয়ে ধরতে বললেন. দুপুরের রোদে বাঁশের shadow মেঝেতে পড়লো.">
+      <Stage backdrop="field" label="মামি কাপড় শুকানোর জন্য বাঁশ নিয়ে আসলেন। ফাহিমকে একটা বাঁশ 60 degree হেলিয়ে ধরতে বললেন। দুপুরের রোদে বাঁশের shadow মেঝেতে পড়লো।">
         <Roof />
         {k >= 1 && (
           <g className={FADE}>
@@ -308,8 +308,8 @@ export function MamiPoles({}: Story) {
         )}
         <Person who="mami" x={k >= 1 ? 96 : -24} y={SG} walking={k === 1} ms={1400} arm={k >= 2 ? "point" : "down"} />
         <Person who="fahim" x={k >= 1 ? 210 : 344} y={SG} facing={-1} walking={k === 1} ms={1400} arm={k >= 3 ? "hold" : "down"} />
-        {k === 2 && <Bubble x={96} y={SG - 66} side="right" lines={["বাঁশটা একটু ধরো তো.", "60° হেলিয়ে."]} />}
-        {k === 3 && <Bubble x={210} y={SG - 66} side="left" lines={["কোনটা ধরবো?", "বাঁশ তো তিনটা."]} />}
+        {k === 2 && <Bubble x={96} y={SG - 66} side="right" lines={["বাঁশটা একটু ধরো তো।", "60° হেলিয়ে।"]} />}
+        {k === 3 && <Bubble x={210} y={SG - 66} side="left" lines={["কোনটা ধরবো?", "বাঁশ তো তিনটা।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -337,7 +337,7 @@ export function StickFound({}: Story) {
   const held = k >= 2;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="field" label="দুপুরবেলা ছাদে. কোণায় একটা বাঁশের কঞ্চি হেলান দেওয়া, 1 metre লম্বা. মামা হেঁটে গিয়ে ওটা তুলে ছাদের মাঝখানে নিয়ে আসলেন. সূর্য ঠিক মাথার উপরে. রোদ সোজা নিচে পড়ছে.">
+      <Stage backdrop="field" label="দুপুরবেলা ছাদে। কোণায় একটা বাঁশের কঞ্চি হেলান দেওয়া, 1 metre লম্বা। মামা হেঁটে গিয়ে ওটা তুলে ছাদের মাঝখানে নিয়ে আসলেন। সূর্য ঠিক মাথার উপরে। রোদ সোজা নিচে পড়ছে।">
         <Roof />
         {k >= 3 && (
           <g className={FADE}>
@@ -364,7 +364,7 @@ export function NewCard({}: Story) {
   const k = s.k;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="field" label="ছাদে মামা নতুন একটা card লিখলেন: v 2 লম্বা, w 3 লম্বা, angle 60 degree. ফাহিম card টার দিকে তাকালো.">
+      <Stage backdrop="field" label="ছাদে মামা নতুন একটা card লিখলেন: v 2 লম্বা, w 3 লম্বা, angle 60 degree। ফাহিম card টার দিকে তাকালো।">
         <Roof />
         <Person who="mama" x={120} y={SG} arm={k >= 1 ? "hold" : "down"} mood={k >= 2 ? "smug" : "plain"} />
         <Person who="fahim" x={236} y={SG} facing={-1} mood={k >= 2 ? "puzzled" : "plain"} />
@@ -383,15 +383,15 @@ export function MamiWantsProof({}: Story) {
   const k = s.k;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="field" label="ছাদে ফাহিমের হাতে box এর 7, মামার হাতে card এর 7. মামা বললেন প্রতিবারই মিলবে. মামি হেঁটে এসে proof চাইলেন. হয়তো কপালগুণে মিলে গেছে.">
+      <Stage backdrop="field" label="ছাদে ফাহিমের হাতে dot product এর 7, মামার হাতে card এর 7। মামা বললেন প্রতিবারই মিলবে। মামি হেঁটে এসে proof চাইলেন। হয়তো কপালগুণে মিলে গেছে।">
         <Roof />
         <Person who="mama" x={96} y={SG} arm="hold" mood={k === 2 ? "smug" : "plain"} />
         <Person who="fahim" x={178} y={SG} arm="hold" facing={k >= 3 ? 1 : -1} mood={k >= 4 ? "puzzled" : "happy"} />
         {k >= 1 && <CastCard x={112} y={SG - 44} text="card: 7" tone="amber" />}
-        {k >= 1 && <CastCard x={194} y={SG - 44} text="box: 7" tone="amber" />}
-        {k === 2 && <Bubble x={96} y={SG - 66} side="right" lines={["সবসময়. প্রতিবার."]} />}
+        {k >= 1 && <CastCard x={194} y={SG - 44} text="dot product: 7" tone="amber" />}
+        {k === 2 && <Bubble x={96} y={SG - 66} side="right" lines={["সবসময়। প্রতিবার।"]} />}
         <Person who="mami" x={k >= 3 ? 268 : 344} y={SG} facing={-1} walking={k === 3} ms={1300} arm={k >= 4 ? "point" : "down"} />
-        {k >= 4 && <Bubble x={268} y={SG - 66} side="left" lines={["নাকি কপাল ভালো ছিল?", "Proof দেখাও."]} />}
+        {k >= 4 && <Bubble x={268} y={SG - 66} side="left" lines={["নাকি কপাল ভালো ছিল?", "Proof দেখাও।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -416,7 +416,7 @@ function TryBar({ n }: { n: number | null }) {
   const [b] = useTween([n ?? 0], 700);
   const x = (v: number) => 14 + (Math.min(Math.max(v, 0), 10.6) / 10) * 216;
   return (
-    <svg viewBox="0 0 260 46" role="img" aria-label={n === null ? "0 থেকে 10 পর্যন্ত একটা ruler, box এর 7 দাগ দেওয়া" : `এই উপায়ে আসে ${n}, box এ আসে 7`} className="mx-auto mt-3 block h-auto w-full max-w-[17rem]">
+    <svg viewBox="0 0 260 46" role="img" aria-label={n === null ? "0 থেকে 10 পর্যন্ত একটা ruler, dot product এর 7 দাগ দেওয়া" : `এই উপায়ে আসে ${n}, dot product এ আসে 7`} className="mx-auto mt-3 block h-auto w-full max-w-[17rem]">
       <rect x={0.5} y={0.5} width={259} height={45} rx={6} fill="white" stroke="#cbd5e1" strokeWidth={0.8} />
       <path d={`M14 28H${x(10.6)}`} stroke={INK} strokeOpacity={0.3} strokeWidth={1} />
       {[0, 2, 4, 6, 8, 10].map((t) => (
@@ -431,7 +431,7 @@ function TryBar({ n }: { n: number | null }) {
       {n !== null && n > 10.6 && b > 10.5 && <path d={`M${x(10.6)} 20l8 5.5l-8 5.5Z`} fill="#dc2626" className={FADE} />}
       <path d={`M${x(7)} 14V33`} stroke="#16a34a" strokeWidth={2} />
       <text x={x(7)} y={11} textAnchor="middle" fontSize={8} fontWeight={700} fill="#15803d">
-        box 7
+        dot product 7
       </text>
     </svg>
   );
@@ -448,7 +448,7 @@ export function CardTries() {
     if (tried.includes(i)) return;
     const next = [...tried, i];
     setTried(next);
-    if (next.length === TRIES.length) pass("কোনোটাতেই 7 আসে না. Angle টা কিছু একটা করে.");
+    if (next.length === TRIES.length) pass("কোনোটাতেই 7 আসে না। Angle টা কিছু একটা করে।");
   };
 
   return (
@@ -476,10 +476,10 @@ export function CardTries() {
       </div>
       {done && (
         <Speech who="মামা" initial="M" tint="teal">
-          এভাবে না. তবে 7 আসবে.
+          এভাবে না। তবে 7 আসবে।
         </Speech>
       )}
-      <Task done={done}>মামার card থেকে 7 আনার তিনটা উপায়ই try করে দেখুন.</Task>
+      <Task done={done}>মামার card থেকে 7 আনার তিনটা উপায়ই try করে দেখুন।</Task>
     </>
   );
 }
@@ -503,12 +503,12 @@ export function FlatFloor() {
     if (done || dot(V2, p) !== 6 || found.some((q) => q[0] === p[0] && q[1] === p[1])) return;
     const next = [...found, p];
     setFound(next);
-    if (next.length === 2) pass("w এর shadow কোথায় পড়ে, শুধু সেটাই matter করে.");
+    if (next.length === 2) pass("w এর shadow কোথায় পড়ে, শুধু সেটাই matter করে।");
   };
 
   return (
     <>
-      <Plane f={F2} ticks={1} label={`v শোয়ানো, 3 লম্বা. w এর মাথা (${nice(w[0])}, ${nice(w[1])}) এ; ওর shadow শেষ হয় ${nice(w[0])} এ`} drag={{ down: (p) => go(snap(p, F2)), move: (p) => go(snap(p, F2)) }} onKey={keyMove(F2, w, go)} className="max-w-[20rem]">
+      <Plane f={F2} ticks={1} label={`v শোয়ানো, 3 লম্বা। w এর মাথা (${nice(w[0])}, ${nice(w[1])}) এ; ওর shadow শেষ হয় ${nice(w[0])} এ`} drag={{ down: (p) => go(snap(p, F2)), move: (p) => go(snap(p, F2)) }} onKey={keyMove(F2, w, go)} className="max-w-[20rem]">
         <Sun f={F2} />
         <Shade f={F2} b={w[0]} />
         <Arrow f={F2} from={O} to={V2} tone="blue" w={3} />
@@ -532,7 +532,7 @@ export function FlatFloor() {
           ["আরেক জায়গায় আরেকটা 6", found.length >= 2],
         ]}
       />
-      <Task done={done}>w এর মাথা টেনে নিন, যতক্ষণ না box বলে 6. তারপর আরেকটা জায়গা খুঁজুন, যেখানেও 6 আসে.</Task>
+      <Task done={done}>w এর মাথা টেনে নিন, যতক্ষণ না dot product বলে 6। তারপর আরেকটা জায়গা খুঁজুন, যেখানেও 6 আসে।</Task>
     </>
   );
 }
@@ -551,7 +551,7 @@ export function BehindFoot() {
   const [s] = useTween([dropped ? W3[0] : 0], 800);
   const drop = () => {
     setDropped(true);
-    setTimeout(() => pass("Shadow v এর গোড়ার পিছনে পড়লে minus."), 800);
+    setTimeout(() => pass("Shadow v এর গোড়ার পিছনে পড়লে minus।"), 800);
   };
 
   return (
@@ -581,7 +581,7 @@ export function BehindFoot() {
           <BoxLine v={V2} w={W3} />
         </div>
       )}
-      <div className="mt-3 text-sm font-medium text-muted">বলুন তো, এই w এর জন্য box কত বলবে?</div>
+      <div className="mt-3 text-sm font-medium text-muted">বলুন তো, এই w এর জন্য dot product কত বলবে?</div>
       <div className="mt-2 grid grid-cols-3 gap-2">
         {G3.map((o, i) => (
           <Choice key={o} n={i} look={predictLook(i, guess, dropped, 1)} disabled={guess !== null} onClick={() => setGuess(i)}>
@@ -589,7 +589,7 @@ export function BehindFoot() {
           </Choice>
         ))}
       </div>
-      <Task done={dropped}>আগে একটা guess দিন. তারপর w এর মাথায় রোদ ফেলুন.</Task>
+      <Task done={dropped}>আগে একটা guess দিন। তারপর w এর মাথায় রোদ ফেলুন।</Task>
     </>
   );
 }
@@ -662,7 +662,7 @@ export function StickMarks() {
     if (!MARKS.includes(d) || hit.includes(d)) return;
     const next = [...hit, d];
     setHit(next);
-    if (MARKS.every((m) => next.includes(m))) pass("প্রতিটা হেলানোর নিজের একটা shadow number আছে.");
+    if (MARKS.every((m) => next.includes(m))) pass("প্রতিটা হেলানোর নিজের একটা shadow number আছে।");
   };
 
   return (
@@ -673,7 +673,7 @@ export function StickMarks() {
         <span className="font-mono">{deg}°</span>: shadow <b className="font-mono">{nice(Math.cos(deg * RAD))}</b> m
       </div>
       <StickCard rows={CARD_ROWS.map(([d, v]) => [d, v, d === 0 || hit.includes(d)])} />
-      <Task done={done}>কঞ্চিটা হেলান, যাতে ওর shadow একে একে প্রতিটা চকের দাগে গিয়ে শেষ হয়.</Task>
+      <Task done={done}>কঞ্চিটা হেলান, যাতে ওর shadow একে একে প্রতিটা চকের দাগে গিয়ে শেষ হয়।</Task>
     </>
   );
 }
@@ -697,7 +697,7 @@ export function ThreePoles() {
     if (d !== 60 || got.includes(l)) return;
     const next = [...got, l];
     setGot(next);
-    if (POLES.every((p) => next.includes(p))) pass("বাঁশ লম্বা, shadow ও লম্বা. তবু সেই 0.5.");
+    if (POLES.every((p) => next.includes(p))) pass("বাঁশ লম্বা, shadow ও লম্বা। তবু সেই 0.5.");
   };
 
   return (
@@ -734,7 +734,7 @@ export function ThreePoles() {
           ];
         })}
       </div>
-      <Task done={done}>তিনটা বাঁশই একে একে 60° তে হেলান.</Task>
+      <Task done={done}>তিনটা বাঁশই একে একে 60° তে হেলান।</Task>
     </>
   );
 }
@@ -810,7 +810,7 @@ export function TurnThePaper() {
     if (flat) return;
     if (Math.abs(t - PHI) < 1.5) {
       setTurn(PHI);
-      pass("v কে শুইয়ে দিলে আবার সেই length × shadow.");
+      pass("v কে শুইয়ে দিলে আবার সেই length × shadow।");
     } else setTurn(t);
   };
 
@@ -829,12 +829,12 @@ export function TurnThePaper() {
           <div className="mt-1 text-center font-mono text-[0.95rem]">
             <div className="font-sans text-xs text-muted">v এর length × shadow</div>
             2.24 × {nice(sh)} = <b className={flat ? "text-accent-text" : "text-danger"}>{flat ? "7.0" : nice(LV * sh)}</b>
-            <span className={flat ? "text-accent-text" : "text-danger"}>{flat ? " ✓ box 7" : " ≠ box 7"}</span>
+            <span className={flat ? "text-accent-text" : "text-danger"}>{flat ? " ✓ dot product 7" : " ≠ dot product 7"}</span>
           </div>
-          {!flat && turn === 0 && <Nope>Shadow পড়ছে মেঝেতে, v এর উপরে না. রোদ তো শুধু সোজা নিচে নামে.</Nope>}
+          {!flat && turn === 0 && <Nope>Shadow পড়ছে মেঝেতে, v এর উপরে না। রোদ তো শুধু সোজা নিচে নামে।</Nope>}
         </div>
       )}
-      <Task done={flat}>আগে শোয়ানো v এর নিয়মটা চালান. তারপর কাগজটা ঘুরাতে থাকুন. যতক্ষণ না মেলে.</Task>
+      <Task done={flat}>আগে শোয়ানো v এর নিয়মটা চালান। তারপর কাগজটা ঘুরাতে থাকুন। যতক্ষণ না মেলে।</Task>
     </>
   );
 }
@@ -849,10 +849,10 @@ const F7 = makeFrame(-0.5, 3.8, -0.75, 2.3, 58);
 const V7: XY = [LV, 0];
 const W7 = rot(W, -PHI); // (3.13, 1.79)
 const SNAP_CAP = [
-  "আগের সেই ঘুরানো কাগজ. v এর উপর w এর shadow: 3.13.",
-  "এবার w এর দিকে আবার তাকান. দুপুরের রোদে একটা কঞ্চি.",
-  "মেঝে থেকে প্রায় 30° হেলানো.",
-  "কঞ্চির card এ 30° এর একটা ঘর আছে.",
+  "আগের সেই ঘুরানো কাগজ। v এর উপর w এর shadow: 3.13.",
+  "এবার w এর দিকে আবার তাকান। দুপুরের রোদে একটা কঞ্চি।",
+  "মেঝে থেকে প্রায় 30° হেলানো।",
+  "কঞ্চির card এ 30° এর একটা ঘর আছে।",
 ];
 const CHIPS = [
   { key: "len", text: "w এর length 3.61" },
@@ -914,7 +914,7 @@ export function WIsTheStick() {
         )}
       </Plane>
       <div className="h-9">{k >= 3 && <StickCard rows={[[30, "0.866", true]]} />}</div>
-      <div className="mx-auto mt-2 min-h-10 max-w-xs text-center text-sm leading-snug text-muted">{seen ? (both ? "দুইটা একই জায়গায় গিয়ে পড়লো." : "কঞ্চির নিয়মে w এর shadow বানান: দুইটাতেই tap করুন.") : SNAP_CAP[k]}</div>
+      <div className="mx-auto mt-2 min-h-10 max-w-xs text-center text-sm leading-snug text-muted">{seen ? (both ? "দুইটা একই জায়গায় গিয়ে পড়লো।" : "কঞ্চির নিয়মে w এর shadow বানান: দুইটাতেই tap করুন।") : SNAP_CAP[k]}</div>
       {!seen && !play.running && (
         <div className="mt-1 flex justify-center">
           <button type="button" onClick={() => play.play(3, () => setSeen(true))} className={primaryBtn}>
@@ -931,7 +931,7 @@ export function WIsTheStick() {
           ))}
         </div>
       )}
-      <Task done={both}>আগে কাগজটা দেখুন. তারপর w এর length আর card এর number এ tap করুন.</Task>
+      <Task done={both}>আগে কাগজটা দেখুন। তারপর w এর length আর card এর number এ tap করুন।</Task>
     </>
   );
 }
@@ -962,7 +962,7 @@ export function CardAlone() {
     setSlots(next);
     if (next.length < 3) return;
     if (next.includes("30")) setMisses(misses + 1);
-    else pass("2.24 × 3.61 × 0.866 = 7.0, box এর মতোই.");
+    else pass("2.24 × 3.61 × 0.866 = 7.0, dot product এর মতোই।");
   };
 
   return (
@@ -1005,8 +1005,8 @@ export function CardAlone() {
           );
         })}
       </div>
-      {full && !right && <Nope key={misses}>30 তো degree, shadow number না. Box 242 হতে পারে না. আবার শুরু করতে একটা number এ tap করুন.</Nope>}
-      <Task done={right}>Card থেকে তিনটা ঘর ভরুন, যাতে উত্তর box এর সাথে মেলে.</Task>
+      {full && !right && <Nope key={misses}>30 তো degree, shadow number না। Dot product 242 হতে পারে না। আবার শুরু করতে একটা number এ tap করুন।</Nope>}
+      <Task done={right}>Card থেকে তিনটা ঘর ভরুন, যাতে উত্তর dot product এর সাথে মেলে।</Task>
     </>
   );
 }
@@ -1022,8 +1022,8 @@ const V9: XY = [2, 0];
 const G9 = ["6", "1.5", "3"];
 const R9 = 2;
 const WHY9: Record<number, string> = {
-  0: "এটা পুরো 3 লম্বা w কে মেঝেতে শুইয়ে দেয়. রোদ w এর মাথা সোজা নিচে ফেলে, w কে শোয়ায় না.",
-  1: "এটা শুধু w এর shadow. মামার recipe এটাকে আবার v এর length দিয়ে গুণ করে.",
+  0: "এটা পুরো 3 লম্বা w কে মেঝেতে শুইয়ে দেয়। রোদ w এর মাথা সোজা নিচে ফেলে, w কে শোয়ায় না।",
+  1: "এটা শুধু w এর shadow। মামার recipe এটাকে আবার v এর length দিয়ে গুণ করে।",
 };
 
 export function SixtyCard() {
@@ -1067,10 +1067,10 @@ export function SixtyCard() {
             <Arc f={F9} a={[1, 0]} b={w} r={0.55} text={`${deg}°`} />
       </Plane>
       {pick === null && <Tilt value={deg} max={180} label="v এর সাথে w এর angle" onChange={setDeg} />}
-      <div className="mt-1 text-center text-sm text-muted">{set ? `v এর উপর w এর shadow: ${nice(w[0])}` : "w কে card এর angle এ হেলান."}</div>
+      <div className="mt-1 text-center text-sm text-muted">{set ? `v এর উপর w এর shadow: ${nice(w[0])}` : "w কে card এর angle এ হেলান।"}</div>
       {set && (
         <div className={FADE}>
-          <div className="mt-2 text-sm font-medium text-muted">তাহলে box কত বলবে?</div>
+          <div className="mt-2 text-sm font-medium text-muted">তাহলে dot product কত বলবে?</div>
           <div className="mt-2 grid grid-cols-3 gap-2">
             {G9.map((o, i) => (
               <Choice key={o} n={i} look={pick === i ? (i === R9 ? "right" : "wrong") : "idle"} disabled={pick === R9} onClick={() => choose(i)}>
@@ -1081,7 +1081,7 @@ export function SixtyCard() {
         </div>
       )}
       {pick !== null && pick !== R9 && <Nope key={miss}>{WHY9[pick]}</Nope>}
-      <Task done={pick === R9}>w কে 60° তে হেলান. তারপর বলুন, box কত বলবে.</Task>
+      <Task done={pick === R9}>w কে 60° তে হেলান। তারপর বলুন, dot product কত বলবে।</Task>
     </>
   );
 }
@@ -1096,8 +1096,8 @@ const V10: XY = [4, 0];
 const OPTS10 = [60, 120, 90];
 const R10 = 1;
 const WHY10: Record<number, string> = {
-  60: "এই w সামনে হেলানো. ওর shadow পড়ে সামনে. তাই box বলতো +4. Card এ কিন্তু লেখা 120°.",
-  90: "এই w একদম খাড়া. কোনো shadow ই নাই. তাই box বলতো 0.",
+  60: "এই w সামনে হেলানো। ওর shadow পড়ে সামনে। তাই dot product বলতো +4. Card এ কিন্তু লেখা 120°।",
+  90: "এই w একদম খাড়া। কোনো shadow ই নাই। তাই dot product বলতো 0.",
 };
 
 function Mini({ deg }: { deg: number }) {
@@ -1122,7 +1122,7 @@ export function LeanBack() {
 
   const choose = (i: number) => {
     setPick(i);
-    if (i === R10) pass("পিছনে হেলানো: shadow −1, box −4.");
+    if (i === R10) pass("পিছনে হেলানো: shadow −1, dot product −4.");
     else setMiss(miss + 1);
   };
 
@@ -1140,7 +1140,7 @@ export function LeanBack() {
       <div className="h-8 text-center font-mono text-[0.95rem]">
         {w && (
           <span key={deg} className={FADE}>
-            <span className="font-sans text-sm text-muted">box </span>4 × {par(sh)} = <b className={pick === R10 ? "text-accent-text" : "text-danger"}>{nice(4 * sh)}</b>
+            <span className="font-sans text-sm text-muted">dot product </span>4 × {par(sh)} = <b className={pick === R10 ? "text-accent-text" : "text-danger"}>{nice(4 * sh)}</b>
           </span>
         )}
       </div>
@@ -1152,7 +1152,7 @@ export function LeanBack() {
         ))}
       </div>
       {pick !== null && pick !== R10 && <Nope key={miss}>{WHY10[OPTS10[pick]]}</Nope>}
-      <Task done={pick === R10}>মামার card এর সাথে যে ছবিটা মেলে, সেটা বেছে নিন.</Task>
+      <Task done={pick === R10}>মামার card এর সাথে যে ছবিটা মেলে, সেটা বেছে নিন।</Task>
     </>
   );
 }
@@ -1182,7 +1182,7 @@ export function BothRecipes() {
     if ((p[0] === 0 && p[1] === 0) || spots.includes(key) || key === `${W[0]},${W[1]}`) return;
     const next = [...spots, key];
     setSpots(next);
-    if (next.length === 3) pass("দুই recipe, একই number. প্রতিবার.");
+    if (next.length === 3) pass("দুই recipe, একই number। প্রতিবার।");
   };
 
   return (
@@ -1200,14 +1200,14 @@ export function BothRecipes() {
       </Plane>
       <div className="mx-auto grid w-fit gap-1 font-mono text-[0.9rem]">
         <div className="rounded-lg border-2 border-cat-amber/40 bg-cat-amber/5 px-2.5 py-1">
-          <span className="font-sans text-xs text-muted">box </span>
+          <span className="font-sans text-xs text-muted">dot product </span>
           <BoxRun a={V} b={w} lang="bn" inline live />
         </div>
         <div className="rounded-lg border-2 border-cat-violet/40 bg-cat-violet/5 px-2.5 py-1">
           <span className="font-sans text-xs text-muted">card </span>2.24 × {nice(len(w))} × {cos3(Math.cos(th * RAD))} = <b className="inline-block">{zero ? "0" : nice(LV * len(w) * Math.cos(th * RAD))}</b>
         </div>
       </div>
-      <Task done={done}>w এর মাথা টেনে তিনটা নতুন জায়গায় নিন. দুইটা number ই খেয়াল করুন.</Task>
+      <Task done={done}>w এর মাথা টেনে তিনটা নতুন জায়গায় নিন। দুইটা number ই খেয়াল করুন।</Task>
     </>
   );
 }
@@ -1218,7 +1218,7 @@ export function BothRecipes() {
 // 7a · Naming it: the stick's triangle, shadow ÷ stick = cos θ; then w's
 //      shadow on v is ‖w‖ cos θ, and the drop meets v square.
 
-const COS_SAY = ["1 লম্বা একটা কঞ্চি, θ angle এ হেলানো.", "ওর shadow ÷ কঞ্চি? এটাই card এর number. এর নাম cos θ.", "3.61 লম্বা কঞ্চির shadow হয় 3.61 × cos θ.", "w এর মাথা থেকে দাগটা v এর উপর right angle এ নামে. এই নামানোকে বলে projection."];
+const COS_SAY = ["1 লম্বা একটা কঞ্চি, θ angle এ হেলানো।", "ওর shadow ÷ কঞ্চি? এটাই card এর number। এর নাম cos θ।", "3.61 লম্বা কঞ্চির shadow হয় 3.61 × cos θ.", "w এর মাথা থেকে দাগটা v এর উপর right angle এ নামে। এই নামানোকে বলে projection।"];
 
 export function CosName() {
   const s = useScene(4, [500, 1800, 2000, 2200]);
@@ -1284,10 +1284,10 @@ const P7_F = makeFrame(-0.3, 3.9, -0.7, 2.1, 42);
 const P7_L = [1, 2, LW, LW];
 const P7_SH = ["0.866", "1.73", "3.13", "3.13"];
 const P7_SAY = [
-  "আগের কঞ্চিটা: 1 metre, 30° হেলানো. ওর shadow 0.866.",
-  "মামির বাঁশের মতো: দ্বিগুণ লম্বা, একই হেলান, shadow ও দ্বিগুণ. 1.73.",
+  "আগের কঞ্চিটা: 1 metre, 30° হেলানো। ওর shadow 0.866.",
+  "মামির বাঁশের মতো: দ্বিগুণ লম্বা, একই হেলান, shadow ও দ্বিগুণ। 1.73.",
   "3.61 লম্বা একটা বাঁশ, 30° তে: 3.61 × 0.866 = 3.13.",
-  "ওই বাঁশটাই w, দাঁড়িয়ে আছে v এর উপর. তাই w এর shadow হলো w এর length × card এর number.",
+  "ওই বাঁশটাই w, দাঁড়িয়ে আছে v এর উপর। তাই w এর shadow হলো w এর length × card এর number.",
 ];
 
 export function PoleToW() {
@@ -1339,7 +1339,7 @@ export function MamaSaid() {
   const k = s.k;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="field" label="মামার হাতে card: 2.24, 3.61 আর 30 degree. ফাহিমের হাতে box এর slot ধরে ধরে যোগফল. মামা বললেন শুধু card থেকেই 7 আনবেন. Slot এর হিসাবটা ফিকে হয়ে গেলো. Card হয়ে গেলো 2.24 গুণ 3.61 গুণ 0.866, মানে 7. ফাহিম বললো, box এর মতোই 7, আর slot ছাড়াই.">
+      <Stage backdrop="field" label="মামার হাতে card: 2.24, 3.61 আর 30 degree। ফাহিমের হাতে dot product এর slot ধরে ধরে যোগফল। মামা বললেন শুধু card থেকেই 7 আনবেন। Slot এর হিসাবটা ফিকে হয়ে গেলো। Card হয়ে গেলো 2.24 গুণ 3.61 গুণ 0.866, মানে 7। ফাহিম বললো, dot product এর মতোই 7, আর slot ছাড়াই।">
         <Roof />
         <Person who="mama" x={112} y={SG} arm="hold" mood={k >= 3 ? "smug" : "plain"} />
         <Person who="fahim" x={262} y={SG} facing={-1} arm="hold" mood={k >= 3 ? "happy" : "plain"} />
@@ -1347,8 +1347,8 @@ export function MamaSaid() {
           <CastCard x={224} y={SG - 44} text="2×2 + 1×3" tone="blue" />
         </g>
         <CastCard key={k >= 3 ? 3 : k >= 2 ? 2 : 0} x={128} y={SG - 44} text={k >= 3 ? "2.24×3.61×0.866 = 7" : k >= 2 ? "2.24 × 3.61 × 0.866" : "2.24 · 3.61 · 30°"} tone="amber" />
-        {k === 1 && <Bubble x={112} y={SG - 66} side="right" lines={["Slot লাগবে না.", "এই card থেকেই 7 আনবো."]} />}
-        {k >= 3 && <Bubble x={262} y={SG - 66} side="left" lines={["Box এর মতোই 7.", "Slot ছাড়াই."]} />}
+        {k === 1 && <Bubble x={112} y={SG - 66} side="right" lines={["Slot লাগবে না।", "এই card থেকেই 7 আনবো।"]} />}
+        {k >= 3 && <Bubble x={262} y={SG - 66} side="left" lines={["Dot product এর মতোই 7.", "Slot ছাড়াই।"]} />}
       </Stage>
     </StoryFrame>
   );

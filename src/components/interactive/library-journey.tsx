@@ -132,13 +132,13 @@ export function RopeRecallPick() {
 
   const choose = (i: number) => {
     setPick(i);
-    if (i === R1_RIGHT) p.play(1, () => pass("লম্বা দড়ি, ছোট angle, টানের বেশিটা সামনে."));
+    if (i === R1_RIGHT) p.play(1, () => pass("লম্বা দড়ি, ছোট angle, টানের বেশিটা সামনে।"));
     else setMiss(miss + 1);
   };
 
   return (
     <>
-      <div className="text-center text-sm text-muted">4.6 এর ঘাট. নৌকা পাড় থেকে 3 metre দূরে, মাঝিরা টানে মোট 10.</div>
+      <div className="text-center text-sm text-muted">4.6 এর ঘাট। নৌকা পাড় থেকে 3 metre দূরে, মাঝিরা টানে মোট 10।</div>
       <svg viewBox="0 0 290 116" role="img" aria-label="নৌকা পাড় থেকে 3 metre দূরে; বেছে নেয়া দড়িতে টানের কতটুকু সামনে যায়" className="mx-auto mt-1 block h-auto w-full max-w-[18rem]">
         <rect x={1} y={1} width={288} height={114} rx={10} fill="#e0f2fe" stroke="#cbd5e1" />
         <rect x={1} y={R1_BANK} width={288} height={19} fill="#a3b18a" />
@@ -180,9 +180,9 @@ export function RopeRecallPick() {
           </PicChoice>
         ))}
       </div>
-      {pick === 0 && <Nope key={miss}>4 metre দড়িতে সামনে যায় মোটে 6.6. কেন? দড়ি খাড়া, angle বড়. টানের বড় একটা অংশ চলে যায় পাড়ের দিকে.</Nope>}
+      {pick === 0 && <Nope key={miss}>4 metre দড়িতে সামনে যায় মোটে 6.6. কেন? দড়ি খাড়া, angle বড়। টানের বড় একটা অংশ চলে যায় পাড়ের দিকে।</Nope>}
       {pick === 2 && <Nope key={miss}>সমান না: 6.6 আর 9.8. দড়ি লম্বা হলে angle ছোট হয়, না বড়?</Nope>}
-      <Task done={pick === R1_RIGHT && !p.running}>কোন দড়িতে মোট 10 এর বেশিটা নৌকাকে সামনে নেয়? ছবিতে tap করুন.</Task>
+      <Task done={pick === R1_RIGHT && !p.running}>কোন দড়িতে মোট 10 এর বেশিটা নৌকাকে সামনে নেয়? ছবিতে tap করুন।</Task>
     </>
   );
 }
@@ -205,7 +205,7 @@ export function TwoMachines() {
 
   const seal = (i: number) => {
     setBet(i);
-    pass("বাজি ধরা হলো. শেষে মিলিয়ে দেখবো.");
+    pass("বাজি ধরা হলো। শেষে মিলিয়ে দেখবো।");
   };
 
   return (
@@ -239,7 +239,7 @@ export function TwoMachines() {
           </Choice>
         ))}
       </div>
-      <Task done={bet !== null}>দুইটা list দেখে একটার উপরে বাজি ধরুন.</Task>
+      <Task done={bet !== null}>দুইটা list দেখে একটার উপরে বাজি ধরুন।</Task>
     </>
   );
 }
@@ -266,7 +266,7 @@ export function OneHotPick() {
 
   const choose = (i: number) => {
     setPick(i);
-    p.play(4, i === H3_RIGHT ? () => pass("শুধু first slot টিকে থাকে: 4.") : undefined);
+    p.play(4, i === H3_RIGHT ? () => pass("শুধু first slot টিকে থাকে: 4।") : undefined);
     if (i !== H3_RIGHT) setMiss(miss + 1);
   };
 
@@ -316,9 +316,9 @@ export function OneHotPick() {
           </PicChoice>
         ))}
       </div>
-      {pick === 0 && !p.running && <Nope key={miss}>গুণগুলা ঠিক আছে. কিন্তু box শেষে সব যোগ করে একটাই number দেয়, list না.</Nope>}
-      {pick === 1 && !p.running && <Nope key={miss}>এটা তো query বাদ দিয়ে বইয়ের সব slot যোগ. 0 দিয়ে গুণ করলে কী থাকে?</Nope>}
-      <Task done={pick === H3_RIGHT && !p.running}>(1, 0, 0) আর (4, 2, 7) এর box কত? একটা বেছে নিয়ে box খুলে দেখুন.</Task>
+      {pick === 0 && !p.running && <Nope key={miss}>গুণগুলা ঠিক আছে। কিন্তু dot product শেষে সব যোগ করে একটাই number দেয়, list না।</Nope>}
+      {pick === 1 && !p.running && <Nope key={miss}>এটা তো query বাদ দিয়ে বইয়ের সব slot যোগ। 0 দিয়ে গুণ করলে কী থাকে?</Nope>}
+      <Task done={pick === H3_RIGHT && !p.running}>(1, 0, 0) আর (4, 2, 7) এর dot product কত? একটা বেছে নিয়ে dot product টা চালিয়ে দেখুন।</Task>
     </>
   );
 }
@@ -368,7 +368,7 @@ export function DotRanking() {
     if (ran.includes(id)) return;
     const next = [...ran, id];
     setRan(next);
-    if (next.length === BOOKS.length) pass("Box তুলে দিলো লম্বা বইটাকে.");
+    if (next.length === BOOKS.length) pass("Dot product তুলে দিলো লম্বা বইটাকে।");
   };
 
   return (
@@ -379,7 +379,7 @@ export function DotRanking() {
       </div>
       <div className="mt-3 grid gap-2">
         {BOOKS.map((b) => (
-          <BookBar key={b.id} id={b.id} v={b.v} score={String(dot(QUERY, b.v))} frac={ran.includes(b.id) ? dot(QUERY, b.v) / 20 : 0} on={ran.includes(b.id)} onClick={() => run(b.id)} label="box চালান" tone="bg-cat-amber" />
+          <BookBar key={b.id} id={b.id} v={b.v} score={String(dot(QUERY, b.v))} frac={ran.includes(b.id) ? dot(QUERY, b.v) / 20 : 0} on={ran.includes(b.id)} onClick={() => run(b.id)} label="dot product চালান" tone="bg-cat-amber" />
         ))}
       </div>
       {all && (
@@ -387,7 +387,7 @@ export function DotRanking() {
           Order: <b>মোটা বই</b> 20, <b className="text-cat-coral">নৌকা-ধান</b> 3, <b>চিঠি</b> 2
         </div>
       )}
-      <Task done={all}>প্রতিটা বইয়ের সাথে query র box চালান.</Task>
+      <Task done={all}>প্রতিটা বইয়ের সাথে query র dot product চালান।</Task>
     </>
   );
 }
@@ -406,7 +406,7 @@ export function CosRanking() {
     if (ran.includes(id)) return;
     const next = [...ran, id];
     setRan(next);
-    if (next.length === BOOKS.length) pass("Length ভাগ দিলে মাছের বই উপরে ওঠে.");
+    if (next.length === BOOKS.length) pass("Length ভাগ দিলে মাছের বই উপরে ওঠে।");
   };
 
   return (
@@ -429,7 +429,7 @@ export function CosRanking() {
           );
         })}
       </div>
-      <Task done={all}>প্রতিটা বইয়ের box এর number কে দুইটা length দিয়ে ভাগ দিন.</Task>
+      <Task done={all}>প্রতিটা বইয়ের dot product এর number কে দুইটা length দিয়ে ভাগ দিন।</Task>
     </>
   );
 }
@@ -463,7 +463,7 @@ export function LoudForBoth() {
     if (seen.includes(r)) return;
     const next = [...seen, r];
     setSeen(next);
-    if (next.length === 2) pass("সবার কাছে যে জেতে, সে জেতে লম্বা হয়ে.");
+    if (next.length === 2) pass("সবার কাছে যে জেতে, সে জেতে লম্বা হয়ে।");
   };
 
   return (
@@ -472,7 +472,7 @@ export function LoudForBoth() {
         নতুন ছবি <b>হুলুস্থুল</b> <span className="font-mono">(5, 5)</span>: কান্নাও সবচেয়ে বেশি, হাসিও
       </div>
       <div className="mt-3 flex justify-center gap-2">
-        {["box", "cosine"].map((r, i) => (
+        {["dot product", "cosine"].map((r, i) => (
           <button key={r} type="button" onClick={() => pick(i as 0 | 1)} className={`${pill(rule === i)} font-sans`}>
             {r}
           </button>
@@ -516,11 +516,11 @@ export function LoudForBoth() {
       </div>
       <Ticks
         items={[
-          ["box দিয়ে", seen.includes(0)],
+          ["dot product দিয়ে", seen.includes(0)],
           ["cosine দিয়ে", seen.includes(1)],
         ]}
       />
-      <Task done={both}>দুইটা নিয়মেই দেখুন, মামা আর মামির কাছে কোন ছবি জেতে.</Task>
+      <Task done={both}>দুইটা নিয়মেই দেখুন, মামা আর মামির কাছে কোন ছবি জেতে।</Task>
     </>
   );
 }
@@ -580,13 +580,13 @@ export function SpenderPick() {
 
   const choose = (i: number) => {
     setPick(i);
-    if (i === S7_RIGHT) p.play(1, () => pass("Length যখন information, normalise না."));
+    if (i === S7_RIGHT) p.play(1, () => pass("Length যখন information, normalise না।"));
     else setMiss(miss + 1);
   };
 
   return (
     <>
-      <div className="text-center text-sm text-muted">সামিনের খাতা: কে (চা, শরবত) এ কত টাকা খরচ করলো.</div>
+      <div className="text-center text-sm text-muted">সামিনের খাতা: কে (চা, শরবত) এ কত টাকা খরচ করলো।</div>
       <svg viewBox="0 0 240 116" role="img" aria-label="করিম (20, 10) আর ডাক্তার আপা (200, 100): দুইটা arrow একই দিকে, আপারটা 10 গুণ লম্বা" className="mx-auto mt-1 block h-auto w-full max-w-[15rem]">
         <rect x={1} y={1} width={238} height={114} rx={10} fill="white" stroke="#cbd5e1" />
         <path d={`M${ox} ${oy}H232M${ox} ${oy}V8`} stroke={L_INK} strokeOpacity={0.35} />
@@ -625,7 +625,7 @@ export function SpenderPick() {
           </span>
         )}
       </div>
-      <div className="mt-2 text-sm font-medium text-muted">সামিন খুঁজছে stall এর সবচেয়ে বড় ক্রেতা. Normalise করা কি ঠিক?</div>
+      <div className="mt-2 text-sm font-medium text-muted">সামিন খুঁজছে stall এর সবচেয়ে বড় ক্রেতা। Normalise করা কি ঠিক?</div>
       <div className="mt-2 grid grid-cols-3 gap-2">
         {S7_OPTS.map((o, i) => (
           <PicChoice key={o} look={pick === i ? (i === S7_RIGHT ? "right" : "wrong") : "idle"} disabled={pick === S7_RIGHT} onClick={() => choose(i)}>
@@ -634,9 +634,9 @@ export function SpenderPick() {
           </PicChoice>
         ))}
       </div>
-      {pick === 0 && <Nope key={miss}>Normalise করতেই দুইজন হুবহু এক. কে 10 গুণ বেশি খরচ করেন, সেই informationটাই মুছে গেলো.</Nope>}
-      {pick === 2 && <Nope key={miss}>দুইজন তো একই direction এ. Direction দিয়ে বড় ক্রেতা বের হয় না. আর normalise করলে টাকাটাই হারায়.</Nope>}
-      <Task done={pick === S7_RIGHT && !p.running}>ছবি দেখে বেছে নিন: বড় ক্রেতা খুঁজতে normalise করবেন কি না.</Task>
+      {pick === 0 && <Nope key={miss}>Normalise করতেই দুইজন হুবহু এক। কে 10 গুণ বেশি খরচ করেন, সেই informationটাই মুছে গেলো।</Nope>}
+      {pick === 2 && <Nope key={miss}>দুইজন তো একই direction এ। Direction দিয়ে বড় ক্রেতা বের হয় না। আর normalise করলে টাকাটাই হারায়।</Nope>}
+      <Task done={pick === S7_RIGHT && !p.running}>ছবি দেখে বেছে নিন: বড় ক্রেতা খুঁজতে normalise করবেন কি না।</Task>
     </>
   );
 }
@@ -748,15 +748,15 @@ function SortJobs({ jobs, bins, note, doneText, nope, task }: { jobs: Job[]; bin
 //     (only direction).
 
 const LENGTH_JOBS: Job[] = [
-  { t: "দালালের card দিয়ে একটা গরুর দাম", bin: 0, why: "Cosine দিলে বড় গরু আর ছোট গরুর দাম প্রায় এক হয়ে যাবে. গরুর ওজনটাই তো দাম." },
-  { t: "মাছের বই খোঁজা, বই ছোট হোক বা মোটা", bin: 1, why: "Box দিলে মোটা বই শুধু মোটা বলেই উপরে উঠবে, নৌকা-ধানের বইয়ের মতো." },
-  { t: "ভ্যান কাদা থেকে উঠবে কি না: রাস্তা বরাবর মোট ধাক্কা", bin: 0, why: "Cosine শুধু বলবে ধাক্কা কোন দিকে. কত জোরে, সেটা হারিয়ে যাবে." },
-  { t: "দুইটা word মানের দিক থেকে কত কাছাকাছি", bin: 1, why: "Box দিলে লম্বা arrow এর word টা সবার সাথেই বড় number পাবে, হুলুস্থুলের মতো." },
-  { t: "“এরকম আরো ছবি দেখাও”, শুধু ছবির ধরন দেখে", bin: 1, why: "Box দিলে হুলুস্থুলের মতো লম্বা ছবিই সবাই পাবে, ধরন যাই হোক." },
-  { t: "যে ছবি সবাই দেখে, সেটা সবাইকে একটু বেশি দেখানো", bin: 0, why: "Cosine length ফেলে দেয়. অথচ এখানে জনপ্রিয় ছবির লম্বা arrow টাই কাজের." },
+  { t: "দালালের card দিয়ে একটা গরুর দাম", bin: 0, why: "Cosine দিলে বড় গরু আর ছোট গরুর দাম প্রায় এক হয়ে যাবে। গরুর ওজনটাই তো দাম।" },
+  { t: "মাছের বই খোঁজা, বই ছোট হোক বা মোটা", bin: 1, why: "Dot product করলে মোটা বই শুধু মোটা বলেই উপরে উঠবে, নৌকা-ধানের বইয়ের মতো।" },
+  { t: "ভ্যান কাদা থেকে উঠবে কি না: রাস্তা বরাবর মোট ধাক্কা", bin: 0, why: "Cosine শুধু বলবে ধাক্কা কোন দিকে। কত জোরে, সেটা হারিয়ে যাবে।" },
+  { t: "দুইটা word মানের দিক থেকে কত কাছাকাছি", bin: 1, why: "Dot product করলে লম্বা arrow এর word টা সবার সাথেই বড় number পাবে, হুলুস্থুলের মতো।" },
+  { t: "“এরকম আরো ছবি দেখাও”, শুধু ছবির ধরন দেখে", bin: 1, why: "Dot product করলে হুলুস্থুলের মতো লম্বা ছবিই সবাই পাবে, ধরন যাই হোক।" },
+  { t: "যে ছবি সবাই দেখে, সেটা সবাইকে একটু বেশি দেখানো", bin: 0, why: "Cosine length ফেলে দেয়। অথচ এখানে জনপ্রিয় ছবির লম্বা arrow টাই কাজের।" },
 ];
 const LENGTH_BINS = [
-  { name: "box", sub: "length ও information" },
+  { name: "dot product", sub: "length ও information" },
   { name: "cosine", sub: "শুধু direction, length হলো noise" },
 ];
 
@@ -766,35 +766,35 @@ export function LengthIsNews() {
       jobs={LENGTH_JOBS}
       bins={LENGTH_BINS}
       note="আসল প্রশ্ন: length কি এখানে information?"
-      doneText="ছয়টা কাজই জায়গামতো বসলো."
+      doneText="ছয়টা কাজই জায়গামতো বসলো।"
       nope="“বেশি” বা “বড়” হওয়াটা কি এখানে উত্তরের অংশ, নাকি শুধু noise?"
-      task="প্রতিটা কাজে কোন মাপ লাগবে, tap করুন."
+      task="প্রতিটা কাজে কোন মাপ লাগবে, tap করুন।"
     />
   );
 }
 
 // ---------------------------------------------------------------------------
-// 9 · এবার আপনার পালা: আপুর list. Five fresh jobs into box / cosine /
+// 9 · এবার আপনার পালা: আপুর list। Five fresh jobs into box / cosine /
 //     distance.
 
 const TOOL_JOBS: Job[] = [
-  { t: "Chatbot কে প্রশ্ন করলেন: কোন paragraph এর মানে প্রশ্নের সবচেয়ে কাছে", bin: 1, why: "Box দিলে লম্বা paragraph শুধু লম্বা বলেই জিতে যাবে." },
-  { t: "দালালের knob দিয়ে একটা ছাগলের দাম", bin: 0, why: "দামটা একটা পরিমাণ. Knob গুলা গুণ করে যোগ, মানে box." },
-  { t: "ডাক্তার আপার twin খেলা: standardise করার পর কে কার সবচেয়ে কাছে দাঁড়িয়ে", bin: 2, why: "প্রশ্নটা জায়গা নিয়ে, কে কোথায় দাঁড়িয়ে." },
-  { t: "ছোট বড় হাজারটা informationের মধ্যে “বন্যা” র information খোঁজা", bin: 1, why: "Box দিলে লম্বা information উপরে উঠবে, বন্যা নিয়ে না হলেও." },
-  { t: "ফাহিমের final number: marks আর weight মিলিয়ে", bin: 0, why: "Marks বেশি হলে number ও বেশি হবে, এটাই তো চাওয়া." },
+  { t: "Chatbot কে প্রশ্ন করলেন: কোন paragraph এর মানে প্রশ্নের সবচেয়ে কাছে", bin: 1, why: "Dot product করলে লম্বা paragraph শুধু লম্বা বলেই জিতে যাবে।" },
+  { t: "দালালের knob দিয়ে একটা ছাগলের দাম", bin: 0, why: "দামটা একটা পরিমাণ। Knob গুলা গুণ করে যোগ, মানে dot product।" },
+  { t: "ডাক্তার আপার twin খেলা: standardise করার পর কে কার সবচেয়ে কাছে দাঁড়িয়ে", bin: 2, why: "প্রশ্নটা জায়গা নিয়ে, কে কোথায় দাঁড়িয়ে।" },
+  { t: "ছোট বড় হাজারটা informationের মধ্যে “বন্যা” র information খোঁজা", bin: 1, why: "Dot product করলে লম্বা information উপরে উঠবে, বন্যা নিয়ে না হলেও।" },
+  { t: "ফাহিমের final number: marks আর weight মিলিয়ে", bin: 0, why: "Marks বেশি হলে number ও বেশি হবে, এটাই তো চাওয়া।" },
 ];
-const TOOL_BINS = [{ name: "box" }, { name: "cosine" }, { name: "distance" }];
+const TOOL_BINS = [{ name: "dot product" }, { name: "cosine" }, { name: "distance" }];
 
 export function PickTool() {
   return (
     <SortJobs
       jobs={TOOL_JOBS}
       bins={TOOL_BINS}
-      note="Length: box. Direction: cosine. জায়গা: distance."
-      doneText="পাঁচটা কাজই ঠিক মাপে বসলো."
+      note="Length: dot product. Direction: cosine. জায়গা: distance."
+      doneText="পাঁচটা কাজই ঠিক মাপে বসলো।"
       nope="Length টাই কি information, নাকি শুধু direction, নাকি জায়গা?"
-      task="প্রতিটা কাজের জন্য ঠিক মাপটা বেছে নিন."
+      task="প্রতিটা কাজের জন্য ঠিক মাপটা বেছে নিন।"
     />
   );
 }
@@ -803,7 +803,7 @@ export function PickTool() {
 // 10 · Try it: the newspaper cupboard's search, a new case. Someone searches
 //      "ইলিশ" among a two-line item (3, 0, 0), a ten-page market report
 //      (10, 60, 8) and a half page on the fishing ban (6, 1, 0), slots
-//      (ইলিশ, দাম, রাজনীতি). Pick a measure and the clippings re-sort: the box
+//      (ইলিশ, দাম, রাজনীতি)। Pick a measure and the clippings re-sort: the box
 //      and length both put the market report on top (it's not about ইলিশ);
 //      cosine puts the two ইলিশ items first.
 
@@ -813,7 +813,7 @@ const N10_NEWS = [
   { id: "R", title: "আধা পাতা: ইলিশ ধরা বন্ধ কেন", v: [6, 1, 0] },
 ];
 const N10_WAYS = [
-  { name: "box", sub: "লম্বা informationে বেশি থাকে", score: (v: readonly number[]) => v[0], d: 0 },
+  { name: "dot product", sub: "লম্বা informationে বেশি থাকে", score: (v: readonly number[]) => v[0], d: 0 },
   { name: "cosine", sub: "শুধু direction", score: (v: readonly number[]) => v[0] / len(v), d: 3 },
   { name: "length", sub: "লম্বাটা আগে", score: (v: readonly number[]) => len(v), d: 1 },
 ];
@@ -831,7 +831,7 @@ export function NewsSearch() {
 
   const choose = (i: number) => {
     setPick(i);
-    if (i === N10_RIGHT) p.play(1, () => pass("লম্বা হয়ে কেউ জিতবে না: cosine."));
+    if (i === N10_RIGHT) p.play(1, () => pass("লম্বা হয়ে কেউ জিতবে না: cosine।"));
     else setMiss(miss + 1);
   };
 
@@ -874,7 +874,7 @@ export function NewsSearch() {
           );
         })}
       </div>
-      <div className="mt-1 text-center text-xs text-muted">বারটা যত লম্বা, information তত লম্বা. নীল অংশটা ইলিশ.</div>
+      <div className="mt-1 text-center text-xs text-muted">বারটা যত লম্বা, information তত লম্বা। নীল অংশটা ইলিশ।</div>
       <div className="mt-3 grid grid-cols-3 gap-2">
         {N10_WAYS.map((w, i) => (
           <button
@@ -891,9 +891,9 @@ export function NewsSearch() {
           </button>
         ))}
       </div>
-      {pick === 0 && <Nope key={miss}>Box এ এক নম্বরে উঠে গেলো দশ পাতার বাজারের information. ইলিশ আছে 10 বার. কিন্তু informationটা দাম নিয়ে. জিতলো লম্বা বলেই.</Nope>}
-      {pick === 2 && <Nope key={miss}>লম্বা information আগে দিয়ে কী লাভ? Search টা লম্বা information চায় নাই, ইলিশের information চেয়েছে.</Nope>}
-      <Task done={pick === N10_RIGHT && !p.running}>“ইলিশ” এর informationগুলা কী দিয়ে সাজাবেন? একটা মাপ বেছে নিয়ে দেখুন.</Task>
+      {pick === 0 && <Nope key={miss}>Dot product এ এক নম্বরে উঠে গেলো দশ পাতার বাজারের information। ইলিশ আছে 10 বার। কিন্তু informationটা দাম নিয়ে। জিতলো লম্বা বলেই।</Nope>}
+      {pick === 2 && <Nope key={miss}>লম্বা information আগে দিয়ে কী লাভ? Search টা লম্বা information চায় নাই, ইলিশের information চেয়েছে।</Nope>}
+      <Task done={pick === N10_RIGHT && !p.running}>“ইলিশ” এর informationগুলা কী দিয়ে সাজাবেন? একটা মাপ বেছে নিয়ে দেখুন।</Task>
     </>
   );
 }
@@ -1033,10 +1033,10 @@ function L_Note({ x, y, lines, tone = L_INK, fs = 7.5 }: { x: number; y: number;
 //      green) grows as the angle shrinks.
 
 const X1_SAY = [
-  "4.6 এর ঘাট. নৌকা পাড় থেকে 3 metre দূরে, টান 10.",
+  "4.6 এর ঘাট। নৌকা পাড় থেকে 3 metre দূরে, টান 10।",
   "4 metre দড়ি: angle বড়, নদী বরাবর যায় 6.6.",
   "15 metre দড়ি: angle ছোট, নদী বরাবর যায় 9.8.",
-  "লম্বা দড়ি, ছোট angle. Shadow প্রায় পুরা টানটাই.",
+  "লম্বা দড়ি, ছোট angle। Shadow প্রায় পুরা টানটাই।",
 ];
 const X1_M = 16.5; // px per metre
 const X1_BANK = 92;
@@ -1118,7 +1118,7 @@ export function LibraryEvening({}: Story) {
         <L_Shelf x={12} y={LG} w={96} />
         <L_Desk x={182} y={LG} query={k >= 4} />
         <L_Apu x={282} arm={k === 1 ? "point" : "down"} mood={k === 1 ? "happy" : "plain"} />
-        {k === 1 && <Bubble x={282} y={LG - 60} side="left" lines={["দুইটা search machine.", "আমার ভাই বানাইছে."]} />}
+        {k === 1 && <Bubble x={282} y={LG - 60} side="left" lines={["দুইটা search machine.", "আমার ভাই বানাইছে।"]} />}
         {k >= 2 && (
           <>
             <rect x={52} y={40} width={9} height={20} fill="#1d4ed8" className={POP} />
@@ -1137,10 +1137,10 @@ export function LibraryEvening({}: Story) {
 //      third book, নৌকা-ধান, second for A and last for B. It stops at "কেন?".
 
 const X2_SAY = [
-  "তিনটা বই, প্রতিটার একই count.",
-  "দুইটা machine কেই দেয়া হলো হুবহু একই তিনটা list.",
-  "তবু বের হলো দুইরকম order.",
-  "ঝগড়া তিন নম্বর বইটা নিয়ে: A তে দুই নম্বরে, B তে তিন নম্বরে.",
+  "তিনটা বই, প্রতিটার একই count।",
+  "দুইটা machine কেই দেয়া হলো হুবহু একই তিনটা list।",
+  "তবু বের হলো দুইরকম order।",
+  "ঝগড়া তিন নম্বর বইটা নিয়ে: A তে দুই নম্বরে, B তে তিন নম্বরে।",
   "মাছ খুঁজতে গিয়ে নৌকা-ধানের বই দুই নম্বরে কেন?",
 ];
 const X2_SHORT: Record<string, string> = { A: BOOK_BN.A.short, B: BOOK_BN.B.short, C: BOOK_BN.C.short };
@@ -1193,12 +1193,12 @@ export function SameCounts() {
 //      wipe the rest: 4. Last, the slip: adding the book's slots gives 13.
 
 const X3_SAY = [
-  "দুইটা list: (1, 0, 0) আর (4, 2, 7).",
+  "দুইটা list: (1, 0, 0) আর (4, 2, 7)।",
   "First slot: 1 × 4 = 4.",
-  "Second slot এ 0, তাই গুণফল 0.",
-  "Third slot এও তাই.",
-  "যোগ: 4. টিকে থাকে শুধু 1 এর slot টা.",
-  "গুণ না করে বইয়ের slot গুলা যোগ করলে আসে 13.",
+  "Second slot এ 0, তাই গুণফল 0।",
+  "Third slot এও তাই।",
+  "যোগ: 4। টিকে থাকে শুধু 1 এর slot টা।",
+  "গুণ না করে বইয়ের slot গুলা যোগ করলে আসে 13।",
 ];
 
 export function OneHotBox() {
@@ -1232,10 +1232,10 @@ const X4_ROWS = [
   { name: "নৌকা-ধান", v: BOOKS[2].v, share: "12 টার মাত্র 3 টা মাছ" },
 ];
 const X4_SAY = [
-  "প্রতিটা word একটা টুকরা: নীল মাছ, সবুজ নৌকা, হলুদ ধান.",
-  "Box দেখে শুধু মাছের ঘর.",
-  "মাছের টুকরা গুনে চিঠি 2, বই 3. বই আগে.",
-  "অথচ চিঠি পুরাটাই মাছ, আর বইয়ে মাছ প্রায় নাই বললেই চলে.",
+  "প্রতিটা word একটা টুকরা: নীল মাছ, সবুজ নৌকা, হলুদ ধান।",
+  "Dot product দেখে শুধু মাছের ঘর।",
+  "মাছের টুকরা গুনে চিঠি 2, বই 3। বই আগে।",
+  "অথচ চিঠি পুরাটাই মাছ, আর বইয়ে মাছ প্রায় নাই বললেই চলে।",
 ];
 
 export function WordTiles() {
@@ -1281,10 +1281,10 @@ export function WordTiles() {
 
 const X4B_O = { x: 26, y: 104 };
 const X4B_SAY = [
-  "4.2 এর ভ্যান. ফাহিম রাস্তা বরাবর ঠেলে, জোর 5. কুলি ঠেলে বাঁকা হয়ে, জোর 10.",
-  "রাস্তা বরাবর shadow: ফাহিম 5, কুলি 6. বাঁকা হয়েও কুলি জিতলো.",
-  "বই দুইটাও তাই. মাছের দিক বরাবর shadow: চিঠি 2, নৌকা-ধান 3.",
-  "নৌকা-ধানের বই মাছ থেকে অনেক বাঁকা, কিন্তু লম্বা, 7.07. লম্বা বলেই জিতলো.",
+  "4.2 এর ভ্যান। ফাহিম রাস্তা বরাবর ঠেলে, জোর 5। কুলি ঠেলে বাঁকা হয়ে, জোর 10।",
+  "রাস্তা বরাবর shadow: ফাহিম 5, কুলি 6। বাঁকা হয়েও কুলি জিতলো।",
+  "বই দুইটাও তাই। মাছের দিক বরাবর shadow: চিঠি 2, নৌকা-ধান 3।",
+  "নৌকা-ধানের বই মাছ থেকে অনেক বাঁকা, কিন্তু লম্বা, 7.07. লম্বা বলেই জিতলো।",
 ];
 
 export function SlantWins() {
@@ -1352,11 +1352,11 @@ const X5_ARROWS = BOOKS.map((b) => {
 });
 const X5_TONE: Record<string, string> = { A: L_BLUE, B: L_TEAL, C: L_CORAL };
 const X5_SAY = [
-  "Query “মাছ” তাক করা মাছের দিক বরাবর.",
-  "চিঠি: ছোট, কিন্তু একদম মাছের দিকে.",
-  "মোটা বই: অনেক লম্বা, প্রায় একই দিকে, মাত্র 3° সরে.",
-  "নৌকা-ধানের বই: প্রায় 65° দূরে.",
-  "Length দিয়ে ভাগ দিলে সবাই সমান লম্বা. থাকে শুধু direction.",
+  "Query “মাছ” তাক করা মাছের দিক বরাবর।",
+  "চিঠি: ছোট, কিন্তু একদম মাছের দিকে।",
+  "মোটা বই: অনেক লম্বা, প্রায় একই দিকে, মাত্র 3° সরে।",
+  "নৌকা-ধানের বই: প্রায় 65° দূরে।",
+  "Length দিয়ে ভাগ দিলে সবাই সমান লম্বা। থাকে শুধু direction।",
 ];
 
 export function UnitFan() {
@@ -1444,8 +1444,8 @@ export function LoudFilmHome({}: Story) {
         <Person who="mami" x={170} y={LG} facing={-1} mood={k >= 2 ? "happy" : "plain"} arm={k === 2 ? "wave" : "down"} label />
         <Person who="mama" x={226} y={LG} facing={-1} mood={k >= 3 ? "happy" : "plain"} arm={k === 3 ? "wave" : "down"} label />
         <Person who="fahim" x={k >= 1 ? 286 : 350} y={LG} facing={-1} walking={k === 1} ms={1300} mood={k >= 4 ? "puzzled" : "plain"} label={k >= 1} />
-        {k === 2 && <Bubble x={170} y={LG - 66} lines={["এত কান্না আর", "কোনো ছবিতে নাই."]} />}
-        {k === 3 && <Bubble x={226} y={LG - 66} side="left" lines={["এত হাসিও নাই."]} />}
+        {k === 2 && <Bubble x={170} y={LG - 66} lines={["এত কান্না আর", "কোনো ছবিতে নাই।"]} />}
+        {k === 3 && <Bubble x={226} y={LG - 66} side="left" lines={["এত হাসিও নাই।"]} />}
         {k >= 4 && (
           <>
             <CastCard x={69} y={52} text="(5, 5)" tone="coral" />
@@ -1469,10 +1469,10 @@ const X6_O = { x: 26, y: 116 };
 const X6_SC = 17;
 const X6_FILM_TONE = [L_BLUE, L_TEAL, L_CORAL];
 const X6_SAY = [
-  "তিনটা ছবি, arrow হিসাবে: (কান্না, হাসি).",
+  "তিনটা ছবি, arrow হিসাবে: (কান্না, হাসি)।",
   "হুলুস্থুল এর arrow সবচেয়ে লম্বা, 7.07.",
-  "মামা আর মামি তাকান দুই দিকে.",
-  "তবু box এ দুইজনের কাছেই জেতে হুলুস্থুল, লম্বা বলে.",
+  "মামা আর মামি তাকান দুই দিকে।",
+  "তবু dot product এ দুইজনের কাছেই জেতে হুলুস্থুল, লম্বা বলে।",
 ];
 
 export function LongestArrow() {
@@ -1533,10 +1533,10 @@ const X6B_O = { x: 22, y: 116 };
 const X6B_R = 90;
 const deg = (v: readonly number[]) => (Math.atan2(v[1], v[0]) * 180) / Math.PI;
 const X6B_SAY = [
-  "Length ফেলে দিলে থাকে শুধু direction.",
-  "মামির direction এর সবচেয়ে কাছে Titanic.",
+  "Length ফেলে দিলে থাকে শুধু direction।",
+  "মামির direction এর সবচেয়ে কাছে Titanic।",
   "মামার direction এর সবচেয়ে কাছে Mr. Bean.",
-  "হুলুস্থুল ঠিক মাঝখানে, 45° তে. তাই দুইজনের কাছেই দুই নম্বরে.",
+  "হুলুস্থুল ঠিক মাঝখানে, 45° তে। তাই দুইজনের কাছেই দুই নম্বরে।",
 ];
 
 export function MiddleDirection() {
@@ -1599,10 +1599,10 @@ const X8_COWS = [
 ];
 const X8_KNOBS = [400, 4000, -5000];
 const X8_SAY = [
-  "4.1 এর দুইটা গাই: (ওজন, দুধ, বয়স).",
-  "দালালের card দিয়ে box: দাম 74,000 আর 85,000 টাকা.",
-  "এবার আগে length 1 করে নেই. দুইটা গাইয়েরই ওজন হয়ে গেলো প্রায় 1.",
-  "Box দিলো প্রায় 296 আর 425. গাইয়ের দামটাই হারিয়ে গেলো.",
+  "4.1 এর দুইটা গাই: (ওজন, দুধ, বয়স)।",
+  "দালালের card দিয়ে dot product: দাম 74,000 আর 85,000 টাকা।",
+  "এবার আগে length 1 করে নেই। দুইটা গাইয়েরই ওজন হয়ে গেলো প্রায় 1।",
+  "Dot product দিলো প্রায় 296 আর 425। গাইয়ের দামটাই হারিয়ে গেলো।",
 ];
 
 export function CowNews() {
@@ -1653,10 +1653,10 @@ const X8B_FILMS = [
 ];
 const X8B_VIEWERS = [10, 82];
 const X8B_SAY = [
-  "App নিজেই ছবির arrow শেখে. জনপ্রিয় ছবির arrow প্রায়ই লম্বা.",
-  "একজন দর্শকের পছন্দ একদিকে. তার দিকে সবচেয়ে লম্বা shadow জনপ্রিয় ছবির.",
-  "আরেকজনের পছন্দ আরেকদিকে. সেখানেও জনপ্রিয় ছবিটাই এগিয়ে.",
-  "জনপ্রিয় ছবি সবাইকে একটু বেশি দেখানো হলো, জেনে-বুঝেই.",
+  "App নিজেই ছবির arrow শেখে। জনপ্রিয় ছবির arrow প্রায়ই লম্বা।",
+  "একজন দর্শকের পছন্দ একদিকে। তার দিকে সবচেয়ে লম্বা shadow জনপ্রিয় ছবির।",
+  "আরেকজনের পছন্দ আরেকদিকে। সেখানেও জনপ্রিয় ছবিটাই এগিয়ে।",
+  "জনপ্রিয় ছবি সবাইকে একটু বেশি দেখানো হলো, জেনে-বুঝেই।",
 ];
 
 export function PopularPull() {
@@ -1669,7 +1669,7 @@ export function PopularPull() {
   const one = k === 1 || k === 2 ? X8B_VIEWERS[k - 1] : null;
   return (
     <Scene scene={s} caption={lsay(X8B_SAY, k)}>
-      <svg viewBox="0 0 170 120" role="img" aria-label="জনপ্রিয় ছবির লম্বা arrow দুই দর্শকের কাছেই box এ এগিয়ে থাকে" className="mx-auto block h-auto w-full max-w-[13rem]">
+      <svg viewBox="0 0 170 120" role="img" aria-label="জনপ্রিয় ছবির লম্বা arrow দুই দর্শকের কাছেই dot product এ এগিয়ে থাকে" className="mx-auto block h-auto w-full max-w-[13rem]">
         <rect x={1} y={1} width={168} height={118} rx={10} fill="white" stroke="#cbd5e1" />
         {viewers.map((a) => {
           const [x2, y2] = pt(a, 102);
@@ -1716,10 +1716,10 @@ const X7_ROWS = [
   { who: "ডাক্তার আপা", v: [200, 100] },
 ];
 const X7_SAY = [
-  "সামিনের খাতা: কে (চা, শরবত) এ কত টাকা খরচ করলো.",
-  "Length: করিম 22, আপা 224. আপা 10 গুণ বড় ক্রেতা.",
+  "সামিনের খাতা: কে (চা, শরবত) এ কত টাকা খরচ করলো।",
+  "Length: করিম 22, আপা 224। আপা 10 গুণ বড় ক্রেতা।",
   "Normalise: দুইজনই (0.89, 0.45), length 1.",
-  "বড় ক্রেতা কে? খাতায় আর লেখা নাই. উত্তরটা নিজের হাতেই মোছা.",
+  "বড় ক্রেতা কে? খাতায় আর লেখা নাই। উত্তরটা নিজের হাতেই মোছা।",
 ];
 
 export function SpenderErase() {
@@ -1777,9 +1777,9 @@ const X10N_NEWS = [
   { name: "দশ পাতা", v: [10, 60, 8] },
 ];
 const X10N_SAY = [
-  "তিনটা information, তিন সাইজের. নীল অংশটা ইলিশ.",
-  "Box গোনে শুধু নীল: দশ পাতার informationে নীল সবচেয়ে বেশি, 10.",
-  "Length দিয়ে ভাগ দিলে তিনটা informationই এক সাইজের.",
+  "তিনটা information, তিন সাইজের। নীল অংশটা ইলিশ।",
+  "Dot product গোনে শুধু নীল: দশ পাতার informationে নীল সবচেয়ে বেশি, 10।",
+  "Length দিয়ে ভাগ দিলে তিনটা informationই এক সাইজের।",
   "এবার জেতে যে informationের বেশিটা ইলিশ: 1.00, 0.99, আর দশ পাতা 0.16.",
 ];
 
@@ -1826,7 +1826,7 @@ export function NewsShrink() {
 // ---------------------------------------------------------------------------
 // 9a · A story scene for step 9's setup, no task: the next afternoon, the
 //      library closing. লাইব্রেরির আপু hands ফাহিম a list: কোন কাজে কোন
-//      মাপ, লিখে দিয়ে যাও. ফাহিম wonders: box, cosine, না distance? No job
+//      মাপ, লিখে দিয়ে যাও। ফাহিম wonders: box, cosine, না distance? No job
 //      is sorted.
 
 function L_Paper() {
@@ -1856,8 +1856,8 @@ export function ListHandover({}: Story) {
             <L_Paper />
           </L_Carry>
         )}
-        {k === 2 && <Bubble x={210} y={LG - 60} lines={["কোন কাজে কোন মাপ,", "লিখে দিয়ে যাও."]} />}
-        {k >= 3 && <Bubble x={140} y={LG - 66} tone="think" lines={["box, cosine,", "না distance?"]} />}
+        {k === 2 && <Bubble x={210} y={LG - 60} lines={["কোন কাজে কোন মাপ,", "লিখে দিয়ে যাও।"]} />}
+        {k >= 3 && <Bubble x={140} y={LG - 66} tone="think" lines={["dot product, cosine,", "না distance?"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1870,15 +1870,15 @@ export function ListHandover({}: Story) {
 //      the gap (distance).
 
 const X13_ITEMS = [
-  { q: "কত বড়?", tool: "box" },
+  { q: "কত বড়?", tool: "dot product" },
   { q: "কী ধরনের?", tool: "cosine" },
   { q: "কে কোথায়?", tool: "distance" },
 ];
 const X13_SAY = [
-  "তিনটা মাপ, তিনটা প্রশ্ন.",
-  "কত বড়: length ও যখন information, box.",
-  "কী ধরনের: শুধু direction জানতে চাইলে, cosine.",
-  "কে কোথায় দাঁড়িয়ে: জায়গাটাই যখন প্রশ্ন, distance.",
+  "তিনটা মাপ, তিনটা প্রশ্ন।",
+  "কত বড়: length ও যখন information, dot product.",
+  "কী ধরনের: শুধু direction জানতে চাইলে, cosine।",
+  "কে কোথায় দাঁড়িয়ে: জায়গাটাই যখন প্রশ্ন, distance।",
 ];
 
 function X13_Pic({ i }: { i: number }) {
@@ -1990,11 +1990,11 @@ export function CatalogueFreeze({}: Story) {
           </g>
         )}
         <L_Apu x={276} mood={k >= 3 ? "puzzled" : "plain"} arm={k === 1 ? "hold" : "down"} />
-        {k === 1 && <Bubble x={276} y={LG - 60} side="left" lines={["জেলার সব বই", "এই computer এ উঠবে."]} />}
+        {k === 1 && <Bubble x={276} y={LG - 60} side="left" lines={["জেলার সব বই", "এই computer এ উঠবে।"]} />}
         {k === 1 && <L_Note x={110} y={30} lines={["জেলার catalogue", "লাখ লাখ বই"]} tone={L_VIOLET} fs={8} />}
         {(k === 2 || k === 3) && <L_Note x={96} y={30} lines={k === 2 ? ["প্রতিটা বইয়ে:", "root, তারপর ভাগ"] : ["এখনো চলছে ..."]} tone={L_CORAL} fs={8} />}
         <Person who="fahim" x={k >= 2 ? 138 : -30} y={LG} walking={k === 2} ms={1300} arm={k === 2 ? "point" : "down"} mood={k >= 4 ? "puzzled" : "plain"} label={k >= 2} />
-        {k >= 4 && <Bubble x={138} y={LG - 66} tone="think" lines={["cosine কে box এর মতো", "সস্তা করা যায় না?"]} />}
+        {k >= 4 && <Bubble x={138} y={LG - 66} tone="think" lines={["cosine কে dot product এর মতো", "সস্তা করা যায় না?"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -2013,10 +2013,10 @@ const X5W_TW = 7.4; // a word tile, with its gap
 const X5W_X = 58;
 const X5W_W = 150; // the one width every row squeezes to
 const X5W_SAY = [
-  "তিনটা বই, প্রতিটা word একটা টুকরা: নীল মাছ, সবুজ নৌকা, হলুদ ধান.",
-  "মোটা বইয়ের সারি লম্বা. Length মানে শুধু কয়টা word লেখা হয়েছে.",
-  "Length ভাগ দিয়ে ফেলে দিলে, তিনটা সারিই এক মাপের.",
-  "থাকে শুধু রঙের মিশাল: বইটা কী নিয়ে.",
+  "তিনটা বই, প্রতিটা word একটা টুকরা: নীল মাছ, সবুজ নৌকা, হলুদ ধান।",
+  "মোটা বইয়ের সারি লম্বা। Length মানে শুধু কয়টা word লেখা হয়েছে।",
+  "Length ভাগ দিয়ে ফেলে দিলে, তিনটা সারিই এক মাপের।",
+  "থাকে শুধু রঙের মিশাল: বইটা কী নিয়ে।",
 ];
 
 export function WordSqueeze() {
@@ -2062,9 +2062,9 @@ const X8N_JOBS = [
   { t: "এরকম আরো দেখাও", a: 34 },
 ];
 const X8N_SAY = [
-  "বই খোঁজা, word এর মানে মেলানো, এরকম আরো দেখাও.",
-  "এসবে length শুধু noise. ফেলে দিলে একই দিকের arrow গুলা এক.",
-  "তাই search আর chatbot এর খোঁজাখুঁজিতে প্রায় সবসময় cosine ই চলে.",
+  "বই খোঁজা, word এর মানে মেলানো, এরকম আরো দেখাও।",
+  "এসবে length শুধু noise। ফেলে দিলে একই দিকের arrow গুলা এক।",
+  "তাই search আর chatbot এর খোঁজাখুঁজিতে প্রায় সবসময় cosine ই চলে।",
 ];
 
 export function NoiseJobs() {

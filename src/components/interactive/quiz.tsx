@@ -45,7 +45,7 @@ export default function Quiz({
         />
         {picked !== null && (
           <p className="mt-4 text-base text-muted">
-            {picked === answer ? "সঠিক! ✅ Correct." : "আবার চেষ্টা করো — wrong."}
+            {picked === answer ? "সঠিক! ✅ Correct." : "আবার চেষ্টা করো — wrong।"}
           </p>
         )}
       </div>

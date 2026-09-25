@@ -1,12 +1,12 @@
 export const metadata = {
   title: "Math for AI 4.3 — দুপুরের shadow, হিসাব দুইটা কিন্তু উত্তর একটা",
-  description: "মামা বলেন, ঘরে ঘরে একটাও গুণ না করে শুধু ফিতা আর চাঁদা দিয়ে তিনি box এর 7 বের করে দেবেন। সত্যিই কি পারবেন? উত্তর লুকিয়ে আছে দুপুরের ছায়ায়।",
+  description: "মামা বলেন, ঘরে ঘরে একটাও গুণ না করে শুধু ফিতা আর চাঁদা দিয়ে তিনি dot product এর 7 বের করে দেবেন। সত্যিই কি পারবেন? উত্তর লুকিয়ে আছে দুপুরের ছায়ায়।",
   type: "article",
 };
 
 {/* Told as a Brilliant-style journey, like 1.1 and 2.3: screen 1 seals the
     reader's bet on what মামা's tape-and-protractor recipe will give for the
-    box's 7, and the bet is not settled until TwoTests, six screens later.
+    dot product's 7, and the bet is not settled until TwoTests, six screens later.
     Each screen opens by reacting to the last; the explanation sits in <Then>
     and shows only once the task is done. Whether the two recipes *always*
     agree, and why, is 4.4's question (04c2_axis_shadow). The screens live in
@@ -51,7 +51,7 @@ import {
 
 <Step>
 
-ছাদে ওঠার আগে ভ্যানের box থেকে একটা প্রশ্ন।
+ছাদে ওঠার আগে ভ্যানের dot product থেকে একটা প্রশ্ন।
 
 <ZeroMeans>
 
@@ -63,11 +63,11 @@ Plus মানে মোটামুটি একই দিকে। minus ম�
 
 <Step>
 
-পরদিন দুপুরবেলা সূর্য যখন ঠিক মাথার ওপরে, ছাদে মামী তখন কাপড় শুকাতে নিয়ে গেছেন। মামা এক টুকরা চক দিয়ে মেঝেতে দুইটা arrow আঁকলেন, $v = (2, 3)$ আর $w = (2, 1)$। ফাহিম সাথে সাথে arrow টা নিয়ে box এ চালিয়ে দিলো: $2 \times 2 + 3 \times 1 = 7$।
+পরদিন দুপুরবেলা সূর্য যখন ঠিক মাথার ওপরে, ছাদে মামী তখন কাপড় শুকাতে নিয়ে গেছেন। মামা এক টুকরা চক দিয়ে মেঝেতে দুইটা arrow আঁকলেন, $v = (2, 3)$ আর $w = (2, 1)$। ফাহিম সাথে সাথে arrow টা নিয়ে dot product করে ফেললো: $2 \times 2 + 3 \times 1 = 7$।
 
 মামা বললেন, “এবার আমি ঘরে ঘরে গুণ করে যোগ করব না। কিন্তু 7 ঠিকই বের করবো। এটার জন্য আমার একটা ফিতা আর চাঁদা লাগবে”।
 
-ফাহিম মাথা নাড়লো। Box এর calculation pair-এ pair-এ সংখ্যা গুণ করে, আর এদিকে ফিতা আর চাঁদা মাপে length আর কোণ। তাহলে দুইটাই same answer কীভাবে দিবে?
+ফাহিম মাথা নাড়লো। Dot product এর calculation pair-এ pair-এ সংখ্যা গুণ করে, আর এদিকে ফিতা আর চাঁদা মাপে length আর কোণ। তাহলে দুইটাই same answer কীভাবে দিবে?
 
 <RoofNoon story />
 
@@ -191,7 +191,7 @@ $$v \text{-এর ওপর } w \text{-এর ছায়া} = \|w\| \cos\theta$$
 
 <TapeThirteen>
 
-৪.১-এ দেখেছিলেন, নিজের সাথে box এ দিলে আসে length-এর বর্গ। মনে আছে তো? তাই (2, 3)-এর length? 13-এর root, প্রায় 3.61। যারা 5 বেছেছিলেন, তারা 2 আর 3 সোজা যোগ করে ফেলেছিলেন।
+৪.১-এ দেখেছিলেন, নিজের সাথে dot product করলে আসে length-এর বর্গ। মনে আছে তো? তাই (2, 3)-এর length? 13-এর root, প্রায় 3.61। যারা 5 বেছেছিলেন, তারা 2 আর 3 সোজা যোগ করে ফেলেছিলেন।
 
 </TapeThirteen>
 
@@ -213,7 +213,7 @@ $$v \text{-এর ওপর } w \text{-এর ছায়া} = \|w\| \cos\theta$$
 
 <Then>
 
-দুইবারই মিললো। প্রথম pair-এ $2 \times 4.24 \times 0.707 = 6$। box এ ও 6। পরের pair-এ $3.61 \times 2.24 \times 0.868 = 7.0$। box এ ও 7। মামার ক্যালকুলেশনটা এভাবে পড়ুন: **$v$ এর length গুণ $w$ এর যেটুকু shadow $v$ এর ওপর পড়ে।**
+দুইবারই মিললো। প্রথম pair-এ $2 \times 4.24 \times 0.707 = 6$। Dot product এ ও 6। পরের pair-এ $3.61 \times 2.24 \times 0.868 = 7.0$। Dot product এ ও 7। মামার ক্যালকুলেশনটা এভাবে পড়ুন: **$v$ এর length গুণ $w$ এর যেটুকু shadow $v$ এর ওপর পড়ে।**
 
 $$v \cdot w = \|v\| \, \|w\| \cos\theta$$
 
@@ -237,7 +237,7 @@ $$v \cdot w = \|v\| \, \|w\| \cos\theta$$
 
 <Then>
 
-রাস্তার card $(4, 3)$ ছিল 5 unit লম্বা। আর box এর উত্তর ছিল আসল ধাক্কার 5 গুণ। এখন কারণটা পরিষ্কার। box মানে রাস্তার length গুণ রাস্তার ওপর ধাক্কার shadow। ফাহিমের ধাক্কার ছায়া রাস্তা বরাবর 5। তাই $5 \times 5 = 25$।
+রাস্তার card $(4, 3)$ ছিল 5 unit লম্বা। আর dot product এর উত্তর ছিল আসল ধাক্কার 5 গুণ। এখন কারণটা পরিষ্কার। Dot product মানে রাস্তার length গুণ রাস্তার ওপর ধাক্কার shadow। ফাহিমের ধাক্কার ছায়া রাস্তা বরাবর 5। তাই $5 \times 5 = 25$।
 
 <RoadDebt />
 
@@ -263,13 +263,13 @@ $2 \times 3 \times \cos 60^\circ = 2 \times 3 \times 0.5 = 3$।
 
 ## শেষ! মামার ফিতা-চাঁদাও বললো 7
 
-মামা বলেছিলেন, ঘরে ঘরে একটাও গুণ না করে box এর 7 বের করবেন। করলেনও: $3.61 \times 2.24 \times 0.868 = 7.0$। “ঠিক 7”-এ বাজি ধরেছিলেন? আপনিই জিতলেন।
+মামা বলেছিলেন, ঘরে ঘরে একটাও গুণ না করে dot product এর 7 বের করবেন। করলেনও: $3.61 \times 2.24 \times 0.868 = 7.0$। “ঠিক 7”-এ বাজি ধরেছিলেন? আপনিই জিতলেন।
 
 <MamaSeven story />
 
 এর জন্য লাগলো শুধু একটা বাঁশের কঞ্চি আর দুপুরের রোদ। লাঠির ছায়া ÷ লাঠি? সেটাই $\cos\theta$। আর এক arrow-এর ওপর আরেক arrow-এর ছায়া? $\|w\| \cos\theta$।
 
-এক লাইনে: **box এর নম্বর মানে একটা arrow-এর length, গুণ তার ওপর আরেকটার ছায়া।**
+এক লাইনে: **dot product এর নম্বর মানে একটা arrow-এর length, গুণ তার ওপর আরেকটার ছায়া।**
 
 <Table
   head={["দেখবেন", "মুখে বলবেন"]}

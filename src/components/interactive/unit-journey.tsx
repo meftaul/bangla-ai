@@ -966,7 +966,7 @@ export function SameLine() {
 
 // ---------------------------------------------------------------------------
 // 4a · A story scene for screen 4's setup, no task: a doubt on the way to
-//      মামা. নাসিব sets off from the stall with the new card (0.6, 0.8), then
+//      মামা। নাসিব sets off from the stall with the new card (0.6, 0.8), then
 //      stops short and stares at it: two numbers this small, and still 1 long?
 //      Or did the slider cheat? মামা waits. The length is not told.
 
@@ -2625,7 +2625,7 @@ export function WrongHats() {
 
 // ---------------------------------------------------------------------------
 // 9a · A story scene for the last screen's heading, no task: মামা ছবি নিয়ে
-//      বাড়ি গেলেন. মামা, film in hand, says goodbye at the club, then walks
+//      বাড়ি গেলেন। মামা, film in hand, says goodbye at the club, then walks
 //      off home while নাসিব waves and the afternoon sun sinks.
 
 const S9_Y = 150;

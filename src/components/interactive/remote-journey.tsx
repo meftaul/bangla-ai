@@ -365,13 +365,13 @@ export function MovingDay({}: Story) {
             </g>
           ))}
         <CastPerson who="ammu" x={96} y={S1_FLOOR + 16} arm={k === 1 ? "point" : "down"} mood={k >= 1 ? "happy" : "plain"} />
-        {k === 1 && <Bubble x={96} y={S1_FLOOR - 50} side="right" lines={["কোথায় কী বসবে,", "দাগ দিয়ে রাখলাম."]} />}
+        {k === 1 && <Bubble x={96} y={S1_FLOOR - 50} side="right" lines={["কোথায় কী বসবে,", "দাগ দিয়ে রাখলাম।"]} />}
         <CastPerson who="fahim" x={186} y={S1_FLOOR + 16} mood={k >= 2 ? "sad" : "plain"} arm={k >= 2 ? "hold" : "down"} />
         {k >= 2 && <Handset x={198} y={S1_FLOOR - 30} broken />}
-        {k === 2 && <Bubble x={186} y={S1_FLOOR - 50} side="mid" lines={["Shiku র remote টা", "ভেঙে গেছে."]} />}
+        {k === 2 && <Bubble x={186} y={S1_FLOOR - 50} side="mid" lines={["Shiku র remote টা", "ভেঙে গেছে।"]} />}
         <Robot x={232} y={S1_FLOOR + 16} />
         <CastPerson who="nasib" x={k >= 3 ? 288 : 372} y={S1_FLOOR + 16} facing={-1} walking={k === 3} mood="smug" />
-        {k >= 3 && <Bubble x={288} y={S1_FLOOR - 50} side="left" lines={["দুটো button দিয়েই", "সব জায়গায় যাওয়া যাবে."]} />}
+        {k >= 3 && <Bubble x={288} y={S1_FLOOR - 50} side="left" lines={["দুটো button দিয়েই", "সব জায়গায় যাওয়া যাবে।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -489,7 +489,7 @@ export function RemoteShelf() {
   const toggle = (n: string) => setPicks(picks.includes(n) ? picks.filter((p) => p !== n) : [...picks, n]);
   const seal = () => {
     setSealed(true);
-    pass(`বাজি সিল: ${picks.length} টা remote সব mark এ.`);
+    pass(`বাজি সিল: ${picks.length} টা remote সব mark এ।`);
   };
 
   return (
@@ -503,7 +503,7 @@ export function RemoteShelf() {
         ))}
       </div>
       <div className="mt-2 flex items-center gap-3">
-        <div className="min-w-0 flex-1 text-sm font-medium text-muted">কোন কোন remote চারটা mark এই পৌঁছাবে? যতগুলো মনে হয়, tap করুন.</div>
+        <div className="min-w-0 flex-1 text-sm font-medium text-muted">কোন কোন remote চারটা mark এই পৌঁছাবে? যতগুলো মনে হয়, tap করুন।</div>
         <div className="w-[7.5rem] shrink-0">
           <B1Shelf picks={picks} sealed={sealed} />
         </div>
@@ -521,13 +521,13 @@ export function RemoteShelf() {
       {!sealed ? (
         <div className="mt-3 flex justify-center">
           <button type="button" onClick={seal} className={primaryBtn}>
-            {picks.length ? "বাজি সিল করুন" : "একটাও পারবে না. সিল করুন"}
+            {picks.length ? "বাজি সিল করুন" : "একটাও পারবে না। সিল করুন"}
           </button>
         </div>
       ) : (
-        <div className={`${FADE} mt-3 text-center text-[0.95rem] text-muted`}>বাজি সিল হলো. দোকান বন্ধের আগে চারটাই চালিয়ে দেখবো.</div>
+        <div className={`${FADE} mt-3 text-center text-[0.95rem] text-muted`}>বাজি সিল হলো। দোকান বন্ধের আগে চারটাই চালিয়ে দেখবো।</div>
       )}
-      <Task done={sealed}>Remote গুলো বেছে নিন, তারপর বাজি সিল করুন.</Task>
+      <Task done={sealed}>Remote গুলো বেছে নিন, তারপর বাজি সিল করুন।</Task>
     </>
   );
 }
@@ -538,10 +538,10 @@ export function RemoteShelf() {
 //      last, and under each remote a chalk mark waits with a "?".
 
 const X1_SAY = [
-  "Shelf এ চারটা remote. দেখতে প্রায় একই রকম.",
-  "প্রত্যেকটায় দুটো করে button.",
-  "পার্থক্য শুধু button এর উপরে লেখা number এ.",
-  "ওই number গুলোই ঠিক করবে Shiku কোথায় যেতে পারবে, আর কোথায় পারবে না.",
+  "Shelf এ চারটা remote। দেখতে প্রায় একই রকম।",
+  "প্রত্যেকটায় দুটো করে button।",
+  "পার্থক্য শুধু button এর উপরে লেখা number এ।",
+  "ওই number গুলোই ঠিক করবে Shiku কোথায় যেতে পারবে, আর কোথায় পারবে না।",
 ];
 
 export function ShelfFour() {
@@ -620,12 +620,12 @@ export function CheapRemote({}: Story) {
         <CastPerson who="nana" x={240} y={KEEP_Y} facing={1} arm={k === 1 ? "hold" : "down"} />
         <ShopCounter />
         {k === 1 && <Handset x={196} y={82} keys={1} />}
-        {k === 1 && <Bubble x={240} y={KEEP_Y - 66} side="left" lines={["সবচাইতে সস্তা এইটা.", "button একটাই."]} />}
+        {k === 1 && <Bubble x={240} y={KEEP_Y - 66} side="left" lines={["সবচাইতে সস্তা এইটা।", "button একটাই।"]} />}
         <Robot x={30} y={SH_FEET} />
         <CastPerson who="nasib" x={112} y={SH_FEET} />
         <CastPerson who="fahim" x={k >= 2 ? 156 : 70} y={SH_FEET} walking={k === 2} arm={k >= 2 ? "hold" : "down"} />
         {k >= 2 && <Handset x={166} y={SH_FEET - 52} keys={1} />}
-        {k >= 2 && <Bubble x={156} y={SH_FEET - 66} side="left" tone="think" lines={["এটাই আগে", "use করে দেখি."]} />}
+        {k >= 2 && <Bubble x={156} y={SH_FEET - 66} side="left" tone="think" lines={["এটাই আগে", "use করে দেখি।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -657,7 +657,7 @@ export function OneButton() {
     if (seen.includes(n)) return;
     const next = [...seen, n];
     setSeen(next);
-    if (!done && swept(next)) pass("এক button: দরজার উপর দিয়ে একটা line.");
+    if (!done && swept(next)) pass("এক button: দরজার উপর দিয়ে একটা line।");
   };
 
   return (
@@ -689,8 +689,8 @@ export function OneButton() {
           className="h-6 min-w-0 flex-1 cursor-pointer accent-[var(--cat-blue)]"
         />
       </label>
-      <div className="mt-1 text-center text-xs text-muted">পিছনে টানলে minus. মাঝপথে থামালে half-press.</div>
-      <Task done={done}>Button টা সামনে, পিছনে, মাঝপথে থামিয়ে দেখুন. খাটের mark এ কি নামা যায়?</Task>
+      <div className="mt-1 text-center text-xs text-muted">পিছনে টানলে minus। মাঝপথে থামালে half-press।</div>
+      <Task done={done}>Button টা সামনে, পিছনে, মাঝপথে থামিয়ে দেখুন। খাটের mark এ কি নামা যায়?</Task>
     </>
   );
 }
@@ -704,9 +704,9 @@ const X2_F = makeFrame(-3, 3, -3, 3, 22, 10);
 const X2_FWD = [0.5, 1, 1.5, 2, 2.5, 3];
 const X2_BACK = [-0.5, -1, -1.5, -2, -2.5, -3];
 const X2_SAY = [
-  "দরজার corner থেকে v button. এক press মানে (1, 1).",
-  "সামনে চাপতে থাকুন, Shiku এই dot গুলোতে নামে.",
-  "পিছনে চাপুন, অর্ধেক চাপুন, মাঝের ফাঁকগুলোও ভরে যায়.",
+  "দরজার corner থেকে v button। এক press মানে (1, 1)।",
+  "সামনে চাপতে থাকুন, Shiku এই dot গুলোতে নামে।",
+  "পিছনে চাপুন, অর্ধেক চাপুন, মাঝের ফাঁকগুলোও ভরে যায়।",
 ];
 
 export function LineNamed() {
@@ -716,7 +716,7 @@ export function LineNamed() {
   return (
     <Scene
       scene={s}
-      caption={k < 3 ? X2_SAY[k] : <span className={FADE}>সব মিলিয়ে একটা পুরা line, ঠিক দরজার উপর দিয়ে গেছে. এই পুরা line টার নাম span&#x7B;v&#x7D;.</span>}
+      caption={k < 3 ? X2_SAY[k] : <span className={FADE}>সব মিলিয়ে একটা পুরা line, ঠিক দরজার উপর দিয়ে গেছে। এই পুরা line টার নাম span&#x7B;v&#x7D;.</span>}
     >
       <div className="mx-auto w-[9.5rem]">
         <Plane f={X2_F} grid={1} axes={false} label="one button's stops fill in a line through the door" className="my-0! max-w-none">
@@ -757,7 +757,7 @@ export function OldRemote() {
     if (!mark || hit.includes(mark.name)) return;
     const got = [...hit, mark.name];
     setHit(got);
-    if (got.length === MARKS.length) pass("A তে mark এর দুই সংখ্যাই press এর count.");
+    if (got.length === MARKS.length) pass("A তে mark এর দুই সংখ্যাই press এর count।");
   };
 
   return (
@@ -773,7 +773,7 @@ export function OldRemote() {
         <ButtonRemote keys={keys} amt={amt} onAmt={press} f={FF} min={-4} max={6} />
       </div>
       <Ticks items={MARKS.map((m) => [m.label, hit.includes(m.name)] as [string, boolean])} />
-      <Task done={done}>Shiku কে চারটা mark এ একবার করে নামান.</Task>
+      <Task done={done}>Shiku কে চারটা mark এ একবার করে নামান।</Task>
     </>
   );
 }
@@ -786,9 +786,9 @@ export function OldRemote() {
 
 const X3_F = makeFrame(-1, 4, -1, 6, 17, 18);
 const X3_SAY = [
-  "আলমারির mark (3, 5) এ.",
-  "e₁ তিনবার: তিন tile east এ.",
-  "তারপর e₂ পাঁচবার: পাঁচ tile north এ. ঠিক আলমারির উপর.",
+  "আলমারির mark (3, 5) এ।",
+  "e₁ তিনবার: তিন tile east এ।",
+  "তারপর e₂ পাঁচবার: পাঁচ tile north এ। ঠিক আলমারির উপর।",
 ];
 
 export function AlmirahBuild() {
@@ -801,7 +801,7 @@ export function AlmirahBuild() {
   return (
     <Scene
       scene={s}
-      caption={k < 3 ? X3_SAY[k] : <span className={FADE}>যেকোনো tile এ একই কায়দা. তাই remote A র span পুরা floor.</span>}
+      caption={k < 3 ? X3_SAY[k] : <span className={FADE}>যেকোনো tile এ একই কায়দা। তাই remote A র span পুরা floor.</span>}
     >
       <div className="mx-auto flex items-center justify-center gap-4">
         <div className="w-[6.8rem] shrink-0">
@@ -841,9 +841,9 @@ const X3B_TILES: XY[] = [
   [-2, 3],
 ];
 const X3B_SAY = [
-  "Floor এর যেকোনো একটা tile নিন.",
-  "(4, 1): e₁ চারবার, e₂ একবার.",
-  "(−2, 3): e₁ দুইবার পিছনে, মানে −2. তারপর e₂ তিনবার.",
+  "Floor এর যেকোনো একটা tile নিন।",
+  "(4, 1): e₁ চারবার, e₂ একবার।",
+  "(−2, 3): e₁ দুইবার পিছনে, মানে −2। তারপর e₂ তিনবার।",
 ];
 
 export function TileCounts() {
@@ -862,7 +862,7 @@ export function TileCounts() {
             {X3B_SAY[k]}
           </span>
         ) : (
-          <span className={FADE}>যে tile-ই বলুন, press এর count ওর নিজের দুইটা সংখ্যা. নাসিবের rule আপাতত টিকে গেলো.</span>
+          <span className={FADE}>যে tile-ই বলুন, press এর count ওর নিজের দুইটা সংখ্যা। নাসিবের rule আপাতত টিকে গেলো।</span>
         )
       }
     >
@@ -920,10 +920,10 @@ export function NasibPicksB({}: Story) {
         <Robot x={30} y={SH_FEET} />
         <CastPerson who="fahim" x={70} y={SH_FEET} />
         <CastPerson who="nasib" x={k >= 2 ? 150 : 112} y={SH_FEET} walking={k === 2} arm={k === 1 ? "point" : k >= 2 ? "hold" : "down"} mood={k >= 3 ? "smug" : "plain"} />
-        {k === 1 && <Bubble x={112} y={SH_FEET - 66} side="right" lines={["চাচা, B টা দেন তো."]} />}
+        {k === 1 && <Bubble x={112} y={SH_FEET - 66} side="right" lines={["চাচা, B টা দেন তো।"]} />}
         {k >= 2 && <Handset x={160} y={SH_FEET - 52} />}
         {k >= 2 && <CastCard x={150} y={SH_FEET - 78} text="(1, 1)  (2, 2)" tone="coral" />}
-        {k >= 3 && <Bubble x={150} y={SH_FEET - 90} side="left" lines={["দুইটা আলাদা জোড়া.", "এটাও সব জায়গায় যাবে."]} />}
+        {k >= 3 && <Bubble x={150} y={SH_FEET - 90} side="left" lines={["দুইটা আলাদা জোড়া।", "এটাও সব জায়গায় যাবে।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -960,7 +960,7 @@ export function TwinButtons() {
     setTried(list);
     if (!done && list.length >= TWIN_TRIES) {
       setDone(true);
-      pass("(2, 2) হলো (1, 1) এরই দুইগুণ.");
+      pass("(2, 2) হলো (1, 1) এরই দুইগুণ।");
     }
   };
 
@@ -982,10 +982,10 @@ export function TwinButtons() {
       </div>
       {table && !done && (
         <div className={`${FADE} mt-2 text-center text-[0.95rem] text-muted`}>
-          টেবিল হয়ে গেলো. এবার star টা আলমারিতে, <span className="font-mono">(3, 5)</span>. Try হলো {tried.length} / {TWIN_TRIES}.
+          টেবিল হয়ে গেলো। এবার star টা আলমারিতে, <span className="font-mono">(3, 5)</span>. Try হলো {tried.length} / {TWIN_TRIES}.
         </div>
       )}
-      <Task done={done}>{table ? "এবার আলমারির mark এ নামান, (3, 5) এ. অন্তত 6 রকম করে try করুন." : "আগে টেবিলের mark এ নামান, (2, 2) এ."}</Task>
+      <Task done={done}>{table ? "এবার আলমারির mark এ নামান, (3, 5) এ। অন্তত 6 রকম করে try করুন।" : "আগে টেবিলের mark এ নামান, (2, 2) এ।"}</Task>
     </>
   );
 }
@@ -1000,8 +1000,8 @@ const X4_F = makeFrame(-2, 4, -2, 6, 20, 12);
 const X4_OFF: XY = [0.35, -0.35];
 const X4_SAY = [
   "Remote B র দুই button: u = (1, 1), v = (2, 2).",
-  "u, তারপর আরেকবার u. গিয়ে পড়লেন ঠিক v এর মাথায়. v হলো u, দুইবার.",
-  "যেভাবেই চাপেন, Shiku থাকে এই একটা line এর উপর.",
+  "u, তারপর আরেকবার u। গিয়ে পড়লেন ঠিক v এর মাথায়। v হলো u, দুইবার।",
+  "যেভাবেই চাপেন, Shiku থাকে এই একটা line এর উপর।",
 ];
 
 export function SameDirection() {
@@ -1009,7 +1009,7 @@ export function SameDirection() {
   const k = s.k;
 
   return (
-    <Scene scene={s} caption={k < 3 ? X4_SAY[k] : <span className={FADE}>আর আলমারির mark ওই line এর বাইরে. তাই Shiku কখনোই ওখানে যেতে পারবে না.</span>}>
+    <Scene scene={s} caption={k < 3 ? X4_SAY[k] : <span className={FADE}>আর আলমারির mark ওই line এর বাইরে। তাই Shiku কখনোই ওখানে যেতে পারবে না।</span>}>
       <div className="mx-auto w-[8.5rem]">
         <Plane f={X4_F} grid={1} axes={false} label="remote B's two buttons push the same way, so every landing sits on one line" className="my-0! max-w-none">
           {k >= 2 && <Reach f={X4_F} keys={SHELF[1].keys} on dots={false} />}
@@ -1046,8 +1046,8 @@ export function CheapC({}: Story) {
         <ShopCounter />
         {k >= 1 && <Handset x={252} y={70} />}
         {k >= 1 && <CastCard x={184} y={94} text="(1, 2)  (2, 5)" tone="teal" />}
-        {k === 1 && <Bubble x={240} y={KEEP_Y - 66} side="left" lines={["দাম কম এইটার."]} />}
-        {k >= 2 && <Bubble x={240} y={KEEP_Y - 66} side="left" lines={["সংখ্যা দেইখা", "কেউ নেয় না."]} />}
+        {k === 1 && <Bubble x={240} y={KEEP_Y - 66} side="left" lines={["দাম কম এইটার।"]} />}
+        {k >= 2 && <Bubble x={240} y={KEEP_Y - 66} side="left" lines={["সংখ্যা দেইখা", "কেউ নেয় না।"]} />}
         <Robot x={30} y={SH_FEET} />
         <CastPerson who="fahim" x={76} y={SH_FEET} />
         <CastPerson who="nasib" x={124} y={SH_FEET} mood={k >= 2 ? "smug" : "plain"} />
@@ -1083,7 +1083,7 @@ export function MessyRemote() {
     if (!mark || ![almirah, bed].includes(mark.name) || hit.includes(mark.name)) return;
     const got = [...hit, mark.name];
     setHit(got);
-    if (got.length === 2) pass("এলোমেলো, কিন্তু দুইটা আলাদা direction.");
+    if (got.length === 2) pass("এলোমেলো, কিন্তু দুইটা আলাদা direction।");
   };
 
   return (
@@ -1133,7 +1133,7 @@ export function MessyRemote() {
         </div>
       </div>
       <Task done={done}>
-        {guess === null ? "আগে একটা guess দিন, তারপর remote হাতে নিন." : hit.includes(almirah) ? "এবার খাটের mark এ নামান, (1, 3) এ." : "আলমারির mark এ নামান, (3, 5) এ."}
+        {guess === null ? "আগে একটা guess দিন, তারপর remote হাতে নিন।" : hit.includes(almirah) ? "এবার খাটের mark এ নামান, (1, 3) এ।" : "আলমারির mark এ নামান, (3, 5) এ।"}
       </Task>
     </>
   );
@@ -1147,9 +1147,9 @@ export function MessyRemote() {
 /** the same floor as screen 6, shorter on the page: the figure shares its step with words */
 const X6_F = makeFrame(-1, 6, -1, 11, 12, 10);
 const X6_SAY = [
-  "u = (1, 2). এক press মানে এক tile ডানে, দুই tile উপরে.",
-  "পাঁচবার চাপলে Shiku (5, 10) এ. আলমারি পড়ে রইলো অনেক নিচে.",
-  "এবার v একবার, উল্টা দিকে: (5, 10) − (2, 5) = (3, 5).",
+  "u = (1, 2). এক press মানে এক tile ডানে, দুই tile উপরে।",
+  "পাঁচবার চাপলে Shiku (5, 10) এ। আলমারি পড়ে রইলো অনেক নিচে।",
+  "এবার v একবার, উল্টা দিকে: (5, 10) − (2, 5) = (3, 5)।",
 ];
 
 export function BackStep() {
@@ -1160,7 +1160,7 @@ export function BackStep() {
   const at = land(keys, amt);
 
   return (
-    <Scene scene={s} caption={k < 3 ? X6_SAY[k] : <span className={FADE}>একটু বেশি গিয়ে, তারপর পিছিয়ে আসা. Minus এর কাজ ঠিক এটাই.</span>}>
+    <Scene scene={s} caption={k < 3 ? X6_SAY[k] : <span className={FADE}>একটু বেশি গিয়ে, তারপর পিছিয়ে আসা। Minus এর কাজ ঠিক এটাই।</span>}>
       <div className="mx-auto flex items-center justify-center gap-4">
         <div className="w-[6.5rem] shrink-0">
           <Plane f={X6_F} grid={1} ticks={5} label="five presses of u overshoot to (5, 10), then one press back on v lands on (3, 5)" className="my-0! max-w-none">
@@ -1202,8 +1202,8 @@ export function ToggleShow({}: Story) {
         <CastPerson who="nana" x={240} y={KEEP_Y} facing={1} arm="hold" />
         <ShopCounter />
         <Handset x={252} y={70} toggle glow={k >= 2} />
-        {k === 1 && <Bubble x={240} y={KEEP_Y - 66} side="left" lines={["সব remote এ একটা", "toggle আছে."]} />}
-        {k >= 2 && <Bubble x={240} y={KEEP_Y - 66} side="left" lines={["টিপ দিলে floor এ", "রং জ্বলবো."]} />}
+        {k === 1 && <Bubble x={240} y={KEEP_Y - 66} side="left" lines={["সব remote এ একটা", "toggle আছে।"]} />}
+        {k >= 2 && <Bubble x={240} y={KEEP_Y - 66} side="left" lines={["টিপ দিলে floor এ", "রং জ্বলবো।"]} />}
         <Robot x={30} y={SH_FEET} />
         <CastPerson who="fahim" x={76} y={SH_FEET} />
         <CastPerson who="nasib" x={124} y={SH_FEET} />
@@ -1232,7 +1232,7 @@ export function PaintReach() {
     if (painted.includes(pick)) return;
     const next = [...painted, pick];
     setPainted(next);
-    if (next.length === SHELF.length) pass("যেখানে যেখানে যায়, সব মিলিয়ে: span.");
+    if (next.length === SHELF.length) pass("যেখানে যেখানে যায়, সব মিলিয়ে: span।");
   };
 
   return (
@@ -1264,7 +1264,7 @@ export function PaintReach() {
         Remote {SHELF[pick].name} এর button: <span className="font-mono">{tup(keys[0].v)}</span> আর <span className="font-mono">{tup(keys[1].v)}</span>
       </div>
       {on ? (
-        <div className={`${FADE} mt-2 text-center text-[0.95rem] text-accent-text`}>রং পড়লো {REACH_SAY[pick]} জুড়ে.</div>
+        <div className={`${FADE} mt-2 text-center text-[0.95rem] text-accent-text`}>রং পড়লো {REACH_SAY[pick]} জুড়ে।</div>
       ) : (
         <div className="mt-2 flex justify-center">
           <button type="button" onClick={show} className={primaryBtn}>
@@ -1273,7 +1273,7 @@ export function PaintReach() {
         </div>
       )}
       <Ticks items={SHELF.map((r, i) => [r.name, painted.includes(i)] as [string, boolean])} />
-      <Task done={done}>চারটা remote এরই সব combination রং করে দেখুন.</Task>
+      <Task done={done}>চারটা remote এরই সব combination রং করে দেখুন।</Task>
     </>
   );
 }
@@ -1289,9 +1289,9 @@ const SPANS: { title: string; keys: Key[] }[] = [
   { title: "span{u, v}", keys: SHELF[1].keys },
 ];
 const SP_SAY = [
-  "তিন রকম remote, পাশাপাশি.",
-  "এক button মানে একটা line.",
-  "দুই button ঠেলে দুই দিকে. তাই পুরা floor.",
+  "তিন রকম remote, পাশাপাশি।",
+  "এক button মানে একটা line।",
+  "দুই button ঠেলে দুই দিকে। তাই পুরা floor।",
 ];
 
 export function ThreeSpans() {
@@ -1299,7 +1299,7 @@ export function ThreeSpans() {
   const k = s.k;
 
   return (
-    <Scene scene={s} caption={k < 3 ? SP_SAY[k] : <span className={FADE}>আর দুই button একই দিকে ঠেললে আবার একটা line. তিনটা আলাদা আকার, নাম একটাই.</span>}>
+    <Scene scene={s} caption={k < 3 ? SP_SAY[k] : <span className={FADE}>আর দুই button একই দিকে ঠেললে আবার একটা line। তিনটা আলাদা আকার, নাম একটাই।</span>}>
       <div className="flex justify-center gap-2">
         {SPANS.map((sp, i) => (
           <div key={sp.title} className={`w-[5.5rem] transition-opacity duration-500 motion-reduce:transition-none ${k >= i + 1 ? "opacity-100" : "opacity-40"}`}>
@@ -1326,10 +1326,10 @@ export function ThreeSpans() {
 
 const X8_F = makeFrame(-5, 3, -2, 5, 7, 5);
 const X8_SAY = [
-  "চারটা remote আবার, রং করার আগে.",
-  "Remote A: পুরা floor. দরজা ভিতরে.",
-  "Remote B: একটা বাঁকা line, ঠিক দরজার উপর দিয়ে.",
-  "Remote C: পুরা floor. দরজা ভিতরে.",
+  "চারটা remote আবার, রং করার আগে।",
+  "Remote A: পুরা floor। দরজা ভিতরে।",
+  "Remote B: একটা বাঁকা line, ঠিক দরজার উপর দিয়ে।",
+  "Remote C: পুরা floor। দরজা ভিতরে।",
 ];
 
 export function DoorEveryTime({}: Story) {
@@ -1339,7 +1339,7 @@ export function DoorEveryTime({}: Story) {
   return (
     <Scene
       scene={s}
-      caption={k < 4 ? X8_SAY[k] : <span className={FADE}>Remote D: দেয়াল বরাবর line, দরজার উপর দিয়ে. চারটা ছবি, চারটাতেই দরজা ভিতরে.</span>}
+      caption={k < 4 ? X8_SAY[k] : <span className={FADE}>Remote D: দেয়াল বরাবর line, দরজার উপর দিয়ে। চারটা ছবি, চারটাতেই দরজা ভিতরে।</span>}
     >
       <div className="flex justify-center gap-1.5">
         {SHELF.map((r, i) => (
@@ -1370,8 +1370,8 @@ export function DoorEveryTime({}: Story) {
 //     tries bounce; the right one plays and then passes.
 
 const D7_F = makeFrame(-5, 4, -3, 4, 12, 8);
-const D7_Q = "যেকোনো একটা remote ধরেন. দরজা কি সবসময় ওর span এর ভিতরে থাকবে?";
-const D7_OPT = ["না, কোন button আছে তার উপর নির্ভর করে.", "শুধু দুইটা button থাকলে.", "হ্যাঁ, সবসময়."];
+const D7_Q = "যেকোনো একটা remote ধরেন। দরজা কি সবসময় ওর span এর ভিতরে থাকবে?";
+const D7_OPT = ["না, কোন button আছে তার উপর নির্ভর করে।", "শুধু দুইটা button থাকলে।", "হ্যাঁ, সবসময়।"];
 const D7_RIGHT = 2;
 /** the same buttons as Your turn's remote 3, with the dead (0, 0) button (8's table comes later in the file) */
 const D7_DEAD: Key[] = [
@@ -1385,8 +1385,8 @@ const D7_RUNS: Key[][][] = [
   [SHELF[0].keys, SHELF[1].keys, ONE_KEY, SHELF[3].keys],
 ];
 const D7_NOPE = [
-  "উঁহু. চার রকম remote, চারবারই দরজা ভিতরে. একটা button-ও না চাপলে Shiku কোথায় দাঁড়িয়ে থাকে?",
-  "উঁহু. এক button এর remote, তবুও দরজা ভিতরে. একটা button-ও না চাপলে Shiku কোথায় দাঁড়িয়ে থাকে?",
+  "উঁহু। চার রকম remote, চারবারই দরজা ভিতরে। একটা button-ও না চাপলে Shiku কোথায় দাঁড়িয়ে থাকে?",
+  "উঁহু। এক button এর remote, তবুও দরজা ভিতরে। একটা button-ও না চাপলে Shiku কোথায় দাঁড়িয়ে থাকে?",
   "",
 ];
 
@@ -1405,7 +1405,7 @@ export function DoorPick() {
     if (won || pl.running) return;
     setPick(i);
     pl.play(D7_RUNS[i].length, () => {
-      if (i === D7_RIGHT) pass("কিছু না চাপাও একটা combination.");
+      if (i === D7_RIGHT) pass("কিছু না চাপাও একটা combination।");
       else setMiss(miss + 1);
     });
   };
@@ -1430,10 +1430,10 @@ export function DoorPick() {
                 Remote {n} / {run.length}
               </div>
               <div className="font-mono">{keys.map((key) => tup(key.v)).join(" ")}</div>
-              <div className="mt-1 text-accent-text">দরজা রং এর ভিতরে.</div>
+              <div className="mt-1 text-accent-text">দরজা রং এর ভিতরে।</div>
             </div>
           ) : (
-            <div className="text-muted">এখনো কোনো button চাপা হয় নি. Shiku দরজায়.</div>
+            <div className="text-muted">এখনো কোনো button চাপা হয় নি। Shiku দরজায়।</div>
           )}
         </div>
       </div>
@@ -1446,7 +1446,7 @@ export function DoorPick() {
         ))}
       </div>
       {landed && !won && <Nope key={miss}>{D7_NOPE[pick ?? 0]}</Nope>}
-      <Task done={won && !pl.running}>একটা উত্তর বেছে নিন, তারপর floor এ দেখুন দরজা কোথায় পড়ে.</Task>
+      <Task done={won && !pl.running}>একটা উত্তর বেছে নিন, তারপর floor এ দেখুন দরজা কোথায় পড়ে।</Task>
     </>
   );
 }
@@ -1457,9 +1457,9 @@ export function DoorPick() {
 //      are, the door is always inside the span.
 
 const DI_SAY = [
-  "হাতে remote, কিন্তু একটা button-ও চাপা হয় নি.",
-  "u শূন্যবার, v শূন্যবার: 0·u + 0·v = (0, 0).",
-  "তাই Shiku দাঁড়িয়ে আছে ঠিক দরজার উপর.",
+  "হাতে remote, কিন্তু একটা button-ও চাপা হয় নি।",
+  "u শূন্যবার, v শূন্যবার: 0·u + 0·v = (0, 0)।",
+  "তাই Shiku দাঁড়িয়ে আছে ঠিক দরজার উপর।",
 ];
 
 export function DoorInside() {
@@ -1468,7 +1468,7 @@ export function DoorInside() {
   const keys = SHELF[2].keys;
 
   return (
-    <Scene scene={s} caption={k < 3 ? DI_SAY[k] : <span className={FADE}>Button যা-ই হোক, এই যোগ সব remote এ খাটে. তাই দরজা কখনো span এর বাইরে পড়ে না.</span>}>
+    <Scene scene={s} caption={k < 3 ? DI_SAY[k] : <span className={FADE}>Button যা-ই হোক, এই যোগ সব remote এ খাটে। তাই দরজা কখনো span এর বাইরে পড়ে না।</span>}>
       <div className="mx-auto flex items-center justify-center gap-4">
         <div className="w-[8rem] shrink-0">
           <Plane f={X2_F} grid={1} axes={false} label="no button pressed at all, so Shiku is on the door corner" className="my-0! max-w-none">
@@ -1512,7 +1512,7 @@ export function BackShelf({}: Story) {
         <CastPerson who="nana" x={k === 1 ? 352 : 240} y={KEEP_Y} facing={k === 1 ? -1 : 1} walking={k === 1 || k === 2} />
         <ShopCounter />
         {k >= 2 && [180, 198, 266, 284].map((x) => <Handset key={x} x={x} y={82} />)}
-        {k === 2 && <Bubble x={240} y={KEEP_Y - 66} side="left" lines={["পিছে আরো চাইরটা", "ছিল."]} />}
+        {k === 2 && <Bubble x={240} y={KEEP_Y - 66} side="left" lines={["পিছে আরো চাইরটা", "ছিল।"]} />}
         {k >= 3 && <Bubble x={240} y={KEEP_Y - 66} side="left" lines={["রং ছাড়া কইতে", "পারবা?"]} />}
         <Robot x={30} y={SH_FEET} />
         <CastPerson who="fahim" x={76} y={SH_FEET} mood={k >= 3 ? "puzzled" : "plain"} />
@@ -1534,25 +1534,25 @@ const YOURS: { keys: Key[]; note: string }[] = [
       { name: "u", v: [3, 1], tone: "blue" },
       { name: "v", v: [-6, -2], tone: "coral" },
     ],
-    note: "(−6, −2) আসলে (3, 1) এর −2 গুণ. একই রাস্তা, উল্টা দিকে.",
+    note: "(−6, −2) আসলে (3, 1) এর −2 গুণ। একই রাস্তা, উল্টা দিকে।",
   },
   {
     keys: [
       { name: "u", v: [1, 0], tone: "blue" },
       { name: "v", v: [1, 1], tone: "coral" },
     ],
-    note: "একটা east এ, একটা বাঁকা. দুইটা আলাদা direction, তাই পুরা floor.",
+    note: "একটা east এ, একটা বাঁকা। দুইটা আলাদা direction, তাই পুরা floor।",
   },
   {
     keys: [
       { name: "u", v: [0, 0], tone: "blue" },
       { name: "v", v: [2, 1], tone: "coral" },
     ],
-    note: "u = (0, 0) একটা মরা button: চাপলে Shiku নড়ে না. হাতে থাকে একটা button, মানে একটা line.",
+    note: "u = (0, 0) একটা মরা button: চাপলে Shiku নড়ে না। হাতে থাকে একটা button, মানে একটা line।",
   },
   {
     keys: [{ name: "v", v: [2, 3], tone: "coral" }],
-    note: "Button একটাই, তাই line-ও একটাই.",
+    note: "Button একটাই, তাই line-ও একটাই।",
   },
 ];
 const YF = makeFrame(-7, 4, -3, 4, 13, 10);
@@ -1582,8 +1582,8 @@ function y8Stops(keys: Key[]): XY[] {
 const Y8_FLOOR: Key[] = SHELF[0].keys;
 const y8Claim = (keys: Key[], i: number): Key[] => (i === 0 ? [{ name: "l", v: dirOf(keys), tone: "violet" }] : Y8_FLOOR);
 const Y8_NOPE = [
-  "উঁহু. Shiku line এর বাইরেও নামলো. আবার দেখুন: button গুলো কি সত্যিই দুই আলাদা দিকে ঠেলে?",
-  "উঁহু. সব stop একটা line এর উপরেই পড়লো. আবার দেখুন: button গুলো কি সত্যিই দুই আলাদা দিকে ঠেলে?",
+  "উঁহু। Shiku line এর বাইরেও নামলো। আবার দেখুন: button গুলো কি সত্যিই দুই আলাদা দিকে ঠেলে?",
+  "উঁহু। সব stop একটা line এর উপরেই পড়লো। আবার দেখুন: button গুলো কি সত্যিই দুই আলাদা দিকে ঠেলে?",
 ];
 
 /** a tiny picture of the two answers: a line through the door, or the whole floor shaded */
@@ -1628,7 +1628,7 @@ export function YourRemotes() {
       setShown(true);
       if (last && !done) {
         setDone(true);
-        pass("কয়টা button, সেটা না. কোন দিকে ঠেলে, সেটা.");
+        pass("কয়টা button, সেটা না। কোন দিকে ঠেলে, সেটা।");
       }
     });
   };
@@ -1695,7 +1695,7 @@ export function YourRemotes() {
           </button>
         </div>
       )}
-      <Task done={done}>চারটা remote এরই span বলুন: একটা line, নাকি পুরা floor? ছবিতে tap করুন, Shiku চেপে দেখাবে.</Task>
+      <Task done={done}>চারটা remote এরই span বলুন: একটা line, নাকি পুরা floor? ছবিতে tap করুন, Shiku চেপে দেখাবে।</Task>
     </>
   );
 }
@@ -1709,8 +1709,8 @@ const X9_F = makeFrame(-1, 4, -1, 3, 18, 10);
 const X9_KEYS: Key[] = YOURS[2].keys;
 const X9_SAY = [
   "Remote 3: u = (0, 0), v = (2, 1).",
-  "u একবার চাপুন. Shiku এক চুলও নড়ে না.",
-  "u আবার চাপুন, আবার. এখনো দরজায়.",
+  "u একবার চাপুন। Shiku এক চুলও নড়ে না।",
+  "u আবার চাপুন, আবার। এখনো দরজায়।",
 ];
 
 export function DeadButton() {
@@ -1720,7 +1720,7 @@ export function DeadButton() {
   const at = k >= 3 ? X9_KEYS[1].v : O;
 
   return (
-    <Scene scene={s} caption={k < 3 ? X9_SAY[k] : <span className={FADE}>শুধু v ওকে নাড়ায়, তাও একটা line বরাবর. তাই u থাকলেও যা, না থাকলেও তা.</span>}>
+    <Scene scene={s} caption={k < 3 ? X9_SAY[k] : <span className={FADE}>শুধু v ওকে নাড়ায়, তাও একটা line বরাবর। তাই u থাকলেও যা, না থাকলেও তা।</span>}>
       <div className="mx-auto flex items-center justify-center gap-4">
         <div className="w-[7rem] shrink-0">
           <Plane f={X9_F} grid={1} axes={false} label="the (0, 0) button leaves Shiku on the door; only (2, 1) moves him, along one line" className="my-0! max-w-none">
@@ -1776,9 +1776,9 @@ const TP_PICS: { kind: TpKind; label: string }[] = [
 ];
 const TP_RIGHT = 1;
 const TP_NOPE: Record<TpKind, string> = {
-  floor: "উঁহু. সব stop পড়লো দেয়ালের line এ. (−5, 0) কি Shiku কে নতুন কোনো দিকে ঠেলে?",
+  floor: "উঁহু। সব stop পড়লো দেয়ালের line এ। (−5, 0) কি Shiku কে নতুন কোনো দিকে ঠেলে?",
   wall: "",
-  two: "উঁহু. দ্বিতীয় line এ একটা stop-ও পড়লো না. (−5, 0) কি Shiku কে নতুন কোনো দিকে ঠেলে?",
+  two: "উঁহু। দ্বিতীয় line এ একটা stop-ও পড়লো না। (−5, 0) কি Shiku কে নতুন কোনো দিকে ঠেলে?",
 };
 
 /** a span shape drawn on a floor: the whole floor, the wall line, or the wall line plus the side wall */
@@ -1810,7 +1810,7 @@ export function WallPick() {
     setPick(i);
     if (i !== TP_RIGHT) setMiss(miss + 1);
     pl.play(TP_STOPS.length, () => {
-      if (i === TP_RIGHT) pass("Button একটা বাড়লো, reach একটুও না.");
+      if (i === TP_RIGHT) pass("Button একটা বাড়লো, reach একটুও না।");
     });
   };
   const look = (i: number): Look => (pick !== i ? (won ? "dim" : "idle") : n < TP_STOPS.length ? "picked" : i === TP_RIGHT ? "right" : "wrong");
@@ -1850,8 +1850,8 @@ export function WallPick() {
         ))}
       </div>
       {pick !== null && !pl.running && pick !== TP_RIGHT && <Nope key={miss}>{TP_NOPE[TP_PICS[pick].kind]}</Nope>}
-      {won && !pl.running && <div className={`${FADE} mt-2 text-center text-[0.95rem] text-accent-text`}>সব stop দেয়ালের line এ, ঠিক প্রথম remote এর মতো.</div>}
-      <Task done={won && !pl.running}>দ্বিতীয় remote এর span এর ছবিটা বেছে নিন.</Task>
+      {won && !pl.running && <div className={`${FADE} mt-2 text-center text-[0.95rem] text-accent-text`}>সব stop দেয়ালের line এ, ঠিক প্রথম remote এর মতো।</div>}
+      <Task done={won && !pl.running}>দ্বিতীয় remote এর span এর ছবিটা বেছে নিন।</Task>
     </>
   );
 }
@@ -1865,9 +1865,9 @@ const XC_F = makeFrame(-5, 5, -2, 2, 18, 10);
 const XC_ONE: Key[] = [{ name: "u", v: [2, 0], tone: "blue" }];
 const XC_TWO: Key[] = [...XC_ONE, { name: "v", v: [-5, 0], tone: "coral" }];
 const XC_SAY = [
-  "প্রথম remote এ একটাই button, (2, 0).",
-  "সামনে, পিছনে, half-press মিলিয়ে দেয়াল বরাবর পুরা line.",
-  "দ্বিতীয় remote এর বাড়তি button (−5, 0)-ও ওই দেয়াল ধরেই হাঁটে.",
+  "প্রথম remote এ একটাই button, (2, 0)।",
+  "সামনে, পিছনে, half-press মিলিয়ে দেয়াল বরাবর পুরা line।",
+  "দ্বিতীয় remote এর বাড়তি button (−5, 0)-ও ওই দেয়াল ধরেই হাঁটে।",
 ];
 
 export function WallLine() {
@@ -1877,7 +1877,7 @@ export function WallLine() {
   return (
     <Scene
       scene={s}
-      caption={k < 3 ? XC_SAY[k] : <span className={FADE}>তাই দুইটার span হুবহু এক: ওই একটা line. Button একটা বাড়লো, reach এক চুলও না.</span>}
+      caption={k < 3 ? XC_SAY[k] : <span className={FADE}>তাই দুইটার span হুবহু এক: ওই একটা line। Button একটা বাড়লো, reach এক চুলও না।</span>}
     >
       <div className="mx-auto w-[12rem]">
         <Plane f={XC_F} grid={1} axes={false} label="both remotes shade the same wall line" className="my-0! max-w-none">
@@ -1907,15 +1907,15 @@ export function RemoteBought({}: Story) {
       <Stage backdrop="evening" ground={S9_FLOOR} label="at dusk Fahim comes out of the toy shop with remote C; the shopkeeper warns that its battery is cheap, Nasib is not impressed, and Shiku walks home with them">
         <CastPerson who="nana" x={48} y={S9_FLOOR} scale={0.8} facing={1} />
         <Stall x={48} y={S9_FLOOR} sign="খেলনা" color="#0d9488" w={72} />
-        {k === 1 && <Bubble x={52} y={S9_FLOOR - 56} side="right" lines={["সস্তা জিনিস.", "battery-ও সস্তা."]} />}
+        {k === 1 && <Bubble x={52} y={S9_FLOOR - 56} side="right" lines={["সস্তা জিনিস।", "battery-ও সস্তা।"]} />}
         <CastPerson who="fahim" x={k >= 4 ? 112 : 152} y={S9_FLOOR + 16} facing={k >= 4 ? -1 : 1} walking={k === 4} arm={k >= 1 ? "hold" : "down"} />
         {k >= 1 && <CastCard x={k >= 4 ? 112 : 152} y={S9_FLOOR - 56} text="remote C" tone="teal" />}
         {k >= 1 && <Handset x={k >= 4 ? 96 : 164} y={S9_FLOOR - 34} />}
         <CastPerson who="nasib" x={262} y={S9_FLOOR + 16} facing={-1} mood={k === 3 ? "puzzled" : "plain"} />
         {k === 3 && <Bubble x={262} y={S9_FLOOR - 50} side="left" lines={["কিন্তু ওইটাই তো", "সবচেয়ে এলোমেলো!"]} />}
         <Robot x={k >= 4 ? 168 : 206} y={S9_FLOOR + 16} walking={k === 4} />
-        {k === 2 && <Bubble x={52} y={S9_FLOOR - 56} side="right" lines={["বেশি টিপাটিপি", "কইরো না."]} />}
-        {k >= 4 && <Bubble x={112} y={S9_FLOOR - 78} side="right" lines={["Button গুনে লাভ নাই.", "দেখো কতদূর যায়."]} />}
+        {k === 2 && <Bubble x={52} y={S9_FLOOR - 56} side="right" lines={["বেশি টিপাটিপি", "কইরো না।"]} />}
+        {k >= 4 && <Bubble x={112} y={S9_FLOOR - 78} side="right" lines={["Button গুনে লাভ নাই।", "দেখো কতদূর যায়।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1927,10 +1927,10 @@ export function RemoteBought({}: Story) {
 //      the journey's one line.
 
 const VERDICT: { name: string; ok: boolean; reach: string; why: string }[] = [
-  { name: "A", ok: true, reach: "পুরা floor", why: "একটা east এ, একটা north এ. দুইটা আলাদা direction." },
-  { name: "B", ok: false, reach: "একটা বাঁকা line", why: "(2, 2) হলো (1, 1) এর দুইগুণ, তাই direction একটাই." },
-  { name: "C", ok: true, reach: "পুরা floor", why: "দেখতে এলোমেলো, কিন্তু দুইটা আলাদা direction." },
-  { name: "D", ok: false, reach: "দেয়াল বরাবর একটা line", why: "(2, 0) আর (−5, 0) দুইটাই একই দেয়াল ধরে হাঁটে." },
+  { name: "A", ok: true, reach: "পুরা floor", why: "একটা east এ, একটা north এ। দুইটা আলাদা direction।" },
+  { name: "B", ok: false, reach: "একটা বাঁকা line", why: "(2, 2) হলো (1, 1) এর দুইগুণ, তাই direction একটাই।" },
+  { name: "C", ok: true, reach: "পুরা floor", why: "দেখতে এলোমেলো, কিন্তু দুইটা আলাদা direction।" },
+  { name: "D", ok: false, reach: "দেয়াল বরাবর একটা line", why: "(2, 0) আর (−5, 0) দুইটাই একই দেয়াল ধরে হাঁটে।" },
 ];
 
 /** the Finale's small floor: the door, the four marks, and the opened remote's paint */
@@ -1952,7 +1952,7 @@ export function Finale() {
     const next = [...open, n];
     setOpen(next);
     pl.play(MARKS.length, () => {
-      if (next.length === VERDICT.length) pass("দুটো করে button, তবু দুইটা আটকে গেলো.");
+      if (next.length === VERDICT.length) pass("দুটো করে button, তবু দুইটা আটকে গেলো।");
     });
   };
 
@@ -2013,10 +2013,10 @@ export function Finale() {
       </div>
       {all && !pl.running && (
         <div className={`${FADE} mx-auto mt-3 max-w-sm rounded-2xl bg-cat-violet/5 px-4 py-3 text-center text-[0.95rem]`}>
-          নাসিবের rule দুইবার হারলো. Button গুনে লাভ নাই; দেখুন কতদূর যায়.
+          নাসিবের rule দুইবার হারলো। Button গুনে লাভ নাই; দেখুন কতদূর যায়।
         </div>
       )}
-      <Task done={all && !pl.running}>চারটা remote এর result একটা একটা করে খুলুন. Floor এ দেখুন কোন mark এ রং পড়ে.</Task>
+      <Task done={all && !pl.running}>চারটা remote এর result একটা একটা করে খুলুন। Floor এ দেখুন কোন mark এ রং পড়ে।</Task>
     </>
   );
 }
@@ -2030,9 +2030,9 @@ const X11_F = makeFrame(-5, 3, -2, 3, 12, 8);
 /** B's v is drawn a little to the side of u, or the two would lie on top of each other */
 const X11_OFF: XY = [0.3, -0.3];
 const X11_SAY = [
-  "Remote B আর remote D. দুইটাতেই দুটো করে button.",
-  "B: একটা বাঁকা line এ আটকে গেলো.",
-  "D: দেয়ালের line এ আটকে গেলো.",
+  "Remote B আর remote D। দুইটাতেই দুটো করে button।",
+  "B: একটা বাঁকা line এ আটকে গেলো।",
+  "D: দেয়ালের line এ আটকে গেলো।",
 ];
 
 export function RuleLost() {
@@ -2040,7 +2040,7 @@ export function RuleLost() {
   const k = s.k;
 
   return (
-    <Scene scene={s} caption={k < 3 ? X11_SAY[k] : <span className={FADE}>Button গুনবেন না. দেখুন কতদূর যায়.</span>}>
+    <Scene scene={s} caption={k < 3 ? X11_SAY[k] : <span className={FADE}>Button গুনবেন না। দেখুন কতদূর যায়।</span>}>
       <div className="flex justify-center gap-3">
         {[1, 3].map((ri, i) => {
           const r = SHELF[ri];
@@ -2101,9 +2101,9 @@ function H10Battery({ bars }: { bars: number }) {
 }
 
 const H10_SAY = [
-  "ফাহিম আলমারি খুঁজেছিল টিপে টিপে. হাতে remote C.",
-  "u একবার, দুইবার… পাঁচবার. আলমারি পার হয়ে গেলো.",
-  "তারপর v একবার, উল্টা দিকে. আলমারি. প্রতিটা টিপে battery একটু করে কমে.",
+  "ফাহিম আলমারি খুঁজেছিল টিপে টিপে। হাতে remote C.",
+  "u একবার, দুইবার… পাঁচবার। আলমারি পার হয়ে গেলো।",
+  "তারপর v একবার, উল্টা দিকে। আলমারি। প্রতিটা টিপে battery একটু করে কমে।",
 ];
 
 export function HuntAhead() {

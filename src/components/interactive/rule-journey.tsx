@@ -273,7 +273,7 @@ export function NightClub({}: Story) {
   const k = s.k;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="room" label="মেলার আগের রাত, club-এর ঘর. নাসিব বোর্ডে দুইটা card লিখলো, মামার পছন্দ আর Titanic, পাশে একটা প্রশ্নবোধক. সামিন বললো যা খুশি করলেই একটা number আসবে.">
+      <Stage backdrop="room" label="মেলার আগের রাত, club-এর ঘর। নাসিব বোর্ডে দুইটা card লিখলো, মামার পছন্দ আর Titanic, পাশে একটা প্রশ্নবোধক। সামিন বললো যা খুশি করলেই একটা number আসবে।">
         <S_Window />
         <S_Board>
           {k >= 1 && (
@@ -303,8 +303,8 @@ export function NightClub({}: Story) {
         <Person who="rina" x={S1_RINA} y={S_Y} label />
         <Person who="nasib" x={S1_NASIB} y={S_Y} facing={-1} arm={k === 1 ? "point" : "down"} mood={k >= 3 ? "puzzled" : "plain"} label />
         <Person who="samin" x={S1_SAMIN} y={S_Y} facing={-1} mood={k === 2 ? "smug" : "plain"} label />
-        {k === 1 && <Bubble x={S1_NASIB} y={S_Y - 66} lines={["দুইটা card থেকে", "একটা number চাই."]} />}
-        {k === 2 && <Bubble x={S1_SAMIN} y={S_Y - 66} side="left" lines={["যোগ কর, ভাগ কর.", "number আসলেই হলো."]} />}
+        {k === 1 && <Bubble x={S1_NASIB} y={S_Y - 66} lines={["দুইটা card থেকে", "একটা number চাই।"]} />}
+        {k === 2 && <Bubble x={S1_SAMIN} y={S_Y - 66} side="left" lines={["যোগ কর, ভাগ কর।", "number আসলেই হলো।"]} />}
         {k >= 3 && <Bubble x={S1_NASIB} y={S_Y - 66} tone="think" lines={["সত্যি?"]} />}
       </Stage>
     </StoryFrame>
@@ -316,7 +316,7 @@ export function NightClub({}: Story) {
 //     sieve; the pick is drawn as how many come out the other side, each with
 //     a "?", then sealed. Never judged here; settled on the last screen.
 
-const X1_BETS = ["সামিন ঠিক. যেকোনো rule-এ চলবে.", "কয়েকটা rule-এ চলবে.", "একটা rule-ই টিকবে."];
+const X1_BETS = ["সামিন ঠিক। যেকোনো rule-এ চলবে।", "কয়েকটা rule-এ চলবে।", "একটা rule-ই টিকবে।"];
 /** how many of the four come through, per pick */
 const X1_THROUGH = [4, 2, 1];
 
@@ -345,7 +345,7 @@ export function RuleBet() {
   const choose = (i: number) => {
     if (bet !== null) return;
     setBet(i);
-    play.play(6, () => pass("বাজি সিল হলো. শেষে মিলিয়ে দেখবো."));
+    play.play(6, () => pass("বাজি সিল হলো। শেষে মিলিয়ে দেখবো।"));
   };
   const k = bet === null ? 0 : play.running ? play.k : 6;
   const through = bet === null ? 0 : X1_THROUGH[bet];
@@ -403,7 +403,7 @@ export function RuleBet() {
           );
         })}
       </div>
-      <Task done={bet !== null && !play.running}>সামিনের কথা কি ঠিক? আপনার বাজি ধরুন.</Task>
+      <Task done={bet !== null && !play.running}>সামিনের কথা কি ঠিক? আপনার বাজি ধরুন।</Task>
     </>
   );
 }
@@ -418,10 +418,10 @@ export function TwoInOne() {
   const s = useScene(3, [600, 1500, 1800]);
   const k = s.k;
   const caps = [
-    "ঢুকবে দুইটা card. মানুষের পছন্দ আর ছবির score.",
-    "ভেতরে কোনো একটা rule.",
-    "বের হবে একটা number. প্রতিটা ছবির জন্য একটা.",
-    "তারপর ছবিগুলো লাইনে দাঁড়াবে. কে সামনে, কে পেছনে?",
+    "ঢুকবে দুইটা card। মানুষের পছন্দ আর ছবির score।",
+    "ভেতরে কোনো একটা rule।",
+    "বের হবে একটা number। প্রতিটা ছবির জন্য একটা।",
+    "তারপর ছবিগুলো লাইনে দাঁড়াবে। কে সামনে, কে পেছনে?",
   ];
   return (
     <Scene scene={s} caption={<span key={k} className={FADE}>{caps[k]}</span>}>
@@ -484,7 +484,7 @@ export function FilmOnly() {
     const next = served.includes(w) ? served : [...served, w];
     play.play(9, () => {
       setServed(next);
-      if (next.length === 2) pass("মানুষ বদলালো, ছবি বদলালো না.");
+      if (next.length === 2) pass("মানুষ বদলালো, ছবি বদলালো না।");
     });
   };
   const k = play.running ? play.k : who ? 9 : 0;
@@ -495,7 +495,7 @@ export function FilmOnly() {
     <>
       <div className={GROW}>
         <div className="mx-auto max-w-[21rem] overflow-hidden rounded-2xl ring-1 ring-black/10">
-          <Stage backdrop="room" label="মামা আর রিনা; মাঝে টেবিলে Titanic আর Mr. Bean. rule যাকে ছবি দেয়, ছবিটা তার কাছে যায়.">
+          <Stage backdrop="room" label="মামা আর রিনা; মাঝে টেবিলে Titanic আর Mr. Bean. rule যাকে ছবি দেয়, ছবিটা তার কাছে যায়।">
             <text x={X2_TABLE} y={40} textAnchor="middle" fontSize={10} fontWeight={600} fill={INK}>
               rule: ছবির card-এর দুই slot যোগ
             </text>
@@ -546,7 +546,7 @@ export function FilmOnly() {
           রিনাকে দিন
         </button>
       </div>
-      <Task done={served.length === 2}>নাসিবের rule দিয়ে মামা আর রিনা, দুইজনকেই একটা করে ছবি দিন.</Task>
+      <Task done={served.length === 2}>নাসিবের rule দিয়ে মামা আর রিনা, দুইজনকেই একটা করে ছবি দিন।</Task>
     </>
   );
 }
@@ -560,10 +560,10 @@ export function OneCardOut() {
   const s = useScene(3, [600, 1500, 2000]);
   const k = s.k;
   const caps = [
-    "নাসিবের rule-এ ঢুকেছে শুধু ছবির card.",
-    "মামার card বাইরে পড়ে ছিল. যে-ই আসুক, number একই.",
-    "তাই দরকার দুইটা ঢোকার পথ.",
-    "একটা মানুষের card-এর জন্য, একটা ছবির জন্য.",
+    "নাসিবের rule-এ ঢুকেছে শুধু ছবির card।",
+    "মামার card বাইরে পড়ে ছিল। যে-ই আসুক, number একই।",
+    "তাই দরকার দুইটা ঢোকার পথ।",
+    "একটা মানুষের card-এর জন্য, একটা ছবির জন্য।",
   ];
   return (
     <Scene scene={s} caption={<span key={k} className={FADE}>{caps[k]}</span>}>
@@ -608,7 +608,7 @@ export function SaminAdds({}: Story) {
   const k = s.k;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="room" label="সামিন বোর্ডের কাছে গিয়ে চারটা number যোগ লিখলো, মামার দুইটা আর ছবির দুইটা.">
+      <Stage backdrop="room" label="সামিন বোর্ডের কাছে গিয়ে চারটা number যোগ লিখলো, মামার দুইটা আর ছবির দুইটা।">
         <S_Window />
         <S_Board>
           {k >= 2 && (
@@ -625,7 +625,7 @@ export function SaminAdds({}: Story) {
         <S_Table x={262} />
         <Person who="nasib" x={196} y={S_Y} facing={-1} mood={k >= 3 ? "puzzled" : "plain"} label />
         <Person who="samin" x={k >= 1 ? 142 : 276} y={S_Y} facing={-1} walking={k === 1} ms={1400} arm={k >= 2 ? "point" : "down"} mood="smug" label />
-        {k >= 3 && <Bubble x={142} y={S_Y - 66} side="right" lines={["মানুষের card-ও", "যোগ করে দে. সোজা."]} />}
+        {k >= 3 && <Bubble x={142} y={S_Y - 66} side="right" lines={["মানুষের card-ও", "যোগ করে দে। সোজা।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -649,7 +649,7 @@ export function AddTaste() {
     setT(next);
     const m = moves + 1;
     setMoves(m);
-    if (m === 4) pass("যা-ই যোগ করি, সবাই সমান বাড়ে.");
+    if (m === 4) pass("যা-ই যোগ করি, সবাই সমান বাড়ে।");
   };
   const [bw, tw] = useTween([(B / MAX) * 100, (T / MAX) * 100], 600);
 
@@ -701,7 +701,7 @@ export function AddTaste() {
         </div>
         <div className="mt-2 text-center text-sm text-muted">rule: মামার দুই number + ছবির দুই number</div>
       </div>
-      <Task done={moves >= 4}>মামার card যেমন খুশি বদলান, চারবার. কোনোভাবে Bean-কে সামনে আনা যায়?</Task>
+      <Task done={moves >= 4}>মামার card যেমন খুশি বদলান, চারবার। কোনোভাবে Bean-কে সামনে আনা যায়?</Task>
     </>
   );
 }
@@ -717,8 +717,8 @@ export function SameOrder() {
   const caps = [
     "মামার জন্য: Titanic 14, Bean 12.",
     "রিনার জন্য: Titanic 13, Bean 11.",
-    "মানুষ বদলালো, ছবির order বদলালো না.",
-    "মানুষের number শুধু পাশে বসে থাকে, সবার ঘাড়ে সমান.",
+    "মানুষ বদলালো, ছবির order বদলালো না।",
+    "মানুষের number শুধু পাশে বসে থাকে, সবার ঘাড়ে সমান।",
   ];
   const rows = (who: string, x: number, t: V, on: boolean) => {
     const add = t[0] + t[1];
@@ -763,7 +763,7 @@ export function SaminDivides({}: Story) {
   const k = s.k;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="room" label="সামিন যোগটা মুছে ভাগ লিখলো: ছবির drama ভাগ মামার drama, ছবির comedy ভাগ মামার comedy.">
+      <Stage backdrop="room" label="সামিন যোগটা মুছে ভাগ লিখলো: ছবির drama ভাগ মামার drama, ছবির comedy ভাগ মামার comedy।">
         <S_Window />
         <S_Board>
           {k === 0 && (
@@ -785,7 +785,7 @@ export function SaminDivides({}: Story) {
         <Person who="samin" x={146} y={S_Y} facing={-1} arm={k >= 1 ? "point" : "down"} mood="smug" label />
         <Person who="nasib" x={200} y={S_Y} facing={-1} mood={k >= 3 ? "puzzled" : "plain"} label />
         <Person who="rina" x={270} y={S_Y} facing={-1} label />
-        {k >= 3 && <Bubble x={146} y={S_Y - 66} side="right" lines={["তাহলে ভাগ.", "drama ভাগ drama."]} />}
+        {k >= 3 && <Bubble x={146} y={S_Y - 66} side="right" lines={["তাহলে ভাগ।", "drama ভাগ drama."]} />}
       </Stage>
     </StoryFrame>
   );
@@ -809,7 +809,7 @@ export function DivideKnob() {
     const z = zeroed || next[0] === 0;
     setRaised(r);
     setZeroed(z);
-    if (r && z && !(raised && zeroed)) pass("ভাগে চাওয়া বাড়লে number কমে.");
+    if (r && z && !(raised && zeroed)) pass("ভাগে চাওয়া বাড়লে number কমে।");
   };
   const T = f(TITANIC);
   const B = f(BEAN);
@@ -843,7 +843,7 @@ export function DivideKnob() {
           />
           <div className="mt-2 min-h-5 text-center text-sm">
             {t[0] === 0 ? (
-              <span key="z" className={`${FADE} font-semibold text-danger`}>0 দিয়ে ভাগ! হিসাব ভেঙে গেলো.</span>
+              <span key="z" className={`${FADE} font-semibold text-danger`}>0 দিয়ে ভাগ! হিসাব ভেঙে গেলো।</span>
             ) : (
               <span className="text-muted">rule: ছবির ঘর ÷ মামার ঘর, তারপর যোগ</span>
             )}
@@ -856,7 +856,7 @@ export function DivideKnob() {
           ["drama-র চাওয়া 0 করুন", zeroed],
         ]}
       />
-      <Task done={raised && zeroed}>মামা comedy আরো বেশি চাইলে Bean-এর bar কোন দিকে যায়? তারপর drama-র চাওয়া 0 করে দেখুন.</Task>
+      <Task done={raised && zeroed}>মামা comedy আরো বেশি চাইলে Bean-এর bar কোন দিকে যায়? তারপর drama-র চাওয়া 0 করে দেখুন।</Task>
     </>
   );
 }
@@ -873,11 +873,11 @@ export function FunnierLoses() {
   const s = useScene(4, [600, 1300, 1300, 1800]);
   const k = s.k;
   const caps = [
-    "উল্টা দিক থেকে: মামার comedy 5, ভাগ ছবির comedy দিয়ে.",
+    "উল্টা দিক থেকে: মামার comedy 5, ভাগ ছবির comedy দিয়ে।",
     "ছবিতে comedy 2: পেলো 2.5.",
     "comedy 5: পেলো 1.",
     "comedy 8, সবচেয়ে হাসির ছবি: পেলো মাত্র 0.63.",
-    "যে ছবিতে হাসি যত বেশি, সে তত পিছিয়ে.",
+    "যে ছবিতে হাসি যত বেশি, সে তত পিছিয়ে।",
   ];
   return (
     <Scene scene={s} caption={<span key={k} className={FADE}>{caps[k]}</span>}>
@@ -916,7 +916,7 @@ export function RinaWishes({}: Story) {
   const k = s.k;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="room" label="রিনা বোর্ডে এক slot-এর দুইটা শর্ত লিখলো: দুইটাই বাড়লে বাড়বে, একটা 0 হলে 0.">
+      <Stage backdrop="room" label="রিনা বোর্ডে এক slot-এর দুইটা শর্ত লিখলো: দুইটাই বাড়লে বাড়বে, একটা 0 হলে 0।">
         <S_Window />
         <S_Board>
           {k >= 2 && (
@@ -938,7 +938,7 @@ export function RinaWishes({}: Story) {
         <Person who="samin" x={200} y={S_Y} facing={-1} label />
         <Person who="nasib" x={250} y={S_Y} facing={-1} label />
         <Person who="rina" x={k >= 1 ? 146 : 296} y={S_Y} facing={-1} walking={k === 1} ms={1400} arm={k >= 2 ? "point" : "down"} label />
-        {k >= 1 && <Bubble x={k >= 1 ? 146 : 296} y={S_Y - 66} side="right" lines={["একটা slot", "ধরে ভাবো."]} />}
+        {k >= 1 && <Bubble x={k >= 1 ? 146 : 296} y={S_Y - 66} side="right" lines={["একটা slot", "ধরে ভাবো।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -966,7 +966,7 @@ export function PatchPlay() {
     setWant(w);
     const d: [boolean, boolean, boolean] = [done[0] || h * w === 0, done[1] || (h === 4 && w === 3), done[2] || (h === 4 && w === 6)];
     setDone(d);
-    if (d.every(Boolean) && !done.every(Boolean)) pass("দুইটাই বাড়লে বাড়ে, একটা 0 হলেই 0.");
+    if (d.every(Boolean) && !done.every(Boolean)) pass("দুইটাই বাড়লে বাড়ে, একটা 0 হলেই 0।");
   };
 
   return (
@@ -1014,7 +1014,7 @@ export function PatchPlay() {
           ["তারপর মামার চাওয়াও দ্বিগুণ", done[2]],
         ]}
       />
-      <Task done={done.every(Boolean)}>রিনার দুইটা শর্ত খোপে খাটে কি না দেখুন: খোপ গায়েব করুন, তারপর একটা একটা করে side দ্বিগুণ করুন.</Task>
+      <Task done={done.every(Boolean)}>রিনার দুইটা শর্ত খোপে খাটে কি না দেখুন: খোপ গায়েব করুন, তারপর একটা একটা করে side দ্বিগুণ করুন।</Task>
     </>
   );
 }
@@ -1028,10 +1028,10 @@ export function AddVsTimes() {
   const s = useScene(3, [600, 1500, 1800]);
   const k = s.k;
   const caps = [
-    "ধরেন কেউ comedy একদম চান না, 0. ছবিতে comedy 4.",
-    "গুণ: 4 চওড়া, 0 উঁচু. খোপই নাই, 0 square.",
-    "যোগ: 0 + 4, তবু 4 পেয়ে গেলো.",
-    "যা চান না, যোগে তার জন্যও number আসে. গুণে আসে না.",
+    "ধরেন কেউ comedy একদম চান না, 0। ছবিতে comedy 4.",
+    "গুণ: 4 চওড়া, 0 উঁচু। খোপই নাই, 0 square।",
+    "যোগ: 0 + 4, তবু 4 পেয়ে গেলো।",
+    "যা চান না, যোগে তার জন্যও number আসে। গুণে আসে না।",
   ];
   const U = 14;
   return (
@@ -1077,7 +1077,7 @@ export function SaminWires({}: Story) {
   const k = s.k;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="room" label="বোর্ডে মামার card আর ছবির card পাশাপাশি. সামিন চক দিয়ে আড়াআড়ি দাগ টানলো.">
+      <Stage backdrop="room" label="বোর্ডে মামার card আর ছবির card পাশাপাশি। সামিন চক দিয়ে আড়াআড়ি দাগ টানলো।">
         <S_Window />
         <S_Board>
           <S_Chalk x={36} y={50} size={9} mono>
@@ -1145,9 +1145,9 @@ const X6_WIRES: [number, number][][] = [
 const X6_NAMES = ["আড়াআড়ি", "সোজা", "সবাই সবার সাথে"];
 const X6_RIGHT = 1;
 const X6_NOPE = [
-  "Titanic অনেক এগিয়ে গেলো. মামার comedy-র 5 গুণ হলো Titanic-এর drama-র 5-এর সাথে. হাসি চাওয়ার number ঢুকে গেলো কান্নার ঘরে.",
+  "Titanic অনেক এগিয়ে গেলো। মামার comedy-র 5 গুণ হলো Titanic-এর drama-র 5-এর সাথে। হাসি চাওয়ার number ঢুকে গেলো কান্নার ঘরে।",
   "",
-  "আবার Titanic. সবার সাথে সবাই মানে আগে দুই card-এর সব যোগ, তারপর গুণ. তখন ছবির card-এর total-ই সব ঠিক করে, ঠিক প্রথম চেষ্টার মতো.",
+  "আবার Titanic। সবার সাথে সবাই মানে আগে দুই card-এর সব যোগ, তারপর গুণ। তখন ছবির card-এর total-ই সব ঠিক করে, ঠিক প্রথম চেষ্টার মতো।",
 ];
 const wired = (w: [number, number][], t: V, f: V) => w.reduce((s, [a, b]) => s + t[a] * f[b], 0);
 
@@ -1245,7 +1245,7 @@ export function WirePick() {
         })}
       </div>
       {settled && pick !== X6_RIGHT && pick !== null && <Nope key={miss}>{X6_NOPE[pick]}</Nope>}
-      <Task done={settled && pick === X6_RIGHT}>কোন তার লাগালে comedy-পাগল মামা Mr. Bean পান? একটা বেছে নিন.</Task>
+      <Task done={settled && pick === X6_RIGHT}>কোন তার লাগালে comedy-পাগল মামা Mr. Bean পান? একটা বেছে নিন।</Task>
     </>
   );
 }
@@ -1259,10 +1259,10 @@ export function NonsensePair() {
   const s = useScene(3, [600, 1600, 1800]);
   const k = s.k;
   const caps = [
-    "মামার comedy-র 5 আর Titanic-এর drama-র 5.",
-    "মামা হাসতে চান, আর ছবিতে কান্না আছে. এদের গুণ করে কী মাপলাম?",
-    "কিছুই না. এই জোড়ার কোনো মানে নাই.",
-    "মানে আছে একই slot-এর জোড়ায়. হাসি চাই, হাসি আছে.",
+    "মামার comedy-র 5 আর Titanic-এর drama-র 5।",
+    "মামা হাসতে চান, আর ছবিতে কান্না আছে। এদের গুণ করে কী মাপলাম?",
+    "কিছুই না। এই জোড়ার কোনো মানে নাই।",
+    "মানে আছে একই slot-এর জোড়ায়। হাসি চাই, হাসি আছে।",
   ];
   return (
     <Scene scene={s} caption={<span key={k} className={FADE}>{caps[k]}</span>}>
@@ -1304,7 +1304,7 @@ export function BhanuBox({}: Story) {
   const k = s.k;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="room" label="রিনা বাক্স থেকে একটা পুরানো ছবি বের করলো, ভানু পেল লটারি, card (0, 6).">
+      <Stage backdrop="room" label="রিনা বাক্স থেকে একটা পুরানো ছবি বের করলো, ভানু পেল লটারি, card (0, 6)।">
         <S_Window />
         <S_Board>
           <S_Chalk x={71} y={66} size={8.5}>
@@ -1319,7 +1319,7 @@ export function BhanuBox({}: Story) {
           <S_Film w={18} h={22} color={FILM.bhanu.color} />
         </S_Carry>
         {k >= 2 && <CastCard x={280} y={S_Y - 50} text="(0, 6)" tone="blue" />}
-        {k >= 3 && <Bubble x={240} y={S_Y - 66} side="left" lines={["পুরা comedy.", "drama একফোঁটাও নাই."]} />}
+        {k >= 3 && <Bubble x={240} y={S_Y - 66} side="left" lines={["পুরা comedy.", "drama একফোঁটাও নাই।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1334,9 +1334,9 @@ export function BhanuBox({}: Story) {
 const X7_OPS = ["গুণ", "যোগ", "ভাগ"];
 const X7_RIGHT = 1;
 const X7_NOPE = [
-  "ভানু নেমে গেলো 0-তে. তার drama-র খোপ 0, আর 0 দিয়ে গুণ করলে সবই 0. খাঁটি comedy-টাই comedy-পাগল মামা পেলেন না.",
+  "ভানু নেমে গেলো 0-তে। তার drama-র খোপ 0, আর 0 দিয়ে গুণ করলে সবই 0। খাঁটি comedy-টাই comedy-পাগল মামা পেলেন না।",
   "",
-  "দুইজনই প্রায় 0. drama-র খোপ ভাগ comedy-র খোপ: comedy যত বড়, number তত ছোট. মামার বেলায় ঠিক উল্টা.",
+  "দুইজনই প্রায় 0। drama-র খোপ ভাগ comedy-র খোপ: comedy যত বড়, number তত ছোট। মামার বেলায় ঠিক উল্টা।",
 ];
 const X7_OP = [(a: number, b: number) => a * b, (a: number, b: number) => a + b, (a: number, b: number) => (b === 0 ? 0 : a / b)];
 const X7_ICONS = ["×", "+", "÷"];
@@ -1349,7 +1349,7 @@ export function PileOrMultiply() {
   const choose = (i: number) => {
     if (play.running) return;
     setPick(i);
-    play.play(8, () => (i === X7_RIGHT ? pass("খোপগুলো জমা, মানে যোগ.") : setMiss((m) => m + 1)));
+    play.play(8, () => (i === X7_RIGHT ? pass("খোপগুলো জমা, মানে যোগ।") : setMiss((m) => m + 1)));
   };
   const settled = pick !== null && !play.running;
   const k = pick === null ? 0 : play.running ? play.k : 8;
@@ -1423,7 +1423,7 @@ export function PileOrMultiply() {
         })}
       </div>
       {settled && pick !== X7_RIGHT && pick !== null && <Nope key={miss}>{X7_NOPE[pick]}</Nope>}
-      <Task done={settled && pick === X7_RIGHT}>প্রতিটা ছবির দুইটা খোপ মিলে একটা number হবে. কীভাবে মেলালে comedy-পাগল মামার জন্য ভানু সামনে থাকে?</Task>
+      <Task done={settled && pick === X7_RIGHT}>প্রতিটা ছবির দুইটা খোপ মিলে একটা number হবে। কীভাবে মেলালে comedy-পাগল মামার জন্য ভানু সামনে থাকে?</Task>
     </>
   );
 }
@@ -1437,10 +1437,10 @@ export function SameSquares() {
   const s = useScene(3, [600, 1500, 1800]);
   const k = s.k;
   const caps = [
-    "হীরক রাজার দেশে, মামার জন্য. drama-র খোপ 8 square, comedy-র 25.",
-    "দুই খোপই square দিয়ে বানানো. তাই এক জায়গায় জমা করা যায়.",
+    "হীরক রাজার দেশে, মামার জন্য। drama-র খোপ 8 square, comedy-র 25.",
+    "দুই খোপই square দিয়ে বানানো। তাই এক জায়গায় জমা করা যায়।",
     "একটা tower, 33 square.",
-    "একটা slot খালি থাকলে? tower একটু ছোট হয়, গায়েব হয় না.",
+    "একটা slot খালি থাকলে? tower একটু ছোট হয়, গায়েব হয় না।",
   ];
   const U = 7;
   return (
@@ -1499,7 +1499,7 @@ export function BuildBean() {
   const pile = () => {
     if (play.running) return;
     setPiled(true);
-    play.play(Math.max(1, total), () => (right ? pass("Bean পেলো 22. মেলার দিনের সেই number.") : setMiss((m) => m + 1)));
+    play.play(Math.max(1, total), () => (right ? pass("Bean পেলো 22। মেলার দিনের সেই number।") : setMiss((m) => m + 1)));
   };
   const shown = !piled ? 0 : play.running ? play.k : total;
   const settled = piled && !play.running;
@@ -1543,11 +1543,11 @@ export function BuildBean() {
       {settled && !right && (
         <Nope key={miss}>
           {crossed
-            ? `জমা হলো ${total}. খোপে অন্য slot-এর number ঢুকে গেছে. drama-র খোপ শুধু drama দিয়ে, comedy-র খোপ শুধু comedy দিয়ে.`
-            : `জমা হলো ${total} square. card দুইটা আরেকবার দেখুন: কোন slot-এ মামা কত চান, Bean-এ কত আছে.`}
+            ? `জমা হলো ${total}. খোপে অন্য slot-এর number ঢুকে গেছে। drama-র খোপ শুধু drama দিয়ে, comedy-র খোপ শুধু comedy দিয়ে।`
+            : `জমা হলো ${total} square. card দুইটা আরেকবার দেখুন: কোন slot-এ মামা কত চান, Bean-এ কত আছে।`}
         </Nope>
       )}
-      <Task done={settled && right}>মামার জন্য Mr. Bean-এর number বের করুন: দুইটা খোপ বানান, তারপর জমা করুন.</Task>
+      <Task done={settled && right}>মামার জন্য Mr. Bean-এর number বের করুন: দুইটা খোপ বানান, তারপর জমা করুন।</Task>
     </>
   );
 }
@@ -1561,10 +1561,10 @@ export function TwentyTwoAgain() {
   const s = useScene(3, [600, 1500, 1800]);
   const k = s.k;
   const caps = [
-    "Mr. Bean, মামার জন্য: 2 আর 20, মোট 22.",
-    "Titanic: 10 আর 10, মোট 20.",
-    "মেলার দিন সকালে মামা ঠিক এই দুইটা number-ই দেখেছিলেন.",
-    "সেই black box-এর ভেতরে এখন আর কিছু লুকানো নাই.",
+    "Mr. Bean, মামার জন্য: 2 আর 20, মোট 22।",
+    "Titanic: 10 আর 10, মোট 20।",
+    "মেলার দিন সকালে মামা ঠিক এই দুইটা number-ই দেখেছিলেন।",
+    "সেই black box-এর ভেতরে এখন আর কিছু লুকানো নাই।",
   ];
   const U = 7;
   return (
@@ -1606,7 +1606,7 @@ export function LongBoard({}: Story) {
   const k = s.k;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="room" label="নাসিব বোর্ডে পুরা rule কথায় লিখলো, লাইনটা বোর্ড ছাড়িয়ে গেলো. সামিন জিজ্ঞেস করলো slot দশটা হলে কী হবে.">
+      <Stage backdrop="room" label="নাসিব বোর্ডে পুরা rule কথায় লিখলো, লাইনটা বোর্ড ছাড়িয়ে গেলো। সামিন জিজ্ঞেস করলো slot দশটা হলে কী হবে।">
         <S_Window />
         <S_Board w={128}>
           {k >= 1 && (
@@ -1644,17 +1644,17 @@ const X9_LINES = [
   "t ▢ f",
 ];
 const X9_CAPS = [
-  "বোর্ডের সেই লম্বা লাইন.",
-  "মামার card-কে বলি t, taste. ছবির card-কে f, film. ছোট 1, 2 মানে কোন slot.",
-  "পাশাপাশি বসালেই গুণ, চিহ্ন লাগে না. আর slot n-টা হলেও লাইন একটাই.",
-  "Σ মানে সব যোগ. প্রতিটা slot i-তে গুণ, তারপর সব যোগ.",
-  "আরো ছোট? শুধু দুইটা card, মাঝে একটা চিহ্ন. কোন চিহ্ন?",
+  "বোর্ডের সেই লম্বা লাইন।",
+  "মামার card-কে বলি t, taste। ছবির card-কে f, film। ছোট 1, 2 মানে কোন slot।",
+  "পাশাপাশি বসালেই গুণ, চিহ্ন লাগে না। আর slot n-টা হলেও লাইন একটাই।",
+  "Σ মানে সব যোগ। প্রতিটা slot i-তে গুণ, তারপর সব যোগ।",
+  "আরো ছোট? শুধু দুইটা card, মাঝে একটা চিহ্ন। কোন চিহ্ন?",
 ];
 const X9_SIGNS = ["×", "+", "·"];
 const X9_RIGHT = 2;
 const X9_NOPE = [
-  "t × f দেখলে মনে হবে ঘরে ঘরে গুণ করে থেমে যাওয়া. হাতে থাকে list, number না. আমাদের rule থামে একটা number-এ.",
-  "+ তো ঘরে ঘরে যোগ, 3.1-এর সেই কাজ. ফেরত আসে আরেকটা card.",
+  "t × f দেখলে মনে হবে ঘরে ঘরে গুণ করে থেমে যাওয়া। হাতে থাকে list, number না। আমাদের rule থামে একটা number-এ।",
+  "+ তো ঘরে ঘরে যোগ, 3.1-এর সেই কাজ। ফেরত আসে আরেকটা card।",
   "",
 ];
 
@@ -1668,7 +1668,7 @@ export function ShortenIt() {
   const choose = (i: number) => {
     if (play.running) return;
     setPick(i);
-    play.play(4, () => (i === X9_RIGHT ? pass("মাঝের dot থেকেই নাম dot product.") : setMiss((m) => m + 1)));
+    play.play(4, () => (i === X9_RIGHT ? pass("মাঝের dot থেকেই নাম dot product।") : setMiss((m) => m + 1)));
   };
   const settled = pick !== null && !play.running;
   const k = pick === null ? 0 : play.running ? play.k : 4;
@@ -1736,7 +1736,7 @@ export function ShortenIt() {
           {settled && pick !== X9_RIGHT && pick !== null && <Nope key={miss}>{X9_NOPE[pick]}</Nope>}
         </>
       )}
-      <Task done={settled && pick === X9_RIGHT}>লাইনটা ছোট করতে থাকুন. শেষে দুই card-এর মাঝে একটা চিহ্ন বসান.</Task>
+      <Task done={settled && pick === X9_RIGHT}>লাইনটা ছোট করতে থাকুন। শেষে দুই card-এর মাঝে একটা চিহ্ন বসান।</Task>
     </>
   );
 }
@@ -1750,10 +1750,10 @@ export function GibbsBoard() {
   const s = useScene(3, [600, 1600, 2000]);
   const k = s.k;
   const caps = [
-    "1881, আমেরিকার Yale. physics-এর class-এ বারবার একই লাইন.",
-    "Gibbs সাহেব ছোট করে লিখলেন, মাঝে একটা dot.",
-    "মুখে বলি: a dot b.",
-    "সেই dot থেকে নাম dot product. উত্তর একটা সাধারণ number, তাই আরেক নাম scalar product.",
+    "1881, আমেরিকার Yale। physics-এর class-এ বারবার একই লাইন।",
+    "Gibbs সাহেব ছোট করে লিখলেন, মাঝে একটা dot।",
+    "মুখে বলি: a dot b।",
+    "সেই dot থেকে নাম dot product। উত্তর একটা সাধারণ number, তাই আরেক নাম scalar product।",
   ];
   return (
     <Scene scene={s} caption={<span key={k} className={FADE}>{caps[k]}</span>}>
@@ -1814,7 +1814,7 @@ export function DotTimeline() {
   const s = useScene(4, [600, 1300, 1300, 1300]);
   const k = s.k;
   return (
-    <Scene scene={s} caption={<span key={k} className={FADE}>{k < 4 ? "গুণ-যোগটা কত পুরানো?" : "নাসিব প্রথম না. নামটা শুধু 1881-এর."}</span>}>
+    <Scene scene={s} caption={<span key={k} className={FADE}>{k < 4 ? "গুণ-যোগটা কত পুরানো?" : "নাসিব প্রথম না। নামটা শুধু 1881-এর।"}</span>}>
       <div className="relative mx-auto max-w-[16rem] pl-6">
         <div className="absolute top-2 bottom-2 left-2 w-0.5 origin-top bg-border transition-transform duration-1000 motion-reduce:transition-none" style={{ transform: `scaleY(${k / 4})` }} />
         {X9T_STOPS.map((st, i) => (
@@ -1838,8 +1838,8 @@ export function DotTimeline() {
 const X10_FILMS: FilmKey[] = ["hirok", "bean", "titanic"];
 const X10_RIGHT = 2;
 const X10_NOPE: Record<string, string> = {
-  hirok: "হীরক জমা হলো 25, Titanic 27. হীরক-এর card বড়, 4 আর 5. কিন্তু রিনা comedy চান মাত্র 1, তাই comedy-র খোপ এক square উঁচু, সরু.",
-  bean: "Bean জমা হলো মাত্র 9. রিনা drama চান 5, আর Bean-এ drama মাত্র 1.",
+  hirok: "হীরক জমা হলো 25, Titanic 27। হীরক-এর card বড়, 4 আর 5। কিন্তু রিনা comedy চান মাত্র 1, তাই comedy-র খোপ এক square উঁচু, সরু।",
+  bean: "Bean জমা হলো মাত্র 9। রিনা drama চান 5, আর Bean-এ drama মাত্র 1।",
 };
 
 export function TryRina() {
@@ -1850,7 +1850,7 @@ export function TryRina() {
   const choose = (i: number) => {
     if (play.running) return;
     setPick(i);
-    play.play(7, () => (i === X10_RIGHT ? pass("Titanic 27, হীরক 25. অল্পের জন্য.") : setMiss((m) => m + 1)));
+    play.play(7, () => (i === X10_RIGHT ? pass("Titanic 27, হীরক 25। অল্পের জন্য।") : setMiss((m) => m + 1)));
   };
   const settled = pick !== null && !play.running;
   const k = pick === null ? 0 : play.running ? play.k : 7;
@@ -1921,7 +1921,7 @@ export function TryRina() {
         })}
       </div>
       {settled && pick !== null && pick !== X10_RIGHT && <Nope key={miss}>{X10_NOPE[X10_FILMS[pick]]}</Nope>}
-      <Task done={settled && pick === X10_RIGHT}>নাসিবের rule রিনার হাতে কোন ছবি দেবে? বেছে নিন.</Task>
+      <Task done={settled && pick === X10_RIGHT}>নাসিবের rule রিনার হাতে কোন ছবি দেবে? বেছে নিন।</Task>
     </>
   );
 }
@@ -1935,10 +1935,10 @@ export function ThinComedy() {
   const s = useScene(3, [600, 1500, 1800]);
   const k = s.k;
   const caps = [
-    "হীরক রাজার দেশে, রিনার জন্য.",
-    "drama-র খোপ: 4 চওড়া, 5 উঁচু. 20 square.",
-    "comedy-র খোপ 5 চওড়া, কিন্তু রিনা চান মাত্র 1. সরু একটা ফিতা, 5 square.",
-    "Titanic-এর drama খোপ এক কলাম বেশি চওড়া, 25. জিত ওখানেই.",
+    "হীরক রাজার দেশে, রিনার জন্য।",
+    "drama-র খোপ: 4 চওড়া, 5 উঁচু। 20 square.",
+    "comedy-র খোপ 5 চওড়া, কিন্তু রিনা চান মাত্র 1। সরু একটা ফিতা, 5 square।",
+    "Titanic-এর drama খোপ এক কলাম বেশি চওড়া, 25। জিত ওখানেই।",
   ];
   const U = 9;
   return (
@@ -1970,7 +1970,7 @@ export function DawnMama({}: Story) {
   const k = s.k;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="fair" label="সকালে মেলা বসলো. club-এর stall-এ বোর্ডে এক লাইন: ঘরে ঘরে গুণ, তারপর যোগ. প্রথমেই এলেন ফাহিমের মামা.">
+      <Stage backdrop="fair" label="সকালে মেলা বসলো। club-এর stall-এ বোর্ডে এক লাইন: ঘরে ঘরে গুণ, তারপর যোগ। প্রথমেই এলেন ফাহিমের মামা।">
         <Stall x={200} y={S_Y} w={100} sign="Movie Club" color="#7c3aed" />
         <rect x={146} y={60} width={108} height={24} rx={3} fill="#1f3d2e" stroke="#8b6b4a" strokeWidth={2} />
         {k >= 1 && (
@@ -2002,7 +2002,7 @@ export function FiveFell() {
   const s = useScene(4, [600, 1300, 1300, 1600]);
   const k = s.k;
   const struck = [1, 1, 2, 2, 3];
-  const caps = ["রাতের সব rule.", "যোগে মানুষটাই হারিয়ে গেলো.", "ভাগে সব উল্টা, আর জোড়া ভুল হলে মানে নাই.", "খোপ গুণ করলে একটা খালি slot-ই যথেষ্ট.", "টিকলো একটা."];
+  const caps = ["রাতের সব rule।", "যোগে মানুষটাই হারিয়ে গেলো।", "ভাগে সব উল্টা, আর জোড়া ভুল হলে মানে নাই।", "খোপ গুণ করলে একটা খালি slot-ই যথেষ্ট।", "টিকলো একটা।"];
   return (
     <Scene scene={s} caption={<span key={k} className={FADE}>{caps[k]}</span>}>
       <div className="mx-auto max-w-[16rem] space-y-1">

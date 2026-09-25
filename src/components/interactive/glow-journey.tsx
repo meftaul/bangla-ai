@@ -14,10 +14,10 @@ import { FLOWER_OUTLINE, LENS_G, LENS_H, LENS_L, PK, PatchWall, cellPoly, mapPts
 // last journey of Article 8: it closes the article (five things, the full
 // notation table) and bridges to Article 9 (the inverse) in words only.
 //
-// ফিরানির রাত. The লাইট ভাই throws one heart through G and L together (8.5's
+// ফিরানির রাত। The লাইট ভাই throws one heart through G and L together (8.5's
 // stack, det 3 × 4 = 12) to fill the wall before আপা's car comes. সোম: এত
-// বড় করলে আলো ফিকে হবে. The লাইট ভাই: বাতি বদলাই নাই, আলো যা ছিলো তাই
-// থাকবো. How bright will the big heart be?
+// বড় করলে আলো ফিকে হবে। The লাইট ভাই: বাতি বদলাই নাই, আলো যা ছিলো তাই
+// থাকবো। How bright will the big heart be?
 //
 // Brightness is drawn as light-dots per ঘর (spec open question 4), never a
 // slider. The stencil's one ঘর lets through 12 dots. A lens carries every dot
@@ -298,7 +298,7 @@ export function GlowBet() {
   const seal = () => {
     if (bet === null || sealed) return;
     setSealed(true);
-    act.play(2, () => pass("বাজি সিল হলো. আগে এক ঘরের আলো."));
+    act.play(2, () => pass("বাজি সিল হলো। আগে এক ঘরের আলো।"));
   };
   const d = bet === null ? 0 : X1_CARDS[bet].d;
   const guess = bet === null ? [] : claimDots(d);
@@ -340,7 +340,7 @@ export function GlowBet() {
           এই বাজি সিল
         </button>
       </div>
-      <Task done={k >= 2}>বড় heart কতটা উজ্জ্বল হবে? একটা বেছে নিয়ে বাজি সিল করুন. উত্তর শেষে.</Task>
+      <Task done={k >= 2}>বড় heart কতটা উজ্জ্বল হবে? একটা বেছে নিয়ে বাজি সিল করুন। উত্তর শেষে।</Task>
     </>
   );
 }
@@ -375,7 +375,7 @@ export function SameLightMoreWall() {
   const count = () => {
     if (!ran || run.running || tick.running) return;
     setCounted(true);
-    tick.play(X2_IN.length, () => pass("আলো একই, জায়গা তিনগুণ: ঘরে তিন ভাগের এক."));
+    tick.play(X2_IN.length, () => pass("আলো একই, জায়গা তিনগুণ: ঘরে তিন ভাগের এক।"));
   };
   const landed = ran && !run.running;
   return (
@@ -432,7 +432,7 @@ export function SameLightMoreWall() {
           {ran ? "আবার আলো ফেলুন" : "আলো ফেলুন"}
         </button>
       </div>
-      <Task done={counted && !tick.running}>আলো ফেলুন. তারপর ছোপের মাঝের পুরা ঘরটা tap করে ফোঁটা গুনুন.</Task>
+      <Task done={counted && !tick.running}>আলো ফেলুন। তারপর ছোপের মাঝের পুরা ঘরটা tap করে ফোঁটা গুনুন।</Task>
     </>
   );
 }
@@ -467,7 +467,7 @@ export function ShrinkBrightens() {
       const nd: [boolean, boolean] = i === 0 ? [true, done[1]] : [done[0], true];
       setDone(nd);
       if (i === 0 && guess !== 0) setMiss((m) => m + 1);
-      if (nd[0] && nd[1]) pass("ছোট করলে ঘন. উল্টালে একই.");
+      if (nd[0] && nd[1]) pass("ছোট করলে ঘন। উল্টালে একই।");
     });
   };
   const cols = X3_LENSES[which].cols;
@@ -530,19 +530,19 @@ export function ShrinkBrightens() {
           <div className="mt-1.5 min-h-5 text-center text-sm text-muted">
             {settled && which === 0 && (
               <span className={FADE}>
-                ¼ ঘরে 12 টা ফোঁটা. পুরা এক ঘরে হতো <b className="font-mono text-foreground">48</b>: চারগুণ উজ্জ্বল.
+                ¼ ঘরে 12 টা ফোঁটা। পুরা এক ঘরে হতো <b className="font-mono text-foreground">48</b>: চারগুণ উজ্জ্বল।
               </span>
             )}
             {settled && which === 1 && (
               <span className={FADE}>
-                এক ঘরেই 12 টা. শুধু উল্টো দিকে. <b>উজ্জ্বল একই.</b>
+                এক ঘরেই 12 টা। শুধু উল্টো দিকে। <b>উজ্জ্বল একই।</b>
               </span>
             )}
           </div>
         </>
       )}
-      {guess !== null && guess !== 0 && done[0] && which === 0 && !run.running && <Nope key={miss}>{guess === 2 ? "আলো কমে নাই. 12 টা ফোঁটাই আছে, শুধু গাদাগাদি করে." : "ফোঁটা একই, কিন্তু জায়গা ¼. প্রতি ঘরে চারগুণ."}</Nope>}
-      <Task done={done[0] && done[1] && !run.running}>আগে guess দিন. তারপর H আর আয়না, দুইটা দিয়েই এক ঘরের আলো চালান.</Task>
+      {guess !== null && guess !== 0 && done[0] && which === 0 && !run.running && <Nope key={miss}>{guess === 2 ? "আলো কমে নাই। 12 টা ফোঁটাই আছে, শুধু গাদাগাদি করে।" : "ফোঁটা একই, কিন্তু জায়গা ¼। প্রতি ঘরে চারগুণ।"}</Nope>}
+      <Task done={done[0] && done[1] && !run.running}>আগে guess দিন। তারপর H আর আয়না, দুইটা দিয়েই এক ঘরের আলো চালান।</Task>
     </>
   );
 }
@@ -587,7 +587,7 @@ export function ProbabilityIsLight() {
     run.run(() => {
       const nt = tried.map((v, j) => v || j === i);
       setTried(nt);
-      if (nt.every(Boolean)) pass("জায়গা বাড়লে ঘনত্ব কমে, মোট একই.");
+      if (nt.every(Boolean)) pass("জায়গা বাড়লে ঘনত্ব কমে, মোট একই।");
     });
   };
   const cols = which === null ? I2 : X4_LENSES[which].cols;
@@ -625,7 +625,7 @@ export function ProbabilityIsLight() {
           </button>
         ))}
       </div>
-      <Task done={tried.every(Boolean) && !run.running}>তিনটা lens দিয়েই স্তূপটা চালান. মাঝের ঘনত্ব আর মোট, দুইটাই দেখুন.</Task>
+      <Task done={tried.every(Boolean) && !run.running}>তিনটা lens দিয়েই স্তূপটা চালান। মাঝের ঘনত্ব আর মোট, দুইটাই দেখুন।</Task>
     </>
   );
 }
@@ -677,7 +677,7 @@ export function YourHeart() {
     setThrown(s);
     const Dn = Math.abs(det(stackOf(s)));
     run.run(() => {
-      if (Math.abs(Dn - 4) < 1e-9) pass("4 গুণ বড়, ঘরে 3 ফোঁটা. এর বেশি না.");
+      if (Math.abs(Dn - 4) < 1e-9) pass("4 গুণ বড়, ঘরে 3 ফোঁটা। এর বেশি না।");
       else setMiss((m) => m + 1);
     });
   };
@@ -725,10 +725,10 @@ export function YourHeart() {
           heart ফেলুন
         </button>
       </div>
-      {verdict === "flat" && <Nope key={miss}>Heart চ্যাপ্টা হয়ে একটা দাগ. নাসিবের lens এর det 0, জায়গাই নাই.</Nope>}
-      {verdict === "faint" && <Nope key={miss}>{`ঘরে ${fmt(+dens.toFixed(2))} ফোঁটা, 3 এর কম. Heart গেটের আলোয় মিশে গেলো. |det| কমান.`}</Nope>}
-      {verdict === "small" && <Nope key={miss}>{`দেখা যায়, ঘরে ${fmt(+dens.toFixed(2))} ফোঁটা. কিন্তু আরো বড় করা যায়. ঘরে 3 হলেও চলে.`}</Nope>}
-      <Task done={verdict === "right"}>Lens বেছে যন্ত্রে দিন, তিনটা পর্যন্ত. Heart যত বড় পারেন, কিন্তু ঘরে অন্তত 3 ফোঁটা থাকতে হবে.</Task>
+      {verdict === "flat" && <Nope key={miss}>Heart চ্যাপ্টা হয়ে একটা দাগ। নাসিবের lens এর det 0, জায়গাই নাই।</Nope>}
+      {verdict === "faint" && <Nope key={miss}>{`ঘরে ${fmt(+dens.toFixed(2))} ফোঁটা, 3 এর কম। Heart গেটের আলোয় মিশে গেলো। |det| কমান।`}</Nope>}
+      {verdict === "small" && <Nope key={miss}>{`দেখা যায়, ঘরে ${fmt(+dens.toFixed(2))} ফোঁটা। কিন্তু আরো বড় করা যায়। ঘরে 3 হলেও চলে।`}</Nope>}
+      <Task done={verdict === "right"}>Lens বেছে যন্ত্রে দিন, তিনটা পর্যন্ত। Heart যত বড় পারেন, কিন্তু ঘরে অন্তত 3 ফোঁটা থাকতে হবে।</Task>
     </>
   );
 }
@@ -750,8 +750,8 @@ const X6_OPTS: { d: number; pts: XY[] }[] = [
 const X6_RIGHT = 1;
 const X6_OF = [2, 0, 1]; // the order the three pictures are shown in
 const X6_NOPE: Record<number, string> = {
-  0: "এই ছবিতে ফোঁটা stencil এর চেয়ে বেশি. বাড়তি আলো আসলো কোথা থেকে? বাতি তো একটাই.",
-  2: "এই ছবিতে ফোঁটা stencil এর চেয়ে কম. বাকি আলো গেলো কোথায়? কাঁচ আলো খায় না.",
+  0: "এই ছবিতে ফোঁটা stencil এর চেয়ে বেশি। বাড়তি আলো আসলো কোথা থেকে? বাতি তো একটাই।",
+  2: "এই ছবিতে ফোঁটা stencil এর চেয়ে কম। বাকি আলো গেলো কোথায়? কাঁচ আলো খায় না।",
 };
 const X6_SF = patchFrame(-0.2, 2.35, -0.15, 1.2, 30); // small picture: 93 × 57
 
@@ -763,7 +763,7 @@ export function TryDim() {
   const choose = (i: number) => {
     if (run.running) return;
     setPick(i);
-    run.run(() => (i === X6_RIGHT ? pass("জায়গা দুইগুণ, ঘরে অর্ধেক ফোঁটা.") : setMiss((m) => m + 1)));
+    run.run(() => (i === X6_RIGHT ? pass("জায়গা দুইগুণ, ঘরে অর্ধেক ফোঁটা।") : setMiss((m) => m + 1)));
   };
   const t = pick === null ? 0 : run.running ? run.t : 1;
   const settled = pick !== null && !run.running;
@@ -778,11 +778,11 @@ export function TryDim() {
       <div className="mt-1 text-center text-sm text-muted">
         {settled ? (
           <span className={FADE}>
-            stencil এ <b className="font-mono text-foreground">{n}</b> ফোঁটা. দেয়ালে <b className="font-mono text-foreground">{n}</b>. আপনার ছবিতে{" "}
+            stencil এ <b className="font-mono text-foreground">{n}</b> ফোঁটা। দেয়ালে <b className="font-mono text-foreground">{n}</b>. আপনার ছবিতে{" "}
             <b className={`font-mono ${pick === X6_RIGHT ? "text-accent-text" : "text-danger"}`}>{X6_OPTS[pick].pts.length}</b>.
           </span>
         ) : (
-          <span>lens: পাশে দুইগুণ, উপরে একই.</span>
+          <span>lens: পাশে দুইগুণ, উপরে একই।</span>
         )}
       </div>
       <div className="mt-2 grid grid-cols-3 gap-1.5">
@@ -799,7 +799,7 @@ export function TryDim() {
         ))}
       </div>
       {settled && pick !== X6_RIGHT && <Nope key={miss}>{X6_NOPE[pick]}</Nope>}
-      <Task done={settled && pick === X6_RIGHT}>এই lens heart টাকে কোন ছবি বানাবে? বেছে নিন.</Task>
+      <Task done={settled && pick === X6_RIGHT}>এই lens heart টাকে কোন ছবি বানাবে? বেছে নিন।</Task>
     </>
   );
 }
@@ -813,10 +813,10 @@ const X7F = X1F;
 const X7_GATE = gateDots(-3.1, 6.6, -0.7, 6.5);
 const X7_TRUE = mapPts(LG, HEART_DOTS);
 const X7_SAY = [
-  "ঘরে 12 হলে পুরা heart এ 12 গুণ আলো লাগতো. বাতি তো একটাই.",
-  "ঘরে 6 হলেও মোট আলো 6 গুণ. এত আলো আসবে কোথা থেকে?",
-  "ঘরে 1. মোট ফোঁটা stencil এর সমান. এটাই হলো.",
-  "144 ভাগের এক হলে পুরা heart মিলে এক ফোঁটাও হয় না. বাকি আলো গেলো কোথায়?",
+  "ঘরে 12 হলে পুরা heart এ 12 গুণ আলো লাগতো। বাতি তো একটাই।",
+  "ঘরে 6 হলেও মোট আলো 6 গুণ। এত আলো আসবে কোথা থেকে?",
+  "ঘরে 1। মোট ফোঁটা stencil এর সমান। এটাই হলো।",
+  "144 ভাগের এক হলে পুরা heart মিলে এক ফোঁটাও হয় না। বাকি আলো গেলো কোথায়?",
 ];
 
 export function GlowOpen() {
@@ -836,7 +836,7 @@ export function GlowOpen() {
     setCur(i);
     const next = open.includes(i) ? open : [...open, i];
     setOpen(next);
-    if (next.length === X1_CARDS.length && open.length < X1_CARDS.length) pass("12 গুণ জায়গা, 12 ভাগের এক আলো.");
+    if (next.length === X1_CARDS.length && open.length < X1_CARDS.length) pass("12 গুণ জায়গা, 12 ভাগের এক আলো।");
   };
   const claim = cur === null ? [] : claimDots(X1_CARDS[cur].d);
   return (
@@ -857,7 +857,7 @@ export function GlowOpen() {
             {X7_SAY[cur]}
           </span>
         ) : ran ? (
-          <span>ঘরে 1 ফোঁটা. গেটের আলো ঘরে 2.</span>
+          <span>ঘরে 1 ফোঁটা। গেটের আলো ঘরে 2।</span>
         ) : null}
       </div>
       {!ran ? (
@@ -878,7 +878,7 @@ export function GlowOpen() {
           ))}
         </div>
       )}
-      <Task done={open.length === X1_CARDS.length}>G আর L দিয়ে heart ফেলুন. তারপর বাজির চারটা card একটা একটা করে খুলুন.</Task>
+      <Task done={open.length === X1_CARDS.length}>G আর L দিয়ে heart ফেলুন। তারপর বাজির চারটা card একটা একটা করে খুলুন।</Task>
     </>
   );
 }
@@ -888,11 +888,11 @@ export function GlowOpen() {
 //     small picture.
 
 const FT_THINGS: [string, string][] = [
-  ["det মানে জায়গা কতগুণ", "এক ঘর lens পার হয়ে যত ঘর, det তত. সব ছবি একই গুণে বাড়ে."],
-  ["2 × 2 এ ad − bc", "হেলানো ছোপের জায়গা: বাক্স থেকে কোনা বাদ. আমিনের কায়দা."],
-  ["Minus মানে উল্টানো", "সংখ্যাটা বলে জায়গা কতগুণ. চিহ্ন বলে ছবি উল্টালো কিনা."],
-  ["শূন্যই আসল কথা", "Column এক লাইনে, জায়গা চ্যাপ্টা, আর ফেরানো যায় না. সব একই ঘটনা."],
-  ["det(AB) = det(A) det(B)", "Lens পরপর চালালে গুণ গুণ হয়. মাঝে একটা শূন্য থাকলে সব শূন্য."],
+  ["det মানে জায়গা কতগুণ", "এক ঘর lens পার হয়ে যত ঘর, det তত। সব ছবি একই গুণে বাড়ে।"],
+  ["2 × 2 এ ad − bc", "হেলানো ছোপের জায়গা: বাক্স থেকে কোনা বাদ। আমিনের কায়দা।"],
+  ["Minus মানে উল্টানো", "সংখ্যাটা বলে জায়গা কতগুণ। চিহ্ন বলে ছবি উল্টালো কিনা।"],
+  ["শূন্যই আসল কথা", "Column এক লাইনে, জায়গা চ্যাপ্টা, আর ফেরানো যায় না। সব একই ঘটনা।"],
+  ["det(AB) = det(A) det(B)", "Lens পরপর চালালে গুণ গুণ হয়। মাঝে একটা শূন্য থাকলে সব শূন্য।"],
 ];
 
 /** one small picture per thing, drawn on a white card */
@@ -947,7 +947,7 @@ export function FiveThings() {
     if (open.includes(i)) return;
     const next = [...open, i];
     setOpen(next);
-    if (next.length === FT_THINGS.length) pass("Article 8 এর পাঁচটা কথা.");
+    if (next.length === FT_THINGS.length) pass("Article 8 এর পাঁচটা কথা।");
   };
   return (
     <>
@@ -972,7 +972,7 @@ export function FiveThings() {
           );
         })}
       </div>
-      <Task done={open.length === FT_THINGS.length}>পাঁচটা card একটা একটা করে খুলুন.</Task>
+      <Task done={open.length === FT_THINGS.length}>পাঁচটা card একটা একটা করে খুলুন।</Task>
     </>
   );
 }
@@ -1155,10 +1155,10 @@ function St_Ledge({ x }: { x: number }) {
 }
 
 // ---------------------------------------------------------------------------
-// 1a · ফিরানির রাত. The wall with the week's paintings; the gate lit; Fahim
+// 1a · ফিরানির রাত। The wall with the week's paintings; the gate lit; Fahim
 //      on the ledge by the gate, looking down the road. The machine throws
 //      last night's small heart. The লাইট ভাই holds up G and L: the heart as
-//      big as the wall. Som: ফিকে. The লাইট ভাই: বাতি বদলাই নাই.
+//      big as the wall. Som: ফিকে। The লাইট ভাই: বাতি বদলাই নাই।
 
 export function NightGate({}: Story) {
   const s = useScene(4, [600, 1600, 2400, 2400, 2600]);
@@ -1184,9 +1184,9 @@ export function NightGate({}: Story) {
           </g>
         )}
         <NightPerson who="som" x={234} name="সোম" facing={-1} arm={k >= 3 ? "point" : "down"} />
-        {k === 2 && <Bubble x={156} y={84} side="mid" lines={["দেয়াল জুড়া", "heart দিমু."]} />}
-        {k === 3 && <Bubble x={232} y={84} side="left" lines={["এত বড় করলে", "আলো ফিকে হবে."]} />}
-        {k >= 4 && <Bubble x={156} y={84} side="mid" lines={["বাতি বদলাই নাই.", "আলো যা ছিলো, তাই থাকবো."]} />}
+        {k === 2 && <Bubble x={156} y={84} side="mid" lines={["দেয়াল জুড়া", "heart দিমু।"]} />}
+        {k === 3 && <Bubble x={232} y={84} side="left" lines={["এত বড় করলে", "আলো ফিকে হবে।"]} />}
+        {k >= 4 && <Bubble x={156} y={84} side="mid" lines={["বাতি বদলাই নাই।", "আলো যা ছিলো, তাই থাকবো।"]} />}
         <Name x={302} y={131}>
           ফাহিম
         </Name>
@@ -1196,12 +1196,12 @@ export function NightGate({}: Story) {
 }
 
 // 1b · Three more answers: Nasib (অর্ধেক), Samin (12 ভাগের এক: জায়গা 12
-//      গুণ), Karim (144: 12 লম্বায়, 12 চওড়ায়).
+//      গুণ), Karim (144: 12 লম্বায়, 12 চওড়ায়)।
 
 const TG_SAY: { who: Who; name: string; x: number; lines: string[]; side: "left" | "mid" | "right" }[] = [
-  { who: "nasib", name: "নাসিব", x: 70, lines: ["একটু তো কমবেই.", "ধরেন অর্ধেক."], side: "right" },
-  { who: "samin", name: "সামিন", x: 150, lines: ["জায়গা 12 গুণ.", "আলো 12 ভাগের এক."], side: "mid" },
-  { who: "karim", name: "করিম", x: 230, lines: ["লম্বায় 12, চওড়ায় 12.", "144 ভাগের এক."], side: "left" },
+  { who: "nasib", name: "নাসিব", x: 70, lines: ["একটু তো কমবেই।", "ধরেন অর্ধেক।"], side: "right" },
+  { who: "samin", name: "সামিন", x: 150, lines: ["জায়গা 12 গুণ।", "আলো 12 ভাগের এক।"], side: "mid" },
+  { who: "karim", name: "করিম", x: 230, lines: ["লম্বায় 12, চওড়ায় 12।", "144 ভাগের এক।"], side: "left" },
 ];
 
 export function ThreeGuesses({}: Story) {
@@ -1240,7 +1240,7 @@ export function NasibSmall({}: Story) {
           </g>
         )}
         <NightPerson who="som" x={70} name="সোম" facing={1} />
-        {k >= 2 && <Bubble x={190} y={84} side="mid" lines={["ছোট lens এ", "আলোও তো কম ঢুকবে."]} />}
+        {k >= 2 && <Bubble x={190} y={84} side="mid" lines={["ছোট lens এ", "আলোও তো কম ঢুকবে।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1262,7 +1262,7 @@ export function SaminPhone({}: Story) {
           {k >= 1 && <path d="M141 110q3 -8 6 0" fill="#ec4899" className={FADE} />}
         </g>
         <NightPerson who="fahim" x={210} name="ফাহিম" facing={-1} />
-        {k >= 2 && <Bubble x={130} y={84} side="right" lines={["ছবি বানানোর AI ও", "এই হিসাবটা করে."]} />}
+        {k >= 2 && <Bubble x={130} y={84} side="right" lines={["ছবি বানানোর AI ও", "এই হিসাবটা করে।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1330,7 +1330,7 @@ export function Headlights({}: Story) {
   );
 }
 
-// 8a · ফিরানি. The car at the gate. আপা gets out, দুলাভাই behind. She walks
+// 8a · ফিরানি। The car at the gate. আপা gets out, দুলাভাই behind. She walks
 //      to the wall: the ফুল, the মেহেদি hands, the door piece, the heart
 //      (now through L alone, bright over the gate's bulbs). She puts her palm
 //      on the painted hand. It is three times her hand, and the other way.
@@ -1377,8 +1377,8 @@ export function LateNight({}: Story) {
         <NightPerson who="samin" x={236} name="সামিন" facing={-1} arm={k === 1 ? "point" : "down"} />
         <LightBhai x={176} y={150} facing={1} nameTone={NIGHT_INK} />
         {k === 1 && <Bubble x={236} y={84} side="left" lines={["উল্টা চালালে রিনার", "ছোট stencil ফেরত আসে?"]} />}
-        {k === 2 && <Bubble x={176} y={84} side="mid" lines={["কোনো lens এ পারি."]} />}
-        {k >= 3 && <Bubble x={176} y={84} side="mid" lines={["কোনোটায়", "জিন্দেগিতেও না."]} />}
+        {k === 2 && <Bubble x={176} y={84} side="mid" lines={["কোনো lens এ পারি।"]} />}
+        {k >= 3 && <Bubble x={176} y={84} side="mid" lines={["কোনোটায়", "জিন্দেগিতেও না।"]} />}
       </Stage>
     </StoryFrame>
   );
@@ -1391,7 +1391,7 @@ export function LateNight({}: Story) {
 //      A bright heart shows over it; a faint one of the same size is lost.
 //      The big one? Stopped at "?".
 
-const S1_SAY = ["গেটে মরিচ বাতি. তার আলোও দেয়ালে পড়ে, ঘরে দুই ফোঁটা.", "উজ্জ্বল heart সেই আলোর উপরেও চোখে পড়ে.", "ফিকে heart গেটের আলোয় মিশে যায়. গাড়ি থেকে নেমে আপা দেখবেনই না.", "দেয়াল জুড়ে বড় heart টা কোনটা হবে?"];
+const S1_SAY = ["গেটে মরিচ বাতি। তার আলোও দেয়ালে পড়ে, ঘরে দুই ফোঁটা।", "উজ্জ্বল heart সেই আলোর উপরেও চোখে পড়ে।", "ফিকে heart গেটের আলোয় মিশে যায়। গাড়ি থেকে নেমে আপা দেখবেনই না।", "দেয়াল জুড়ে বড় heart টা কোনটা হবে?"];
 const S1F = patchFrame(-1.5, 6.5, -0.4, 4.4, 24); // 208 × 131
 const S1_GATE = gateDots(-1.5, 6.5, -0.4, 4.4);
 const S1_H = small(HEART0, 2.6, [1.1, 0.8]);
@@ -1438,7 +1438,7 @@ const S2_DOTS = X2_END.map((p) => {
   const i = S2_PLAN.pieces.findIndex((q) => q.cell[0] === Math.floor(p[0]) && q.cell[1] === Math.floor(p[1]));
   return { p, piece: i };
 });
-const S2_SAY = ["G এর ছোপ, 12 টা ফোঁটা নিয়ে.", "চকের দাগে কাটি. প্রতিটা টুকরা তার ফোঁটা নিয়ে যায়.", "8.1 এর মতো টুকরা সরিয়ে তিনটা পুরা ঘর.", "প্রতি ঘরে 4. তিন ঘরে 12. একটা ফোঁটাও হারায় নাই."];
+const S2_SAY = ["G এর ছোপ, 12 টা ফোঁটা নিয়ে।", "চকের দাগে কাটি। প্রতিটা টুকরা তার ফোঁটা নিয়ে যায়।", "8.1 এর মতো টুকরা সরিয়ে তিনটা পুরা ঘর।", "প্রতি ঘরে 4। তিন ঘরে 12। একটা ফোঁটাও হারায় নাই।"];
 
 export function SlideThree() {
   const s = useScene(3, [600, 1600, 1800, 2200]);
@@ -1475,7 +1475,7 @@ export function SlideThree() {
 // 2½b · Som's torch: held close, a small bright circle; stepped back, a big
 //       faint one. The same 12 dots.
 
-const S2B_SAY = ["সোমের টর্চ, দেয়ালের একদম কাছে. ছোট গোল আলো, খুব উজ্জ্বল.", "সোম দুই পা পিছালো. গোলটা বড় হলো.", "ফোঁটা সেই 12 টাই. ছড়িয়েছে বেশি জায়গায়, তাই প্রতি ঘরে কম."];
+const S2B_SAY = ["সোমের টর্চ, দেয়ালের একদম কাছে। ছোট গোল আলো, খুব উজ্জ্বল।", "সোম দুই পা পিছালো। গোলটা বড় হলো।", "ফোঁটা সেই 12 টাই। ছড়িয়েছে বেশি জায়গায়, তাই প্রতি ঘরে কম।"];
 const S2B_UNIT: XY[] = Array.from({ length: 12 }, (_, i) => {
   const r = Math.sqrt((i + 0.5) / 12);
   const a = i * 2.39996;
@@ -1519,7 +1519,7 @@ export function TorchFig() {
 // 3½ · The rule, three lenses side by side: one ঘর of the wall under G (4),
 //      H (48), M (12); then "÷ |det|" lands: 12 ÷ 3, 12 ÷ ¼, 12 ÷ 1.
 
-const S3_SAY = ["G: জায়গা 3 গুণ. ঘরে 12 ÷ 3 = 4.", "H: জায়গা ¼. ঘরে 12 ÷ ¼ = 48.", "আয়না: det −1. ঘরে 12 ÷ 1 = 12. ফোঁটা তো minus হয় না.", "দেয়ালের ঘনত্ব = stencil এর ঘনত্ব ÷ |det|."];
+const S3_SAY = ["G: জায়গা 3 গুণ। ঘরে 12 ÷ 3 = 4।", "H: জায়গা ¼। ঘরে 12 ÷ ¼ = 48।", "আয়না: det −1। ঘরে 12 ÷ 1 = 12। ফোঁটা তো minus হয় না।", "দেয়ালের ঘনত্ব = stencil এর ঘনত্ব ÷ |det|।"];
 const S3_PANELS = [
   { name: "G", n: 4, sum: "12 ÷ 3" },
   { name: "H", n: 48, sum: "12 ÷ ¼" },
@@ -1566,7 +1566,7 @@ export function DivideFig() {
 //      by lens; after each, the middle's thickness is divided by that lens's
 //      |det|. The total stays 1.
 
-const S4_SAY = ["Model শুরু করে একটা সোজা, গোল স্তূপ দিয়ে. মাঝে ঘরে 16.", "এক lens: পাশে দুইগুণ. |det| 2, মাঝে 16 ÷ 2 = 8.", "আরেকটা: হেলানো. |det| 1, মাঝে সেই 8.", "আরেকটা: G. |det| 3, মাঝে 8 ÷ 3, প্রায় 2.7. মোট তবু 1."];
+const S4_SAY = ["Model শুরু করে একটা সোজা, গোল স্তূপ দিয়ে। মাঝে ঘরে 16।", "এক lens: পাশে দুইগুণ। |det| 2, মাঝে 16 ÷ 2 = 8।", "আরেকটা: হেলানো। |det| 1, মাঝে সেই 8।", "আরেকটা: G। |det| 3, মাঝে 8 ÷ 3, প্রায় 2.7. মোট তবু 1।"];
 const S4F = patchFrame(-5, 7, -3.4, 5, 15); // 196 × 142
 const SHEAR: Cols = [
   [1, 0],
@@ -1605,7 +1605,7 @@ export function FlowFig() {
 //       wide, half as tall (same area); in two directions, √det Σ is that
 //       spread's room, and the height is divided by it.
 
-const S4B_SAY = ["পাশ থেকে দেখা একটা bell curve. নিচের জায়গা মোট 1.", "দুইগুণ চওড়া হলে উঁচু অর্ধেক. জায়গা সেই 1.", "অনেক দিকে ছড়ালে ছড়ানোর মাপ Σ. তার জায়গা √det Σ, তাই সামনে 1/√det Σ."];
+const S4B_SAY = ["পাশ থেকে দেখা একটা bell curve। নিচের জায়গা মোট 1।", "দুইগুণ চওড়া হলে উঁচু অর্ধেক। জায়গা সেই 1।", "অনেক দিকে ছড়ালে ছড়ানোর মাপ Σ। তার জায়গা √det Σ, তাই সামনে 1/√det Σ।"];
 const bell = (sig: number) => {
   let d = "";
   for (let i = 0; i <= 60; i += 1) {
@@ -1639,7 +1639,7 @@ export function BellFig() {
 // 8½ · The recap: last night's small heart, 12 per ঘর; through L, 4 × the
 //      room, 3 per ঘর, over the gate's 2; the dots the same.
 
-const S8_SAY = ["কালকের ছোট heart. ঘরে 12 ফোঁটা.", "L দিয়ে: জায়গা 4 গুণ. ঘরে 12 ÷ 4 = 3.", "গেটের আলো ঘরে 2. Heart চোখে পড়ে.", "জায়গা det গুণ হলে, ঘনত্ব det ভাগ. ফোঁটা সেই কয়টাই."];
+const S8_SAY = ["কালকের ছোট heart। ঘরে 12 ফোঁটা।", "L দিয়ে: জায়গা 4 গুণ। ঘরে 12 ÷ 4 = 3।", "গেটের আলো ঘরে 2। Heart চোখে পড়ে।", "জায়গা det গুণ হলে, ঘনত্ব det ভাগ। ফোঁটা সেই কয়টাই।"];
 const S8F = patchFrame(-1.6, 3.2, -0.5, 2.6, 36); // 189 × 128
 const S8_GATE = gateDots(-1.6, 3.2, -0.5, 2.6);
 

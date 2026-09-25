@@ -193,7 +193,7 @@ export function StraightPush() {
           <DotBox a={ROAD} b={push} names={DIRS} />
           {!front && (
             <>
-              <div className="mt-3 text-sm font-medium text-muted">এবার ফাহিম সামনে গিয়ে উল্টো দিকে ঠেলবে, (−4, −3)। box কী দেবে?</div>
+              <div className="mt-3 text-sm font-medium text-muted">এবার ফাহিম সামনে গিয়ে উল্টো দিকে ঠেলবে, (−4, −3)। dot product কী দেবে?</div>
               <div className="mt-2 grid grid-cols-3 gap-2">
                 {FRONT_GUESS.map((o, i) => (
                   <Choice key={o} n={i} look={predictLook(i, guess, false, 2)} disabled={guess !== null} onClick={() => setGuess(i)}>
@@ -223,7 +223,7 @@ export function StraightPush() {
           ["সামনে থেকে", front],
         ]}
       />
-      <Task done={front}>ফাহিমকে আগে পেছন থেকে ঠেলতে দিন। তারপর guess করুন, সামনে থেকে ঠেললে box কী দেবে।</Task>
+      <Task done={front}>ফাহিমকে আগে পেছন থেকে ঠেলতে দিন। তারপর guess করুন, সামনে থেকে ঠেললে dot product কী দেবে।</Task>
     </>
   );
 }
@@ -364,7 +364,7 @@ export function PushRing() {
           ["সবচেয়ে কম", found.min],
         ]}
       />
-      <Task done={done}>ফাহিমকে বৃত্তের বিভিন্ন জায়গায় দাঁড় করান। box এর সবচেয়ে বড় নম্বর, একটা শূন্য আর সবচেয়ে ছোট নম্বর খুঁজে বের করুন।</Task>
+      <Task done={done}>ফাহিমকে বৃত্তের বিভিন্ন জায়গায় দাঁড় করান। Dot product এর সবচেয়ে বড় নম্বর, একটা শূন্য আর সবচেয়ে ছোট নম্বর খুঁজে বের করুন।</Task>
     </>
   );
 }
@@ -389,7 +389,7 @@ export function StrongPush() {
 
   const run = () => {
     setRan(true);
-    pass("box এ দিক আর জোর, দুইটাই মেশে।");
+    pass("Dot product এ দিক আর জোর, দুইটাই মেশে।");
   };
 
   return (
@@ -427,7 +427,7 @@ export function StrongPush() {
       {guess !== null && !ran && (
         <div className={`${FADE} mt-3 flex justify-center`}>
           <button type="button" onClick={run} className={primaryBtn}>
-            দুইজনকেই box এ দিন
+            দুইজনেরই dot product করুন
           </button>
         </div>
       )}
@@ -439,7 +439,7 @@ export function StrongPush() {
           </Choice>
         ))}
       </div>
-      <Task done={ran}>আগে guess করুন, কার ধাক্কা বেশি কাজে লাগবে। তারপর দুইজনকেই রাস্তার সাথে box এ দিন।</Task>
+      <Task done={ran}>আগে guess করুন, কার ধাক্কা বেশি কাজে লাগবে। তারপর দুইজনেরই রাস্তার সাথে dot product করুন।</Task>
     </>
   );
 }
@@ -518,7 +518,7 @@ export function CoinBox() {
           </div>
           {summed && (
             <div className={`${FADE} mt-2 text-center text-[0.95rem]`}>
-              দুইটা মিল, দুইটা অমিল: box এ <b className="font-mono">0</b>
+              দুইটা মিল, দুইটা অমিল: dot product <b className="font-mono">0</b>
             </div>
           )}
           {!summed ? (
@@ -550,25 +550,25 @@ export function CoinBox() {
         </>
       ) : (
         <div className={FADE}>
-          <div className="mt-2 text-center text-sm text-accent-text">✓ চার ঘরে দুই মিল, দুই অমিল: box এ 0, কোণ 90°।</div>
+          <div className="mt-2 text-center text-sm text-accent-text">✓ চার ঘরে দুই মিল, দুই অমিল: dot product 0, কোণ 90°।</div>
           <div className="mx-auto mt-3 grid w-fit grid-cols-10 gap-1" aria-label={`একশো জোড়ার ${bn(MATCH100)}টা মিল`}>
             {BLUE100.map((v, i) => (
               <span key={i} className={`size-4 rounded-sm ${v === RED100[i] ? "bg-accent/70" : "bg-danger/60"}`} />
             ))}
           </div>
           <div className="mt-3 text-center text-[0.95rem]">
-            মিল <b className="font-mono">{MATCH100}</b>, অমিল <b className="font-mono">{100 - MATCH100}</b>, box এ {" "}
+            মিল <b className="font-mono">{MATCH100}</b>, অমিল <b className="font-mono">{100 - MATCH100}</b>, dot product {" "}
             <b className="font-mono">{num(dot(BLUE100, RED100))}</b>। সব মিললে হতো 100।
           </div>
         </div>
       )}
-      <Task done={hundred}>আগে চার জোড়া coin box এ দিন। তারপর কোণটা বলুন। শেষে 100 বার toss করে দেখুন।</Task>
+      <Task done={hundred}>আগে চার জোড়া coin এর dot product করুন। তারপর কোণটা বলুন। শেষে 100 বার toss করে দেখুন।</Task>
     </>
   );
 }
 
 // ---------------------------------------------------------------------------
-// 6 · এবার আপনার পালা. The five pushers again, numbers only, one card at a
+// 6 · এবার আপনার পালা। The five pushers again, numbers only, one card at a
 //     time: পক্ষে, কাজে আসছে না, or বিপক্ষে, worked out in the head. Wrong tries
 //     bounce. Their numbers add to 66 and the van needs 80. Sending মামী and
 //     রফিক round the back makes it 121, and the van comes out.
@@ -614,7 +614,7 @@ export function FixTheCrew() {
         )}
         {miss !== null && !all && (
           <Nope key={miss}>
-            উঁহু। মনে মনে boxটা চালান। 4 গুণ প্রথম সংখ্যা। 3 গুণ দ্বিতীয় সংখ্যা। তারপর যোগ। কী এলো? plus, শূন্য না minus?
+            উঁহু। মনে মনে dot product টা করুন। 4 গুণ প্রথম সংখ্যা। 3 গুণ দ্বিতীয় সংখ্যা। তারপর যোগ। কী এলো? plus, শূন্য না minus?
           </Nope>
         )}
       </div>
@@ -670,7 +670,7 @@ export function FixTheCrew() {
         </div>
       )}
       <Task done={fixed}>
-        প্রতিজনের ধাক্কা রাস্তার সাথে মনে মনে box এ দিন। বিচার করুন ({bn(done)}/{bn(CREW.length)})। তারপর ভ্যানটাকে কাদা থেকে তুলুন।
+        প্রতিজনের ধাক্কা রাস্তার সাথে মনে মনে dot product করুন। বিচার করুন ({bn(done)}/{bn(CREW.length)})। তারপর ভ্যানটাকে কাদা থেকে তুলুন।
       </Task>
     </>
   );
@@ -784,9 +784,9 @@ function RightAngle({ f, to }: { f: Frame; to: XY }) {
 //      sign flips — the box telling the road which team the push is on.
 
 const X2T_SAY = [
-  "পেছন থেকে ঠেললে (4, 3): box এ +25।",
+  "পেছন থেকে ঠেললে (4, 3): dot product +25।",
   "সামনে থেকে সেই একই ধাক্কা (−4, −3): −25।",
-  "সংখ্যা একই। শুধু চিহ্ন উল্টা। দুইটা informationই box দেয় একদম ঠিক।",
+  "সংখ্যা একই। শুধু চিহ্ন উল্টা। দুইটা informationই dot product দেয় একদম ঠিক।",
 ];
 const X2T_ROWS = [
   { head: "পেছন থেকে", tup: "(4, 3)", out: "+25", team: "ভ্যানের দলে", ink: "text-cat-blue", edge: "border-cat-blue/40", chip: "bg-cat-blue/10 text-cat-blue" },
@@ -837,7 +837,7 @@ const F2F = makeFrame(-0.6, 4.8, -0.6, 3.9, 24);
 const X2F_SAY = [
   "রাস্তার arrow (4, 3) নিজে কত লম্বা?",
   "ফিতা দিয়ে মাপা যায়: ঠিক 5।",
-  "তাই box এর নম্বর আসল ধাক্কার 5 গুণ: 25 = 5 × 5।",
+  "তাই dot product এর নম্বর আসল ধাক্কার 5 গুণ: 25 = 5 × 5।",
 ];
 
 export function FiveTimes() {
@@ -1156,9 +1156,9 @@ const X5_SAY = [
   "নীল আর লাল coin-এর চার জোড়া: প্রতি জোড়া হয় মিল, নয় অমিল।",
   "মিল হলে +1। সেই জোড়া টানে ডান দিকে।",
   "অমিল হলে −1। ওরা টানে বাঁ দিকে।",
-  "দুই দিকের টান সমান। ফাঁস জায়গায়। box এ 0, কোণ ঠিক 90°।",
+  "দুই দিকের টান সমান। ফাঁস জায়গায়। Dot product 0, কোণ ঠিক 90°।",
   `এবার 100 জোড়া: মিল ${MATCH100}, অমিল ${100 - MATCH100}।`,
-  "টান প্রায় সমান। box এ 4। তাই কোণ প্রায় 90°।",
+  "টান প্রায় সমান। Dot product 4। তাই কোণ প্রায় 90°।",
 ];
 
 export function CoinTug() {
@@ -1237,8 +1237,8 @@ export function CoinTug() {
 const F9F = makeFrame(-1.5, 3.6, -0.5, 3.5, 26);
 const X9_SAY = [
   "আঁকা যায় এমন দুইটা arrow। কোণটা চোখেই পড়ে। ৯০ degree।",
-  "নাসিবের চার ঘরের coin arrow আঁকা যায় না। কিন্তু box চলে: +1 − 1 − 1 + 1 = 0।",
-  "একশো ঘরের arrow-ও আঁকা যায় না। কিন্তু box তো চলেই। উত্তর 0 মানেই ৯০ degree কোণ।",
+  "নাসিবের চার ঘরের coin arrow আঁকা যায় না। কিন্তু dot product চলে: +1 − 1 − 1 + 1 = 0।",
+  "একশো ঘরের arrow-ও আঁকা যায় না। কিন্তু dot product তো চলেই। উত্তর 0 মানেই ৯০ degree কোণ।",
   "এই পরীক্ষার নাম? u ⊥ v। মানে u perpendicular to v।",
 ];
 const X9_PRODUCTS = ["+1", "−1", "−1", "+1"];
@@ -1277,7 +1277,7 @@ export function AnySize() {
           )}
           {k >= 2 && (
             <div className={`${FADE} rounded-xl border-2 border-border bg-surface px-2 py-1 text-xs`}>
-              যত ঘরই হোক — <b className="font-mono">box চলে</b>
+              যত ঘরই হোক — <b className="font-mono">dot product চলে</b>
             </div>
           )}
           {k >= 3 && (
@@ -1370,8 +1370,8 @@ const X7_SAY = [
   "পাঁচজনের ধাক্কা প্রথমে লাগছে একই বিন্দুতে। দেখুন, সব arrow একই জায়গায়।",
   "এবার যোগ, ৩.১-এর মতো। একটার ঘাড়ে আরেকটা বসাই। arrow-গুলো একটার পর একটা stack হচ্ছে।",
   "শেষে পৌঁছানো গেল (3, 18)-এ। শুরু থেকে শেষ, এটাই final arrow। সব arrow-এর যোগফল।",
-  "মোট arrow-টা রাস্তার সাথে box এ: 12 + 54 = 66।",
-  "আলাদা আলাদা নম্বরগুলোর যোগফল? সেটাও 66। আগে যোগ পরে box, উত্তর একই।",
+  "মোট arrow-টার সাথে রাস্তার dot product: 12 + 54 = 66।",
+  "আলাদা আলাদা নম্বরগুলোর যোগফল? সেটাও 66। আগে যোগ পরে dot product, উত্তর একই।",
 ];
 
 export function SumThenBox() {
@@ -1477,7 +1477,7 @@ export function DinnerBet({}: Story) {
             </P_Carry>
           </>
         )}
-        {k >= 1 && k < 3 && <Bubble x={116} y={PG - 66} side="right" lines={k === 1 ? ["০ এর বড় না ছোট তো কোণের information দেয়।", "কিন্তু কেন?"] : ["কোণের information আসবে কোথা থেকে?", "box এ তো কোনো চাঁদাই নাই!"]} />}
+        {k >= 1 && k < 3 && <Bubble x={116} y={PG - 66} side="right" lines={k === 1 ? ["০ এর বড় না ছোট তো কোণের information দেয়।", "কিন্তু কেন?"] : ["কোণের information আসবে কোথা থেকে?", "dot product এ তো কোনো চাঁদাই নাই!"]} />}
         {k >= 3 && <Bubble x={164} y={PG - 66} side="left" lines={["ফিতা আর একটা চাঁদাই হবে।", "কাল দুপুরে ছাদে!"]} />}
         {k >= 3 && (
           <text x={212} y={PG - 78} textAnchor="middle" fontSize={24} fontWeight={800} fill={P_INK} className={POP}>
@@ -1620,7 +1620,7 @@ const X1_SAY = [
   "মামী আর রফিক, দুইজনই মোটামুটি পাশ থেকে ঠেলছে।",
   "কার ধাক্কা কতটা কাজের? চোখে দেখে বলা মুশকিল।",
   "রাস্তার arrow আর কারো ধাক্কার arrow, দুইটাই তো list।",
-  "box এ দিলে বের হবে একটা সংখ্যা। সেটা দিয়ে কি ধাক্কাটা মাপা যায়?",
+  "Dot product করলে বের হবে একটা সংখ্যা। সেটা দিয়ে কি ধাক্কাটা মাপা যায়?",
 ];
 
 export function PushToBox() {
@@ -1666,7 +1666,7 @@ export function PushToBox() {
           )}
           {k >= 3 && (
             <div className={`${POP} rounded-2xl border-2 border-cat-amber/40 bg-cat-amber/5 px-2 py-2`}>
-              <div className="text-[0.65rem] text-muted">box</div>
+              <div className="text-[0.65rem] text-muted">dot product</div>
               <div className="font-mono text-xs">
                 {tupN(ROAD)} · {tupN(X1_RAFIQ.v)}
               </div>
@@ -1748,7 +1748,7 @@ export function PlusSide() {
           </Plane>
         </div>
         <div className="w-[5.5rem] shrink-0 text-center">
-          <div className="text-[0.65rem] text-muted">box এ</div>
+          <div className="text-[0.65rem] text-muted">dot product</div>
           <div className="font-mono text-2xl font-bold text-cat-blue tabular-nums">{signed(n)}</div>
           <div className="text-[0.65rem] text-muted">
             রাস্তা থেকে <span className="font-mono">{off}°</span>
@@ -1774,7 +1774,7 @@ const X4T_FILMS: { name: string; v: XY; tone: Tone; n: number; dx: number; dy: n
 const X4T_SAY = [
   "৩.৬-এর movie club। মামার পছন্দ (2, 5), পাশেই Mr. Bean (1, 4)।",
   "Titanic (5, 2) তাকিয়ে আছে অন্য দিকে, কিন্তু দুইটা score-ই বড় বড়।",
-  "তবু box এ Mr. Bean 22, Titanic 20। প্রায় জিতে যাচ্ছিল, শুধু জোরের জোরে।",
+  "তবু dot product এ Mr. Bean 22, Titanic 20। প্রায় জিতে যাচ্ছিল, শুধু জোরের জোরে।",
   "ছবি বাছতে চাই শুধু “কতটা একই দিকে”। জোরটা ছেঁটে ফেলবো কীভাবে? সেটা সামনের journey-র কাজ।",
 ];
 
@@ -2163,9 +2163,9 @@ export function BoxWarmup() {
           </P_Opt>
         ))}
       </div>
-      {s.over && s.pick === 0 && <Nope key={s.miss}>উঁহু, box গুণ করে থেমে গেল। ঘরে ঘরে গুণ, তারপর যোগ।</Nope>}
+      {s.over && s.pick === 0 && <Nope key={s.miss}>উঁহু, গুণ করে থেমে গেল। ঘরে ঘরে গুণ, তারপর যোগ।</Nope>}
       {s.over && s.pick === 1 && <Nope key={s.miss}>উঁহু, এখানে আগে যোগ হলো, পরে গুণ। ঘরে ঘরে গুণ, তারপর যোগ।</Nope>}
-      <Task done={won}>একটা উত্তর tap করুন। box সেই উত্তরের নিয়মে চলবে। দেখুন কোনটা মেলে।</Task>
+      <Task done={won}>একটা উত্তর tap করুন। Dot product সেই উত্তরের নিয়মে চলবে। দেখুন কোনটা মেলে।</Task>
     </>
   );
 }
@@ -2176,11 +2176,11 @@ export function BoxWarmup() {
 //      the multiply ((2, 6)), and adding first (16).
 
 const X0_SAY = [
-  "হাটের box, দুইটা list: (1, 3) আর (2, 2)।",
+  "হাটের dot product, দুইটা list: (1, 3) আর (2, 2)।",
   "ঘরে ঘরে গুণ: 1 × 2 = 2, 3 × 2 = 6।",
   "তারপর যোগ: 8।",
   "(2, 6)? গুণ করে থেমে যাওয়া। যোগটা এখনো বাকি।",
-  "আর 16 হলো আগে যোগ, পরে গুণ। box এর নিয়ম মানে না ওটা।",
+  "আর 16 হলো আগে যোগ, পরে গুণ। Dot product এর নিয়ম মানে না ওটা।",
 ];
 const X0_AT: [W0Mode, number][] = [
   ["right", 0],
@@ -2540,7 +2540,7 @@ const D5_B = (() => {
   const r = rng(8);
   return D5_A.map(() => (r() < 0.5 ? 1 : -1));
 })();
-const D5_OPTS = ["box চালিয়ে, উত্তর 0 হলে ৯০ degree কোণে।", "আঁকতে না পারলে বোঝার উপায় নাই।", "দুইটার length মিলিয়ে।"];
+const D5_OPTS = ["Dot product করে, উত্তর 0 হলে ৯০ degree কোণে।", "আঁকতে না পারলে বোঝার উপায় নাই।", "দুইটার length মিলিয়ে।"];
 const D5_RIGHT = 0;
 const D5_MATCH = D5_A.filter((x, i) => x === D5_B[i]).length;
 
@@ -2631,9 +2631,9 @@ export function HundredSlots() {
         )}
         {s.pick === D5_RIGHT && k >= 3 && (
           <g className={POP}>
-            <rect x={96} y={80} width={108} height={22} rx={11} fill="white" stroke={P_OK} strokeWidth={1.6} />
+            <rect x={84} y={80} width={132} height={22} rx={11} fill="white" stroke={P_OK} strokeWidth={1.6} />
             <text x={150} y={94.5} textAnchor="middle" fontSize={10} fontWeight={800} fill={P_OK}>
-              box এ 0, ৯০ degree
+              dot product 0, ৯০ degree
             </text>
           </g>
         )}
@@ -2667,26 +2667,26 @@ export function HundredSlots() {
       </svg>
       <div className="mt-3 grid gap-1.5">
         {D5_OPTS.map((o, i) => (
-          <Choice key={o} n={i} look={s.look(i, D5_RIGHT)} disabled={won} onClick={() => s.go(i, D5_RIGHT, () => pass("box এ 0 মানে ৯০ degree কোণ, যত ঘরেই।"))}>
+          <Choice key={o} n={i} look={s.look(i, D5_RIGHT)} disabled={won} onClick={() => s.go(i, D5_RIGHT, () => pass("Dot product 0 মানে ৯০ degree কোণ, যত ঘরেই।"))}>
             <span className="text-[0.95rem] leading-snug">{o}</span>
           </Choice>
         ))}
       </div>
-      {s.over && s.pick !== D5_RIGHT && <Nope key={s.miss}>Coin-এর বেলায় ছবি ছাড়াই কোণটা কে বলে দিলো? মিল আর অমিল সমান হলে box এ কত আসে?</Nope>}
+      {s.over && s.pick !== D5_RIGHT && <Nope key={s.miss}>Coin-এর বেলায় ছবি ছাড়াই কোণটা কে বলে দিলো? মিল আর অমিল সমান হলে dot product এ কত আসে?</Nope>}
       <Task done={won}>একটা উপায় বেছে নিন। দেখুন সেটা দিয়ে কোণটা ধরা যায় কিনা।</Task>
     </>
   );
 }
 
 // ---------------------------------------------------------------------------
-// 6b · একটু ঝালিয়ে নিন: (3, −2, 5) and (4, 1, −2). A pick plays out: the box
+// 6b · একটু ঝালিয়ে নিন: (3, −2, 5) and (4, 1, −2)। A pick plays out: the box
 //      runs slot by slot to 12 − 2 − 10 = 0; "20" runs it with the minus
 //      signs falling off; "can't tell without drawing" tries the sheet and
 //      runs out of room at the third slot.
 
 const E6_A = [3, -2, 5];
 const E6_B = [4, 1, -2];
-const E6_OPTS = ["হ্যাঁ, box এ 0", "না, box এ 20", "আঁকা ছাড়া বলা যায় না"];
+const E6_OPTS = ["হ্যাঁ, dot product 0", "না, dot product 20", "আঁকা ছাড়া বলা যায় না"];
 const E6_RIGHT = 0;
 
 /** The three-slot box at beat k (0…4): a product per beat, the sum at 4. `drop` lets the minus signs fall off. */
@@ -2757,8 +2757,8 @@ export function ThreeSlots() {
         ))}
       </div>
       {s.over && s.pick === 1 && <Nope key={s.miss}>উঁহু, minus-গুলো পড়ে গেল। ঘরে ঘরে গুণ করে যোগ করুন। minus-গুলো সাবধানে।</Nope>}
-      {s.over && s.pick === 2 && <Nope key={s.miss}>তিন ঘরের arrow আঁকা যায় না, ঠিক। কিন্তু box তো চলে।</Nope>}
-      <Task done={won}>একটা উত্তর tap করুন। box বা কাগজ, যেটা বেছে নেন সেটাই চলবে।</Task>
+      {s.over && s.pick === 2 && <Nope key={s.miss}>তিন ঘরের arrow আঁকা যায় না, ঠিক। কিন্তু dot product তো চলে।</Nope>}
+      <Task done={won}>একটা উত্তর tap করুন। Dot product বা কাগজ, যেটা বেছে নেন সেটাই চলবে।</Task>
     </>
   );
 }
@@ -2772,7 +2772,7 @@ const X6B_SAY = [
   "(3 × 4) + (−2 × 1) + (5 × −2)।",
   "ঘরে ঘরে গুণ করে যোগ: 12 − 2 − 10 = 0।",
   "minus-গুলো বাদ দিলে হয়ে যায় 12 + 2 + 10 = 20।",
-  "box এ 0 মানে ৯০ degree কোণ। কোণ মাপতে চাঁদা লাগে না। boxই যথেষ্ট।",
+  "Dot product 0 মানে ৯০ degree কোণ। কোণ মাপতে চাঁদা লাগে না। Dot productই যথেষ্ট।",
 ];
 
 export function MinusCare() {
