@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
 import { Bubble, Person, Stage, StoryFrame } from "@/components/journey/cast";
 import { Task, useGate } from "@/components/journey/journey";
@@ -8,6 +8,7 @@ import { Choice, FADE, Nope, POP, Scene, predictLook, primaryBtn, usePlay, useSc
 import { Arrow, makeFrame, type Frame, type XY } from "@/components/journey/plane";
 import { LightBhai, Projector, STAGE_WALL_F, StageWall, apply, det, pathOf, useLensRun, type Cols, type Move } from "./light-kit";
 import { LENS_G, PK, PatchWall, patchCorners, patchFrame } from "./patch-kit";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 9.5 — ঝাপসা lens, ফেরাতে গেলে বিপদ", told as a
 // Journey in the author's Bangla-English. The plan is 09_journey_specs.md,
@@ -316,6 +317,7 @@ export function SpeckBet() {
   const seal = () => {
     if (bet === null || sealed) return;
     setSealed(true);
+    sfx.stamp();
     act.play(3, () => pass("বাজি সিল হলো। আগে দাগ ছাড়া।"));
   };
   return (
@@ -1160,6 +1162,10 @@ function St_Gate({ x }: { x: number }) {
 export function VanAtGate({}: Story) {
   const s = useScene(3, [600, 1800, 2000, 2600]);
   const k = s.k;
+  // the fly lifts off the heart and buzzes away
+  useEffect(() => {
+    if (k === 1) sfx.fly(1.1);
+  }, [k]);
   const [fx, fy] = onStage(ST_SPECK);
   return (
     <StoryFrame scene={s}>
@@ -1209,6 +1215,10 @@ export function SpeckGuesses({}: Story) {
 export function SecondSheet({}: Story) {
   const s = useScene(2, [600, 1800, 2000]);
   const k = s.k;
+  // রিনা brings a second sheet
+  useEffect(() => {
+    if (k === 1) sfx.slip();
+  }, [k]);
   const [fx, fy] = onStage(ST_SPECK);
   return (
     <StoryFrame scene={s}>

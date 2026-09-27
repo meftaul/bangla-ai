@@ -1,6 +1,6 @@
 "use client";
 
-import { type ReactNode } from "react";
+import { useEffect, type ReactNode } from "react";
 
 import { Bubble, Card, Person, Stage, StoryFrame } from "@/components/journey/cast";
 import { Task, useGate } from "@/components/journey/journey";
@@ -9,6 +9,7 @@ import { DotBox, Tup, dot } from "@/components/journey/box";
 import { Arrow, Lit, Plane, clamp, makeFrame, same, tup, type Frame, type XY } from "@/components/journey/plane";
 import { Shiku } from "./arrow-journey";
 import { LightBhai } from "./light-kit";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 7.1 — বাজারের list, গুণ করার দুই রাস্তা", told as a
 // Journey in the author's Bangla-English. The plan is 07_journey_specs.md,
@@ -387,7 +388,10 @@ export function ListBet() {
   const act = usePlay(750);
   const seal = (i: number) => {
     setBet(i);
-    act.play(3, () => pass("বাজি সিল হলো। আগে এক ডেকচি করে দেখি।"));
+    act.play(3, () => {
+      sfx.stamp();
+      pass("বাজি সিল হলো। আগে এক ডেকচি করে দেখি।");
+    });
   };
   // beats of the acted bet: 1 the bags swell to the pick, 2 its "?", 3 sealed
   const k = bet === null ? 0 : act.running ? act.k : 3;
@@ -1068,6 +1072,10 @@ function S_Khata({ x, y, w = 30, lines = 3 }: { x: number; y: number; w?: number
 export function UthanDawn({}: Story) {
   const s = useScene(4, [600, 1600, 2400, 2400, 2400]);
   const k = s.k;
+  // করিম carries in the ডেকচি and sets it down
+  useEffect(() => {
+    if (k === 1) setTimeout(() => sfx.pot(), 1200);
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="field" label="ভোরে নানাবাড়ির উঠান; বাবুর্চি খালি ডেকচির পাশে খাতা হাতে; করিম একটা ডেকচি গড়িয়ে আনছে; মামা সাইকেলে; বাবুর্চি বললেন তিনি ডেকচি ধরে গোনেন, মামা বললেন চাল কত মাংস কত বলেন; নাসিব বললো দুইজনের হিসাব মিলবে না">
@@ -1135,6 +1143,10 @@ export function BaburchiKhata({}: Story) {
 export function MamaShop({}: Story) {
   const s = useScene(3, [600, 1600, 2400, 2400]);
   const k = s.k;
+  // মামা sets his bag down on the counter
+  useEffect(() => {
+    if (k === 1) setTimeout(() => sfx.thump(), 1300);
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="fair" label="বাজারে চালের দোকান; মামা ব্যাগ নিয়ে এলেন; দোকানদার জিজ্ঞেস করলো কয় কেজি; মামা ভাবলেন ডেকচি না, কেজি লাগবে">
@@ -1319,6 +1331,11 @@ export function RezalaNight({}: Story) {
 export function NoonUnpack({}: Story) {
   const s = useScene(4, [600, 1600, 1800, 2400, 2400]);
   const k = s.k;
+  // মামা back on his cycle; the bag set down
+  useEffect(() => {
+    if (k === 1) sfx.bell();
+    else if (k === 2) sfx.thump();
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="field" label="দুপুরে মামা সাইকেলে ফিরলেন; উঠানে মাদুর পাতা হলো; ব্যাগ উপুড় করে চাল আর মাংস দুই স্তূপ; বাবুর্চি ডেকচি ধরে গুনবেন, মামা জিনিস ধরে">
@@ -1351,6 +1368,10 @@ export function NoonUnpack({}: Story) {
 export function FirstFire({}: Story) {
   const s = useScene(2, [600, 1400, 1800]);
   const k = s.k;
+  // the first fire lit under the pot
+  useEffect(() => {
+    if (k === 1) sfx.fire(2.2);
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="evening" label="সন্ধ্যায় উঠানে চুলা জ্বলছে; প্রথম ডেকচি চড়েছে; বাবুর্চি খুন্তি হাতে; মামা পাশে">
@@ -1379,6 +1400,13 @@ export function FirstFire({}: Story) {
 export function LightVan({}: Story) {
   const s = useScene(4, [600, 1600, 2200, 1600, 1800]);
   const k = s.k;
+  // the light bhai's van rolls in
+  useEffect(() => {
+    if (k === 1) {
+      sfx.bell();
+      sfx.pedal();
+    }
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="evening" label="লাইট ভাই পুরানো লাইট মেশিন দেয়ালের সামনে বসালেন; মেশিনে দুইটা knob; রিনা দেয়ালের উপরের একটা কোণা দেখালো, ওখানে একটা হার্ট চাই; ওখানে আলো পৌঁছাবে কিনা, প্রশ্ন">

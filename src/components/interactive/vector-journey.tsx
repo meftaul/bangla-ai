@@ -1,11 +1,12 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
 import { Task, useGate } from "@/components/journey/journey";
 import { Choice, FADE, Nope, POP, Speech, predictLook, primaryBtn, quietBtn, useCountUp, usePlay, useTween } from "@/components/journey/kit";
 import { bn } from "./figure-kit";
 import { CELL_TONES, gray } from "./pixel-art";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 1.4 — Vector", told as a Journey.
 //
@@ -236,11 +237,13 @@ export function MeasureDay() {
   const rec = usePlay(1200);
 
   const call = (i: number) => {
+    sfx.whistle(0.35);
     setWho(i);
     // A later click restarts the timer and replaces this callback, so `done`
     // here is still the newest list when it fires.
     rec.play(1, () => {
       if (done.includes(i)) return;
+      sfx.pencil(0.4);
       const d = [...done, i];
       setDone(d);
       if (d.length === KIDS.length) pass("প্রত্যেকের জন্য দুইটা সংখ্যা।");
@@ -328,6 +331,10 @@ export function ShortNote() {
   const k = cut.k; // lines cut so far
   const started = cut.running || k > 0;
   const done = k === KIDS.length;
+
+  useEffect(() => {
+    if (k > 0) sfx.pencil(0.35);
+  }, [k]);
 
   return (
     <>
@@ -458,6 +465,7 @@ export function SlotRule() {
       return;
     }
     const p = [...put, x];
+    sfx.pencil(0.2);
     setPut(p);
     setMiss(0);
     if (p.length < 2) return;

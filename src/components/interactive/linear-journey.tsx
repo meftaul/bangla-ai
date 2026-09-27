@@ -1,12 +1,13 @@
 "use client";
 
-import { useId, type KeyboardEvent, type ReactNode } from "react";
+import { useEffect, useId, type KeyboardEvent, type ReactNode } from "react";
 
 import { Bubble, Card, Person, Stage, StoryFrame } from "@/components/journey/cast";
 import { Task, useGate } from "@/components/journey/journey";
 import { Choice, Draw, FADE, LOOK, Nope, POP, Scene, Stepper, Ticks, predictLook, primaryBtn, quietBtn, usePlay, useScene, useSeed, useTween, type Fixtures, type Look } from "@/components/journey/kit";
 import { Lit, listOf, makeFrame, sg, type Frame, type XY } from "@/components/journey/plane";
 import { Alpana, ChalkGrid, ID, Pillar, RoadBed, Rope, apply, byCols, partway, pathOf, turnCols, type Cols, type Move } from "@/components/interactive/road-kit";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 6.6 — The club's machine, which rules can be a
 // matrix", told as a Journey. The plan is 06_journey_specs.md, block 6.6.
@@ -314,6 +315,7 @@ export function MachineBet() {
   };
   const seal = () => {
     setSealed(true);
+    sfx.stamp();
     act.play(3, () => pass("বাজি সিল হলো। সামিনের কথা ঝুলে থাকলো।"));
   };
   // beats of the acted bet: 1 the picked cards go into the machine, 2 its screen says "?", 3 sealed
@@ -1138,6 +1140,11 @@ const S2_MOVES: Move[] = [
 export function SaminTypes({}: Story) {
   const s = useScene(3, [600, 1400, 1400, 1800]);
   const k = s.k;
+  // সামিন types new numbers into the desktop
+  useEffect(() => {
+    if (k === 1) sfx.typing(0.8);
+    else if (k === 2) sfx.typing(0.8);
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="room" label="সামিন desktop এ number বদলাচ্ছে; পর্দায় রাস্তা কাত হয়, ঘোরে, বড় হয়; নাসিব পাশে দাঁড়িয়ে, হাতে চায়ের কাপ">
@@ -1217,6 +1224,10 @@ export function KarimSquare({}: Story) {
 export function SaminStacks({}: Story) {
   const s = useScene(3, [600, 2200, 1400, 1400]);
   const k = s.k;
+  // সামিন types the three matrices in
+  useEffect(() => {
+    if (k === 3) sfx.typing(0.6);
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="room" label="সামিন বললো তিনটা matrix পরপর চালাই; সোম বললো হবে না; সামিন বললো দেখি">
@@ -1239,6 +1250,11 @@ export function SaminStacks({}: Story) {
 export function DisplayRuns({}: Story) {
   const s = useScene(3, [600, 1600, 1800, 1800]);
   const k = s.k;
+  // করিম's rule struck through; সামিন rings the +1
+  useEffect(() => {
+    if (k === 1) sfx.pencil(0.5);
+    else if (k === 2) sfx.pencil(0.3);
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="room" label="সন্ধ্যা, display এর শেষ test; পর্দায় পদ্মের move চলছে; বোর্ডে করিমের নিয়ম কাটা; সোমের নিয়মের +1 এর চারপাশে সামিন একটা গোল দাগ দিলো">
@@ -1339,6 +1355,11 @@ const S8_F = makeFrame(-4.5, 5.5, -3.5, 4.5, 6, 2);
 export function ClubAlbum({}: Story) {
   const s = useScene(3, [600, 1400, 1800, 2000]);
   const k = s.k;
+  // the club's old album out of the cupboard, its pages turned
+  useEffect(() => {
+    if (k === 1) sfx.book();
+    else if (k === 2) sfx.paper();
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="room" label="আলমারিতে club এর পুরানো album; খুললে ছয়টা ছবি, প্রত্যেকটায় রাস্তা আর পদ্ম, কোনো একটা নিয়মে সরানো; কোনটা machine এর বানানো লেখা নাই">

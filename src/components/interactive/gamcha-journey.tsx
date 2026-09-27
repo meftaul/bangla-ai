@@ -1,12 +1,13 @@
 "use client";
 
-import { useState, type KeyboardEvent } from "react";
+import { useEffect, useState, type KeyboardEvent } from "react";
 
 import { Tup } from "@/components/journey/box";
 import { Bubble, Chest, Person, Stage, StoryFrame } from "@/components/journey/cast";
 import { Task, useGate } from "@/components/journey/journey";
 import { Choice, Draw, FADE, Nope, POP, Scene, Stepper, predictLook, primaryBtn, usePlay, useScene, useSeed, type Fixtures } from "@/components/journey/kit";
 import { BIRD_COLS, BIRD_PX } from "./pixel-art";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 7.6 — নানার গামছা, a grid from two threads", told as
 // a Journey in the author's Bangla-English. The plan is 07_journey_specs.md,
@@ -344,7 +345,10 @@ export function GamchaBet() {
   const act = usePlay(800);
   const seal = (i: number) => {
     setBet(i);
-    act.play(3, () => pass("বাজি সিল হলো। আগে একটা চেক বুনি।"));
+    act.play(3, () => {
+      sfx.stamp();
+      pass("বাজি সিল হলো। আগে একটা চেক বুনি।");
+    });
   };
   // beats of the acted bet: 1 the checks drop in, 2 the "?", 3 sealed
   const k = bet === null ? 0 : act.running ? act.k : 3;
@@ -395,6 +399,7 @@ export function OneCheck() {
   const p = usePlay(450);
   const hit = (w: { u: number[]; v: number[] } | null) => !!w && w.u.join() === OC_U.join() && w.v.join() === OC_V.join();
   const run = () => {
+    sfx.loom();
     const w = { u: [...u], v: [...v] };
     setWoven(w);
     p.play(4, () => {
@@ -566,6 +571,7 @@ export function OneLayerIsPlain() {
     set(arr.map((a, j) => (j === i ? 1 - a : a)));
   };
   const check = () => {
+    sfx.loom();
     setJudged(true);
     p.play(N7, () => {
       setTries((t) => t + 1);
@@ -701,6 +707,7 @@ export function YourLetter() {
     setLayers(layers.map((l, n) => (n === now ? { ...l, [key]: l[key].map((a, j) => (j === i ? 1 - a : a)) } : l)));
   };
   const check = () => {
+    sfx.loom();
     setJudged(true);
     const ok = sameG(sum, T);
     const count = used;
@@ -1021,6 +1028,13 @@ function G_Paper({ x, y }: { x: number; y: number }) {
 export function LoomNight({}: Story) {
   const s = useScene(5, [600, 1600, 2200, 2400, 2400, 2400]);
   const k = s.k;
+  // নানা at the loom: the shuttle and the beater
+  useEffect(() => {
+    if (k === 3) {
+      sfx.loom();
+      setTimeout(() => sfx.loom(), 700);
+    }
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="night" label="বিয়ের রাত, বারান্দায় নানার তাঁত, পাশে হারিকেন; রিনা লাল আর সবুজ সুতার গোছা ধরে আছে; সোম একটা কাগজে বড় করে T নিয়ে এলো, গামছায় বুনে দিতে বললো; নানা চোখ না তুলে বললেন একবারে একটা চেকই ওঠে, দুই-তিনটা উপর উপর বসাইলে যা খুশি উঠে; নাসিব বললো চেক দিয়ে অক্ষর কোনোদিন হয় না">
@@ -1050,6 +1064,10 @@ export function LoomNight({}: Story) {
 export function NanaTwoThreads({}: Story) {
   const s = useScene(4, [600, 1400, 1400, 1600, 2400]);
   const k = s.k;
+  // a thread thrown through
+  useEffect(() => {
+    if (k === 1) sfx.loom();
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="night" label="নানা রিনার হাত থেকে দুইটা সুতা নিলেন; একটা পাশে টানলেন, আরেকটা উপর থেকে নিচে; যেখানে দুইটা একটার উপর আরেকটা পড়লো, সেখানে রং গাঢ়; নানা বললেন দুই সুতা যত গাঢ়, ঘর তত গাঢ়">
@@ -1074,6 +1092,13 @@ export function NanaTwoThreads({}: Story) {
 export function NasibAtLoom({}: Story) {
   const s = useScene(3, [600, 1600, 2400, 1800]);
   const k = s.k;
+  // নাসিব tries the loom himself
+  useEffect(() => {
+    if (k === 2) {
+      sfx.loom();
+      setTimeout(() => sfx.loom(), 700);
+    }
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="night" label="নাসিব তাঁতের সামনে এসে দাঁড়ালো, বললো দেখি এক চেকে T ওঠে কিনা; নানা কিছু বললেন না, সরে দাঁড়ালেন">

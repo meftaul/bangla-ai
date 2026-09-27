@@ -24,6 +24,7 @@ import {
 import { Bubble, Card, Person, Stage, StoryFrame } from "@/components/journey/cast";
 import { Label, Plane, makeFrame, type Frame, type XY } from "@/components/journey/plane";
 import { Shiku } from "@/components/interactive/arrow-journey";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Calculus for AI 1.1 — Two dots and a straight road"
 // (src/content/articles/calculus_for_ai/01a_bee_route.mdx; the plan is in
@@ -242,6 +243,7 @@ export function FenceBet() {
             disabled={bet !== null}
             onClick={() => {
               setBet(i);
+              sfx.stamp();
               pass("Bet sealed. We'll check it at the fence.");
             }}
           >

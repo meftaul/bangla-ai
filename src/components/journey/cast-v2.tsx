@@ -4,6 +4,7 @@ import { useEffect, useId, useState, type ReactNode } from "react";
 
 import { POP } from "./kit";
 import { CAST, Loop, type Mood, type Who } from "./cast";
+import { sfx } from "./sfx";
 
 // PROTOTYPE — a richer drawing style for story scenes, to compare against
 // cast.tsx before rolling it out (see cartoon-v2-preview.tsx). Same API shape
@@ -39,7 +40,7 @@ function Idle({ calm, type, values, dur, begin = 0 }: { calm: boolean; type: "ro
 // ---------------------------------------------------------------------------
 // People.
 
-const BLINK_AT: Record<Who, number> = { fahim: 0.3, samin: 1.4, som: 2.1, nasib: 0.9, ammu: 1.8, apa: 2.6, mama: 0.6, rina: 1.1, karim: 2.3, mami: 1.6, nana: 0.1 };
+const BLINK_AT: Record<Who, number> = { fahim: 0.3, samin: 1.4, som: 2.1, nasib: 0.9, ammu: 1.8, apa: 2.6, mama: 0.6, rina: 1.1, karim: 2.3, mami: 1.6, nana: 0.1, jobair: 1.2 };
 
 function Eye({ cx, calm, begin }: { cx: number; calm: boolean; begin: number }) {
   return (
@@ -114,6 +115,17 @@ export function Person2({
   const c = CAST[who];
   const calm = useCalm();
   const move = walking && !calm;
+  // footsteps while walking, as cast.tsx's Person
+  useEffect(() => {
+    if (!walking) return;
+    sfx.footstep();
+    const tick = setInterval(() => sfx.footstep(), 380);
+    const end = ms > 0 ? setTimeout(() => clearInterval(tick), ms - 150) : undefined;
+    return () => {
+      clearInterval(tick);
+      clearTimeout(end);
+    };
+  }, [walking, x, y, ms]);
   const run = `${x},${y}`;
   const nana = who === "nana";
   const [ex, ey, hx, hy] = ARM[arm];

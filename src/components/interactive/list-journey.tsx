@@ -21,6 +21,7 @@ import {
   useTween,
 } from "@/components/journey/kit";
 import { bn } from "./figure-kit";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 2.1 — List, সামিনের গড়বড় file", told as a Journey.
 //
@@ -335,6 +336,7 @@ export function PartnerMap() {
   const mate = sel === null ? null : closest(sel, CLASS.map(hw));
 
   const pick = (i: number) => {
+    sfx.pencil(0.2);
     setSel(i);
     if (seen.includes(i)) return;
     const next = [...seen, i];
@@ -398,6 +400,7 @@ export function FlipAll() {
   const choose = (i: number) => {
     if (guess !== null) return;
     setGuess(i);
+    sfx.typing(0.9);
     setFlipped(true);
     show.play(2, () =>
       pass(
@@ -438,7 +441,12 @@ export function FlipAll() {
       {over && flipped && <SaminSays tone="good">দেখলি? কিছুই ভাঙেনি। কাগজটা শুধু আয়নার মতো উল্টে গেছে।</SaminSays>}
       {over && (
         <div className={`${FADE} mt-3 flex justify-center`}>
-          <button type="button" onClick={() => setFlipped((f) => !f)} className={quietBtn}>
+          <button type="button" onClick={() => {
+              sfx.typing(0.5);
+              setFlipped((f) => !f);
+            }}
+            className={quietBtn}
+          >
             {flipped ? "আবার আগের মতো লিখুন" : "আবার উল্টে দিন"}
           </button>
         </div>
@@ -488,6 +496,7 @@ export function OneSlip() {
   };
 
   const fix = () => {
+    sfx.typing(0.4);
     setFixed(true);
     settle.play(1, () => pass("Order উল্টালে উত্তর চুপচাপ ভুল।"));
   };
@@ -606,6 +615,7 @@ export function MissingAge() {
   const [tried, setTried] = useState<Fill[]>([]);
 
   const choose = (f: Fill) => {
+    sfx.typing(f === "empty" ? 0.1 : 0.3);
     setAge(f === "empty" ? null : f === "zero" ? 0 : AVG);
     setLast(f);
     if (tried.includes(f)) return;

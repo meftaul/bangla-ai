@@ -1,10 +1,11 @@
 "use client";
 
-import { useRef, useState, type KeyboardEvent, type PointerEvent as ReactPointerEvent, type ReactNode } from "react";
+import { useEffect, useRef, useState, type KeyboardEvent, type PointerEvent as ReactPointerEvent, type ReactNode } from "react";
 
 import { Task, useGate } from "@/components/journey/journey";
 import { Choice, FADE, LOOK, Nope, POP, Speech, Ticks, predictLook, primaryBtn, useCountUp, usePlay } from "@/components/journey/kit";
 import { bn } from "./figure-kit";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 1.3 — রঙিন ছবি", told as a Journey.
 //
@@ -322,6 +323,11 @@ export function ColorCall() {
   const started = read.running || k > 0;
   const done = k === ALL;
 
+  // Rafi's brush, cell after cell
+  useEffect(() => {
+    if (k > 0) sfx.brush(0.15);
+  }, [k]);
+
   const start = () => read.play(ALL, () => pass("সংখ্যা পৌঁছালো, রঙ পৌঁছালো না।"));
 
   return (
@@ -485,6 +491,7 @@ export function WaterDrop() {
             onPointerDown={(e) => {
               e.currentTarget.setPointerCapture(e.pointerId);
               down.current = true;
+              sfx.drip();
               fromPointer(e);
             }}
             onPointerMove={(e) => {
@@ -559,6 +566,7 @@ export function EightColors() {
   const c = full(n);
 
   const flip = (k: number) => {
+    sfx.click();
     const v = n ^ (4 >> k);
     setN(v);
     if (found.includes(v)) return;
@@ -814,7 +822,12 @@ export function StackSheets() {
       </div>
       {phase === 0 && !go.running && (
         <div className="flex justify-center">
-          <button type="button" onClick={() => go.play(2, undefined, 1)} className={primaryBtn}>
+          <button type="button" onClick={() => {
+              sfx.slip();
+              go.play(2, undefined, 1);
+            }}
+            className={primaryBtn}
+          >
             পাতা তিনটা একটার ওপর আরেকটা বসান
           </button>
         </div>
@@ -859,6 +872,7 @@ export function PullSheet() {
   const choose = (i: number) => {
     if (guess !== null) return;
     setGuess(i);
+    sfx.slip();
     setUse([false, true, true]);
     show.play(1, () =>
       pass(
@@ -875,7 +889,10 @@ export function PullSheet() {
               key={k}
               type="button"
               aria-pressed={use[k]}
-              onClick={() => setUse((u) => u.map((s, j) => (j === k ? !s : s)))}
+              onClick={() => {
+                sfx.slip();
+                setUse((u) => u.map((s, j) => (j === k ? !s : s)));
+              }}
               className={`cursor-pointer rounded-full border-2 px-3.5 py-1 text-sm font-semibold transition-colors ${
                 use[k] ? `${ch.chip} border-transparent text-white` : "border-dashed border-border text-muted"
               }`}
@@ -1093,6 +1110,9 @@ export function GreyHunt() {
 
 function FinaleReel({ onReplay }: { onReplay: () => void }) {
   const k = useCountUp(3, 1300); // 0 apart · 1 stacked · 2 face-on · 3 the count
+  useEffect(() => {
+    if (k === 1) sfx.slip();
+  }, [k]);
   return (
     <>
       <div className="my-5">

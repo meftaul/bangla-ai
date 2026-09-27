@@ -9,6 +9,7 @@ import { Choice, Draw, FADE, Nope, POP, Scene, Speech, Ticks, pill, primaryBtn, 
 import { Arrow, Label, Plane, makeFrame, type Frame, type XY } from "@/components/journey/plane";
 import { Tape } from "./dimension-journey";
 import { dot, tupN } from "./haat-journey";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 4.5 — Cosine similarity, whose film fits better", told as a Journey.
 //
@@ -62,6 +63,7 @@ export function WhoFits() {
 
   const seal = (i: number) => {
     setBet(i);
+    sfx.stamp();
     pass("বাজি ধরা হয়ে গেলো। শেষে মিলিয়ে দেখবো।");
   };
 
@@ -101,7 +103,11 @@ export function LoudPerson() {
   const mama: XY = doubled ? [4, 10] : MAMA;
   const score = dot(mama, BEAN) / len(BEAN);
 
-  const measure = (i: number) => !measured.includes(i) && setMeasured([...measured, i]);
+  const measure = (i: number) => {
+    if (measured.includes(i)) return;
+    sfx.tape(0.45);
+    setMeasured([...measured, i]);
+  };
   const double = () => {
     setDoubled(true);
     pass("Number double করলে score ও double হয়।");
@@ -861,6 +867,13 @@ const S1_FAHIM = 276;
 export function RemoteFight({}: Story) {
   const s = useScene(4, [600, 1600, 1800, 1700]);
   const k = s.k;
+  // the remote's buttons jabbed as they tug
+  useEffect(() => {
+    if (k === 1) {
+      sfx.press();
+      setTimeout(() => sfx.press(), 250);
+    }
+  }, [k]);
   const tug = k < 3;
 
   return (
@@ -1786,6 +1799,13 @@ export function BoxVsCos() {
 export function TeaForTwo({}: Story) {
   const s = useScene(3, [600, 1800, 2000]);
   const k = s.k;
+  // two cups set down on their saucers
+  useEffect(() => {
+    if (k === 3) {
+      sfx.cup();
+      setTimeout(() => sfx.cup(), 300);
+    }
+  }, [k]);
   const near = k >= 2;
 
   return (

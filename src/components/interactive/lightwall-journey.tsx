@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type KeyboardEvent, type ReactNode } from "react";
+import { useEffect, useState, type KeyboardEvent, type ReactNode } from "react";
 
 import { Tup } from "@/components/journey/box";
 import { Bubble, Card, Person, Robot, Stage, StoryFrame } from "@/components/journey/cast";
@@ -41,6 +41,7 @@ import {
   wallFrame,
   type Cols,
 } from "./light-kit";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 7.2 — The light on the wall, where Ax can land",
 // told as a Journey in the author's Bangla-English. The plan is
@@ -197,6 +198,7 @@ export function WallBet() {
   };
   const seal = () => {
     setSealed(true);
+    sfx.stamp();
     act.play(3, () => pass("বাজি সিল হলো। আগে knob দুইটা ঘুরাই।"));
   };
   const near = (p: XY) => {
@@ -927,6 +929,10 @@ export function SomReads({}: Story) {
 export function BagLens({}: Story) {
   const s = useScene(4, [600, 2200, 1800, 1800, 2200]);
   const k = s.k;
+  // the light bhai takes a lens out of his bag
+  useEffect(() => {
+    if (k === 2) sfx.lens();
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="evening" label="নাসিব বললো যন্ত্র এক লাইনের বাইরে যায় না; লাইট ভাই কিছু বললেন না; ব্যাগ থেকে গত রাতের lens বের করলেন; তার পাতে (2, 1) আর (1, 2)">
@@ -962,6 +968,10 @@ export function BagLens({}: Story) {
 export function SpareLens({}: Story) {
   const s = useScene(3, [600, 1800, 1800, 2600]);
   const k = s.k;
+  // করিম brings the spare lens
+  useEffect(() => {
+    if (k === 2) sfx.lens();
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="evening" label="করিম ডেকোরেটরের বাক্স থেকে একটা ধুলা মাখা lens আনলো; পাতে (1, 0) আর (0, 0); লাইট ভাই বললেন এইটা বাড়তি, knob 2 এর তার ছেঁড়া">

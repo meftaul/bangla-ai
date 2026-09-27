@@ -1,0 +1,660 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"></head><body>
+<title>Pathshala Rail</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Hanken+Grotesk:wght@400;500;600;700&family=Hind+Siliguri:wght@400;600;700&family=Courier+Prime:wght@400;700&display=swap">
+<style>
+:root{
+  --bg:#eef1ea; --surface:#fbfcf8; --surface-2:#e4e9df; --ink:#16231c; --muted:#58675d; --line:#d3dbcf;
+  --rail:#0b5d3b; --rail-soft:color-mix(in srgb,var(--rail) 12%,transparent); --on-rail:#ffffff;
+  --signal:#c1352c; --steel:#8a948d; --sleeper:#9b8467;
+  /* physical objects keep their own colours in both themes */
+  --board:#f3c623; --board-ink:#141414;
+  --paper:#efe2c1; --paper-2:#e6d5ab; --paper-ink:#3b2b14; --paper-red:#a8322a; --paper-blue:#2b4f7a;
+  --shadow:0 1px 2px rgb(20 35 28/.06),0 14px 30px -18px rgb(20 35 28/.35);
+  --f-display:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
+  --f-body:"Hanken Grotesk","Hind Siliguri",system-ui,sans-serif;
+  --f-bn:"Hind Siliguri","Hanken Grotesk",system-ui,sans-serif;
+  --f-print:"Courier Prime","Courier New",monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  color-scheme:dark;
+  --bg:#0c1411; --surface:#141f1a; --surface-2:#1b2822; --ink:#e5ece6; --muted:#98a89d; --line:#27362e;
+  --rail:#2f9a6a; --on-rail:#06140e; --signal:#e0594f; --steel:#6d7a72; --sleeper:#6b5a45;
+  --shadow:0 1px 2px rgb(0 0 0/.4),0 16px 34px -18px rgb(0 0 0/.8);
+}}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0c1411; --surface:#141f1a; --surface-2:#1b2822; --ink:#e5ece6; --muted:#98a89d; --line:#27362e;
+  --rail:#2f9a6a; --on-rail:#06140e; --signal:#e0594f; --steel:#6d7a72; --sleeper:#6b5a45;
+  --shadow:0 1px 2px rgb(0 0 0/.4),0 16px 34px -18px rgb(0 0 0/.8);
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:16px/1.55 var(--f-body);padding-inline:16px;padding-block:0 64px}
+.wrap{max-width:1080px;margin:0 auto}
+.bn{font-family:var(--f-bn)}
+h1,h2,h3{text-wrap:balance;margin:0}
+p{margin:0}
+button{font:inherit;cursor:pointer}
+button:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--signal);outline-offset:2px}
+
+/* ---------- intro ---------- */
+.intro{padding-block:48px 28px;display:grid;gap:18px}
+.eyebrow{font:600 12px/1 var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.intro h1{font:900 clamp(40px,7vw,76px)/.92 var(--f-display);letter-spacing:.005em;text-transform:uppercase;max-width:14ch}
+.intro h1 span{color:var(--rail)}
+.lede{max-width:62ch;font-size:18px;color:var(--ink)}
+.map-table{margin-top:10px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.map-table div{background:var(--surface);padding:14px 16px;display:grid;gap:3px}
+.map-table b{font:700 12px/1.2 var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.map-table span{font-weight:600}
+.map-table em{font-style:normal;color:var(--muted);font-size:14px}
+
+/* ---------- screen sections ---------- */
+.screen{margin-top:56px;display:grid;gap:16px}
+.screen-head{display:flex;gap:14px;align-items:baseline;flex-wrap:wrap}
+.screen-head .no{font:800 15px/1 var(--f-display);background:var(--ink);color:var(--bg);padding:6px 8px;border-radius:4px;letter-spacing:.06em}
+.screen-head h2{font:800 30px/1 var(--f-display);text-transform:uppercase;letter-spacing:.01em}
+.screen-head p{flex-basis:100%;color:var(--muted);max-width:66ch}
+.frame{background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);overflow:hidden}
+.notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px 24px;font-size:14px;color:var(--muted);padding:0;margin:0;list-style:none}
+.notes li{padding-left:16px;position:relative}
+.notes li::before{content:"";position:absolute;left:0;top:.6em;width:7px;height:7px;background:var(--rail);border-radius:50%}
+.notes b{color:var(--ink);font-weight:600}
+
+/* ---------- route map ---------- */
+.lines{display:flex;gap:8px;padding:14px 16px;border-bottom:1px solid var(--line);flex-wrap:wrap;align-items:center}
+.line-tab{border:1px solid var(--line);background:transparent;color:var(--muted);border-radius:999px;padding:6px 12px;font-size:13px;font-weight:600;display:flex;gap:6px;align-items:center}
+.line-tab.on{background:var(--rail);border-color:var(--rail);color:var(--on-rail)}
+.line-tab .dot{width:8px;height:8px;border-radius:50%;background:currentColor;opacity:.7}
+.line-tab.locked{opacity:.55}
+.route-title{padding:22px 20px 0;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:end}
+.route-title h3{font:800 34px/1 var(--f-display);text-transform:uppercase}
+.route-title h3 small{display:block;font:600 16px/1.4 var(--f-bn);text-transform:none;color:var(--muted);margin-top:4px}
+.route-stats{display:flex;gap:18px;font-size:13px;color:var(--muted)}
+.route-stats strong{display:block;font:800 26px/1 var(--f-display);color:var(--ink);font-variant-numeric:tabular-nums}
+.route-scroll{overflow-x:auto;padding:26px 0 24px}
+.route{position:relative;width:1460px;height:300px;margin:0 20px}
+.track{position:absolute;left:0;right:0;top:132px;height:14px}
+.track::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,var(--sleeper) 0 5px,transparent 5px 16px);opacity:.7}
+.track::after{content:"";position:absolute;left:0;right:0;top:3px;height:8px;border-top:2px solid var(--steel);border-bottom:2px solid var(--steel)}
+.track .done{position:absolute;left:0;top:3px;height:8px;border-top:2px solid var(--rail);border-bottom:2px solid var(--rail);z-index:1}
+.stn{position:absolute;top:0;width:130px;margin-left:-65px;display:grid;justify-items:center;text-align:center}
+.stn .board{background:var(--board);color:var(--board-ink);border:2px solid var(--board-ink);border-radius:3px;padding:4px 8px 3px;min-width:104px;box-shadow:0 2px 0 rgb(0 0 0/.25)}
+.stn .board .b1{font:700 15px/1.2 var(--f-bn)}
+.stn .board .b2{font:800 12px/1 var(--f-display);letter-spacing:.08em;text-transform:uppercase}
+.stn .posts{width:74px;height:40px;border-left:3px solid var(--steel);border-right:3px solid var(--steel)}
+.stn .node{margin-top:12px;width:26px;height:26px;border-radius:50%;background:var(--surface);border:4px solid var(--steel);position:relative;z-index:2}
+.stn.done .node{background:var(--rail);border-color:var(--rail)}
+.stn.next .node{border-color:var(--rail);box-shadow:0 0 0 6px var(--rail-soft)}
+.stn.junction .node{border-radius:5px;transform:rotate(45deg)}
+.stn .num{margin-top:10px;font:700 12px/1 var(--f-print);color:var(--muted);letter-spacing:.04em}
+.stn .code{font:700 11px/1 var(--f-print);color:var(--muted)}
+.stn .gift{margin-top:10px;width:58px;height:58px;border-radius:12px;display:grid;place-items:center;border:1.5px solid var(--line);background:var(--surface-2);color:var(--rail)}
+.stn .gift svg{width:32px;height:32px}
+.stn.todo .gift{border-style:dashed;background:transparent;color:var(--steel)}
+.stn .gname{margin-top:6px;font-size:12px;font-weight:600;line-height:1.25;max-width:110px}
+.stn.todo .gname{color:var(--muted);font-weight:500}
+.stn.locked .board{filter:saturate(.25);opacity:.75}
+.route .train{position:absolute;top:112px;width:92px;margin-left:-46px;z-index:3;transition:left .8s cubic-bezier(.5,0,.2,1)}
+
+/* ---------- ride ---------- */
+.ride-top{padding:16px 20px;border-bottom:1px solid var(--line);display:grid;grid-template-columns:1fr auto;gap:10px 16px;align-items:center}
+.ride-top .fromto{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-weight:600}
+.ride-top .fromto .arrow{color:var(--muted)}
+.chip{font:700 11px/1 var(--f-print);background:var(--board);color:var(--board-ink);padding:4px 6px;border-radius:3px;border:1.5px solid var(--board-ink)}
+.mini-ticket{background:var(--paper);color:var(--paper-ink);border-radius:6px;padding:6px 10px;display:flex;gap:10px;align-items:center;font:700 12px/1.2 var(--f-print);position:relative;box-shadow:0 1px 0 var(--paper-2)}
+.mini-ticket .holes{display:flex;gap:4px}
+.mini-ticket .holes i{width:9px;height:9px;border-radius:50%;border:1.5px dashed var(--paper-ink);opacity:.45}
+.mini-ticket .holes i.punched{border:none;background:var(--surface);opacity:1;box-shadow:inset 0 1px 2px rgb(0 0 0/.45)}
+.stretch{grid-column:1/-1;position:relative;height:52px;margin-top:6px}
+.stretch .rails{position:absolute;left:14px;right:14px;top:30px;height:10px;border-top:2px solid var(--steel);border-bottom:2px solid var(--steel)}
+.stretch .rails .fill{position:absolute;left:0;top:-2px;height:10px;border-top:2px solid var(--rail);border-bottom:2px solid var(--rail);transition:width .6s ease}
+.stretch .post{position:absolute;top:24px;width:4px;height:22px;margin-left:-2px;background:var(--steel);border-radius:2px}
+.stretch .post.tte{width:14px;height:14px;margin-left:-7px;top:28px;background:var(--surface);border:2.5px solid var(--signal);border-radius:3px;transform:rotate(45deg)}
+.stretch .post.passed{background:var(--rail)}
+.stretch .post.tte.passed{background:var(--signal)}
+.stretch .end{position:absolute;right:0;top:0;font:700 11px/1 var(--f-print);color:var(--muted)}
+.stretch .start{position:absolute;left:0;top:0;font:700 11px/1 var(--f-print);color:var(--muted)}
+.stretch .train{position:absolute;top:17px;width:60px;margin-left:-30px;transition:left .6s cubic-bezier(.5,0,.2,1)}
+.ride-body{display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:0}
+.lesson{padding:26px 24px 22px;display:grid;gap:14px;align-content:start;min-height:320px}
+.lesson .stepno{font:700 12px/1 var(--f-print);color:var(--muted);letter-spacing:.05em}
+.lesson h4{margin:0;font:700 24px/1.2 var(--f-body)}
+.lesson .ph{border:1.5px dashed var(--line);border-radius:12px;min-height:150px;display:grid;place-items:center;color:var(--muted);font-size:14px;text-align:center;padding:16px;background:var(--surface-2)}
+.lesson .ph.tte{border-color:var(--signal)}
+.lesson .ctrl{display:flex;gap:10px;justify-content:space-between;align-items:center;flex-wrap:wrap}
+.btn{border:1.5px solid var(--ink);background:transparent;color:var(--ink);border-radius:8px;padding:9px 16px;font-weight:600}
+.btn.primary{background:var(--rail);border-color:var(--rail);color:var(--on-rail)}
+.btn:disabled{opacity:.4;cursor:default}
+.window{border-left:1px solid var(--line);background:var(--surface-2);padding:18px;display:grid;gap:10px;align-content:start}
+.window h5{margin:0;font:700 11px/1 var(--f-body);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.window p{font-size:14px;color:var(--muted)}
+.tte-toast{border:1.5px solid var(--signal);color:var(--ink);background:var(--surface);border-radius:10px;padding:10px 12px;font-size:14px;display:flex;gap:10px;align-items:center}
+.tte-toast svg{flex:none;color:var(--signal)}
+
+/* ---------- arrival ---------- */
+.platform{position:relative;background:
+  linear-gradient(var(--surface-2),var(--surface-2)) bottom/100% 64px no-repeat,
+  var(--surface);padding:30px 20px 90px;display:grid;gap:26px;justify-items:center;overflow:hidden}
+.platform::after{content:"";position:absolute;left:0;right:0;bottom:64px;height:10px;background:repeating-linear-gradient(90deg,var(--board) 0 26px,var(--board-ink) 26px 34px);opacity:.9}
+.bigboard{display:grid;justify-items:center;gap:0}
+.bigboard .face{background:var(--board);color:var(--board-ink);border:3px solid var(--board-ink);border-radius:4px;padding:10px 34px 8px;text-align:center;box-shadow:0 4px 0 rgb(0 0 0/.25)}
+.bigboard .face .b1{font:700 40px/1.1 var(--f-bn)}
+.bigboard .face .b2{font:900 26px/1 var(--f-display);letter-spacing:.14em;text-transform:uppercase}
+.bigboard .face .b3{font:700 12px/1 var(--f-print);margin-top:6px;opacity:.8}
+.bigboard .legs{width:62%;height:36px;border-left:5px solid var(--steel);border-right:5px solid var(--steel)}
+.arrive-grid{display:grid;grid-template-columns:minmax(0,300px) minmax(0,560px);gap:28px;align-items:center;justify-content:center;width:100%}
+.giftcard{background:var(--surface);border:1.5px solid var(--line);border-radius:16px;padding:18px;display:grid;gap:10px;box-shadow:var(--shadow)}
+.giftcard .gl{font:700 11px/1 var(--f-body);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.giftcard .gi{width:84px;height:84px;border-radius:18px;background:var(--rail-soft);color:var(--rail);display:grid;place-items:center}
+.giftcard .gi svg{width:54px;height:54px}
+.giftcard h4{margin:0;font:700 22px/1.2 var(--f-body)}
+.giftcard p{font-size:14px;color:var(--muted)}
+.giftcard code{font:700 14px var(--f-print);color:var(--ink);background:var(--surface-2);padding:2px 6px;border-radius:4px}
+.counter{display:grid;gap:10px;justify-items:center}
+.counter .slot{width:100%;max-width:560px;height:14px;border-radius:7px;background:var(--ink);opacity:.85}
+.counter .slot-label{font:700 11px/1 var(--f-body);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.counter .tk-holder{width:100%;max-width:560px;margin-top:-18px;overflow:hidden;padding:0 4px 10px}
+.arrive-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;position:relative;z-index:1}
+.play .bigboard{animation:drop .7s cubic-bezier(.3,1.4,.5,1) both}
+.play .giftcard{animation:pop .6s .5s cubic-bezier(.3,1.5,.5,1) both}
+.play .tk-holder .ticket{animation:print 1.1s .9s cubic-bezier(.4,0,.2,1) both}
+@keyframes drop{from{transform:translateY(-40px);opacity:.2}to{transform:none;opacity:1}}
+@keyframes pop{from{transform:scale(.85) rotate(-3deg);opacity:.2}to{transform:none;opacity:1}}
+@keyframes print{from{transform:translateY(-100%)}to{transform:none}}
+
+/* ---------- ticket ---------- */
+.ticket{--w:560px;position:relative;display:grid;grid-template-columns:1fr 132px;width:100%;max-width:var(--w);color:var(--paper-ink);filter:drop-shadow(0 10px 16px rgb(40 25 5/.25));font-family:var(--f-print)}
+.ticket .main,.ticket .stub{background:
+  repeating-linear-gradient(45deg,rgb(120 80 20/.06) 0 1px,transparent 1px 7px),
+  repeating-linear-gradient(-45deg,rgb(120 80 20/.06) 0 1px,transparent 1px 7px),
+  var(--paper);position:relative}
+.ticket .main{border-radius:12px 0 0 12px;padding:14px 18px 14px;display:grid;gap:10px;
+  -webkit-mask:radial-gradient(circle 10px at 100% 0,#0000 98%,#000) top right/100% 51% no-repeat,radial-gradient(circle 10px at 100% 100%,#0000 98%,#000) bottom right/100% 51% no-repeat;
+  mask:radial-gradient(circle 10px at 100% 0,#0000 98%,#000) top right/100% 51% no-repeat,radial-gradient(circle 10px at 100% 100%,#0000 98%,#000) bottom right/100% 51% no-repeat}
+.ticket .stub{border-radius:0 12px 12px 0;padding:14px 12px;display:grid;align-content:space-between;justify-items:center;text-align:center;border-left:2px dashed rgb(59 43 20/.35);
+  -webkit-mask:radial-gradient(circle 10px at 0 0,#0000 98%,#000) top left/100% 51% no-repeat,radial-gradient(circle 10px at 0 100%,#0000 98%,#000) bottom left/100% 51% no-repeat;
+  mask:radial-gradient(circle 10px at 0 0,#0000 98%,#000) top left/100% 51% no-repeat,radial-gradient(circle 10px at 0 100%,#0000 98%,#000) bottom left/100% 51% no-repeat}
+.tk-head{display:flex;justify-content:space-between;align-items:center;gap:8px;border-bottom:2px solid var(--paper-red);padding-bottom:7px}
+.tk-rly{display:flex;align-items:center;gap:8px}
+.tk-rly .seal{width:30px;height:30px;border-radius:50%;border:2px solid var(--paper-red);display:grid;place-items:center;color:var(--paper-red);font:800 13px/1 var(--f-display)}
+.tk-rly .t1{font:700 15px/1.05 var(--f-bn);color:var(--paper-red)}
+.tk-rly .t2{font:800 10px/1 var(--f-display);letter-spacing:.2em;color:var(--paper-red);text-transform:uppercase}
+.tk-no{font-size:11px;text-align:right;line-height:1.25}
+.tk-no b{font-size:14px;letter-spacing:.06em;color:var(--paper-blue)}
+.tk-route{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px}
+.tk-route .st{display:grid;gap:1px}
+.tk-route .st:last-child{text-align:right}
+.tk-route .lab{font-size:10px;letter-spacing:.14em;text-transform:uppercase;opacity:.7}
+.tk-route .bnn{font:700 22px/1.1 var(--f-bn)}
+.tk-route .enn{font:800 13px/1 var(--f-display);letter-spacing:.12em;text-transform:uppercase}
+.tk-route .mid{display:grid;justify-items:center;font-size:10px;gap:2px;color:var(--paper-blue)}
+.tk-route .mid svg{width:58px;height:18px}
+.tk-grid{display:grid;grid-template-columns:repeat(4,auto);gap:4px 14px;font-size:10px;letter-spacing:.08em;text-transform:uppercase}
+.tk-grid div{display:grid;gap:1px}
+.tk-grid b{font-size:14px;letter-spacing:.02em;text-transform:none;font-family:var(--f-print)}
+.tk-grid b.bn{font-family:var(--f-bn);font-size:14px;line-height:1.2}
+.tk-foot{display:flex;justify-content:space-between;align-items:end;gap:10px}
+.tk-fare{font-size:11px;line-height:1.35;max-width:30ch}
+.tk-fare b{color:var(--paper-blue)}
+.stamp{font:700 13px/1.05 var(--f-bn);color:var(--paper-red);border:2px solid var(--paper-red);border-radius:6px;padding:4px 8px;transform:rotate(-8deg);opacity:.8;text-align:center;mix-blend-mode:multiply}
+.stamp small{display:block;font:700 9px/1 var(--f-print);letter-spacing:.12em}
+.stub .sl{font-size:9px;letter-spacing:.16em;text-transform:uppercase;opacity:.7}
+.stub .seat{font:900 44px/.9 var(--f-display);color:var(--paper-blue)}
+.stub .cls{font:700 13px/1.15 var(--f-bn)}
+.stub .bars{width:100%;height:30px;background:repeating-linear-gradient(90deg,var(--paper-ink) 0 2px,transparent 2px 4px,var(--paper-ink) 4px 5px,transparent 5px 8px,var(--paper-ink) 8px 11px,transparent 11px 12px);opacity:.8}
+.stub .punch{position:absolute;right:14px;top:50%;width:14px;height:14px;border-radius:50%;background:var(--surface);box-shadow:inset 0 1px 3px rgb(0 0 0/.5)}
+.ticket.snigdha .main,.ticket.snigdha .stub{background:
+  repeating-linear-gradient(45deg,rgb(20 60 110/.06) 0 1px,transparent 1px 7px),
+  repeating-linear-gradient(-45deg,rgb(20 60 110/.06) 0 1px,transparent 1px 7px),
+  #dfe8ef}
+
+/* anatomy */
+.anatomy{padding:28px 20px;display:grid;grid-template-columns:minmax(0,560px) minmax(0,1fr);gap:28px;align-items:center;justify-content:center}
+.anatomy ol{margin:0;padding:0;list-style:none;display:grid;gap:12px;font-size:14px;color:var(--muted);counter-reset:a}
+.anatomy li{display:grid;grid-template-columns:24px 1fr;gap:10px;counter-increment:a}
+.anatomy li::before{content:counter(a);width:22px;height:22px;border-radius:50%;background:var(--paper-red);color:#fff;font:700 12px/22px var(--f-print);text-align:center}
+.anatomy b{color:var(--ink)}
+
+/* ---------- trunk + workshop ---------- */
+.shop{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0}
+.trunk{padding:22px 20px;border-right:1px solid var(--line);display:grid;gap:14px;align-content:start}
+.trunk-lid{background:linear-gradient(180deg,#3d6f9a,#2c5577);border-radius:14px 14px 4px 4px;height:44px;position:relative;box-shadow:inset 0 -4px 0 rgb(0 0 0/.18)}
+.trunk-lid::before{content:"";position:absolute;inset:10px 18px;border:2px solid rgb(255 255 255/.25);border-radius:6px}
+.trunk-lid::after{content:"";position:absolute;left:50%;top:26px;width:22px;height:26px;margin-left:-11px;background:#c9a24a;border-radius:4px;box-shadow:inset 0 -3px 0 rgb(0 0 0/.25)}
+.trunk-lid .painted{position:absolute;left:0;right:0;top:12px;text-align:center;font:700 13px/1 var(--f-bn);color:#f6e7b0;letter-spacing:.02em}
+.trunk-box{border:2px solid #2c5577;border-top:none;border-radius:0 0 10px 10px;padding:14px;display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:10px;background:var(--surface-2)}
+.item{border:1.5px solid var(--line);background:var(--surface);border-radius:12px;padding:10px 6px;display:grid;justify-items:center;gap:6px;text-align:center;font-size:12px;font-weight:600;color:var(--ink);line-height:1.2}
+.item svg{width:34px;height:34px;color:var(--rail)}
+.item.used{opacity:.35}
+.item.empty{border-style:dashed;color:var(--muted);font-weight:500;background:transparent}
+.item.empty svg{color:var(--steel)}
+button.item:hover:not(.used){border-color:var(--rail)}
+.bench{padding:22px 20px;display:grid;gap:14px;align-content:start;background:
+  linear-gradient(var(--line) 1px,transparent 1px) 0 0/22px 22px,
+  linear-gradient(90deg,var(--line) 1px,transparent 1px) 0 0/22px 22px,var(--surface)}
+.bench h4{margin:0;font:800 24px/1 var(--f-display);text-transform:uppercase}
+.bench .sub{font-size:14px;color:var(--muted)}
+.blueprint{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.bslot{border:2px dashed var(--steel);border-radius:12px;padding:12px;display:grid;gap:4px;background:var(--surface);min-height:92px;align-content:center}
+.bslot .need{font:700 11px/1 var(--f-print);color:var(--muted);letter-spacing:.04em}
+.bslot .what{font-size:14px;font-weight:600}
+.bslot.filled{border-style:solid;border-color:var(--rail);background:var(--rail-soft)}
+.bslot.filled .what{color:var(--rail)}
+.buildbar{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.meter{flex:1;min-width:140px;height:10px;border-radius:5px;background:var(--surface-2);border:1px solid var(--line);overflow:hidden}
+.meter i{display:block;height:100%;background:var(--rail);transition:width .4s ease}
+
+/* ---------- album ---------- */
+.album{padding:26px 20px 34px;display:grid;gap:20px}
+.fan{display:flex;flex-wrap:wrap;gap:14px;justify-content:center}
+.fan .ticket{--w:420px;transform:rotate(var(--r));font-size:.9em}
+.fan .ticket .tk-grid,.fan .ticket .tk-fare,.fan .ticket .tk-no,.fan .ticket .t2{display:none}
+.fan .ticket .tk-route .mid span{display:none}
+.fan .ticket .tk-route .bnn{font-size:17px}
+.fan .ticket .stub{grid-template-columns:none}
+.fan .ticket{grid-template-columns:1fr 92px}
+.fan .ticket .stub .seat{font-size:32px}
+.album-sum{display:flex;gap:28px;flex-wrap:wrap;justify-content:center;font-size:13px;color:var(--muted);text-align:center}
+.album-sum strong{display:block;font:800 30px/1 var(--f-display);color:var(--ink);font-variant-numeric:tabular-nums}
+
+/* ---------- questions ---------- */
+.qs{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;counter-reset:q}
+.q{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px;display:grid;gap:6px;counter-increment:q}
+.q h3{font:700 16px/1.3 var(--f-body)}
+.q h3::before{content:"Q" counter(q) "  ";font:700 13px var(--f-print);color:var(--signal)}
+.q p{font-size:14px;color:var(--muted)}
+
+@media (max-width:820px){
+  .ride-body,.shop,.arrive-grid,.anatomy{grid-template-columns:minmax(0,1fr)}
+  .window{border-left:none;border-top:1px solid var(--line)}
+  .trunk{border-right:none;border-bottom:1px solid var(--line)}
+  .arrive-grid{justify-items:center}
+}
+@media (max-width:520px){
+  .ticket{grid-template-columns:1fr 96px}
+  .ticket .main{padding:12px}
+  .tk-grid{grid-template-columns:repeat(2,auto)}
+  .tk-route .bnn{font-size:17px}
+  .stub .seat{font-size:34px}
+  .bigboard .face{padding:8px 16px}
+  .bigboard .face .b1{font-size:30px}
+  .blueprint{grid-template-columns:minmax(0,1fr)}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+
+<div class="wrap">
+
+<header class="intro">
+  <div class="eyebrow">Pathshala · design mockup for review · Math for AI, Line 4</div>
+  <h1>Every journey is a <span>train ride</span></h1>
+  <p class="lede">A chapter becomes a rail line. Each journey is the ride to the next station. When you pull into the platform, the station hands you a gift made from what you just learned, and the ticket for the next ride. At the junction at the end of the line, you open your trunk and build something with the gifts.</p>
+  <div class="map-table">
+    <div><b>Course</b><span>The rail network</span><em>Math for AI = the whole map</em></div>
+    <div><b>Chapter</b><span>A line with a named train</span><em>Ch. 4 dot product = বিন্দু এক্সপ্রেস</em></div>
+    <div><b>Journey</b><span>The ride between two stations</span><em>4.5 = ছায়াবাড়ি → সিনেমা হল</em></div>
+    <div><b>Step</b><span>A kilometre post on the way</span><em>At most 11 per ride</em></div>
+    <div><b>Exercise</b><span>The TTE checks your ticket</span><em>A right answer punches a hole</em></div>
+    <div><b>Finish</b><span>Platform arrival</span><em>Gift + ticket for the next ride</em></div>
+    <div><b>Chapter end</b><span>Junction workshop</span><em>Build a small tool from the gifts</em></div>
+  </div>
+</header>
+
+<!-- SCREEN 1 -->
+<section class="screen" id="map">
+  <div class="screen-head"><span class="no">SCREEN 1</span><h2>The route map</h2>
+    <p>Replaces today's course list. One line per chapter. Stations you reached are green and show their gift. The train sits where you left off.</p></div>
+  <div class="frame">
+    <div class="lines" role="tablist" aria-label="Lines">
+      <button class="line-tab" type="button"><span class="dot"></span>Line 1 · ছবি মেইল</button>
+      <button class="line-tab" type="button"><span class="dot"></span>Line 2 · তীর এক্সপ্রেস</button>
+      <button class="line-tab" type="button"><span class="dot"></span>Line 3 · মাপ কমিউটার</button>
+      <button class="line-tab on" type="button"><span class="dot"></span>Line 4 · বিন্দু এক্সপ্রেস</button>
+      <button class="line-tab locked" type="button"><span class="dot"></span>Line 5 · Span Intercity</button>
+    </div>
+    <div class="route-title">
+      <h3>Bindu Express · Line 4<small>বিন্দু এক্সপ্রেস — dot product, from the haat to ChatGPT</small></h3>
+      <div class="route-stats">
+        <div><strong>5 / 10</strong>stations reached</div>
+        <div><strong>5</strong>gifts in the trunk</div>
+        <div><strong>31</strong>holes punched</div>
+      </div>
+    </div>
+    <div class="route-scroll"><div class="route" id="route"></div></div>
+  </div>
+  <ul class="notes">
+    <li><b>Station names</b> come from each journey's story: the haat, the muddy van, mama's card, the cinema hall.</li>
+    <li><b>Gift slots ahead are dashed.</b> You can see what's coming, which gives a reason to keep riding.</li>
+    <li><b>The diamond station</b> at the end is the junction workshop where the line's gifts get used.</li>
+    <li>On a phone the map scrolls sideways, and opens already scrolled to the train.</li>
+  </ul>
+</section>
+
+<!-- SCREEN 2 -->
+<section class="screen" id="ride">
+  <div class="screen-head"><span class="no">SCREEN 2</span><h2>On the ride</h2>
+    <p>The journey itself doesn't change. Only the progress bar does: it becomes a stretch of track with a post for each step, and the train moves one post per step. Red diamonds are exercise steps where the TTE checks your ticket. Try the buttons.</p></div>
+  <div class="frame">
+    <div class="ride-top">
+      <div class="fromto"><span class="chip">CHY</span><span class="bn">ছায়াবাড়ি</span><span class="arrow">→</span><span class="chip">CIN</span><span class="bn">সিনেমা হল</span><span style="color:var(--muted);font-weight:500">· Journey 4.5</span></div>
+      <div class="mini-ticket" title="Your ticket for this ride"><span>SEAT 27</span><span class="holes" id="holes"></span></div>
+      <div class="stretch" id="stretch"></div>
+    </div>
+    <div class="ride-body">
+      <div class="lesson">
+        <div class="stepno" id="stepno"></div>
+        <h4 id="steptitle"></h4>
+        <div class="ph" id="stepbox"></div>
+        <div class="ctrl">
+          <button class="btn" id="back" type="button">Back</button>
+          <button class="btn primary" id="next" type="button">Next</button>
+        </div>
+      </div>
+      <aside class="window">
+        <h5>Train window</h5>
+        <p id="windowtext"></p>
+        <div class="tte-toast" id="toast" hidden>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3" fill="currentColor"/></svg>
+          <span>TTE punched your ticket. Right on the first try.</span>
+        </div>
+      </aside>
+    </div>
+  </div>
+  <ul class="notes">
+    <li><b>The train window</b> is optional. It could hold the story's scenery, or just stay empty on small screens.</li>
+    <li><b>Punches don't block you.</b> A wrong answer still lets you ride on. The hole just isn't punched, and it affects the ticket class you get next.</li>
+  </ul>
+</section>
+
+<!-- SCREEN 3 -->
+<section class="screen" id="arrive">
+  <div class="screen-head"><span class="no">SCREEN 3</span><h2>Arriving at the platform</h2>
+    <p>Shown when the last step is done. The station board drops in, the gift is handed over, and the next ticket prints out of the counter.</p></div>
+  <div class="frame">
+    <div class="platform" id="platform">
+      <div class="bigboard">
+        <div class="face"><div class="b1">সিনেমা হল</div><div class="b2">Cinema Hall</div><div class="b3">CIN · 4.5 · BINDU EXPRESS</div></div>
+        <div class="legs"></div>
+      </div>
+      <div class="arrive-grid">
+        <div class="giftcard">
+          <div class="gl">Station gift</div>
+          <div class="gi" id="arriveGiftIcon"></div>
+          <h4>Taste compass</h4>
+          <p>Tells how alike two tastes are, however much each person watches. You made it when you divided the dot product by both lengths: <code>cos θ = a·b / ‖a‖‖b‖</code></p>
+        </div>
+        <div class="counter">
+          <div class="slot-label">Ticket counter · টিকেট ঘর</div>
+          <div class="slot"></div>
+          <div class="tk-holder" id="arriveTicket"></div>
+        </div>
+      </div>
+      <div class="arrive-actions">
+        <button class="btn" type="button" id="replay">Replay arrival</button>
+        <button class="btn primary" type="button">Put gift in trunk · board to নদীঘাট</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKET -->
+<section class="screen" id="ticket">
+  <div class="screen-head"><span class="no">DETAIL</span><h2>The ticket, up close</h2>
+    <p>Modelled on the old cardboard counter ticket: buff card, guilloche print, a red rule, a rubber stamp and a tear-off stub. Every field is real data from your ride.</p></div>
+  <div class="frame">
+    <div class="anatomy">
+      <div id="bigTicket"></div>
+      <ol>
+        <li><span><b>Route</b> is the next journey: from the station you're at to the next one, in Bangla and English with a three-letter station code.</span></li>
+        <li><span><b>Class</b> reflects the ride you just did. All exercises right first time gets <span class="bn">স্নিগ্ধা</span> (blue card). Otherwise <span class="bn">শোভন চেয়ার</span> (buff card). Nobody is held back.</span></li>
+        <li><span><b>Fare</b> is paid in what you learned, e.g. "one cosine similarity". It doubles as a one-line recap.</span></li>
+        <li><span><b>Coach and seat</b> are stable per learner, so your seat number is the same on every ticket, like your seat on a regular route.</span></li>
+        <li><span><b>The stub</b> gets punched on each exercise during the ride. The album keeps punched tickets.</span></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- SCREEN 4 -->
+<section class="screen" id="shop">
+  <div class="screen-head"><span class="no">SCREEN 4</span><h2>The trunk and the junction workshop</h2>
+    <p>Gifts go into a tin trunk that travels with you. At the junction at the end of the line, a blueprint asks for some of them. Tap a gift to fit it. When the blueprint is full, you build the line's tool and use it once, for real.</p></div>
+  <div class="frame">
+    <div class="shop">
+      <div class="trunk">
+        <div class="trunk-lid"><div class="painted">আমার ট্রাংক</div></div>
+        <div class="trunk-box" id="trunkBox"></div>
+      </div>
+      <div class="bench">
+        <div class="eyebrow">Monojog Junction · মনোযোগ জংশন</div>
+        <h4>Build: a tiny search box</h4>
+        <p class="sub">Type a question, and the box finds the library card that points the same way. It's the same move ChatGPT's attention makes, in miniature.</p>
+        <div class="blueprint" id="blueprint"></div>
+        <div class="buildbar"><div class="meter"><i id="meter"></i></div><button class="btn primary" id="build" type="button" disabled>Build it</button></div>
+      </div>
+    </div>
+  </div>
+  <ul class="notes">
+    <li><b>Each blueprint slot says which station</b> the gift comes from, so a missing gift points you back to a journey.</li>
+    <li><b>The build is a real mini-exercise</b>, using the gifts as its steps. It's the chapter's capstone.</li>
+    <li>Gifts carry across lines. Line 6 (matrices) could ask for the Line 4 shadow lamp again.</li>
+  </ul>
+</section>
+
+<!-- SCREEN 5 -->
+<section class="screen" id="album">
+  <div class="screen-head"><span class="no">SCREEN 5</span><h2>Ticket album</h2>
+    <p>Every ticket you've used, kept in your profile. A record of the whole trip.</p></div>
+  <div class="frame">
+    <div class="album">
+      <div class="album-sum">
+        <div><strong>14</strong>tickets</div>
+        <div><strong>6</strong>স্নিগ্ধা class</div>
+        <div><strong>2</strong>lines finished</div>
+        <div><strong>1</strong>tool built</div>
+      </div>
+      <div class="fan" id="fan"></div>
+    </div>
+  </div>
+</section>
+
+<section class="screen" id="review">
+  <div class="screen-head"><span class="no">REVIEW</span><h2>Questions for you</h2></div>
+  <div class="qs">
+    <div class="q"><h3>Ticket class by score?</h3><p>Should ticket class reward first-try answers (স্নিগ্ধা vs শোভন চেয়ার), or should every ticket be the same so nobody feels graded?</p></div>
+    <div class="q"><h3>Station names: story or topic?</h3><p>This mockup names stations after each journey's story (হাট, সিনেমা হল). The alternative is topic names (Dot Product, Cosine).</p></div>
+    <div class="q"><h3>What gets built?</h3><p>One tool per line (search box for Line 4), or one big machine across the whole course that each line adds a part to?</p></div>
+    <div class="q"><h3>How much motion on the ride?</h3><p>Is the moving train in the progress bar enough, or do you want the train window with story scenery too?</p></div>
+    <div class="q"><h3>Train names</h3><p>Invented names like বিন্দু এক্সপ্রেস, or names that echo real intercity trains (সুবর্ণ, একতা, সুন্দরবন)?</p></div>
+    <div class="q"><h3>Scope</h3><p>Math for AI only to start, or every course in the library as a rail line?</p></div>
+  </div>
+</section>
+
+</div>
+
+<script>
+(function(){
+const I = {
+  rule:'<svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><rect x="7" y="6" width="26" height="28" rx="3"/><path d="M13 14l6 6M19 14l-6 6M24 17h6M27 14v6M13 27h14"/></svg>',
+  scale:'<svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6v26M8 11h24M13 34h14"/><path d="M8 11l-5 11h10zM32 11l-5 11h10z"/></svg>',
+  sign:'<svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="20" cy="20" r="14"/><path d="M20 6v28M10 16h6M13 13v6M24 24h6"/></svg>',
+  angle:'<svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M7 32h27M7 32L27 10"/><path d="M17 32a10 10 0 0 0-3-7"/></svg>',
+  lamp:'<svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 32h28"/><path d="M8 30L28 12"/><path d="M28 12v18" stroke-dasharray="3 3"/><path d="M8 34h20" stroke-width="4"/></svg>',
+  compass:'<svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><circle cx="20" cy="20" r="14"/><path d="M20 9l4 11-4 11-4-11z" fill="currentColor" fill-opacity=".25"/><circle cx="20" cy="20" r="1.8" fill="currentColor"/></svg>',
+  rope:'<svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 28c4-4 6 4 10 0s6-4 10 0 5-6 9-10"/><path d="M34 18l-1-7-6 3"/></svg>',
+  cards:'<svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><rect x="6" y="13" width="24" height="18" rx="2"/><path d="M11 13V9h24v18h-5M11 20h14M11 25h9"/></svg>',
+  stamp:'<svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="20" cy="9" r="4"/><path d="M18 13h4l1 8h-6zM9 21h22v6H9zM8 33h24"/></svg>',
+  box:'<svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><path d="M6 13l14-7 14 7v14l-14 7-14-7z"/><path d="M6 13l14 7 14-7M20 20v14"/></svg>'
+};
+const train = (w)=>`<svg viewBox="0 0 120 40" width="${w}" aria-hidden="true"><rect x="2" y="8" width="70" height="22" rx="4" fill="var(--rail)"/><rect x="2" y="21" width="70" height="3" fill="var(--board)"/><rect x="8" y="12" width="10" height="7" rx="1.5" fill="var(--surface)"/><rect x="22" y="12" width="10" height="7" rx="1.5" fill="var(--surface)"/><rect x="36" y="12" width="10" height="7" rx="1.5" fill="var(--surface)"/><path d="M76 8h28c8 0 14 8 14 16v6H76z" fill="var(--rail)"/><path d="M76 21h42v3H76z" fill="var(--board)"/><path d="M104 11c5 1 9 5 10 9h-14v-9z" fill="var(--surface)"/><rect x="110" y="25" width="7" height="4" rx="1" fill="var(--signal)"/><rect x="72" y="16" width="4" height="10" fill="var(--steel)"/><g fill="var(--ink)"><circle cx="14" cy="33" r="4"/><circle cx="58" cy="33" r="4"/><circle cx="86" cy="33" r="4"/><circle cx="108" cy="33" r="4"/></g></svg>`;
+
+const S = [
+  {c:'NSB',bn:'নাসিবের মোড়',en:"Nasib's Mor",n:'4.0',g:'Rule card',i:'rule'},
+  {c:'HAT',bn:'হাট',en:'Haat',n:'4.1',g:'Daripalla scale',i:'scale'},
+  {c:'KDP',bn:'কাদাপাড়া',en:'Kadapara',n:'4.2',g:'For-or-against sign',i:'sign'},
+  {c:'MMA',bn:'মামার মোড়',en:'Mamar Mor',n:'4.3',g:'Angle card',i:'angle'},
+  {c:'CHY',bn:'ছায়াবাড়ি',en:'Chhayabari',n:'4.4',g:'Shadow lamp',i:'lamp'},
+  {c:'CIN',bn:'সিনেমা হল',en:'Cinema Hall',n:'4.5',g:'Taste compass',i:'compass'},
+  {c:'NDG',bn:'নদীঘাট',en:'Nodighat',n:'4.6',g:'Tow rope',i:'rope'},
+  {c:'PTG',bn:'পাঠাগার',en:'Pathagar',n:'4.7',g:'Index cards',i:'cards'},
+  {c:'LKB',bn:'লাখবই',en:'Lakhboi',n:'4.8',g:'Normalise stamp',i:'stamp'},
+  {c:'MNJ',bn:'মনোযোগ জংশন',en:'Monojog Jn.',n:'4.9',g:'Workshop',i:'box',junction:true}
+];
+const reached = 5; // stations 0..4 done; riding to index 5
+
+/* ---- route map ---- */
+const route = document.getElementById('route');
+const gap = 140, x0 = 70;
+let html = '<div class="track"><div class="done" style="width:'+(x0+gap*(reached-1)+gap*.55)+'px"></div></div>';
+S.forEach((s,k)=>{
+  const st = k<reached?'done':k===reached?'next todo':'todo'+(k>reached+1?' locked':'');
+  html += `<div class="stn ${st}${s.junction?' junction':''}" style="left:${x0+gap*k}px">
+    <div class="board"><div class="b1">${s.bn}</div><div class="b2">${s.en}</div></div>
+    <div class="posts"></div>
+    <div class="node"></div>
+    <div class="num">${s.c} · ${s.n}</div>
+    <div class="gift" title="${s.g}">${I[s.i]}</div>
+    <div class="gname">${k<reached?s.g:(s.junction?'Build a tool':'Gift waiting')}</div>
+  </div>`;
+});
+html += `<div class="train" style="left:${x0+gap*(reached-1)+gap*.55}px">${train(92)}</div>`;
+route.innerHTML = html;
+const rs = document.querySelector('.route-scroll');
+requestAnimationFrame(()=>{ rs.scrollLeft = Math.max(0, x0+gap*(reached-1) - rs.clientWidth/2 + 60); });
+
+/* ---- ticket ---- */
+function ticket(o){
+  return `<div class="ticket ${o.snigdha?'snigdha':''}" ${o.r?`style="--r:${o.r}deg"`:''}>
+   <div class="main">
+    <div class="tk-head">
+      <div class="tk-rly"><div class="seal">প</div><div><div class="t1">পাঠশালা রেলওয়ে</div><div class="t2">Pathshala Railway</div></div></div>
+      <div class="tk-no">No.<br><b>${o.no}</b></div>
+    </div>
+    <div class="tk-route">
+      <div class="st"><span class="lab">From</span><span class="bnn">${o.from.bn}</span><span class="enn">${o.from.en} · ${o.from.c}</span></div>
+      <div class="mid"><svg viewBox="0 0 58 18"><path d="M2 9h50M46 3l7 6-7 6" fill="none" stroke="currentColor" stroke-width="2"/></svg><span>${o.train}</span></div>
+      <div class="st"><span class="lab">To</span><span class="bnn">${o.to.bn}</span><span class="enn">${o.to.en} · ${o.to.c}</span></div>
+    </div>
+    <div class="tk-grid">
+      <div>Journey<b>${o.to.n}</b></div>
+      <div>Date<b>${o.date}</b></div>
+      <div>Coach<b class="bn">ঘ</b></div>
+      <div>Steps<b>9 km</b></div>
+    </div>
+    <div class="tk-foot">
+      <div class="tk-fare">Fare paid: <b>${o.fare}</b></div>
+      <div class="stamp">শুভ যাত্রা<small>${o.date}</small></div>
+    </div>
+   </div>
+   <div class="stub">
+    <span class="sl">Seat</span>
+    <span class="seat">27</span>
+    <span class="cls">${o.snigdha?'স্নিগ্ধা':'শোভন চেয়ার'}</span>
+    <div class="bars"></div>
+    ${o.punched?'<span class="punch"></span>':''}
+   </div>
+  </div>`;
+}
+const T = (a,b,extra)=>Object.assign({from:S[a],to:S[b],train:'বিন্দু এক্সপ্রেস 704',date:'26 SEP 26'},extra);
+document.getElementById('arriveTicket').innerHTML = ticket(T(5,6,{no:'PR-704-0417',fare:'one cosine similarity',snigdha:true}));
+document.getElementById('bigTicket').innerHTML = ticket(T(5,6,{no:'PR-704-0417',fare:'one cosine similarity',snigdha:false}));
+document.getElementById('arriveGiftIcon').innerHTML = I.compass;
+const fan = [
+  T(0,1,{no:'PR-704-0412',fare:'the multiply rule',snigdha:true,punched:true,r:-2}),
+  T(1,2,{no:'PR-704-0413',fare:'one dot product',punched:true,r:1.5}),
+  T(2,3,{no:'PR-704-0414',fare:'the sign of a push',snigdha:true,punched:true,r:-1}),
+  T(3,4,{no:'PR-704-0415',fare:'two lengths, one angle',punched:true,r:2}),
+  T(4,5,{no:'PR-704-0416',fare:'one shadow',snigdha:true,punched:true,r:-1.5})
+];
+document.getElementById('fan').innerHTML = fan.map(ticket).join('');
+
+/* ---- ride ---- */
+const steps = [
+  {t:'Rumi and Tanvir both say they love thrillers',w:'Paddy fields. A boy on a bicycle races the train for a while.'},
+  {t:'Two lists of films, one per person',w:'The train slows past a level crossing. Rickshaws wait.'},
+  {t:'Which pair matches better?',tte:true,w:'The TTE walks down the coach, punch in hand.'},
+  {t:'Tanvir watches ten times as much',w:'A tea seller calls "cha, cha garam" through the window.'},
+  {t:'The dot product is fooled by volume',w:'Water on both sides. The Jamuna is somewhere near.'},
+  {t:'Divide by both lengths',tte:true,w:'The TTE comes back. Tickets out.'},
+  {t:'Only the angle is left',w:'A long bridge. The wheels change their sound.'},
+  {t:'Sort the four friends by taste',tte:true,w:'Last check before the station.'},
+  {t:'Cinema Hall is in sight',w:'The platform board comes into view: সিনেমা হল.'}
+];
+let at = 5; // index 0-based; start mid-ride
+const firstTry = new Set([2]);
+const stretch = document.getElementById('stretch');
+const L = k => (steps.length===1?0:k/(steps.length-1))*100;
+stretch.innerHTML = '<span class="start">CHY</span><span class="end">CIN</span><div class="rails"><div class="fill"></div></div>'
+  + steps.map((s,k)=>`<span class="post${s.tte?' tte':''}" style="left:calc(14px + (100% - 28px) * ${L(k)/100})"></span>`).join('')
+  + `<div class="train">${train(60)}</div>`;
+const holes = document.getElementById('holes');
+function render(punchNow){
+  const pct = L(at)/100;
+  stretch.querySelector('.fill').style.width = `calc((100% ) * ${pct})`;
+  stretch.querySelector('.train').style.left = `calc(14px + (100% - 28px) * ${pct})`;
+  stretch.querySelectorAll('.post').forEach((p,k)=>p.classList.toggle('passed',k<=at));
+  const s = steps[at];
+  document.getElementById('stepno').textContent = `KM ${at+1} OF ${steps.length}` + (s.tte?' · TICKET CHECK':'');
+  document.getElementById('steptitle').textContent = s.t;
+  const box = document.getElementById('stepbox');
+  box.classList.toggle('tte',!!s.tte);
+  box.textContent = s.tte ? 'Exercise screen from the journey, unchanged. Answer right first time and the TTE punches your ticket.' : 'Step screen from the journey, unchanged (scene, widget, <Then>).';
+  document.getElementById('windowtext').textContent = s.w;
+  const tteSteps = steps.map((x,k)=>x.tte?k:-1).filter(k=>k>=0);
+  holes.innerHTML = tteSteps.map(k=>`<i class="${firstTry.has(k)&&k<=at?'punched':''}"></i>`).join('');
+  document.getElementById('toast').hidden = !(punchNow);
+  document.getElementById('back').disabled = at===0;
+  const nx = document.getElementById('next');
+  nx.textContent = at===steps.length-1 ? 'Arrive at সিনেমা হল' : 'Next';
+}
+document.getElementById('next').onclick = ()=>{
+  if(at===steps.length-1){ document.getElementById('arrive').scrollIntoView({behavior:'smooth'}); playArrive(); return; }
+  at++;
+  let punch=false;
+  if(steps[at].tte){ firstTry.add(at); punch=true; }
+  render(punch);
+};
+document.getElementById('back').onclick = ()=>{ if(at>0){at--;render(false);} };
+render(false);
+
+/* ---- arrival ---- */
+const plat = document.getElementById('platform');
+function playArrive(){ plat.classList.remove('play'); void plat.offsetWidth; plat.classList.add('play'); }
+document.getElementById('replay').onclick = playArrive;
+
+/* ---- trunk + workshop ---- */
+const need = [
+  {k:1,what:'Daripalla scale',role:'score each card: multiply and add'},
+  {k:3,what:'Angle card',role:'read the score as length × length × cos'},
+  {k:5,what:'Taste compass',role:'ignore how long each card is'},
+  {k:8,what:'Normalise stamp',role:'do the dividing once, up front'}
+];
+const have = new Set([0,1,2,3,4,5]); // pretend 4.5 gift just arrived
+const placed = new Set();
+function drawShop(){
+  document.getElementById('trunkBox').innerHTML = S.slice(0,9).map((s,k)=>{
+    if(!have.has(k)) return `<div class="item empty">${I[s.i]}<span>${s.c} · ${s.n}</span></div>`;
+    return `<button type="button" class="item${placed.has(k)?' used':''}" data-k="${k}">${I[s.i]}<span>${s.g}</span></button>`;
+  }).join('');
+  document.getElementById('blueprint').innerHTML = need.map(n=>{
+    const f = placed.has(n.k);
+    return `<div class="bslot${f?' filled':''}"><span class="need">FROM ${S[n.k].c} · ${S[n.k].n}</span><span class="what">${n.what}</span><span class="need" style="font-family:var(--f-body);letter-spacing:0;font-weight:500">${n.role}</span></div>`;
+  }).join('');
+  const done = need.filter(n=>placed.has(n.k)).length;
+  document.getElementById('meter').style.width = (done/need.length*100)+'%';
+  const b = document.getElementById('build');
+  b.disabled = done<need.length;
+  const missing = need.filter(n=>!have.has(n.k));
+  b.textContent = done===need.length ? 'Build it' : missing.length && need.filter(n=>have.has(n.k)).every(n=>placed.has(n.k)) ? `Still need: ${missing.map(n=>S[n.k].bn).join(', ')}` : 'Build it';
+  document.querySelectorAll('#trunkBox button.item').forEach(el=>el.onclick=()=>{
+    const k=+el.dataset.k; if(need.some(n=>n.k===k)){ placed.has(k)?placed.delete(k):placed.add(k); drawShop(); }
+    else { el.animate([{transform:'translateX(0)'},{transform:'translateX(-4px)'},{transform:'translateX(4px)'},{transform:'none'}],{duration:260}); }
+  });
+}
+placed.add(1); placed.add(3);
+drawShop();
+})();
+</script>
+</body></html>

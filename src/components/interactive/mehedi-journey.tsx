@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useState, type ReactNode } from "react";
+import { useEffect, useId, useState, type ReactNode } from "react";
 
 import { Tup } from "@/components/journey/box";
 import { Bubble, Chest, Person, Stage, StoryFrame } from "@/components/journey/cast";
@@ -8,6 +8,7 @@ import { Task, useGate } from "@/components/journey/journey";
 import { Choice, FADE, Nope, POP, Scene, Stepper, pill, predictLook, primaryBtn, quietBtn, usePlay, useScene, useSeed, useTween, type Fixtures } from "@/components/journey/kit";
 import { Arrow, Plane, clamp, makeFrame, type Frame, type XY } from "@/components/journey/plane";
 import { LensCard, LightBhai, Projector, WALL_SLOTS, WallBed, apply, byCols, det, partway, pathOf, projectorLens, useLensRun, type Cols, type Move } from "./light-kit";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 8.3 — মেহেদির হাত, minus জায়গা", told as a Journey
 // in the author's Bangla-English. The plan is 08_journey_specs.md, block 8.3.
@@ -386,6 +387,7 @@ export function MinusBet() {
   const seal = () => {
     if (bet === null || sealed) return;
     setSealed(true);
+    sfx.stamp();
     act.play(2, () => pass("বাজি সিল হলো। আগে সোজা আয়না।"));
   };
   const show = k >= 1 ? bet : null;
@@ -1273,6 +1275,10 @@ export function MehediAfternoon({}: Story) {
 export function AynaLens({}: Story) {
   const s = useScene(3, [600, 1600, 1600, 1800]);
   const k = s.k;
+  // the mirror lens held up
+  useEffect(() => {
+    if (k === 1) sfx.lens();
+  }, [k]);
   const PJ: [number, number] = [236, 150];
   const [lx, ly] = projectorLens(PJ[0], PJ[1]);
   return (
@@ -1422,6 +1428,10 @@ export function HandsFacing({}: Story) {
 export function BulbFuses() {
   const s = useScene(3, [600, 1600, 1800, 2400]);
   const k = s.k;
+  // the machine's bulb fuses
+  useEffect(() => {
+    if (k === 1) sfx.fuse();
+  }, [k]);
   const PJ: [number, number] = [150, 150];
   const [lx, ly] = projectorLens(PJ[0], PJ[1], 1);
   return (

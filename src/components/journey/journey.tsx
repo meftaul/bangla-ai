@@ -21,7 +21,19 @@ import { createPortal } from "react-dom";
 
 import { bn } from "@/components/interactive/figure-kit";
 import { COURSES } from "@/content/courses";
-import { GROW_WIDGET } from "@/components/journey/kit";
+import { prevStop, stopOf, type Stop } from "@/content/rail";
+import { GROW_WIDGET, MissCtx } from "@/components/journey/kit";
+import { MegaphoneSimple } from "@phosphor-icons/react";
+
+import { Arrival } from "@/components/rail/arrival";
+import { Train, type TrainFx } from "@/components/rail/parts";
+import { arriveSound, horn, punchSound } from "@/components/rail/sound";
+import { SoundToggle } from "@/components/rail/sound-toggle";
+import { Tte, type TteCall } from "@/components/rail/tte";
+import { chase, CLASS_LABEL, recordArrival, useRail, type Chase } from "@/lib/rail";
+
+/** The ticket checker (TTE) is switched off for now; flip to bring him back. */
+const TTE_ON = false;
 
 // A lesson told one screen at a time, Brilliant-style.
 //
@@ -66,6 +78,14 @@ import { GROW_WIDGET } from "@/components/journey/kit";
 // back on the very screen they were on, with Continue as they left it.
 // ponytail: per browser, not per user; move it to Supabase if readers switch
 // devices, or if the Library should show which journeys are finished.
+//
+// On the Math for AI railway (src/content/rail.ts) the journey is a train ride
+// to its station: the progress bar is a stretch of track the train runs along,
+// a step with a task is a ticket check, and the ending is the platform, where
+// the station hands over its tool and the next ticket. A check counts as passed
+// on the first try unless a <Nope> showed before its task was done (MissCtx).
+// The ticket checker comes by for each check (rail/tte.tsx) and the train on
+// the track puffs or lurches with it; arriving plays the brakes and the horn.
 //
 // Continue, when locked, still answers a tap: it says why and shakes the Task.
 // A turn moves focus to the new screen and is announced, as is an unlock. After
@@ -134,6 +154,9 @@ type Saved = {
   finished?: boolean;
   /** reached the ending at least once */
   done?: boolean;
+  /** steps with a task (a ticket check), and those missed on the first try */
+  checked?: number[];
+  missed?: number[];
 };
 
 const calm = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -181,6 +204,15 @@ export function Journey({
   const [found, setFound] = useState<Record<number, string>>({});
   const [finished, setFinished] = useState(false);
   const [next, setNext] = useState<string | null>(null);
+  // The station this ride goes to, when the lesson is on the railway.
+  const [stop, setStop] = useState<Stop | null>(null);
+  // Steps with a task, and those whose task saw a miss before it was done.
+  const [checked, setChecked] = useState<number[]>([]);
+  const [missed, setMissed] = useState<number[]>([]);
+  // The checker's latest visit, and what the train on the track just did.
+  const [tte, setTte] = useState<TteCall>(null);
+  const [trainFx, setTrainFx] = useState<TrainFx>(null);
+  const beat = useRef(0);
   // Said to a screen reader on a turn.
   const [said, setSaid] = useState("");
   // The frame's root, which a side quest takes over, and whether one is on.
@@ -203,16 +235,51 @@ export function Journey({
     atNow.current = at;
   });
 
+  // A miss counts only against a task not yet done: a Nope shown after the pass
+  // (or on a step with no task) says nothing about the first try.
+  const openTask = useRef(false);
+  const missedNow = useRef<number[]>([]);
+  // What the last render saw, for the gate callbacks: the step's tasks, those
+  // done, and whether this ride is on the railway (so the checker comes by).
+  const gatesNow = useRef<string[]>([]);
+  const passedNow = useRef<string[]>([]);
+  const railOn = useRef(false);
+
   const register = useCallback((id: string) => {
     setGates((g) => [...g, id]);
     return () => setGates((g) => g.filter((x) => x !== id));
   }, []);
-  const pass = useCallback((id: string, n?: ReactNode) => {
-    setPassed((p) => (p.includes(id) ? p : [...p, id]));
-    if (n) setNote(n);
-    if (typeof n === "string") setFound((f) => ({ ...f, [atNow.current]: n }));
-  }, []);
+  const pass = useCallback(
+    (id: string, n?: ReactNode) => {
+      // The pass that finishes an open check brings the checker, right on this
+      // screen: he punches the ticket, or after a miss waves you on unpunched.
+      const done = openTask.current && gatesNow.current.every((g) => g === id || passedNow.current.includes(g));
+      if (done && railOn.current) {
+        openTask.current = false;
+        const k = ++beat.current;
+        const first = !missedNow.current.includes(atNow.current);
+        setTte({ kind: first ? "punch" : "late", n: k });
+        if (first) {
+          setTrainFx({ kind: "puff", n: k });
+          if (TTE_ON) punchSound();
+        }
+      }
+      setPassed((p) => (p.includes(id) ? p : [...p, id]));
+      if (n) setNote(n);
+      if (typeof n === "string") setFound((f) => ({ ...f, [atNow.current]: n }));
+    },
+    [setTte, setTrainFx],
+  );
   const gateApi = useMemo(() => ({ register, pass }), [register, pass]);
+  const onMiss = useCallback(() => {
+    if (!openTask.current) return;
+    const i = atNow.current;
+    const n = ++beat.current;
+    setTrainFx({ kind: "jolt", n });
+    // He comes by for the first miss on a check only; after that he lets you work.
+    if (!missedNow.current.includes(i)) setTte({ kind: "miss", n });
+    setMissed((m) => (m.includes(i) ? m : [...m, i]));
+  }, [setTrainFx, setTte]);
 
   const announceThen = useCallback(() => {
     setThens((n) => n + 1);
@@ -237,6 +304,31 @@ export function Journey({
   const cleared = at < furthest || at === solvedAt || gates.every((g) => passed.includes(g));
   const reachable = (i: number) => i <= Math.max(furthest, cleared ? at + 1 : at);
   const locked = !cleared && onWidget;
+  useEffect(() => {
+    openTask.current = gates.length > 0 && !cleared;
+  });
+  // A step that shows a task is a ticket check.
+  const hasTask = gates.length > 0;
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- tasks register from inside the step, after it mounts
+    if (hasTask) setChecked((c) => (c.includes(at) ? c : [...c, at]));
+  }, [hasTask, at]);
+  // A check counts once it is behind the reader (or its task is done) and saw no miss.
+  useEffect(() => {
+    missedNow.current = missed;
+    gatesNow.current = gates;
+    passedNow.current = passed;
+    railOn.current = !!stop && !detour;
+  });
+  const checks = {
+    total: checked.length,
+    first: checked.filter((i) => !missed.includes(i) && (i < at || (i === at && cleared) || finished)).length,
+  };
+  // The class still in reach. How many checks the ride holds is known once the
+  // reader has arrived here before; a first ride learns it as it goes.
+  const rail = useRail();
+  const known = stop ? rail.checks[stop.slug] : undefined;
+  const aim = chase(checks.first, missed.length, known === undefined ? null : Math.max(known, checks.total));
   // The Task belongs to the widget: keep it out of the top bar on every other screen.
   const stageApi = useMemo(
     () => ({ taskSlot: onWidget ? taskSlot : null, thenSlot: page > W ? thenSlot : null, announceThen, nudged }),
@@ -253,6 +345,8 @@ export function Journey({
     setNote(null);
     setNudged(0);
     setFinished(false);
+    // The checker stays with the screen he checked; a new step sends him off.
+    setTte(null);
     turned.current = true;
     setSaid(`ধাপ ${bn(to + 1)} / ${bn(steps.length)}`);
   };
@@ -265,10 +359,20 @@ export function Journey({
   };
   const finish = () => {
     if (detour) return detour.onExit();
+    if (stop) {
+      recordArrival(stop.slug, checks.total ? checks.first / checks.total : null, checks.total);
+      arriveSound();
+    }
     setDir(1);
     setFinished(true);
     turned.current = true;
     setSaid("Journey শেষ।");
+  };
+  // A new ride from the start: its checks are scored afresh.
+  const again = () => {
+    setChecked([]);
+    setMissed([]);
+    go(0);
   };
   // A locked Continue is not dead: a tap (or →) says what is missing and shakes the Task.
   const nudge = () => setNudged((n) => n + 1);
@@ -445,6 +549,7 @@ export function Journey({
     const after = course?.items[course.items.indexOf(slug) + 1];
     // eslint-disable-next-line react-hooks/set-state-in-effect -- the pathname, which the server render cannot see
     setNext(after ? `/dashboard/articles/${after}` : null);
+    setStop(stopOf(slug) ?? null);
     try {
       const saved = JSON.parse(localStorage.getItem(key) ?? "null") as Saved | null;
       if (saved && Number.isInteger(saved.furthest) && Number.isInteger(saved.at)) {
@@ -457,6 +562,8 @@ export function Journey({
         if (saved.cleared) setSolvedAt(a);
         if (saved.found && typeof saved.found === "object") setFound(saved.found);
         if (saved.finished && a === last) setFinished(true);
+        if (Array.isArray(saved.checked)) setChecked(saved.checked);
+        if (Array.isArray(saved.missed)) setMissed(saved.missed);
       }
     } catch {
       // storage blocked or corrupt: start from screen 1
@@ -466,12 +573,12 @@ export function Journey({
     if (!saveKey.current) return;
     try {
       const done = finished || !!(JSON.parse(localStorage.getItem(saveKey.current) ?? "null") as Saved | null)?.done;
-      const saved: Saved = { at, furthest, page, cleared, found, finished, done };
+      const saved: Saved = { at, furthest, page, cleared, found, finished, done, checked, missed };
       localStorage.setItem(saveKey.current, JSON.stringify(saved));
     } catch {
       // storage blocked: progress just is not kept
     }
-  }, [at, furthest, page, cleared, found, finished]);
+  }, [at, furthest, page, cleared, found, finished, checked, missed]);
   // A restored screen may no longer exist (a different screen size breaks the
   // step differently) or may be past a task that was not done: pull it back.
   useLayoutEffect(() => {
@@ -604,6 +711,8 @@ export function Journey({
             <span className="shrink-0 rounded-md bg-cat-amber/15 px-1.5 py-0.5 font-semibold text-cat-amber">Side quest</span>
             <span className="min-w-0 truncate font-semibold">{title}</span>
           </div>
+        ) : stop ? (
+          <RideLine stop={stop} checks={checks} aim={finished ? null : aim} />
         ) : title ? (
           <div className="mb-2 hidden truncate text-xs font-semibold tracking-wider text-accent-text uppercase sm:block">{title}</div>
         ) : null}
@@ -619,8 +728,8 @@ export function Journey({
             </button>
           ) : (
           <Link
-            href="/dashboard/articles"
-            aria-label="লাইব্রেরিতে ফিরে যান"
+            href={stop ? "/dashboard/courses/math_for_ai" : "/dashboard/articles"}
+            aria-label={stop ? "Route map-এ ফিরে যান" : "লাইব্রেরিতে ফিরে যান"}
             // .article's unlayered `a` rule (accent, underline) beats utilities; only inline style wins
             style={{ color: "inherit", textDecoration: "none" }}
             className="group/x -ml-1.5 grid size-9 shrink-0 place-items-center rounded-full text-2xl leading-none transition-colors hover:bg-foreground/5"
@@ -628,6 +737,19 @@ export function Journey({
             <span aria-hidden="true" className="text-muted group-hover/x:text-foreground">×</span>
           </Link>
           )}
+          {stop && !detour ? (
+            <Track
+              steps={steps.length}
+              at={at}
+              progress={finished ? 1 : (at + done / (lastPage + 1)) / steps.length}
+              furthest={furthest}
+              reachable={reachable}
+              checked={checked}
+              missed={missed}
+              go={go}
+              fx={trainFx}
+            />
+          ) : (
           <nav aria-label="ধাপগুলো" className="flex flex-1 gap-1">
             {steps.map((_, i) => (
               <button
@@ -648,6 +770,7 @@ export function Journey({
               </button>
             ))}
           </nav>
+          )}
           <span className="shrink-0 font-mono text-xs text-muted tabular-nums">
             {bn(at + 1)}/{bn(steps.length)}
           </span>
@@ -665,6 +788,7 @@ export function Journey({
         className="min-h-0 flex-1 overflow-y-auto overscroll-contain"
       >
         <GateCtx.Provider value={gateApi}>
+          <MissCtx.Provider value={detour ? null : onMiss}>
           <StageCtx.Provider value={stageApi}>
             <ClearedCtx.Provider value={cleared}>
               <div
@@ -719,11 +843,25 @@ export function Journey({
               </div>
             </ClearedCtx.Provider>
           </StageCtx.Provider>
+          </MissCtx.Provider>
         </GateCtx.Provider>
-        {finished ? <Ending ref={ending} title={title} steps={steps.length} found={found} next={next} onAgain={() => go(0)} /> : null}
+        {finished ? (
+          stop ? (
+            <Arrival ref={ending} stop={stop} checks={checks} found={foundNotes(found)} onAgain={again} />
+          ) : (
+            <Ending ref={ending} title={title} steps={steps.length} found={found} next={next} onAgain={again} />
+          )
+        ) : null}
         {/* a soft edge that says "more below"; at the very end it only covers the bottom padding */}
         <div aria-hidden="true" className="pointer-events-none sticky bottom-0 -mt-6 h-6 bg-linear-to-t from-surface" />
       </div>
+
+      {/* the ticket checker stands just above the bottom bar */}
+      {TTE_ON && stop && !detour ? (
+        <div className="relative h-0">
+          <Tte call={tte} />
+        </div>
+      ) : null}
 
       {/* ---- bottom bar: what they found, back, Continue ------------------- */}
       <div inert={away} className="shrink-0 border-t border-border bg-surface px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:px-8 sm:pb-4">
@@ -765,10 +903,23 @@ export function Journey({
           >
             <span aria-hidden="true">←</span>
           </button>
+          {stop && !detour ? (
+            <button
+              type="button"
+              aria-label="হর্ন বাজান"
+              onClick={() => {
+                horn();
+                setTrainFx({ kind: "puff", n: ++beat.current });
+              }}
+              className="grid size-12 shrink-0 cursor-pointer place-items-center rounded-full border border-border text-muted transition-colors hover:border-accent hover:text-foreground active:scale-95"
+            >
+              <MegaphoneSimple size={20} weight="bold" aria-hidden="true" />
+            </button>
+          ) : null}
           {finished ? (
             next ? (
               <Link href={next} style={{ textDecoration: "none" }} className={`${bigBtn} ${goBtn} text-accent-foreground!`}>
-                পরের পাঠ <span aria-hidden="true">→</span>
+                {stop ? "পরের ট্রেনে উঠুন" : "পরের পাঠ"} <span aria-hidden="true">→</span>
               </Link>
             ) : (
               <Link href="/dashboard/articles" style={{ textDecoration: "none" }} className={`${bigBtn} ${goBtn} text-accent-foreground!`}>
@@ -806,7 +957,7 @@ export function Journey({
             </button>
           ) : (
             <button type="button" onClick={finish} className={`${bigBtn} ${goBtn}`}>
-              {detour ? "মূল journey তে ফিরুন" : "শেষ করুন"} <span aria-hidden="true">✓</span>
+              {detour ? "মূল journey তে ফিরুন" : stop ? `${stop.bn} স্টেশনে নামুন` : "শেষ করুন"} <span aria-hidden="true">✓</span>
             </button>
           )}
         </div>
@@ -937,6 +1088,159 @@ function planStory(main: ReactNode[], el: HTMLElement, room: number, storyRoom: 
   return [...packBlocks(el, () => storyRoom, keep, topOf(keep)), keep];
 }
 
+/** Each step's pass note, in step order, for the ending's recap. */
+const foundNotes = (found: Record<number, string>) =>
+  Object.keys(found)
+    .map(Number)
+    .sort((a, b) => a - b)
+    .map((i) => found[i]);
+
+/**
+ * The top bar's first line on the railway: where this ride runs from and to,
+ * and the ticket in hand with a hole for every check passed on the first try.
+ * Hidden on a phone, like the title it stands in for.
+ */
+function RideLine({ stop, checks, aim }: { stop: Stop; checks: { total: number; first: number }; aim: Chase | null }) {
+  const from = prevStop(stop.slug);
+  const chip = "rounded-[3px] border-[1.5px] border-[#141414] bg-[#f3c623] px-1 py-px font-ticket text-[0.65rem] font-bold text-[#141414]";
+  return (
+    <div className="mb-2 hidden items-center gap-2 text-xs sm:flex">
+      <span className="flex min-w-0 flex-1 items-center gap-1.5 font-semibold">
+        {from ? (
+          <>
+            <span className={chip}>{from.code}</span>
+            <span className="truncate font-bangla">{from.bn}</span>
+            <span aria-hidden="true" className="text-muted">
+              →
+            </span>
+          </>
+        ) : null}
+        <span className={chip}>{stop.code}</span>
+        <span className="truncate font-bangla">{stop.bn}</span>
+        <span className="shrink-0 font-normal text-muted">
+          · {stop.line.train.bn} {stop.line.train.no}
+        </span>
+      </span>
+      {aim ? <AimNote aim={aim} /> : null}
+      <SoundToggle className="shrink-0" />
+      {checks.total ? (
+        <span
+          className="flex shrink-0 items-center gap-1.5 rounded-md bg-[#efe2c1] px-2 py-1 font-ticket text-[0.7rem] font-bold text-[#3b2b14]"
+          title="প্রথম চেষ্টায় পার হওয়া টিকেট চেক"
+        >
+          <span className="sr-only">
+            টিকেট চেক {bn(checks.total)}টা, প্রথম চেষ্টায় {bn(checks.first)}টা
+          </span>
+          <span aria-hidden="true">TICKET</span>
+          <span aria-hidden="true" className="flex gap-1">
+            {Array.from({ length: checks.total }, (_, i) => (
+              <span key={i} className={`rail-punch ${i < checks.first ? "" : "open"} size-2!`} />
+            ))}
+          </span>
+        </span>
+      ) : null}
+    </div>
+  );
+}
+
+/**
+ * The seat upgrade in the ride line: the class the reader is riding for, and
+ * how many checks it still takes, so the class is something to aim for on the
+ * way and not only a grade at the platform.
+ */
+function AimNote({ aim }: { aim: Chase }) {
+  const cls = <b className="font-semibold text-foreground">{CLASS_LABEL[aim.cls].bn}</b>;
+  const text =
+    aim.kind === "set" ? (
+      <>এই যাত্রায় {cls}</>
+    ) : aim.kind === "on" ? (
+      <>{cls} চলছে{aim.cls === "snigdha" ? ", একটাও miss নেই" : ""}</>
+    ) : aim.cls === "snigdha" ? (
+      <>
+        {bn(aim.n)}টা check বাকি {cls}-র জন্য
+      </>
+    ) : (
+      <>
+        আর {bn(aim.n)}টা check প্রথমবারে পার করলে {cls}
+      </>
+    );
+  return <span className="min-w-0 shrink truncate font-bangla text-muted" aria-live="polite">{text}</span>;
+}
+
+/**
+ * The progress bar on the railway: a stretch of track with a post for every
+ * step (a diamond once a step turns out to hold a ticket check, red once it is
+ * passed on the first try), and the train running along it. Posts are the
+ * step buttons, as the segments are off the railway.
+ */
+function Track({
+  steps,
+  at,
+  progress,
+  furthest,
+  reachable,
+  checked,
+  missed,
+  go,
+  fx,
+}: {
+  steps: number;
+  at: number;
+  /** 0…1, how far along the ride the train is */
+  progress: number;
+  furthest: number;
+  reachable: (i: number) => boolean;
+  checked: number[];
+  missed: number[];
+  go: (i: number) => void;
+  fx: TrainFx;
+}) {
+  // A post sits at the end of its step: reaching it means the step is done.
+  const x = (f: number) => `calc(0.75rem + (100% - 1.5rem) * ${f})`;
+  return (
+    <nav aria-label="ধাপগুলো" className="relative h-9 min-w-0 flex-1">
+      <div aria-hidden="true" className="absolute inset-x-3 top-[1.35rem] h-2 border-y-2 border-muted/50">
+        <div
+          className="absolute -top-0.5 left-0 h-2 border-y-2 border-accent transition-[width] duration-700 ease-out motion-reduce:transition-none"
+          style={{ width: `${progress * 100}%` }}
+        />
+      </div>
+      {Array.from({ length: steps }, (_, i) => {
+        const check = checked.includes(i);
+        const passed = i < furthest || progress >= (i + 1) / steps - 1e-6;
+        return (
+          <button
+            key={i}
+            type="button"
+            aria-label={`ধাপ ${bn(i + 1)}${check ? ", টিকেট চেক" : ""}`}
+            aria-current={i === at ? "step" : undefined}
+            disabled={!reachable(i)}
+            onClick={() => go(i)}
+            className="absolute top-3.5 grid h-5 w-5 -translate-x-1/2 cursor-pointer place-items-center disabled:cursor-default"
+            style={{ left: x((i + 1) / steps) }}
+          >
+            {check ? (
+              <span
+                className={`block size-2.5 rotate-45 rounded-[2px] border-2 border-danger ${passed && !missed.includes(i) ? "bg-danger" : "bg-surface"}`}
+              />
+            ) : (
+              <span className={`block h-4 w-1 rounded-full ${passed ? "bg-accent" : "bg-muted/50"}`} />
+            )}
+          </button>
+        );
+      })}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute top-1 w-12 -translate-x-full transition-[left] duration-700 ease-out motion-reduce:transition-none"
+        // the nose at the train's spot, but never backed off the start of the track
+        style={{ left: `max(3rem, ${x(progress)})` }}
+      >
+        <Train className="w-full" fx={fx} />
+      </div>
+    </nav>
+  );
+}
+
 /**
  * After the last screen: the lesson is done, what the reader found on the way
  * (each step's pass note), and where to go next. Focused on arrival.
@@ -956,10 +1260,7 @@ function Ending({
   next: string | null;
   onAgain: () => void;
 }) {
-  const notes = Object.keys(found)
-    .map(Number)
-    .sort((a, b) => a - b)
-    .map((i) => found[i]);
+  const notes = foundNotes(found);
   return (
     <div
       ref={ref}
@@ -1167,6 +1468,7 @@ export function Check({
   children?: ReactNode;
 }) {
   const pass = useGate();
+  const miss = useContext(MissCtx);
   const [wrong, setWrong] = useState<number[]>([]);
   const [won, setWon] = useState(false);
 
@@ -1177,7 +1479,10 @@ export function Check({
       // Without a praise of its own, the default is shown but kept out of the ending's
       // recap (only string notes are recorded): "ঠিক ধরেছেন!" is not something found.
       pass(praise ?? <>ঠিক ধরেছেন!</>);
-    } else setWrong((w) => (w.includes(i) ? w : [...w, i]));
+    } else {
+      miss?.();
+      setWrong((w) => (w.includes(i) ? w : [...w, i]));
+    }
   };
 
   return (

@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useState, type ReactNode } from "react";
+import { useEffect, useId, useState, type ReactNode } from "react";
 
 import { Bubble, Person, Stage, StoryFrame } from "@/components/journey/cast";
 import { Task, useGate } from "@/components/journey/journey";
@@ -8,6 +8,7 @@ import { Choice, Draw, FADE, Nope, POP, Scene, Stepper, Ticks, primaryBtn, quiet
 import { Lit, Plane, clamp, listOf, makeFrame, sg, type Frame, type XY } from "@/components/journey/plane";
 
 import { Alpana, ChalkGrid, FISH, ID, LOTUS_TIPS, PETALS, Pillar, RoadBed, Rope, apply, byCols, partway, turnCols, type Cols } from "./road-kit";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 6.4 — The art sir's notebook, reading a matrix",
 // told as a Journey. The plan is 06_journey_specs.md, block 6.4.
@@ -336,7 +337,10 @@ export function NotebookBet() {
   const run = useRun();
   const seal = (i: number) => {
     setBet(i);
-    run.go(() => pass("বাজি সিল হলো। আগে কালকের দড়িটা খুঁজি।"));
+    run.go(() => {
+      sfx.stamp();
+      pass("বাজি সিল হলো। আগে কালকের দড়িটা খুঁজি।");
+    });
   };
   return (
     <>
@@ -418,6 +422,7 @@ export function RopesInTheGrid() {
           drag={{
             down: (p) => {
               const w = d(e1, p) <= d(e2, p) ? 1 : 2;
+              sfx.rope(0.5);
               setHeld(w);
               moveTo(w, p);
             },
@@ -816,6 +821,7 @@ export function AnyAngle() {
   const got45 = seen.includes(45);
   const got90 = seen.includes(90);
   const turn = (d: number) => {
+    sfx.knob();
     const n = clamp(deg + d, 0, 180);
     setDeg(n);
     const next = seen.includes(n) ? seen : [...seen, n];
@@ -968,6 +974,7 @@ export function TryMirror() {
   const mv = right ? partway(byCols(cols), run.t) : (p: XY) => p;
   const tap = (p: XY) => {
     if (right || run.running) return;
+    sfx.chalk(0.2);
     const q: XY = [clamp(Math.round(p[0]), -1, 6), clamp(Math.round(p[1]), -1, 6)];
     setPick(q);
     if (q[0] === TM_RIGHT[0] && q[1] === TM_RIGHT[1]) run.go(() => pass("দুই দড়ি জায়গা বদল করে: y = x এর আয়না।"));
@@ -1079,6 +1086,12 @@ function S_Page({ x, y, grids, flip = false, w = 96, fs = 6.5 }: { x: number; y:
 export function SickMorning({}: Story) {
   const s = useScene(4, [600, 1500, 1800, 1600, 2600]);
   const k = s.k;
+  // the art sir's notebook opened, and its pages turned
+  useEffect(() => {
+    if (k === 1) sfx.book();
+    else if (k === 2) sfx.paper();
+    else if (k === 3) sfx.paper();
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="street" label="সকালে স্কুলের সিঁড়ি; রিনার কোলে chalk এর বাক্স, পাশে সোম; গেটের খুঁটির পাশে আর্ট স্যারের চেয়ার খালি; খাতা এলো, ভেতরে পাঁচটা ছোট grid; সোম খাতা উল্টো করে ধরে বললো চারটা সংখ্যা, এর থেকে ছবি বের করা যায় না">
@@ -1130,6 +1143,10 @@ export function LastNightPage({}: Story) {
 export function BlankPage({}: Story) {
   const s = useScene(2, [600, 1500, 2200]);
   const k = s.k;
+  // a blank page turned up
+  useEffect(() => {
+    if (k === 2) sfx.paper();
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="street" label="রিনা খাতা খুলে ধরলো; প্রথম দিনের আধা পাক ঘোরানোর পাতা খালি; সোম বললো লিখে ফেলি তাহলে">
@@ -1284,6 +1301,11 @@ export function GatePage({}: Story) {
 export function NightChalk({}: Story) {
   const s = useScene(4, [600, 1400, 2200, 2200, 1800]);
   const k = s.k;
+  // the torch clicks on; the fish chalked by its light
+  useEffect(() => {
+    if (k === 1) sfx.click();
+    else if (k === 4) sfx.chalkLines(3, 0.3, 0.2);
+  }, [k]);
   const torch = k >= 4 ? 190 : 150;
   return (
     <StoryFrame scene={s}>

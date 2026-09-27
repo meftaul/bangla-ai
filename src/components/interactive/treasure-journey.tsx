@@ -26,6 +26,7 @@ import { Arrow, Label, Plane, clamp, makeFrame, minus, plus, same, sg, snap, tup
 import { Bubble, Card as CastCard, Chest, Gate, Person, Robot, Stage, Stall, StoryFrame, type Who } from "@/components/journey/cast";
 import { Shiku, Trail, route, useWalk } from "./arrow-journey";
 import { bn } from "./figure-kit";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 3.1 — যোগ-বিয়োগ, মেলার গুপ্তধন", told as a Journey.
 //
@@ -300,7 +301,9 @@ export function TwoClues() {
   const locked = t.running || walked;
 
   const put = (p: XY) => {
-    if (!locked) setGuess(snap(p, FA));
+    if (locked) return;
+    sfx.chalk(0.15);
+    setGuess(snap(p, FA));
   };
   const go = () =>
     t.go(U1, V1, () => {
@@ -1227,6 +1230,9 @@ function S4Tiffin({ x, y, open }: { x: number; y: number; open: boolean }) {
 export function TiffinCards({}: Story) {
   const s = useScene(6, [600, 1600, 1100, 800, 800, 1200]);
   const k = s.k;
+  useEffect(() => {
+    if (k === 2) sfx.lid();
+  }, [k]);
   const counter = S4_Y - 24;
   return (
     <StoryFrame scene={s}>
@@ -1281,6 +1287,7 @@ export function SnackLabel() {
 
   const add = (i: number) => {
     if (added.includes(i)) return;
+    sfx.pop();
     const next = [...added, i];
     setAdded(next);
     if (next.length === FOODS.length) pass("তিন ঘরেও যোগের নিয়ম একই।");
@@ -1909,6 +1916,7 @@ export function WayBack() {
   const put = (p: XY) => {
     if (done) return;
     const t = snap(p, FA);
+    sfx.chalk(0.2);
     setTip(t);
     setPeek(t);
     if (!same(t, u)) return;

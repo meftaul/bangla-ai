@@ -38,6 +38,7 @@ import {
   type Cols,
   type Move,
 } from "./light-kit";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 7.3 — Two lenses, one lens", told as a Journey in
 // the author's Bangla-English. The plan is 07_journey_specs.md, block 7.3.
@@ -412,6 +413,7 @@ export function LensBet() {
   const seal = () => {
     if (pick === null || sealed) return;
     setSealed(true);
+    sfx.stamp();
     act.play(3, () => pass("বাজি সিল হলো। আগে দুই lens পরপর চালাই।"));
   };
   return (

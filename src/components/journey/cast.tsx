@@ -3,6 +3,7 @@
 import { useEffect, useId, useRef, useState, type ReactNode } from "react";
 
 import { GROW_WIDE, POP, SceneControls, type SceneState } from "./kit";
+import { sfx } from "./sfx";
 
 // The recurring cast and their world, for story scenes: small animated
 // pictures that act out what a step's setup words describe (the finalists
@@ -20,8 +21,10 @@ import { GROW_WIDE, POP, SceneControls, type SceneState } from "./kit";
 // ---------------------------------------------------------------------------
 // The cast. মামী (ফাহিমের মামার স্ত্রী) came in with Article 4's হাট; নানা (Moumachi
 // Nana, the beekeeper: white hair and beard, white panjabi) with Calculus for AI.
+// জোবায়ের: swept-up wavy hair, black rectangular glasses, a short full beard,
+// navy button-up shirt.
 
-export type Who = "fahim" | "samin" | "som" | "nasib" | "ammu" | "apa" | "mama" | "rina" | "karim" | "mami" | "nana";
+export type Who = "fahim" | "samin" | "som" | "nasib" | "ammu" | "apa" | "mama" | "rina" | "karim" | "mami" | "nana" | "jobair";
 
 type Look = { name: string; shirt: string; pants: string; skin: string; hair: string };
 export const CAST: Record<Who, Look> = {
@@ -36,6 +39,7 @@ export const CAST: Record<Who, Look> = {
   karim: { name: "করিম", shirt: "#0891b2", pants: "#292524", skin: "#c68e5f", hair: "#1c1917" },
   mami: { name: "মামী", shirt: "#9d174d", pants: "#9d174d", skin: "#d8a47a", hair: "#1c1917" },
   nana: { name: "নানা", shirt: "#f1f5f9", pants: "#4d7c0f", skin: "#c68e5f", hair: "#e5e7eb" },
+  jobair: { name: "জোবায়ের", shirt: "#1e2847", pants: "#27272a", skin: "#c48a5c", hair: "#18130f" },
 };
 
 const INK = "#0f1b2d";
@@ -110,6 +114,18 @@ export function Person({
   const c = CAST[who];
   const calm = useCalm();
   const move = walking && !calm;
+  // footsteps in time with the bob, for as long as the glide lasts (or, with
+  // no glide of its own, as long as the caller says they are walking)
+  useEffect(() => {
+    if (!walking) return;
+    sfx.footstep();
+    const tick = setInterval(() => sfx.footstep(), 380);
+    const end = ms > 0 ? setTimeout(() => clearInterval(tick), ms - 150) : undefined;
+    return () => {
+      clearInterval(tick);
+      clearTimeout(end);
+    };
+  }, [walking, x, y, ms]);
   const run = `${x},${y}`;
   const dress = who === "ammu" || who === "mami";
   const coat = who === "apa";
@@ -167,6 +183,8 @@ export function Person({
             <path d="M-9.5 -52q0 -10 9.5 -10t9.5 10q-5 -5 -9.5 -5t-9.5 5ZM-9.5 -52q-3 8 1 12M9.5 -52q3 8 -1 12" fill={c.hair} stroke={c.hair} strokeWidth={2} />
           ) : who === "samin" ? (
             <path d="M-9.5 -52q-1 -11 9.5 -11t9.5 11q-2 -3 -4 -4q-1 2 -3 1q-2 2 -4 0q-2 2 -4 0q-2 1 -4 2Z" fill={c.hair} />
+          ) : who === "jobair" ? (
+            <path d="M-9.8 -50q-2 -13 8 -15.5q4 -1 7.5 1.5q2 -1.5 4 0q-1.5 .5 -1.5 1.5q3 3 1.8 12.5q-2 -6 -8.5 -6.5q-7 -.5 -11.3 6.5Z" fill={c.hair} />
           ) : (
             <path d="M-9.5 -52q0 -11 9.5 -11t9.5 11q-6 -6 -19 0Z" fill={c.hair} />
           )}
@@ -179,6 +197,24 @@ export function Person({
             </g>
           )}
           {who === "mama" && <path d="M-4 -47.5q4 -2.5 8 0q-4 1.5 -8 0Z" fill="#3f3f46" />}
+          {who === "jobair" && (
+            <>
+              {/* beard along the jaw, moustache, glasses, collar and buttons */}
+              <path d="M-8.6 -49.5Q-7.6 -42 -4.5 -39.5Q-2 -37.4 0 -37Q2 -37.4 4.5 -39.5Q7.6 -42 8.6 -49.5Q7 -45 5 -43.4Q2.5 -42 0 -42.1Q-2.5 -42 -5 -43.4Q-7 -45 -8.6 -49.5Z" fill={c.hair} fillOpacity={0.9} />
+              <path d="M1.5 -63.5q3 -3.5 6 -1.5" fill="none" stroke={c.hair} strokeWidth={1.2} strokeLinecap="round" />
+              <path d="M-3.6 -46.8q3.6 -1.6 7.2 0" fill="none" stroke={c.hair} strokeWidth={1.3} strokeLinecap="round" />
+              <g fill="white" fillOpacity={0.25} stroke="#0b0b0b" strokeWidth={1.1}>
+                <rect x={-6.6} y={eyeY - 2.3} width={5.4} height={4.4} rx={0.9} />
+                <rect x={1.2} y={eyeY - 2.3} width={5.4} height={4.4} rx={0.9} />
+              </g>
+              <path d={`M-1.2 ${eyeY - 0.6}h2.4M-6.6 ${eyeY - 1}l-2.6 -.6M6.6 ${eyeY - 1}l2.6 -.6`} stroke="#0b0b0b" strokeWidth={1} />
+              <path d="M-5 -40.3l5 4.3l5 -4.3" fill="none" stroke="#0f1630" strokeWidth={1.3} strokeLinejoin="round" />
+              <g fill="#0b1020">
+                <circle cy={-32} r={0.8} />
+                <circle cy={-26.5} r={0.8} />
+              </g>
+            </>
+          )}
           {who === "nana" && <path d="M-8 -50q1 11 8 12q7 -1 8 -12q-3 5 -8 5q-5 0 -8 -5Z" fill="#e5e7eb" stroke="#cbd5e1" strokeWidth={0.6} />}
           {who === "apa" && <path d="M-6 -40q-2 10 3 13M6 -40q2 10 -3 13" fill="none" stroke="#334155" strokeWidth={1.2} />}
           {/* face */}
@@ -200,6 +236,18 @@ export function Person({
 /** Shiku, the class robot, feet at (x, y), on the stage's scale. */
 export function Robot({ x, y, ms = 1200, walking = false }: { x: number; y: number; ms?: number; walking?: boolean }) {
   const calm = useCalm();
+  // footsteps in time with the bob, for as long as the glide lasts (or, with
+  // no glide of its own, as long as the caller says it is walking)
+  useEffect(() => {
+    if (!walking) return;
+    sfx.step();
+    const tick = setInterval(() => sfx.step(), 300);
+    const end = ms > 0 ? setTimeout(() => clearInterval(tick), ms - 150) : undefined;
+    return () => {
+      clearInterval(tick);
+      clearTimeout(end);
+    };
+  }, [walking, x, y, ms]);
   return (
     <g style={{ transform: `translate(${x}px, ${y}px)`, transitionDuration: `${ms}ms` }} className="pointer-events-none transition-transform ease-in-out motion-reduce:transition-none">
       <g>
@@ -334,6 +382,12 @@ export function Building({ x, y, w, h, color = "#e7d7c1", roof = false, label }:
 
 /** A treasure chest, bottom-centre at (x, y); `open` lifts the lid. */
 export function Chest({ x, y, open = false }: { x: number; y: number; open?: boolean }) {
+  // the lid creaks up when it opens (not when a scene starts with it open)
+  const was = useRef(open);
+  useEffect(() => {
+    if (open && !was.current) sfx.chest();
+    was.current = open;
+  }, [open]);
   return (
     <g className="pointer-events-none">
       <rect x={x - 11} y={y - 13} width={22} height={13} rx={2} fill="#b45309" />

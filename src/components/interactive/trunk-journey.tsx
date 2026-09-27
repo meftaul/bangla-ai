@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 
 import { Bubble, Person, Stage, StoryFrame } from "@/components/journey/cast";
 import { Task, useGate } from "@/components/journey/journey";
@@ -9,6 +9,7 @@ import { Arrow, Plane, makeFrame, type Frame, type XY } from "@/components/journ
 import { LightBhai, Projector, STAGE_WALL_F, StageWall, apply, byCols, pathOf, projectorLens, type Cols, type Move } from "./light-kit";
 import { turnCols } from "./road-kit";
 import { LENS_G, LENS_H, LENS_L, PK, PatchWall, cellPoly, patchFrame } from "./patch-kit";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 9.3 — আপার ট্রাংক, শেষেরটা আগে", told as a Journey in
 // the author's Bangla-English. The plan is 09_journey_specs.md, block 9.3.
@@ -365,6 +366,7 @@ export function OrderBet() {
   const seal = () => {
     if (bet === null || sealed) return;
     setSealed(true);
+    sfx.stamp();
     act.play(4, () => pass("বাজি সিল হলো। আগে আপার ট্রাংক।"));
   };
   const card = bet === null ? null : X1_CARDS[bet];
@@ -455,6 +457,11 @@ export function Unpack() {
   const tap = (i: number) => {
     if (shake.running || glide.running || i < out) return;
     if (i === out) {
+      // off it comes: the padlock unsnapped, the lid creaking up, the bag lifted out, the sari unfolded
+      if (i === 0) sfx.lock();
+      else if (i === 1) sfx.door();
+      else if (i === 2) sfx.thump();
+      else sfx.paper();
       setPull(null);
       setOut(out + 1);
       glide.play(1, () => {
@@ -462,6 +469,8 @@ export function Unpack() {
       });
     } else {
       setPull(i);
+      // tugged, and it rattles against what's still in its way
+      sfx.knock(2);
       shake.play(8, () => setMiss((m) => m + 1));
     }
   };
@@ -1141,6 +1150,14 @@ function St_Chouki({ x0, x1, y }: { x0: number; x1: number; y: number }) {
 
 /** আপার ট্রাংক, bottom-centre at (x, y); `open` lifts the ডালা, `lock` hangs the তালা, `bag` shows the ব্যাগ inside */
 function St_Trunk({ x, y, open = false, lock = false, bag = false }: { x: number; y: number; open?: boolean; lock?: boolean; bag?: boolean }) {
+  // the bag set in, the lid banged shut, the padlock snapped (not on the first draw)
+  const was = useRef({ open, lock, bag });
+  useEffect(() => {
+    if (bag && !was.current.bag) sfx.thump();
+    if (!open && was.current.open) sfx.knock(1);
+    if (lock && !was.current.lock) setTimeout(() => sfx.lock(), 250);
+    was.current = { open, lock, bag };
+  }, [open, lock, bag]);
   return (
     <g className="pointer-events-none">
       {bag && open && <rect x={x - 17} y={y - 30} width={34} height={12} rx={3} fill="#16a34a" className={POP} />}

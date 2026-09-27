@@ -9,6 +9,7 @@ import { Bubble, Building, Card as CastCard, Chest, Gate, Person, Stage, Stall, 
 import { Tape } from "./dimension-journey";
 import { bn } from "./figure-kit";
 import { Prize, Samin } from "./treasure-journey";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 3.4 — ‖v‖, গুপ্তধন কত দূরে", told as a Journey.
 //
@@ -125,6 +126,7 @@ export function PrizeRow() {
 
   const seal = (i: number) => {
     setBet(i);
+    sfx.stamp();
     pass("বাজি ধরা হলো, মিলিয়ে দেখবো শেষে।");
   };
 
@@ -298,6 +300,7 @@ export function TapeRecall() {
 
   const pull = (p: XY) => {
     if (!pulling) return;
+    sfx.tape(0.3);
     const t: XY = [clamp(p[0], FA.x0, FA.x1), clamp(p[1], FA.y0, FA.y1)];
     if (dist(t, V1) < 0.4) {
       setEnd(V1);
@@ -1093,6 +1096,7 @@ export function NoZero() {
 
   const put = (p: XY) => {
     const t = snap(p, FZ);
+    sfx.pencil(0.2);
     setTip(t);
     const k = keyOf(t);
     if (tried.includes(k)) return;
@@ -1326,6 +1330,7 @@ export function StretchTape() {
   const tip: XY = [k * SV[0], k * SV[1]];
 
   const turn = (n: number) => {
+    sfx.knob();
     setK(n);
     if (seen.includes(n)) return;
     const next = [...seen, n];
@@ -2070,6 +2075,7 @@ export function PrizeGiven() {
 
   const measure = (i: number) => {
     if (shown.includes(i)) return;
+    sfx.tape(0.5);
     setShown([...shown, i]);
   };
   const choose = (i: number) => {
@@ -2359,6 +2365,7 @@ export function TeaStalls() {
   const place = (p: XY) => {
     if (started) return;
     const t = snap(p, FS);
+    sfx.tap();
     setLonely(0);
     if (flags.length < 2) setFlags([...flags, t]);
     else {
@@ -2372,6 +2379,7 @@ export function TeaStalls() {
       setLonely((n) => n + 1);
       return;
     }
+    for (let i = 0; i < 4; i++) setTimeout(() => sfx.footstep(), i * 140);
     setSwapped(groups ? g.flatMap((v, i) => (v === groups[i] ? [] : [i])) : []);
     setGroups(g);
     setStaged(true);
@@ -2380,6 +2388,7 @@ export function TeaStalls() {
   };
   const shift = () => {
     if (!middles) return;
+    sfx.scrape(0.6);
     play(biggest + 2, () => {
       const next = middles.map((m) => m.at);
       const moved = Math.max(dist(next[0], flags[0]), dist(next[1], flags[1]));

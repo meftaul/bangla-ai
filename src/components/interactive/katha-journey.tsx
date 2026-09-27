@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
 import { Tup } from "@/components/journey/box";
 import { Bubble, Gate, Person, Stage, StoryFrame } from "@/components/journey/cast";
@@ -8,6 +8,7 @@ import { Task, useGate } from "@/components/journey/journey";
 import { Choice, Draw, FADE, Nope, POP, Scene, Stepper, pill, primaryBtn, quietBtn, usePlay, useScene, useSeed, useTween, type Fixtures } from "@/components/journey/kit";
 import { Lit, type XY } from "@/components/journey/plane";
 import { LightBhai, Projector, StageBeam, StageWall, heartPath, projectorLens } from "./light-kit";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 8.6 — পাইকারের কাঠা, তিন দিকের জায়গা", told as a
 // Journey in the author's Bangla-English. The plan is 08_journey_specs.md,
@@ -428,6 +429,7 @@ export function KathaBet() {
   const seal = () => {
     if (pick === null || sealed) return;
     setSealed(true);
+    sfx.stamp();
     act.play(2, () => pass("বাজি সিল হলো। আগে নানার কাঠা।"));
   };
   return (
@@ -509,6 +511,7 @@ export function UnitCube() {
   const play = usePlay(170);
   const pour = (i: number) => {
     if (play.running || full[i]) return;
+    sfx.rice(1);
     setCur(i);
     play.play(vol(X2_BOXES[i].dims), () => {
       const next = full.map((f, j) => f || j === i);
@@ -1178,6 +1181,7 @@ export function BetOpen() {
   const open = usePlay(800);
   const tap = () => {
     if (pour.running || open.running || poured >= 4) return;
+    sfx.rice(0.9);
     pour.play(3, () => {
       const n = poured + 1;
       setPoured(n);
@@ -1357,6 +1361,10 @@ export function PaikarArrives({}: Story) {
 export function KarimPushes({}: Story) {
   const s = useScene(3, [600, 1600, 2000, 2000]);
   const k = s.k;
+  // করিম pushes the stack of sacks over
+  useEffect(() => {
+    if (k === 2) sfx.scrape(0.6);
+  }, [k]);
   const lean = k >= 2 ? 1 : 0;
   const pj = pjAt(150, 150, 17);
   const bags: V3[] = [];
@@ -1390,6 +1398,10 @@ export function KarimPushes({}: Story) {
 export function NanaOldBox({}: Story) {
   const s = useScene(3, [600, 1800, 2400, 2400]);
   const k = s.k;
+  // নানা sets his father's box down
+  useEffect(() => {
+    if (k === 1) sfx.thump();
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="field" label="গোলাঘর থেকে নানা একটা পুরানো হেলানো বাক্স বের করে আনলেন; গায়ে পোড়া দাগে লেখা 2; নানা বললেন, আব্বার আমলের বাক্স, দুই কাঠা ধরে; সোম খাতা খুলে বললো, যেটার উত্তর জানা, সেটায় আগে হাঁটি">
@@ -1422,6 +1434,10 @@ export function NanaOldBox({}: Story) {
 export function SaminTape({}: Story) {
   const s = useScene(4, [600, 2400, 1500, 1500, 1500]);
   const k = s.k;
+  // সামিন measures the box from outside
+  useEffect(() => {
+    if (k === 2) sfx.tape(0.5);
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="field" label="ভ্যানের উপর পাইকারের বাক্স; পাইকার বললেন, মাপেন, বাইরে থিকা, ভিতরে হাত দিবেন না; সামিন ফিতা ধরে কোনা থেকে তিনটা কিনারা মাপলো, তিন রঙে">

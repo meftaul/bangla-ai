@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Choice, Draw, FADE, Nope, POP, Scene, pill, primaryBtn, usePlay, useScene, useSeed, useTween, type Fixtures } from "@/components/journey/kit";
 import { Bubble, Card as CastCard, Person as CastPerson, Stage, StoryFrame } from "@/components/journey/cast";
 import { Arrow, Plane, clamp, makeFrame, sg, type Frame, type XY } from "@/components/journey/plane";
 import { Task, useGate } from "@/components/journey/journey";
 import { BedBath, Clipped, FLATS, FlatDot, GROUND, Jilapi, KF, NameTag, O, R2, RoofSet, TiltGrid, type Story } from "./rooftop-parts";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 5.6b — Turn the grid, what stays real", told as a
 // Journey in the author's Bangla-English, 7 steps (the pathshala-journey
@@ -148,6 +149,7 @@ export function FairBet() {
 
   const seal = () => {
     setSealed(true);
+    sfx.stamp();
     pass("বাজি সিল। শেষ screen এ খুলবো।");
   };
 
@@ -267,6 +269,12 @@ function F2_Tape({ x, y, out = 0 }: { x: number; y: number; out?: number }) {
 export function NasibSums({}: Story) {
   const s = useScene(3, [700, 1800, 1800, 2000]);
   const k = s.k;
+  // নাসিব's sums, then ফাহিম's tape out of his pocket
+  useEffect(() => {
+    if (k === 1) sfx.scribble(3, 0.25, 0.2);
+    else if (k === 2) sfx.scribble(3, 0.25, 0.2);
+    else if (k === 3) sfx.tape(0.5);
+  }, [k]);
 
   return (
     <StoryFrame scene={s}>
@@ -335,6 +343,8 @@ export function NasibTape() {
   const all = seen.length === 3;
 
   const go = (h: How) => {
+    if (h === "tape") sfx.tape(0.5);
+    else sfx.scribble(3, 0.2, 0.2);
     setHow(h);
     setTries((t) => t + 1);
     if (seen.includes(h)) return;
@@ -1099,6 +1109,12 @@ export function TryFairGrid() {
 export function ThreeGridsDrawn({}: Story) {
   const s = useScene(3, [700, 1600, 1600, 1600]);
   const k = s.k;
+  // three grids drawn on the back of the khata
+  useEffect(() => {
+    if (k === 1) sfx.scribble(5, 0.12, 0.12);
+    else if (k === 2) sfx.scribble(5, 0.12, 0.12);
+    else if (k === 3) sfx.scribble(5, 0.12, 0.12);
+  }, [k]);
   const PX = [150, 196, 242];
   const PY = 58;
 
@@ -1235,6 +1251,7 @@ export function BetOpened() {
   };
   const unseal = () => {
     setOpen(true);
+    sfx.tape(0.9);
     p.play(4);
   };
 

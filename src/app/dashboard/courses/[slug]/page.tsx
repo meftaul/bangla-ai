@@ -10,6 +10,8 @@ import {
   type Status,
 } from "@/lib/articles";
 import { COURSES } from "@/content/courses";
+import { RAIL } from "@/content/rail";
+import { RouteMap } from "@/components/rail/route-map";
 
 export default async function CoursePage({
   params,
@@ -70,6 +72,16 @@ export default async function CoursePage({
 
       {members.length === 0 ? (
         <p className="mt-8 text-sm text-muted">Nothing published in this course yet.</p>
+      ) : RAIL[slug] ? (
+        // A course on the railway shows its route map instead of a list.
+        <RouteMap
+          course={slug}
+          items={members.map((a) => ({
+            slug: a.slug,
+            href: `/dashboard/articles/${a.slug}`,
+            badge: isAdmin && a.status !== "published" ? STATUS_LABELS[a.status] : undefined,
+          }))}
+        />
       ) : (
         <ol className="mt-8 flex flex-col gap-3">
           {members.map((a, i) => {

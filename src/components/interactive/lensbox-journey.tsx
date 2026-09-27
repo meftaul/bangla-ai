@@ -1,6 +1,6 @@
 "use client";
 
-import { type KeyboardEvent, type ReactNode } from "react";
+import { useEffect, type KeyboardEvent, type ReactNode } from "react";
 
 import { Tup, num } from "@/components/journey/box";
 import { Bubble, Chest, Person, Stage, StoryFrame } from "@/components/journey/cast";
@@ -30,6 +30,7 @@ import {
   wallFrame,
   type Cols,
 } from "./light-kit";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 8.4 — লাইট ভাইয়ের পুরানো lens, শূন্য", told as a
 // Journey in the author's Bangla-English. The plan is 08_journey_specs.md,
@@ -404,6 +405,7 @@ export function BoxBet() {
   const seal = () => {
     if (n === 0 || sealed) return;
     setSealed(true);
+    sfx.stamp();
     act.play(2, () => pass("বাজি সিল হলো। পুরানো lens টা দিয়ে শুরু।"));
   };
   let slot = 0;
@@ -1008,6 +1010,9 @@ export function YourBox() {
   const t = tried === null ? 0 : go.running ? go.t : 1;
   const choose = (side: 0 | 1) => {
     if (go.running || !cur) return;
+    // kept for Rina, set down on the মাদুর; or thrown in the পুকুর
+    if (side === 1) setTimeout(() => sfx.splash(), 450);
+    else sfx.lens();
     setTried(side);
     const right = (side === 1) === flat(cur.cols);
     go.run(() => {
@@ -1201,6 +1206,7 @@ export function MorningRun() {
   const all = opened.every(Boolean);
   const tap = (i: number) => {
     if (go.running) return;
+    sfx.lens();
     setCur(i);
     const next = opened.map((o, j) => o || j === i);
     go.run(() => {
@@ -1450,6 +1456,10 @@ export function SaminKhata({}: Story) {
 export function SeventhLens({}: Story) {
   const s = useScene(2, [600, 1800, 2200]);
   const k = s.k;
+  // the light bhai holds up a seventh lens
+  useEffect(() => {
+    if (k === 1) sfx.lens();
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="night" label="লাইট ভাই বাক্সের তলা থেকে আরেকটা lens বের করলেন, সাত নম্বর; তার প্রথম column এ দুইটাই 0">
@@ -1508,6 +1518,17 @@ export function NewBulb({}: Story) {
 export function PukurDawn({}: Story) {
   const s = useScene(3, [600, 1800, 1800, 2400]);
   const k = s.k;
+  // the crushing lenses thrown into the পুকুর
+  useEffect(() => {
+    if (k === 1) {
+      sfx.splash();
+      setTimeout(() => sfx.splash(), 400);
+    }
+    else if (k === 2) {
+      sfx.splash();
+      setTimeout(() => sfx.splash(), 400);
+    }
+  }, [k]);
   const SINK: XY[] = [
     [168, 150],
     [196, 158],
@@ -1616,6 +1637,10 @@ const X1B_SAY = [
 export function LensStake() {
   const s = useScene(3, [600, 1800, 2200, 2600]);
   const k = s.k;
+  // a lens sinks in the পুকুর
+  useEffect(() => {
+    if (k === 1) sfx.splash();
+  }, [k]);
   return (
     <Scene scene={s} caption={say(X1B_SAY, k)}>
       <svg viewBox="0 0 240 120" className="mx-auto h-auto w-full max-w-[15rem]" role="img" aria-label="কাটা bulb, ছয়টা lens; একটা পুকুরে পড়লো; রাখা lens এর আলো দেয়ালে একটা দাগ">

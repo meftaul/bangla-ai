@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useState, type ReactNode } from "react";
+import { useEffect, useId, useState, type ReactNode } from "react";
 
 import { Bubble, Card, Person, Stage, StoryFrame } from "@/components/journey/cast";
 import { Task, useGate } from "@/components/journey/journey";
@@ -8,6 +8,7 @@ import { Choice, Draw, FADE, Nope, POP, Scene, Stepper, predictLook, primaryBtn,
 import { Arrow, Lit, Plane, clamp, makeFrame, same, tup, type Frame, type XY } from "@/components/journey/plane";
 import { L_Home, L_Place, L_Trail, route } from "./lanes-kit";
 import { Alpana, ChalkGrid, Pillar, RoadBed, Rope, apply, byCols, partway, rowsOf, turnCols, type Cols, type Move } from "./road-kit";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 6.7 — Did the arrow move, or the paper?", told as a
 // Journey in the author's Bangla-English. The plan is 06_journey_specs.md,
@@ -299,7 +300,10 @@ export function TwoAnswersBet() {
   const act = usePlay(750);
   const seal = (i: number) => {
     setBet(i);
-    act.play(3, () => pass("বাজি সিল হলো। দুইটা আবার চালিয়ে দেখি।"));
+    act.play(3, () => {
+      sfx.stamp();
+      pass("বাজি সিল হলো। দুইটা আবার চালিয়ে দেখি।");
+    });
   };
   // beats of the acted bet: 1 the mark drawn on the pages, 2 its "?", 3 sealed
   const k = bet === null ? 0 : act.running ? act.k : 3;
@@ -392,6 +396,7 @@ export function ShearTheFlower() {
   const [rx, setRx] = useSeed("rx", 0);
   const [done, setDone] = useState(false);
   const pull = (v: number) => {
+    sfx.rope(0.4);
     const x = clamp(v, 0, 1);
     const snapped = x > 0.93 ? 1 : x;
     setRx(snapped);
@@ -1150,6 +1155,10 @@ export function FahimsPage({}: Story) {
 export function ArtSirRope({}: Story) {
   const s = useScene(3, [600, 1600, 2600, 1800]);
   const k = s.k;
+  // করিম takes the rope and pulls it toward the lane
+  useEffect(() => {
+    if (k === 3) sfx.rope(0.7);
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="street" ground={110} label="নিচে রাস্তায় আর্ট স্যার pillar এর পাশে বসা; দুইটা দড়ি; করিম দ্বিতীয় দড়ির মাথা ধরে আছে; আর্ট স্যার বললেন দড়িটা গলির দিকে টানো, দেখো ফুলটা কোথায় যায়">
@@ -1267,6 +1276,10 @@ export function SomStacks({}: Story) {
 export function SaminLaptop({}: Story) {
   const s = useScene(3, [600, 1600, 1600, 2000]);
   const k = s.k;
+  // সামিন at the laptop
+  useEffect(() => {
+    if (k === 2) sfx.typing(0.6);
+  }, [k]);
   const gust = k % 2 === 0 ? 0 : 14;
   return (
     <StoryFrame scene={s}>
@@ -1310,6 +1323,10 @@ export function SaminLaptop({}: Story) {
 export function ArtSirStretch({}: Story) {
   const s = useScene(4, [600, 1800, 1400, 2600, 2400]);
   const k = s.k;
+  // the art sir takes hold of the rope
+  useEffect(() => {
+    if (k === 2) sfx.rope(0.6);
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="night" label="সন্ধ্যা সাতটা, আর্ট স্যার ছাদে এলেন; notebook এর শেষ পাতায় দড়ি (2, 0) আর (0, 1); বললেন আলপনা দুইগুণ চওড়া হবে, ফুল থাকবে (5, 3) এ; রিনা জিজ্ঞেস করলো কোন কাগজের (5, 3)">

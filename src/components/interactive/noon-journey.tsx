@@ -7,6 +7,7 @@ import { Task, useGate } from "@/components/journey/journey";
 import { Choice, FADE, Nope, POP, Scene, Speech, Ticks, pill, predictLook, primaryBtn, usePlay, useScene, useSeed, useTween, type Fixtures } from "@/components/journey/kit";
 import { Bubble, Card as CastCard, Person, Stage, StoryFrame } from "@/components/journey/cast";
 import { Arrow, Label, Plane, clamp, makeFrame, snap, type Frame, type XY } from "@/components/journey/plane";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 4.3 — Mama's card", the pieces-to-picture version
 // of 04c_noon_shadow (see .claude/skills/pieces-to-picture and
@@ -710,6 +711,7 @@ export function ThreePoles() {
       <div className="mt-1 flex justify-center gap-2">
         {POLES.map((l) => (
           <button key={l} type="button" onClick={() => {
+              sfx.thump();
               setL(l);
               note(l, deg);
             }} className={pill(L === l)}>

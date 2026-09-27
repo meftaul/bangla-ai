@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useId, useState, type KeyboardEvent, type ReactNode } from "react";
+import { Fragment, useEffect, useId, useState, type KeyboardEvent, type ReactNode } from "react";
 
 import { Task, useGate } from "@/components/journey/journey";
 import { GROW,
@@ -37,6 +37,7 @@ import {
 import { Arrow, Dot, Label, Plane, Star, clamp, dist, makeFrame, same, sg, tup, type Frame, type XY } from "@/components/journey/plane";
 import { Shiku } from "./arrow-journey";
 import { bn } from "./figure-kit";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 3.3 — Recipe, টিফিন বক্সের অঙ্ক", told as a Journey.
 //
@@ -159,6 +160,7 @@ export function NasibBet() {
 
   const seal = (i: number) => {
     setBet(i);
+    sfx.stamp();
     pass("বাজি ধরা হলো, মিলিয়ে দেখবো শেষে।");
   };
 
@@ -489,6 +491,7 @@ export function BalanceCard() {
   };
   const lift = () => {
     setHeld(true);
+    sfx.coin(3);
     play(4, () => {
       setAveraged(true);
       pass("Balance বসে দুই ঘরের average-এ।");
@@ -1034,6 +1037,9 @@ function S4Slip({ at, into, tilt }: { at: XY; into: boolean; tilt: number }) {
 export function CommentDrop({}: Story) {
   const s = useScene(5, [600, 1600, 1400, 1600, 2600]);
   const k = s.k;
+  useEffect(() => {
+    if (k === 2) sfx.slip();
+  }, [k]);
   const kx = k >= 1 ? S4_AT.karim : -30;
   const rx = k >= 1 ? S4_AT.rina : 360;
   const fx = k >= 3 ? S4_AT.fahim : 370;
@@ -1164,10 +1170,12 @@ export function ReviewBox() {
       return;
     }
     setMiss(0);
+    sfx.slip();
     setDropped(false);
     setSorted(sorted + 1);
   };
   const dropTwins = () => {
+    sfx.slip();
     setTwin(true);
     pass("বাক্য বসে তার শব্দগুলোর average-এ।");
   };
@@ -1185,7 +1193,12 @@ export function ReviewBox() {
           </div>
           {!dropped ? (
             <div className="mt-3 flex justify-center">
-              <button type="button" onClick={() => setDropped(true)} className={`${primaryBtn} bg-cat-violet`}>
+              <button type="button" onClick={() => {
+                sfx.slip();
+                setDropped(true);
+              }}
+              className={`${primaryBtn} bg-cat-violet`}
+            >
                 box এ  ফেলুন
               </button>
             </div>
@@ -1576,6 +1589,7 @@ export function ComboBox() {
   const match = total.every((t, s) => t === ORDER[s]);
 
   const change = (i: number, v: number) => {
+    sfx.tap();
     const next = n.map((x, j) => (j === i ? v : x));
     setN(next);
     if (labelOf(next).every((t, s) => t === ORDER[s]) && !match) pass("একটু করে stretch, তারপর সব যোগ।");
@@ -2194,6 +2208,7 @@ export function TwoButtons() {
 
   const press = (d: XY) => {
     if (waiting || over) return;
+    sfx.press();
     const next: XY = [clamp(at[0] + d[0], FE.x0, FE.x1), clamp(at[1] + d[1], FE.y0, FE.y1)];
     setAt(next);
     if (!same(next, goal)) return;
@@ -2472,6 +2487,7 @@ export function TiltedField() {
   const roaming = found && guess !== null && !back;
 
   const press = (da: number, db: number) => {
+    sfx.press();
     const [a, b] = [ka + da, kb + db];
     const at = land(a, b);
     if (!onField(at)) return;
@@ -2933,6 +2949,7 @@ export function BendIt() {
   const live: XY[] = beads.map((p, i) => [now[2 * i] ?? p[0], now[2 * i + 1] ?? p[1]]);
 
   const apply = (m: (typeof MOVES)[number]) => {
+    sfx.tiles(8);
     setWas(beads);
     setBeads(beads.map(m.go));
     setKind(m.stretch ? "stretch" : "add");

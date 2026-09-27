@@ -5,6 +5,7 @@ import { type KeyboardEvent, type ReactNode, useEffect, useState } from "react";
 import { Bubble, Card, Loop, Person, Stage, StoryFrame } from "@/components/journey/cast";
 import { Task, useGate } from "@/components/journey/journey";
 import { Choice, Draw, FADE, Nope, POP, Scene, Stepper, Ticks, predictLook, quietBtn, usePlay, useScene, useSeed, useSeeded, useTween, type Fixtures } from "@/components/journey/kit";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 6.1 — The team register, a table that is one thing",
 // told as a Journey. The plan is 06_journey_specs.md, block 6.1.
@@ -281,7 +282,10 @@ export function ShapeBet() {
   const seal = (i: number) => {
     if (bet !== null) return;
     setBet(i);
-    p.play(2, () => pass("বাজি ধরা হয়ে গেলো। শেষে মিলিয়ে দেখবো।"));
+    p.play(2, () => {
+      sfx.stamp();
+      pass("বাজি ধরা হয়ে গেলো। শেষে মিলিয়ে দেখবো।");
+    });
   };
   const card = bet === null ? "" : SB_CARD[bet];
   const bn = /[ঀ-৿]/.test(card);
@@ -1276,6 +1280,13 @@ export function TeachersRoom({}: Story) {
 export function CardsSpill({}: Story) {
   const s = useScene(2, [600, 1400, 2400]);
   const k = s.k;
+  // the clip opens and the slips spill across the table
+  useEffect(() => {
+    if (k === 1) {
+      sfx.click();
+      sfx.paper();
+    }
+  }, [k]);
   const slips = [104, 118, 132, 146, 160, 174, 188, 202];
   return (
     <StoryFrame scene={s}>
@@ -1394,6 +1405,10 @@ export function NasibsBoard({}: Story) {
 export function BellRings({}: Story) {
   const s = useScene(3, [600, 1400, 1600, 2400]);
   const k = s.k;
+  // the tiffin bell
+  useEffect(() => {
+    if (k === 1) sfx.schoolBell();
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="room" label="টিফিনের ঘণ্টা পড়লো; app আটজনের পাশে হ্যাঁ না বসিয়ে দিলো; করিম লিস্ট পড়লো, নিজের নাম সবার আগে">
@@ -1427,6 +1442,10 @@ export function BellRings({}: Story) {
 export function ArtSirRoad({}: Story) {
   const s = useScene(3, [600, 1800, 1400, 2800]);
   const k = s.k;
+  // the art sir chalks an even grid on the road
+  useEffect(() => {
+    if (k === 1) sfx.chalkLines(6, 0.22, 0.2);
+  }, [k]);
   const xs = [150, 175, 200, 225, 250, 275, 300];
   return (
     <StoryFrame scene={s}>

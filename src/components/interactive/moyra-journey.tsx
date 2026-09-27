@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useState, type ReactNode } from "react";
+import { useEffect, useId, useState, type ReactNode } from "react";
 
 import { Tup } from "@/components/journey/box";
 import { Bubble, Person, Stage, StoryFrame } from "@/components/journey/cast";
@@ -9,6 +9,7 @@ import { Choice, Draw, FADE, LOOK, Nope, POP, Scene, Stepper, predictLook, prima
 import { Arrow, Plane, makeFrame, plus, same, snap, type Frame, type XY } from "@/components/journey/plane";
 import { Shiku } from "./arrow-journey";
 import { Heart, LightBhai, LitRegion, OLD_LENS, Post, WallBed, WallGrid, wallFrame } from "./light-kit";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 10.2 — ময়রার রসিদ, মোট জানার আগেই", told as a
 // Journey in the author's Bangla-English. The plan is 10_journey_specs.md,
@@ -352,6 +353,7 @@ export function PairsBet() {
   const seal = () => {
     if (sealed || !touched) return;
     setSealed(true);
+    sfx.stamp();
     act.play(5, () => pass("বাজি সিল হলো। আগে মোট নিয়ে খেলি।"));
   };
   return (
@@ -1411,6 +1413,10 @@ export function NasibClaim({}: Story) {
 export function WorstPage({}: Story) {
   const s = useScene(3, [600, 1600, 2200, 2400]);
   const k = s.k;
+  // the worst page, still wet, laid down
+  useEffect(() => {
+    if (k === 1) sfx.slip();
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="field" label="ময়রা পকেট থেকে সবচেয়ে ভেজা পাতাটা বের করলেন; সামিন পড়লো, সকালে 3 আর 1, রাতে 6 আর 2; ময়রা বললেন এইটার মোট তারও মনে নাই">
@@ -1455,6 +1461,11 @@ export function RinaKhata({}: Story) {
 export function PhoneRings({}: Story) {
   const s = useScene(3, [600, 1400, 2000, 2200]);
   const k = s.k;
+  // the ময়রা's son phones: it rings until সামিন picks up
+  useEffect(() => {
+    if (k === 1) return sfx.ring(3);
+    if (k === 2) sfx.click();
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="field" label="জোহরের পর ময়রার ফোন বাজলো; তিনি ফোন কানে নিয়ে বললেন, হ, কও; সামিন পেন্সিল নিয়ে লেখার জন্য তৈরি">
@@ -1481,6 +1492,10 @@ export function PhoneRings({}: Story) {
 export function MoyraLeaves() {
   const s = useScene(2, [600, 1600, 2000]);
   const k = s.k;
+  // the ময়রা swings up his empty হাঁড়ি and goes
+  useEffect(() => {
+    if (k === 1) sfx.pot();
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="field" label="মামা ময়রার হাতে টাকা দিলেন; ময়রা খালি হাঁড়ি বগলে নিয়ে গেটের দিকে হেঁটে গেলেন">

@@ -1,11 +1,12 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
 import { Task, useGate } from "@/components/journey/journey";
 import { Choice, FADE, Nope, POP, Speech, predictLook, primaryBtn, quietBtn, useCountUp, usePlay, useTween } from "@/components/journey/kit";
 import { NORMAL_MAIL, SPAM_MAIL, capsShare, countFree, countLinks } from "./email-data";
 import { bn } from "./figure-kit";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 1.5 — Representation", told as a Journey.
 //
@@ -165,6 +166,9 @@ function Bin({ title, tone, items }: { title: string; tone: "coral" | "teal"; it
 export function SortInbox() {
   const pass = useGate();
   const came = useCountUp(INBOX.length, 420);
+  useEffect(() => {
+    if (came > 0) sfx.chime();
+  }, [came]);
   const [spamBin, setSpamBin] = useState<number[]>([]);
   const [okBin, setOkBin] = useState<number[]>([]);
   const [miss, setMiss] = useState<{ i: number; n: number } | null>(null);
@@ -177,6 +181,7 @@ export function SortInbox() {
       return;
     }
     setMiss(null);
+    sfx.slip();
     const s = spam ? [...spamBin, i] : spamBin;
     const o = spam ? okBin : [...okBin, i];
     setSpamBin(s);
@@ -248,6 +253,7 @@ export function TellMachine() {
 
   const feed = (j: number) => {
     if (busy || tried.includes(j)) return;
+    sfx.typing(0.7);
     setNow(j);
     chew.play(2, () => {
       const t = [...tried, j];
@@ -618,6 +624,7 @@ export function ShuffleTrap() {
   const before = SPAM_V.map((x, j) => shown(j, x));
 
   const mix = () => {
+    sfx.paper();
     setWords(shuffle(WORDS));
     setRound((r) => r + 1);
   };

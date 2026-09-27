@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, type KeyboardEvent, type ReactNode } from "react";
+import { useEffect, useRef, useState, type KeyboardEvent, type ReactNode } from "react";
 
 import {
   Choice,
@@ -23,6 +23,7 @@ import {
 import { Bubble, Person as CastPerson, Stage, StoryFrame } from "@/components/journey/cast";
 import { Arrow, Dot, Label, Lit, listOf, Plane, clamp, makeFrame, plus, tup, type XY } from "@/components/journey/plane";
 import { Task, useGate } from "@/components/journey/journey";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 5.4 — The flat sheet, where the khata really lives",
 // told as a Journey in the author's Bangla-English, 10 steps (the
@@ -433,6 +434,10 @@ function MoveBox({ x, y }: { x: number; y: number }) {
 export function StairsBet({}: Story) {
   const s = useScene(3, [700, 2400, 2400, 2400]);
   const k = s.k;
+  // নাসিব puts the box down on the bet
+  useEffect(() => {
+    if (k === 3) sfx.thump();
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="room" label="evening of moving day: Samin with the khata, Nasib by the last box at the foot of the stairs; they bet on how many directions the flats need, and the loser carries the box">
@@ -520,6 +525,7 @@ export function SheetBet() {
   const [sealed, setSealed] = useSeed("sealed", false);
   const seal = () => {
     setSealed(true);
+    sfx.stamp();
     pass("বাজি পাকা। যে হারবে, বাক্স তার।");
   };
   return (
@@ -811,6 +817,10 @@ function Pot({ x, y, s = 1 }: { x: number; y: number; s?: number }) {
 export function ChalkClubs({}: Story) {
   const s = useScene(3, [700, 2400, 1800, 2400]);
   const k = s.k;
+  // সামিন chalks the clubs on the floor
+  useEffect(() => {
+    if (k === 2) setTimeout(() => sfx.chalkLines(4, 0.25, 0.2), 900);
+  }, [k]);
   // the four chalk clubs on the floor, in perspective
   const floorY = 166;
   return (
@@ -1040,6 +1050,11 @@ export function FloorClub() {
 export function PotHole({}: Story) {
   const s = useScene(2, [700, 2000, 2400]);
   const k = s.k;
+  // the whole floor chalked as a club, then the pot's corner cut out
+  useEffect(() => {
+    if (k === 1) sfx.chalkLines(3, 0.25, 0.3);
+    else if (k === 2) sfx.chalk(0.5);
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="room" label="Ammu stands by her flower pot in the door corner; Samin chalks the whole floor as one club, then the same floor with the pot's corner cut out">
@@ -1432,6 +1447,10 @@ export function TwoButtonsPaint() {
 export function NasibTries({}: Story) {
   const s = useScene(3, [700, 2200, 1600, 2200]);
   const k = s.k;
+  // নাসিব nudges the box across
+  useEffect(() => {
+    if (k === 1) sfx.scrape(0.5);
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="room" label="Nasib nudges the box towards Samin and says he will add two flats until one falls off the sheet; Samin tells him to go on">
@@ -1583,6 +1602,10 @@ const S8_PAGES: { x: number; names: [string, string, string] }[] = [
 export function DalalBag({}: Story) {
   const s = useScene(2, [700, 2000, 2400]);
   const k = s.k;
+  // three pages come out of the dalal's bag
+  useEffect(() => {
+    if (k === 1) sfx.paper();
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="room" label="the dalal's bag on the floor; three more pages come out of it, each with three columns">
@@ -2059,6 +2082,10 @@ const stepAt = (i: number): XY => [236 + 20 * i + 10, GR - 14 * (i + 1)];
 export function LastBox({}: Story) {
   const s = useScene(3, [700, 2200, 2400, 1800]);
   const k = s.k;
+  // নাসিব heaves the box up and climbs
+  useEffect(() => {
+    if (k === 3) sfx.thump();
+  }, [k]);
   const up = k >= 3;
   const [nx, ny] = up ? stepAt(1) : [150, GR];
   return (

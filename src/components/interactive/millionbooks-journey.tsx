@@ -1,11 +1,12 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
 import { Bubble, Building, Card as CastCard, Person, Stage, StoryFrame } from "@/components/journey/cast";
 import { BoxRun, dot, num } from "@/components/journey/box";
 import { Task, useGate } from "@/components/journey/journey";
 import { Choice, FADE, Nope, POP, Scene, Ticks, pill, primaryBtn, usePlay, useScene, useSeed, useTween, type Fixtures } from "@/components/journey/kit";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 4.8 — A million books, normalise once", told as a Journey.
 //
@@ -197,6 +198,7 @@ export function SpeedBet() {
 
   const seal = (i: number) => {
     setBet(i);
+    sfx.stamp();
     pass("বাজি ধরা হয়ে গেলো। শেষে মিলিয়ে দেখবো।");
   };
 
@@ -267,6 +269,7 @@ export function CostRace() {
 
   const search = () => {
     const s = size;
+    sfx.typing(0.4);
     setShown(s);
     run.play(Math.ceil((4 * CR_MS[s]) / TICK), () => {
       if (seen.includes(s)) return;
@@ -331,6 +334,7 @@ export function SameLength() {
 
   const search = (i: number) => {
     if (runs.includes(i)) return;
+    sfx.typing(0.4);
     setRuns([...runs, i]);
   };
   const choose = (c: "box" | "len") => {
@@ -451,6 +455,7 @@ export function ShelveOnce() {
 
   const shelve = (id: string) => {
     if (shelved.includes(id)) return;
+    sfx.book();
     const next = [...shelved, id];
     setShelved(next);
     if (next.length === MB_BOOKS.length) pass("প্রতিটা বইয়ের length মাপা হলো একবারই।");
@@ -1013,6 +1018,10 @@ function MB_Pen() {
 export function CatalogueArrives({}: Story) {
   const s = useScene(4, [600, 1600, 1800, 2200, 2400]);
   const k = s.k;
+  // the pen drive clicks into the computer
+  useEffect(() => {
+    if (k === 2) sfx.click();
+  }, [k]);
   const bx = k >= 1 ? 298 : 360;
   return (
     <StoryFrame scene={s}>
@@ -1233,6 +1242,11 @@ const X4A_COLS = [{ x: 128, t: "search" }, { x: 172, t: "বই" }, { x: 218, t:
 export function FahimLog({}: Story) {
   const s = useScene(3, [600, 1500, 1500, 1800]);
   const k = s.k;
+  // machine B's notebook opened, and its rows filled in
+  useEffect(() => {
+    if (k === 2) sfx.paper();
+    else if (k === 3) sfx.scribble(4, 0.2, 0.2);
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="room" label="ফাহিম computer এর কাছে গিয়ে machine B র খাতা খোলে; খাতায় search, বই, dot product, length এর ঘর, প্রতিটা search এর হিসাব লেখা">
@@ -1341,6 +1355,12 @@ export function SameTwenty() {
 export function BhaiShelves({}: Story) {
   const s = useScene(3, [600, 1800, 2400, 2400]);
   const k = s.k;
+  // the fish note taken off the shelf, and put back once, normalised
+  useEffect(() => {
+    if (k === 1) sfx.book();
+    else if (k === 2) sfx.pencil(0.3);
+    else if (k === 3) sfx.book();
+  }, [k]);
   const inHand = k === 1 || k === 2;
   return (
     <StoryFrame scene={s}>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, type KeyboardEvent, type PointerEvent, type ReactNode } from "react";
+import { useEffect, useRef, useState, type KeyboardEvent, type PointerEvent, type ReactNode } from "react";
 
 import { Task, useGate } from "@/components/journey/journey";
 import {
@@ -25,6 +25,7 @@ import {
 import { Arrow, Dot, Label, Plane, clamp, dist, makeFrame, minus, plus, same, sg, snap, type Frame, type XY } from "@/components/journey/plane";
 import { Shiku, Trail, route, useWalk } from "./arrow-journey";
 import { bn } from "./figure-kit";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 2.5 — চোখে না দেখে geometry".
 //
@@ -255,6 +256,7 @@ export function PlotTogether() {
   const tryPlace = (age: number, bp: number) => {
     if (stage !== "up" || age < 15 || age > 80 || bp < 110 || bp > 165) return;
     if (age === mAge && bp === mBp) {
+      sfx.pencil(0.12);
       setStage("mine");
       setMiss(null);
       setCursor(null);
@@ -582,6 +584,7 @@ export function ShikuTape() {
   const send = () => w.go(route(O, ball), () => setWalked(true));
   const pull = (p: XY) => {
     if (!pulling) return;
+    sfx.tape(0.3);
     const t: XY = [clamp(p[0], FT.x0, FT.x1), clamp(p[1], FT.y0, FT.y1)];
     if (dist(t, ball) < 0.4) {
       setEnd(ball);
@@ -590,6 +593,7 @@ export function ShikuTape() {
     } else setEnd(t);
   };
   const again = () => {
+    sfx.tapeBack();
     setRound(1);
     setWalked(false);
     setEnd(O);
@@ -739,6 +743,7 @@ export function TilePour() {
   const pour = () => {
     setPoured(true);
     if (over || settle.running) return;
+    sfx.tiles();
     settle.play(1, () => {
       const next = seen.includes(t) ? seen : [...seen, t];
       setSeen(next);
@@ -1359,8 +1364,12 @@ export function RoomCorner() {
   const v = useTween(look, ms, [...EYE_AT, 17, -72]);
   const c = camera(v);
 
+  useEffect(() => {
+    sfx.mosquito(1.6);
+  }, []);
   const next = () => {
     const n = stage + 1;
+    sfx.mosquito(1.2);
     setStage(n);
     setMs(1600);
     setLook(VIEWS[n]);
@@ -1925,7 +1934,14 @@ export function BazaarSigma() {
         <>
           <div className="mt-2 text-center font-mono text-[0.95rem]">মোট = {k === 0 ? "0" : `${added.join(" + ")} = ${total}`}</div>
           <div className="mt-3 flex justify-center">
-            <button type="button" onClick={() => setK(k + 1)} className={primaryBtn}>
+            <button
+              type="button"
+              onClick={() => {
+                sfx.pencil(0.25);
+                setK(k + 1);
+              }}
+              className={primaryBtn}
+            >
               Σ মেশিন: i = {k + 1} বসান
             </button>
           </div>
@@ -2503,6 +2519,8 @@ export function OneKnob() {
 
   const move = (n: number) => {
     const c = clamp(Math.round(n * 100) / 100, 0, 10);
+    sfx.knob();
+    sfx.staticNoise(0.5, Math.min(1, hiss(c) / hiss(0)));
     setK(c);
     if (!low && hiss(c) < OK_HISS) pass("ঢাল যেদিকে নামে, knob সেদিকে।");
   };
@@ -2690,6 +2708,7 @@ export function KnobStep() {
   const low = L < GOOD;
 
   const move = (n: XY, by: "arrow" | 0 | 1) => {
+    sfx.knob();
     setPath([...path, n]);
     setMoved(by);
     const byHand = by !== "arrow";

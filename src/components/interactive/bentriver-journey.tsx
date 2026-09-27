@@ -1,12 +1,13 @@
 "use client";
 
-import { useId, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import { BoxRun, Tup, dot, num, tupN } from "@/components/journey/box";
 import { Bubble, Card as CastCard, Person, Stage, StoryFrame } from "@/components/journey/cast";
 import { Task, useGate } from "@/components/journey/journey";
 import { Choice, Draw, FADE, Nope, POP, Scene, Stepper, Ticks, pill, primaryBtn, usePlay, useScene, useSeed, useSeeded, useTween, type Fixtures } from "@/components/journey/kit";
 import { Arrow, Label, Plane, makeFrame, type Frame, type XY } from "@/components/journey/plane";
 import { O, S1_WL, T_Boat, T_Dab, T_INK, T_Majhi, T_Square, T_Water, T_say, fix, tupF, type Story } from "./towrope-journey";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 4.6 — বাঁকা নদী: shadow এর মাথা কোথায় পড়ে", told as a
 // Journey. The second half of the tow: 4.6 settled the straight river (the pull
@@ -715,6 +716,7 @@ export function ShareToPoint() {
 
   const sail = (i: number) => {
     if (play.running) return;
+    sfx.lap(1.5);
     setLast(i);
     if (!seen.includes(i)) setSeen([...seen, i]);
     play.play(10);
@@ -727,7 +729,7 @@ export function ShareToPoint() {
 
   return (
     <>
-      <Legend now="মাথার ঠিকানা" />
+      <Legend now="SHADOW-এর মাথার ঠিকানা" />
       <div className="flex items-center gap-2">
         <div className="w-full max-w-[8.5rem] shrink-0">
           <Plane f={f} ticks={0} label={`নদী (2, 3); নৌকা এখন ${tupF([x, y])} এ`} className="my-0! max-w-none">
@@ -848,6 +850,10 @@ function S5B_Khata({ ask }: { ask: boolean }) {
 export function KhataDot({}: Story) {
   const s = useScene(2, [600, 2200, 2600]);
   const k = s.k;
+  // ফাহিম draws the bent river in his khata
+  useEffect(() => {
+    if (k === 1) sfx.scribble(3, 0.3, 0.3);
+  }, [k]);
   const cx = 250;
   return (
     <StoryFrame scene={s}>
@@ -879,7 +885,7 @@ const X5T_SAY = [
   "নদীর arrow এর দুই পা: 2 ঘর ডানে, 3 ঘর উপরে।",
   "আধা পথ: arrow আধা, দুই পা-ও আধা। 1 আর 1.5.",
   "7/13 পথ: দুই পা-ই 7/13 হলো। 1.08 আর 1.62.",
-  "মাথার ঠিকানা (1.08, 1.62). খাতায় dot টা ওখানেই বসলো।",
+  "SHADOW-এর মাথার ঠিকানা (1.08, 1.62). খাতায় dot টা ওখানেই বসলো।",
 ];
 
 export function ShrinkBoth() {
@@ -1364,6 +1370,10 @@ function T_ManTop({ x, y }: { x: number; y: number }) {
 export function RiverBend({}: Story) {
   const s = useScene(5, [600, 1600, 1600, 1800, 2400]);
   const k = s.k;
+  // the river at the bend, water against the boat
+  useEffect(() => {
+    if (k === 1) sfx.lap(3);
+  }, [k]);
   const end = S3_at(S3_V, 200);
   const tip = S3_at(S3_V, 88);
   const men = S3_at(S3_WD, 80);
@@ -1900,6 +1910,13 @@ const S8_POST: XY = [212, 134];
 export function GhatRiddle({}: Story) {
   const s = useScene(4, [600, 1500, 1600, 1800, 2400]);
   const k = s.k;
+  // the boat tied up at the ghat: the rope pulled tight, water at the steps
+  useEffect(() => {
+    if (k === 1) {
+      sfx.rope(0.7);
+      sfx.lap(2.5);
+    }
+  }, [k]);
   const [bx] = useTween([k >= 1 ? S8_BOAT : 88], 1300);
   return (
     <StoryFrame scene={s}>
@@ -2212,6 +2229,13 @@ const S7B_BANK = 118;
 export function SecondBend({}: Story) {
   const s = useScene(3, [600, 1600, 2200, 2000]);
   const k = s.k;
+  // the tow goes on into the afternoon
+  useEffect(() => {
+    if (k === 1) {
+      sfx.lap(3);
+      sfx.rope(0.7);
+    }
+  }, [k]);
   const [bx, cx, dx] = useTween([k >= 1 ? 104 : 74, k >= 1 ? 254 : 224, k >= 1 ? 200 : 170], 1500);
   return (
     <StoryFrame scene={s}>
@@ -2332,6 +2356,13 @@ const S1B_BANK = 118;
 export function BendNear({}: Story) {
   const s = useScene(2, [600, 1800, 2000]);
   const k = s.k;
+  // the tow: water at the bow, the rope creaking as they walk
+  useEffect(() => {
+    if (k === 1) {
+      sfx.lap(3);
+      sfx.rope(0.7);
+    }
+  }, [k]);
   const [bx, cx, dx] = useTween([k >= 1 ? 96 : 64, k >= 1 ? 246 : 214, k >= 1 ? 192 : 160], 1600);
   return (
     <StoryFrame scene={s}>
@@ -2987,8 +3018,8 @@ export function KeepsTurning() {
 const SQ2B_U = 22;
 const SQ2B_SAY = [
   "First slot: দড়ির first number, মানে shadow, গুণ নদীর length.",
-  "Second slot: দড়ির বাকি টুকরা গুণ নদীর 0। কিছুই যোগ হয় না।",
-  "তাই dot product = shadow × নদীর length. 1.94 চওড়া, 3.61 লম্বা একটা আয়ত, ভিতরে প্রায় 7 ঘর।",
+  "Second slot: দড়ির টানের বাকি অংশ নদীর 0। কিছুই যোগ হয় না।",
+  "তাই dot product = shadow এর length × নদীর length. 1.94 চওড়া, 3.61 লম্বা একটা আয়ত, ভিতরে প্রায় 7 ঘর।",
   "বাঁকা নদীতেও একই 7: 2 × 2 + 3 × 1। কাগজ ঘুরালে dot product বদলায় না।",
 ];
 
@@ -3110,7 +3141,7 @@ export function FormulaTurns() {
 const SQ5_SAY = [
   "প্রশ্ন ছিল: 7 কে 13 দিয়ে ভাগ দিলে shadow আসে কেন?",
   "কাগজ ঘুরিয়ে নদী সোজা করলাম। Dot product তখনো 7.",
-  "সোজা নদীতে dot product = shadow × নদীর length.",
+  "সোজা নদীতে dot product = shadow এর length × নদীর length.",
   "একবার নদীর length দিয়ে ভাগ: shadow এর length, 1.94.",
   "আরেকবার ভাগ: নদীর কত অংশ। দুইবারে ভাগ হলো 13 দিয়ে, মানে নদী · নদী।",
 ];

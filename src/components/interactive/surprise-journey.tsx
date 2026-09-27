@@ -6,6 +6,7 @@ import { Task, useGate } from "@/components/journey/journey";
 import { Choice, FADE, POP, Ticks, pill, predictLook, primaryBtn, quietBtn, usePlay, useSeed, type Fixtures } from "@/components/journey/kit";
 import { Arrow, Plane, makeFrame, type XY } from "@/components/journey/plane";
 import { bn } from "./figure-kit";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 2.7 — অনেক dimension-এর তিনটা চমক".
 //
@@ -165,6 +166,7 @@ export function DiceOne() {
 
   const go = () => {
     const n = roll + 1;
+    sfx.dice(3);
     setRoll(n);
     spin.play(8, () => {
       if (n === 3) pass("এক ছক্কায় কারো 1, কারো 6।");
@@ -226,6 +228,7 @@ export function DiceMany() {
         : "এবার বড়র পাল্লা ভারী, তাই সোমের যোগফল একটু বেশির দিকে।";
 
   const pick = (i: number) => {
+    sfx.dice(4);
     setCi(i);
     if (!hit && DICE_COUNTS[i] === 100) {
       setHit(true);
@@ -276,7 +279,12 @@ export function DiceMany() {
             </div>
           )}
           <div className="mt-3 flex justify-center">
-            <button type="button" onClick={() => setRoll(roll + 1)} className={quietBtn}>
+            <button type="button" onClick={() => {
+                sfx.dice(4);
+                setRoll(roll + 1);
+              }}
+              className={quietBtn}
+            >
               আবার চালুন
             </button>
           </div>
@@ -459,13 +467,20 @@ export function CoinArrows() {
     if (next.length === RULE.length) pass("মিল-অমিল সমান হলে arrow 90°-এ।");
   };
   const toss = () => {
+    sfx.flip(4);
     const r = rng(tosses * 97 + 11);
     const c = () => (r() < 0.5 ? 1 : -1);
     setTosses(tosses + 1);
     show([c(), c()], [c(), c()]);
   };
-  const flipA = (i: number) => show(i === 0 ? [-a[0], a[1]] : [a[0], -a[1]], b);
-  const flipB = (i: number) => show(a, i === 0 ? [-b[0], b[1]] : [b[0], -b[1]]);
+  const flipA = (i: number) => {
+    sfx.flip();
+    show(i === 0 ? [-a[0], a[1]] : [a[0], -a[1]], b);
+  };
+  const flipB = (i: number) => {
+    sfx.flip();
+    show(a, i === 0 ? [-b[0], b[1]] : [b[0], -b[1]]);
+  };
 
   return (
     <>
@@ -612,6 +627,7 @@ export function CoinMany() {
   const c = useMemo(() => coins(tosses * 7919 + n, n), [tosses, n]);
 
   const toss = () => {
+    sfx.flip(6);
     const next = tosses + 1;
     const nc = coins(next * 7919 + n, n);
     setTosses(next);
@@ -717,6 +733,7 @@ export function EdgeFloor() {
   const edge = (i: number) => i === 0 || i === 9;
 
   const peelFloor = () => {
+    sfx.tiles(14);
     setFloorPeeled(true);
     pass("দুই দিকেই ভেতরে থাকলে তবেই ভেতরে।");
   };
@@ -735,7 +752,12 @@ export function EdgeFloor() {
             দুই মাথার <b className="text-cat-amber">2</b>টা গেল খোসায়, ভেতরে রইলো <b>8</b>টা, মানে <b>80%</b>।
           </span>
         ) : (
-          <button type="button" onClick={() => setRowPeeled(true)} className={primaryBtn}>
+          <button type="button" onClick={() => {
+              sfx.tiles(6);
+              setRowPeeled(true);
+            }}
+            className={primaryBtn}
+          >
             খোসা ছাড়ান
           </button>
         )}
@@ -800,6 +822,7 @@ export function SugarCube() {
   const [guess, setGuess] = useSeed<number | null>("guess", null);
   const [peeled, setPeeled] = useSeed("peeled", false);
   const peel = () => {
+    sfx.rice(0.4);
     setPeeled(true);
     pass("তিন dimension-এ প্রায় অর্ধেক খোসায়।");
   };

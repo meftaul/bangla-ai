@@ -325,8 +325,20 @@ export function Speech({
   );
 }
 
+/**
+ * How a Journey hears that the reader missed: every widget shows a <Nope> on a
+ * wrong try, so a Nope mounting is the miss. The Journey uses it to tell which
+ * checks were passed on the first try (the ticket class on the railway).
+ * Null outside a Journey.
+ */
+export const MissCtx = createContext<(() => void) | null>(null);
+
 /** A "not quite" line under the stage; key it so it re-animates per miss. */
 export function Nope({ children }: { children: ReactNode }) {
+  const miss = useContext(MissCtx);
+  useEffect(() => {
+    miss?.();
+  }, [miss]);
   return (
     <div className="mt-2 text-[0.95rem] text-danger transition duration-300 motion-reduce:transition-none starting:-translate-y-1 starting:opacity-0">
       {children}

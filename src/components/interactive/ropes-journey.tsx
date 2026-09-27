@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, type KeyboardEvent, type ReactNode } from "react";
+import { useEffect, useId, type KeyboardEvent, type ReactNode } from "react";
 
 import { Bubble, Card, Person, Robot, Stage, StoryFrame } from "@/components/journey/cast";
 import { Task, useGate } from "@/components/journey/journey";
@@ -8,6 +8,7 @@ import { Choice, Draw, FADE, Nope, POP, Scene, Stepper, Ticks, primaryBtn, usePl
 import { Lit, Plane, clamp, listOf, makeFrame, tup, type Drag, type Frame, type XY } from "@/components/journey/plane";
 
 import { Alpana, ChalkGrid, LOTUS_C, LOTUS_TIPS, PETALS, Pillar, RoadBed, Rope, apply, byCols, partway, pathOf, turnCols, type Cols, type Move } from "./road-kit";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 6.3 — Two ropes, and the whole alpana follows",
 // told as a Journey. The plan is 06_journey_specs.md, block 6.3.
@@ -253,7 +254,10 @@ export function TwoRopesBet() {
   const act = usePlay(650);
   const seal = (i: number) => {
     setBet(i);
-    act.play(3, () => pass("বাজি সিল হলো। স্যার ফেরার আগে পাঁচটা পাপড়ি।"));
+    act.play(3, () => {
+      sfx.stamp();
+      pass("বাজি সিল হলো। স্যার ফেরার আগে পাঁচটা পাপড়ি।");
+    });
   };
   // beats of the acted bet: 1 the claim drawn, 2 its "?", 3 sealed
   const k = bet === null ? 0 : act.running ? act.k : 3;
@@ -336,6 +340,7 @@ export function GuessByEye() {
   const walk = usePlay(550);
   const drop = (p: XY) => {
     if (mine) return;
+    sfx.chalk(0.2);
     const q: XY = [clamp(Math.round(p[0] * 2) / 2, GE_F.x0, GE_F.x1), clamp(Math.round(p[1] * 2) / 2, GE_F.y0, GE_F.y1)];
     setMine(q);
     walk.play(3, () => pass("চোখে মেপে সবাই আলাদা জায়গা বলে।"));
@@ -689,6 +694,7 @@ export function PaintThePetals() {
   };
   const tap = (p: XY) => {
     if (done || walk.running) return;
+    sfx.chalk(0.2);
     const b = RP_BACK(p);
     const q: XY = [Math.round(b[0]), Math.round(b[1])];
     setLast(null);
@@ -771,6 +777,7 @@ export function TryNewRopes() {
   const right = pick !== null && eq(pick, TN_RIGHT);
   const tap = (p: XY) => {
     if (right || walk.running) return;
+    sfx.chalk(0.2);
     const q: XY = [clamp(Math.round(p[0]), -3, 3), clamp(Math.round(p[1]), -1, 4)];
     setPick(q);
     // every tap walks the recipe, yellow once, green once; a right one lands on the mark
@@ -914,6 +921,11 @@ function S_Lotus({ x, y, n = 5 }: { x: number; y: number; n?: number }) {
 export function RopesTied({}: Story) {
   const s = useScene(5, [600, 1600, 1600, 2800, 2800]);
   const k = s.k;
+  // the sir pulls the ropes out; রিনা chalks the two marks
+  useEffect(() => {
+    if (k === 1) sfx.rope(0.7);
+    else if (k === 2) sfx.chalkLines(2, 0.4, 0.2);
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="evening" ground={S_ROAD} label="সন্ধ্যা, গেটের সামনের রাস্তা; আর্ট স্যার খুঁটি থেকে দুইটা দড়ি টেনে নিলেন, রিনা দুই মাথায় chalk এর ক্রস দিলো; স্যার বললেন দুই দড়ির মাথা কই গেলো হেইডা জানলেই সব জানা হইলো, তারপর মাগরিবে চলে গেলেন; নাসিব বললো প্রত্যেক পাপড়ির জন্য স্যার লাগবে">
@@ -950,6 +962,11 @@ export function RopesTied({}: Story) {
 export function EyeGuesses({}: Story) {
   const s = useScene(3, [600, 1800, 2000, 2000]);
   const k = s.k;
+  // a petal chalked by eye, then two more
+  useEffect(() => {
+    if (k === 2) sfx.chalk(0.2);
+    else if (k === 3) sfx.chalkLines(2, 0.3, 0.2);
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="evening" ground={S_ROAD} label="রিনা কাগজ থেকে পড়লো দুই তিন; নাসিব রাস্তায় এক জায়গায় পা রাখলো, করিম আর সোম আরো দুই জায়গায়">
@@ -1121,6 +1138,11 @@ export function MosqueOut({}: Story) {
 export function KarimRopes({}: Story) {
   const s = useScene(3, [600, 1600, 1600, 2400]);
   const k = s.k;
+  // করিম lays out his two ropes
+  useEffect(() => {
+    if (k === 1) sfx.rope(0.6);
+    else if (k === 2) sfx.rope(0.6);
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="evening" ground={S_ROAD} label="করিম পাশের খুঁটিতে দুইটা দড়ি বাঁধলো; হলুদটা আড়াআড়ি তিন ঘর, সবুজটা উল্টা দিকে রাস্তা বরাবর দুই ঘর; করিম জিজ্ঞেস করলো এবার এক এক কোথায়">
@@ -1143,6 +1165,10 @@ export function KarimRopes({}: Story) {
 export function SirReturns({}: Story) {
   const s = useScene(3, [600, 2000, 2600, 2600]);
   const k = s.k;
+  // the sir's lantern turned up
+  useEffect(() => {
+    if (k === 2) sfx.click();
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="night" ground={S_ROAD} label="রাত; রাস্তায় পাঁচ পাপড়ির পদ্ম; আর্ট স্যার হারিকেন হাতে ফিরলেন, উঁচু করে ধরে দেখলেন, কিছু বললেন না; তারপর খাতায় দুই দড়ির মাথা লিখলেন, চারটা সংখ্যা, একটা ছোট ঘরে">

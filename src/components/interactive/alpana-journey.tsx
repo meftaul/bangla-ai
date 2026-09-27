@@ -1,12 +1,13 @@
 "use client";
 
-import { useId, useState, type ReactNode } from "react";
+import { useEffect, useId, useState, type ReactNode } from "react";
 
 import { Bubble, Person, Stage, StoryFrame } from "@/components/journey/cast";
 import { Task, useGate } from "@/components/journey/journey";
 import { Choice, Draw, FADE, Nope, POP, Scene, Ticks, predictLook, primaryBtn, quietBtn, usePlay, useScene, useSeed, useSeeded, useTween, type Fixtures } from "@/components/journey/kit";
 import { Plane, makeFrame, snap, tup, type Drag, type Frame, type XY } from "@/components/journey/plane";
 import { Alpana, ChalkGrid, FISH, ID, LOTUS_C, LOTUS_TIPS, PETALS, Pillar, RoadBed, byCols, partway, pathOf, turnCols, type Move } from "@/components/interactive/road-kit";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 6.2 — The alpana on the road, moving every point at
 // once", told as a Journey. The plan is 06_journey_specs.md, block 6.2.
@@ -236,7 +237,10 @@ export function AlpanaBet() {
   const play = usePlay(1400);
   const seal = (i: number) => {
     setBet(i);
-    play.play(1, () => pass("বাজি সিল হলো। আগে স্যারের নিয়মটা বুঝি।"));
+    play.play(1, () => {
+      sfx.stamp();
+      pass("বাজি সিল হলো। আগে স্যারের নিয়মটা বুঝি।");
+    });
   };
   return (
     <>
@@ -319,6 +323,8 @@ export function OnePointAtATime() {
     move: (p) => held !== null && setAt(p),
     up: () => {
       if (held === null) return;
+      // the petal tip chalked where it is set down
+      sfx.chalk(0.2);
       const s = snap(at, OP_F);
       const want = dbl(LOTUS_TIPS[OP_TIPS[held]]);
       if (s[0] === want[0] && s[1] === want[1]) {
@@ -470,6 +476,7 @@ export function StraightStays() {
   const [cur, setCur] = useSeed<number | null>("cur", null);
   const [tried, setTried] = useSeed<boolean[]>("tried", [false, false, false, false]);
   const run = (i: number) => {
+    sfx.whoosh(0.4);
     setCur(i);
     const next = tried.map((v, j) => v || j === i);
     setTried(next);
@@ -527,6 +534,7 @@ export function SlideTheAlpana() {
   const [slid, setSlid] = useSeed("slid", false);
   const play = usePlay(1150);
   const push = () => {
+    sfx.slip();
     setSlid(true);
     play.play(1, () => pass("সরালে খুঁটির কোণাও সরে। তাই এটা হয় না।"));
   };
@@ -876,6 +884,10 @@ export function GateEvening({}: Story) {
 export function FahimChalks({}: Story) {
   const s = useScene(4, [600, 2400, 1600, 1400, 2000]);
   const k = s.k;
+  // ফাহিম chalks the doubled points, one, two, three
+  useEffect(() => {
+    if (k === 4) sfx.chalkLines(3, 0.5, 0.15);
+  }, [k]);
   const dots = [150, 206, 262];
   return (
     <StoryFrame scene={s}>
@@ -968,6 +980,10 @@ export function ThreeFingers({}: Story) {
 export function NasibPushes({}: Story) {
   const s = useScene(3, [600, 1600, 1600, 2600]);
   const k = s.k;
+  // নাসিব slides the paper one square right
+  useEffect(() => {
+    if (k === 2) sfx.slip();
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="evening" ground={120} label="নাসিব graph paper টা রাস্তায় রাখলো, এক ঘর ডানে ঠেলে দিলো, বললো লাইন সোজা, ঘর সমান; স্যার কিছু বললেন না">
@@ -1018,6 +1034,12 @@ export function SixRoads({}: Story) {
 export function LightsOut({}: Story) {
   const s = useScene(3, [600, 1600, 1600, 2400]);
   const k = s.k;
+  // রিনা chalks two lines; the power goes; সামিন's torch clicks on
+  useEffect(() => {
+    if (k === 1) sfx.chalkLines(2, 0.4, 0.35);
+    else if (k === 2) sfx.click();
+    else if (k === 3) sfx.click();
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop={k >= 2 ? "night" : "evening"} ground={120} label="রিনা নতুন grid এর দুইটা লাইন টানলো; কারেন্ট চলে গেলো, রাস্তার বাতি নিভলো; সামিন মোবাইলের আলো জ্বাললো">
@@ -1059,6 +1081,15 @@ function S_Rickshaw({ x }: { x: number }) {
 export function RickshawPasses({}: Story) {
   const s = useScene(3, [600, 2000, 1600, 2000]);
   const k = s.k;
+  // a rickshaw rattles past; নাসিব folds his paper; the sir ties a second rope
+  useEffect(() => {
+    if (k === 1) {
+      sfx.bell();
+      sfx.pedal();
+    }
+    else if (k === 2) sfx.paper();
+    else if (k === 3) sfx.rope(0.6);
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="evening" ground={120} label="একটা রিকশা গেলো, চাকা খুঁটির পাশের ঘরের উপর দিয়ে; নাসিব কাগজ ভাঁজ করে পকেটে রাখলো; আর্ট স্যার খুঁটিতে আরেকটা দড়ি বাঁধলেন">
@@ -1083,6 +1114,11 @@ export function RickshawPasses({}: Story) {
 export function TwoCrosses({}: Story) {
   const s = useScene(3, [600, 1800, 1600, 2400]);
   const k = s.k;
+  // the two ropes pulled out; a chalk cross at each end
+  useEffect(() => {
+    if (k === 1) sfx.rope(0.7);
+    else if (k === 2) sfx.chalkLines(2, 0.35, 0.2);
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="evening" ground={120} label="আর্ট স্যার দুইটা দড়ির মাথা টেনে রাস্তার দুই জায়গায় নিলেন, দুইটা ক্রস দিলেন, তারপর মাগরিবে চলে গেলেন">

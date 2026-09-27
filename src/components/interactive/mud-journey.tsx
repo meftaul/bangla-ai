@@ -1,12 +1,13 @@
 "use client";
 
-import { useId, useState, type ReactNode } from "react";
+import { useEffect, useId, useState, type ReactNode } from "react";
 
 import { Task, useGate } from "@/components/journey/journey";
 import { Choice, Draw, FADE, LOOK, Nope, POP, Scene, Speech, pill, predictLook, primaryBtn, useScene, useSeed, useTween, type Fixtures, type Look } from "@/components/journey/kit";
 import { Bubble, Card as CastCard, Person, Robot, Stage, StoryFrame } from "@/components/journey/cast";
 import { Arrow, Label, Plane, makeFrame, snap, type Frame, type XY } from "@/components/journey/plane";
 import { BoxLine, Drop, Floor, Shade, Sun, keyMove, nice, polar, rot } from "./noon-journey";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 4.3 — The box said 25", the discovery version of
 // 04c_noon_shadow (see .claude/skills/pathshala-discovery and
@@ -149,6 +150,10 @@ function Mud() {
 export function VanStuck({}: Story) {
   const s = useScene(5, [500, 1500, 1600, 2200, 2400]);
   const k = s.k;
+  // ফাহিম's push: the van rocks in the mud and settles back
+  useEffect(() => {
+    if (k === 4) sfx.squelch();
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="field" label="গ্রামের কাদা রাস্তা। করিমের ভ্যান আটকে আছে। ফাহিম ধাক্কা দেয়, dot product বলে 25, ভ্যান একটু নড়ে আবার থেমে যায়, এখনো কাদায়। করিম হাত তুলে দেখায়।">
@@ -168,6 +173,14 @@ export function VanStuck({}: Story) {
 export function VanOut({}: Story) {
   const s = useScene(3, [500, 1600, 2200]);
   const k = s.k;
+  // করিম pulls from the dry bank and the van rolls out of the mud
+  useEffect(() => {
+    if (k === 1) sfx.rope(0.8);
+    else if (k === 2) {
+      sfx.squelch();
+      setTimeout(() => sfx.bell(), 1100);
+    }
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="field" label="করিম শুকনা পাড় থেকে 30 degree তে টানে, ভ্যান কাদা থেকে গড়িয়ে শুকনা রাস্তায় ওঠে, সবাই হাত নাড়ে।">
@@ -261,6 +274,7 @@ export function StuckBet() {
                 disabled={bet !== null}
                 onClick={() => {
                   setBet(i);
+                  sfx.stamp();
                   pass("বাজি ধরা হয়ে গেলো। শেষে মিলিয়ে দেখবো।");
                 }}
               >
@@ -299,6 +313,7 @@ export function RollFour() {
   };
   const push = () => {
     if (pushed || (w[0] === 0 && w[1] === 0)) return;
+    sfx.squelch();
     setPushed(true);
     const next = [...log, [dot(ROAD, w), r]];
     setLog(next);
@@ -349,6 +364,7 @@ export function BendFlags() {
   };
   const push = () => {
     if (pushed || (w[0] === 0 && w[1] === 0)) return;
+    sfx.squelch();
     setPushed(true);
     const next = [...log, [flag, r]];
     setLog(next);
@@ -616,6 +632,7 @@ export function LongerCard() {
             type="button"
             onClick={() => {
               setPushed(true);
+              sfx.squelch();
               setTimeout(() => pass("Card লম্বা, dot product বড়। গড়ানো একই।"), 900);
             }}
             className={`${primaryBtn} ${FADE}`}
@@ -766,8 +783,12 @@ export function PondRope() {
   const out = got >= 6;
 
   const stand = (i: number) => {
+    sfx.rope(0.7);
     setSpot(i);
-    if (7 * SPOTS[i].card >= 6) setTimeout(() => pass("7 × 0.866 = 6.06. ভ্যান কাদা থেকে উঠে গেলো।"), 1000);
+    if (7 * SPOTS[i].card >= 6) {
+      setTimeout(() => sfx.squelch(), 500);
+      setTimeout(() => pass("7 × 0.866 = 6.06. ভ্যান কাদা থেকে উঠে গেলো।"), 1000);
+    }
     else setMiss(miss + 1);
   };
 

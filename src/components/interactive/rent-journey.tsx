@@ -18,8 +18,9 @@ import {
 } from "@/components/journey/kit";
 import { Bubble, Card as CastCard, Person as CastPerson, Stage, StoryFrame } from "@/components/journey/cast";
 import { Lit, listOf, sg } from "@/components/journey/plane";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Task, useGate } from "@/components/journey/journey";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 5.2 — The extra column, what a bathroom is worth",
 // told as a Journey in the author's Banglish, 8 steps (the pathshala-journey
@@ -117,6 +118,11 @@ function PhoneCard({ x, y, says }: { x: number; y: number; says: string }) {
 export function DalalArrives({}: Story) {
   const s = useScene(4, [700, 2400, 2600, 2400]);
   const k = s.k;
+  // the dalal's app pings its answer, morning and evening
+  useEffect(() => {
+    if (k === 1) sfx.chime();
+    else if (k === 2) sfx.chime();
+  }, [k]);
 
   return (
     <StoryFrame scene={s}>
@@ -223,6 +229,7 @@ export function TwoAnswers() {
 
   const seal = () => {
     setSealed(true);
+    sfx.stamp();
     pass("বাজি সিল হলো। এবার খাতাটা খুলি।");
   };
 
@@ -391,6 +398,10 @@ const scrawl = (x: number, y: number, w: number) => `M${x} ${y}q${w / 8} -3 ${w 
 export function KhataOpens({}: Story) {
   const s = useScene(3, [700, 1800, 1800, 2000]);
   const k = s.k;
+  // সামিন opens the khata
+  useEffect(() => {
+    if (k === 1) sfx.paper();
+  }, [k]);
   const cols = [
     { x: 78, head: "sq ft" },
     { x: 142, head: "sq m" },
@@ -802,6 +813,10 @@ export function BuiltRowByRow() {
 export function KnobCards({}: Story) {
   const s = useScene(3, [700, 2400, 2200, 2000]);
   const k = s.k;
+  // ফাহিম picks the phone up off the table
+  useEffect(() => {
+    if (k === 3) sfx.tap();
+  }, [k]);
 
   return (
     <StoryFrame scene={s}>
@@ -1233,6 +1248,11 @@ function LoosePage({ x, y, tilt }: { x: number; y: number; tilt: number }) {
 export function BagPages({}: Story) {
   const s = useScene(3, [700, 1800, 2400, 2200]);
   const k = s.k;
+  // the bag opens and pages spill; সামিন lays them out
+  useEffect(() => {
+    if (k === 1) sfx.paper();
+    else if (k === 3) sfx.slip();
+  }, [k]);
 
   return (
     <StoryFrame scene={s}>
@@ -1495,6 +1515,11 @@ export function TrapPage() {
 export function FreeRefresh({}: Story) {
   const s = useScene(2, [700, 1600, 2400]);
   const k = s.k;
+  // a tap to refresh, and the app's new answer
+  useEffect(() => {
+    if (k === 1) sfx.tap();
+    else if (k === 2) sfx.chime();
+  }, [k]);
 
   return (
     <StoryFrame scene={s}>
@@ -1730,6 +1755,10 @@ function PaperTag({ x, y, text }: { x: number; y: number; text: string }) {
 export function AbbuSigns({}: Story) {
   const s = useScene(3, [700, 2400, 2200, 2400]);
   const k = s.k;
+  // the total column crossed off
+  useEffect(() => {
+    if (k === 2) sfx.pencil(0.4);
+  }, [k]);
 
   return (
     <StoryFrame scene={s}>
@@ -1972,6 +2001,10 @@ function S8BRemote({ x, y }: { x: number; y: number }) {
 export function NasibAtDoor() {
   const s = useScene(3, [700, 2000, 1800, 2000]);
   const k = s.k;
+  // the dalal lets himself out, and there's নাসিব at the door
+  useEffect(() => {
+    if (k === 1) sfx.door();
+  }, [k]);
 
   return (
     <StoryFrame scene={s}>

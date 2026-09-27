@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
 import { Bubble, Person, Stage, StoryFrame } from "@/components/journey/cast";
 import { Task, useGate } from "@/components/journey/journey";
@@ -33,6 +33,7 @@ import {
   wholeCells,
   type PatchPlan,
 } from "./patch-kit";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 8.1 — রঙের কৌটা, জায়গা কতগুণ", told as a Journey
 // in the author's Bangla-English. The plan is 08_journey_specs.md, block 8.1.
@@ -125,6 +126,7 @@ export function PatchBet() {
   const seal = () => {
     if (bet === null || sealed) return;
     setSealed(true);
+    sfx.stamp();
     act.play(2, () => pass("বাজি সিল হলো। আগে এক ঘর গুনি।"));
   };
   const n = bet === null ? 0 : X1_CARDS[bet].n;
@@ -186,6 +188,7 @@ function useCutSlide(plan: PatchPlan, onAll: () => void) {
   const glide = usePlay(750);
   const slide = (i: number) => {
     if (!cut || slid[i] || !moves(plan.pieces[i])) return;
+    sfx.slip();
     const ns = slid.map((v, j) => v || j === i);
     setSeq([...seq, i]);
     setBefore(slid);
@@ -478,6 +481,7 @@ export function YourPatch() {
   const brush = usePlay(380);
   const paint = () => {
     if (!cs.allIn || brush.running) return;
+    sfx.brush(0.6);
     setPainted(true);
     brush.play(n, () => {
       if (n === X6_N) pass("এই lens এ এক ঘর হয় 4 ঘর।");
@@ -854,6 +858,10 @@ export function RinaStencil({}: Story) {
 export function BagLenses({}: Story) {
   const s = useScene(3, [600, 1400, 1600, 1600]);
   const k = s.k;
+  // the light bhai takes his lenses out
+  useEffect(() => {
+    if (k === 2) sfx.lens();
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="field" label="লাইট ভাই তার ঝোলা খুললেন; একটা lens বের করলেন, গায়ে L; তারপর আরেকটা, গায়ে H; রিনা আর সামিন দেখছে">
@@ -883,6 +891,11 @@ export function BagLenses({}: Story) {
 export function NoonPaint({}: Story) {
   const s = useScene(3, [600, 1600, 1800, 2200]);
   const k = s.k;
+  // the tins prised open one by one
+  useEffect(() => {
+    if (k === 2) for (let i = 0; i < 4; i++) setTimeout(() => sfx.lid(), i * 220);
+    else if (k === 3) sfx.lid();
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="field" label="দুপুর; মামা বাজার থেকে সাইকেলে কৌটা নিয়ে ফিরলেন; রিনার পাঁচটার পাশে দশটা নতুন; রিনা মোড়ায় উঠে ফুলটা রং করলো; পনেরোটা কৌটাই খালি হলো, ফুল পুরা রং হলো">
@@ -969,6 +982,10 @@ const S1F = patchFrame(-2.5, 7.5, -2.4, 5.4, 18); // 196 × 156
 export function StakeFig() {
   const s = useScene(3, [600, 2200, 2200, 2200]);
   const k = s.k;
+  // the tins opened for the flower
+  useEffect(() => {
+    if (k === 1) sfx.lid();
+  }, [k]);
   return (
     <Scene scene={s} caption={say(S1_SAY, k)}>
       <PatchWall f={S1F} label="দেয়ালে ফুলের ছবির দাগ; কম রং আনলে অর্ধেক রং, বেশি আনলে কৌটা পড়ে থাকে; ঠিক কত, প্রশ্নবোধক" className="max-w-[14rem]" pin={false}>
@@ -1009,6 +1026,14 @@ const S2F = patchFrame(-0.4, 3.4, -0.4, 3.4, 34); // 145 × 145
 export function CutPaper() {
   const s = useScene(3, [600, 1600, 2000, 2400]);
   const k = s.k;
+  // the paper cut into pieces, then slid into place
+  useEffect(() => {
+    if (k === 1) {
+      sfx.snip();
+      setTimeout(() => sfx.snip(), 250);
+    }
+    else if (k === 2) sfx.slip();
+  }, [k]);
   const all = X2_PLAN.pieces.map(() => true);
   return (
     <Scene scene={s} caption={say(S2_SAY, k)}>
