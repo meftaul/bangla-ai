@@ -7,6 +7,7 @@ import { Task, useGate } from "@/components/journey/journey";
 import { Choice, Draw, FADE, Nope, POP, Scene, Ticks, pill, usePlay, useScene, useSeed, useSeeded, useTween, type Fixtures } from "@/components/journey/kit";
 import { Arrow, Label, Plane, makeFrame, sg, snap, type Frame, type XY } from "@/components/journey/plane";
 import { tupN } from "./haat-journey";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 4.6 — Towing the boat, how much of the pull works", told as a Journey.
 //
@@ -192,6 +193,7 @@ export function RopeBet() {
 
   const seal = (i: number) => {
     setBet(i);
+    sfx.stamp();
     pass("বাজি ধরা হয়ে গেলো। শেষে মিলিয়ে দেখবো।");
   };
 
@@ -246,6 +248,7 @@ export function SplitPull() {
   const move = (p: XY) => {
     const q = snap(p, FS);
     if (q[0] === w[0] && q[1] === w[1]) return;
+    sfx.rope(0.4);
     setW(q);
     const g = goal(q);
     if (g < 0 || hit.includes(g)) return;
@@ -305,6 +308,7 @@ export function SidePull() {
   const manX = bx + 3;
 
   const go = (f: boolean) => {
+    sfx.lap(1.5);
     const [x, y] = end;
     const d = (6.2 - x) * 0.5;
     const next: XY = f ? [x + d, Math.min(2.4, y + d * 0.6)] : [x + d, y];
@@ -403,6 +407,7 @@ export function LongRope() {
   const all = seen.length === 3;
 
   const slide = (r: number) => {
+    sfx.rope(0.4);
     setRope(r);
     // short, middle and long ropes
     const b = r <= 4 ? 0 : r >= 7.5 && r <= 8.5 ? 1 : r >= 14 ? 2 : -1;
@@ -890,6 +895,11 @@ const S1_BANK = 118;
 export function GunTana({}: Story) {
   const s = useScene(5, [600, 1400, 1400, 2000, 2200]);
   const k = s.k;
+  // the loaded boat on the water; the rope takes the strain as they walk
+  useEffect(() => {
+    if (k === 1) sfx.lap(3);
+    else if (k === 2) sfx.rope(0.8);
+  }, [k]);
   const ashore = k >= 2;
   const far = k >= 3;
   const [bx, cx, dx, my] = useTween(
@@ -1050,6 +1060,13 @@ export function ShadowDrop() {
 export function RudderMan({}: Story) {
   const s = useScene(3, [600, 1800, 2400, 2400]);
   const k = s.k;
+  // the tow on the river, the tiller creaking under the helmsman's hand
+  useEffect(() => {
+    if (k === 1) {
+      sfx.lap(3);
+      sfx.rope(0.6);
+    }
+  }, [k]);
   const [bx, cx, dx] = useTween([k >= 1 ? 112 : 88, k >= 1 ? 290 : 266, k >= 1 ? 236 : 212], 1600);
   return (
     <StoryFrame scene={s}>
@@ -1457,6 +1474,10 @@ export function GunHisab({}: Story) {
 export function NoonBend({}: Story) {
   const s = useScene(3, [600, 2000, 2400, 2400]);
   const k = s.k;
+  // the tow goes on past noon, water at the bow
+  useEffect(() => {
+    if (k === 1) sfx.lap(3.5);
+  }, [k]);
   const [bx, cx, dx] = useTween([k >= 1 ? 116 : 88, k >= 1 ? 266 : 236, k >= 1 ? 212 : 182], 1600);
   return (
     <StoryFrame scene={s}>

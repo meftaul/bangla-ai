@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, type KeyboardEvent, type ReactNode } from "react";
+import { useEffect, useId, type KeyboardEvent, type ReactNode } from "react";
 
 import { Bubble, Card as CastCard, Person, Stage, StoryFrame } from "@/components/journey/cast";
 import { Task, useGate } from "@/components/journey/journey";
@@ -8,6 +8,7 @@ import { Choice, FADE, Nope, POP, Scene, predictLook, primaryBtn, quietBtn, useP
 import { Arrow, Plane, makeFrame, type Frame, type XY } from "@/components/journey/plane";
 import { LightBhai, Projector, STAGE_WALL_F, StageBeam, StageWall, apply, det, projectorLens, type Cols, type Move } from "./light-kit";
 import { FLOWER_OUTLINE, LENS_G, LENS_H, LENS_L, PK, cellPoly, mapPts, polyArea } from "./patch-kit";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 9.1 — ফেরার lens", told as a Journey in the
 // author's Bangla-English. The plan is 09_journey_specs.md, block 9.1.
@@ -520,6 +521,7 @@ export function UndoBet() {
   const seal = () => {
     if (bet === null || sealed) return;
     setSealed(true);
+    sfx.stamp();
     act.play(4, () => pass("বাজি সিল হলো। আগে সবচেয়ে সোজা lens।"));
   };
   return (
@@ -1340,6 +1342,10 @@ function St_NumCard({ x, y }: { x: number; y: number }) {
 export function MorningBucket({}: Story) {
   const s = useScene(3, [600, 1600, 1800, 2000]);
   const k = s.k;
+  // রিনা stirs the pulp in the bucket
+  useEffect(() => {
+    if (k === 2) sfx.drip();
+  }, [k]);
   const [fx] = onStage([-1.4, 0.2]);
   return (
     <StoryFrame scene={s}>
@@ -1369,6 +1375,11 @@ export function MorningBucket({}: Story) {
 export function FourCards({}: Story) {
   const s = useScene(4, [600, 2400, 2200, 2400, 2200]);
   const k = s.k;
+  // lenses held up; the light bhai lays one more on the মাদুর
+  useEffect(() => {
+    if (k === 1) sfx.lens();
+    else if (k === 4) sfx.lens();
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="field" label="নাসিব G রোদের দিকে তুলে বললো সব সংখ্যা উল্টায় দেন, ফুল ফেরত; সামিন বললো ছোট করলেই তো হয়; করিম বললো রং একবার দিলে আর ফেরে না; লাইট ভাই চুপচাপ আরেকটা lens মাদুরে রাখলেন">
@@ -1393,6 +1404,10 @@ export function FourCards({}: Story) {
 export function ClearGlass({}: Story) {
   const s = useScene(2, [600, 1800, 2000]);
   const k = s.k;
+  // the plain glass held up
+  useEffect(() => {
+    if (k === 1) sfx.lens();
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="field" label="লাইট ভাই ঝোলা থেকে একটা গোল সাদা কাঁচ বের করলেন; চোখের সামনে ধরলেন; ওপাশের নারকেল গাছ যেমন ছিলো তেমনই দেখা গেলো">
@@ -1504,6 +1519,11 @@ export function TallHeart({}: Story) {
 export function NewStencil({}: Story) {
   const s = useScene(3, [600, 1800, 1800, 2200]);
   const k = s.k;
+  // রিনা traces the flower onto polythene and cuts it out
+  useEffect(() => {
+    if (k === 1) sfx.scribble(4, 0.25, 0.25);
+    else if (k === 2) sfx.snip();
+  }, [k]);
   const f = makeFrame(-1.2, 2.2, -1.2, 2.2, 9, 0);
   const cx = 118;
   const cy = 98;

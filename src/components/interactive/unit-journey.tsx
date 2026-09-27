@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect } from "react";
+
 import type { ReactNode } from "react";
 
 import { BoxRun } from "@/components/journey/box";
@@ -9,6 +11,7 @@ import { Arrow, Label, Plane, dist, makeFrame, mix, type XY } from "@/components
 import { Tape } from "./dimension-journey";
 import { Bubble, Card as CastCard, Person, Robot, Stage, Stall, StoryFrame, Tree } from "@/components/journey/cast";
 import { bn } from "./figure-kit";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 3.6 — শুধু দিক, movie club-এর গোলমাল", told as a Journey.
 //
@@ -459,9 +462,12 @@ export function WhyLoud() {
   const done = both && seen.includes(0.5) && seen.includes(2);
 
   const measure = (id: string) => {
-    if (!measured.includes(id)) setMeasured([...measured, id]);
+    if (measured.includes(id)) return;
+    sfx.tape(0.5);
+    setMeasured([...measured, id]);
   };
   const turn = (n: number) => {
+    sfx.knob();
     setLam(n);
     if (seen.includes(n)) return;
     const next = [...seen, n];
@@ -1013,7 +1019,9 @@ export function HatCheck() {
   const [rooted, setRooted] = useSeed("rooted", false);
 
   const square = (i: number) => {
-    if (!squared.includes(i)) setSquared([...squared, i]);
+    if (squared.includes(i)) return;
+    sfx.pencil(0.25);
+    setSquared([...squared, i]);
   };
   const root = () => {
     setRooted(true);
@@ -1379,6 +1387,10 @@ function S5_Sack({ x, y }: { x: number; y: number }) {
 export function ClubSack({}: Story) {
   const s = useScene(4, [600, 2400, 1500, 1500]);
   const k = s.k;
+  // the films tumble out of the sack onto the floor
+  useEffect(() => {
+    if (k === 1) sfx.tiles(10);
+  }, [k]);
 
   return (
     <StoryFrame scene={s}>
@@ -1453,10 +1465,12 @@ export function OnTheRing() {
       }
     });
     if (best < 0) return;
+    sfx.pencil(0.15);
     setMarks(marks.includes(best) ? marks.filter((m) => m !== best) : [...marks, best]);
   };
   const normalise = () => {
     setNormed(true);
+    sfx.whoosh(0.5);
     pass("length মুছে থাকলো শুধু দিক।");
   };
 

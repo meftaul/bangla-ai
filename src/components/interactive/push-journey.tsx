@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type KeyboardEvent, type ReactNode } from "react";
+import { useEffect, useState, type KeyboardEvent, type ReactNode } from "react";
 
 import { Bubble, Card, Person, Stage, StoryFrame } from "@/components/journey/cast";
 import { BoxRun } from "@/components/journey/box";
@@ -10,6 +10,7 @@ import { Arrow, Dot, Label, Plane, makeFrame, type Frame, type Tone, type XY } f
 import { bn } from "./figure-kit";
 import { DotBox, dot, num, tupN } from "./haat-journey";
 import { rng } from "./surprise-journey";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 4.2 — পক্ষে না বিপক্ষে, কাদায় আটকানো ভ্যান", told as a Journey.
 //
@@ -111,6 +112,7 @@ export function VanStuck() {
 
   const seal = (i: number) => {
     setBet(i);
+    sfx.stamp();
     pass("বাজি সিল হলো। মাপার যন্ত্র লাগবে।");
   };
 
@@ -170,6 +172,7 @@ export function StraightPush() {
   const push = side === 1 ? FRONT : BEHIND;
 
   const runFront = () => {
+    sfx.squelch();
     setSide(1);
     setFront(true);
     pass("plus, minus বলে দেয় পক্ষে নাকি বিপক্ষে।");
@@ -295,6 +298,7 @@ export function PushRing() {
   const done = found.max && found.zero && found.min;
 
   const go = (i: number) => {
+    sfx.squelch();
     setAt(i);
     if (seen.includes(i)) return;
     const next = [...seen, i];
@@ -389,6 +393,7 @@ export function StrongPush() {
 
   const run = () => {
     setRan(true);
+    sfx.squelch();
     pass("Dot product এ দিক আর জোর, দুইটাই মেশে।");
   };
 
@@ -492,6 +497,7 @@ export function CoinBox() {
     setNamed(true);
   };
   const toss = () => {
+    sfx.flip(6);
     setHundred(true);
     pass("মিল-অমিল সমান হলে 0, মানে ৯০ degree কোণ।");
   };
@@ -594,6 +600,8 @@ export function FixTheCrew() {
     setDone(done + 1);
   };
   const fix = () => {
+    sfx.squelch();
+    setTimeout(() => sfx.bell(), 900);
     setFixed(true);
     pass("উল্টো ধাক্কা minus, অকাজের ধাক্কা 0।");
   };
@@ -1557,6 +1565,13 @@ const S1_RIDE: { who: "mama" | "fahim" | "mami" | "samin"; dx: number }[] = [
 export function VanSinks({}: Story) {
   const s = useScene(4, [600, 1800, 1400, 2800]);
   const k = s.k;
+  // the storm breaks and the wheels sink into the mud
+  const storm = k >= 2;
+  useEffect(() => {
+    if (!storm) return;
+    sfx.squelch();
+    return sfx.rain();
+  }, [storm]);
   const vx = k >= 1 ? 110 : -4;
   const vy = PG + (k >= 2 ? 5 : 0);
   const ms = 1600;
@@ -1969,6 +1984,13 @@ const S12_WHO: ("mama" | "fahim" | "karim" | "mami" | "samin")[] = ["mama", "fah
 export function VanOut({}: Story) {
   const s = useScene(3, [600, 2000, 1800]);
   const k = s.k;
+  // everyone heaves from behind, the wheels suck free, the bell rings
+  useEffect(() => {
+    if (k === 2) {
+      sfx.squelch();
+      setTimeout(() => sfx.bell(), 900);
+    }
+  }, [k]);
   const vx = k >= 2 ? 216 : 150;
   const x = (w: string) => (k === 0 ? S12_BEFORE[w] : S12_BEHIND[w] + (k >= 2 ? 58 : 0));
   const y = (w: string) => (k === 0 && w === "mami" ? PG + 6 : PG);

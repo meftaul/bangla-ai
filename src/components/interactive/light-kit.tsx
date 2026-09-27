@@ -1,11 +1,12 @@
 "use client";
 
-import { useId, type ReactNode } from "react";
+import { useEffect, useId, useRef, type ReactNode } from "react";
 
 import { Person } from "@/components/journey/cast";
 import { usePlay } from "@/components/journey/kit";
 import { Arrow, makeFrame, tup, type Frame, type XY } from "@/components/journey/plane";
 import { byCols, partway, pathOf, type Cols, type Move } from "./road-kit";
+import { sfx } from "@/components/journey/sfx";
 
 // The light wall, shared by the Article 7 journeys on the light machine
 // (7.2 → 7.4), so the নানাবাড়ির দেয়াল, its chalk grid and the লাইট ভাই's
@@ -431,11 +432,29 @@ export function KnobControl({
         knob {which}: <span className="font-mono">{turns < 0 ? `−${-turns}` : turns}</span> পাক
       </div>
       <div className="flex items-center gap-1.5">
-        <button type="button" aria-label={`knob ${which} এক পাক পেছনে`} className={btn} disabled={!canBack} onClick={() => onTurn(-1)}>
+        <button
+          type="button"
+          aria-label={`knob ${which} এক পাক পেছনে`}
+          className={btn}
+          disabled={!canBack}
+          onClick={() => {
+            sfx.knob();
+            onTurn(-1);
+          }}
+        >
           <TurnGlyph dir={-1} />
         </button>
         <KnobDial turns={turns} which={which} size={36} />
-        <button type="button" aria-label={`knob ${which} এক পাক সামনে`} className={btn} disabled={!canFwd} onClick={() => onTurn(1)}>
+        <button
+          type="button"
+          aria-label={`knob ${which} এক পাক সামনে`}
+          className={btn}
+          disabled={!canFwd}
+          onClick={() => {
+            sfx.knob();
+            onTurn(1);
+          }}
+        >
           <TurnGlyph dir={1} />
         </button>
       </div>
@@ -527,6 +546,19 @@ export function Projector({
   lens?: "old" | "good" | "spare" | "empty" | "cracked";
 }) {
   const [lx, ly] = projectorLens(x, y, facing);
+  // switched on: the switch and the fan; a lens changed in its slot: the glass
+  // (not on the first draw, when a scene opens with the machine already set)
+  const turns = knobs.join();
+  const was = useRef({ on, lens, turns });
+  useEffect(() => {
+    if (on && !was.current.on) sfx.hum(1.4);
+    if (lens !== was.current.lens) {
+      if (lens === "cracked") sfx.crack();
+      else if (lens !== "empty") sfx.lens();
+    }
+    if (turns !== was.current.turns) sfx.knob();
+    was.current = { on, lens, turns };
+  }, [on, lens, turns]);
   const glass = lens === "empty" ? "#1f2937" : lens === "good" ? "#a7f3d0" : lens === "spare" ? "#d6d3d1" : "#bae6fd";
   return (
     <g className="pointer-events-none">

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
 import { Task, useGate } from "@/components/journey/journey";
 import {
@@ -24,6 +24,7 @@ import {
 } from "@/components/journey/kit";
 import { Bubble, Card as CastCard, Person as CastPerson, Robot, Stage, Stall, StoryFrame } from "@/components/journey/cast";
 import { Arrow, Lit, Plane, listOf, makeFrame, same, snap, tup, type Frame, type Tone, type XY } from "@/components/journey/plane";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 5.3 — Basis and dimension, the fewest buttons",
 // told as a Journey in the author's Bangla-English, 10 steps (the
@@ -536,6 +537,11 @@ function MvTruck({ x }: { x: number }) {
 export function TruckDay({}: Story) {
   const s = useScene(4, [600, 2400, 2400, 2400, 2000]);
   const k = s.k;
+  // the truck idling at the gate; then the drone hovers in, remote-less
+  useEffect(() => {
+    if (k === 0) sfx.rumble(1.4);
+    else if (k === 4) setTimeout(sfx.drone(), 1800);
+  }, [k]);
 
   return (
     <StoryFrame scene={s}>
@@ -607,6 +613,7 @@ export function FewestButtons() {
 
   const seal = () => {
     setSealed(true);
+    sfx.stamp();
     pass("বাজি ধরা হলো। এবার button খোলা শুরু।");
   };
 
@@ -841,6 +848,7 @@ export function DropOne() {
     const next = kept.map((x, j) => (j === i ? !x : x));
     const n = next.filter(Boolean).length;
     if (n === 0) return;
+    sfx.click();
     setKept(next);
     const k2 = saw2 || n === 2;
     const k1 = saw1 || n === 1;
@@ -958,6 +966,11 @@ const S3_REMOTES = [2, 3, 1, 2, 2];
 export function FiveOnCounter({}: Story) {
   const s = useScene(3, [600, 1500, 1500, 2600]);
   const k = s.k;
+  // remotes set on the counter, two, then three more
+  useEffect(() => {
+    if (k === 1) sfx.tiles(2);
+    else if (k === 2) sfx.tiles(3);
+  }, [k]);
   const shown = k === 0 ? 0 : k === 1 ? 2 : 5;
 
   return (
@@ -1605,6 +1618,10 @@ function S5Fan({ dust }: { dust: boolean }) {
 export function DroneUnderFan({}: Story) {
   const s = useScene(3, [600, 2400, 2400, 2600]);
   const k = s.k;
+  // the drone slides along the floor to under the fan
+  useEffect(() => {
+    if (k === 1) setTimeout(sfx.drone(), 1600);
+  }, [k]);
 
   return (
     <StoryFrame scene={s}>
@@ -2066,6 +2083,10 @@ const S6_G = 150;
 export function AbbuOrders({}: Story) {
   const s = useScene(3, [600, 2400, 2400, 2000]);
   const k = s.k;
+  // seven buttons clatter onto the counter
+  useEffect(() => {
+    if (k === 2) sfx.tiles(5);
+  }, [k]);
 
   return (
     <StoryFrame scene={s}>
@@ -2150,6 +2171,7 @@ export function ShopOrder() {
 
   const toggle = (i: number) => {
     if (won) return;
+    sfx.tap();
     setCart(cart.includes(i) ? cart.filter((j) => j !== i) : [...cart, i]);
   };
   const test = () => {
@@ -2572,6 +2594,11 @@ export function FourInRoom() {
 export function FanDusted({}: Story) {
   const s = useScene(3, [600, 2000, 2000, 2400]);
   const k = s.k;
+  // the drone rises to the fan; the dust comes down
+  useEffect(() => {
+    if (k === 1) setTimeout(sfx.drone(), 2200);
+    else if (k === 2) sfx.rice(0.6);
+  }, [k]);
 
   return (
     <StoryFrame scene={s}>

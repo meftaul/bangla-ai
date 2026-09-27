@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
 import { Bubble, Person, Stage, StoryFrame } from "@/components/journey/cast";
 import { Task, useGate } from "@/components/journey/journey";
@@ -8,6 +8,7 @@ import { Choice, FADE, Nope, POP, Scene, Stepper, predictLook, primaryBtn, quiet
 import { Arrow, makeFrame, type Frame, type XY } from "@/components/journey/plane";
 import { LightBhai, Projector, STAGE_WALL_F, StageWall, apply, det, pathOf, projectorLens, useLensRun, type Cols, type Move } from "./light-kit";
 import { FLOWER_OUTLINE, LENS_G, PK, PatchWall, StageMora, cellPoly, patchCorners, patchFrame } from "./patch-kit";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 9.2 — সোমের নিয়ম, খোঁজা লাগে না", told as a
 // Journey in the author's Bangla-English. The plan is 09_journey_specs.md,
@@ -444,6 +445,7 @@ export function RecipeBet() {
   const seal = () => {
     if (bet === null || sealed) return;
     setSealed(true);
+    sfx.stamp();
     act.play(3, () => pass("বাজি সিল হলো। আগে সোমের খাতা।"));
   };
   const card = bet === null ? null : X1_CARDS[bet];
@@ -1418,6 +1420,10 @@ export function SomsKhata({}: Story) {
 export function HandInMachine({}: Story) {
   const s = useScene(3, [600, 1800, 2200, 2600]);
   const k = s.k;
+  // রিনা slides the polythene in
+  useEffect(() => {
+    if (k === 1) sfx.slip();
+  }, [k]);
   const [lx, ly] = projectorLens(PJ[0], PJ[1]);
   return (
     <StoryFrame scene={s}>
@@ -1446,6 +1452,10 @@ export function HandInMachine({}: Story) {
 export function PocketLens({}: Story) {
   const s = useScene(2, [600, 1800, 2400]);
   const k = s.k;
+  // নাসিব's pocket lens
+  useEffect(() => {
+    if (k === 1) sfx.lens();
+  }, [k]);
   const a = onStage([-2, -1.5]);
   const b = onStage([4.5, 5]);
   return (
@@ -1479,6 +1489,11 @@ export function PocketLens({}: Story) {
 export function TwoSmallLenses({}: Story) {
   const s = useScene(2, [600, 2200, 2400]);
   const k = s.k;
+  // two small lenses held up
+  useEffect(() => {
+    if (k === 1) sfx.lens();
+    else if (k === 2) sfx.lens();
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="field" label="রিনা 8.4 এর সবচেয়ে ছোট lens টা তুলে ধরলো; লাইট ভাই ব্যাগ থেকে একটা প্রায় চ্যাপ্টা lens বের করলেন">
@@ -1531,6 +1546,10 @@ export function ApaPalm({}: Story) {
 export function KhataPack({}: Story) {
   const s = useScene(2, [600, 2000, 2200]);
   const k = s.k;
+  // the khata packed away
+  useEffect(() => {
+    if (k === 1) sfx.book();
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="evening" label="সন্ধ্যা; আপা stencil টা একটা খাতার দুই পাতার মাঝে রাখলেন; খাতা বন্ধ করলেন">

@@ -7,6 +7,7 @@ import { Choice, Draw, FADE, Nope, POP, Scene, Speech, Ticks, pill, predictLook,
 import { Arrow, Label, Plane, Star, clamp, dist, makeFrame, plus, same, snap, type Frame, type XY } from "@/components/journey/plane";
 import { Loop, Bubble, Card as CastCard, Gate as CastGate, Person, Robot, Stage, Stall, StoryFrame } from "@/components/journey/cast";
 import { bn } from "./figure-kit";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 3.5 — কাক, পথিক আর দাবার রাজা", told as a Journey.
 //
@@ -240,6 +241,8 @@ export function HowFar() {
 
   const show = () => {
     setShown(true);
+    const stop = sfx.drone();
+    setTimeout(stop, 1800);
     pass("দূরত্ব নির্ভর করে কীভাবে যাবেন।");
   };
 
@@ -512,6 +515,7 @@ export function WalkRows() {
     if (won) return;
     const next = plus(at, STEP[d]);
     if (!inside(next, FW)) return;
+    sfx.footstep();
     const r = route + d;
     if (!same(next, STALL)) {
       setAgain(0);
@@ -903,6 +907,7 @@ export function KingMoves() {
     if (arrived) return;
     const t = snap(p, FK);
     if (!kingStep(king, t)) return;
+    sfx.tap();
     const next = [...trail, t];
     setTrail(next);
     if (!same(t, KING_GOAL)) return;
@@ -2027,6 +2032,7 @@ export function KnobFine() {
 
   const put = (p: XY) => {
     if (locked) return;
+    sfx.knob();
     let q = r.into([clamp(p[0], FF.x0, FF.x1), clamp(p[1], FF.y0, FF.y1)]);
     const hit = dist(q, r.best) < 0.07;
     if (hit) q = r.best;

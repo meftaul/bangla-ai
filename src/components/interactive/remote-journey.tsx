@@ -1,6 +1,6 @@
 "use client";
 
-import { type ReactNode } from "react";
+import { useEffect, type ReactNode } from "react";
 
 import { Task, useGate } from "@/components/journey/journey";
 import {
@@ -23,6 +23,7 @@ import {
 import { Bubble, Card as CastCard, Person as CastPerson, Robot, Stage, Stall, StoryFrame } from "@/components/journey/cast";
 import { Arrow, Dot, Label, Plane, Star, makeFrame, same, sg, tup, type Frame, type Tone, type XY } from "@/components/journey/plane";
 import { Shiku } from "./arrow-journey";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 5.1 — Span, which remote reaches where", told as a Journey.
 //
@@ -269,7 +270,17 @@ export function ButtonRemote({
             <span className="text-sm">
               <b className={TEXT[k.tone]}>{k.name}</b> <span className="font-mono text-[0.95rem]">{tup(k.v)}</span>
             </span>
-            <Stepper value={amt[i]} onChange={(n) => onAmt(i, n)} min={lo} max={hi} disabled={disabled} label={k.name} />
+            <Stepper
+              value={amt[i]}
+              onChange={(n) => {
+                sfx.press();
+                onAmt(i, n);
+              }}
+              min={lo}
+              max={hi}
+              disabled={disabled}
+              label={k.name}
+            />
           </div>
         );
       })}
@@ -340,6 +351,10 @@ export function Handset({ x, y, keys = 2, broken = false, toggle = false, glow =
 export function MovingDay({}: Story) {
   const s = useScene(3, [600, 2400, 2400]);
   const k = s.k;
+  // Ammu chalks the four marks on the tiles
+  useEffect(() => {
+    if (k === 1) sfx.chalkLines(4, 0.3, 0.2);
+  }, [k]);
 
   return (
     <StoryFrame scene={s}>
@@ -489,6 +504,7 @@ export function RemoteShelf() {
   const toggle = (n: string) => setPicks(picks.includes(n) ? picks.filter((p) => p !== n) : [...picks, n]);
   const seal = () => {
     setSealed(true);
+    sfx.stamp();
     pass(`বাজি সিল: ${picks.length} টা remote সব mark এ।`);
   };
 
@@ -612,6 +628,10 @@ export function ShelfFour() {
 export function CheapRemote({}: Story) {
   const s = useScene(2, [600, 2400]);
   const k = s.k;
+  // the one-button remote set on the counter
+  useEffect(() => {
+    if (k === 1) sfx.tap();
+  }, [k]);
 
   return (
     <StoryFrame scene={s}>
@@ -910,6 +930,10 @@ export function TileCounts() {
 export function NasibPicksB({}: Story) {
   const s = useScene(3, [600, 1800, 1800]);
   const k = s.k;
+  // remote B taken down off the wall
+  useEffect(() => {
+    if (k === 2) sfx.tap();
+  }, [k]);
 
   return (
     <StoryFrame scene={s}>
@@ -1037,6 +1061,10 @@ export function SameDirection() {
 export function CheapC({}: Story) {
   const s = useScene(2, [600, 2200]);
   const k = s.k;
+  // remote C taken down and set on the counter
+  useEffect(() => {
+    if (k === 1) sfx.tap();
+  }, [k]);
 
   return (
     <StoryFrame scene={s}>
@@ -1194,6 +1222,10 @@ export function BackStep() {
 export function ToggleShow({}: Story) {
   const s = useScene(2, [600, 2400]);
   const k = s.k;
+  // the toggle on top flicked on
+  useEffect(() => {
+    if (k === 2) sfx.click();
+  }, [k]);
 
   return (
     <StoryFrame scene={s}>
@@ -1228,6 +1260,8 @@ export function PaintReach() {
   const done = painted.length === SHELF.length;
 
   const show = () => {
+    // the paint toggle flicked on: the floor lights up
+    sfx.click();
     setOn(true);
     if (painted.includes(pick)) return;
     const next = [...painted, pick];
@@ -1504,6 +1538,10 @@ export function DoorInside() {
 export function BackShelf({}: Story) {
   const s = useScene(3, [600, 1400, 1800, 2400]);
   const k = s.k;
+  // four more remotes clatter onto the counter
+  useEffect(() => {
+    if (k === 2) sfx.tiles(4);
+  }, [k]);
 
   return (
     <StoryFrame scene={s}>

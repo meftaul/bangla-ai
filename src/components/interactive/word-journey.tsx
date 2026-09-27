@@ -1,11 +1,12 @@
 "use client";
 
-import { useState, type KeyboardEvent, type ReactNode } from "react";
+import { useEffect, useState, type KeyboardEvent, type ReactNode } from "react";
 
 import { Task, useGate } from "@/components/journey/journey";
 import { Choice, FADE, Nope, POP, Speech, Ticks, predictLook, primaryBtn, quietBtn, useCountUp, usePlay, useTween } from "@/components/journey/kit";
 import { Arrow, Plane, clamp, dist, makeFrame, minus, mix, plus, INK, type Frame, type Tone, type XY } from "@/components/journey/plane";
 import { bn } from "./figure-kit";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 2.3 — King − man + woman, চায়ের দোকানের ধাঁধা".
 //
@@ -271,6 +272,7 @@ export function KingMinusMan() {
       setFirst(null);
       return;
     }
+    sfx.pencil(0.35);
     setDrawn([first, wd]);
     setFirst(null);
     if (first === MAN && wd === KING) pass("king − man: man থেকে king-এর arrow।");
@@ -350,6 +352,7 @@ export function CarryArrow() {
   };
 
   const put = (wd: Word) => {
+    sfx.tap();
     setTail(wd.at);
     land(wd.at);
   };
@@ -432,10 +435,12 @@ export function ParallelArrows() {
 
   const draw = (i: number) => {
     if (drawn.includes(i)) return;
+    sfx.pencil(0.35);
     setDrawn([...drawn, i]);
   };
   const bundle = () => {
     const b = !bundled;
+    sfx.whoosh(0.4);
     setBundled(b);
     if (b) settle.play(1, () => pass("“রাজকীয়” জিনিসটা একটা direction।"));
   };
@@ -518,6 +523,7 @@ export function CapitalMap() {
   const hit = from.w !== "France" && near.d < NEAR;
 
   const go = (wd: Word) => {
+    sfx.pencil(0.35);
     setFrom(wd);
     if (wd.w === "France" || went.includes(wd.w)) return;
     const next = [...went, wd.w];
@@ -784,6 +790,9 @@ const REEL_HEADS = ["king", "queen", "prince", "princess"];
 function FinaleReel({ onReplay }: { onReplay: () => void }) {
   const k = useCountUp(BASES.length + 1, 1300);
   const i = clamp(k - 1, 0, BASES.length - 1);
+  useEffect(() => {
+    if (k > 0 && k <= BASES.length) sfx.whoosh(0.35);
+  }, [k]);
   const [tx, ty] = useTween(BASES[i].at, 800);
   const t: XY = [tx, ty];
   const there = dist(t, BASES[i].at) < 0.02;

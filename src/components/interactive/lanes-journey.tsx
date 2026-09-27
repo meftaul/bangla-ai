@@ -44,6 +44,7 @@ import {
   route,
   type Story,
 } from "./lanes-kit";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 5.5 — The road to school, a card for the rickshaw
 // mama", told as a Journey in the author's Bangla-English, 7 steps (the
@@ -196,6 +197,7 @@ export function SchoolBet() {
 
   const seal = () => {
     setSealed(true);
+    sfx.stamp();
     pass("বাজি ধরা হলো। চলেন রিকশায় উঠি।");
   };
 

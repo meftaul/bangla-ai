@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type KeyboardEvent } from "react";
+import { useEffect, useRef, useState, type KeyboardEvent } from "react";
 
 import { Task, useGate } from "@/components/journey/journey";
 import { FADE, Nope, POP, Stepper, Ticks, primaryBtn, quietBtn, useCountUp, usePlay, useTween } from "@/components/journey/kit";
@@ -23,6 +23,7 @@ import {
   type XY,
 } from "@/components/journey/plane";
 import { bn } from "./figure-kit";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 2.2 — Arrow, যার কোনো address নাই", told as a Journey.
 //
@@ -70,6 +71,14 @@ export function useWalk(ms: number) {
 
 /** Shiku, from 1.5. Moved by a CSS transform, so the transition does the in-between. */
 export function Shiku({ f, at }: { f: Frame; at: XY }) {
+  // a footstep each time he lands on a new square (not on the first draw, and
+  // not for every frame of a slide between squares)
+  const cell = `${Math.round(at[0])},${Math.round(at[1])}`;
+  const was = useRef<string | null>(null);
+  useEffect(() => {
+    if (was.current !== null && was.current !== cell) sfx.step();
+    was.current = cell;
+  }, [cell]);
   return (
     <g
       style={{ transform: `translate(${f.sx(at[0])}px, ${f.sy(at[1])}px)` }}
@@ -324,6 +333,7 @@ export function SlideArrow() {
   const drop = (t: XY) => {
     const key = t.join(",");
     if (key === "0,0" || spots.includes(key)) return;
+    sfx.pencil(0.3);
     const next = [...spots, key];
     setSpots(next);
     if (next.length === PLACES_GOAL) pass("যেখানেই রাখুন, vector সেই (3, 1)।");
@@ -513,6 +523,7 @@ export function SlideHome() {
 
   const toggle = () => {
     const h = !home;
+    sfx.whoosh(0.4);
     setHome(h);
     if (h) settle.play(1, () => pass("সরিয়ে বসালে তিনটাই একটা arrow।"));
   };
@@ -577,6 +588,11 @@ export function CityWalk() {
   const [from, setFrom] = useState<number | null>(null);
   const [walked, setWalked] = useState<number[]>([]);
   const w = useWalk(420);
+  // a footstep for every block walked
+  const walkedTo = w.trail.length;
+  useEffect(() => {
+    if (w.running && walkedTo > 1) sfx.footstep();
+  }, [w.running, walkedTo]);
 
   const start = (i: number) => {
     if (w.running) return;
@@ -880,6 +896,7 @@ export function UnitSteps() {
     if (reached || steps.length >= MAX_STEPS) return;
     const nextEnd = plus(end, d);
     if (nextEnd[0] < F2.x0 || nextEnd[0] > F2.x1 || nextEnd[1] < F2.y0 || nextEnd[1] > F2.y1) return;
+    sfx.pencil(0.15);
     setSteps([...steps, d]);
     if (same(nextEnd, UNIT_GOAL)) pass("সংখ্যাগুলো বলে কোন axis-এ কত পা।");
   };
@@ -941,6 +958,10 @@ const REEL_SPOTS: XY[] = [
 function FinaleReel({ onReplay }: { onReplay: () => void }) {
   const k = useCountUp(REEL_SPOTS.length + 2, 800);
   const shown = REEL_SPOTS.slice(0, Math.min(k, REEL_SPOTS.length));
+  useEffect(() => {
+    if (k > 0 && k <= REEL_SPOTS.length) sfx.pencil(0.3);
+    else if (k === REEL_SPOTS.length + 1) sfx.whoosh(0.6);
+  }, [k]);
   const [p] = useTween([k > REEL_SPOTS.length ? 1 : 0], 1300);
   const last = k === REEL_SPOTS.length + 2;
 

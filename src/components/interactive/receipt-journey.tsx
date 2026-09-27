@@ -1,12 +1,13 @@
 "use client";
 
-import { useId, useState, type KeyboardEvent, type ReactNode } from "react";
+import { useEffect, useId, useState, type KeyboardEvent, type ReactNode } from "react";
 
 import { Bubble, Person, Robot, Stage, StoryFrame } from "@/components/journey/cast";
 import { Task, useGate } from "@/components/journey/journey";
 import { Choice, Draw, FADE, Nope, POP, Scene, Ticks, predictLook, primaryBtn, usePlay, useScene, useSeed, useTween, type Fixtures } from "@/components/journey/kit";
 import { Plane, makeFrame, plus, snap, type Frame, type XY } from "@/components/journey/plane";
 import { Shiku } from "./arrow-journey";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 10.1 — ভেজা খাতা, দুই রসিদ এক দাম", told as a
 // Journey in the author's Bangla-English. The plan is 10_journey_specs.md,
@@ -299,6 +300,7 @@ export function PairBet() {
   const seal = () => {
     if (sealed) return;
     setSealed(true);
+    sfx.stamp();
     act.play(3, () => pass("বাজি সিল হলো। আগে একটা রসিদ।"));
   };
   return (
@@ -1083,6 +1085,10 @@ function St_Paper({ x, y, lines = 0 }: { x: number; y: number; lines?: number })
 export function MorningKhata({}: Story) {
   const s = useScene(3, [600, 2000, 2000, 2600]);
   const k = s.k;
+  // মামা peels the soaked pages apart
+  useEffect(() => {
+    if (k === 1) sfx.paper();
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="field" label="সকাল; রোয়াকে রোদে মামার ভেজা খাতা; মামা পাতা ছাড়াচ্ছেন, দাম ধুয়ে গেছে; মাদুরে ছয়টা রসিদ, জোড়ায় জোড়ায়; বাবুর্চির হাতে পান; পান মুখে দিয়ে বললেন, যেই দুইটা রসিদ ধরেন, দাম বাইর হইয়া যাইবো">
@@ -1188,6 +1194,10 @@ export function BiyePair({}: Story) {
 export function BoyBrings({}: Story) {
   const s = useScene(2, [600, 1800, 2400]);
   const k = s.k;
+  // the ছেলে hands over two receipts
+  useEffect(() => {
+    if (k === 1) sfx.slip();
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="field" label="বাবুর্চির ছেলে গেট থেকে দৌড়ে এলো; হাতে ফিরানির দুইটা রসিদ; বললো, ফিরানির দুইটা আমি লিখছিলাম">
@@ -1212,6 +1222,10 @@ export function BoyBrings({}: Story) {
 export function BoyScratches({}: Story) {
   const s = useScene(2, [600, 1800, 2400]);
   const k = s.k;
+  // the ছেলে scratches his 12 out
+  useEffect(() => {
+    if (k === 1) sfx.pencil(0.5);
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="field" label="বাবুর্চির ছেলে রসিদ দুইটার দিকে তাকিয়ে মাথা চুলকালো; বললো, বারো লিখছিলাম? দশ হইবো; বাবুর্চি তার দিকে তাকিয়ে আছেন">
@@ -1282,6 +1296,11 @@ export function DoiwalaGate({}: Story) {
 export function NotesCounted({}: Story) {
   const s = useScene(3, [600, 1800, 1800, 2400]);
   const k = s.k;
+  // the notes counted out, note by note
+  useEffect(() => {
+    if (k === 1) sfx.paper();
+    else if (k === 2) sfx.paper();
+  }, [k]);
   const notes = Math.min(k, 2) * 3 + 1;
   return (
     <StoryFrame scene={s}>

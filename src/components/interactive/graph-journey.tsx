@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, type KeyboardEvent as ReactKeyboardEvent, 
 
 import { Task, useGate } from "@/components/journey/journey";
 import { bn } from "./figure-kit";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 1.5 — গ্রাফ পেপার", told as a Journey.
 //
@@ -257,6 +258,12 @@ function Bot({
   name?: boolean;
   className?: string;
 }) {
+  const tile = `${at[0]},${at[1]}`;
+  const was = useRef<string | null>(null);
+  useEffect(() => {
+    if (was.current !== null && was.current !== tile) sfx.step();
+    was.current = tile;
+  }, [tile]);
   return (
     <g
       style={{ transform: `translate(${mx(at[0])}px, ${my(at[1])}px)` }}
@@ -471,6 +478,7 @@ export function DrivePad() {
     const next: Cell = [at[0] + STEP[d][0], at[1] + STEP[d][1]];
     if (!inRoom(next)) {
       setBump((b) => b + 1);
+      sfx.knock(1);
       setMsg("ধাম! দেয়াল। Room-এর বাইরে তো যাওয়া যায় না।");
       return;
     }
@@ -699,7 +707,10 @@ export function BuildOrder() {
     setTries((t) => t + 1);
     w.start(cells, () => {
       const end = cells[cells.length - 1];
-      if (walled) setOut({ kind: "wall", side: walled });
+      if (walled) {
+        sfx.knock(1);
+        setOut({ kind: "wall", side: walled });
+      }
       else if (same(end, BALL)) {
         setOut({ kind: "ball" });
         pass("ডানে ১০ ঘর, তারপর উপরে ১২ ঘর।");
@@ -777,6 +788,7 @@ export function PredictSwap() {
     if (guess !== null) return;
     setGuess(i);
     w.start(SWAPPED.cells, () => {
+      sfx.knock(1);
       setOver(true);
       pass(
         "সংখ্যা একই, জায়গা বদলালেই গড়বড়।");
@@ -1075,6 +1087,7 @@ export function PaperReveal() {
           disabled={!paper || drawn}
           onClick={() => {
             setDrawn(true);
+            sfx.scribble(Math.min(LINES.length, 24), 0.05, 0.1);
             pass("আরে, এটা তো সেই tiles-এর room!");
           }}
           className="inline-flex h-11 cursor-pointer items-center gap-2 rounded-full bg-cat-blue px-5 font-semibold text-white transition-all hover:-translate-y-px disabled:cursor-default disabled:opacity-40 disabled:hover:translate-y-0"
@@ -1152,6 +1165,7 @@ export function NameAxes() {
   const [y, setY] = useState(false);
 
   const draw = (which: "x" | "y") => {
+    sfx.pencil(0.6);
     const nx = x || which === "x";
     const ny = y || which === "y";
     setX(nx);

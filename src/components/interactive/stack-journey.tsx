@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
 import { Bubble, Card as CastCard, Person, Stage, StoryFrame } from "@/components/journey/cast";
 import { Task, useGate } from "@/components/journey/journey";
@@ -28,6 +28,7 @@ import {
   patchFrame,
   planPatch,
 } from "./patch-kit";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 8.5 — lens এর উপর lens, জায়গা গুণ", told as a
 // Journey in the author's Bangla-English. The plan is 08_journey_specs.md,
@@ -275,6 +276,7 @@ export function StackBet() {
   const seal = () => {
     if (bet === null || sealed) return;
     setSealed(true);
+    sfx.stamp();
     act.play(5, () => pass("বাজি সিল হলো। আগে প্রথম দুইটা lens।"));
   };
   const n = bet === null ? 0 : X1_CARDS[bet].n;
@@ -508,6 +510,10 @@ export function SlideAndTurn() {
   const go = () => {
     if (run.running || stage >= 3) return;
     const ns = stage + 1;
+    // the cards pushed sideways, the piece cut off, the square turned
+    if (stage === 0) sfx.slip();
+    else if (stage === 1) sfx.snip();
+    else sfx.whoosh(0.4);
     run.run(() => {
       setStage(ns);
       if (ns === 3) pass("হেলালে বা ঘুরালে জায়গা একই।");
@@ -745,6 +751,7 @@ export function YourStack() {
   const n = vals[tab];
   const paint = () => {
     if (pour.running || ok[tab]) return;
+    sfx.brush(0.6);
     const i = tab;
     setPainted(painted.map((v, j) => v || j === i));
     pour.play(1, () => {
@@ -1216,6 +1223,10 @@ export function SlantTurn({}: Story) {
 export function NasibSlips({}: Story) {
   const s = useScene(3, [600, 1800, 1800, 2400]);
   const k = s.k;
+  // নাসিব slips his pocket lens into the stack
+  useEffect(() => {
+    if (k === 2) sfx.lens();
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="field" label="লাইট ভাই পানি খেতে গেলেন; নাসিব পকেট থেকে একটা lens বের করলো, পাতে লেখা 1 1 1 1, পুকুরে যাওয়ার কথা ছিলো; নাসিব সেটা stack এ গুঁজে দিলো; বললো একটা খারাপ, বাকি তিনটা ভালো, ভালোরাই জিতবে">
@@ -1244,6 +1255,11 @@ export function NasibSlips({}: Story) {
 export function LadderPaint({}: Story) {
   const s = useScene(3, [600, 1600, 1800, 2400]);
   const k = s.k;
+  // রিনা paints the flower over the door
+  useEffect(() => {
+    if (k === 1) sfx.brush(0.6);
+    else if (k === 2) sfx.brush(0.6);
+  }, [k]);
   const [fx, fy] = onStage([6, 3.6]);
   return (
     <StoryFrame scene={s}>
@@ -1292,6 +1308,13 @@ export function DoorDrying({}: Story) {
 export function PaikarVan({}: Story) {
   const s = useScene(2, [600, 1800, 2200]);
   const k = s.k;
+  // the পাইকার's van pulls up
+  useEffect(() => {
+    if (k === 1) {
+      sfx.bell();
+      sfx.pedal();
+    }
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="field" label="ফিরানির দিন সকাল; গেটে পাইকারের ভ্যান থামলো; ভ্যানে দড়ি দিয়ে বাঁধা একটা হেলানো কাঠের বাক্স; নানা তাকিয়ে আছেন">

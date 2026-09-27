@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useState, type PointerEvent, type ReactNode } from "react";
+import { useEffect, useId, useState, type PointerEvent, type ReactNode } from "react";
 
 import { Tup } from "@/components/journey/box";
 import { Bubble, Person, Stage, StoryFrame } from "@/components/journey/cast";
@@ -8,6 +8,7 @@ import { Task, useGate } from "@/components/journey/journey";
 import { Choice, FADE, Nope, POP, Scene, Stepper, primaryBtn, quietBtn, usePlay, useScene, useSeed, type Fixtures } from "@/components/journey/kit";
 import { Arrow, Lit, Plane, makeFrame, type XY } from "@/components/journey/plane";
 import { Shiku } from "./arrow-journey";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 10.5 — বোরহানি, রসিদ যা দেখে না", told as a
 // Journey in the author's Bangla-English. The plan is 10_journey_specs.md,
@@ -266,6 +267,7 @@ export function HowManyBet() {
   const seal = () => {
     if (sealed || bet === null) return;
     setSealed(true);
+    sfx.stamp();
     act.play(3, () => pass("বাজি সিল হলো। আগে একটা দাম মিলাই।"));
   };
   return (
@@ -1094,6 +1096,10 @@ function St_Khata({ x, y, lines = 2 }: { x: number; y: number; lines?: number })
 export function NightBundle({}: Story) {
   const s = useScene(4, [600, 2000, 2600, 2600, 2600]);
   const k = s.k;
+  // the বাবুর্চি sets down his second bundle
+  useEffect(() => {
+    if (k === 1) sfx.thump();
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="night" label="রাতে বারান্দার চৌকিতে হারিকেন; বাবুর্চি আরেকটা বান্ডিল রাখলেন, চারটা রসিদ; মামা জিজ্ঞেস করলেন, বোরহানি বাসায় বানাবো, এক প্লেট কত; বাবুর্চি বললেন, প্লেট আলাদা বেচি না; নাসিব বললো, চারটা রসিদ তিনটা দাম, বের হবেই">
@@ -1193,6 +1199,10 @@ export function SomStacks({}: Story) {
 export function NastaPage({}: Story) {
   const s = useScene(3, [600, 1800, 2600, 2600]);
   const k = s.k;
+  // করিম's নাস্তা page
+  useEffect(() => {
+    if (k === 1) sfx.paper();
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="night" label="করিম বাবুর্চির ব্যাগ থেকে আরেকটা পাতা বের করলো; গায়ে হলুদের বিকালের নাশতা; পড়লো, এক পিঠা, দুই সিঙ্গারা, তিন কাপ চা, সত্তর টাকা; পরেরটায় সব ডবল">
@@ -1221,6 +1231,10 @@ export function NastaPage({}: Story) {
 export function RinaSlips({}: Story) {
   const s = useScene(2, [600, 1800, 2600]);
   const k = s.k;
+  // রিনা brings two receipts from the পাঞ্জাবি pocket
+  useEffect(() => {
+    if (k === 1) sfx.slip();
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="night" label="রিনা ঘর থেকে বের হয়ে এলো; হাতে ময়রার দুইটা রসিদ; বললো, মামার পাঞ্জাবির পকেটে ছিলো">
@@ -1277,6 +1291,10 @@ export function BorhaniEka({}: Story) {
 export function KhataClosed({}: Story) {
   const s = useScene(3, [600, 1800, 1800, 2000]);
   const k = s.k;
+  // the khata shut; the বাবুর্চি goes off with his bundle
+  useEffect(() => {
+    if (k === 1) sfx.book();
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="night" label="মামা হারিকেনের আলোয় খাতায় দাম লিখলেন; বাবুর্চি বান্ডিল বেঁধে গেট দিয়ে বের হলেন; কারেন্ট চলে এলো">
@@ -1304,6 +1322,13 @@ export function KhataClosed({}: Story) {
 export function VanwalaGate({}: Story) {
   const s = useScene(3, [600, 1800, 2400, 2400]);
   const k = s.k;
+  // the ভ্যানওয়ালা rings up to the gate
+  useEffect(() => {
+    if (k === 1) {
+      sfx.bell();
+      sfx.pedal();
+    }
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="field" label="যাওয়ার দিনের সকাল; গেটে ভ্যানওয়ালা, হাতে নিজের খাতা, বিয়ের সপ্তাহের ছয়টা ট্রিপ; বললো, সবগুলার ভাড়া একসাথে; মামা বললেন, তোর নিয়মটা কী">

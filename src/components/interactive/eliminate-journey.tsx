@@ -9,6 +9,7 @@ import { Choice, Draw, FADE, Nope, POP, Scene, Stepper, primaryBtn, usePlay, use
 import { Plane, makeFrame, type Frame, type XY } from "@/components/journey/plane";
 import { Shiku } from "./arrow-journey";
 import { LightBhai, Projector } from "./light-kit";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 10.3 — রসিদ দিয়ে রসিদ কাটা", told as a Journey in
 // the author's Bangla-English. The plan is 10_journey_specs.md, block 10.3.
@@ -224,6 +225,7 @@ export function ChairBet() {
   const seal = () => {
     if (bet === null || sealed) return;
     setSealed(true);
+    sfx.stamp();
     act.play(2, () => pass("বাজি সিল হলো। আগে কাগজটা বড় করি।"));
   };
   const f = X1F;
@@ -322,6 +324,7 @@ export function ZoomFails() {
   const play = usePlay(700);
   const zoom = () => {
     if (z >= 2 || play.running) return;
+    sfx.scribble(5, 0.12, 0.15);
     const next = z + 1;
     setZ(next);
     play.play(1, next === 2 ? () => pass("আঁকা দিয়ে কাছাকাছি আসে, ঠিকটা আসে না।") : undefined);

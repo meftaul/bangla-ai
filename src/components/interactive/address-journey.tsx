@@ -1,6 +1,6 @@
 "use client";
 
-import { type ReactNode } from "react";
+import { useEffect, type ReactNode } from "react";
 
 import { Bubble, Card as CastCard, Person, Stage, StoryFrame, Tree } from "@/components/journey/cast";
 import { Task, useGate } from "@/components/journey/journey";
@@ -10,6 +10,7 @@ import { Tup } from "@/components/journey/box";
 import { Shiku } from "./arrow-journey";
 import { L_Home, L_Place, L_Roads, L_Squares, L_Trail } from "./lanes-kit";
 import { LightBhai } from "./light-kit";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 9.4 — দুলাভাইয়ের ঠিকানা, এক গুণে card", told as a
 // Journey in the author's Bangla-English. The plan is 09_journey_specs.md,
@@ -246,6 +247,11 @@ function V_Walk({ f, pts, upto, faint = false }: { f: Frame; pts: XY[]; upto: nu
 function useCardWalk(ms = 220, e1: XY = [1, 0], e2: XY = [1, 1], key = "walked") {
   const [walked, setWalked] = useSeed<XY | null>(key, null);
   const play = usePlay(ms);
+  // Shiku's footstep on every ঘর walked
+  const { running, k } = play;
+  useEffect(() => {
+    if (running && k > 0) sfx.step();
+  }, [running, k]);
   const pts = walked ? walkOf(walked, e1, e2) : [O];
   const i = play.running ? play.k : pts.length - 1;
   const go = (c: XY, done?: () => void) => {
@@ -403,6 +409,7 @@ export function CardBet() {
   const seal = () => {
     if (bet === null || sealed) return;
     setSealed(true);
+    sfx.stamp();
     act.play(2, () => pass("বাজি সিল হলো। Shiku কে হাঁটাই।"));
   };
   return (
@@ -1089,6 +1096,11 @@ function St_Note({ x, y, text, w = 46 }: { x: number; y: number; text: string; w
 export function LeavingMorning({}: Story) {
   const s = useScene(4, [600, 1800, 2400, 2400, 2400]);
   const k = s.k;
+  // দুলাভাই unfolds his map; the card written out
+  useEffect(() => {
+    if (k === 1) sfx.paper();
+    else if (k === 4) sfx.pencil(0.4);
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="field" label="যাওয়ার দিন সকাল; বারান্দায় দুলাভাই, হাতে card, টেবিলে গ্রামের map; গেটে ভ্যানওয়ালা বললেন, ম্যাপ আমি বুঝি না, কয় ঘর সোজা, কয় ঘর বাঁধ ধইরা, লেইখা দেন; দুলাভাই বললেন, map এ যা, card এও তা, (5, 2)">
@@ -1115,6 +1127,10 @@ export function LeavingMorning({}: Story) {
 export function NasibLens({}: Story) {
   const s = useScene(3, [600, 1800, 2400, 2400]);
   const k = s.k;
+  // নাসিব holds up the light bhai's lens
+  useEffect(() => {
+    if (k === 1) sfx.lens();
+  }, [k]);
   const up = k >= 1;
   return (
     <StoryFrame scene={s}>
@@ -1310,6 +1326,11 @@ export function NanaPocket({}: Story) {
 export function CardStack({}: Story) {
   const s = useScene(3, [600, 1800, 1400, 1800]);
   const k = s.k;
+  // the cards stacked; one struck through
+  useEffect(() => {
+    if (k === 1) sfx.slip();
+    else if (k === 2) sfx.pencil(0.3);
+  }, [k]);
   const n = k >= 1 ? 6 : 3;
   return (
     <StoryFrame scene={s}>
@@ -1335,6 +1356,10 @@ export function CardStack({}: Story) {
 export function LastLens({}: Story) {
   const s = useScene(3, [600, 1800, 2200, 2400]);
   const k = s.k;
+  // the light bhai picks up the last lens
+  useEffect(() => {
+    if (k === 1) sfx.lens();
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="field" label="উঠানে লাইট ভাই lens গুলো কাপড়ে মুড়ে বাক্সে রাখছেন; শেষ lens টা ঝাপসা, প্রায় চ্যাপ্টা; রিনা দেয়ালের দিকে দেখালো, এইটা দিয়েই তার heart আঁকা; heart এর উপর মাছির ছোট দাগ">

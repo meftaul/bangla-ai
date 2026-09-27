@@ -1,6 +1,6 @@
 "use client";
 
-import { type PointerEvent, type ReactNode } from "react";
+import { useEffect, type PointerEvent, type ReactNode } from "react";
 
 import { Task, useGate } from "@/components/journey/journey";
 import {
@@ -25,6 +25,7 @@ import { Loop, Bubble, Card as CastCard, Chest, Person, Stage, Stall, StoryFrame
 import { Shiku, Trail } from "./arrow-journey";
 import { bn } from "./figure-kit";
 import { Prize, Samin } from "./treasure-journey";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 3.2 — Stretch, শরবতের recipe", told as a Journey.
 //
@@ -167,6 +168,7 @@ export function MoreGlasses() {
 
   const mix = () => {
     setMixed(true);
+    sfx.pour(1.1);
     pass("দুইবার যোগ মানে প্রতিটা ঘর 2 গুণ।");
   };
 
@@ -387,6 +389,10 @@ const s2y = (n: number) => S2_OY - n * S2_UY;
 export function RecipeOnPaper() {
   const s = useScene(4, [600, 1500, 1400, 1500]);
   const k = s.k;
+  useEffect(() => {
+    if (k === 2) sfx.scribble(2, 0.4, 0.35);
+    else if (k === 3) sfx.pencil(0.12);
+  }, [k]);
 
   return (
     <StoryFrame scene={s}>
@@ -847,7 +853,9 @@ const polar = (r: number, deg: number): [number, number] => [70 + r * Math.sin((
 function Knob({ k, onTurn }: { k: number; onTurn: (k: number) => void }) {
   const set = (n: number) => {
     const c = Math.min(K_MAX, Math.max(K_MIN, Math.round(n * 2) / 2));
-    if (c !== k) onTurn(c);
+    if (c === k) return;
+    sfx.knob();
+    onTurn(c);
   };
   const follow = (e: PointerEvent<SVGSVGElement>) => {
     const r = e.currentTarget.getBoundingClientRect();

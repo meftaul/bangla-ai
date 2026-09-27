@@ -20,6 +20,7 @@ import {
   usePlay,
   type Look,
 } from "@/components/journey/kit";
+import { sfx } from "@/components/journey/sfx";
 import { bn } from "./figure-kit";
 import {
   BIRD_COLS,
@@ -328,13 +329,23 @@ export function CallFriend() {
   const drawn = useCountUp(DRAWING.length, 280);
   const [call, setCall] = useState<Call>("idle");
 
+  // the pencil scratches as each stroke of the bird lands
+  useEffect(() => {
+    if (drawn > 0) sfx.pencil(0.22);
+  }, [drawn]);
+
   useEffect(() => {
     if (call !== "ringing") return;
+    const stop = sfx.ring(2);
     const t = setTimeout(() => {
       setCall("on");
+      sfx.click();
       pass("লাইন পেলেন, এবার পাঠাতে হবে কথায়।");
     }, 1800);
-    return () => clearTimeout(t);
+    return () => {
+      clearTimeout(t);
+      stop();
+    };
   }, [call, pass]);
 
   return (
@@ -393,6 +404,9 @@ export function JustWords() {
   const choose = (id: string) => {
     setPick(id);
     setN((k) => k + 1);
+    // Rafi's pencil: one sweep for the bird in his head, three rings for the guesses
+    if (id === "bird") sfx.pencil(0.9);
+    else sfx.scribble(3, 0.25, 0.3);
     const t = tried.includes(id) ? tried : [...tried, id];
     setTried(t);
     if (t.length === SAY.length) pass("মুখের বর্ণনায় কাজ হচ্ছে না।");
@@ -511,6 +525,7 @@ export function RuleGrid() {
             type="button"
             onClick={() => {
               setRuled(true);
+              sfx.scribble(LINES.length, 0.07, 0.12);
               pass("দুই খাতায় ৬৪টা ঘর, একই জায়গায়।");
             }}
             className={primaryBtn}
@@ -687,6 +702,11 @@ export function ReadOut() {
   const row = rowOf(Math.max(0, said - 1));
   const heard = TONES.slice(row * N, said);
 
+  // Rafi's pencil shades each cell as he hears its number
+  useEffect(() => {
+    if (said > 0) sfx.pencil(0.12);
+  }, [said]);
+
   return (
     <>
       <Pages>
@@ -747,6 +767,10 @@ export function WrongOrder() {
   const fill = usePlay(30);
   const over = guess !== null && fill.k === ALL;
 
+  useEffect(() => {
+    if (fill.k > 0) sfx.pencil(0.12);
+  }, [fill.k]);
+
   const choose = (i: number) => {
     if (guess !== null) return;
     setGuess(i);
@@ -796,6 +820,7 @@ export function PixelHunt() {
   const found = seen.includes(DARKEST);
 
   const tap = (i: number) => {
+    sfx.tap();
     setAt(i);
     if (!seen.includes(i)) setSeen([...seen, i]);
     if (i === DARKEST) pass("সবচেয়ে কালো pixel, সবচেয়ে ছোট সংখ্যা।");
@@ -984,7 +1009,10 @@ export function EditPicture() {
               type="button"
               aria-label={`row ${Math.floor(i / 3) + 1}, column ${(i % 3) + 1}, value ${v}`}
               aria-pressed={i === sel}
-              onClick={() => setSel(i)}
+              onClick={() => {
+                sfx.tap();
+                setSel(i);
+              }}
               className={`grid aspect-square cursor-pointer place-items-center rounded-md font-mono text-sm font-semibold transition-[background-color,color,box-shadow] duration-150 ${
                 i === sel ? "ring-4 ring-cat-amber" : "ring-1 ring-foreground/15"
               }`}
@@ -1032,6 +1060,8 @@ export function YouDraw() {
   const paint = (i: number) => {
     const v = erase ? P_BG : P_INK;
     if (px[i] === v) return;
+    if (erase) sfx.erase();
+    else sfx.pencil(0.15);
     // functional update: a fast drag can land two cells before the next render
     setPx((p) => p.map((old, j) => (j === i ? v : old)));
     if (!erase && lit + 1 >= P_GOAL) pass("ছবিটা আসলে ১৪৪টা সংখ্যার list।");
@@ -1086,7 +1116,14 @@ export function YouDraw() {
         <button type="button" aria-pressed={nums} onClick={() => setNums((s) => !s)} className={pill(nums)}>
           {nums ? "সংখ্যা লুকান" : "সংখ্যা দেখান"}
         </button>
-        <button type="button" onClick={() => setPx(P_BLANK)} className={pill(false)}>
+        <button
+          type="button"
+          onClick={() => {
+            sfx.erase(0.5);
+            setPx(P_BLANK);
+          }}
+          className={pill(false)}
+        >
           ↺ সব মুছুন
         </button>
       </div>
@@ -1203,6 +1240,12 @@ export function BirdNumbers() {
 
 function FinaleReel({ onReplay }: { onReplay: () => void }) {
   const stage = useCountUp(4, 1300);
+  // ruling, then shading, then the numbers popping on
+  useEffect(() => {
+    if (stage === 1) sfx.scribble(LINES.length, 0.07, 0.12);
+    else if (stage === 2) sfx.scribble(8, 0.1, 0.12);
+    else if (stage === 3) sfx.pop();
+  }, [stage]);
   return (
     <>
       <div className="mx-auto my-5 w-full max-w-[16rem]">

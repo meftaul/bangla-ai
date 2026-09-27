@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useState, type ReactNode } from "react";
+import { useEffect, useId, useState, type ReactNode } from "react";
 
 import { Tup } from "@/components/journey/box";
 import { Bubble, Card, Person, Stage, StoryFrame } from "@/components/journey/cast";
@@ -8,6 +8,7 @@ import { Task, useGate } from "@/components/journey/journey";
 import { Choice, FADE, LOOK, Nope, POP, Scene, primaryBtn, quietBtn, usePlay, useScene, useSeed, type Fixtures, type Look } from "@/components/journey/kit";
 import { Arrow, Plane, Star, makeFrame, same, type Frame, type XY } from "@/components/journey/plane";
 import { ID, LensCard, LightBhai, LightGrid, LitRegion, Post, Projector, StageBeam, WALL_SLOTS, WallBed, apply, byCols, partway, pathOf, projectorLens, useLensRun, type Cols, type Move } from "./light-kit";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 7.4 — হলুদ আগে না গোসল আগে, the order", told as a
 // Journey in the author's Bangla-English. The plan is 07_journey_specs.md,
@@ -350,6 +351,7 @@ export function OrderBet() {
   const seal = () => {
     if (bet === null || sealed) return;
     setSealed(true);
+    sfx.stamp();
     act.play(3, () => pass("বাজি সিল হলো। আগে হলুদ আর গোসল।"));
   };
   const end = apply(DS, FLOWER);
@@ -1264,6 +1266,11 @@ export function HoludNight({}: Story) {
 export function ChalkOrder({}: Story) {
   const s = useScene(3, [600, 1600, 1600, 2000]);
   const k = s.k;
+  // আপা chalks the order on the stand
+  useEffect(() => {
+    if (k === 1) sfx.chalkLines(3, 0.25, 0.2);
+    else if (k === 2) sfx.chalkLines(3, 0.25, 0.2);
+  }, [k]);
   const [lx, ly] = projectorLens(PJ[0], PJ[1]);
   return (
     <StoryFrame scene={s}>
@@ -1332,6 +1339,11 @@ export function SaminApp({}: Story) {
 export function NasibBox({}: Story) {
   const s = useScene(3, [600, 1800, 1800, 2400]);
   const k = s.k;
+  // নাসিব takes two lenses out of the box
+  useEffect(() => {
+    if (k === 1) sfx.lens();
+    else if (k === 2) sfx.lens();
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="night" label="নাসিব ডেকোরেটরের বাক্স থেকে আরো দুইটা lens বের করলো, একটা ঘোরায়, একটা দ্বিগুণ করে; বললো এই দুইটা দিয়ে দেখাই, আগে পরে একই হবে">

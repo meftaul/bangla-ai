@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import {
   Choice,
@@ -49,6 +49,7 @@ import {
   type Flat,
   type Story,
 } from "./rooftop-parts";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 5.6 — The rooftop flat's rent, a new basis", told
 // as a Journey in the author's Bangla-English, 9 steps (the pathshala-journey
@@ -131,6 +132,7 @@ export function JilapiBet() {
 
   const seal = () => {
     setSealed(true);
+    sfx.stamp();
     pass("বাজি সিল হলো। জিলাপি এখন দানে।");
   };
 
@@ -227,6 +229,10 @@ export function EightFlats() {
 export function ChachaTries({}: Story) {
   const s = useScene(3, [700, 2400, 2200]);
   const k = s.k;
+  // চাচা licks his pencil and prices by beds
+  useEffect(() => {
+    if (k === 1) sfx.scribble(3, 0.3, 0.25);
+  }, [k]);
 
   return (
     <StoryFrame scene={s}>
@@ -397,6 +403,11 @@ export function SlantClimb() {
 export function FahimDraws({}: Story) {
   const s = useScene(4, [700, 1600, 1600, 2400, 2400]);
   const k = s.k;
+  // ফাহিম draws the two arrows
+  useEffect(() => {
+    if (k === 1) sfx.pencil(0.5);
+    else if (k === 2) sfx.pencil(0.5);
+  }, [k]);
   const px = (x: number) => 156 + x * 17;
   const py = (y: number) => 32 - y * 17;
 
@@ -1210,6 +1221,10 @@ function S7Tenant({ x, y }: { x: number; y: number }) {
 export function TenantStairs({}: Story) {
   const s = useScene(3, [700, 2200, 2400]);
   const k = s.k;
+  // footsteps coming up the stairs
+  useEffect(() => {
+    if (k === 1) for (let i = 0; i < 5; i++) setTimeout(() => sfx.footstep(), i * 300);
+  }, [k]);
 
   return (
     <StoryFrame scene={s}>
@@ -1466,6 +1481,10 @@ const CW_Y = 30;
 export function ChachaWrites() {
   const s = useScene(2, [700, 2200]);
   const k = s.k;
+  // চাচা writes it into his khata
+  useEffect(() => {
+    if (k === 1) sfx.scribble(3, 0.3, 0.25);
+  }, [k]);
   const row = (i: number) => CW_Y + 14 + i * 15;
 
   return (
@@ -1871,6 +1890,10 @@ export function KhataTwice() {
 export function NasibNotDone() {
   const s = useScene(3, [700, 1800, 2400]);
   const k = s.k;
+  // নাসিব turns the khata's page
+  useEffect(() => {
+    if (k === 1) sfx.paper();
+  }, [k]);
 
   return (
     <StoryFrame scene={s}>

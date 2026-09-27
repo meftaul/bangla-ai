@@ -7,6 +7,7 @@ import { BoxRun } from "@/components/journey/box";
 import { Task, useGate } from "@/components/journey/journey";
 import { Choice, Draw, FADE, Nope, POP, Scene, Stepper, Ticks, pill, usePlay, useScene, useSeed, useSeeded, useTween, type Fixtures } from "@/components/journey/kit";
 import { dot, num, tupN } from "./haat-journey";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 4.9 — The same box, inside ChatGPT", told as a Journey.
 //
@@ -228,6 +229,7 @@ export function BoxBet() {
 
   const seal = (i: number) => {
     setBet(i);
+    sfx.stamp();
     pass("বাজি ধরা হয়ে গেলো। শেষে মিলিয়ে দেখবো।");
   };
 
@@ -1192,6 +1194,10 @@ function A_Shed({ x, y }: { x: number; y: number }) {
 export function GoyalGhor({}: Story) {
   const s = useScene(3, [600, 2000, 1800]);
   const k = s.k;
+  // মামার গরু in the shed, off its খড়
+  useEffect(() => {
+    if (k === 1) sfx.moo();
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="night" label="রাতে মামার গোয়ালঘর: গরুটা বসে আছে, সামনে খড়, ছোঁয়া হয় নাই; ফোনে ফাহিম সোমকে বলে; সোম একটা বাক্য বলে, ওটা কে?">
@@ -1236,6 +1242,13 @@ export function GoyalGhor({}: Story) {
 export function KhataCard({}: Story) {
   const s = useScene(3, [600, 2200, 1600]);
   const k = s.k;
+  // the khata's pages turned back to 4.1
+  useEffect(() => {
+    if (k === 1) {
+      sfx.paper();
+      setTimeout(() => sfx.paper(), 450);
+    }
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="room" label="ঘরে ফাহিম; ফোনে সোম বলে neuron সে গরুর হাটে দেখেছে; ফাহিম খাতা উল্টিয়ে 4.1 এর পাতায় দালালের card পায়">
@@ -1312,6 +1325,12 @@ const B10_PIECES = [
 export function BusHome({}: Story) {
   const s = useScene(4, [600, 1600, 2200, 2000]);
   const k = s.k;
+  // the bus pulls off; the message to সোম; the formula written in the khata
+  useEffect(() => {
+    if (k === 1) sfx.rumble(1.6);
+    else if (k === 2) sfx.chime();
+    else if (k === 3) sfx.scribble(5, 0.25, 0.2);
+  }, [k]);
   const bx = k >= 1 ? 12 : -170;
   return (
     <StoryFrame scene={s}>
@@ -1432,6 +1451,11 @@ function A_Leaves() {
 export function GoatLeaves({}: Story) {
   const s = useScene(4, [600, 1600, 1600, 1400]);
   const k = s.k;
+  // the jackfruit leaves set down in front of the goat; the goat turns away
+  useEffect(() => {
+    if (k === 2) sfx.paper();
+    else if (k === 3) sfx.bleat();
+  }, [k]);
   const mx = k === 1 ? 168 : 44;
   return (
     <StoryFrame scene={s}>
@@ -1501,6 +1525,11 @@ function A_Cat({ walking, run, ms }: { walking: boolean; run: string; ms: number
 export function CatKitchen({}: Story) {
   const s = useScene(2, [600, 1800]);
   const k = s.k;
+  // the cat pads in at night; by morning the bowl is licked clean
+  useEffect(() => {
+    if (k === 1) sfx.meow();
+    else if (k === 2) sfx.cup();
+  }, [k]);
   const night = k < 2;
   return (
     <StoryFrame scene={s}>

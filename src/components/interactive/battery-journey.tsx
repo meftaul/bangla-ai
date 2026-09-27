@@ -1,6 +1,6 @@
 "use client";
 
-import { type ReactNode } from "react";
+import { useEffect, type ReactNode } from "react";
 
 import { Task, useGate } from "@/components/journey/journey";
 import { Draw, FADE, LOOK, Nope, POP, Scene, Stepper, Ticks, pill, primaryBtn, usePlay, useScene, useSeed, useTween, type Fixtures, type Look } from "@/components/journey/kit";
@@ -8,6 +8,7 @@ import { Bubble, Person as CastPerson, Robot, Stage, StoryFrame } from "@/compon
 import { Arrow, Dot, Label, Plane, Star, clamp, makeFrame, same, sg, tup, type Frame, type Tone, type XY } from "@/components/journey/plane";
 import { Shiku } from "./arrow-journey";
 import { ButtonRemote, Chains, Chalk, Door, Handset, Recipe, SHELF, land, type Key } from "./remote-journey";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 5.1b — The weak battery, working out the presses",
 // told as a Journey.
@@ -179,6 +180,10 @@ function Tiles() {
 export function NightMarks({}: Story) {
   const s = useScene(3, [600, 2200, 1800, 2400]);
   const k = s.k;
+  // Ammu chalks the fridge's mark
+  useEffect(() => {
+    if (k === 1) sfx.chalk(0.4);
+  }, [k]);
 
   return (
     <StoryFrame scene={s}>
@@ -290,6 +295,11 @@ const X1_SAY = [
 export function TwoMoreMarks() {
   const s = useScene(3, [600, 1800, 1800]);
   const k = s.k;
+  // the sofa's mark chalked, then the TV's
+  useEffect(() => {
+    if (k === 1) sfx.chalk(0.4);
+    else if (k === 2) sfx.chalk(0.4);
+  }, [k]);
 
   return (
     <Scene
@@ -340,6 +350,11 @@ const S2_HOPS = [0, 1, 2].map((i) => [S2_AT(i, 2 * i), S2_AT(i + 1, 2 * i + 2)] 
 export function KhataFloor({}: Story) {
   const s = useScene(3, [600, 1600, 1800, 2200]);
   const k = s.k;
+  // the floor ruled in the khata, then Shiku's hops pencilled across it
+  useEffect(() => {
+    if (k === 1) sfx.scribble(8, 0.08, 0.1);
+    else if (k === 2) sfx.scribble(3, 0.3, 0.15);
+  }, [k]);
   const [ex, ey] = S2_AT(3, 6);
 
   return (
@@ -1013,6 +1028,10 @@ export function TwinSlots() {
 export function SofaChalk({}: Story) {
   const s = useScene(2, [600, 2000, 1800]);
   const k = s.k;
+  // Ammu walks in and chalks the sofa's mark
+  useEffect(() => {
+    if (k === 1) setTimeout(() => sfx.chalk(0.4), 900);
+  }, [k]);
 
   return (
     <StoryFrame scene={s}>
@@ -1221,6 +1240,10 @@ export function BookLine() {
 export function NasibKhata({}: Story) {
   const s = useScene(2, [600, 2400]);
   const k = s.k;
+  // নাসিব works the TV's sum in the khata
+  useEffect(() => {
+    if (k === 1) sfx.scribble(4, 0.25, 0.2);
+  }, [k]);
 
   return (
     <StoryFrame scene={s}>

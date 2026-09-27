@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useState, type KeyboardEvent, type ReactNode } from "react";
+import { useEffect, useId, useState, type KeyboardEvent, type ReactNode } from "react";
 
 import { Bubble, Person, Stage, StoryFrame } from "@/components/journey/cast";
 import { Task, useGate } from "@/components/journey/journey";
@@ -9,6 +9,7 @@ import { Arrow, Plane, makeFrame, type Drag, type Frame, type XY } from "@/compo
 import { Tup } from "@/components/journey/box";
 import { GOOD_LENS, LightBhai, Post, Projector, STAGE_WALL_F, StageBeam, StageWall, WallBed, apply, det, heartPath, projectorLens, type Cols } from "./light-kit";
 import { Kouta, PK, PaintFill, StageBrush, StageKouta, polyArea } from "./patch-kit";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 10.4 — কৌটা গুনে stencil এর ঠিকানা", told as a
 // Journey in the author's Bangla-English. The plan is 10_journey_specs.md,
@@ -389,6 +390,7 @@ export function StencilBet() {
   const seal = () => {
     if (bet === null || sealed) return;
     setSealed(true);
+    sfx.stamp();
     act.play(3, () => pass("বাজি সিল হলো। আগে একটা ঠিকানা মাপি।"));
   };
   return (
@@ -654,9 +656,14 @@ export function CountKouta() {
   const choose = (i: number) => {
     if (guess !== null) return;
     setGuess(i);
+    // the first কৌটা opened and poured into column 1's patch
+    sfx.lid();
+    setTimeout(() => sfx.pour(0.8), 200);
     run.play(3, () => setStage(1));
   };
   const pourB = () => {
+    sfx.lid();
+    setTimeout(() => sfx.pour(1.2), 200);
     setStage(2);
     run.play(6, () => setStage(3));
   };
@@ -930,6 +937,8 @@ export function YourKouta() {
   const t = shot === null ? 0 : run.running ? run.k / N : 1;
   const pourIt = (i: number) => {
     if (pour.running) return;
+    sfx.lid();
+    setTimeout(() => sfx.pour(1.2), 200);
     setPouring(i);
     pour.play(i === 0 ? 6 : 3, () => {
       setPoured(poured.map((p, j) => p || j === i));
@@ -1326,6 +1335,10 @@ function St_Baburchi({ x, y = 150, facing = 1, arm = "down" }: { x: number; y?: 
 export function DoorCross({}: Story) {
   const s = useScene(3, [600, 2000, 2000, 2400]);
   const k = s.k;
+  // রিনা chalks a cross over the door
+  useEffect(() => {
+    if (k === 3) sfx.chalkLines(2, 0.3, 0.2);
+  }, [k]);
   const [bx] = onStage(B);
   return (
     <StoryFrame scene={s}>
@@ -1378,6 +1391,11 @@ export function FourSpots({}: Story) {
 export function KarimChalk({}: Story) {
   const s = useScene(3, [600, 1800, 1800, 2400]);
   const k = s.k;
+  // করিম chalks the patch's two sides
+  useEffect(() => {
+    if (k === 1) sfx.chalk(0.4);
+    else if (k === 2) sfx.chalk(0.4);
+  }, [k]);
   const o = onStage([0, 0]);
   const c1 = onStage(C1);
   const b = onStage(B);
@@ -1431,6 +1449,14 @@ export function SaminPhone({}: Story) {
 export function RinaCuts({}: Story) {
   const s = useScene(3, [600, 1800, 1800, 2200]);
   const k = s.k;
+  // রিনা draws the heart on the card and cuts it out
+  useEffect(() => {
+    if (k === 1) sfx.pencil(0.5);
+    else if (k === 2) {
+      sfx.snip();
+      setTimeout(() => sfx.snip(), 250);
+    }
+  }, [k]);
   const [lx, ly] = projectorLens(PJ[0], PJ[1]);
   return (
     <StoryFrame scene={s}>
@@ -1465,6 +1491,10 @@ export function RinaCuts({}: Story) {
 export function KarimCross({}: Story) {
   const s = useScene(2, [600, 1800, 2200]);
   const k = s.k;
+  // করিম chalks his own cross
+  useEffect(() => {
+    if (k === 2) sfx.chalkLines(2, 0.3, 0.2);
+  }, [k]);
   const [kx] = onStage(B7);
   return (
     <StoryFrame scene={s}>
@@ -1487,6 +1517,10 @@ export function KarimCross({}: Story) {
 export function NextLens({}: Story) {
   const s = useScene(2, [600, 2000, 2000]);
   const k = s.k;
+  // the light bhai holds up the next wedding's lens
+  useEffect(() => {
+    if (k === 1) sfx.lens();
+  }, [k]);
   const [dx] = onStage(B8);
   return (
     <StoryFrame scene={s}>
@@ -1509,6 +1543,14 @@ export function NextLens({}: Story) {
 export function MagribVan({}: Story) {
   const s = useScene(3, [600, 1800, 2000, 2200]);
   const k = s.k;
+  // the machine switched off, packed on the van, and away
+  useEffect(() => {
+    if (k === 1) sfx.click();
+    else if (k === 3) {
+      sfx.bell();
+      sfx.pedal();
+    }
+  }, [k]);
   const [hx, hy] = onStage(B);
   return (
     <StoryFrame scene={s}>

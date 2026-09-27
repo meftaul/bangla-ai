@@ -1,11 +1,12 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
 import { Tup } from "@/components/journey/box";
 import { Task, useGate } from "@/components/journey/journey";
 import { Choice, Draw, FADE, GROW, Nope, POP, Scene, Stepper, Ticks, primaryBtn, usePlay, useScene, useSeed, useTween, type Fixtures, type Look } from "@/components/journey/kit";
 import { Bubble, Card as CastCard, Person, Stage, Stall, StoryFrame } from "@/components/journey/cast";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 4.0 — নাসিবের নিয়ম, ঘরে ঘরে গুণ কেন", told as a Journey.
 //
@@ -345,7 +346,10 @@ export function RuleBet() {
   const choose = (i: number) => {
     if (bet !== null) return;
     setBet(i);
-    play.play(6, () => pass("বাজি সিল হলো। শেষে মিলিয়ে দেখবো।"));
+    play.play(6, () => {
+      sfx.stamp();
+      pass("বাজি সিল হলো। শেষে মিলিয়ে দেখবো।");
+    });
   };
   const k = bet === null ? 0 : play.running ? play.k : 6;
   const through = bet === null ? 0 : X1_THROUGH[bet];
@@ -606,6 +610,10 @@ export function OneCardOut() {
 export function SaminAdds({}: Story) {
   const s = useScene(3, [600, 1600, 2400]);
   const k = s.k;
+  // his sum chalked up on the board
+  useEffect(() => {
+    if (k === 2) sfx.chalkLines(4, 0.2, 0.15);
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="room" label="সামিন বোর্ডের কাছে গিয়ে চারটা number যোগ লিখলো, মামার দুইটা আর ছবির দুইটা।">
@@ -761,6 +769,11 @@ export function SameOrder() {
 export function SaminDivides({}: Story) {
   const s = useScene(3, [600, 1600, 2400]);
   const k = s.k;
+  // the sum rubbed out with the duster, the division chalked in
+  useEffect(() => {
+    if (k === 1) sfx.erase(0.5);
+    else if (k === 2) sfx.chalkLines(4, 0.2, 0.15);
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="room" label="সামিন যোগটা মুছে ভাগ লিখলো: ছবির drama ভাগ মামার drama, ছবির comedy ভাগ মামার comedy।">
@@ -1075,6 +1088,10 @@ export function AddVsTimes() {
 export function SaminWires({}: Story) {
   const s = useScene(3, [600, 1500, 2400]);
   const k = s.k;
+  // the chalk run across the two cards
+  useEffect(() => {
+    if (k === 1) sfx.chalkLines(2, 0.35, 0.3);
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="room" label="বোর্ডে মামার card আর ছবির card পাশাপাশি। সামিন চক দিয়ে আড়াআড়ি দাগ টানলো।">
@@ -1302,6 +1319,13 @@ export function NonsensePair() {
 export function BhanuBox({}: Story) {
   const s = useScene(3, [600, 1500, 2200]);
   const k = s.k;
+  // রিনা rummages through the box of films
+  useEffect(() => {
+    if (k === 1) {
+      sfx.paper();
+      sfx.tiles(5);
+    }
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="room" label="রিনা বাক্স থেকে একটা পুরানো ছবি বের করলো, ভানু পেল লটারি, card (0, 6)।">
@@ -1604,6 +1628,11 @@ export function TwentyTwoAgain() {
 export function LongBoard({}: Story) {
   const s = useScene(3, [600, 1500, 2400]);
   const k = s.k;
+  // the rule chalked out in words, running off the edge
+  useEffect(() => {
+    if (k === 1) sfx.chalkLines(6, 0.18, 0.15);
+    else if (k === 2) sfx.chalkLines(4, 0.18, 0.15);
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="room" label="নাসিব বোর্ডে পুরা rule কথায় লিখলো, লাইনটা বোর্ড ছাড়িয়ে গেলো। সামিন জিজ্ঞেস করলো slot দশটা হলে কী হবে।">

@@ -18,6 +18,7 @@ import {
   type Fixtures,
 } from "@/components/journey/kit";
 import { bn } from "./figure-kit";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 1.2 — বাইনারি", told as a Journey.
 //
@@ -376,6 +377,7 @@ export function BuildRow() {
   const lit = places.filter((w) => n & w);
 
   const toggle = (w: number) => {
+    sfx.click();
     const v = n ^ w;
     setN(v);
     if (target !== undefined && v === target) {
@@ -462,6 +464,10 @@ export function OneWire() {
   const change = (x: number) => {
     setV(x);
     const z = zoneOf(x);
+    if (z !== zone) {
+      if (z === "mid") sfx.staticNoise(0.25);
+      else sfx.click();
+    }
     if (!seen.includes(z)) {
       const s = [...seen, z];
       setSeen(s);
@@ -562,6 +568,7 @@ export function EightWires() {
   const [n, setN] = useSeed("n", 0);
 
   const toggle = (w: number) => {
+    sfx.click();
     const v = n ^ w;
     setN(v);
     if (v === 255) pass("আটটা হ্যাঁ-না মানে ২৫৬টা ধাপ।");

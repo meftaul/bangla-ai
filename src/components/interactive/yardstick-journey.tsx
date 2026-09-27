@@ -7,6 +7,7 @@ import { Task, useGate } from "@/components/journey/journey";
 import { Choice, Draw, FADE, Laptop, Nope, Out, POP, Scene, Speech, Ticks, pill, predictLook, primaryBtn, useScene, useSeed, useTween, type Fixtures } from "@/components/journey/kit";
 import { INK, INK_SOFT, sg } from "@/components/journey/plane";
 import { bn } from "./figure-kit";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 3.7 — গ্রামের ফাঁদ, ডাক্তার আপার stall", told as a Journey.
 //
@@ -346,6 +347,7 @@ export function KgVsGram() {
 
   const run = (i: number) => {
     if (ran.includes(i)) return;
+    sfx.typing(0.6);
     const next = [...ran, i];
     setRan(next);
     if (next.length === 2) pass("বদলেছে শুধু ওজনের unit, আর twin।");
@@ -659,6 +661,10 @@ function S2Balance({ x, loaded }: { x: number; loaded: boolean }) {
 export function WaysToWeigh({}: Story) {
   const s = useScene(5, [600, 1700, 1800, 1500, 1300]);
   const k = s.k;
+  useEffect(() => {
+    if (k === 1) sfx.thump();
+    else if (k === 4) sfx.knob();
+  }, [k]);
 
   return (
     <StoryFrame scene={s}>
@@ -700,6 +706,7 @@ export function UnitDial() {
   const dC = rawD(C, k);
 
   const turn = (i: number) => {
+    sfx.knob();
     setU(i);
     if (seen.includes(i)) return;
     const next = [...seen, i];
@@ -1301,6 +1308,7 @@ export function SpreadMachine() {
   const all = stages[1] === 5;
 
   const step = () => {
+    sfx.pencil(0.3);
     const next = col === 0 ? [st + 1, 0] : [5, st + 1];
     setStages(next);
     if (next[1] === 5) pass("scale : উচ্চতায় 10 cm, ওজনে 12 kg।");
@@ -1685,10 +1693,13 @@ export function Yardstick() {
   const allConv = conv.length === 4;
 
   const convert = (key: string) => {
-    if (!conv.includes(key)) setConv([...conv, key]);
+    if (conv.includes(key)) return;
+    sfx.pencil(0.25);
+    setConv([...conv, key]);
   };
   const measure = () => {
     setMeasured(true);
+    sfx.tape(0.5);
     pass("scale এ মাপলে twin C।");
   };
 
@@ -1894,6 +1905,7 @@ export function UnitsCancel() {
   const fmtU = (n: number) => (n >= 1000 ? Math.round(n).toLocaleString("en-US") : n.toFixed(UNITS[u].dec));
 
   const turn = (i: number) => {
+    sfx.knob();
     setU(i);
     if (seen.includes(i)) return;
     const next = [...seen, i];
@@ -2749,6 +2761,7 @@ export function TwoNormalises() {
       return;
     }
     setMiss(null);
+    sfx.slip();
     setDone(done + 1);
     if (done + 1 === SORT_CARDS.length) pass("Row-এ মোছে length, column-এ মোছে unit।");
   };

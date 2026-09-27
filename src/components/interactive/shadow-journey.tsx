@@ -10,6 +10,7 @@ import { Arrow, Label, Plane, Star, clamp, makeFrame, snap, type Frame, type XY 
 import { Shiku, Trail, route } from "./arrow-journey";
 import { DotBox, dot, tupN } from "./haat-journey";
 import { bn } from "./figure-kit";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for two journeys on the same ছাদ, "Math for AI 4.3 — দুপুরের ছায়া"
 // and "Math for AI 4.4 — দুই হিসাব কেন মেলে".
@@ -161,6 +162,7 @@ export function TwoRecipes() {
 
   const seal = (i: number) => {
     setBet(i);
+    sfx.stamp();
     pass("বাজি সিল হলো। শুরু লাঠির ছায়া দিয়ে।");
   };
 
@@ -492,6 +494,10 @@ export function TwoTests() {
   const over = k >= 4;
 
   const step = () => {
+    // the tape on v, the tape on w, the protractor set down, the sum worked
+    if (k < 2) sfx.tape(0.45);
+    else if (k === 2) sfx.tap();
+    else sfx.pencil(0.3);
     setK(k + 1);
     if (k + 1 === 4 && round === 1) pass("দুই হিসাব, দুইবারই একই উত্তর।");
   };
@@ -865,6 +871,7 @@ export function AlwaysBet() {
 
   const seal = (i: number) => {
     setBet(i);
+    sfx.stamp();
     pass("বাজি সিল হলো। খোঁজ শুরু axis-এর ছায়ায়।");
   };
 

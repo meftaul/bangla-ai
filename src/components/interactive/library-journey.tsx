@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect } from "react";
+
 import type { ReactNode } from "react";
 
 import { Bubble, Building, Card as CastCard, Person, Stage, StoryFrame, Tree } from "@/components/journey/cast";
@@ -7,6 +9,7 @@ import { Task, useGate } from "@/components/journey/journey";
 import { Choice, Draw, FADE, LOOK, Nope, POP, Scene, Ticks, pill, usePlay, useScene, useSeed, useTween, type Fixtures, type Look } from "@/components/journey/kit";
 import { DotBox, dot } from "./haat-journey";
 import { Tup } from "@/components/journey/box";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 4.7 — The library search, the box or cosine"
 // (04f_library_search), in the author's Banglish. 4.8 and 4.9 have their own
@@ -205,6 +208,7 @@ export function TwoMachines() {
 
   const seal = (i: number) => {
     setBet(i);
+    sfx.stamp();
     pass("বাজি ধরা হলো। শেষে মিলিয়ে দেখবো।");
   };
 
@@ -1112,6 +1116,11 @@ function L_Apu({ x, mood = "plain", arm = "down" }: { x: number; mood?: "plain" 
 export function LibraryEvening({}: Story) {
   const s = useScene(4, [600, 2400, 2200, 1500]);
   const k = s.k;
+  // a book comes off the shelf; the query typed in
+  useEffect(() => {
+    if (k === 2) sfx.book();
+    else if (k === 4) sfx.typing(0.5);
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="room" label="সন্ধ্যায় লাইব্রেরি; আপু নতুন computer এর দুইটা machine দেখান, একটা বই হয়ে যায় (মাছ, নৌকা, ধান) list, ফাহিম দুইটাতেই মাছ লিখে search দেয়">
@@ -1843,6 +1852,10 @@ function L_Paper() {
 export function ListHandover({}: Story) {
   const s = useScene(3, [600, 1600, 2200]);
   const k = s.k;
+  // আপু hands over the list
+  useEffect(() => {
+    if (k === 1) sfx.slip();
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="evening" label="লাইব্রেরি বন্ধের সময় আপু ফাহিমের হাতে একটা list দেন: কোন কাজে কোন মাপ, লিখে দিয়ে যাও">
@@ -1973,6 +1986,10 @@ function L_Hourglass({ x, y }: { x: number; y: number }) {
 export function CatalogueFreeze({}: Story) {
   const s = useScene(4, [600, 2400, 2000, 1800, 2400]);
   const k = s.k;
+  // the district's catalogue loaded, the search typed, the machine grinding
+  useEffect(() => {
+    if (k === 2) sfx.typing(0.4);
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="room" label="জেলার catalogue আসে, লাখ লাখ বই; ফাহিম মাছ search দেয়, machine B প্রতিটা বইয়ে root আর ভাগ করে, screen আটকে যায়">
@@ -2154,6 +2171,12 @@ function L_Clip({ pages, text }: { pages: number; text: string }) {
 export function NewsCupboard({}: Story) {
   const s = useScene(3, [600, 1800, 1800]);
   const k = s.k;
+  // out of the cupboard: a slip, then a thick bundle; then "ইলিশ" typed in
+  useEffect(() => {
+    if (k === 1) sfx.slip();
+    else if (k === 2) sfx.paper();
+    else if (k === 3) sfx.typing(0.5);
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="room" label="আপুর পত্রিকার আলমারি; দুই লাইনের খবর আর দশ পাতার খবর; কেউ search এ ইলিশ লেখে">

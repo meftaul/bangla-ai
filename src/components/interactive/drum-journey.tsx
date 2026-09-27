@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { Task, useGate } from "@/components/journey/journey";
 import {
@@ -18,6 +18,7 @@ import {
   type Fixtures,
 } from "@/components/journey/kit";
 import { Bubble, Person, Stage, Stall, StoryFrame } from "@/components/journey/cast";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 1.2 — Binary from rice drums", the pieces-to-picture
 // version of 01b_binary (see .claude/skills/pieces-to-picture and
@@ -174,6 +175,7 @@ function usePack(base: number, initial: number[]) {
     const g = Math.floor(counts[i] / base);
     const next = counts.map((c, j) => (j === i ? c - g * base : j === i + 1 ? c + g : c));
     setTimeout(() => {
+      sfx.thump();
       setCounts(next);
       setPacking(null);
       busy.current = false;
@@ -324,7 +326,10 @@ export function RiceShop({}: Story) {
 function useBoard(k: number) {
   const [bits, setBits] = useSeed<number[]>("bits", Array(k).fill(0));
   const [sent, setSent] = useSeed<number | null>("sent", null);
-  const toggle = (j: number) => setBits(bits.map((b, i) => (i === j ? 1 - b : b)));
+  const toggle = (j: number) => {
+    sfx.click();
+    setBits(bits.map((b, i) => (i === j ? 1 - b : b)));
+  };
   return { bits, setBits, sent, setSent, toggle };
 }
 
@@ -385,6 +390,7 @@ export function PackThirteen() {
             type="button"
             onClick={() => {
               setPoured(true);
+              sfx.rice(0.9);
               setCounts([13, 0]);
             }}
             className={primaryBtn}
@@ -411,6 +417,9 @@ export function NinetyThree() {
   const [over, setOver] = useSeed("over", false);
   const play = usePlay(260);
   const k = over && !play.running ? 9 : play.k;
+  useEffect(() => {
+    if (play.running && play.k > 0) sfx.thump();
+  }, [play.running, play.k]);
 
   const pour = () =>
     play.play(9, () => {
@@ -454,6 +463,9 @@ export function OneFifty() {
   const [arrived, setArrived] = useSeed("arrived", false);
   const play = usePlay(140);
   const shown = arrived ? counts : [0, play.k, 0];
+  useEffect(() => {
+    if (play.running && play.k > 0) sfx.thump();
+  }, [play.running, play.k]);
   const done = arrived && settled(counts, 10);
 
   const onPack = (i: number) =>
@@ -545,6 +557,7 @@ export function FoldPaper() {
   const locked = folds === 3 && guess === null;
 
   const fold = () => {
+    sfx.paper();
     if (done || locked) return;
     setFolds(folds + 1);
     if (folds + 1 === 4) pass("Every fold doubles: 1, 2, 4, 8, 16.");
@@ -621,6 +634,7 @@ export function TinyDrums() {
             type="button"
             onClick={() => {
               setPoured(true);
+              sfx.rice(0.9);
               setCounts([13, 0, 0, 0]);
             }}
             className={primaryBtn}
@@ -661,6 +675,7 @@ export function ShelfToBulbs() {
 
   const tap = (j: number) => {
     if (!seen || !SNAP[j] || tapped.includes(j)) return;
+    sfx.click();
     const next = [...tapped, j];
     setTapped(next);
     if (next.length === 3) pass("Full = on, empty = off: 1101 is 13.");

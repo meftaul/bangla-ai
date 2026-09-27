@@ -1,12 +1,13 @@
 "use client";
 
-import { useId, useState, type ReactNode } from "react";
+import { useEffect, useId, useState, type ReactNode } from "react";
 
 import { Tup, num } from "@/components/journey/box";
 import { Bubble, Person, Stage, StoryFrame } from "@/components/journey/cast";
 import { Task, useGate } from "@/components/journey/journey";
 import { Choice, Draw, FADE, Nope, POP, Scene, predictLook, primaryBtn, usePlay, useScene, useSeed, useTween, type Fixtures } from "@/components/journey/kit";
 import { Arrow, Plane, makeFrame, type Frame, type XY } from "@/components/journey/plane";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 7.5 — The photographer's fifty filters", told as a
 // Journey in the author's Bangla-English. The plan is 07_journey_specs.md,
@@ -277,7 +278,10 @@ export function FilterBet() {
   const act = usePlay(800);
   const seal = (i: number) => {
     setBet(i);
-    act.play(3, () => pass("বাজি সিল হলো। আগে দুইটা filter।"));
+    act.play(3, () => {
+      sfx.stamp();
+      pass("বাজি সিল হলো। আগে দুইটা filter।");
+    });
   };
   // beats of the acted bet: 1 the chips do what the claim says, 2 its "?", 3 sealed
   const k = bet === null ? 0 : act.running ? act.k : 3;
@@ -1279,6 +1283,10 @@ function A_ScreenBar({ x, y, done, of = 300 }: { x: number; y: number; done: num
 export function WeddingCorner({}: Story) {
   const s = useScene(4, [600, 1600, 2200, 2400, 2200]);
   const k = s.k;
+  // the photographer's shutter
+  useEffect(() => {
+    if (k === 1) sfx.shutter();
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="fair" label="বিয়ের দিন, প্যান্ডেলের কোণায় প্লাস্টিকের টেবিলে laptop; ফটোগ্রাফার ভাই, 300 এর 3 টা ছবি শেষ; সামিন বললো পঞ্চাশটা লাগবে না, একটাতেই হবে; ফটোগ্রাফার ভাই বললেন পঞ্চাশটা filter, পঞ্চাশ রকম সুন্দর, সময় তো লাগবেই">
@@ -1468,6 +1476,10 @@ function A_Car({ x, y }: { x: number; y: number }) {
 export function LastPhoto({}: Story) {
   const s = useScene(3, [600, 1600, 1600, 2000]);
   const k = s.k;
+  // the last photo taken
+  useEffect(() => {
+    if (k === 2) sfx.shutter();
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="fair" label="সাড়ে চারটা; শেষ ছবিটা বের হলো, 300 এর 300; ফটোগ্রাফার ভাই laptop বন্ধ করলেন; গেটে বরের গাড়ির হর্ন">
@@ -1495,6 +1507,10 @@ export function LastPhoto({}: Story) {
 export function NanaAlbum({}: Story) {
   const s = useScene(3, [600, 1800, 1800, 2400]);
   const k = s.k;
+  // নানা opens the old album
+  useEffect(() => {
+    if (k === 1) sfx.paper();
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="night" label="রাত আটটা, প্যান্ডেলের বাতি; album নানার কোলে, নানা খুব ধীরে পাতা উল্টাচ্ছেন; একটা ছবিতে হলুদ শাড়িতে আপা; নানা ছবিটার উপর আঙুল রাখলেন">

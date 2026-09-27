@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
 import { Bubble, Person, Stage, StoryFrame, type Who } from "@/components/journey/cast";
 import { Task, useGate } from "@/components/journey/journey";
@@ -8,6 +8,7 @@ import { Choice, FADE, Nope, POP, Scene, predictLook, primaryBtn, usePlay, useSc
 import { type Frame, type XY } from "@/components/journey/plane";
 import { LightBhai, Projector, STAGE_WALL_F, StageBeam, StageWall, byCols, det, partway, projectorLens, useLensRun, type Cols } from "./light-kit";
 import { FLOWER_OUTLINE, LENS_G, LENS_H, LENS_L, PK, PatchWall, cellPoly, mapPts, patchCorners, patchFrame, planPatch } from "./patch-kit";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 8.7 — বড় হলে আলো ফিকে", told as a Journey in the
 // author's Bangla-English. The plan is 08_journey_specs.md, block 8.7. The
@@ -298,6 +299,7 @@ export function GlowBet() {
   const seal = () => {
     if (bet === null || sealed) return;
     setSealed(true);
+    sfx.stamp();
     act.play(2, () => pass("বাজি সিল হলো। আগে এক ঘরের আলো।"));
   };
   const d = bet === null ? 0 : X1_CARDS[bet].d;
@@ -368,6 +370,7 @@ export function SameLightMoreWall() {
   const shown = !counted ? 0 : tick.running ? tick.k : X2_IN.length;
   const fire = () => {
     if (run.running) return;
+    sfx.hum(1.2);
     setRan(true);
     setCounted(false);
     run.run();
@@ -673,6 +676,7 @@ export function YourHeart() {
   };
   const fire = () => {
     if (run.running || !stack.length) return;
+    sfx.hum(1.2);
     const s = [...stack];
     setThrown(s);
     const Dn = Math.abs(det(stackOf(s)));
@@ -828,6 +832,7 @@ export function GlowOpen() {
   const t = !ran ? 0 : run.running ? run.t : 1;
   const fire = () => {
     if (run.running || ran) return;
+    sfx.hum(1.2);
     setRan(true);
     run.run();
   };
@@ -1300,6 +1305,11 @@ export function LensLedge({}: Story) {
 export function Headlights({}: Story) {
   const s = useScene(3, [600, 1800, 2000, 2200]);
   const k = s.k;
+  // headlights down the lane, then the horn: the car
+  useEffect(() => {
+    if (k === 1) sfx.rumble(1.6);
+    else if (k === 3) sfx.horn2();
+  }, [k]);
   const [lx, ly] = projectorLens(PJ[0], PJ[1]);
   return (
     <StoryFrame scene={s}>
@@ -1338,6 +1348,13 @@ export function Headlights({}: Story) {
 export function Firani({}: Story) {
   const s = useScene(4, [600, 1800, 2000, 2200, 2400]);
   const k = s.k;
+  // the car stops and its door opens
+  useEffect(() => {
+    if (k === 1) {
+      sfx.thump();
+      setTimeout(() => sfx.click(), 150);
+    }
+  }, [k]);
   const [lx, ly] = projectorLens(PJ[0], PJ[1]);
   const apaX = k >= 3 ? 112 : k >= 2 ? 190 : 250;
   return (

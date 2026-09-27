@@ -1,8 +1,11 @@
 "use client";
 
+import { useEffect, useRef } from "react";
+
 import { POP, Stepper } from "@/components/journey/kit";
 import { Card as CastCard } from "@/components/journey/cast";
 import { Arrow, tup, type Frame, type Tone, type XY } from "@/components/journey/plane";
+import { sfx } from "@/components/journey/sfx";
 
 // The map pieces shared by the two road-to-school journeys: 5.5
 // (lanes-journey.tsx, the card for the rickshaw mama) and 5.5b
@@ -190,6 +193,13 @@ export function L_Place({ f, at, kind, hit = false, name = true }: { f: Frame; a
 
 /** The rickshaw on a map, centred on its point; it glides to a new point over `ms`. */
 export function L_Rickshaw({ f, at, ms = 300, facing = 1, s = 1 }: { f: Frame; at: XY; ms?: number; facing?: 1 | -1; s?: number }) {
+  // pedalled a block: the chain ticks (not on the first draw)
+  const spot = `${at[0]},${at[1]}`;
+  const was = useRef<string | null>(null);
+  useEffect(() => {
+    if (was.current !== null && was.current !== spot) sfx.pedal();
+    was.current = spot;
+  }, [spot]);
   return (
     <g
       style={{ transform: `translate(${f.sx(at[0])}px, ${f.sy(at[1])}px)`, transitionDuration: `${ms}ms` }}
@@ -247,7 +257,17 @@ export function L_Remote({ amt, onAmt, f, disabled = false }: { amt: number[]; o
             <span className="text-sm whitespace-nowrap">
               <b className={i ? "text-cat-coral" : "text-cat-blue"}>{key.name}</b> <span className="font-mono text-[0.9rem]">{tup(key.v)}</span>
             </span>
-            <Stepper value={amt[i]} onChange={(n) => onAmt(i, n)} min={lo} max={hi} disabled={disabled} label={key.name} />
+            <Stepper
+              value={amt[i]}
+              onChange={(n) => {
+                sfx.press();
+                onAmt(i, n);
+              }}
+              min={lo}
+              max={hi}
+              disabled={disabled}
+              label={key.name}
+            />
           </div>
         );
       })}
@@ -285,6 +305,19 @@ export function L_BigRick({
   facing?: 1 | -1;
   riders?: (keyof typeof RIDER)[];
 }) {
+  // off it goes: the bell, then the pedals for as long as the ride lasts
+  const was = useRef(x);
+  useEffect(() => {
+    if (x === was.current) return;
+    was.current = x;
+    sfx.bell();
+    const tick = setInterval(() => sfx.pedal(), 280);
+    const end = setTimeout(() => clearInterval(tick), Math.max(0, ms - 200));
+    return () => {
+      clearInterval(tick);
+      clearTimeout(end);
+    };
+  }, [x, ms]);
   return (
     <g
       style={{ transform: `translate(${x}px, ${y}px)`, transitionDuration: `${ms}ms` }}
@@ -366,6 +399,12 @@ export function L_Clock({ x, y, h, m, r = 13 }: { x: number; y: number; h: numbe
 
 /** The school bell on a post: a brass bell whose lines show when it rings. */
 export function L_Bell({ x, y, ringing = false }: { x: number; y: number; ringing?: boolean }) {
+  // the school bell rung (not when a scene opens with it already ringing)
+  const was = useRef(ringing);
+  useEffect(() => {
+    if (ringing && !was.current) sfx.schoolBell();
+    was.current = ringing;
+  }, [ringing]);
   return (
     <g className="pointer-events-none">
       <path d={`M${x} ${y - 8}V${y}`} stroke="#57534e" strokeWidth={1.6} />
@@ -382,6 +421,13 @@ export function L_Bell({ x, y, ringing = false }: { x: number; y: number; ringin
 
 /** The measuring tape from 3.4: a yellow case at (x, y) with `len` units of tape pulled out to the right. */
 export function L_TapeCase({ x, y, len = 0 }: { x: number; y: number; len?: number }) {
+  // the tape pulled out further, or wound back in
+  const was = useRef(len);
+  useEffect(() => {
+    if (len > was.current) sfx.tape(0.4);
+    else if (len < was.current) sfx.tapeBack();
+    was.current = len;
+  }, [len]);
   return (
     <g className="pointer-events-none">
       {len > 0 && <path d={`M${x + 6} ${y + 2.5}H${x + 6 + len}`} strokeWidth={2.4} className="stroke-[#eab308]" />}

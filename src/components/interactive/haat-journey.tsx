@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
 import { Bubble, Card as CastCard, Person, Robot, Stage, Stall, StoryFrame, Tree } from "@/components/journey/cast";
 import { DotBox, dot, num, tupN } from "@/components/journey/box";
@@ -11,6 +11,7 @@ import { Arrow, Plane, makeFrame, type XY } from "@/components/journey/plane";
 import { Shiku, Trail } from "./arrow-journey";
 import { Tape } from "./dimension-journey";
 import { bn } from "./figure-kit";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 4.1 — ঘরে ঘরে গুণ, হাটের হিসাব", told as a Journey.
 //
@@ -92,6 +93,7 @@ export function HaatBet() {
   const toggle = (i: number) => setPicks(picks.includes(i) ? picks.filter((p) => p !== i) : [...picks, i].sort());
   const seal = () => {
     setSealed(true);
+    sfx.stamp();
     pass(`বাজি সিল: box পারবে ${bn(picks.length)}টা কাজ।`);
   };
 
@@ -135,7 +137,10 @@ export function GroceryBill() {
   const step = () => {
     const next = k + 1;
     setK(next);
-    if (next > QTY.length) pass("ঘরে ঘরে গুণ, তারপর সব যোগ: 444।");
+    if (next > QTY.length) {
+      sfx.coin(4);
+      pass("ঘরে ঘরে গুণ, তারপর সব যোগ: 444।");
+    } else sfx.pencil(0.3);
   };
 
   return (
@@ -936,6 +941,10 @@ function S2_Shop({ talk, prices }: { talk: boolean; prices: boolean }) {
 export function MudiStall({}: Story) {
   const s = useScene(4, [600, 1500, 1800, 1600]);
   const k = s.k;
+  // মামী's list handed over the counter
+  useEffect(() => {
+    if (k === 2) sfx.slip();
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="fair" label="মুদি দোকানে মামী ফর্দ (2, 1, 12) দেন, দোকানের দাম (60, 180, 12), দোকানদার  ক্যালকুলেটর ছাড়াই মুখে হিসাব করেন">
@@ -1226,6 +1235,10 @@ const S6_ROWS = [
 export function ResultPing({}: Story) {
   const s = useScene(5, [600, 1300, 1600, 2000, 2400]);
   const k = s.k;
+  // the result arrives: ফাহিম's phone buzzing in his hand
+  useEffect(() => {
+    if (k === 1) sfx.vibrate();
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="fair" label="হাট থেকে বের হতে ফাহিমের ফোনে result: 80, 60, 90; স্কুলের weight 20%, 30%, 50%">
@@ -1342,6 +1355,10 @@ export function AverageIsBox() {
 export function DalalCard({}: Story) {
   const s = useScene(4, [600, 1800, 2200, 1600]);
   const k = s.k;
+  // two cows led up to the posts, one of them lowing
+  useEffect(() => {
+    if (k === 4) sfx.moo();
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="field" label="গরুর হাটে মামা দুধের গাই চান, দালাল ত্রিশ বছরের হিসাবের card (400, 4000, −5000) দেখান, সামনে দুইটা গাই">
@@ -1869,6 +1886,11 @@ export function TwoQuestions() {
 export function JilapiPaid({}: Story) {
   const s = useScene(4, [600, 1500, 1500, 1600, 1600]);
   const k = s.k;
+  // coins for the jilapi; the sack heaved onto the van
+  useEffect(() => {
+    if (k === 1) sfx.coin(3);
+    else if (k === 4) sfx.thump();
+  }, [k]);
   const plate: XY = k >= 2 ? [143, G - 44] : [127, G - 44];
   return (
     <StoryFrame scene={s}>
@@ -1910,6 +1932,15 @@ const S14_PUSH: { who?: "mama" | "fahim" | "mami"; look?: "karim" | "som"; name?
 export function VanInMud({}: Story) {
   const s = useScene(5, [600, 1500, 1200, 2000, 1600, 1600]);
   const k = s.k;
+  // the van rattles up with its bell, sinks, and five people push in the mud
+  useEffect(() => {
+    if (k === 1) sfx.bell();
+    else if (k === 2) sfx.squelch();
+    else if (k === 4) {
+      sfx.squelch();
+      setTimeout(() => sfx.squelch(), 350);
+    }
+  }, [k]);
   const sunk = k >= 2 ? 5 : 0;
   return (
     <StoryFrame scene={s}>

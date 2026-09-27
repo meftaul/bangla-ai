@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Task, useGate } from "@/components/journey/journey";
 import { Choice, Draw, FADE, LOOK, Nope, POP, Scene, pill, predictLook, primaryBtn, usePlay, useScene, useSeed, type Fixtures, type Look } from "@/components/journey/kit";
@@ -26,6 +26,7 @@ import {
   type Story,
 } from "./lanes-kit";
 import { Chacha, GROUND as R_GROUND, NameTag, RoofSet } from "./rooftop-parts";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 5.5b — Same arrow, new numbers", told as a Journey
 // in the author's Bangla-English, 7 steps (the pathshala-journey skill).
@@ -69,6 +70,11 @@ function T_Bench({ x0 = 60, x1 = 260 }: { x0?: number; x1?: number }) {
 export function TiffinSums({}: Story) {
   const s = useScene(4, [600, 2000, 2000, 2200, 2400]);
   const k = s.k;
+  // করিম works Pythagoras on each card
+  useEffect(() => {
+    if (k === 1) sfx.scribble(3, 0.25, 0.2);
+    else if (k === 2) sfx.scribble(3, 0.25, 0.2);
+  }, [k]);
   const row = (y: number, name: string, card: string, sum: string, on: boolean) => (
     <g>
       <text x={24} y={y} fontSize={8.5} fontWeight={700} fill="#0f1b2d">
@@ -126,6 +132,7 @@ export function DistanceBet() {
 
   const seal = () => {
     setSealed(true);
+    sfx.stamp();
     pass("বাজি ধরা হলো। শেষে ফিতা দিয়ে মাপবো।");
   };
 
@@ -459,6 +466,10 @@ export function AssemblyLines() {
 export function TapeOut({}: Story) {
   const s = useScene(3, [600, 2000, 2000, 2400]);
   const k = s.k;
+  // the tape pulled out of the case
+  useEffect(() => {
+    if (k === 2) sfx.tape(0.5);
+  }, [k]);
 
   return (
     <StoryFrame scene={s}>
@@ -503,6 +514,7 @@ export function LaneBlock() {
 
   const pull = (p: XY) => {
     if (all) return;
+    sfx.tape(0.3);
     const t: XY = [clamp(p[0], LBF.x0, LBF.x1), clamp(p[1], LBF.y0, LBF.y1)];
     const i = LB_T.findIndex((g, j) => !got[j] && dist(t, g.at) < 0.22);
     if (i < 0) {
@@ -1139,6 +1151,10 @@ export function ReachPaint() {
 export function TapeOnMap({}: Story) {
   const s = useScene(3, [600, 1800, 2200, 2400]);
   const k = s.k;
+  // করিম pulls the tape from home to the school
+  useEffect(() => {
+    if (k === 2) sfx.tape(0.9);
+  }, [k]);
   // the map, lying on the bench top, drawn in a little perspective
   const P = (x: number, y: number): XY => [130 + x * 22 - y * 6, 116 - y * 6];
   const pt = (x: number, y: number) => P(x, y).join(",");
@@ -1179,6 +1195,7 @@ export function TapeReveal() {
 
   const pull = (p: XY) => {
     if (measured) return;
+    sfx.tape(0.3);
     const t: XY = [clamp(p[0], M.x0, M.x1), clamp(p[1], M.y0, M.y1)];
     if (dist(t, SCHOOL) < 0.45) {
       setEnd(SCHOOL);

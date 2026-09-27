@@ -6,6 +6,7 @@ import { Task, useGate } from "@/components/journey/journey";
 import { Choice, FADE, Laptop, Nope, Out, POP, Speech, Ticks, predictLook, primaryBtn, quietBtn, useCountUp, usePlay, useTween } from "@/components/journey/kit";
 import { Arrow, Label, Plane, clamp, makeFrame, type Tone, type XY } from "@/components/journey/plane";
 import { bn } from "./figure-kit";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 2.4 — মাঝির বাতাস আর golf ball".
 //
@@ -71,6 +72,7 @@ export function WindReport() {
   const mast: XY = [FW.sx(BOAT[0]), FW.sy(BOAT[1] + 1.1)];
 
   const pick = (r: Report) => {
+    sfx.wind(1.4, r === "both");
     setRep(r);
     if (tried.includes(r)) return;
     const next = [...tried, r];
@@ -342,6 +344,7 @@ export function TablePush() {
   const mid = TABLE.y + TABLE.h / 2;
 
   const push = () => {
+    sfx.scrape(0.7, net === 0);
     setOffset(clamp(net * 9, -115, 115));
     if (net === 0) setShake((s) => s + 1);
     const k = net === 0 && shom >= 5 && samin >= 5 && side === "right" ? "still" : net !== 0 ? "moved" : null;
@@ -491,6 +494,7 @@ export function GolfThrow() {
   const choose = (i: number) => {
     if (guess !== null) return;
     setGuess(i);
+    sfx.whoosh(0.5);
     show.play(1, () =>
       pass(
         "বল গেল কোণাকুনি, সবার চেয়ে জোরে।"),
@@ -513,6 +517,7 @@ export function GolfThrow() {
           <button
             type="button"
             onClick={() => {
+              sfx.whoosh(0.5);
               setRun((r) => r + 1);
               show.play(1);
             }}

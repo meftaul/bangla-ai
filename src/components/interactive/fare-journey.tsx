@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useState, type ReactNode } from "react";
+import { useEffect, useId, useState, type ReactNode } from "react";
 
 import { Tup } from "@/components/journey/box";
 import { Bubble, Person, Stage, StoryFrame } from "@/components/journey/cast";
@@ -8,6 +8,7 @@ import { Task, useGate } from "@/components/journey/journey";
 import { Choice, Draw, FADE, LOOK, Nope, POP, Scene, Stepper, predictLook, primaryBtn, quietBtn, usePlay, useScene, useSeed, useTween, type Fixtures } from "@/components/journey/kit";
 import { Lit, Plane, makeFrame, type Frame, type XY } from "@/components/journey/plane";
 import { Shiku } from "./arrow-journey";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 10.6 — ভ্যানের ভাড়া, সবচেয়ে কম গরমিল", told as a
 // Journey in the author's Bangla-English. The plan is 10_journey_specs.md,
@@ -377,6 +378,7 @@ export function RuleBet() {
   const seal = () => {
     if (sealed || bet === null) return;
     setSealed(true);
+    sfx.stamp();
     act.play(3, () => pass("বাজি সিল হলো। আগে দুইটা ট্রিপ।"));
   };
   const r = bet === null ? null : BETS[bet].rule;
@@ -1555,6 +1557,10 @@ function Note({ x, y }: { x: number; y: number }) {
 export function VanwalaKhata({}: Story) {
   const s = useScene(5, [600, 1600, 2200, 2400, 2200, 2400]);
   const k = s.k;
+  // the ভ্যানওয়ালা opens his khata
+  useEffect(() => {
+    if (k === 1) sfx.paper();
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="field" label="সকালে গেটে ব্যাগ ভরা ভ্যান, নানা গেটে; ভ্যানওয়ালা পাটাতনে খাতা খুললেন; মামা জিজ্ঞেস করলেন তোর নিয়মটা কী; ভ্যানওয়ালা বললেন উঠলেই বিশ, কিলো দশ, খাতা মিলায় দেখেন; নানা বললেন ছেলেটা ঠকায় না">

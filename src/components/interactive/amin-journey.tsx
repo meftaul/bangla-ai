@@ -1,6 +1,6 @@
 "use client";
 
-import { type ReactNode } from "react";
+import { useEffect, type ReactNode } from "react";
 
 import { Tup, num } from "@/components/journey/box";
 import { Bubble, Person, Robot, Stage, StoryFrame } from "@/components/journey/cast";
@@ -8,6 +8,7 @@ import { Task, useGate } from "@/components/journey/journey";
 import { Choice, Draw, FADE, Nope, POP, Scene, Stepper, predictLook, primaryBtn, usePlay, useScene, useSeed, useTween, type Fixtures } from "@/components/journey/kit";
 import { Arrow, Lit, Plane, makeFrame, mix, type Frame, type XY } from "@/components/journey/plane";
 import { Post, STAGE_WALL_F, StageWall, WallBed, WallClip, WallGrid, byCols, partway, useLensRun, type Cols } from "./light-kit";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 8.2 — আমিনের মাপ, ad − bc", told as a Journey in the
 // author's Bangla-English. The plan is 08_journey_specs.md, block 8.2.
@@ -356,6 +357,7 @@ export function PlotBet() {
   const seal = () => {
     if (pick === null || sealed) return;
     setSealed(true);
+    sfx.stamp();
     act.play(2, () => pass("বাজি সিল হলো। আগে মামার নিয়ম।"));
   };
   return (
@@ -477,6 +479,8 @@ export function TheBox() {
   const go = () => {
     if (play.running || phase >= 3) return;
     const n = phase + 1;
+    // the শিকল pulled out along the next side
+    sfx.chain(n === 3 ? 1.4 : 0.8);
     setPhase(n);
     play.play(n === 1 ? 4 : n === 2 ? 3 : 12, n === 3 ? () => pass("বাক্স মাপা সোজা: লম্বা × চওড়া।") : undefined);
   };
@@ -547,6 +551,7 @@ export function CutCorners() {
   const play = usePlay(900);
   const tap = (i: number) => {
     if (guess === null || gone[i] || play.running) return;
+    sfx.snip();
     setLift(i);
     const ng = gone.map((v, j) => v || j === i);
     play.play(1, () => {
@@ -1050,6 +1055,13 @@ function AJ_Sheet({ x, y, flip = false }: { x: number; y: number; flip?: boolean
 export function AminPegs({}: Story) {
   const s = useScene(4, [600, 1600, 1600, 2400, 2600]);
   const k = s.k;
+  // the আমিন knocks his pegs in at the corners
+  useEffect(() => {
+    if (k === 1) {
+      sfx.knock(2);
+      setTimeout(() => sfx.knock(2), 700);
+    }
+  }, [k]);
   const [cx, cy] = fp([0, 0]);
   return (
     <StoryFrame scene={s}>
@@ -1079,6 +1091,11 @@ export function AminPegs({}: Story) {
 export function ChainTaut({}: Story) {
   const s = useScene(3, [600, 2000, 2000, 2200]);
   const k = s.k;
+  // the chain dragged out along each side and pulled taut
+  useEffect(() => {
+    if (k === 1) sfx.chain(1.2);
+    else if (k === 2) sfx.chain(1.2);
+  }, [k]);
   const O = fp([0, 0]);
   const E = fp([4, 0]);
   const N = fp([4, 3]);
@@ -1214,6 +1231,10 @@ export function PukurPlot({}: Story) {
 export function DolilDay({}: Story) {
   const s = useScene(2, [600, 2200, 2000]);
   const k = s.k;
+  // the দলিল unrolled
+  useEffect(() => {
+    if (k === 1) sfx.paper();
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="room" label="নানার বারান্দা; জলচৌকির উপর দলিল; নানা জমির পরিমাণ লিখলেন, 50 শতাংশ; আমিন ছাতা বন্ধ করলেন">

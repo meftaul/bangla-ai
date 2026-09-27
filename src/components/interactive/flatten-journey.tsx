@@ -7,6 +7,7 @@ import { Task, useGate } from "@/components/journey/journey";
 import { Choice, Draw, FADE, Nope, POP, Scene, Stepper, Ticks, quietBtn, usePlay, useScene, useSeed, useTween, type Fixtures } from "@/components/journey/kit";
 import { type Frame, type XY, makeFrame, sg } from "@/components/journey/plane";
 import { Alpana, ChalkGrid, FISH, ID, PETALS, Pillar, RoadBed, Rope, apply, byCols, partway, pathOf, type Cols, type Move } from "@/components/interactive/road-kit";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 6.5 — The flat crossing, what can't be undone",
 // told as a Journey. The plan is 06_journey_specs.md, block 6.5.
@@ -313,6 +314,7 @@ export function UndoBet() {
   const toggle = (i: number) => setTicks(ticks.map((t, j) => (j === i ? !t : t)));
   const seal = () => {
     setSealed(true);
+    sfx.stamp();
     act.play(order.length + 1, () => pass("বাজি সিল হলো। সহজটা দিয়ে শুরু।"));
   };
   // how many ticked roads have sent their "?" up so far
@@ -1041,6 +1043,10 @@ function S_Pillar({ x, y, h, pins = 0 }: { x: number; y: number; h: number; pins
 export function GateSteps({}: Story) {
   const s = useScene(4, [600, 1600, 2400, 2600, 2400]);
   const k = s.k;
+  // no paper, only the khata: its pages leafed
+  useEffect(() => {
+    if (k === 3) sfx.paper();
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="street" ground={128} label="চৈত্রের শেষ দিন সকালে গেটের সামনে; pillar এ পাঁচটা খালি পিন; তপু graph paper নিয়ে এলো, বললো পাঁচটা আলপনাই ম্যাগাজিনে যাবে; আর্ট স্যার বললেন কাগজ তো নাই, রাস্তা আছে, খাতা আছে; নাসিব বললো উল্টা চালালেই তো হয়">
@@ -1128,6 +1134,11 @@ const S8_F = makeFrame(0.4, 6.4, 0.6, 5.6, 14, 4);
 export function RinaRedraws({}: Story) {
   const s = useScene(4, [600, 1400, 2400, 1800, 2400]);
   const k = s.k;
+  // রিনা draws the fifth paper, petal by petal, then the fish
+  useEffect(() => {
+    if (k === 1) sfx.scribble(5, 0.25, 0.2);
+    else if (k === 2) sfx.scribble(4, 0.25, 0.2);
+  }, [k]);
   return (
     <StoryFrame scene={s}>
       <Stage backdrop="evening" ground={138} label="সন্ধ্যা, গেটের সিঁড়ি; চারটা কাগজে আলপনা, পাঁচ নম্বরটা খালি; রিনা খালি কাগজে পাঁচটা পাপড়ি আর একটা মাছ আঁকলো; তপু পাশে বসে থাকলো; আর্ট স্যার বললেন হইছে">
@@ -1176,6 +1187,9 @@ const S1_FALL: [number, number, number][] = [
 export function RainNight({}: Story) {
   const s = useScene(3, [600, 1600, 1800, 2200]);
   const k = s.k;
+  // the rain through the night, until the morning
+  const raining = k >= 1 && k < 3;
+  useEffect(() => (raining ? sfx.rain() : undefined), [raining]);
   const morning = k >= 3;
   return (
     <StoryFrame scene={s}>
@@ -1305,6 +1319,15 @@ function S_Page({ x, y, head, rows }: { x: number; y: number; head: string; rows
 export function RinaTorch({}: Story) {
   const s = useScene(4, [600, 1600, 2000, 1800, 1800]);
   const k = s.k;
+  // রিনা's torch clicks on; she chalks the crossing; at dawn the first rickshaw rolls over it
+  useEffect(() => {
+    if (k === 1) sfx.click();
+    else if (k === 2) sfx.chalkLines(3, 0.3, 0.25);
+    else if (k === 3) {
+      sfx.bell();
+      sfx.pedal();
+    }
+  }, [k]);
   const morning = k >= 3;
   return (
     <StoryFrame scene={s}>
@@ -1401,6 +1424,11 @@ export function OwlCage({}: Story) {
 export function OldKhata({}: Story) {
   const s = useScene(3, [600, 1600, 1600, 2400]);
   const k = s.k;
+  // the almirah opened, last year's notebook brought out
+  useEffect(() => {
+    if (k === 1) sfx.door();
+    else if (k === 2) sfx.book();
+  }, [k]);
   const open = k >= 2;
   return (
     <StoryFrame scene={s}>

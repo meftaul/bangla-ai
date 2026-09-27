@@ -19,9 +19,10 @@ import {
 import { Bubble, Card as CastCard, Gate, Person as CastPerson, Stage, Stall, StoryFrame } from "@/components/journey/cast";
 import { Arrow, Dot, Label, Plane, Star, makeFrame, same, sg, snap, tup, type Frame, type XY } from "@/components/journey/plane";
 import { ButtonRemote, Chains, Recipe, SHELF, land, type Key } from "./remote-journey";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Shiku } from "./arrow-journey";
 import { Task, useGate } from "@/components/journey/journey";
+import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 5.2b — The walk home, catching an extra button",
 // told as a Journey in the author's Banglish, 7 steps (the pathshala-journey
@@ -197,6 +198,7 @@ export function ThirdBet() {
 
   const seal = () => {
     setSealed(true);
+    sfx.stamp();
     pass("বাজি সিল হলো। এবার চোখ ছাড়া পরীক্ষা।");
   };
 
@@ -1057,6 +1059,10 @@ export function FloorFull() {
 export function CheapRemote({}: Story) {
   const s = useScene(3, [700, 2000, 2600, 2000]);
   const k = s.k;
+  // the 'fake' remote set on the counter
+  useEffect(() => {
+    if (k === 1) sfx.tap();
+  }, [k]);
 
   return (
     <StoryFrame scene={s}>
@@ -1292,6 +1298,11 @@ export function TwoArrowsTest() {
 export function NasibReturns({}: Story) {
   const s = useScene(4, [700, 1800, 2400, 2400, 1800]);
   const k = s.k;
+  // the remote handed back, fifty taka counted out
+  useEffect(() => {
+    if (k === 3) sfx.tap();
+    else if (k === 4) sfx.coin(3);
+  }, [k]);
 
   return (
     <StoryFrame scene={s}>
@@ -1479,6 +1490,11 @@ function MD_Drone({ x, y }: { x: number; y: number }) {
 export function MovingDay() {
   const s = useScene(3, [700, 1800, 2000, 2400]);
   const k = s.k;
+  // the truck pulls up; the drone hovers in
+  useEffect(() => {
+    if (k === 1) sfx.rumble(1.4);
+    else if (k === 2) setTimeout(sfx.drone(), 1600);
+  }, [k]);
 
   return (
     <StoryFrame scene={s}>
