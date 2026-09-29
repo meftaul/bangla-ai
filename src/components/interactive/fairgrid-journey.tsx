@@ -414,7 +414,7 @@ export function StepLength() {
   const SAY = [
     "ফাহিমের একটা size ধাপ: (1, 1)।",
     "এক ঘর ডানে, এক ঘর উপরে। Pythagoras: √(1² + 1²).",
-    "মানে ফাহিমের এক ধাপ কাগজে 1.41 লম্বা। 1 না।",
+    "মানে ফাহিমের এক ধাপ কাগজে 1.41 unit লম্বা। 1 না।",
     "ওর card এ লেখা 1। কাগজে কিন্তু 1.41. Pythagoras এর হিসাব এটা জানে না।",
   ];
 
@@ -473,7 +473,7 @@ export function ShrinkButtons() {
   const pick = (i: number) => {
     setLi(i);
     setBump((b) => b + 1);
-    if (i === SB_RIGHT) pass("Button 1 লম্বা: হিসাব আর ফিতা মিলে গেলো।");
+    if (i === SB_RIGHT) pass("Button 1 unit লম্বা: হিসাব আর ফিতা মিলে গেলো।");
   };
 
   return (
@@ -528,7 +528,7 @@ export function ShrinkToOne() {
   const k = s.k;
   const [len] = useTween([k >= 1 ? 1 / R2 : 1], 1200);
   const SAY = [
-    "ফাহিমের button গুলা দুই room এর ধাপ, প্রতিটা প্রায় 1.41 লম্বা।",
+    "ফাহিমের button গুলা দুই room এর ধাপ, প্রতিটা প্রায় 1.41 unit লম্বা।",
     "প্রতিটাকে 1.41 দিয়ে ভাগ করুন: দুইটাই গিয়ে বসে 1 length এর গোল দাগে।",
     "ধাপ ছোট, তাই ধাপ লাগে বেশি: flat (3, 2) এর card হয়ে যায় (3.54, 0.71).",
   ];
@@ -578,7 +578,7 @@ export function NasibTurns({}: Story) {
           <rect x={168} y={90} width={28} height={28} fill="white" stroke="#b91c1c" strokeWidth={1} />
           <path d="M175 90V118M182 90V118M189 90V118M168 97H196M168 104H196M168 111H196" stroke="#94a3b8" strokeWidth={0.6} />
         </g>
-        {k === 1 && <Bubble x={220} y={GROUND - 68} side="left" lines={["ঠিক আছে, 1 লম্বা।"]} />}
+        {k === 1 && <Bubble x={220} y={GROUND - 68} side="left" lines={["ঠিক আছে, 1 unit লম্বা।"]} />}
         {k >= 2 && <Bubble x={220} y={GROUND - 68} side="left" lines={["কিন্তু grid তো", "যেদিকে খুশি ঘুরে।"]} />}
       </Stage>
     </StoryFrame>
@@ -1040,7 +1040,7 @@ export function RiverIdeaAgain() {
 const C30 = Math.cos(Math.PI / 6);
 const S30 = Math.sin(Math.PI / 6);
 const TG: { name: string; e1: XY; e2: XY; nope: string }[] = [
-  { name: "ফাহিমের grid", e1: [1, 1], e2: [1, -1], nope: "এই grid এ হিসাব বলে 1.41, ফিতা বলে 2। ঘর গুলা square ঠিকই। কিন্তু ধাপ? 1.41 লম্বা।" },
+  { name: "ফাহিমের grid", e1: [1, 1], e2: [1, -1], nope: "এই grid এ হিসাব বলে 1.41, ফিতা বলে 2। ঘর গুলা square ঠিকই। কিন্তু ধাপ? 1.41 unit লম্বা।" },
   { name: "30° ঘুরানো, ধাপ 1", e1: [C30, S30], e2: [-S30, C30], nope: "" },
   { name: "রিকশার রাস্তা", e1: [1, 0], e2: [1, 1], nope: "এই grid এ হিসাব বলে 2.83, ফিতা বলে 2। রাস্তা দুইটা right angle এ না।" },
 ];
@@ -1056,7 +1056,7 @@ export function TryFairGrid() {
   const choose = (i: number) => {
     if (right) return;
     setPick(i);
-    if (i === TG_RIGHT) pass("Square আর 1 লম্বা: তবেই হিসাব সত্যি।");
+    if (i === TG_RIGHT) pass("Square আর 1 unit লম্বা: তবেই হিসাব সত্যি।");
     else setMiss((m) => m + 1);
   };
   const g = pick === null ? null : TG[pick];
@@ -1215,7 +1215,7 @@ export function LastJilapi({}: Story) {
 
 const OPENED = [
   ["খাতার grid", "2"],
-  ["ফাহিমের grid, button 1 লম্বা করার পর", "2"],
+  ["ফাহিমের grid, button 1 unit লম্বাকরার পর", "2"],
   ["যেকোনো দিকে ঘুরানো fair grid", "2"],
 ];
 const FIVE = [
@@ -1330,7 +1330,7 @@ export function BetOpened() {
 const PCA = [
   ["PCA, data থেকেই, খুঁজে বের করে", ""],
   ["একটা basis,", "5.3"],
-  ["যার button গুলা right angle এ, প্রতিটা 1 লম্বা,", "4.2 · 3.6"],
+  ["যার button গুলা right angle এ, প্রতিটা 1 unit লম্বা,", "4.2 · 3.6"],
   ["যার প্রথম direction এ data সবচেয়ে বেশি ছড়ানো, তারপর পরেরটা,", "4.5"],
   ["আর শুধু প্রথম কয়েকটা রেখে দেয়।", "আজ"],
 ];
@@ -1341,7 +1341,7 @@ export function PcaWords() {
   const SAY = [
     "এই course এর শেষে যে বড় idea টা অপেক্ষা করছে, এক line এ।",
     "একটা basis: যথেষ্ট button, একটাও বাড়তি না।",
-    "Square আর 1 লম্বা: orthonormal, তাই সব সংখ্যা এক scale এ, আর দূরত্ব ঠিক থাকে।",
+    "Square আর 1 unit লম্বা: orthonormal, তাই সব সংখ্যা এক scale এ, আর দূরত্ব ঠিক থাকে।",
     "Data যেদিকে সবচেয়ে বেশি ছড়ানো, সেই direction আগে। আজকের 35° এর line এর মতো।",
     "প্রথম কয়েকটা রাখো, বাকিটা ফেলে দাও, imbalance ফেলে দেয়ার মতো। প্রতিটা শব্দ এখন আপনার চেনা।",
   ];

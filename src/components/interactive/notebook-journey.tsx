@@ -831,7 +831,7 @@ export function AnyAngle() {
   return (
     <>
       <div className="mx-auto w-full max-w-[14rem]">
-        <Plane f={f} paper={false} grid={0} axes={false} label="খুঁটি থেকে 1 লম্বা amber দড়ি θ কোণে; মেঝের লাইনে তার ছায়া, খাড়া লাইনে আরেকটা ছায়া" className="my-0! max-w-none">
+        <Plane f={f} paper={false} grid={0} axes={false} label="খুঁটি থেকে 1 unit লম্বাamber দড়ি θ কোণে; মেঝের লাইনে তার ছায়া, খাড়া লাইনে আরেকটা ছায়া" className="my-0! max-w-none">
           <RoadBed f={f} />
           <ChalkGrid f={f} move={byCols([e1, e2])} x0={-1} x1={1} y0={-1} y1={1} ghost />
           <circle cx={f.sx(0)} cy={f.sy(0)} r={f.u} fill="none" stroke="white" strokeOpacity={0.35} strokeDasharray="3 4" />
@@ -1734,7 +1734,7 @@ export function ShadowCircle() {
   const tr = "transition-all duration-700 motion-reduce:transition-none";
   return (
     <Scene scene={s} caption={say(X7_SAY, k)}>
-      <Sheet w={f.W + 60} h={f.H} label="1 লম্বা দড়ি θ কোণে; মেঝেতে ছায়া cos θ, খাড়া দিকে ছায়া sin θ">
+      <Sheet w={f.W + 60} h={f.H} label="1 unit লম্বাদড়ি θ কোণে; মেঝেতে ছায়া cos θ, খাড়া দিকে ছায়া sin θ">
         <path d={`M${f.sx(0)} ${f.sy(0)}H${f.sx(1.25)}M${f.sx(0)} ${f.sy(0)}V${f.sy(1.25)}`} stroke={INK} strokeOpacity={0.4} />
         <path d={`M${f.sx(1)} ${f.sy(0)}A${f.u} ${f.u} 0 0 0 ${f.sx(0)} ${f.sy(1)}`} fill="none" stroke="#94a3b8" strokeDasharray="3 3" />
         <g style={{ transform: `translate(${f.sx(0)}px, ${f.sy(0)}px)` }}>
@@ -1801,7 +1801,7 @@ export function RotorBuild() {
   const nine = k >= 3;
   return (
     <Scene scene={s} caption={say(X7B_SAY, k)}>
-      <Sheet w={f.W + 118} h={f.H} label="1 লম্বা দুই দড়ি; amber দড়ির মাথা (cos θ, sin θ), সবুজটা এক কোণা এগিয়ে (−sin θ, cos θ); দুই column মিলে R(θ); θ = 90° দিলে 0, −1, 1, 0">
+      <Sheet w={f.W + 118} h={f.H} label="1 unit লম্বাদুই দড়ি; amber দড়ির মাথা (cos θ, sin θ), সবুজটা এক কোণা এগিয়ে (−sin θ, cos θ); দুই column মিলে R(θ); θ = 90° দিলে 0, −1, 1, 0">
         <path d={`M${f.sx(-1.25)} ${oy}H${f.sx(1.25)}M${ox} ${oy}V${f.sy(1.25)}`} stroke={INK} strokeOpacity={0.35} />
         <path d={`M${f.sx(1)} ${oy}A${f.u} ${f.u} 0 0 0 ${f.sx(-1)} ${oy}`} fill="none" stroke="#94a3b8" strokeDasharray="3 3" />
         <g style={{ transform: `translate(${ox}px, ${oy}px)` }}>

@@ -862,7 +862,7 @@ const CF = makeFrame(-2.6, 2.6, -2.6, 2.6, 30, 10);
 const CLUBS: { name: string; tick: string; a: XY; b: XY; inside: (p: XY) => boolean; why: string }[] = [
   { name: "পুরা মেঝে", tick: "পুরা মেঝে", a: [1, 1], b: [1, -2], inside: () => true, why: "" },
   { name: "মেঝে, কিন্তু দরজার কোণায় টব", tick: "টব বাদে", a: [1, 1], b: [-1, -1], inside: (p) => p[0] !== 0 || p[1] !== 0, why: "ওটা দরজার কোণা, টবের জায়গা। Club এ ওই জায়গাটা নাই।" },
-  { name: "3.6 এর ring, সব arrow ঠিক 1 লম্বা", tick: "ring", a: [1, 0], b: [0, 1], inside: (p) => Math.abs(Math.hypot(p[0], p[1]) - 1) < 1e-9, why: "" },
+  { name: "3.6 এর ring, সব arrow ঠিক 1 unit লম্বা", tick: "ring", a: [1, 0], b: [0, 1], inside: (p) => Math.abs(Math.hypot(p[0], p[1]) - 1) < 1e-9, why: "" },
   { name: "কোনো minus নাই, word count এর মত", tick: "minus নাই", a: [1, 1], b: [1, 0], inside: (p) => p[0] >= 0 && p[1] >= 0, why: "Minus সংখ্যা চলে এসেছে।" },
 ];
 const MOVES: { say: string; go: (a: XY, b: XY) => XY }[] = [
@@ -1174,9 +1174,9 @@ const S4S_U: XY = [S4S_C[0] + S4S_R * Math.SQRT1_2, S4S_C[1] - S4S_RY * Math.SQR
 const S4S_W: XY = [S4S_C[0] + S4S_R * Math.SQRT1_2, S4S_C[1] + S4S_RY * Math.SQRT1_2];
 const S4S_SUM: XY = [S4S_C[0] + S4S_R * Math.SQRT2, S4S_C[1]];
 const S4S_SAY = [
-  "Unit sphere: এর উপরের সব arrow ঠিক 1 লম্বা। মাঝের দাগটা 3.6 এর সেই ring।",
+  "Unit sphere: এর উপরের সব arrow ঠিক 1 unit লম্বা। মাঝের দাগটা 3.6 এর সেই ring।",
   "Ring এর দুইটা member: (1, 0) আর (0, 1)।",
-  "যোগ করুন: 1.41 লম্বা। Sphere এর বাইরে।",
+  "যোগ করুন: 1.41 unit লম্বা। Sphere এর বাইরে।",
   "তাই sphere হলো একটা surface, vector space না।",
 ];
 

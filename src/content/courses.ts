@@ -124,4 +124,11 @@ export const COURSES: Course[] = [
     description: "Slopes, limits, integrals and gradients, told through a honey year in a mustard village, up to the network that sorts the hives.",
     items: ["calculus_for_ai/01a_bee_route"],
   },
+  {
+    // NCTB class 9–10 physics, chapter by chapter; plan in nctb/phy01_journey_specs.md.
+    slug: "physics_9_10",
+    title: "Physics 9–10 (NCTB)",
+    description: "নবম-দশম শ্রেণির পদার্থবিজ্ঞান, অধ্যায় ধরে ধরে, ময়মনসিংহের এক স্কুলের বিজ্ঞান মেলার সপ্তাহে।",
+    items: ["nctb/phy01a_fair_stalls", "nctb/phy01b_dark_gap", "nctb/phy01c_amber_lodestone", "nctb/phy01d_falling_atom"],
+  },
 ];

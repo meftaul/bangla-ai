@@ -401,7 +401,7 @@ export function NearestRule() {
   return (
     <>
       <div className="mx-auto max-w-sm rounded-xl bg-cat-amber/10 px-3 py-1.5 text-center text-sm">
-        নিয়ম: ওটার ঠিক আগে যে নামটা, ওটা মানে সেটাই।
+        নিয়ম: ওটার ঠিক আগে যে noun পাব, ওটা মানে সেটাই।
       </div>
       <div className="mt-3 grid gap-3">
         {R3.map((row, r) => {

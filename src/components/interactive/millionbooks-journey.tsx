@@ -231,7 +231,7 @@ export function SpeedBet() {
           </text>
         </g>
       </svg>
-      <div className="mt-2 text-sm font-medium text-muted">আপুর ভাই বলছেন, machine B-কে machine A র মতোই দ্রুত করা যায়, একটা উত্তরও না বদলে। আপনার কী মনে হয়?</div>
+      <div className="mt-2 text-sm font-medium text-muted">আপুর ভাই বলছেন, machine B-কে machine A র মতোই fast বানান যায়, একটা উত্তরও না বদলে। আপনার কী মনে হয়?</div>
       <div className="mt-2 grid gap-2">
         {SB_BET.map((o, i) => (
           <Choice key={o} n={i} look={bet === i ? "picked" : bet !== null ? "dim" : "idle"} disabled={bet !== null} onClick={() => seal(i)}>
@@ -539,7 +539,7 @@ export function BoxOnShelved() {
   const go = () => {
     race.play(Math.ceil((4 * BS_MS) / TICK), () => {
       setRaced(true);
-      pass("1 লম্বা card এ dot product-ই cosine.");
+      pass("1 unit লম্বা card এ dot product-ই cosine.");
     });
   };
 
@@ -629,7 +629,7 @@ export function TipGap() {
 
   return (
     <>
-      <svg viewBox="0 0 260 132" role="img" aria-label={`দুইটা 1 লম্বা card, মাঝে ${deg}°; dot product ${fix(c, 2)}, মাথার দূরত্ব ${fix(d, 2)}`} className="mx-auto block h-auto w-full max-w-[19rem]">
+      <svg viewBox="0 0 260 132" role="img" aria-label={`দুইটা 1 unit লম্বাcard, মাঝে ${deg}°; dot product ${fix(c, 2)}, মাথার দূরত্ব ${fix(d, 2)}`} className="mx-auto block h-auto w-full max-w-[19rem]">
         <rect x={1} y={1} width={258} height={130} rx={10} fill="white" stroke="#cbd5e1" />
         <path d={`M${TG_O.x + TG_R} ${TG_O.y}A${TG_R} ${TG_R} 0 0 0 ${TG_O.x - TG_R} ${TG_O.y}`} fill="none" stroke="#0f1b2d" strokeOpacity={0.18} strokeDasharray="3 3" />
         {d > 0.02 && <path d={`M${TG_O.x + TG_R} ${TG_O.y}L${vx} ${vy}`} stroke="#e11d48" strokeWidth={2.2} strokeDasharray="4 3" />}
@@ -722,7 +722,7 @@ export function YourCos() {
 
   return (
     <>
-      <svg viewBox="0 0 260 150" role="img" aria-label="দুইটা 1 লম্বা card (0.6, 0.8) আর (0.8, 0.6), নিচে cosine মাপার line" className="mx-auto block h-auto w-full max-w-[19rem]">
+      <svg viewBox="0 0 260 150" role="img" aria-label="দুইটা 1 unit লম্বা card (0.6, 0.8) আর (0.8, 0.6), নিচে cosine মাপার line" className="mx-auto block h-auto w-full max-w-[19rem]">
         <rect x={1} y={1} width={258} height={148} rx={10} fill="white" stroke="#cbd5e1" />
         <path d={`M${O.x + R} ${O.y}A${R} ${R} 0 0 0 ${O.x} ${O.y - R}`} fill="none" stroke="#0f1b2d" strokeOpacity={0.2} strokeDasharray="3 3" />
         <MB_Arr x1={O.x} y1={O.y} x2={O.x + 0.6 * R} y2={O.y - 0.8 * R} color="#2563eb" w={2.4} />
@@ -789,7 +789,7 @@ export function YourCos() {
             ? "Cosine কখনো 1 এর বেশি হয় না। 0.6 আর 0.8 যোগ হলো। গুণটা কোথায়?"
             : pick === 2
               ? "0.48 তো শুধু প্রথম slot জোড়ার গুণ। Dot product এ সব জোড়া লাগে।"
-              : "দুইটা card-ই 1 লম্বা। 1 × 1 দিয়ে ভাগ দিলে কী বদলায়?"}
+              : "দুইটা card-ই 1 unit লম্বা। 1 × 1 দিয়ে ভাগ দিলে কী বদলায়?"}
         </Nope>
       )}
       <Task done={right}>দুইটা card এর cosine কত, বেছে নিন।</Task>
@@ -829,7 +829,7 @@ export function TryShelve() {
   return (
     <>
       <div className="mx-auto flex max-w-sm items-center gap-2">
-        <svg viewBox="0 0 170 166" role="img" aria-label={`নতুন বইয়ের card, length ${fix(10 / d, 2)}; 1 লম্বা ring এর সাথে তুলনা`} className="block h-auto w-full max-w-[11rem] shrink-0">
+        <svg viewBox="0 0 170 166" role="img" aria-label={`নতুন বইয়ের card, length ${fix(10 / d, 2)}; 1 unit লম্বাring এর সাথে তুলনা`} className="block h-auto w-full max-w-[11rem] shrink-0">
           <rect x={1} y={1} width={168} height={164} rx={10} fill="white" stroke="#cbd5e1" />
           <path d={`M${TS_O.x} ${TS_O.y}H164M${TS_O.x} ${TS_O.y}V6`} stroke="#0f1b2d" strokeOpacity={0.35} strokeWidth={1} />
           <text x={162} y={TS_O.y - 4} textAnchor="end" fontSize={9} fill="#64748b">
@@ -1472,7 +1472,7 @@ export function OnceNotEvery() {
 
 const X6_SAY = [
   "Cosine: dot product, তারপর দুইটা length দিয়ে ভাগ।",
-  "Card দুইটা আগেই 1 লম্বা। মাথায় 3.6 এর টুপি: û, v̂।",
+  "Card দুইটা আগেই 1 unit লম্বা। মাথায় 3.6 এর টুপি: û, v̂।",
   "1 × 1 দিয়ে ভাগ দিলে কিছুই বদলায় না।",
   "তাই সাদামাটা dot product-ই cosine.",
 ];
@@ -1539,7 +1539,7 @@ export function StoreOnce() {
           <g className={POP}>
             <rect x={101} y={3} width={48} height={18} rx={9} fill="#b45309" />
             <text x={125} y={15.5} textAnchor="middle" fontSize={9.5} fontWeight={700} fill="white">
-              প্রশ্ন
+              Search
             </text>
           </g>
         )}

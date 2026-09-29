@@ -1220,7 +1220,7 @@ export function BothRecipes() {
 // 7a · Naming it: the stick's triangle, shadow ÷ stick = cos θ; then w's
 //      shadow on v is ‖w‖ cos θ, and the drop meets v square.
 
-const COS_SAY = ["1 লম্বা একটা কঞ্চি, θ angle এ হেলানো।", "ওর shadow ÷ কঞ্চি? এটাই card এর number। এর নাম cos θ।", "3.61 লম্বা কঞ্চির shadow হয় 3.61 × cos θ.", "w এর মাথা থেকে দাগটা v এর উপর right angle এ নামে। এই নামানোকে বলে projection।"];
+const COS_SAY = ["1 unit লম্বাএকটা কঞ্চি, θ angle এ হেলানো।", "ওর shadow ÷ কঞ্চি? এটাই card এর number। এর নাম cos θ।", "3.61 unit লম্বাকঞ্চির shadow হয় 3.61 × cos θ.", "w এর মাথা থেকে দাগটা v এর উপর right angle এ নামে। এই নামানোকে বলে projection।"];
 
 export function CosName() {
   const s = useScene(4, [500, 1800, 2000, 2200]);
@@ -1288,7 +1288,7 @@ const P7_SH = ["0.866", "1.73", "3.13", "3.13"];
 const P7_SAY = [
   "আগের কঞ্চিটা: 1 metre, 30° হেলানো। ওর shadow 0.866.",
   "মামির বাঁশের মতো: দ্বিগুণ লম্বা, একই হেলান, shadow ও দ্বিগুণ। 1.73.",
-  "3.61 লম্বা একটা বাঁশ, 30° তে: 3.61 × 0.866 = 3.13.",
+  "3.61 unit লম্বাএকটা বাঁশ, 30° তে: 3.61 × 0.866 = 3.13.",
   "ওই বাঁশটাই w, দাঁড়িয়ে আছে v এর উপর। তাই w এর shadow হলো w এর length × card এর number.",
 ];
 
