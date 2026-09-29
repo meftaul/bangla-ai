@@ -111,7 +111,7 @@ const TRIP_NO = ["1", "2", "3", "4", "5", "6"];
 
 /** the four bet lines: who drew each, and how */
 const BETS: { who: string; say: string; rule: Rule; color: string }[] = [
-  { who: "নাসিব", say: "প্রথম দুই ট্রিপের উপর দিয়ে", rule: [30, 5], color: OK },
+  { who: "হামজা", say: "প্রথম দুই ট্রিপের উপর দিয়ে", rule: [30, 5], color: OK },
   { who: "করিম", say: "শেষের দুই ট্রিপের উপর দিয়ে", rule: [-60, 20], color: "#db2777" },
   { who: "ভ্যানওয়ালা", say: "উঠলেই বিশ, কিলো দশ", rule: VAN, color: VANC },
   { who: "সামিন", say: "ফোনের app যা দিলো", rule: LS, color: BEST },
@@ -1591,7 +1591,7 @@ export function FourLines({}: Story) {
   const k = s.k;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="field" label="নাসিব বললো প্রথম দুইটা ট্রিপ ধরলেই হয়; করিম বললো শেষের দুইটা ধরো, ওগুলা নতুন; সামিন ফোনের app এ ছয়টা ট্রিপ দিলো, app একটা লাইন দিলো">
+      <Stage backdrop="field" label="হামজা বললো প্রথম দুইটা ট্রিপ ধরলেই হয়; করিম বললো শেষের দুইটা ধরো, ওগুলা নতুন; সামিন ফোনের app এ ছয়টা ট্রিপ দিলো, app একটা লাইন দিলো">
         <Van x={250} />
         <Khata x={262} y={122} />
         <Person who="nasib" x={50} y={150} facing={1} arm={k === 1 ? "point" : "down"} mood={k === 1 ? "smug" : "plain"} label />

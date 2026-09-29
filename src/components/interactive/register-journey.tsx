@@ -228,7 +228,7 @@ function R_Laptop({ x, y, lines, tone = "plain" }: { x: number; y: number; lines
 //     answers from four friends; the reader seals one. Unmarked; the last
 //     screen settles it.
 
-const SB_OPTS = ["3 × 8 — নাসিব", "8 × 3 — সামিন", "8 × 4, হ্যাঁ/না সহ — সোম", "যেটাই দাও, app বুঝে নিবে — করিম"];
+const SB_OPTS = ["3 × 8 — হামজা", "8 × 3 — সামিন", "8 × 4, হ্যাঁ/না সহ — সোম", "যেটাই দাও, app বুঝে নিবে — করিম"];
 const SB_G: Geo = { nw: 34, cw: 26, rh: 10.5, hh: 13 };
 /** each answer as a picture: its rows × columns as a block of little cells (Som's 4th column amber); Karim's a loose pile */
 const SB_PIC: [rows: number, cols: number][] = [
@@ -825,7 +825,7 @@ export function FlipSideways() {
       setFed(was);
       const next: [boolean, boolean] = was ? [both[0], true] : [true, both[1]];
       setBoth(next);
-      if (was) pass("নাসিবের table ভুল না, কাত করা। নাম transpose.");
+      if (was) pass("হামজাের table ভুল না, কাত করা। নাম transpose.");
     });
   };
   const flip = () => {
@@ -881,7 +881,7 @@ export function FlipSideways() {
           App কে দিন
         </button>
       </div>
-      <Task done={both[1]}>Table টা কাত করে নাসিবের 3 × 8 বানান। তারপর app কে দিন।</Task>
+      <Task done={both[1]}>Table টা কাত করে হামজাের 3 × 8 বানান। তারপর app কে দিন।</Task>
     </>
   );
 }
@@ -1324,7 +1324,7 @@ export function SirCalls({}: Story) {
   const k = s.k;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="room" label="খেলার স্যার বললেন row 2, column 3; নাসিব আর সামিন দুই জায়গায় আঙুল রাখলো">
+      <Stage backdrop="room" label="খেলার স্যার বললেন row 2, column 3; হামজা আর সামিন দুই জায়গায় আঙুল রাখলো">
         <Person who="mama" x={160} y={150} facing={-1} />
         <S_Name x={160} y={150} text="খেলার স্যার" />
         <S_Table x={96} w={130} />
@@ -1380,7 +1380,7 @@ export function NasibsBoard({}: Story) {
   const k = s.k;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="room" label="দেয়ালে স্কুলের notice board, সেখানে নাম পাশাপাশি এক লাইনে; নাসিব দেখিয়ে বললো আমি ওইভাবেই গুনেছি, 3 × 8">
+      <Stage backdrop="room" label="দেয়ালে স্কুলের notice board, সেখানে নাম পাশাপাশি এক লাইনে; হামজা দেখিয়ে বললো আমি ওইভাবেই গুনেছি, 3 × 8">
         <rect x={168} y={26} width={146} height={70} rx={3} fill="#a16207" />
         <rect x={173} y={31} width={136} height={60} rx={2} fill="#fef3c7" />
         {k >= 1 &&
@@ -1742,7 +1742,7 @@ export function HeightColumn() {
 //      the cell's name a₂₃ is built. Then Nasib's route, column first, ends on
 //      41: row 3, column 2.
 
-const X4_SAY = ["Table এর নাম A.", "আগে নিচে নামুন: row 2। R আগে।", "তারপর পাশে যান: column 3। C পরে।", "ঘরটার নাম a₂₃। ছোট a, আগে row, পরে column.", "নাসিব আগে column গুনেছিল। তাই পৌঁছেছে row 3, column 2 তে: 41।"];
+const X4_SAY = ["Table এর নাম A.", "আগে নিচে নামুন: row 2। R আগে।", "তারপর পাশে যান: column 3। C পরে।", "ঘরটার নাম a₂₃। ছোট a, আগে row, পরে column.", "হামজা আগে column গুনেছিল। তাই পৌঁছেছে row 3, column 2 তে: 41।"];
 
 export function RowThenColumn() {
   const s = useScene(4, [600, 1600, 1600, 2400, 2600]);
@@ -1759,7 +1759,7 @@ export function RowThenColumn() {
   const [fx, fy] = useTween([c < 0 ? g.nw / 2 : g.nw + c * g.cw + g.cw / 2, g.hh + r * g.rh + g.rh / 2], 700);
   return (
     <Scene scene={s} caption={say(X4_SAY, k)}>
-      <svg viewBox="-10 -12 200 116" role="img" aria-label="table A; আঙুল আগে row 2 তে নামে, তারপর column 3 এ যায়; ঘরের নাম a দুই তিন; নাসিবের পথ আগে column" className="mx-auto block h-auto w-full max-w-[16rem]">
+      <svg viewBox="-10 -12 200 116" role="img" aria-label="table A; আঙুল আগে row 2 তে নামে, তারপর column 3 এ যায়; ঘরের নাম a দুই তিন; হামজাের পথ আগে column" className="mx-auto block h-auto w-full max-w-[16rem]">
         <Sheet data={cells(R_DATA)} g={g} numbered />
         {k >= 1 && <circle cx={fx} cy={fy} r={4.5} fill={HI} fillOpacity={0.35} stroke={HI} />}
         {k >= 3 && (
@@ -2035,11 +2035,11 @@ export function ArrayNoMeaning() {
 
 const X10_BETS: [string, string, "no" | "half" | "yes"][] = [
   ["করিম", "যেটাই দাও", "no"],
-  ["নাসিব", "3 × 8", "half"],
+  ["হামজা", "3 × 8", "half"],
   ["সোম", "8 × 4", "half"],
   ["সামিন", "8 × 3", "yes"],
 ];
-const X10_SAY = ["চারটা বাজি।", "করিম: app কিছু বুঝে নেয় না।", "নাসিব: table ঠিক, শুধু কাত করা।", "সোম: column লাগে, তবে আলাদা করে, y হয়ে।", "সামিন: 8 × 3। App এটাই নিলো।"];
+const X10_SAY = ["চারটা বাজি।", "করিম: app কিছু বুঝে নেয় না।", "হামজা: table ঠিক, শুধু কাত করা।", "সোম: column লাগে, তবে আলাদা করে, y হয়ে।", "সামিন: 8 × 3। App এটাই নিলো।"];
 
 function X10_Mark({ kind }: { kind: "no" | "half" | "yes" }) {
   if (kind === "yes") return <path d="M-5 0l3.5 4l7 -8" fill="none" stroke={OK} strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round" />;
@@ -2052,7 +2052,7 @@ export function BetSettled() {
   const k = s.k;
   return (
     <Scene scene={s} caption={say(X10_SAY, k)}>
-      <svg viewBox="0 0 240 70" role="img" aria-label="চারটা বাজির হিসাব: করিম হারলো, নাসিব আর সোম অর্ধেক, সামিন জিতলো" className="mx-auto block h-auto w-full max-w-[17rem]">
+      <svg viewBox="0 0 240 70" role="img" aria-label="চারটা বাজির হিসাব: করিম হারলো, হামজা আর সোম অর্ধেক, সামিন জিতলো" className="mx-auto block h-auto w-full max-w-[17rem]">
         {X10_BETS.map(([who, t, kind], i) => (
           <g key={who} transform={`translate(${8 + i * 58} 8)`}>
             <rect width={52} height={40} rx={5} fill="white" stroke={INK} strokeOpacity={0.3} />

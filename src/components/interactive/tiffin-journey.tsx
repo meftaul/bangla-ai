@@ -58,7 +58,7 @@ import { sfx } from "@/components/journey/sfx";
 // customers and spam, words tugging a slip's dot, the tiffin box filling its
 // label, the average as a linear combination, λ₁v₁ + … + λₖvₖ growing, the
 // subscript trap, presses that are the vector's numbers, one star by two
-// remotes, a basis turned to fit a cloud, নাসিব's win, a GPU's cells, a
+// remotes, a basis turned to fit a cloud, হামজা's win, a GPU's cells, a
 // straight line on curved data, and the Check's right and wrong answers.
 //
 // Tailwind only; the sheets are journey/plane. Ink on the white sheet is fixed.
@@ -76,9 +76,9 @@ const KEY_STEP: Record<string, XY> = { ArrowRight: [1, 0], ArrowLeft: [-1, 0], A
 type Story = { story?: boolean };
 
 // ---------------------------------------------------------------------------
-// 1a · A story scene for screen 1's setup, no task: নাসিবের বাজি. নাসিব is
+// 1a · A story scene for screen 1's setup, no task: হামজাের বাজি. হামজা is
 //      washing glasses by the শরবত stall and scoffs at the two moves; ফাহিম
-//      walks up with his list of six jobs, and নাসিব reads it and grins. Which
+//      walks up with his list of six jobs, and হামজা reads it and grins. Which
 //      job he means stays his secret.
 
 const S1_Y = 150;
@@ -122,7 +122,7 @@ export function NasibWager({}: Story) {
 
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="fair" label="নাসিব washes glasses at the শরবত stall and scoffs at the two moves; ফাহিম walks up with a list of six jobs, and নাসিব grins">
+      <Stage backdrop="fair" label="হামজা washes glasses at the শরবত stall and scoffs at the two moves; ফাহিম walks up with a list of six jobs, and হামজা grins">
         <Stall x={50} y={S1_Y} sign="শরবত" color="#f97316" w={72} />
         <CastPerson who="nasib" x={n} y={S1_Y} arm={k >= 3 ? "down" : "hold"} mood={k === 1 || k >= 4 ? "smug" : "plain"} label />
         {k < 3 && <S1Glass x={n + 19} y={S1_Y - 40} />}
@@ -136,7 +136,7 @@ export function NasibWager({}: Story) {
 }
 
 // ---------------------------------------------------------------------------
-// 1 · নাসিবের বাজি। The six jobs of this journey, laid out at the start beside
+// 1 · হামজাের বাজি। The six jobs of this journey, laid out at the start beside
 //     the only two moves the reader owns. The reader bets on the one that
 //     cannot be done, and the bet is sealed, never marked: BendIt (screen 9)
 //     is what settles it. This is the question the whole journey answers.
@@ -234,7 +234,7 @@ export function MovesOnly() {
   const tip = add(X1_U, X1_V);
 
   return (
-    <Scene scene={s} caption={k < 4 ? X1_SAY[k] : <span className={FADE}>নাসিবের শর্তে সেটা নিষেধ। ছয়টা কাজেই চাল শুধু এই দুইটা।</span>}>
+    <Scene scene={s} caption={k < 4 ? X1_SAY[k] : <span className={FADE}>হামজাের শর্তে সেটা নিষেধ। ছয়টা কাজেই চাল শুধু এই দুইটা।</span>}>
       <div className="flex justify-center gap-3">
         <X1Panel title="যোগ" on={k >= 1}>
           {k >= 1 && (
@@ -2845,7 +2845,7 @@ export function DataBasis() {
 }
 
 // ---------------------------------------------------------------------------
-// 9a · A story scene for screen 9's setup, no task: the last job. নাসিব walks
+// 9a · A story scene for screen 9's setup, no task: the last job. হামজা walks
 //      up to the pond with his face gone dry, one job left; then the curved
 //      road along the bank, and a straight string of beads that comes to hover
 //      over it. Whether it can be laid on the road is the widget's question.
@@ -2861,7 +2861,7 @@ export function PondRoad({}: Story) {
 
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="field" ground={100} label="নাসিব, worried, reaches the pond with one job left; a curved road runs along the bank, and a straight string of beads hovers over it">
+      <Stage backdrop="field" ground={100} label="হামজা, worried, reaches the pond with one job left; a curved road runs along the bank, and a straight string of beads hovers over it">
         <Tree x={292} y={108} s={0.8} />
         <Tree x={118} y={104} s={0.55} />
         <ellipse cx={205} cy={154} rx={54} ry={17} fill="#38bdf8" stroke="#0284c7" strokeWidth={1} />
@@ -3123,8 +3123,8 @@ export function CurvedData() {
 }
 
 // ---------------------------------------------------------------------------
-// 9¾ · A story scene for screen 9's explanation, no task: নাসিব wins. The
-//      straight rope still hangs over the curved road; ফাহিম gives up, নাসিব
+// 9¾ · A story scene for screen 9's explanation, no task: হামজা wins. The
+//      straight rope still hangs over the curved road; ফাহিম gives up, হামজা
 //      walks in grinning, and the six jobs are ticked on a board: five done,
 //      one not.
 
@@ -3153,7 +3153,7 @@ export function NasibWins() {
 
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="field" ground={100} label="the straight rope still hangs over the curved road; ফাহিম gives up, নাসিব walks in grinning, and a board shows five jobs done and one not">
+      <Stage backdrop="field" ground={100} label="the straight rope still hangs over the curved road; ফাহিম gives up, হামজা walks in grinning, and a board shows five jobs done and one not">
         <Tree x={302} y={108} s={0.7} />
         <ellipse cx={205} cy={154} rx={54} ry={17} fill="#38bdf8" stroke="#0284c7" strokeWidth={1} />
         <path d="M138 172C148 108 262 108 272 172" fill="none" stroke="#c8a27a" strokeWidth={10} strokeLinecap="round" />

@@ -1240,7 +1240,7 @@ export function BookLine() {
 export function NasibKhata({}: Story) {
   const s = useScene(2, [600, 2400]);
   const k = s.k;
-  // নাসিব works the TV's sum in the khata
+  // হামজা works the TV's sum in the khata
   useEffect(() => {
     if (k === 1) sfx.scribble(4, 0.25, 0.2);
   }, [k]);
@@ -1332,7 +1332,7 @@ export function NasibSum() {
       pl.play(NS_WRONG[i].length);
       return;
     }
-    pl.play(NS_FIXED.length, () => pass("নাসিব minus টা ফেলে দিয়েছে: α = −2।"));
+    pl.play(NS_FIXED.length, () => pass("হামজা minus টা ফেলে দিয়েছে: α = −2।"));
   };
   const look = (i: number): Look => (i === pick ? (won ? "right" : "picked") : won ? "dim" : "idle");
 
@@ -1378,7 +1378,7 @@ export function NasibSum() {
           </Plane>
         </div>
         <div className="min-w-0 flex-1">
-          <div className="text-xs font-semibold text-muted">নাসিবের খাতা</div>
+          <div className="text-xs font-semibold text-muted">হামজাের খাতা</div>
           <div className="mt-1 grid gap-1.5">
             {NS_LINES.map((l, i) => (
               <button
@@ -1402,7 +1402,7 @@ export function NasibSum() {
       {won && !pl.running && (
         <div className={`${FADE} mt-2 text-center text-[0.95rem] text-accent-text`}>α = −2 নিলে: −2·(1, 2) + 1·(2, 5) = (0, 1)। টিভি।</div>
       )}
-      <Task done={won && !pl.running}>নাসিবের হিসাবের যে line এ ভুল, সেটায় tap করুন।</Task>
+      <Task done={won && !pl.running}>হামজাের হিসাবের যে line এ ভুল, সেটায় tap করুন।</Task>
     </>
   );
 }
@@ -1425,12 +1425,12 @@ export function TvFixed() {
   return (
     <Scene
       scene={s}
-      caption={k < 3 ? <span key={k} className={FADE}>{X7_SAY[k]}</span> : <span className={FADE}>নাসিব লিখেছিল α = 2। তাতে u আরো 2 ঘর ডানে নেয়: first slot 4, 0 না।</span>}
+      caption={k < 3 ? <span key={k} className={FADE}>{X7_SAY[k]}</span> : <span className={FADE}>হামজা লিখেছিল α = 2। তাতে u আরো 2 ঘর ডানে নেয়: first slot 4, 0 না।</span>}
     >
       {k < 3 ? (
         <SlotBar target={0} vShare={2} vLabel="v: 2" uLabel="u: −2" show={k === 0 ? 0 : k === 1 ? 1 : 2} />
       ) : (
-        <SlotBar target={4} vShare={2} vLabel="v: 2" uLabel="নাসিবের u: 2" show={2} />
+        <SlotBar target={4} vShare={2} vLabel="v: 2" uLabel="হামজাের u: 2" show={2} />
       )}
     </Scene>
   );

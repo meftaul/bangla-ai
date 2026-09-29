@@ -882,7 +882,7 @@ export function TileCounts() {
             {X3B_SAY[k]}
           </span>
         ) : (
-          <span className={FADE}>যে tile-ই বলুন, press এর count ওর নিজের দুইটা সংখ্যা। নাসিবের rule আপাতত টিকে গেলো।</span>
+          <span className={FADE}>যে tile-ই বলুন, press এর count ওর নিজের দুইটা সংখ্যা। হামজাের rule আপাতত টিকে গেলো।</span>
         )
       }
     >
@@ -2051,7 +2051,7 @@ export function Finale() {
       </div>
       {all && !pl.running && (
         <div className={`${FADE} mx-auto mt-3 max-w-sm rounded-2xl bg-cat-violet/5 px-4 py-3 text-center text-[0.95rem]`}>
-          নাসিবের rule দুইবার হারলো। Button গুনে লাভ নাই; দেখুন কতদূর যায়।
+          হামজাের rule দুইবার হারলো। Button গুনে লাভ নাই; দেখুন কতদূর যায়।
         </div>
       )}
       <Task done={all && !pl.running}>চারটা remote এর result একটা একটা করে খুলুন। Floor এ দেখুন কোন mark এ রং পড়ে।</Task>

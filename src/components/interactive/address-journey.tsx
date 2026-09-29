@@ -395,7 +395,7 @@ function LensTag({ cells, fera = false, lit = false }: { cells: Cells; fera?: bo
 
 const X1_CARDS: { who: string; line: string; c: XY }[] = [
   { who: "দুলাভাই", line: "map এ যা, card এও তা", c: [5, 2] },
-  { who: "নাসিব", line: "road lens দিয়ে চালানো", c: [7, 2] },
+  { who: "হামজা", line: "road lens দিয়ে চালানো", c: [7, 2] },
   { who: "করিম", line: "বাঁধেই বেশি হাঁটা", c: [2, 3] },
   { who: "সামিন", line: "চুপচাপ লিখলো", c: [3, 2] },
 ];
@@ -556,7 +556,7 @@ function X3_Pic({ from, to, both = false }: { from: "card" | "map"; to: "card" |
 }
 
 const X3_OPTS: { from: "card" | "map"; to: "card" | "map"; both?: boolean; say: string }[] = [
-  { from: "map", to: "card", say: "map দিলে card (নাসিব)" },
+  { from: "map", to: "card", say: "map দিলে card (হামজা)" },
   { from: "card", to: "map", say: "card দিলে map" },
   { from: "card", to: "map", both: true, say: "দুই দিকেই একই" },
 ];
@@ -637,7 +637,7 @@ export function LensMakesMap() {
           <div className="flex justify-center">
             {runs < 2 && (
               <button type="button" className={primaryBtn} disabled={play.running} onClick={feed}>
-                {runs === 0 ? "Card (3, 2) lens এ দিন" : "নাসিবের মতো map (5, 2) দিন"}
+                {runs === 0 ? "Card (3, 2) lens এ দিন" : "হামজাের মতো map (5, 2) দিন"}
               </button>
             )}
           </div>
@@ -1127,14 +1127,14 @@ export function LeavingMorning({}: Story) {
 export function NasibLens({}: Story) {
   const s = useScene(3, [600, 1800, 2400, 2400]);
   const k = s.k;
-  // নাসিব holds up the light bhai's lens
+  // হামজা holds up the light bhai's lens
   useEffect(() => {
     if (k === 1) sfx.lens();
   }, [k]);
   const up = k >= 1;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="field" label="নাসিব টেবিল থেকে লাইট ভাইয়ের হেলানো lens তুললো; lens এর ভেতরে দুইটা রাস্তা, সোজা আর হেলানো; নাসিব বললো roads এর lens তো এইটাই, map এর সংখ্যা চালান, card বের হবে">
+      <Stage backdrop="field" label="হামজা টেবিল থেকে লাইট ভাইয়ের হেলানো lens তুললো; lens এর ভেতরে দুইটা রাস্তা, সোজা আর হেলানো; হামজা বললো roads এর lens তো এইটাই, map এর সংখ্যা চালান, card বের হবে">
         <St_Veranda x0={0} x1={240} />
         <St_Table x={150} />
         {!up && <St_Lens x={140} y={122} r={6} />}
@@ -1170,7 +1170,7 @@ export function LensOnMap({}: Story) {
   const k = s.k;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="field" label="নাসিব lens টা map এর উপর ধরে আছে; সোম পাশে এসে বসলো; বললো, lens টা কোন দিকে চলে আগে দেখো, card দিলে কী বের হয়">
+      <Stage backdrop="field" label="হামজা lens টা map এর উপর ধরে আছে; সোম পাশে এসে বসলো; বললো, lens টা কোন দিকে চলে আগে দেখো, card দিলে কী বের হয়">
         <St_Veranda x0={0} x1={300} />
         <St_Table x={150} />
         <Person who="nasib" x={110} y={150} facing={1} arm="hold" label />
@@ -1500,7 +1500,7 @@ export function LensColumns() {
 //       the house slides there. The real house stays: it needed a new name,
 //       not a new place (6.7: active vs passive).
 
-const X3C_SAY = ["বাড়ি map এর (5, 2) এ।", "নাসিব (5, 2) কেই card ধরে lens এ দিলো: 5 ঘর সোজা, 2 ঘর বাঁধ।", "পৌঁছালো (7, 2)। Lens বাড়িটাকে সরিয়ে এখানে আনতো। 6.7 এর active move.", "আসল বাড়ি নড়ে নাই। তার দরকার ছিলো নতুন নাম। Passive."];
+const X3C_SAY = ["বাড়ি map এর (5, 2) এ।", "হামজা (5, 2) কেই card ধরে lens এ দিলো: 5 ঘর সোজা, 2 ঘর বাঁধ।", "পৌঁছালো (7, 2)। Lens বাড়িটাকে সরিয়ে এখানে আনতো। 6.7 এর active move.", "আসল বাড়ি নড়ে নাই। তার দরকার ছিলো নতুন নাম। Passive."];
 
 export function HouseMoved() {
   const s = useScene(3, [600, 1800, 2400, 2400]);
@@ -1508,7 +1508,7 @@ export function HouseMoved() {
   const f = V;
   return (
     <Scene scene={s} caption={say(X3C_SAY, k)}>
-      <V_Map label="নাসিবের পথ: map এর (5, 2) কে card ধরে চালালে পৌঁছায় (7, 2); বাড়ির একটা কপি সেখানে সরে যায়; আসল বাড়ি জায়গায় থাকে" className="max-w-[17rem]">
+      <V_Map label="হামজাের পথ: map এর (5, 2) কে card ধরে চালালে পৌঁছায় (7, 2); বাড়ির একটা কপি সেখানে সরে যায়; আসল বাড়ি জায়গায় থাকে" className="max-w-[17rem]">
         {k >= 1 && <V_Walk f={f} pts={walkOf(HOUSE)} upto={9} />}
         {k === 2 && (
           <g className={`${POP} pointer-events-none`}>

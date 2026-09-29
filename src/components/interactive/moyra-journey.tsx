@@ -1391,7 +1391,7 @@ export function NasibClaim({}: Story) {
   const k = s.k;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="field" label="নাসিব দামের কাগজের দিকে আঙুল দেখিয়ে বললো, মোট বদলাইতে থাকেন, কোথাও না কোথাও কাটবেই">
+      <Stage backdrop="field" label="হামজা দামের কাগজের দিকে আঙুল দেখিয়ে বললো, মোট বদলাইতে থাকেন, কোথাও না কোথাও কাটবেই">
         <Veranda />
         <Chouki x={160} y={150} w={100} />
         <g className="pointer-events-none">

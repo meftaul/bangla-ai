@@ -32,7 +32,7 @@ import { sfx } from "@/components/journey/sfx";
 // At the science fair the class sells লেবুর শরবত from a recipe card written
 // for 4 glasses. Eight people queue: two batches are the card added to itself,
 // every slot doubled. Drawn on graph paper, every batch size sits on one line
-// through 0, and নাসিব's extra sugar knocks the dot off it. A knob then
+// through 0, and হামজা's extra sugar knocks the dot off it. A knob then
 // multiplies (1, 2) by anything, minus and zero included: the tip never leaves
 // the line. Five number cards sorted by what they do name the scalar. Flip
 // সামিন's arrow from 3.1 and add, and it lands on the same card as the
@@ -442,7 +442,7 @@ export function RecipeOnPaper() {
 
 // ---------------------------------------------------------------------------
 // 2 · The recipe as a dot on (লেবু, চিনি) paper. 1, 2, 4 and 8 glasses all sit
-//     on one line through 0; নাসিব doubles only the sugar and falls off it.
+//     on one line through 0; হামজা doubles only the sugar and falls off it.
 
 const FT = makeFrame(0, 5, 0, 9, 26);
 const SIZES = [1, 2, 4, 8];
@@ -483,7 +483,7 @@ export function TasteLine() {
           </button>
         ))}
       </div>
-      <Plane f={FT} ticks={1} label={`recipe dots for ${seen.map((i) => SIZES[i]).join(", ")} glasses${nasib ? ", and নাসিব's (2, 8) off the line" : ""}`} className="max-w-[14rem]">
+      <Plane f={FT} ticks={1} label={`recipe dots for ${seen.map((i) => SIZES[i]).join(", ")} glasses${nasib ? ", and হামজা's (2, 8) off the line" : ""}`} className="max-w-[14rem]">
         <Label f={FT} at={[5, 0]} dx={-4} dy={-6} anchor="end" size={9} className="fill-[#5a6b7d]">
           লেবু →
         </Label>
@@ -502,7 +502,7 @@ export function TasteLine() {
           <>
             <Dot f={FT} at={NASIB} r={6} className="fill-cat-coral" pop />
             <Label f={FT} at={NASIB} dx={9} dy={4} anchor="start" size={10} weight={700} className={`${FADE} fill-cat-coral`}>
-              নাসিব
+              হামজা
             </Label>
           </>
         )}
@@ -514,19 +514,19 @@ export function TasteLine() {
       {all && !nasib && (
         <div className={`${FADE} mt-3 flex justify-center`}>
           <button type="button" onClick={spoil} className={`${primaryBtn} bg-cat-coral`}>
-            নাসিবকে শরবত বানাতে দিন
+            হামজাকে শরবত বানাতে দিন
           </button>
         </div>
       )}
       {nasib && (
         <>
-          <Speech who="নাসিব" initial="ন" tint="blue">
+          <Speech who="হামজা" initial="ন" tint="blue">
             {bn(4)} গ্লাসই বানালাম, শুধু চিনিটা ডাবল করে দিলাম। মিষ্টি বেশি, মজাও বেশি!
           </Speech>
-          <Nope>নাসিবের dot লাইন ছেড়ে ওপরে উঠে গেছে। চুমুক দিয়ে সামিন মুখ কুঁচকালো: “এটা তো অন্য শরবত!”</Nope>
+          <Nope>হামজাের dot লাইন ছেড়ে ওপরে উঠে গেছে। চুমুক দিয়ে সামিন মুখ কুঁচকালো: “এটা তো অন্য শরবত!”</Nope>
         </>
       )}
-      <Task done={nasib}>চারটা মাপই একবার করে দেখুন, dot-গুলো কোথায় বসে খেয়াল করুন। তারপর নাসিবের পালা।</Task>
+      <Task done={nasib}>চারটা মাপই একবার করে দেখুন, dot-গুলো কোথায় বসে খেয়াল করুন। তারপর হামজাের পালা।</Task>
     </>
   );
 }
@@ -613,14 +613,14 @@ export function LemonStairs() {
 }
 
 // ---------------------------------------------------------------------------
-// 2⅓ · A figure for screen 2's explanation, no task: what নাসিব's extra sugar
-//      breaks. সামিনের card pairs every lemon with 2 spoons. নাসিব takes the
+// 2⅓ · A figure for screen 2's explanation, no task: what হামজা's extra sugar
+//      breaks. সামিনের card pairs every lemon with 2 spoons. হামজা takes the
 //      same 2 lemons and the same pairs, then the sugar alone doubles: every
 //      lemon now goes with 4 spoons. The pair itself changed, so did the taste.
 
 const SC_PAIRS = [
   { who: "সামিন", card: "(2, 4)", ink: "text-cat-blue" },
-  { who: "নাসিব", card: "(2, 8)", ink: "text-cat-coral" },
+  { who: "হামজা", card: "(2, 8)", ink: "text-cat-coral" },
 ];
 
 export function PerLemon() {
@@ -634,13 +634,13 @@ export function PerLemon() {
         k <= 1 ? (
           `সামিনের শরবতে প্রতিটা লেবুর জুটি ${bn(2)} চামচ চিনি।`
         ) : k === 2 ? (
-          `নাসিবও নিলো সেই ${bn(2)}টা লেবু, জুটিও প্রথমে একই।`
+          `হামজাও নিলো সেই ${bn(2)}টা লেবু, জুটিও প্রথমে একই।`
         ) : (
           <span className={FADE}>তারপর চিনি একা ডাবল। প্রতি লেবুতে এখন {bn(4)} চামচ, জুটিটাই বদলে গেল।</span>
         )
       }
     >
-      <div className="mx-auto grid w-fit gap-2" role="img" aria-label="সামিন: every lemon with 2 spoons of sugar; নাসিব: every lemon with 4 spoons">
+      <div className="mx-auto grid w-fit gap-2" role="img" aria-label="সামিন: every lemon with 2 spoons of sugar; হামজা: every lemon with 4 spoons">
         {SC_PAIRS.map((r, i) => {
           const on = k >= i + 1;
           const more = i === 1 && k >= 3;
@@ -682,7 +682,7 @@ export function PerLemon() {
 // ---------------------------------------------------------------------------
 // 2½ · A figure for screen 2's explanation, no task: the same recipes, now as
 //      arrows. The whole card × ¼ and × 2 only slides the tip along its own
-//      line; নাসিব's sugar-only double swings the arrow off it, to (2, 8).
+//      line; হামজা's sugar-only double swings the arrow off it, to (2, 8).
 
 const SC_FA = makeFrame(0, 4.5, 0, 8.5, 18, 14);
 const SC_TURN_SCALE = [1, 1, 0.25, 2, 1];
@@ -690,7 +690,7 @@ const SC_TURN_ROWS: { who: string; v: XY; ink: string }[] = [
   { who: `${bn(4)} গ্লাস, আসল card`, v: [2, 4], ink: "text-cat-blue" },
   { who: `${bn(1)} গ্লাস, পুরো card × ¼`, v: [0.5, 1], ink: "text-cat-blue" },
   { who: `${bn(8)} গ্লাস, পুরো card × 2`, v: [4, 8], ink: "text-cat-blue" },
-  { who: "নাসিব, শুধু চিনি × 2", v: NASIB, ink: "text-cat-coral" },
+  { who: "হামজা, শুধু চিনি × 2", v: NASIB, ink: "text-cat-coral" },
 ];
 /** a point `r` px from the origin of SC_FA, pointing along `v` */
 const scRay = (v: XY, r: number) => {
@@ -715,13 +715,13 @@ export function ArrowTurns() {
         ) : k === 3 ? (
           "পুরো card 2 গুণ: লম্বা হলো, দিক তবুও একই। মাথাটা শুধু লাইন ধরে সরে।"
         ) : (
-          <span className={FADE}>নাসিব শুধু চিনির ঘর ডাবল করলো। Arrow লাইন ছেড়ে অন্য দিকে ঘুরে গেল।</span>
+          <span className={FADE}>হামজা শুধু চিনির ঘর ডাবল করলো। Arrow লাইন ছেড়ে অন্য দিকে ঘুরে গেল।</span>
         )
       }
     >
       <div className="flex items-center justify-center gap-3">
         <div className="w-[7rem] shrink-0">
-          <Plane f={SC_FA} ticks={2} label={`the recipe (2, 4) as an arrow, stretched by ¼ and 2 along one line; নাসিব's (2, 8) points elsewhere`} className="my-0! max-w-none">
+          <Plane f={SC_FA} ticks={2} label={`the recipe (2, 4) as an arrow, stretched by ¼ and 2 along one line; হামজা's (2, 8) points elsewhere`} className="my-0! max-w-none">
             <Label f={SC_FA} at={[4.5, 0]} dx={-3} dy={-5} anchor="end" size={8.5} className="fill-[#5a6b7d]">
               লেবু →
             </Label>
@@ -1928,12 +1928,12 @@ export function GramsClue() {
 
 // ---------------------------------------------------------------------------
 // 6¼ · A figure for screen 6's explanation, no task: "হুবহু সেই কাজ".
-//      নাসিবের শরবত card: × 2 lands on the চিনি slot alone, the লেবু slot
+//      হামজাের শরবত card: × 2 lands on the চিনি slot alone, the লেবু slot
 //      stays. A-এর card: × 1000 lands on the ওজন slot alone, the উচ্চতা slot
 //      stays. One slot stretched by itself, twice over.
 
 const SC_SLOT_ROWS: { who: string; slots: [string, number][]; by: number }[] = [
-  { who: "নাসিবের শরবত", slots: [["লেবু", 2], ["চিনি", 4]], by: 2 },
+  { who: "হামজাের শরবত", slots: [["লেবু", 2], ["চিনি", 4]], by: 2 },
   { who: "A-এর card", slots: [["উচ্চতা", 172], ["ওজন", 68]], by: 1000 },
 ];
 
@@ -1948,13 +1948,13 @@ export function OneSlotOnly() {
         k === 0 ? (
           "দুইটা card। একটা শরবতের, একটা ডাক্তার আপার board-এর।"
         ) : k <= 2 ? (
-          "নাসিব গুণ করেছিল শুধু চিনির ঘর, লেবু যেমন ছিল তেমনই।"
+          "হামজা গুণ করেছিল শুধু চিনির ঘর, লেবু যেমন ছিল তেমনই।"
         ) : (
           <span className={FADE}>Gram-এ লিখতে গুণ হলো শুধু ওজনের ঘর, উচ্চতা যেমন ছিল। হুবহু একই কাজ।</span>
         )
       }
     >
-      <div className="mx-auto grid w-fit gap-1" role="img" aria-label="নাসিব's card: sugar slot alone times 2, 4 to 8; A's card: weight slot alone times 1000, 68 to 68,000">
+      <div className="mx-auto grid w-fit gap-1" role="img" aria-label="হামজা's card: sugar slot alone times 2, 4 to 8; A's card: weight slot alone times 1000, 68 to 68,000">
         {SC_SLOT_ROWS.map((r, i) => {
           const chip = k >= 2 * i + 1;
           const done = k >= 2 * i + 2;

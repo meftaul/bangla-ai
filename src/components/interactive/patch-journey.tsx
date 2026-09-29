@@ -112,7 +112,7 @@ const FLOWER_G = mapPts(LENS_G, FLOWER_OUTLINE);
 const X1_CARDS = [
   { who: "লাইট ভাই", n: 2, line: "lens এ 2 লেখা" },
   { who: "সোম", n: 3, line: "দেখে তিনগুণ লাগে" },
-  { who: "নাসিব", n: 4, line: "2 আর 2, দুই দুগুণে চার" },
+  { who: "হামজা", n: 4, line: "2 আর 2, দুই দুগুণে চার" },
   { who: "করিম", n: 6, line: "2 + 1 + 1 + 2" },
 ];
 const X1F = patchFrame(-0.6, 5.2, -0.6, 3.6, 34); // 213 × 159
@@ -816,7 +816,7 @@ export function FourCounts({}: Story) {
   const k = s.k;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="field" label="উঠানে তিনজন; সোম বললো তিনগুণের মতো লাগে; নাসিব বললো lens এ 2 আর 2, দুই দুগুণে চার; করিম আঙুলে গুনে বললো 2, 1, 1, 2, যোগ করলে 6">
+      <Stage backdrop="field" label="উঠানে তিনজন; সোম বললো তিনগুণের মতো লাগে; হামজা বললো lens এ 2 আর 2, দুই দুগুণে চার; করিম আঙুলে গুনে বললো 2, 1, 1, 2, যোগ করলে 6">
         <StageWall x={SW[0]} y={SW[1]}>
           <St_Flower light dim />
         </StageWall>
@@ -838,7 +838,7 @@ export function RinaStencil({}: Story) {
   const k = s.k;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="field" label="রিনা আসল stencil টা আলোর দিকে তুলে ধরলো, মাঝে এক ঘর আর চার দিকে চারটা পাপড়ি; নাসিব বললো এক ঘর তিনগুণ ঠিক আছে, কিন্তু ফুল তো চারকোনা না, ফুলের হিসাব আলাদা">
+      <Stage backdrop="field" label="রিনা আসল stencil টা আলোর দিকে তুলে ধরলো, মাঝে এক ঘর আর চার দিকে চারটা পাপড়ি; হামজা বললো এক ঘর তিনগুণ ঠিক আছে, কিন্তু ফুল তো চারকোনা না, ফুলের হিসাব আলাদা">
         <Person who="rina" x={110} y={150} facing={1} arm={k >= 1 ? "hold" : "down"} label />
         {k >= 1 && (
           <g className={POP}>

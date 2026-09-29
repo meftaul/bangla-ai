@@ -962,7 +962,7 @@ export function KhichuriVector() {
 type Thing = { icon: ThingKind; name: string; what: string; nums: [string, string][]; more?: boolean; ask: string };
 
 const THINGS: Thing[] = [
-  { icon: "student", name: "নাসিব", what: "ক্লাসের একজন student", nums: [["height", "180"], ["weight", "78"], ["জুতা", "43"], ["বয়স", "18"]], ask: "কার সাথে কার মিল বেশি?" },
+  { icon: "student", name: "হামজা", what: "ক্লাসের একজন student", nums: [["height", "180"], ["weight", "78"], ["জুতা", "43"], ["বয়স", "18"]], ask: "কার সাথে কার মিল বেশি?" },
   { icon: "photo", name: "একটা photo", what: "3000 × 4000 pixel", nums: [["px 1", "10"], ["px 2", "20"], ["px 3", "15"], ["px 4", "25"]], more: true, ask: "ছবিতে কি পাখি আছে?" },
   { icon: "mail", name: "আম্মুর mail", what: "রাত 3:47-এ আসা", nums: [["free", "6"], ["link", "14"], ["caps", "0.31"], ["৩–৫টা", "1"]], ask: "এটা কি spam?" },
   { icon: "movie", name: "Toy Story", what: "0 থেকে 5 score", nums: [["drama", "2"], ["comedy", "5"]], ask: "আর কার ভালো লাগবে?" },

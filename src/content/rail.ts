@@ -192,7 +192,7 @@ const LINES: Line[] = [
     topic: "The dot product, from the haat to ChatGPT",
     machine: { name: "Tiny search box", does: "Finds the library card that points the same way as your question." },
     stations: [
-      s("04a0_nasib_rule", "NSB", "নাসিবের মোড়", "Nasiber Mor", "Rule card", "Why you multiply slot by slot, then add.", Cards),
+      s("04a0_nasib_rule", "NSB", "হামজাের মোড়", "Nasiber Mor", "Rule card", "Why you multiply slot by slot, then add.", Cards),
       s("04a_haat_dot", "HAT", "হাট", "Haat", "Daripalla", "One number from two cards: the dot product.", Basket),
       s("04b_van_push", "KDP", "কাদাপাড়া", "Kadapara", "For-or-against sign", "The dot product's sign says whether a push helps.", PlusMinus),
       s("04c_noon_shadow", "DPC", "দুপুরের ছাদ", "Dupurer Chhad", "Noon stick", "The dot product from a shadow: length × shadow.", Sun),

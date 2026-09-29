@@ -304,7 +304,7 @@ const X1_CARDS: { who: string; line: string; kind: Outcome }[] = [
   { who: "লাইট ভাই", line: "পরিষ্কার heart, এক ফোঁটাও এদিক ওদিক না", kind: "clean" },
   { who: "সামিন", line: "Heart, আর ছোট একটা ফোঁটা", kind: "dot" },
   { who: "সোম", line: "Heart এর উপর বিশাল দাগ", kind: "streak" },
-  { who: "নাসিব", line: "Heart ই আসবে না", kind: "none" },
+  { who: "হামজা", line: "Heart ই আসবে না", kind: "none" },
 ];
 const X1F = patchFrame(-0.3, 2.2, -0.3, 2.2, 40); // 116 × 116
 
@@ -1197,7 +1197,7 @@ export function SpeckGuesses({}: Story) {
   const k = s.k;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="field" label="সামিন বললো দাগ যেমন ছোট, card এও তেমন ছোট থাকবে; সোম বললো ফেরা lens এর সংখ্যা বিশাল, দাগও বিশাল হবে; নাসিব বললো এত চিকন ফালি থেকে heart আসবেই না">
+      <Stage backdrop="field" label="সামিন বললো দাগ যেমন ছোট, card এও তেমন ছোট থাকবে; সোম বললো ফেরা lens এর সংখ্যা বিশাল, দাগও বিশাল হবে; হামজা বললো এত চিকন ফালি থেকে heart আসবেই না">
         <Person who="samin" x={60} y={150} facing={1} arm={k === 1 ? "point" : "down"} label />
         <Person who="som" x={160} y={150} facing={1} arm={k === 2 ? "hold" : "down"} label />
         {k === 2 && <rect x={166} y={100} width={20} height={14} rx={1} fill="#fefce8" stroke="#a16207" strokeWidth={0.8} className={POP} />}

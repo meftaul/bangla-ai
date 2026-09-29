@@ -553,7 +553,7 @@ export function TruckDay({}: Story) {
         {k === 0 && <Bubble x={72} y={S1_G - 34} side="right" lines={["আধা ঘণ্টার মইধ্যে", "মাল নামান, ভাই।"]} />}
         {k === 1 && <Bubble x={136} y={S1_G - 70} side="mid" lines={["button যত বেশি,", "ঝামেলা তত কম।"]} />}
         <CastPerson who="nasib" x={k >= 2 ? 214 : 360} y={S1_G} facing={-1} walking={k === 2} mood="smug" arm={k === 2 ? "point" : "down"} />
-        {k >= 2 && <MvTag x={214} y={S1_G + 12} name="নাসিব" />}
+        {k >= 2 && <MvTag x={214} y={S1_G + 12} name="হামজা" />}
         {k === 2 && <Bubble x={214} y={S1_G - 66} side="mid" lines={["ঠিক দিকে তাক করা", "একটা button ই যথেষ্ট।"]} />}
         <CastPerson who="som" x={k >= 3 ? 276 : 380} y={S1_G} facing={-1} walking={k === 3} mood={k === 3 ? "happy" : "plain"} />
         {k >= 3 && <MvTag x={276} y={S1_G + 12} name="সোম" />}
@@ -662,13 +662,13 @@ export function FewestButtons() {
 const X1_SAY = [
   "তিনজন মানুষ, একটা remote নিয়ে তিন রকম কথা।",
   "দোকানদার: button যত বেশি, তত নিরাপদ।",
-  "নাসিব: ঠিক দিকে তাক করলে একটা button ই যথেষ্ট।",
+  "হামজা: ঠিক দিকে তাক করলে একটা button ই যথেষ্ট।",
   "সোম: যেভাবেই বানান, গুনলে সংখ্যা একই আসবে।",
   "তিনজন একসাথে ঠিক হতে পারে না। কে ঠিক? আজকের প্রশ্ন এটাই।",
 ];
 const X1_CLAIMS: { who: string; lines: string[]; n: number }[] = [
   { who: "দোকানদার", lines: ["যত বেশি,", "তত নিরাপদ।"], n: 6 },
-  { who: "নাসিব", lines: ["একটা button,", "ঠিক দিকে।"], n: 1 },
+  { who: "হামজা", lines: ["একটা button,", "ঠিক দিকে।"], n: 1 },
   { who: "সোম", lines: ["সংখ্যা একই,", "যে-ই বানাক।"], n: 2 },
 ];
 
@@ -1436,7 +1436,7 @@ const X4_DESIGNS: { who: string; keys: Key[] }[] = [
     ],
   },
   {
-    who: "নাসিব",
+    who: "হামজা",
     keys: [
       { name: "a", v: [2, 1], tone: "blue" },
       { name: "b", v: [-1, 2], tone: "coral" },
@@ -1453,7 +1453,7 @@ const X4_DESIGNS: { who: string; keys: Key[] }[] = [
 const X4_SAY = [
   "তিনজন তিনটা floor remote design করলো।",
   "ফাহিমের টা: east আর north। পুরা floor.",
-  "নাসিবের টা: দুইটা বাঁকা button। পুরা floor.",
+  "হামজাের টা: দুইটা বাঁকা button। পুরা floor.",
   "সোমের টা: আরেক জোড়া। আবারো পুরা floor।",
 ];
 
@@ -1488,7 +1488,7 @@ export function ThreeDesigners() {
 //      name dimension lands; Som's claim card from screen 1 gets its tick for
 //      the floor, with the room still a "?".
 
-const X4B_WHO = ["ফাহিম", "নাসিব", "সোম"];
+const X4B_WHO = ["ফাহিম", "হামজা", "সোম"];
 const X4B_SAY = [
   "তিনজনের তিনটা design। গুনলে তিনটাতেই 2।",
   "সংখ্যাটা কে বানালো তার উপর নির্ভর করে না। ওটা floor এর নিজের।",
@@ -1645,7 +1645,7 @@ export function DroneUnderFan({}: Story) {
         {k === 2 && <Bubble x={46} y={S5_G - 50} side="right" lines={["উপরে তো", "ওঠেই না।"]} />}
         <Robot x={86} y={S5_G + 16} />
         <CastPerson who="nasib" x={k >= 3 ? 262 : 360} y={S5_G + 16} facing={-1} walking={k === 3} mood="smug" arm={k >= 3 ? "point" : "down"} />
-        {k >= 3 && <MvTag x={262} y={S5_G + 26} name="নাসিব" />}
+        {k >= 3 && <MvTag x={262} y={S5_G + 26} name="হামজা" />}
         {k >= 3 && <Bubble x={262} y={S5_G - 50} side="left" lines={["ফ্যানের দিকে তাক করা", "একটা button ই যথেষ্ট।"]} />}
       </Stage>
     </StoryFrame>
@@ -1676,11 +1676,11 @@ export function OneAimed() {
 
   const say =
     aim === null
-      ? "নাসিবের button টা ফ্যানের দিকে তাক করুন।"
+      ? "হামজাের button টা ফ্যানের দিকে তাক করুন।"
       : aim === 0
         ? tried.length === 2
           ? "ফ্যান আবার পাওয়া গেলো। ঝুল আবার line এর বাইরে।"
-          : "Drone line ধরে সোজা ফ্যানে। নাসিব ঠিক?"
+          : "Drone line ধরে সোজা ফ্যানে। হামজা ঠিক?"
         : "ঝুল পাওয়া গেলো। কিন্তু এবার ফ্যান line এর বাইরে।";
 
   return (
@@ -1786,7 +1786,7 @@ export function AmmuSpots({}: Story) {
         {k === 1 && <Bubble x={108} y={S5_G - 50} side="mid" lines={["আলমারির মাথা।", "কেউ দেখে নাই।"]} />}
         {k === 2 && <Bubble x={108} y={S5_G - 50} side="right" lines={["ঘড়ির মাথাতেও ধুলা।"]} />}
         <CastPerson who="nasib" x={k >= 3 ? 272 : 360} y={S5_G + 16} facing={-1} walking={k === 3} mood="smug" />
-        {k >= 3 && <MvTag x={272} y={S5_G + 26} name="নাসিব" />}
+        {k >= 3 && <MvTag x={272} y={S5_G + 26} name="হামজা" />}
         {k >= 3 && <Bubble x={272} y={S5_G - 50} side="left" lines={["ঠিক আছে, দুইটা button।", "এদিকে একটা, ওদিকে একটা।"]} />}
       </Stage>
     </StoryFrame>
@@ -1903,7 +1903,7 @@ export function SomThird({}: Story) {
       <Stage backdrop="room" ground={S5_G} label="Nasib holds his two-button remote under the dusty fan; Som walks in and says a third button is needed, and whichever three you aim, the count stays three">
         <S5Fan dust />
         <CastPerson who="nasib" x={110} y={S5_G + 16} arm="hold" mood={k >= 2 ? "puzzled" : "smug"} />
-        <MvTag x={110} y={S5_G + 26} name="নাসিব" />
+        <MvTag x={110} y={S5_G + 26} name="হামজা" />
         <MvRemote x={134} y={S5_G - 30} n={2} s={0.8} />
         <CastPerson who="som" x={k >= 1 ? 236 : 360} y={S5_G + 16} facing={-1} walking={k === 1} mood="plain" arm={k >= 2 ? "point" : "down"} />
         {k >= 1 && <MvTag x={236} y={S5_G + 26} name="সোম" />}
@@ -2388,7 +2388,7 @@ export function TryTwoInRoom() {
             <MvDrone at={RV7.p(now as V3)} />
           </svg>
           <div className="text-center text-sm text-muted">
-            নাসিবের লম্বা button: <span className="font-mono text-cat-blue">(4, 0, 2)</span> আর <span className="font-mono text-cat-coral">(0, 4, 1)</span>
+            হামজাের লম্বা button: <span className="font-mono text-cat-blue">(4, 0, 2)</span> আর <span className="font-mono text-cat-coral">(0, 4, 1)</span>
           </div>
           <div className="mt-1.5 grid grid-cols-3 gap-2">
             {T_PICS.map((p, i) => (
@@ -2525,7 +2525,7 @@ export function NasibStretches({}: Story) {
         <S9Arrow to={[216, 80]} color="#2563eb" len={len} />
         <S9Arrow to={[220, 108]} color="#e0664f" len={len} />
         <CastPerson who="nasib" x={116} y={S5_G + 16} arm="hold" mood="smug" />
-        <MvTag x={116} y={S5_G + 26} name="নাসিব" />
+        <MvTag x={116} y={S5_G + 26} name="হামজা" />
         <MvRemote x={140} y={S5_G - 30} n={2} s={0.8} />
         {k === 1 && <Bubble x={116} y={S5_G - 50} side="right" lines={["button দুইটা অনেক", "লম্বা বানাই।"]} />}
         {k === 2 && <Bubble x={116} y={S5_G - 50} side="right" lines={["তাহলেই সব জায়গায়", "পৌঁছাবে।"]} />}
@@ -2629,7 +2629,7 @@ export function FanDusted({}: Story) {
 
 const VERDICTS: { who: string; claim: string; ok: boolean; why: string; pic: "extra" | "line" | "count" }[] = [
   { who: "দোকানদার", claim: "Button যত বেশি, তত নিরাপদ।", ok: false, why: "তিনের পরে প্রতিটা button বাড়তি। একই ঘর, বেশি টাকা।", pic: "extra" },
-  { who: "নাসিব", claim: "ঠিক দিকে তাক করা একটা button ই যথেষ্ট।", ok: false, why: "এক button রং করে একটা line, যেদিকেই তাক করুন।", pic: "line" },
+  { who: "হামজা", claim: "ঠিক দিকে তাক করা একটা button ই যথেষ্ট।", ok: false, why: "এক button রং করে একটা line, যেদিকেই তাক করুন।", pic: "line" },
   { who: "সোম", claim: "যে-ই বানাক, সংখ্যা একই।", ok: true, why: "Floor এ সবসময় 2। ঘরে সবসময় 3।", pic: "count" },
 ];
 const V8_F = makeFrame(-1, 3, -1, 2, 11, 4);

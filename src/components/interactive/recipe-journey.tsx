@@ -411,7 +411,7 @@ function useMachine() {
 //     between the painting and the stencil card, the card gets a "?".
 
 const X1_CARDS: { who: string; line: string; cells: [[string, string], [string, string]] | null }[] = [
-  { who: "নাসিব", line: "সব সংখ্যা উল্টাও", cells: [["−1", "1/2"], ["1/2", "1"]] },
+  { who: "হামজা", line: "সব সংখ্যা উল্টাও", cells: [["−1", "1/2"], ["1/2", "1"]] },
   { who: "করিম", line: "Z এর সংখ্যাই, এদিক ওদিক", cells: [["1", "−1"], ["−2", "−1"]] },
   { who: "ব্যাগের lens", line: "কেউ চেনে না", cells: [["−1/3", "1/3"], ["2/3", "1/3"]] },
   { who: "লাইট ভাই", line: "বলা যায় না, খুঁজতে হবে", cells: null },
@@ -789,13 +789,13 @@ export function ZeroRefuses() {
     <>
       <div className="flex items-center justify-center gap-2">
         <div className="flex w-[8.75rem] flex-col items-center gap-1.5">
-          <span className="text-xs text-muted">নাসিবের lens</span>
+          <span className="text-xs text-muted">হামজাের lens</span>
           <RecipeBox lens={CRUSH} stage={m.stage} />
           {stopped && <span className={`text-center text-xs font-semibold text-danger ${FADE}`}>det 1·1 − 1·1 = 0. যন্ত্র থেমে গেলো।</span>}
         </div>
         {stopped ? (
           <div className={FADE}>
-            <PatchWall f={X5F} label="নাসিবের lens এর আলো দেয়ালে একটা দাগ; দাগের একটা বিন্দুতে tap করলে দুইটা আলাদা বিন্দু জ্বলে, দুইটাই এখানে এসে পড়ে" className="max-w-[9.5rem]">
+            <PatchWall f={X5F} label="হামজাের lens এর আলো দেয়ালে একটা দাগ; দাগের একটা বিন্দুতে tap করলে দুইটা আলাদা বিন্দু জ্বলে, দুইটাই এখানে এসে পড়ে" className="max-w-[9.5rem]">
               <path d={`M${X5F.sx(-1)} ${X5F.sy(-1)}L${X5F.sx(6)} ${X5F.sy(6)}`} stroke={PK.glow} strokeWidth={X5F.u * 0.5} strokeOpacity={0.55} strokeLinecap="round" />
               <path d={`M${X5F.sx(-1)} ${X5F.sy(-1)}L${X5F.sx(6)} ${X5F.sy(6)}`} stroke={PK.lamp} strokeWidth={1.4} />
               {s &&
@@ -836,7 +836,7 @@ export function ZeroRefuses() {
             </PatchWall>
           </div>
         ) : (
-          <div className="grid h-[10rem] w-[10rem] place-items-center rounded-lg border border-dashed border-border text-center text-xs text-muted">নাসিবের lens এর দাগ</div>
+          <div className="grid h-[10rem] w-[10rem] place-items-center rounded-lg border border-dashed border-border text-center text-xs text-muted">হামজাের lens এর দাগ</div>
         )}
       </div>
       {s && bt >= 1 && (
@@ -851,7 +851,7 @@ export function ZeroRefuses() {
           </button>
         </div>
       )}
-      <Task done={spot !== null && !beam.running}>{!stopped ? "নাসিবের lens যন্ত্রে দিন। তিনটা কাজ একটা একটা করে।" : "দাগের উপরের একটা আলোর বিন্দুতে tap করুন। কে কে এখানে এসে পড়ে?"}</Task>
+      <Task done={spot !== null && !beam.running}>{!stopped ? "হামজাের lens যন্ত্রে দিন। তিনটা কাজ একটা একটা করে।" : "দাগের উপরের একটা আলোর বিন্দুতে tap করুন। কে কে এখানে এসে পড়ে?"}</Task>
     </>
   );
 }
@@ -1354,7 +1354,7 @@ export function NoHisab({}: Story) {
   const k = s.k;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="field" label="উঠানে নাসিব, করিম আর সোম; নাসিব বললো আবার সব সংখ্যা উল্টাও; করিম সোমের খাতায় উঁকি দিয়ে Z এর সংখ্যা এদিক ওদিক করে লিখলো; সোম খাতায় মাথা নিচু করে আছে">
+      <Stage backdrop="field" label="উঠানে হামজা, করিম আর সোম; হামজা বললো আবার সব সংখ্যা উল্টাও; করিম সোমের খাতায় উঁকি দিয়ে Z এর সংখ্যা এদিক ওদিক করে লিখলো; সোম খাতায় মাথা নিচু করে আছে">
         <Person who="nasib" x={60} y={150} facing={1} arm={k === 1 ? "point" : "down"} label />
         <Person who="som" x={170} y={150} facing={-1} arm="hold" label />
         <St_Khata x={158} y={112} />
@@ -1452,7 +1452,7 @@ export function HandInMachine({}: Story) {
 export function PocketLens({}: Story) {
   const s = useScene(2, [600, 1800, 2400]);
   const k = s.k;
-  // নাসিব's pocket lens
+  // হামজা's pocket lens
   useEffect(() => {
     if (k === 1) sfx.lens();
   }, [k]);
@@ -1460,7 +1460,7 @@ export function PocketLens({}: Story) {
   const b = onStage([4.5, 5]);
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="field" label="নাসিব পকেট থেকে তার lens বের করলো, চারটাই 1; দেয়ালের কোনায় এখনো তার আলোর দাগের চক দাগ; নাসিব বললো, এইটারও বানাও">
+      <Stage backdrop="field" label="হামজা পকেট থেকে তার lens বের করলো, চারটাই 1; দেয়ালের কোনায় এখনো তার আলোর দাগের চক দাগ; হামজা বললো, এইটারও বানাও">
         <StageWall x={SW[0]} y={SW[1]}>
           <path d={`M${a[0] - SW[0]} ${a[1] - SW[1]}L${b[0] - SW[0]} ${b[1] - SW[1]}`} stroke="#94a3b8" strokeWidth={1.4} strokeDasharray="3 2" />
         </StageWall>
@@ -1809,7 +1809,7 @@ export function FlipBack() {
 //      spot to one spot: from (5, 5) its arrow can go to (5, 0) or to (0, 5),
 //      not both.
 
-const X5B_SAY = ["(5, 0) আর (0, 5): দুইটা আলাদা জায়গা।", "নাসিবের lens দুইটাকেই পাঠায় (5, 5) এ।", "ফেরার lens (5, 5) কে কোথায় পাঠাবে? (5, 0) এ?", "তাহলে (0, 5) হারালো। একটা জায়গা থেকে এক জায়গাতেই যাওয়া যায়।"];
+const X5B_SAY = ["(5, 0) আর (0, 5): দুইটা আলাদা জায়গা।", "হামজাের lens দুইটাকেই পাঠায় (5, 5) এ।", "ফেরার lens (5, 5) কে কোথায় পাঠাবে? (5, 0) এ?", "তাহলে (0, 5) হারালো। একটা জায়গা থেকে এক জায়গাতেই যাওয়া যায়।"];
 const X5B_F = makeFrame(-0.6, 5.8, -0.6, 5.8, 22, 6);
 
 export function WhereBack() {

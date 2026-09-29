@@ -808,7 +808,7 @@ export function ZOnTheWall() {
 //     matches, the hand doesn't).
 
 const X6_F = makeFrame(-1.5, 1.5, -1.35, 1.35, 52, 8); // 172 × 156
-const X6_NAMES = ["নাসিবের lens", "আয়না"];
+const X6_NAMES = ["হামজাের lens", "আয়না"];
 const X6_LENS = [N, M];
 
 export function TurnIsNotFlip() {
@@ -887,7 +887,7 @@ export function TurnIsNotFlip() {
       <div className="mt-1.5 flex justify-center">
         {!ran[tab] && (
           <button type="button" className={primaryBtn} disabled={run.running} onClick={go}>
-            {tab === 0 ? "নাসিবের lens চালান" : "আয়না চালান"}
+            {tab === 0 ? "হামজাের lens চালান" : "আয়না চালান"}
           </button>
         )}
         {tab === 0 && fitN && ran[0] && (
@@ -896,7 +896,7 @@ export function TurnIsNotFlip() {
           </button>
         )}
       </div>
-      <Task done={done}>{tab === 0 ? "নাসিবের lens চালান। তারপর ছায়াটা ঘুরিয়ে ছবির উপর বসান।" : "আয়নার ছবিতেও ছায়াটা ঘুরিয়ে দেখুন, চার রকমই।"}</Task>
+      <Task done={done}>{tab === 0 ? "হামজাের lens চালান। তারপর ছায়াটা ঘুরিয়ে ছবির উপর বসান।" : "আয়নার ছবিতেও ছায়াটা ঘুরিয়ে দেখুন, চার রকমই।"}</Task>
     </>
   );
 }
@@ -1349,10 +1349,10 @@ export function NasibTwoMinus({}: Story) {
   const cy = SWY + SF.sy(3);
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="field" label="নাসিব চক দিয়ে দেয়ালে নিজের lens লিখলো, দুই কোনায় −1; বললো একটা minus এ এক উল্টা, দুইটা minus, দুইবার উল্টাবে">
+      <Stage backdrop="field" label="হামজা চক দিয়ে দেয়ালে নিজের lens লিখলো, দুই কোনায় −1; বললো একটা minus এ এক উল্টা, দুইটা minus, দুইবার উল্টাবে">
         <H_StageWall>
           <text x={SF.sx(-2)} y={SF.sy(3.4)} fontSize={9} fontWeight={700} fill={CHALK}>
-            নাসিবের lens
+            হামজাের lens
           </text>
         </H_StageWall>
         {k >= 1 && (
@@ -1643,9 +1643,9 @@ export function TradePlaces() {
 //      mirror's never does.
 
 const X6B_SAY = [
-  "বামে নাসিবের lens এর ছবি, ডানে আয়নার। উপরে আসল হাতের ছায়া।",
+  "বামে হামজাের lens এর ছবি, ডানে আয়নার। উপরে আসল হাতের ছায়া।",
   "ছায়া ঘুরছে। আয়নার ছবিতে চারকোনা মিললো, হাত মেলে নাই।",
-  "আধা পাকে নাসিবের ছবিতে হুবহু বসে গেলো।",
+  "আধা পাকে হামজাের ছবিতে হুবহু বসে গেলো।",
   "আয়নার ছবিতে এখনো মেলে না।",
   "পুরা এক পাক। আয়নার ছবিতে একবারও বসলো না।",
 ];
@@ -1661,8 +1661,8 @@ export function SpinVsMirror() {
       <div className="mx-auto grid max-w-[15rem] grid-cols-2 gap-2">
         {[0, 1].map((i) => (
           <div key={i} className="min-w-0">
-            <div className="mb-0.5 text-center text-xs text-muted">{i === 0 ? "নাসিবের lens" : "আয়না"}</div>
-            <H_Wall f={X6B_F} label={i === 0 ? "নাসিবের lens এর ছবি, আসল হাতের ছায়া আধা পাকে বসে যায়" : "আয়নার ছবি, আসল হাতের ছায়া কোনো পাকেই বসে না"} width="max-w-none">
+            <div className="mb-0.5 text-center text-xs text-muted">{i === 0 ? "হামজাের lens" : "আয়না"}</div>
+            <H_Wall f={X6B_F} label={i === 0 ? "হামজাের lens এর ছবি, আসল হাতের ছায়া আধা পাকে বসে যায়" : "আয়নার ছবি, আসল হাতের ছায়া কোনো পাকেই বসে না"} width="max-w-none">
               <H_Print f={X6B_F} move={byCols(i === 0 ? N : M)} />
               <H_Print f={X6B_F} ghost move={rot(i === 0 ? b : a)} tone={i === 0 && k >= 2 ? OK : BLUE} />
             </H_Wall>

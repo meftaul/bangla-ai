@@ -184,7 +184,7 @@ function RP_PaperDraw({ f, hi = null, ropes = true, fish = true }: { f: Frame; h
 //     Unmarked; the last screen settles it.
 
 const TB_OPTS: [string, string][] = [
-  ["প্রত্যেক পাপড়ির জন্য স্যার লাগবে।", "নাসিব"],
+  ["প্রত্যেক পাপড়ির জন্য স্যার লাগবে।", "হামজা"],
   ["আরো কয়েকটা দাগ দিয়ে গেলে হতো।", "করিম"],
   ["দুই দড়িই যথেষ্ট।", "রিনা"],
 ];
@@ -327,7 +327,7 @@ export function TwoRopesBet() {
 
 const GE_F = makeFrame(-1, 9, -1, 9, 20, 8);
 const GE_FRIENDS: [string, XY][] = [
-  ["নাসিব", [2, 3]],
+  ["হামজা", [2, 3]],
   ["করিম", [4, 6.5]],
   ["সোম", [6.5, 5]],
 ];
@@ -928,7 +928,7 @@ export function RopesTied({}: Story) {
   }, [k]);
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="evening" ground={S_ROAD} label="সন্ধ্যা, গেটের সামনের রাস্তা; আর্ট স্যার খুঁটি থেকে দুইটা দড়ি টেনে নিলেন, রিনা দুই মাথায় chalk এর ক্রস দিলো; স্যার বললেন দুই দড়ির মাথা কই গেলো হেইডা জানলেই সব জানা হইলো, তারপর মাগরিবে চলে গেলেন; নাসিব বললো প্রত্যেক পাপড়ির জন্য স্যার লাগবে">
+      <Stage backdrop="evening" ground={S_ROAD} label="সন্ধ্যা, গেটের সামনের রাস্তা; আর্ট স্যার খুঁটি থেকে দুইটা দড়ি টেনে নিলেন, রিনা দুই মাথায় chalk এর ক্রস দিলো; স্যার বললেন দুই দড়ির মাথা কই গেলো হেইডা জানলেই সব জানা হইলো, তারপর মাগরিবে চলে গেলেন; হামজা বললো প্রত্যেক পাপড়ির জন্য স্যার লাগবে">
         <S_Road />
         <S_Pillar />
         {k >= 1 && (
@@ -969,7 +969,7 @@ export function EyeGuesses({}: Story) {
   }, [k]);
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="evening" ground={S_ROAD} label="রিনা কাগজ থেকে পড়লো দুই তিন; নাসিব রাস্তায় এক জায়গায় পা রাখলো, করিম আর সোম আরো দুই জায়গায়">
+      <Stage backdrop="evening" ground={S_ROAD} label="রিনা কাগজ থেকে পড়লো দুই তিন; হামজা রাস্তায় এক জায়গায় পা রাখলো, করিম আর সোম আরো দুই জায়গায়">
         <S_Road />
         <S_Pillar />
         <S_Rope to={[128, 150]} c={E1C} />
@@ -1025,7 +1025,7 @@ export function NasibTurn({}: Story) {
   const k = s.k;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="evening" ground={S_ROAD} label="নাসিব বললো এটা বানানো হিসাব; কালকের উল্টা ঘুরানো ছবিটা তুলে ধরে বললো ওইটা দিয়ে মিলাও">
+      <Stage backdrop="evening" ground={S_ROAD} label="হামজা বললো এটা বানানো হিসাব; কালকের উল্টা ঘুরানো ছবিটা তুলে ধরে বললো ওইটা দিয়ে মিলাও">
         <S_Road />
         <S_Pillar />
         <Person who="som" x={100} y={142} label />
@@ -1468,18 +1468,18 @@ export function KarimWalk() {
 //      Karim's "a few more marks" out, Rina's "two ropes are enough" in.
 
 const X9_BETS: [string, string, boolean][] = [
-  ["নাসিব", "স্যার লাগবে", false],
+  ["হামজা", "স্যার লাগবে", false],
   ["করিম", "আরো দাগ", false],
   ["রিনা", "দুই দড়িই", true],
 ];
-const X9_SAY = ["তিনটা বাজি।", "নাসিব: স্যার ছাড়াই পাঁচটা পাপড়ি বসেছে।", "করিম: বাড়তি একটা দাগও লাগে নাই।", "রিনা: দুই দড়িই যথেষ্ট ছিল।"];
+const X9_SAY = ["তিনটা বাজি।", "হামজা: স্যার ছাড়াই পাঁচটা পাপড়ি বসেছে।", "করিম: বাড়তি একটা দাগও লাগে নাই।", "রিনা: দুই দড়িই যথেষ্ট ছিল।"];
 
 export function RopesBetSettled() {
   const s = useScene(3, [600, 1800, 1800, 2200]);
   const k = s.k;
   return (
     <Scene scene={s} caption={say(X9_SAY, k)}>
-      <svg viewBox="0 0 200 70" role="img" aria-label="তিনটা বাজির হিসাব: নাসিব আর করিম হারলো, রিনা জিতলো" className="mx-auto block h-auto w-full max-w-[15rem]">
+      <svg viewBox="0 0 200 70" role="img" aria-label="তিনটা বাজির হিসাব: হামজা আর করিম হারলো, রিনা জিতলো" className="mx-auto block h-auto w-full max-w-[15rem]">
         {X9_BETS.map(([who, t, win], i) => (
           <g key={who} transform={`translate(${6 + i * 64} 6)`}>
             <rect width={58} height={40} rx={5} fill="white" stroke={INK} strokeOpacity={0.3} />

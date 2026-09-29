@@ -48,7 +48,7 @@ import { sfx } from "@/components/journey/sfx";
 // [2, 1]] and W = [[0, 1], [1, 1]], and the machine has one slot. বাজারের কাঁচের
 // দোকান can cut one new lens before সন্ধ্যা from four numbers; the machine's
 // app on Samin's phone shows what any four numbers would throw on the wall.
-// Which four? Four cards: করিম W + Z, নাসিব entry by entry, সোম "one won't do",
+// Which four? Four cards: করিম W + Z, হামজা entry by entry, সোম "one won't do",
 // সামিন "there is a matrix, find it".
 //
 // Ten screens. 1 seals the bet (LensBet). 2 Z in the slot, W held in front by
@@ -341,7 +341,7 @@ function LJ_Chip({ label, cols, on = false, tint }: { label: ReactNode; cols: Co
 
 const X1_CARDS: { who: string; line: string; face: Cols | "two" | "?" }[] = [
   { who: "করিম", line: "W + Z, যোগ করে দাও", face: SUM },
-  { who: "নাসিব", line: "ঘরে ঘরে গুণ", face: CELL },
+  { who: "হামজা", line: "ঘরে ঘরে গুণ", face: CELL },
   { who: "সোম", line: "একটায় হবে না", face: "two" },
   { who: "সামিন", line: "একটা matrix আছে", face: "?" },
 ];
@@ -508,11 +508,11 @@ export function ThroughBoth() {
 
 const X3_CARDS: { who: string; cols: Cols }[] = [
   { who: "করিমের W + Z", cols: SUM },
-  { who: "নাসিবের ঘরে ঘরে গুণ", cols: CELL },
+  { who: "হামজাের ঘরে ঘরে গুণ", cols: CELL },
 ];
 const X3_NOPE = [
   "করিমের lens dot টা পাঠালো (1, 5) এ। দুই lens পরপর পাঠায় (3, 3) এ। পুরা grid ও অন্য দিকে হেলে গেলো।",
-  "নাসিবের lens dot টা পাঠালো (1, 3) এ। (3, 3) থেকে দুই ঘর বামে। Grid ও মিললো না।",
+  "হামজাের lens dot টা পাঠালো (1, 3) এ। (3, 3) থেকে দুই ঘর বামে। Grid ও মিললো না।",
 ];
 
 export function TryTheCards() {
@@ -1256,7 +1256,7 @@ export function FourIdeas({}: Story) {
   const k = s.k;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="field" label="উঠানে চারজন; করিম বললো W যোগ Z, নাসিব বললো ঘরে ঘরে গুণ, সোম বললো একটায় হবে না, সামিন ফোন হাতে বললো একটা matrix আছে, খুঁজে বের করতে হবে">
+      <Stage backdrop="field" label="উঠানে চারজন; করিম বললো W যোগ Z, হামজা বললো ঘরে ঘরে গুণ, সোম বললো একটায় হবে না, সামিন ফোন হাতে বললো একটা matrix আছে, খুঁজে বের করতে হবে">
         <LJ_Madur x={290} y={152} />
         {FI_SAY.map((p, i) => (
           <Person key={p.who} who={p.who} x={p.x} y={150} facing={i < 2 ? 1 : -1} label arm={k === i + 1 ? "point" : p.who === "samin" ? "hold" : "down"} />
@@ -1621,14 +1621,14 @@ export function CellIsHeight() {
 
 const BO_ROWS: [string, boolean][] = [
   ["করিম: W + Z", false],
-  ["নাসিব: ঘরে ঘরে গুণ", false],
+  ["হামজা: ঘরে ঘরে গুণ", false],
   ["সোম: একটায় হবে না", false],
   ["সামিন: একটা matrix আছে", true],
 ];
 const BO_SAY = [
   "চারটা card।",
   "করিমের যোগ dot টা নিলো (1, 5) এ। মিললো না।",
-  "নাসিবের ঘরে ঘরে গুণ নিলো (1, 3) এ। মিললো না।",
+  "হামজাের ঘরে ঘরে গুণ নিলো (1, 3) এ। মিললো না।",
   "সোম বলেছিল একটায় হবে না। হলো। এক কাঁচেই।",
   "সামিনের matrix: দড়ি ধরে পাওয়া WZ। জিতলো।",
 ];

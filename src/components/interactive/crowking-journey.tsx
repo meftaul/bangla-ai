@@ -2258,8 +2258,8 @@ export function RidgeLasso() {
 }
 
 // ---------------------------------------------------------------------------
-// 8a · A story scene for screen 8's setup, no task: নাসিব's photo contest.
-//      নাসিব walks up to ফাহিমের stall's photo on an easel and gives the
+// 8a · A story scene for screen 8's setup, no task: হামজা's photo contest.
+//      হামজা walks up to ফাহিমের stall's photo on an easel and gives the
 //      rule, edits allowed but no pixel changed by more than 5; one row of the
 //      photo lights up and slides out as the strip of pixels the screen
 //      edits. Where the rule's loophole is stays the screen's question.
@@ -2298,7 +2298,7 @@ export function PhotoContest() {
   const rowY = S8_Y0 + S8_ROW * S8_CELL;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="fair" label="নাসিব at an easel with a photo of ফাহিমের stall gives the contest rule, and one row of the photo's pixels slides out">
+      <Stage backdrop="fair" label="হামজা at an easel with a photo of ফাহিমের stall gives the contest rule, and one row of the photo's pixels slides out">
         <rect x={S8_X0 - 12} y={14} width={w + 24} height={15} rx={3} fill="#dc2626" />
         <text x={S8_X0 + w / 2} y={25} textAnchor="middle" fontSize={8.5} fontWeight={800} fill="white">
           movie club · ছবি প্রতিযোগিতা
@@ -2802,7 +2802,7 @@ export function NestNumbers() {
 
 // ---------------------------------------------------------------------------
 // 11¾ · A figure for the last explanation, no task: the next journey's
-//       trouble, set up and left open. নাসিবের movie club: a visitor (2, 5) who
+//       trouble, set up and left open. হামজাের movie club: a visitor (2, 5) who
 //       loves comedy, a comedy (1, 4) scoring 22 and a drama (5, 2) scoring
 //       20, almost level, because the drama's arrow is longer (5.39 vs 4.12).
 //       Whether length can be taken away and only direction kept is not shown.
@@ -2813,7 +2813,7 @@ const X11B_FILMS = [
   { name: "drama", at: [5, 2] as XY, score: 20, tone: "coral" as const, swatch: "bg-cat-coral", show: 3 },
 ];
 const X11B_SAY = [
-  "নাসিবের movie club। ডানে drama, ওপরে comedy।",
+  "হামজাের movie club। ডানে drama, ওপরে comedy।",
   "দর্শক comedy বেশি ভালোবাসেন: (2, 5)।",
   "Club-এর হিসাবে comedy ছবিটা পেলো 22।",
   "আর drama পেলো 20, প্রায় সমান!",

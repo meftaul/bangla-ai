@@ -34,7 +34,7 @@ type Kid = {
   chip: string;
 };
 
-const NASIB: Kid = { name: "নাসিব", initial: "না", v: [180, 78, 43, 18], shirt: "fill-cat-blue", chip: "bg-cat-blue/15 text-cat-blue" };
+const NASIB: Kid = { name: "হামজা", initial: "না", v: [180, 78, 43, 18], shirt: "fill-cat-blue", chip: "bg-cat-blue/15 text-cat-blue" };
 const SAMIN: Kid = { name: "সামিন", initial: "সা", v: [170, 60, 41, 17], shirt: "fill-cat-coral", chip: "bg-cat-coral/15 text-cat-coral" };
 const SHOM: Kid = { name: "সোম", initial: "সো", v: [175, 75, 42, 19], shirt: "fill-cat-teal", chip: "bg-cat-teal/15 text-cat-teal" };
 // Shom to the centimetre and the kilo, and the same shoe size too: only the
@@ -407,7 +407,7 @@ export function SwapTrap() {
         <Vec v={written} names={guess === null ? undefined : ["height", "weight"]} />
       </div>
       <div className="mt-4 text-center text-sm font-medium text-muted">
-        {guess === null ? "আসল নাসিব" : wrongWay ? "স্যার খাতা পড়ে যাকে ভাবছেন" : "order ঠিক থাকলে"}
+        {guess === null ? "আসল হামজা" : wrongWay ? "স্যার খাতা পড়ে যাকে ভাবছেন" : "order ঠিক থাকলে"}
       </div>
       <Stage
         h={h}
@@ -416,7 +416,7 @@ export function SwapTrap() {
         ghost={guess !== null && wrongWay ? REAL : undefined}
         label={`a student ${Math.round(h)} cm tall and ${Math.round(w)} kg heavy`}
       />
-      {over && wrongWay && <SirSays tone="bad">৭৮ সেন্টিমিটার?! নাসিব কি এখনো ক্লাস ওয়ানে পড়ে? তার ওপর ওজন ১৮০ কেজি!</SirSays>}
+      {over && wrongWay && <SirSays tone="bad">৭৮ সেন্টিমিটার?! হামজা কি এখনো ক্লাস ওয়ানে পড়ে? তার ওপর ওজন ১৮০ কেজি!</SirSays>}
       {over && (
         <div className={`${FADE} mt-3 flex justify-center`}>
           <button type="button" onClick={() => setWrongWay((x) => !x)} className={quietBtn}>
@@ -424,7 +424,7 @@ export function SwapTrap() {
           </button>
         </div>
       )}
-      <div className="mt-5 text-sm font-medium text-muted">স্যার (78, 180) পড়ে নাসিবকে কেমন ভাববেন?</div>
+      <div className="mt-5 text-sm font-medium text-muted">স্যার (78, 180) পড়ে হামজাকে কেমন ভাববেন?</div>
       <div className="mt-2 grid gap-2">
         {TRAP.map((o, i) => (
           <Choice key={o} n={i} look={predictLook(i, guess, over, TRAP_RIGHT)} disabled={guess !== null} onClick={() => choose(i)}>

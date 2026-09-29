@@ -31,7 +31,7 @@ export const CAST: Record<Who, Look> = {
   fahim: { name: "ফাহিম", shirt: "#2563eb", pants: "#1e293b", skin: "#e0ac7e", hair: "#1f1a17" },
   samin: { name: "সামিন", shirt: "#0d9488", pants: "#334155", skin: "#c68e5f", hair: "#111827" },
   som: { name: "সোম", shirt: "#d97706", pants: "#3f3f46", skin: "#e8b88f", hair: "#2b211c" },
-  nasib: { name: "নাসিব", shirt: "#dc2626", pants: "#1f2937", skin: "#d49a6a", hair: "#1c1917" },
+  nasib: { name: "হামজা", shirt: "#dc2626", pants: "#1f2937", skin: "#d49a6a", hair: "#1c1917" },
   ammu: { name: "আম্মু", shirt: "#7c3aed", pants: "#7c3aed", skin: "#e0ac7e", hair: "#1c1917" },
   apa: { name: "ডাক্তার আপা", shirt: "#f8fafc", pants: "#0f766e", skin: "#d8a47a", hair: "#1c1917" },
   mama: { name: "মামা", shirt: "#65a30d", pants: "#44403c", skin: "#c68e5f", hair: "#3f3f46" },

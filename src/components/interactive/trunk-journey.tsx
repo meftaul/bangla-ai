@@ -353,7 +353,7 @@ const X1_CARDS: { who: string; order: GKey[] | null; line: string }[] = [
   { who: "করিম", order: ["zi", "wi", "h"], line: "যে order এ লাগানো, সেই order এ" },
   { who: "সামিন", order: ["h", "wi", "zi"], line: "পুরাটা উল্টা order এ" },
   { who: "সোম", order: ["wi", "h", "zi"], line: "Z সবার আগে লেগেছে, খুলবে সবার শেষে" },
-  { who: "নাসিব", order: null, line: "order লাগে না, সব তো গুণ" },
+  { who: "হামজা", order: null, line: "order লাগে না, সব তো গুণ" },
 ];
 const X1F = patchFrame(-0.5, 6.5, -0.5, 6.5, 21); // 163 × 163
 
@@ -716,7 +716,7 @@ export function HAnywhere() {
       </div>
       {all3 && (
         <>
-          <Speech who="নাসিব" initial="না" tint="teal">
+          <Speech who="হামজা" initial="না" tint="teal">
             তাইলে order লাগেই না!
           </Speech>
           <div className="mt-2 flex justify-center">
@@ -729,7 +729,7 @@ export function HAnywhere() {
         </>
       )}
       {swapped && doneRun && <Nope>H আগে বসেছে ঠিকই। কিন্তু Z এর ফেরা W এর ফেরার আগে চলে এলো, হাত বাঁকা।</Nope>}
-      <Task done={swapped && !run.running}>{all3 ? "নাসিবের কথা মতো বাকি দুইটার জায়গা বদলে চালান।" : "H কে তিন জায়গাতেই বসিয়ে চালান। হাত কি ফেরে?"}</Task>
+      <Task done={swapped && !run.running}>{all3 ? "হামজাের কথা মতো বাকি দুইটার জায়গা বদলে চালান।" : "H কে তিন জায়গাতেই বসিয়ে চালান। হাত কি ফেরে?"}</Task>
     </>
   );
 }

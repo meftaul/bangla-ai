@@ -255,7 +255,7 @@ function RowArrow() {
 //     stand on the wall next to the one ঘর, with a "?".
 
 const X1_CARDS = [
-  { who: "নাসিব", n: 5, line: "3 আর 2, যোগ" },
+  { who: "হামজা", n: 5, line: "3 আর 2, যোগ" },
   { who: "সোম", n: 6, line: "3 আর 2, গুণ" },
   { who: "সামিন", n: 12, line: "Z, W মিলে G; তারপর L" },
   { who: "করিম", n: 36, line: "Z এ 3, G তে 3, L এ 2 × 2" },
@@ -648,10 +648,10 @@ export function OneZeroRuinsAll() {
       </div>
       {pos === null && (
         <div className="mb-1 flex items-center justify-center gap-1.5 text-sm text-muted">
-          নাসিবের lens <LensCard cols={CRUSH} small /> কোথায় বসবে?
+          হামজাের lens <LensCard cols={CRUSH} small /> কোথায় বসবে?
         </div>
       )}
-      <PatchWall f={X5F} label="এক ঘর আলো stack এর lens গুলো দিয়ে একটার পর একটা যায়; নাসিবের lens এ এসে ছবি একটা দাগ হয়ে যায়, পরে আর চওড়া হয় না" className="max-w-[13rem]">
+      <PatchWall f={X5F} label="এক ঘর আলো stack এর lens গুলো দিয়ে একটার পর একটা যায়; হামজাের lens এ এসে ছবি একটা দাগ হয়ে যায়, পরে আর চওড়া হয় না" className="max-w-[13rem]">
         <UnitTile f={X5F} faint />
         {pos !== null && <Patch f={X5F} cols={cols} />}
         {flat && <S_Chip f={X5F} at={[-0.6, 6.2]} text="দাগ: জায়গা 0" tone={BAD} />}
@@ -670,7 +670,7 @@ export function OneZeroRuinsAll() {
           </button>
         ))}
       </div>
-      <Task done={tried.every(Boolean) && !run.running}>নাসিবের lens টা তিনটা জায়গাতেই বসিয়ে চালান। কোথাও কি ছবি বাঁচে?</Task>
+      <Task done={tried.every(Boolean) && !run.running}>হামজাের lens টা তিনটা জায়গাতেই বসিয়ে চালান। কোথাও কি ছবি বাঁচে?</Task>
     </>
   );
 }
@@ -1126,7 +1126,7 @@ export function StackMorning({}: Story) {
   const k = s.k;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="field" label="ফিরানির আগের দিন; দেয়ালে দরজার উপরে খালি জায়গা; লাইট ভাই যন্ত্রের সামনে তিনটা lens বসালেন, Z, W আর L; মামা টাকা গুনছেন; নাসিব বললো দুইগুণ lens তো, দুইগুণ রং, আর আগের দুইটার 3, মোট 5">
+      <Stage backdrop="field" label="ফিরানির আগের দিন; দেয়ালে দরজার উপরে খালি জায়গা; লাইট ভাই যন্ত্রের সামনে তিনটা lens বসালেন, Z, W আর L; মামা টাকা গুনছেন; হামজা বললো দুইগুণ lens তো, দুইগুণ রং, আর আগের দুইটার 3, মোট 5">
         <StageWall x={SW[0]} y={SW[1]}>
           <St_DoorFlower />
         </StageWall>
@@ -1223,13 +1223,13 @@ export function SlantTurn({}: Story) {
 export function NasibSlips({}: Story) {
   const s = useScene(3, [600, 1800, 1800, 2400]);
   const k = s.k;
-  // নাসিব slips his pocket lens into the stack
+  // হামজা slips his pocket lens into the stack
   useEffect(() => {
     if (k === 2) sfx.lens();
   }, [k]);
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="field" label="লাইট ভাই পানি খেতে গেলেন; নাসিব পকেট থেকে একটা lens বের করলো, পাতে লেখা 1 1 1 1, পুকুরে যাওয়ার কথা ছিলো; নাসিব সেটা stack এ গুঁজে দিলো; বললো একটা খারাপ, বাকি তিনটা ভালো, ভালোরাই জিতবে">
+      <Stage backdrop="field" label="লাইট ভাই পানি খেতে গেলেন; হামজা পকেট থেকে একটা lens বের করলো, পাতে লেখা 1 1 1 1, পুকুরে যাওয়ার কথা ছিলো; হামজা সেটা stack এ গুঁজে দিলো; বললো একটা খারাপ, বাকি তিনটা ভালো, ভালোরাই জিতবে">
         <StageWall x={SW[0]} y={SW[1]}>
           <St_DoorFlower />
         </StageWall>
@@ -1551,7 +1551,7 @@ export function TurnFormula() {
 const S5_SAY = [
   "Stack এ চারটা lens. det: −3, −1, 0, 4.",
   "গুণ করতে করতে: 1, তারপর −3, তারপর 3।",
-  "তারপর নাসিবের lens। 3 × 0 = 0. ছবি একটা দাগ।",
+  "তারপর হামজাের lens। 3 × 0 = 0. ছবি একটা দাগ।",
   "তারপর L। 0 × 4 = 0. দাগ লম্বা হলো, চওড়া হলো না।",
   "দাগ থেকে ছবি আর ফেরে কি না, সেটা Article 9 এর প্রশ্ন।",
 ];
@@ -1584,7 +1584,7 @@ export function ZeroChain() {
   return (
     <Scene scene={s} caption={say(S5_SAY, k)}>
       <div className="flex items-center justify-center gap-3">
-        <PatchWall f={S5F} label="stack এর ছবি: প্রথমে ছোপ, নাসিবের lens এ দাগ, L এ দাগ লম্বা" className="max-w-[7.5rem]">
+        <PatchWall f={S5F} label="stack এর ছবি: প্রথমে ছোপ, হামজাের lens এ দাগ, L এ দাগ লম্বা" className="max-w-[7.5rem]">
           <Patch
             f={S5F}
             cols={[

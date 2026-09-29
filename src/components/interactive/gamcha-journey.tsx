@@ -17,7 +17,7 @@ import { sfx } from "@/components/journey/sfx";
 // cell's colour is how dark its row's thread (পাশের সুতা) × how dark its
 // column's thread (উপরের সুতা): one column × one row, a whole grid, the outer
 // product. সোম wants আপার নামের প্রথম অক্ষর, T, woven in. নানা: একবারে একটা
-// চেকই ওঠে; নাসিব: চেক দিয়ে অক্ষর কোনোদিন হয় না। How many checks does T need?
+// চেকই ওঠে; হামজা: চেক দিয়ে অক্ষর কোনোদিন হয় না। How many checks does T need?
 //
 // The letter is a T on a 7 × 7 loom: row 2 full (columns 2–6), the stem in
 // column 4 (rows 3–6). Its rows come in exactly two kinds, so it is rank 2:
@@ -1037,7 +1037,7 @@ export function LoomNight({}: Story) {
   }, [k]);
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="night" label="বিয়ের রাত, বারান্দায় নানার তাঁত, পাশে হারিকেন; রিনা লাল আর সবুজ সুতার গোছা ধরে আছে; সোম একটা কাগজে বড় করে T নিয়ে এলো, গামছায় বুনে দিতে বললো; নানা চোখ না তুলে বললেন একবারে একটা চেকই ওঠে, দুই-তিনটা উপর উপর বসাইলে যা খুশি উঠে; নাসিব বললো চেক দিয়ে অক্ষর কোনোদিন হয় না">
+      <Stage backdrop="night" label="বিয়ের রাত, বারান্দায় নানার তাঁত, পাশে হারিকেন; রিনা লাল আর সবুজ সুতার গোছা ধরে আছে; সোম একটা কাগজে বড় করে T নিয়ে এলো, গামছায় বুনে দিতে বললো; নানা চোখ না তুলে বললেন একবারে একটা চেকই ওঠে, দুই-তিনটা উপর উপর বসাইলে যা খুশি উঠে; হামজা বললো চেক দিয়ে অক্ষর কোনোদিন হয় না">
         <G_Veranda />
         <G_Lamp x={32} y={150} />
         <G_Loom x={104} y={150} cloth={0.6} />
@@ -1092,7 +1092,7 @@ export function NanaTwoThreads({}: Story) {
 export function NasibAtLoom({}: Story) {
   const s = useScene(3, [600, 1600, 2400, 1800]);
   const k = s.k;
-  // নাসিব tries the loom himself
+  // হামজা tries the loom himself
   useEffect(() => {
     if (k === 2) {
       sfx.loom();
@@ -1101,7 +1101,7 @@ export function NasibAtLoom({}: Story) {
   }, [k]);
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="night" label="নাসিব তাঁতের সামনে এসে দাঁড়ালো, বললো দেখি এক চেকে T ওঠে কিনা; নানা কিছু বললেন না, সরে দাঁড়ালেন">
+      <Stage backdrop="night" label="হামজা তাঁতের সামনে এসে দাঁড়ালো, বললো দেখি এক চেকে T ওঠে কিনা; নানা কিছু বললেন না, সরে দাঁড়ালেন">
         <G_Veranda />
         <G_Lamp x={32} y={150} />
         <G_Loom x={104} y={150} cloth={0.6} />
@@ -1194,7 +1194,7 @@ export function NanaDawn({}: Story) {
   const k = s.k;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="evening" label="ভোর চারটা, হারিকেনের তেল প্রায় শেষ; সোম খুঁটিতে হেলান দিয়ে ঘুমিয়ে; নাসিব জেগে; নানা শেষ সুতাটা টানলেন, গামছাটা কেটে নিলেন, একবার ভাঁজ করলেন">
+      <Stage backdrop="evening" label="ভোর চারটা, হারিকেনের তেল প্রায় শেষ; সোম খুঁটিতে হেলান দিয়ে ঘুমিয়ে; হামজা জেগে; নানা শেষ সুতাটা টানলেন, গামছাটা কেটে নিলেন, একবার ভাঁজ করলেন">
         <G_Veranda />
         <G_Lamp x={34} y={150} low />
         <G_Loom x={110} y={150} cloth={k >= 2 ? 0 : 1} letter={k === 1} />

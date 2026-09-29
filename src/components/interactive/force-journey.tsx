@@ -565,11 +565,11 @@ const LENSES = [
   },
   {
     id: "kids",
-    name: "নাসিব − সোম",
+    name: "হামজা − সোম",
     x: "height-এর তফাত (cm)",
     y: "weight-এর তফাত (kg)",
-    read: "নাসিব সোমের চেয়ে 5 cm লম্বা, 3 kg ভারী",
-    flip: "সোম − নাসিব: সোম 5 cmছোট, 3 kg হালকা",
+    read: "হামজা সোমের চেয়ে 5 cm লম্বা, 3 kg ভারী",
+    flip: "সোম − হামজা: সোম 5 cmছোট, 3 kg হালকা",
   },
 ];
 
@@ -750,7 +750,7 @@ const REEL: { to: XY; name: string; tone: Tone; chosen?: boolean; dx: number; dy
   { to: [0.3, 2.7], name: "বাস", tone: "blue", dx: 6, dy: -4, anchor: "start" },
   { to: [2.6, 1.9], name: "golf ball", tone: "violet", dx: 6, dy: -4, anchor: "start" },
   { to: [-3.2, -0.5], name: "ধাক্কা", tone: "amber", dx: 0, dy: 16, anchor: "middle" },
-  { to: [2.9, -1.2], name: "নাসিব − সোম", tone: "coral", chosen: true, dx: 0, dy: 16, anchor: "middle" },
+  { to: [2.9, -1.2], name: "হামজা − সোম", tone: "coral", chosen: true, dx: 0, dy: 16, anchor: "middle" },
   { to: [-1.0, -2.6], name: "king − man", tone: "coral", chosen: true, dx: 6, dy: 12, anchor: "start" },
 ];
 

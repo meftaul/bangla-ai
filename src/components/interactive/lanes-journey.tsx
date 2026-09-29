@@ -1050,7 +1050,7 @@ export function NasibCard({}: Story) {
         <Building x={250} y={150} w={64} h={84} color="#fef3c7" label="ফুচকা" />
         <path d="M0 162H320" stroke="white" strokeWidth={2} strokeDasharray="10 8" opacity={0.7} />
         <L_BigRick x={k >= 1 ? 150 : 60} y={150} ms={1400} riders={["fahim", "nasib"]} />
-        {k >= 2 && <L_NamedCard x={66} y={66} name="নাসিবের card" text="(3, 2)" tone="coral" />}
+        {k >= 2 && <L_NamedCard x={66} y={66} name="হামজাের card" text="(3, 2)" tone="coral" />}
         {k === 2 && <Bubble x={140} y={96} side="right" lines={["ছুটির পরে ফুচকা।", "Card বানিয়ে ফেলছি।"]} />}
         {k >= 3 && <Bubble x={171} y={92} side="right" lines={["এইডা দিয়া গেলে", "ফুচকা পাইবা না।"]} />}
       </Stage>
@@ -1124,14 +1124,14 @@ export function SpotTheSlip() {
       {!driven ? (
         <div className="mt-2 flex justify-center">
           <button type="button" onClick={drive} disabled={play.running} className={primaryBtn}>
-            নাসিবের card চালান
+            হামজাের card চালান
           </button>
         </div>
       ) : (
         !fixed && <div className={`${FADE} mt-1 text-center text-sm text-danger`}>মামা থামলেন (5, 2) এ। ফুচকা (1, 2) এ।</div>
       )}
       <div className="mx-auto mt-1.5 max-w-xs rounded-xl border border-border bg-surface p-1.5">
-        <div className="px-1 pb-1 text-xs text-muted">নাসিবের খাতা</div>
+        <div className="px-1 pb-1 text-xs text-muted">হামজাের খাতা</div>
         <div className="grid gap-1">
           {(fixed ? SL_FIXED : SL_LINES).map((l, i) => (
             <button
@@ -1149,7 +1149,7 @@ export function SpotTheSlip() {
         </div>
       </div>
       {pick !== null && pick !== SL_WRONG && !fixed && <Nope key={miss}>{SL_WHY[pick]}</Nope>}
-      <Task done={fixed && settled}>{driven ? "নাসিবের খাতায় যে line এ ভুল, সেটায় tap করুন।" : "আগে নাসিবের card টা মামাকে দিয়ে চালান।"}</Task>
+      <Task done={fixed && settled}>{driven ? "হামজাের খাতায় যে line এ ভুল, সেটায় tap করুন।" : "আগে হামজাের card টা মামাকে দিয়ে চালান।"}</Task>
     </>
   );
 }
@@ -1164,7 +1164,7 @@ const X7_SAY = [
   "ঠিক card (−1, 2)। মিলিয়ে দেখি।",
   "গলিতে 2 block: (2, 2)।",
   "বড় রাস্তায় 1 block পিছনে: (1, 2)। ফুচকার দোকান।",
-  "নাসিবের (3, 2) গেলে থামতো (5, 2) এ, দোকান থেকে 4 block দূরে।",
+  "হামজাের (3, 2) গেলে থামতো (5, 2) এ, দোকান থেকে 4 block দূরে।",
 ];
 
 export function StallCheck() {

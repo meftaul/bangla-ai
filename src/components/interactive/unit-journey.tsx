@@ -15,7 +15,7 @@ import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 3.6 — শুধু দিক, movie club-এর গোলমাল", told as a Journey.
 //
-// নাসিবের movie club scores each film against a visitor's taste with a rule
+// হামজাের movie club scores each film against a visitor's taste with a rule
 // used as a black box here ("ঘরে ঘরে গুণ, তারপর যোগ"; Article 4 explains it).
 // ফাহিমের মামা loves comedy, yet Titanic almost ties Mr. Bean: 20 vs 22. The
 // films as arrows show why: Titanic is simply longer, and a longer arrow in the
@@ -41,7 +41,7 @@ import { sfx } from "@/components/journey/sfx";
 // the Check's (5, 12) worked slot by slot with its wrong answers on the ring
 // (8, 8½). The setup
 // words get story scenes on the fair's stage (1a, 4a, 5a, 6a, 7a, 9a, 9b):
-// মামা at the club, নাসিব's doubt, the sack of films, the three films on the
+// মামা at the club, হামজা's doubt, the sack of films, the three films on the
 // counter, সামিন's খাতা, মামা going home, and ডাক্তার আপার twin mix-up.
 //
 // Tailwind only; the sheets are journey/plane, the tape comes from 2.5's
@@ -149,7 +149,7 @@ function S_Carry({ x, y, ms = 1200, children }: { x: number; y: number; ms?: num
 
 // ---------------------------------------------------------------------------
 // 1a · A story scene for screen 1's setup, no task: the movie club opens at
-//      the fair. নাসিব calls out the service beside the stall and holds up
+//      the fair. হামজা calls out the service beside the stall and holds up
 //      the shape of a score card, (drama, comedy); then ফাহিমের মামা walks up
 //      first thing in the morning and says what he wants. No films scored yet.
 
@@ -165,7 +165,7 @@ export function MamaAtClub({}: Story) {
 
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="fair" label="নাসিবের movie club stall at the fair; নাসিব shows a score card (drama, comedy), and ফাহিমের মামা walks up asking for a comedy">
+      <Stage backdrop="fair" label="হামজাের movie club stall at the fair; হামজা shows a score card (drama, comedy), and ফাহিমের মামা walks up asking for a comedy">
         <Stall x={S1_STALL} y={S1_Y} w={96} sign="Movie Club" color="#7c3aed" />
         {S1_FILMS.map((c, i) => (
           <S_Film key={c} x={S1_STALL - 26 + i * 26} y={S1_Y - 24} w={20} h={20} color={c} />
@@ -972,7 +972,7 @@ export function SameLine() {
 
 // ---------------------------------------------------------------------------
 // 4a · A story scene for screen 4's setup, no task: a doubt on the way to
-//      মামা। নাসিব sets off from the stall with the new card (0.6, 0.8), then
+//      মামা। হামজা sets off from the stall with the new card (0.6, 0.8), then
 //      stops short and stares at it: two numbers this small, and still 1 long?
 //      Or did the slider cheat? মামা waits. The length is not told.
 
@@ -988,7 +988,7 @@ export function TooSmallDoubt({}: Story) {
 
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="fair" label="নাসিব carries the card (0.6, 0.8) toward মামা, stops, and wonders whether two numbers this small can really be 1 long">
+      <Stage backdrop="fair" label="হামজা carries the card (0.6, 0.8) toward মামা, stops, and wonders whether two numbers this small can really be 1 long">
         <Stall x={58} y={S4_Y} w={80} sign="Movie Club" color="#7c3aed" />
         <Person who="mama" x={S4_MAMA} y={S4_Y} facing={-1} label />
         <Person who="nasib" x={nx} y={S4_Y} walking={k === 2} ms={1300} mood={k >= 3 ? "puzzled" : "plain"} arm={k >= 1 ? "hold" : "down"} label />
@@ -1355,7 +1355,7 @@ export function DivideIsStretch() {
 }
 
 // ---------------------------------------------------------------------------
-// 5a · A story scene for screen 5's setup, no task: the club's sack. নাসিব
+// 5a · A story scene for screen 5's setup, no task: the club's sack. হামজা
 //      says there are many more films; out of the sack they tumble, tall ones
 //      and short ones, each leaning its own way, and the rule has to work on
 //      every one of them. Nobody is normalised yet.
@@ -1394,7 +1394,7 @@ export function ClubSack({}: Story) {
 
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="fair" label="নাসিব empties the club's sack: films of every size tumble out, each leaning a different way">
+      <Stage backdrop="fair" label="হামজা empties the club's sack: films of every size tumble out, each leaning a different way">
         <Stall x={50} y={S5_Y} w={72} sign="Movie Club" color="#7c3aed" />
         {S5_FILMS.map((f, i) => {
           const out = k >= (i < 4 ? 2 : 3);
@@ -1775,7 +1775,7 @@ export function ZeroQuestion() {
 
 // ---------------------------------------------------------------------------
 // 6a · A story scene for screen 6's setup, no task: the real test. মামা is
-//      still standing there. নাসিব announces it, and the three films go up on
+//      still standing there. হামজা announces it, and the three films go up on
 //      the counter one by one with their cards, Titanic (5, 2), the double
 //      Titanic (10, 4) and Mr. Bean (1, 4). Then: make all three 1 long. Who
 //      wins stays for the screen.
@@ -1796,7 +1796,7 @@ export function ThreeFilms({}: Story) {
 
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="fair" label="মামা still waits; নাসিব puts Titanic (5, 2), double Titanic (10, 4) and Mr. Bean (1, 4) on the counter and says to make all three 1 long">
+      <Stage backdrop="fair" label="মামা still waits; হামজা puts Titanic (5, 2), double Titanic (10, 4) and Mr. Bean (1, 4) on the counter and says to make all three 1 long">
         <Stall x={S6_STALL} y={S6_Y} w={170} color="#7c3aed" />
         {S6_FILMS.map(
           (f, i) =>
@@ -2211,8 +2211,8 @@ export function CosineName() {
 }
 
 // ---------------------------------------------------------------------------
-// 7a · A story scene for screen 7's setup, no task: মামা খুশি, নাসিবও. মামা
-//      heads off with his film while নাসিব declares normalise for every sum
+// 7a · A story scene for screen 7's setup, no task: মামা খুশি, হামজাও. মামা
+//      heads off with his film while হামজা declares normalise for every sum
 //      at the stall; then সামিন walks in with his খাতা and opens it: what each
 //      customer spent on (চা, শরবত). Whose sums they are stays in the widget.
 
@@ -2250,7 +2250,7 @@ export function SaminKhata({}: Story) {
 
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="fair" label="মামা leaves happy with his film, নাসিব says normalise every sum from now on, and সামিন walks in and opens his খাতা of (চা, শরবত) spending">
+      <Stage backdrop="fair" label="মামা leaves happy with his film, হামজা says normalise every sum from now on, and সামিন walks in and opens his খাতা of (চা, শরবত) spending">
         <Stall x={52} y={S7_Y} w={76} sign="Movie Club" color="#7c3aed" />
         <Person who="nasib" x={S7_NASIB} y={S7_Y} mood={k >= 2 ? "smug" : "happy"} arm={k === 2 ? "point" : "down"} label />
         {k === 2 && <Bubble x={S7_NASIB} y={S7_Y - 66} lines={["এখন থেকে সব", "হিসাবেই normalise!"]} />}
@@ -2640,7 +2640,7 @@ export function WrongHats() {
 // ---------------------------------------------------------------------------
 // 9a · A story scene for the last screen's heading, no task: মামা ছবি নিয়ে
 //      বাড়ি গেলেন। মামা, film in hand, says goodbye at the club, then walks
-//      off home while নাসিব waves and the afternoon sun sinks.
+//      off home while হামজা waves and the afternoon sun sinks.
 
 const S9_Y = 150;
 const S9_NASIB = 120;
@@ -2656,7 +2656,7 @@ export function MamaGoesHome({}: Story) {
 
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="evening" label="late afternoon: মামা says goodbye to নাসিব and walks home with his comedy film">
+      <Stage backdrop="evening" label="late afternoon: মামা says goodbye to হামজা and walks home with his comedy film">
         <circle
           r={13}
           fill="#fde047"
