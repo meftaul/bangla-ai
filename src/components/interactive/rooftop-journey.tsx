@@ -121,7 +121,7 @@ export function RooftopBet({}: Story) {
 // 1 · The sealed bet. Fahim, Nasib, or both. The jilapi slides to whoever
 //     the reader backs, and nothing is marked: the finale settles it.
 
-const BET = ["ফাহিম ঠিক", "নাসিব ঠিক", "দুইজনই ঠিক"];
+const BET = ["ফাহিম ঠিক", "হামজা ঠিক", "দুইজনই ঠিক"];
 const BET_X = [44, 196, 120];
 
 export function JilapiBet() {
@@ -144,7 +144,7 @@ export function JilapiBet() {
           <div className="text-[0.8rem] leading-snug">খাতার দুইটা column ই নতুন করে লিখবো। তখন ভাড়া বলতে একটা সংখ্যাই লাগবে।</div>
         </div>
         <div className="rounded-xl border-2 border-cat-coral/30 bg-cat-coral/5 px-2.5 py-1.5">
-          <div className="text-xs font-semibold text-cat-coral">নাসিব</div>
+          <div className="text-xs font-semibold text-cat-coral">হামজা</div>
           <div className="text-[0.8rem] leading-snug">নতুন কোনো তথ্য তো ঢুকছে না। তাই নতুন কিছু বেরও হবে না।</div>
         </div>
       </div>
@@ -154,7 +154,7 @@ export function JilapiBet() {
           ফাহিম
         </text>
         <text x={196} y={50} textAnchor="middle" fontSize={9} fontWeight={700} className="fill-cat-coral">
-          নাসিব
+          হামজা
         </text>
         <text x={120} y={50} textAnchor="middle" fontSize={9} fontWeight={700} className="fill-[#5a6b7d]">
           দুইজনই
@@ -181,7 +181,7 @@ export function JilapiBet() {
           সিল করা থাকলো। চাচা ভাড়া পেয়ে গেলে শেষ screen এ খুলবো।
         </div>
       ) : null}
-      <Task done={sealed}>ফাহিম, নাসিব, নাকি দুইজনই? একটা বেছে নিয়ে বাজি সিল করুন। কে জিতলো, শেষের আগে কেউ বলবে না।</Task>
+      <Task done={sealed}>ফাহিম, হামজা, নাকি দুইজনই? একটা বেছে নিয়ে বাজি সিল করুন। কে জিতলো, শেষের আগে কেউ বলবে না।</Task>
     </>
   );
 }
@@ -1595,7 +1595,7 @@ export function TryConvertBack() {
   return (
     <>
       <div className="mx-auto w-fit rounded-lg border-2 border-cat-violet px-3 py-1 text-center">
-        <div className="text-xs text-muted">ফাহিমের grid এ নাসিবের card</div>
+        <div className="text-xs text-muted">ফাহিমের grid এ হামজাের card</div>
         <div className="font-mono font-bold text-cat-violet">size 2, imbalance 1</div>
       </div>
       <Plane f={TCB_F} ticks={1} drag={{ down }} label="tap the spot on the bed and bath sheet where the card (2, 1) really is" className="my-2! max-w-[16rem]">
@@ -1619,7 +1619,7 @@ export function TryConvertBack() {
           Card (2, 1) মানে flat (3, 1): 3 bed, 1 bath.
         </div>
       ) : null}
-      <Task done={right && step >= 2}>নাসিবের card টা bed আর bath এ আসলে কোথায়, সেই জায়গায় tap করুন।</Task>
+      <Task done={right && step >= 2}>হামজাের card টা bed আর bath এ আসলে কোথায়, সেই জায়গায় tap করুন।</Task>
     </>
   );
 }
@@ -1632,7 +1632,7 @@ export function BackAndForth() {
   const s = useScene(3, [700, 2000, 2000]);
   const k = s.k;
   const SAY = [
-    "নাসিবের card, (2, 1): size 2, imbalance 1.",
+    "হামজাের card, (2, 1): size 2, imbalance 1.",
     "Bed: size যোগ imbalance, 2 + 1 = 3. Bath: size বিয়োগ imbalance, 2 − 1 = 1.",
     "আবার ফেরত: size = (3 + 1) ÷ 2 = 2, imbalance = (3 − 1) ÷ 2 = 1.",
     "দুই দিকেই দুইটা করে হিসাব। কিছু হারায় না, কিছু যোগও হয় না।",
@@ -1673,7 +1673,7 @@ export function SchoolSlip() {
   const s = useScene(2, [700, 2400]);
   const k = s.k;
   const SAY = [
-    "নাসিবের card (2, 1), আর কালকের স্কুলের রাস্তার card (−1, 3)।",
+    "হামজাের card (2, 1), আর কালকের স্কুলের রাস্তার card (−1, 3)।",
     "দুইটাকেই পুরানো grid এর slot হিসাবে পড়লাম। দুইটাই ভুল জায়গায় থামলো।",
     "যার card, তার grid এ হাঁটলে: flat (3, 1), আর স্কুলের গেট।",
   ];
@@ -1747,7 +1747,7 @@ export function FirstNight({}: Story) {
         <CastPerson who="fahim" x={k >= 3 ? 176 : 196} y={GROUND} facing={1} arm={k >= 3 ? "hold" : "down"} mood={k >= 2 ? "happy" : "plain"} walking={k === 3} ms={900} />
         <NameTag x={k >= 3 ? 176 : 196} y={GROUND + 13} name="ফাহিম" night />
         <CastPerson who="nasib" x={k >= 3 ? 268 : 248} y={GROUND} facing={-1} arm={k >= 2 ? "hold" : "down"} mood={k >= 2 ? "happy" : "plain"} walking={k === 3} ms={900} />
-        <NameTag x={k >= 3 ? 268 : 248} y={GROUND + 13} name="নাসিব" night />
+        <NameTag x={k >= 3 ? 268 : 248} y={GROUND + 13} name="হামজা" night />
         {k === 2 && <Jilapi x={258} y={GROUND - 36} s={0.9} />}
         {k >= 3 && (
           <>
@@ -1793,7 +1793,7 @@ export function BetSettled() {
         <div className="mx-auto grid max-w-sm gap-1.5">
           {shown >= 1 ? (
             <div className={`${FADE} rounded-xl border-2 border-accent/50 bg-accent/5 px-2.5 py-1 text-[0.8rem] leading-snug`}>
-              <b className="text-cat-coral">নাসিব</b> <Tick /> নতুন কোনো তথ্য নাই: card (2, 1) সোজা ফেরত গেলো flat (3, 1) এ।
+              <b className="text-cat-coral">হামজা</b> <Tick /> নতুন কোনো তথ্য নাই: card (2, 1) সোজা ফেরত গেলো flat (3, 1) এ।
             </div>
           ) : null}
           {shown >= 2 ? (
@@ -1890,7 +1890,7 @@ export function KhataTwice() {
 export function NasibNotDone() {
   const s = useScene(3, [700, 1800, 2400]);
   const k = s.k;
-  // নাসিব turns the khata's page
+  // হামজা turns the khata's page
   useEffect(() => {
     if (k === 1) sfx.paper();
   }, [k]);
@@ -1902,7 +1902,7 @@ export function NasibNotDone() {
         <NameTag x={96} y={GROUND + 13} name="ফাহিম" night />
         <Jilapi x={110} y={GROUND - 28} s={0.8} half />
         <CastPerson who="nasib" x={220} y={GROUND} facing={-1} arm={k >= 2 ? "point" : "hold"} mood={k >= 2 ? "smug" : "plain"} />
-        <NameTag x={220} y={GROUND + 13} name="নাসিব" night />
+        <NameTag x={220} y={GROUND + 13} name="হামজা" night />
         {k < 2 && <Jilapi x={206} y={GROUND - 28} s={0.8} half />}
         {k >= 1 && <CastCard x={134} y={40} text="(4, 2)" tone="amber" />}
         {k >= 1 && <CastCard x={186} y={40} text="(3, 1)" tone="blue" />}

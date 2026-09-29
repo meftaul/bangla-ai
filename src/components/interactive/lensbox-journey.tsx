@@ -40,7 +40,7 @@ import { sfx } from "@/components/journey/sfx";
 // morning. The লাইট ভাই opens his old lens box on the মাদুর: six lenses, four
 // numbers scratched on each rim. The ones that keep a picture go to Rina; the
 // ones that crush it go in the পুকুর. Nobody can switch the machine on to
-// check. নাসিব sorts them by the size of their numbers: বড় সংখ্যার lens বড় ছবি
+// check. হামজা sorts them by the size of their numbers: বড় সংখ্যার lens বড় ছবি
 // দেয়।
 //
 // Ten screens. 1 seals the bet: which of the six go in the পুকুর (BoxBet).
@@ -125,7 +125,7 @@ const L_W: Cols = [
 
 type Lens = { key: string; cols: Cols; name: string; nasib: "keep" | "throw" };
 
-/** The six in the box, in the order they lie. নাসিব keeps the big numbers. */
+/** The six in the box, in the order they lie. হামজা keeps the big numbers. */
 const BOX: Lens[] = [
   { key: "old", cols: OLD_LENS, name: "পুরানো", nasib: "keep" },
   { key: "spare", cols: L_SPARE, name: "বাড়তি", nasib: "throw" },
@@ -712,7 +712,7 @@ export function BigButZero() {
   return (
     <>
       <div className="flex justify-center">
-        <LB_Matrix cols={L_BIG} name="নাসিবের lens" />
+        <LB_Matrix cols={L_BIG} name="হামজাের lens" />
       </div>
       <div className="mt-2 flex justify-center">
         <LB_Wall f={X4F} label="একশ lens এ রিনার এক ঘর: দুই পাশ দেয়াল ছাড়িয়ে (100, 100) এর দিকে; ঘর ফুলে উঠে আবার চ্যাপ্টা" width="max-w-[18rem]">
@@ -1193,7 +1193,7 @@ export function TryZero() {
 // ---------------------------------------------------------------------------
 // 9 · The morning run. The new bulb is in. A tap puts that lens in the
 //     machine: the chalk grid's light is thrown through it, onto the wall.
-//     Under each lens, নাসিবের ভাগ; once run, where it really goes.
+//     Under each lens, হামজাের ভাগ; once run, where it really goes.
 
 const X9F = wallFrame(18, 6);
 
@@ -1211,7 +1211,7 @@ export function MorningRun() {
     const next = opened.map((o, j) => o || j === i);
     go.run(() => {
       setOpened(next);
-      if (next.every(Boolean) && !all) pass("নাসিবের রাখার ভাগেও দুইটা পুকুরের।");
+      if (next.every(Boolean) && !all) pass("হামজাের রাখার ভাগেও দুইটা পুকুরের।");
     });
   };
   const l = cur === null ? null : BOX[cur];
@@ -1241,7 +1241,7 @@ export function MorningRun() {
             }`}
           >
             <LB_Matrix cols={b.cols} small />
-            <span className="text-[0.7rem] leading-tight text-muted">নাসিব: {b.nasib === "keep" ? "রাখো" : "ফেলো"}</span>
+            <span className="text-[0.7rem] leading-tight text-muted">হামজা: {b.nasib === "keep" ? "রাখো" : "ফেলো"}</span>
             <span className="h-4 text-[0.72rem] font-semibold leading-tight">
               {opened[i] && (
                 <span className={flat(b.cols) ? "text-danger" : "text-accent-text"}>
@@ -1254,7 +1254,7 @@ export function MorningRun() {
       </div>
       {all && !go.running && (
         <div className={`${FADE} mx-auto mt-2 max-w-sm text-center text-sm leading-snug`}>
-          নাসিবের রাখার ভাগে পুরানো, একশ আর G। প্রথম দুইটাই চ্যাপ্টা। ফেলার ভাগের পুঁচকেটা রাখার মতো।
+          হামজাের রাখার ভাগে পুরানো, একশ আর G। প্রথম দুইটাই চ্যাপ্টা। ফেলার ভাগের পুঁচকেটা রাখার মতো।
         </div>
       )}
       <Ticks items={[["ছয়টা lens চালানো", all]]} />
@@ -1268,7 +1268,7 @@ export function MorningRun() {
 
 // 1a · Night on the বারান্দা. The হারিকেন; the machine dark on its stand; the
 //      লাইট ভাই with his old box open on the মাদুর; সামিন with the lenses;
-//      নাসিব sorting them in two piles and saying so.
+//      হামজা sorting them in two piles and saying so.
 
 const S1_PILE_A: XY[] = [
   [128, 132],
@@ -1294,7 +1294,7 @@ export function BoxNight({}: Story) {
   ];
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="night" label="রাত; বারান্দায় হারিকেন; bulb কাটা যন্ত্র; মাদুরে লাইট ভাইয়ের খোলা বাক্স; সামিনের তালুতে ছয়টা lens; নাসিব সংখ্যা দেখে দুই ভাগ করলো; বললো, বড় সংখ্যার lens বড় ছবি দেয়, ছোট সংখ্যারটা ফালায় দেন">
+      <Stage backdrop="night" label="রাত; বারান্দায় হারিকেন; bulb কাটা যন্ত্র; মাদুরে লাইট ভাইয়ের খোলা বাক্স; সামিনের তালুতে ছয়টা lens; হামজা সংখ্যা দেখে দুই ভাগ করলো; বললো, বড় সংখ্যার lens বড় ছবি দেয়, ছোট সংখ্যারটা ফালায় দেন">
         <LB_Verandah />
         <Projector x={286} y={138} facing={-1} lens="old" />
         <path d="M282 72l8 8M290 72l-8 8" stroke={BAD} strokeWidth={1.6} strokeLinecap="round" />
@@ -1304,7 +1304,7 @@ export function BoxNight({}: Story) {
         <Person who="samin" x={168} y={138} arm="hold" />
         <LB_Name x={168} y={138} n="সামিন" />
         <Person who="nasib" x={250} y={138} facing={-1} arm={k >= 2 ? "point" : "down"} />
-        <LB_Name x={250} y={138} n="নাসিব" />
+        <LB_Name x={250} y={138} n="হামজা" />
         {(k < 2 ? inHand : [...S1_PILE_A, ...S1_PILE_B]).map(([x, y], i) => (
           <g key={i} style={{ transform: `translate(${x}px, ${y}px)` }} className="transition-transform duration-1000 ease-out motion-reduce:transition-none">
             <circle r={5} fill="#bae6fd" stroke="#e2e8f0" strokeWidth={0.8} />
@@ -1340,18 +1340,18 @@ export function SomLine({}: Story) {
   );
 }
 
-// 4a · নাসিব lifts the biggest one from his keep pile: four 100s.
+// 4a · হামজা lifts the biggest one from his keep pile: four 100s.
 
 export function NasibHundred({}: Story) {
   const s = useScene(2, [600, 1800, 2400]);
   const k = s.k;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="night" label="নাসিব তার রাখার ভাগ থেকে সবচেয়ে বড় সংখ্যার lens তুলে ধরলো, চার ঘরেই 100; বললো, এইটা দিয়া দেয়াল ভরে যাবে">
+      <Stage backdrop="night" label="হামজা তার রাখার ভাগ থেকে সবচেয়ে বড় সংখ্যার lens তুলে ধরলো, চার ঘরেই 100; বললো, এইটা দিয়া দেয়াল ভরে যাবে">
         <LB_Verandah />
         <LB_Mat x={90} y={126} w={120} h={14} />
         <Person who="nasib" x={160} y={138} arm={k >= 1 ? "hold" : "down"} />
-        <LB_Name x={160} y={138} n="নাসিব" />
+        <LB_Name x={160} y={138} n="হামজা" />
         {k >= 1 && (
           <g className={POP}>
             <LB_Disc x={186} y={70} r={20} cols={L_BIG} />
@@ -1365,17 +1365,17 @@ export function NasibHundred({}: Story) {
   );
 }
 
-// 5a · নাসিব holds up the smallest from his throw pile; সামিন's phone: 0.01.
+// 5a · হামজা holds up the smallest from his throw pile; সামিন's phone: 0.01.
 
 export function NasibTiny({}: Story) {
   const s = useScene(3, [600, 1800, 2000, 2400]);
   const k = s.k;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="night" label="নাসিব ফেলার ভাগ থেকে পুঁচকে lens তুললো, 0.1 আর 0; বললো, এইটা তো কিছুই না, ফালাও; সামিনের phone এ 0.1·0.1 − 0·0 = 0.01">
+      <Stage backdrop="night" label="হামজা ফেলার ভাগ থেকে পুঁচকে lens তুললো, 0.1 আর 0; বললো, এইটা তো কিছুই না, ফালাও; সামিনের phone এ 0.1·0.1 − 0·0 = 0.01">
         <LB_Verandah />
         <Person who="nasib" x={110} y={138} arm={k >= 1 ? "hold" : "down"} />
-        <LB_Name x={110} y={138} n="নাসিব" />
+        <LB_Name x={110} y={138} n="হামজা" />
         {k >= 1 && (
           <g className={POP}>
             <LB_Disc x={136} y={70} r={20} cols={L_TINY} />
@@ -1513,7 +1513,7 @@ export function NewBulb({}: Story) {
 }
 
 // 10a · Dawn at the পুকুর. The লাইট ভাই throws the flat lenses in, one after
-//       another; নাসিব, beside him, slips the four-ones lens into his pocket.
+//       another; হামজা, beside him, slips the four-ones lens into his pocket.
 
 export function PukurDawn({}: Story) {
   const s = useScene(3, [600, 1800, 1800, 2400]);
@@ -1538,7 +1538,7 @@ export function PukurDawn({}: Story) {
   const THROWN = [OLD_LENS, L_SPARE, L_BIG, L_SEVEN];
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="evening" ground={124} label="ভোরে পুকুরপাড়; লাইট ভাই চ্যাপ্টা lens গুলো একটা একটা করে পানিতে ফেললেন; পাশে নাসিব চার এক এর lens টা পকেটে ঢুকালো">
+      <Stage backdrop="evening" ground={124} label="ভোরে পুকুরপাড়; লাইট ভাই চ্যাপ্টা lens গুলো একটা একটা করে পানিতে ফেললেন; পাশে হামজা চার এক এর lens টা পকেটে ঢুকালো">
         <LB_Pond cx={214} cy={154} rx={96} ry={20} ripples={SINK.slice(0, k >= 2 ? 4 : k >= 1 ? 2 : 0)} />
         <LightBhai x={70} y={140} facing={1} arm={k === 1 || k === 2 ? "wave" : "hold"} />
         {THROWN.map((c, i) => {

@@ -295,7 +295,7 @@ function LN_Rule({ who, text }: { who: string; text: ReactNode }) {
 
 const MB_RULES = [
   ["পদ্মের move", "(2g₁ + g₂, g₁ + 2g₂)"],
-  ["নাসিবের slide", "(g₁ + 1, g₂ + 1)"],
+  ["হামজাের slide", "(g₁ + 1, g₂ + 1)"],
   ["করিমের বর্গ", "(g₁², g₂)"],
   ["সোমের swap", "(g₂, g₁ + 1)"],
 ] as const;
@@ -303,7 +303,7 @@ const MB_RULES = [
 /** a picked rule's paper card, waiting in front of the machine */
 const MB_CARD_W = 44;
 const MB_Y = 162;
-const MB_NAMES = ["পদ্ম", "নাসিব", "করিম", "সোম"];
+const MB_NAMES = ["পদ্ম", "হামজা", "করিম", "সোম"];
 
 export function MachineBet() {
   const pass = useGate();
@@ -436,7 +436,7 @@ export function TryToGrid() {
   };
   return (
     <>
-      <LN_Road f={TG_F} label="রাস্তার আলপনা, matrix এর চার ঘর বদলালে পুরা রাস্তা বদলায়; ফুটকি দেওয়া আলপনা নাসিবের চাওয়া জায়গা, এক ঘর ডানে আর উপরে" max="max-w-[12.5rem]">
+      <LN_Road f={TG_F} label="রাস্তার আলপনা, matrix এর চার ঘর বদলালে পুরা রাস্তা বদলায়; ফুটকি দেওয়া আলপনা হামজাের চাওয়া জায়গা, এক ঘর ডানে আর উপরে" max="max-w-[12.5rem]">
         <ChalkGrid f={TG_F} move={move} ghost x0={-1} x1={8} y0={-1} y1={7} />
         <Alpana f={TG_F} move={slide} faint />
         <circle cx={TG_F.sx(1)} cy={TG_F.sy(1)} r={5} fill="none" stroke="#fde047" strokeWidth={1.4} strokeDasharray="2.5 2" />
@@ -455,7 +455,7 @@ export function TryToGrid() {
         <span aria-hidden="true" className="h-[5.5rem] w-2 rounded-r-md border-y-2 border-r-2 border-foreground/60" />
       </div>
       <div className="mt-2 text-center text-sm">
-        খুঁটির কোণা: <span className="font-mono">(0, 0) → {pt(corner)}</span>. নাসিব চায় <span className="font-mono">(1, 1)</span>.
+        খুঁটির কোণা: <span className="font-mono">(0, 0) → {pt(corner)}</span>. হামজা চায় <span className="font-mono">(1, 1)</span>.
       </div>
       {done && <div className={`mt-1 text-center text-sm text-danger ${FADE}`}>চার ঘরেই হাত দিলেন। কোণা একবারও নড়লো না।</div>}
       <Task done={done}>চারটা ঘরই বদলে দেখুন। আলপনা কি ফুটকি দেওয়া জায়গায় যায়?</Task>
@@ -528,8 +528,8 @@ export function SlideFails() {
   };
   return (
     <>
-      <LN_Rule who="নাসিবের slide" text="(g₁ + 1, g₂ + 1)" />
-      <LN_Race f={TL_F} m={slide} r={{ kind: "scale", c, v: [1, 1] }} k={race.k} max="max-w-[10rem]" label="নাসিবের slide এর race, (1, 1) কে কত গুণ করা হবে তা আপনি বাছেন" />
+      <LN_Rule who="হামজাের slide" text="(g₁ + 1, g₂ + 1)" />
+      <LN_Race f={TL_F} m={slide} r={{ kind: "scale", c, v: [1, 1] }} k={race.k} max="max-w-[10rem]" label="হামজাের slide এর race, (1, 1) কে কত গুণ করা হবে তা আপনি বাছেন" />
       <div className="mt-2 flex flex-wrap items-center justify-center gap-3">
         <span className="flex items-center gap-1.5 text-sm">
           কত গুণ? <Stepper value={c} min={0} max={3} label="গুণ" disabled={race.running} onChange={pick} />
@@ -1033,7 +1033,7 @@ function S_Board({ strike = false, ring = false, lanes = false, name }: { strike
   const y = 18;
   const rows = [
     ["পদ্ম", "(2g₁+g₂, g₁+2g₂)"],
-    ["নাসিব", "(g₁+1, g₂+1)"],
+    ["হামজা", "(g₁+1, g₂+1)"],
     ["করিম", "(g₁², g₂)"],
     ["সোম", "(g₂, g₁+1)"],
   ];
@@ -1106,7 +1106,7 @@ export function ClubRoom({}: Story) {
   const k = s.k;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="room" label="Computer club এর ঘর; whiteboard এ চারটা নিয়ম, দেয়ালে রাস্তার ছবি; করিম বললো বর্গ করাও তো একটা নিয়ম, নিয়ম হইলেই চলবো; নাসিব বললো আমারটা আরো সোজা, শুধু সরানো">
+      <Stage backdrop="room" label="Computer club এর ঘর; whiteboard এ চারটা নিয়ম, দেয়ালে রাস্তার ছবি; করিম বললো বর্গ করাও তো একটা নিয়ম, নিয়ম হইলেই চলবো; হামজা বললো আমারটা আরো সোজা, শুধু সরানো">
         <S_Board />
         <S_Proj />
         <Person who="samin" x={48} y={150} label facing={k >= 3 ? 1 : -1} arm={k >= 3 ? "hold" : "down"} />
@@ -1147,7 +1147,7 @@ export function SaminTypes({}: Story) {
   }, [k]);
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="room" label="সামিন desktop এ number বদলাচ্ছে; পর্দায় রাস্তা কাত হয়, ঘোরে, বড় হয়; নাসিব পাশে দাঁড়িয়ে, হাতে চায়ের কাপ">
+      <Stage backdrop="room" label="সামিন desktop এ number বদলাচ্ছে; পর্দায় রাস্তা কাত হয়, ঘোরে, বড় হয়; হামজা পাশে দাঁড়িয়ে, হাতে চায়ের কাপ">
         <S_Board />
         <S_Proj move={S2_MOVES[k]} />
         <S_Desk x={132} />
@@ -1186,8 +1186,8 @@ export function NasibSlide({}: Story) {
   const k = s.k;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="room" label="নাসিব কাপ নামিয়ে বললো এবার আমারটা চালাও; সোম lane এর মাথায় নাসিবের নাম লিখলো">
-        <S_Board lanes name={k >= 2 ? "নাসিব" : undefined} />
+      <Stage backdrop="room" label="হামজা কাপ নামিয়ে বললো এবার আমারটা চালাও; সোম lane এর মাথায় হামজাের নাম লিখলো">
+        <S_Board lanes name={k >= 2 ? "হামজা" : undefined} />
         <S_Proj />
         <S_Desk x={196} />
         {k >= 1 && <S_Cup x={216} y={116} />}
@@ -1545,7 +1545,7 @@ export function SplitMoveJoin() {
 //      where the pillar's corner went; lane 2 ends on the pillar.
 
 const X4_F = makeFrame(-1, 7.5, -1, 6.5, 22, 6);
-const X4_SAY = ["নাসিবের slide।", "পুরা রাস্তা এক ঘর ডানে, এক ঘর উপরে। খুঁটির কোণাও।", "Lane 1: 0 গুণ মানে খুঁটি থেকে শুরু। Machine তাকে পাঠালো কোণার নতুন জায়গায়।", "Lane 2 থামে খুঁটিতেই। 0 গুণের race আর খুঁটির পরীক্ষা একই জিনিস।"];
+const X4_SAY = ["হামজাের slide।", "পুরা রাস্তা এক ঘর ডানে, এক ঘর উপরে। খুঁটির কোণাও।", "Lane 1: 0 গুণ মানে খুঁটি থেকে শুরু। Machine তাকে পাঠালো কোণার নতুন জায়গায়।", "Lane 2 থামে খুঁটিতেই। 0 গুণের race আর খুঁটির পরীক্ষা একই জিনিস।"];
 
 export function CornerOff() {
   const s = useScene(3, [600, 1800, 2600, 2600]);
@@ -1554,7 +1554,7 @@ export function CornerOff() {
   const mv = partway(slide, t);
   return (
     <Scene scene={s} caption={say(X4_SAY, k)}>
-      <LN_Road f={X4_F} label="নাসিবের slide এ পুরা রাস্তা সরে, খুঁটির কোণাও; 0 গুণের race এ lane 1 থামে কোণার নতুন জায়গায়, lane 2 খুঁটিতে" max="max-w-[12.5rem]">
+      <LN_Road f={X4_F} label="হামজাের slide এ পুরা রাস্তা সরে, খুঁটির কোণাও; 0 গুণের race এ lane 1 থামে কোণার নতুন জায়গায়, lane 2 খুঁটিতে" max="max-w-[12.5rem]">
         <ChalkGrid f={X4_F} move={mv} ghost x0={-1} x1={8} y0={-1} y1={7} />
         <Alpana f={X4_F} move={mv} />
         <Pillar f={X4_F} at={mv([0, 0])} off={k >= 1} />
@@ -1707,11 +1707,11 @@ export function WaveTrap() {
 
 const X9_BETS: [string, string, "no" | "half" | "yes"][] = [
   ["পদ্ম", "matrix", "yes"],
-  ["নাসিব", "কোণা সরে", "no"],
+  ["হামজা", "কোণা সরে", "no"],
   ["করিম", "ঘর বাঁকে", "no"],
   ["সোম", "+1 ছাড়া", "half"],
 ];
-const X9_SAY = ["চারটা নিয়ম।", "পদ্মের move: চলে।", "নাসিবের slide: চলে না। খুঁটির কোণা সরে।", "করিমের বর্গ: চলে না। ঘর সমান থাকে না।", "সোমের swap: +1 বাদে চলে। +1 টা আলাদা, b।"];
+const X9_SAY = ["চারটা নিয়ম।", "পদ্মের move: চলে।", "হামজাের slide: চলে না। খুঁটির কোণা সরে।", "করিমের বর্গ: চলে না। ঘর সমান থাকে না।", "সোমের swap: +1 বাদে চলে। +1 টা আলাদা, b।"];
 
 function X9_Mark({ kind }: { kind: "no" | "half" | "yes" }) {
   if (kind === "yes") return <path d="M-5 0l3.5 4l7 -8" fill="none" stroke="#0d9488" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round" />;
@@ -1724,7 +1724,7 @@ export function BetSettled() {
   const k = s.k;
   return (
     <Scene scene={s} caption={say(X9_SAY, k)}>
-      <svg viewBox="0 0 240 70" role="img" aria-label="বাজির হিসাব: পদ্ম চলে, নাসিব আর করিমেরটা চলে না, সোমেরটা +1 বাদে চলে" className="mx-auto block h-auto w-full max-w-[17rem]">
+      <svg viewBox="0 0 240 70" role="img" aria-label="বাজির হিসাব: পদ্ম চলে, হামজা আর করিমেরটা চলে না, সোমেরটা +1 বাদে চলে" className="mx-auto block h-auto w-full max-w-[17rem]">
         {X9_BETS.map(([who, t, kind], i) => (
           <g key={who} transform={`translate(${8 + i * 58} 8)`}>
             <rect width={52} height={40} rx={5} fill="white" stroke={INK} strokeOpacity={0.3} />
@@ -1753,7 +1753,7 @@ export function BetSettled() {
 //      (0, 1)); then + (1, 1) slides the whole road, pillar's corner and all.
 //      The two boxes read wx + b at the end.
 
-const X9C_SAY = ["আগে matrix, তারপর আলাদা করে + b।", "নাসিবের slide: matrix রাস্তা যেমন আছে তেমন রাখে।", "তারপর + (1, 1)। পুরা রাস্তা এক ঘর ডানে, এক ঘর উপরে।", "4.1 এর wx + b এর b এটাই।"];
+const X9C_SAY = ["আগে matrix, তারপর আলাদা করে + b।", "হামজাের slide: matrix রাস্তা যেমন আছে তেমন রাখে।", "তারপর + (1, 1)। পুরা রাস্তা এক ঘর ডানে, এক ঘর উপরে।", "4.1 এর wx + b এর b এটাই।"];
 
 export function MatrixThenB() {
   const s = useScene(3, [600, 1800, 2200, 2200]);
@@ -1770,7 +1770,7 @@ export function MatrixThenB() {
         </svg>
         <span className={box(k >= 2)}>+ b</span>
       </div>
-      <LN_Road f={X4_F} label="নাসিবের slide দুই ধাপে: matrix রাস্তা যেমন আছে রাখে, তারপর + (1, 1) পুরা রাস্তা এক ঘর ডানে আর উপরে সরায়" max="max-w-[11rem]">
+      <LN_Road f={X4_F} label="হামজাের slide দুই ধাপে: matrix রাস্তা যেমন আছে রাখে, তারপর + (1, 1) পুরা রাস্তা এক ঘর ডানে আর উপরে সরায়" max="max-w-[11rem]">
         <ChalkGrid f={X4_F} move={mv} ghost x0={-1} x1={8} y0={-1} y1={7} />
         <Alpana f={X4_F} move={mv} />
         {k === 1 && (

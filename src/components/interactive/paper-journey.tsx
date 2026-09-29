@@ -1095,7 +1095,7 @@ export function RoofEve({}: Story) {
   const k = s.k;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="evening" label="চৈত্রের শেষ সন্ধ্যা, স্কুলের ছাদ; ফাহিমের হাতে map এর card (−1, 3), রিনার হাতে notebook এর (5, 3); নাসিব বললো একই দুই arrow, দুইটার একটা ভুল">
+      <Stage backdrop="evening" label="চৈত্রের শেষ সন্ধ্যা, স্কুলের ছাদ; ফাহিমের হাতে map এর card (−1, 3), রিনার হাতে notebook এর (5, 3); হামজা বললো একই দুই arrow, দুইটার একটা ভুল">
         <P_Roof lights={k >= 1} />
         <Person who="fahim" x={70} y={150} label arm={k >= 2 ? "hold" : "down"} />
         <Person who="rina" x={250} y={150} facing={-1} label arm={k >= 2 ? "hold" : "down"} />
@@ -1220,7 +1220,7 @@ export function NasibSideBySide({}: Story) {
   const k = s.k;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="evening" label="নাসিব দুইটা ছবি রেলিং এর উপর পাশাপাশি রাখলো, বামে ফাহিমের map, ডানে রাস্তা; বললো দুইটা একসাথে চালাও, একই দুই দড়ি, দেখি কী হয়">
+      <Stage backdrop="evening" label="হামজা দুইটা ছবি রেলিং এর উপর পাশাপাশি রাখলো, বামে ফাহিমের map, ডানে রাস্তা; বললো দুইটা একসাথে চালাও, একই দুই দড়ি, দেখি কী হয়">
         <P_Roof />
         <Person who="fahim" x={48} y={150} label />
         <Person who="nasib" x={110} y={150} label arm={k === 1 ? "hold" : k >= 2 ? "point" : "down"} />
@@ -1418,7 +1418,7 @@ const BS_SAY = [
   "(−1, 3) ঠিক: স্কুল নড়েনি, শুধু রাস্তার ভাষায় লেখা।",
   "(5, 3) ঠিক: ফুলটা সত্যিই সরে গেছে।",
   "তাই দুইটাই ভুল হতে পারে না।",
-  "দুইটাই ঠিক। প্রশ্ন ছিল দুইটা। নাসিবের একটা ভুল টিকলো না।",
+  "দুইটাই ঠিক। প্রশ্ন ছিল দুইটা। হামজাের একটা ভুল টিকলো না।",
 ];
 
 function P_Mark({ ok }: { ok: boolean }) {

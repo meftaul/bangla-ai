@@ -47,7 +47,7 @@ import { sfx } from "@/components/journey/sfx";
 type Kid = { name: string; of: string; h: number; w: number; age: number; tone: string };
 
 const SLATE = "fill-[#475569]";
-const NASIB: Kid = { name: "নাসিব", of: "নাসিবের", h: 180, w: 78, age: 18, tone: "fill-cat-blue" };
+const NASIB: Kid = { name: "হামজা", of: "হামজাের", h: 180, w: 78, age: 18, tone: "fill-cat-blue" };
 const SAMIN: Kid = { name: "সামিন", of: "সামিনের", h: 170, w: 60, age: 17, tone: "fill-cat-coral" };
 const SHOM: Kid = { name: "সোম", of: "সোমের", h: 175, w: 75, age: 19, tone: "fill-cat-teal" };
 const ARIF: Kid = { name: "আরিফ", of: "আরিফের", h: 158, w: 49, age: 15, tone: SLATE };
@@ -1085,7 +1085,7 @@ export function SameVector() {
         {note}
       </div>
       <Task done={seen.length === FORMS.length}>
-        নাসিবের vector তিনভাবেই সাজিয়ে দেখুন ({bn(seen.length)}/{bn(FORMS.length)})
+        হামজাের vector তিনভাবেই সাজিয়ে দেখুন ({bn(seen.length)}/{bn(FORMS.length)})
       </Task>
     </>
   );
@@ -1098,7 +1098,7 @@ export function SameVector() {
 const NV = [NASIB.h, NASIB.w, NASIB.age];
 const SUB = "₀₁₂₃₄₅₆₇₈₉";
 const vSub = (i: number) => `v${String(i).replace(/\d/g, (d) => SUB[Number(d)])}`;
-const PRINT_Q = ["180, নাসিবের height", "78, নাসিবের weight", "Error দেবে, v[1] বলে কিছু নাই"];
+const PRINT_Q = ["180, হামজাের height", "78, হামজাের weight", "Error দেবে, v[1] বলে কিছু নাই"];
 const PRINT_RIGHT = 1;
 const AGE_Q = ["v[3]", "v[2]", "v[18]"];
 const AGE_RIGHT = 1;
@@ -1137,7 +1137,7 @@ export function IndexTrap() {
         <Laptop file="heights.py">
           <Out tone="plain">{">>> v = [180, 78, 18]"}</Out>
           <Out tone="plain">{">>> print(v[1])"}</Out>
-          <Out>{"    # নাসিবের height?"}</Out>
+          <Out>{"    # হামজাের height?"}</Out>
           {guess !== null && show.k === 1 && (
             <Out tone="ok">
               <b className={`${POP} inline-block text-base`}>78</b>
@@ -1145,7 +1145,7 @@ export function IndexTrap() {
           )}
         </Laptop>
       </div>
-      {over && <SaminSays tone="bad">নাসিবের height 78?! ক্লাস ওয়ানের বাচ্চাও তো এর চেয়ে লম্বা।</SaminSays>}
+      {over && <SaminSays tone="bad">হামজাের height 78?! ক্লাস ওয়ানের বাচ্চাও তো এর চেয়ে লম্বা।</SaminSays>}
 
       {over ? (
         <div className={FADE}>
@@ -1172,7 +1172,7 @@ export function IndexTrap() {
               <b className="text-cat-amber">নিচে</b> code-এর গোনা, 0 থেকে
             </span>
           </div>
-          <div className="mt-5 text-sm font-medium text-muted">তাহলে code-এ নাসিবের বয়স, 18, বের করতে কী লিখবেন?</div>
+          <div className="mt-5 text-sm font-medium text-muted">তাহলে code-এ হামজাের বয়স, 18, বের করতে কী লিখবেন?</div>
           <div className="mt-2 flex flex-wrap gap-2">
             {AGE_Q.map((o, i) => (
               <button

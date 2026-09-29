@@ -184,7 +184,7 @@ export const A_PROPOSALS: Proposal[] = [
   { who: "ফাহিম", how: "বড় করে, দ্বিগুণ", move: A_BIG, frame: [-1, 12, -1, 10.6] },
   { who: "সামিন", how: "কাত করে", move: A_SLANT, frame: [-1, 9, -1, 6] },
   { who: "সোম", how: "উল্টা করে, আয়নার মতো", move: A_MIRROR, frame: [-7, 7, -1, 6] },
-  { who: "নাসিব", how: "যেমন আছে, শুধু এক ঘর ডানে", move: A_SLIDE, frame: [-1, 8, -1, 6] },
+  { who: "হামজা", how: "যেমন আছে, শুধু এক ঘর ডানে", move: A_SLIDE, frame: [-1, 8, -1, 6] },
 ];
 
 /** One proposal on its own small road. The grid stays; only the design moves. */
@@ -559,7 +559,7 @@ export function SlideTheAlpana() {
         </div>
       )}
       {slid && <A_LateLamps lamps={[true, true, false]} ms={1100} />}
-      <div className="mt-3 text-sm font-medium text-muted">নাসিবের move এ স্যারের তিনটা বাতির কী হবে?</div>
+      <div className="mt-3 text-sm font-medium text-muted">হামজাের move এ স্যারের তিনটা বাতির কী হবে?</div>
       <div className="mt-2 grid gap-2">
         {SL_GUESS.map((o, i) => (
           <Choice key={o} n={i} look={predictLook(i, guess, landed, SL_RIGHT)} disabled={guess !== null} onClick={() => setGuess(i)}>
@@ -848,7 +848,7 @@ export function GateEvening({}: Story) {
   const k = s.k;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="street" ground={120} label="স্কুল গেটের সামনের রাস্তা; আর্ট স্যার খুঁটির গোড়ায়, রিনার হাতে graph paper; ফাহিম, সামিন, সোম আর নাসিব চার রকম কাগজ তুলে ধরলো; স্যার বললেন খুঁটি থেকে যা শুরু খুঁটিতেই থাকে, চাইরটার একটা আমার নিয়মে হয় না">
+      <Stage backdrop="street" ground={120} label="স্কুল গেটের সামনের রাস্তা; আর্ট স্যার খুঁটির গোড়ায়, রিনার হাতে graph paper; ফাহিম, সামিন, সোম আর হামজা চার রকম কাগজ তুলে ধরলো; স্যার বললেন খুঁটি থেকে যা শুরু খুঁটিতেই থাকে, চাইরটার একটা আমার নিয়মে হয় না">
         <S_Pillar />
         <S_Grid />
         <Person who="nana" x={62} y={160} arm={k >= 3 ? "point" : "down"} />
@@ -958,7 +958,7 @@ export function ThreeFingers({}: Story) {
   const k = s.k;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="evening" ground={120} label="সন্ধ্যা নামছে, রাস্তার বাতি জ্বললো; নাসিব বললো তাহলে যা খুশি করা যায়; আর্ট স্যার একটা কঞ্চি chalk এর লাইনের পাশে রাখলেন, তারপর তিনটা শর্ত বললেন">
+      <Stage backdrop="evening" ground={120} label="সন্ধ্যা নামছে, রাস্তার বাতি জ্বললো; হামজা বললো তাহলে যা খুশি করা যায়; আর্ট স্যার একটা কঞ্চি chalk এর লাইনের পাশে রাখলেন, তারপর তিনটা শর্ত বললেন">
         <S_Pillar />
         <S_Grid />
         <S_StreetLamp on={k >= 1} />
@@ -980,13 +980,13 @@ export function ThreeFingers({}: Story) {
 export function NasibPushes({}: Story) {
   const s = useScene(3, [600, 1600, 1600, 2600]);
   const k = s.k;
-  // নাসিব slides the paper one square right
+  // হামজা slides the paper one square right
   useEffect(() => {
     if (k === 2) sfx.slip();
   }, [k]);
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="evening" ground={120} label="নাসিব graph paper টা রাস্তায় রাখলো, এক ঘর ডানে ঠেলে দিলো, বললো লাইন সোজা, ঘর সমান; স্যার কিছু বললেন না">
+      <Stage backdrop="evening" ground={120} label="হামজা graph paper টা রাস্তায় রাখলো, এক ঘর ডানে ঠেলে দিলো, বললো লাইন সোজা, ঘর সমান; স্যার কিছু বললেন না">
         <S_Pillar />
         <S_Grid />
         <S_StreetLamp on />
@@ -1081,7 +1081,7 @@ function S_Rickshaw({ x }: { x: number }) {
 export function RickshawPasses({}: Story) {
   const s = useScene(3, [600, 2000, 1600, 2000]);
   const k = s.k;
-  // a rickshaw rattles past; নাসিব folds his paper; the sir ties a second rope
+  // a rickshaw rattles past; হামজা folds his paper; the sir ties a second rope
   useEffect(() => {
     if (k === 1) {
       sfx.bell();
@@ -1092,7 +1092,7 @@ export function RickshawPasses({}: Story) {
   }, [k]);
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="evening" ground={120} label="একটা রিকশা গেলো, চাকা খুঁটির পাশের ঘরের উপর দিয়ে; নাসিব কাগজ ভাঁজ করে পকেটে রাখলো; আর্ট স্যার খুঁটিতে আরেকটা দড়ি বাঁধলেন">
+      <Stage backdrop="evening" ground={120} label="একটা রিকশা গেলো, চাকা খুঁটির পাশের ঘরের উপর দিয়ে; হামজা কাগজ ভাঁজ করে পকেটে রাখলো; আর্ট স্যার খুঁটিতে আরেকটা দড়ি বাঁধলেন">
         <S_Pillar ropes={k >= 3 ? 2 : 1} />
         <S_Grid />
         <S_StreetLamp on />
@@ -1526,7 +1526,7 @@ export function CopySquares() {
 // 8½ · The bet, settled. The four proposals as small roads; a tick lands on
 //      three of them, a cross on Nasib's.
 
-const X8_SAY = ["চারটা প্রস্তাব।", "বড় করা: লাইন সোজা, ঘর সমান, খুঁটি জায়গায়।", "কাত করা: একই। উল্টা করা: একই।", "নাসিবের এক ঘর ডানে: grid এর কোণা খুঁটি ছাড়ে।"];
+const X8_SAY = ["চারটা প্রস্তাব।", "বড় করা: লাইন সোজা, ঘর সমান, খুঁটি জায়গায়।", "কাত করা: একই। উল্টা করা: একই।", "হামজাের এক ঘর ডানে: grid এর কোণা খুঁটি ছাড়ে।"];
 
 export function BetSettled() {
   const s = useScene(3, [600, 1600, 1800, 2200]);

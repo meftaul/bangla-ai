@@ -208,7 +208,7 @@ function BulbIcon({ x, y, s = 1, lit = true }: { x: number; y: number; s?: numbe
 //     crossing's height; sealing hangs a "?" on it. Never judged here.
 
 const X1_CARDS = [
-  { who: "নাসিব", line: "স্কেলে মাপলাম", v: 45 },
+  { who: "হামজা", line: "স্কেলে মাপলাম", v: 45 },
   { who: "সামিন", line: "আমি তো দেখি", v: 48 },
   { who: "মামা", line: "গোল সংখ্যাই হবে", v: 50 },
   { who: "লাইট ভাই", line: "আমার মনে আছে", v: 47 },
@@ -1185,7 +1185,7 @@ export function LightVanBack({}: Story) {
   );
 }
 
-// 1b · Four answers, one after another: নাসিব with his স্কেল, সামিন, মামা,
+// 1b · Four answers, one after another: হামজা with his স্কেল, সামিন, মামা,
 //      the লাইট ভাই।
 
 export function FourGuesses({}: Story) {
@@ -1193,7 +1193,7 @@ export function FourGuesses({}: Story) {
   const k = s.k;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="field" label="নাসিব স্কেল হাতে বললো একটু বড় করে আঁকলে পঁয়তাল্লিশ; সামিন বললো আটচল্লিশ; মামা বললেন গোল সংখ্যাই হবে, পঞ্চাশ; লাইট ভাই বললেন সাতচল্লিশ, তার মনে আছে">
+      <Stage backdrop="field" label="হামজা স্কেল হাতে বললো একটু বড় করে আঁকলে পঁয়তাল্লিশ; সামিন বললো আটচল্লিশ; মামা বললেন গোল সংখ্যাই হবে, পঞ্চাশ; লাইট ভাই বললেন সাতচল্লিশ, তার মনে আছে">
         <Person who="nasib" x={48} y={150} facing={1} arm="hold" mood={k === 0 ? "smug" : "plain"} label />
         <path d="M58 108l24 -6" stroke="#ca8a04" strokeWidth={3} strokeLinecap="round" />
         <Person who="samin" x={118} y={150} facing={1} arm={k === 1 ? "point" : "down"} label />

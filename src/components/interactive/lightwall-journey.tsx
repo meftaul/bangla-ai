@@ -935,7 +935,7 @@ export function BagLens({}: Story) {
   }, [k]);
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="evening" label="নাসিব বললো যন্ত্র এক লাইনের বাইরে যায় না; লাইট ভাই কিছু বললেন না; ব্যাগ থেকে গত রাতের lens বের করলেন; তার পাতে (2, 1) আর (1, 2)">
+      <Stage backdrop="evening" label="হামজা বললো যন্ত্র এক লাইনের বাইরে যায় না; লাইট ভাই কিছু বললেন না; ব্যাগ থেকে গত রাতের lens বের করলেন; তার পাতে (2, 1) আর (1, 2)">
         <StageWall x={SW[0]} y={SW[1]}>
           <path d={`M${STAGE_WALL_F.sx(-3)} ${STAGE_WALL_F.sy(-1.5)}L${STAGE_WALL_F.sx(9)} ${STAGE_WALL_F.sy(4.5)}`} stroke="#f59e0b" strokeWidth={2} strokeOpacity={0.6} />
         </StageWall>

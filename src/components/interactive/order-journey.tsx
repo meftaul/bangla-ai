@@ -1148,7 +1148,7 @@ function O_Helper({ x, y, facing = -1, arm = "down", walking = false, ms = 1200 
 }
 
 /** a name under someone's feet, light ink for the night stage */
-const NAMES = { rina: "রিনা", fahim: "ফাহিম", nasib: "নাসিব", ammu: "আম্মু", samin: "সামিন", apa: "আপা" } as const;
+const NAMES = { rina: "রিনা", fahim: "ফাহিম", nasib: "হামজা", ammu: "আম্মু", samin: "সামিন", apa: "আপা" } as const;
 function O_Name({ x, who }: { x: number; who: keyof typeof NAMES }) {
   return (
     <text x={x} y={161} textAnchor="middle" fontSize={8.5} fontWeight={700} fill="#e2e8f0" className="pointer-events-none">
@@ -1222,7 +1222,7 @@ export function HoludNight({}: Story) {
   const [lx, ly] = projectorLens(PJ[0], PJ[1]);
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="night" label="হলুদের রাত; show শেষ; লাইট ভাই lens দুইটা উল্টা করে লাগিয়েছেন, W খোপে, Z সামনে; ফাহিম, নাসিব, রিনার মুখে হলুদ; আম্মু বালতি হাতে বললেন এবার গোসল; নাসিব বললো গোসল আগে করলে কী হতো; তারপর বললো আগে পরে কী আসে যায়; লাইট ভাই ব্যাগ থেকে S আর D বের করলেন; যন্ত্রের গায়ে চকে লেখা আগে S, তারপর D">
+      <Stage backdrop="night" label="হলুদের রাত; show শেষ; লাইট ভাই lens দুইটা উল্টা করে লাগিয়েছেন, W খোপে, Z সামনে; ফাহিম, হামজা, রিনার মুখে হলুদ; আম্মু বালতি হাতে বললেন এবার গোসল; হামজা বললো গোসল আগে করলে কী হতো; তারপর বললো আগে পরে কী আসে যায়; লাইট ভাই ব্যাগ থেকে S আর D বের করলেন; যন্ত্রের গায়ে চকে লেখা আগে S, তারপর D">
         <O_StageWall />
         <Projector x={PJ[0]} y={PJ[1]} lens="empty" />
         <O_Glass x={lx} y={ly} letter="W" fill={W_FILL} />
@@ -1339,14 +1339,14 @@ export function SaminApp({}: Story) {
 export function NasibBox({}: Story) {
   const s = useScene(3, [600, 1800, 1800, 2400]);
   const k = s.k;
-  // নাসিব takes two lenses out of the box
+  // হামজা takes two lenses out of the box
   useEffect(() => {
     if (k === 1) sfx.lens();
     else if (k === 2) sfx.lens();
   }, [k]);
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="night" label="নাসিব ডেকোরেটরের বাক্স থেকে আরো দুইটা lens বের করলো, একটা ঘোরায়, একটা দ্বিগুণ করে; বললো এই দুইটা দিয়ে দেখাই, আগে পরে একই হবে">
+      <Stage backdrop="night" label="হামজা ডেকোরেটরের বাক্স থেকে আরো দুইটা lens বের করলো, একটা ঘোরায়, একটা দ্বিগুণ করে; বললো এই দুইটা দিয়ে দেখাই, আগে পরে একই হবে">
         <O_StageWall />
         <Projector x={PJ[0]} y={PJ[1]} lens="empty" />
         {/* the decorator's box */}
@@ -1458,7 +1458,7 @@ export function BackFromGosol({}: Story) {
   const flower = onSW(apply(cols, FLOWER));
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="night" label="ছেলেমেয়েরা গোসল সেরে ফিরলো, মুখে হলুদ নাই; হেল্পার lens উল্টালো, দেয়ালের ছবি বদলালো; আবার আগের মতো লাগালো, আগের ছবি ফিরলো; নাসিব কিছু বললো না">
+      <Stage backdrop="night" label="ছেলেমেয়েরা গোসল সেরে ফিরলো, মুখে হলুদ নাই; হেল্পার lens উল্টালো, দেয়ালের ছবি বদলালো; আবার আগের মতো লাগালো, আগের ছবি ফিরলো; হামজা কিছু বললো না">
         <O_StageWall>{k !== 1 && <O_StageLight cols={cols} />}</O_StageWall>
         {k !== 1 && <StageBeam from={projectorLens(PJ[0], PJ[1])} to={flower} />}
         <Projector x={PJ[0]} y={PJ[1]} on={k !== 1} lens={k === 1 ? "empty" : "good"} />

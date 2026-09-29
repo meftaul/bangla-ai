@@ -35,7 +35,7 @@ import { sfx } from "@/components/journey/sfx";
 // the prize turns out to be the two walks joined; three pairs given only as
 // numbers give up the rule, slot with slot. সোম reads the cards the other way
 // round and lands on the same corner. Then the rule leaves the paper: আম্মুর
-// tiffin adds up as three-slot cards, and নাসিব's two mismatched cards cannot
+// tiffin adds up as three-slot cards, and হামজা's two mismatched cards cannot
 // be added at all. Subtraction is the question asked backwards: which one card
 // takes সামিন to the prize? End − start, three times, checked by walking it,
 // and last read as "what changed" in her stall book.
@@ -1524,7 +1524,7 @@ export function ManySlots() {
 }
 
 // ---------------------------------------------------------------------------
-// 5a · A story scene for screen 5's setup, no task: নাসিব gets an idea. He
+// 5a · A story scene for screen 5's setup, no task: হামজা gets an idea. He
 //      walks past the snack table, a bulb lights over his head, and out of his
 //      pocket come two cards, height and weight, and last week's checkup. He
 //      decides to add them too; whether he can is the widget's.
@@ -1554,7 +1554,7 @@ export function NasibPocket({}: Story) {
   );
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="fair" label="নাসিব gets an idea and takes two cards out of his pocket: height and weight (150, 45), and a checkup report (12, 110, 90); he wants to add them">
+      <Stage backdrop="fair" label="হামজা gets an idea and takes two cards out of his pocket: height and weight (150, 45), and a checkup report (12, 110, 90); he wants to add them">
         <Stall x={52} y={S5_Y} w={84} sign="Snack table" color="#16a34a" />
         <Person who="nasib" x={k >= 1 ? S5_NASIB : 370} y={S5_Y} facing={-1} walking={k === 1} ms={1400} arm={k >= 3 ? "hold" : "down"} mood={k >= 2 ? "smug" : "plain"} label />
         {k >= 2 && k < 5 && <S5Bulb x={S5_NASIB} y={S5_Y - 72} />}
@@ -1577,7 +1577,7 @@ export function NasibPocket({}: Story) {
 }
 
 // ---------------------------------------------------------------------------
-// 5 · নাসিব's two cards do not match. Pair them slot by slot: cm meets years,
+// 5 · হামজা's two cards do not match. Pair them slot by slot: cm meets years,
 //     kg meets pressure, and slot 3 has nobody at all.
 
 const HW = [
@@ -1618,7 +1618,7 @@ export function WrongShape() {
 
   return (
     <>
-      <Speech who="নাসিব" initial="ন" tint="blue">
+      <Speech who="হামজা" initial="ন" tint="blue">
         আমার এই দুইটা card-ও একটু যোগ করে দাও না!
       </Speech>
       <div className="mt-4 text-center text-sm">
@@ -1661,19 +1661,19 @@ export function WrongShape() {
 
 // ---------------------------------------------------------------------------
 // 5½ · A figure for screen 5's explanation, no task: the condition hidden in
-//      the rule. নাসিব's two cards lined up slot by slot: the first two slots
+//      the rule. হামজা's two cards lined up slot by slot: the first two slots
 //      find partners, 90 finds nobody, and even 150 + 12, which does come
 //      out as a number, comes out as a number that means nothing.
 
 const X5_SAY = [
-  "নাসিবের দুইটা card, ঘরে ঘরে সাজানো হলো।",
-  "নাসিবের দুইটা card, ঘরে ঘরে সাজানো হলো।",
+  "হামজাের দুইটা card, ঘরে ঘরে সাজানো হলো।",
+  "হামজাের দুইটা card, ঘরে ঘরে সাজানো হলো।",
   "প্রথম দুইটা ঘর একজন করে সঙ্গী পেলো।",
   "কিন্তু 90-এর সঙ্গী কই? Card ১-এ তিন নম্বর ঘরই নাই।",
   "আর 150 + 12 = 162 ঠিকই হয়। কিন্তু 162 কী, cm না বছর? এর কোনো মানে নাই।",
 ];
 
-/** One of নাসিব's slots, compact: what it is, and its number. */
+/** One of হামজা's slots, compact: what it is, and its number. */
 function X5Cell({ k, v, tone }: { k: string; v: string; tone: "blue" | "coral" }) {
   return (
     <span className={`block rounded-lg px-1 py-1 leading-tight ${tone === "blue" ? "bg-cat-blue/10" : "bg-cat-coral/10"}`}>
@@ -2762,7 +2762,7 @@ export function GuessNudge() {
 
 // ---------------------------------------------------------------------------
 // 8¾ · A story figure for screen 8's explanation, no task: ডাক্তার আপা reads
-//      one patient's two reports. নাসিব walks into her room; last year's
+//      one patient's two reports. হামজা walks into her room; last year's
 //      (প্রেশার, চিনি) card, then today's (the checkup from screen 5, 110 and
 //      90); today − last year pops up, and she sees which way it is heading.
 
@@ -2786,7 +2786,7 @@ export function ApaReport() {
       <Stage
         backdrop="room"
         ground={X8_Y}
-        label="ডাক্তার আপা reads নাসিব's reports, (প্রেশার, চিনি): last year (105, 70), today (110, 90); today minus last year is (+5, +20), and she sees the sugar is going up"
+        label="ডাক্তার আপা reads হামজা's reports, (প্রেশার, চিনি): last year (105, 70), today (110, 90); today minus last year is (+5, +20), and she sees the sugar is going up"
       >
         <Person who="apa" x={X8_APA} y={X8_Y} arm={k >= 2 ? "hold" : "down"} mood={k >= 5 ? "puzzled" : "plain"} />
         {/* her desk, in front of her */}

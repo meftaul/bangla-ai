@@ -1049,7 +1049,7 @@ export function GateSteps({}: Story) {
   }, [k]);
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="street" ground={128} label="চৈত্রের শেষ দিন সকালে গেটের সামনে; pillar এ পাঁচটা খালি পিন; তপু graph paper নিয়ে এলো, বললো পাঁচটা আলপনাই ম্যাগাজিনে যাবে; আর্ট স্যার বললেন কাগজ তো নাই, রাস্তা আছে, খাতা আছে; নাসিব বললো উল্টা চালালেই তো হয়">
+      <Stage backdrop="street" ground={128} label="চৈত্রের শেষ দিন সকালে গেটের সামনে; pillar এ পাঁচটা খালি পিন; তপু graph paper নিয়ে এলো, বললো পাঁচটা আলপনাই ম্যাগাজিনে যাবে; আর্ট স্যার বললেন কাগজ তো নাই, রাস্তা আছে, খাতা আছে; হামজা বললো উল্টা চালালেই তো হয়">
         <S_Pillar x={14} y={52} h={76} pins={5} />
         <g opacity={0.45}>
           <ellipse cx={120} cy={168} rx={16} ry={4} fill="#f472b6" />
@@ -1083,7 +1083,7 @@ export function FifthCrossing({}: Story) {
   const k = s.k;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="street" ground={120} label="পাঁচ নম্বর মোড়; রাস্তায় শুধু একটা লম্বা গোলাপি দাগ; নাসিব এসে থামলো; রিনা জিজ্ঞেস করলো ওটাও ফেরত আসবে কি-না; নাসিব বললো আসবে, দাঁড়াও">
+      <Stage backdrop="street" ground={120} label="পাঁচ নম্বর মোড়; রাস্তায় শুধু একটা লম্বা গোলাপি দাগ; হামজা এসে থামলো; রিনা জিজ্ঞেস করলো ওটাও ফেরত আসবে কি-না; হামজা বললো আসবে, দাঁড়াও">
         <rect x={0} y={120} width={320} height={60} fill="#6b7280" />
         <path d="M70 150H200" stroke="#f472b6" strokeWidth={4} strokeLinecap="round" />
         <path d="M200 150H240" stroke="#fbbf24" strokeWidth={4} strokeLinecap="round" />
@@ -1108,7 +1108,7 @@ export function OwlNoon({}: Story) {
   const fx = k >= 1 ? 150 : -40;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="street" ground={130} label="দুপুর বারোটা, সূর্য মাথার উপরে; ফাহিম বাঁশের মাথায় কাগজের পেঁচা নিয়ে এলো; রাস্তায় ঠিক নিচে গোল ছায়া; নাসিব বললো ছায়া দেখে বলে দিবে পেঁচা কত উঁচুতে">
+      <Stage backdrop="street" ground={130} label="দুপুর বারোটা, সূর্য মাথার উপরে; ফাহিম বাঁশের মাথায় কাগজের পেঁচা নিয়ে এলো; রাস্তায় ঠিক নিচে গোল ছায়া; হামজা বললো ছায়া দেখে বলে দিবে পেঁচা কত উঁচুতে">
         <circle cx={70} cy={22} r={10} fill="#fde047" stroke="#f59e0b" strokeWidth={1.5} />
         {k >= 2 && <ellipse cx={fx + 16} cy={160} rx={13} ry={4} fill="#0b1220" fillOpacity={0.5} className={FADE} />}
         <g className="transition-transform duration-[1200ms] ease-out motion-reduce:transition-none" style={{ transform: `translateX(${fx}px)` }}>
@@ -1261,7 +1261,7 @@ export function FirstCrossing({}: Story) {
   const tx = k >= 3 ? 262 : 370;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="street" ground={116} label="এক নম্বর মোড়; রাস্তায় কাগজেরটার দ্বিগুণ বড় আলপনা; নাসিব এসে বসলো, হাতে খাতা, তাতে এই মোড়ের matrix; তপু graph paper হাতে পাশে এসে বসলো">
+      <Stage backdrop="street" ground={116} label="এক নম্বর মোড়; রাস্তায় কাগজেরটার দ্বিগুণ বড় আলপনা; হামজা এসে বসলো, হাতে খাতা, তাতে এই মোড়ের matrix; তপু graph paper হাতে পাশে এসে বসলো">
         <rect y={116} width={320} height={64} fill="#6b7280" />
         <S_Pillar x={10} y={62} h={56} />
         <g transform="translate(112 118) scale(1 0.6)">

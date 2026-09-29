@@ -371,12 +371,12 @@ function CubeRow({ pj, n, fill = DHAN, stroke = DHAN_DARK, from = 0 }: { pj: Pj;
 }
 
 // ---------------------------------------------------------------------------
-// 1 · The sealed bet. Four cards: নাসিব কম ধরে · পাইকার ঠিক 3 · সোম বেশি ধরে
+// 1 · The sealed bet. Four cards: হামজা কম ধরে · পাইকার ঠিক 3 · সোম বেশি ধরে
 //     · করিম মাপা যায় না। A pick is drawn on the box; sealing writes it into
 //     the খাতা with a "?". Never marked.
 
 const X1_CARDS = [
-  { who: "নাসিব", t: "কম ধরে", line: "হেলানো বাক্স চাপা খায়" },
+  { who: "হামজা", t: "কম ধরে", line: "হেলানো বাক্স চাপা খায়" },
   { who: "পাইকার", t: "ঠিক 3", line: "বাপ-দাদার আমলের মাপ" },
   { who: "সোম", t: "বেশি ধরে", line: "হেলানো দিকে ফুলে আছে" },
   { who: "করিম", t: "মাপা যায় না", line: "হেলানো জিনিস মাপবে কে" },
@@ -1167,7 +1167,7 @@ export function TooManyTerms() {
 
 const X9_PJ = pjAt(28, 166, 33);
 const X9_CARDS: [string, boolean][] = [
-  ["নাসিব: কম ধরে", false],
+  ["হামজা: কম ধরে", false],
   ["পাইকার: ঠিক 3", false],
   ["সোম: বেশি ধরে", true],
   ["করিম: মাপা যায় না", false],

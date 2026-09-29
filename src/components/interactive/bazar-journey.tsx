@@ -1078,7 +1078,7 @@ export function UthanDawn({}: Story) {
   }, [k]);
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="field" label="ভোরে নানাবাড়ির উঠান; বাবুর্চি খালি ডেকচির পাশে খাতা হাতে; করিম একটা ডেকচি গড়িয়ে আনছে; মামা সাইকেলে; বাবুর্চি বললেন তিনি ডেকচি ধরে গোনেন, মামা বললেন চাল কত মাংস কত বলেন; নাসিব বললো দুইজনের হিসাব মিলবে না">
+      <Stage backdrop="field" label="ভোরে নানাবাড়ির উঠান; বাবুর্চি খালি ডেকচির পাশে খাতা হাতে; করিম একটা ডেকচি গড়িয়ে আনছে; মামা সাইকেলে; বাবুর্চি বললেন তিনি ডেকচি ধরে গোনেন, মামা বললেন চাল কত মাংস কত বলেন; হামজা বললো দুইজনের হিসাব মিলবে না">
         <S_House door={false} />
         <S_Yard />
         {[84, 108, 132, 156].map((x) => (
@@ -1184,7 +1184,7 @@ export function NasibLuck({}: Story) {
   const k = s.k;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="field" label="নাসিব দুইটা card ধরলো, দুইটাতেই (8, 7); বললো এটা কপালে মিলছে, order বদলালে মিলবে না">
+      <Stage backdrop="field" label="হামজা দুইটা card ধরলো, দুইটাতেই (8, 7); বললো এটা কপালে মিলছে, order বদলালে মিলবে না">
         <S_House />
         <S_Yard />
         <Person who="fahim" x={70} y={160} label />

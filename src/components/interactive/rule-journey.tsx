@@ -8,9 +8,9 @@ import { Choice, Draw, FADE, GROW, Nope, POP, Scene, Stepper, Ticks, primaryBtn,
 import { Bubble, Card as CastCard, Person, Stage, Stall, StoryFrame } from "@/components/journey/cast";
 import { sfx } from "@/components/journey/sfx";
 
-// Screens for "Math for AI 4.0 — নাসিবের নিয়ম, ঘরে ঘরে গুণ কেন", told as a Journey.
+// Screens for "Math for AI 4.0 — হামজাের নিয়ম, ঘরে ঘরে গুণ কেন", told as a Journey.
 //
-// The night before the fair. নাসিব needs a rule that takes two cards, a
+// The night before the fair. হামজা needs a rule that takes two cards, a
 // person's taste and a film's score, both (drama, comedy), and gives one
 // number to line the films up by. সামিন says any rule that gives a number will
 // do; the reader seals a bet on that (1). Then the rules fall one by one, each
@@ -262,7 +262,7 @@ function S_Table({ x, films = ["#e11d48", "#0d9488", "#2563eb"] }: { x: number; 
 
 // ---------------------------------------------------------------------------
 // 1a · A story scene for screen 1's setup, no task: the club's room the night
-//      before the fair. নাসিব puts two cards on the board, a taste and a film,
+//      before the fair. হামজা puts two cards on the board, a taste and a film,
 //      and an arrow to "?"; সামিন says any rule that gives a number will do.
 
 const S1_NASIB = 158;
@@ -274,7 +274,7 @@ export function NightClub({}: Story) {
   const k = s.k;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="room" label="মেলার আগের রাত, club-এর ঘর। নাসিব বোর্ডে দুইটা card লিখলো, মামার পছন্দ আর Titanic, পাশে একটা প্রশ্নবোধক। সামিন বললো যা খুশি করলেই একটা number আসবে।">
+      <Stage backdrop="room" label="মেলার আগের রাত, club-এর ঘর। হামজা বোর্ডে দুইটা card লিখলো, মামার পছন্দ আর Titanic, পাশে একটা প্রশ্নবোধক। সামিন বললো যা খুশি করলেই একটা number আসবে।">
         <S_Window />
         <S_Board>
           {k >= 1 && (
@@ -469,7 +469,7 @@ export function TwoInOne() {
 }
 
 // ---------------------------------------------------------------------------
-// 2 · The first try, নাসিবের: add up the film's own card. Serve মামা and
+// 2 · The first try, হামজাের: add up the film's own card. Serve মামা and
 //     রিনা; the bars are the same both times (Titanic 7, Bean 5), so Titanic
 //     glides to both. রিনা smiles, মামা doesn't.
 
@@ -550,7 +550,7 @@ export function FilmOnly() {
           রিনাকে দিন
         </button>
       </div>
-      <Task done={served.length === 2}>নাসিবের rule দিয়ে মামা আর রিনা, দুইজনকেই একটা করে ছবি দিন।</Task>
+      <Task done={served.length === 2}>হামজাের rule দিয়ে মামা আর রিনা, দুইজনকেই একটা করে ছবি দিন।</Task>
     </>
   );
 }
@@ -564,7 +564,7 @@ export function OneCardOut() {
   const s = useScene(3, [600, 1500, 2000]);
   const k = s.k;
   const caps = [
-    "নাসিবের rule-এ ঢুকেছে শুধু ছবির card।",
+    "হামজাের rule-এ ঢুকেছে শুধু ছবির card।",
     "মামার card বাইরে পড়ে ছিল। যে-ই আসুক, number একই।",
     "তাই দরকার দুইটা ঢোকার পথ।",
     "একটা মানুষের card-এর জন্য, একটা ছবির জন্য।",
@@ -1621,7 +1621,7 @@ export function TwentyTwoAgain() {
 }
 
 // ---------------------------------------------------------------------------
-// 9a · A story scene for screen 9's setup, no task: নাসিব writes the rule out
+// 9a · A story scene for screen 9's setup, no task: হামজা writes the rule out
 //      in words on the board; the second half runs off the edge. সামিন asks
 //      what happens with ten slots.
 
@@ -1635,7 +1635,7 @@ export function LongBoard({}: Story) {
   }, [k]);
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="room" label="নাসিব বোর্ডে পুরা rule কথায় লিখলো, লাইনটা বোর্ড ছাড়িয়ে গেলো। সামিন জিজ্ঞেস করলো slot দশটা হলে কী হবে।">
+      <Stage backdrop="room" label="হামজা বোর্ডে পুরা rule কথায় লিখলো, লাইনটা বোর্ড ছাড়িয়ে গেলো। সামিন জিজ্ঞেস করলো slot দশটা হলে কী হবে।">
         <S_Window />
         <S_Board w={128}>
           {k >= 1 && (
@@ -1843,7 +1843,7 @@ export function DotTimeline() {
   const s = useScene(4, [600, 1300, 1300, 1300]);
   const k = s.k;
   return (
-    <Scene scene={s} caption={<span key={k} className={FADE}>{k < 4 ? "গুণ-যোগটা কত পুরানো?" : "নাসিব প্রথম না। নামটা শুধু 1881-এর।"}</span>}>
+    <Scene scene={s} caption={<span key={k} className={FADE}>{k < 4 ? "গুণ-যোগটা কত পুরানো?" : "হামজা প্রথম না। নামটা শুধু 1881-এর।"}</span>}>
       <div className="relative mx-auto max-w-[16rem] pl-6">
         <div className="absolute top-2 bottom-2 left-2 w-0.5 origin-top bg-border transition-transform duration-1000 motion-reduce:transition-none" style={{ transform: `scaleY(${k / 4})` }} />
         {X9T_STOPS.map((st, i) => (
@@ -1950,7 +1950,7 @@ export function TryRina() {
         })}
       </div>
       {settled && pick !== null && pick !== X10_RIGHT && <Nope key={miss}>{X10_NOPE[X10_FILMS[pick]]}</Nope>}
-      <Task done={settled && pick === X10_RIGHT}>নাসিবের rule রিনার হাতে কোন ছবি দেবে? বেছে নিন।</Task>
+      <Task done={settled && pick === X10_RIGHT}>হামজাের rule রিনার হাতে কোন ছবি দেবে? বেছে নিন।</Task>
     </>
   );
 }
@@ -1991,7 +1991,7 @@ export function ThinComedy() {
 
 // ---------------------------------------------------------------------------
 // 11a · A story scene for the ending, no task: morning at the fair. The club's
-//       stall, a small board with the night's one line; নাসিব at the counter;
+//       stall, a small board with the night's one line; হামজা at the counter;
 //       ফাহিমের মামা walks up first, as in 3.6, and says what he wants.
 
 export function DawnMama({}: Story) {

@@ -111,7 +111,7 @@ export function RoofLate({}: Story) {
         <NameTag x={132} y={GROUND + 13} name="ফাহিম" />
         <Jilapi x={146} y={GROUND - 28} s={0.8} half />
         <CastPerson who="nasib" x={236} y={GROUND} facing={-1} arm={k >= 1 ? "point" : "hold"} mood={k >= 1 ? "smug" : "plain"} />
-        <NameTag x={236} y={GROUND + 13} name="নাসিব" />
+        <NameTag x={236} y={GROUND + 13} name="হামজা" />
         {k === 0 && <Jilapi x={222} y={GROUND - 28} s={0.8} half />}
         {k >= 1 && <rect x={250} y={GROUND - 46} width={11} height={14} rx={1} fill="#b91c1c" stroke="#7f1d1d" strokeWidth={0.6} className={POP} />}
         {k === 1 && <Bubble x={236} y={GROUND - 68} side="left" lines={["যেকোনো grid নে,", "যেকোনো সংখ্যা পাবি।"]} />}
@@ -197,7 +197,7 @@ export function FairBet() {
           </button>
         </div>
       ) : null}
-      {sealed ? <div className={`${FADE} mt-2 text-center text-[0.9rem] leading-snug text-muted`}>সিল করা থাকলো। নাসিব ঠিক না ভুল, শেষে খুলবো।</div> : null}
+      {sealed ? <div className={`${FADE} mt-2 text-center text-[0.9rem] leading-snug text-muted`}>সিল করা থাকলো। হামজা ঠিক না ভুল, শেষে খুলবো।</div> : null}
       <Task done={sealed}>একটা উত্তর বেছে নিয়ে বাজি সিল করুন। শেষের আগে কেউ বলবে না কে জিতলো।</Task>
     </>
   );
@@ -269,7 +269,7 @@ function F2_Tape({ x, y, out = 0 }: { x: number; y: number; out?: number }) {
 export function NasibSums({}: Story) {
   const s = useScene(3, [700, 1800, 1800, 2000]);
   const k = s.k;
-  // নাসিব's sums, then ফাহিম's tape out of his pocket
+  // হামজা's sums, then ফাহিম's tape out of his pocket
   useEffect(() => {
     if (k === 1) sfx.scribble(3, 0.25, 0.2);
     else if (k === 2) sfx.scribble(3, 0.25, 0.2);
@@ -283,7 +283,7 @@ export function NasibSums({}: Story) {
         <CastPerson who="fahim" x={124} y={GROUND} facing={1} arm={k >= 3 ? "hold" : "down"} mood={k >= 3 ? "smug" : "plain"} />
         <NameTag x={124} y={GROUND + 13} name="ফাহিম" />
         <CastPerson who="nasib" x={228} y={GROUND} facing={-1} arm="hold" mood={k >= 1 && k < 3 ? "puzzled" : "plain"} />
-        <NameTag x={228} y={GROUND + 13} name="নাসিব" />
+        <NameTag x={228} y={GROUND + 13} name="হামজা" />
         <rect x={207} y={GROUND - 46} width={11} height={14} rx={1} fill="#b91c1c" stroke="#7f1d1d" strokeWidth={0.6} />
         {k >= 1 && k < 3 && (
           <g key={k} className={POP}>
@@ -570,7 +570,7 @@ export function NasibTurns({}: Story) {
         <CastPerson who="fahim" x={124} y={GROUND} facing={1} />
         <NameTag x={124} y={GROUND + 13} name="ফাহিম" />
         <CastPerson who="nasib" x={220} y={GROUND} facing={-1} arm="hold" mood={k >= 1 ? "smug" : "plain"} />
-        <NameTag x={220} y={GROUND + 13} name="নাসিব" />
+        <NameTag x={220} y={GROUND + 13} name="হামজা" />
         <g
           style={{ transform: `rotate(${k >= 2 ? -35 : 0}deg)`, transformOrigin: "182px 104px" }}
           className="transition-transform duration-1000 ease-in-out motion-reduce:transition-none"
@@ -1125,7 +1125,7 @@ export function ThreeGridsDrawn({}: Story) {
         <CastPerson who="fahim" x={104} y={GROUND} facing={1} />
         <NameTag x={104} y={GROUND + 13} name="ফাহিম" />
         <CastPerson who="nasib" x={272} y={GROUND} facing={-1} arm={k >= 1 ? "point" : "hold"} />
-        <NameTag x={272} y={GROUND + 13} name="নাসিব" />
+        <NameTag x={272} y={GROUND + 13} name="হামজা" />
         {/* the back of the khata, held up big */}
         <rect x={124} y={28} width={144} height={62} rx={3} fill="white" stroke="#b91c1c" strokeWidth={1.4} />
         {TG.map((t, i) =>
@@ -1198,7 +1198,7 @@ export function LastJilapi({}: Story) {
         <CastPerson who="fahim" x={130} y={GROUND} facing={1} mood={k >= 2 ? "puzzled" : "happy"} arm={k >= 2 ? "point" : "down"} />
         <NameTag x={130} y={GROUND + 13} name="ফাহিম" />
         <CastPerson who="nasib" x={226} y={GROUND} facing={-1} arm="hold" mood={k >= 1 ? "happy" : "plain"} />
-        <NameTag x={226} y={GROUND + 13} name="নাসিব" />
+        <NameTag x={226} y={GROUND + 13} name="হামজা" />
         {k === 0 && <Jilapi x={212} y={GROUND - 28} s={0.8} half />}
         {k >= 1 && <path d="M205 112L212 126L219 112Z" fill="#fef3c7" stroke="#a16207" strokeWidth={0.8} className={POP} />}
         {k === 1 && <Bubble x={226} y={GROUND - 68} side="left" lines={["ঠিক আছে।", "দূরত্ব আসল।"]} />}

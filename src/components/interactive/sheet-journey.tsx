@@ -434,7 +434,7 @@ function MoveBox({ x, y }: { x: number; y: number }) {
 export function StairsBet({}: Story) {
   const s = useScene(3, [700, 2400, 2400, 2400]);
   const k = s.k;
-  // নাসিব puts the box down on the bet
+  // হামজা puts the box down on the bet
   useEffect(() => {
     if (k === 3) sfx.thump();
   }, [k]);
@@ -460,7 +460,7 @@ export function StairsBet({}: Story) {
 //     sheet and a line. No marking; BetSettled opens it at the end.
 
 const BET3 = [
-  { n: 3, say: "3 direction", who: "নাসিব: প্রতি column এ একটা" },
+  { n: 3, say: "3 direction", who: "হামজা: প্রতি column এ একটা" },
   { n: 2, say: "2 direction", who: "সামিন: একটা flat sheet" },
   { n: 1, say: "1 direction", who: "ছয়টাই এক line এ" },
 ];
@@ -724,7 +724,7 @@ const Z2_SAY = [
   "মেঝে, তক্তা আর তাক। প্রতিটার উপরে দরজার কোণা থেকে একটা arrow।",
   "তিনটাকেই × 0: তিনটা মাথাই চলে এলো দরজার কোণায়।",
   "মেঝে আর তক্তা দরজার কোণা ছুঁয়ে আছে। মাথাটা এখনো ওদের উপরে।",
-  "তাক কোণা থেকে 1.5 উপরে। মাথাটা তাকের উপরে নাই। নাসিবের তাক বাদ।",
+  "তাক কোণা থেকে 1.5 উপরে। মাথাটা তাকের উপরে নাই। হামজাের তাক বাদ।",
 ];
 const Z2_TONE: Tone3[] = ["blue", "coral", "violet"];
 
@@ -976,7 +976,7 @@ export function LastClubs() {
 
 const X3Q_SAY = [
   "খাতার ছয়টা flat, আবার সেই ঘরে।",
-  "নাসিব দুইটা বাছলো: flat 1 আর flat 2।",
+  "হামজা দুইটা বাছলো: flat 1 আর flat 2।",
   "Flat 1 এর মাথা থেকে flat 2 এর arrow টা আরেকবার হাঁটুন।",
   "যোগফল গিয়ে পড়লো কোথাও। কিন্তু sheet এর উপরে কি? এখনো জানি না।",
 ];
@@ -1447,7 +1447,7 @@ export function TwoButtonsPaint() {
 export function NasibTries({}: Story) {
   const s = useScene(3, [700, 2200, 1600, 2200]);
   const k = s.k;
-  // নাসিব nudges the box across
+  // হামজা nudges the box across
   useEffect(() => {
     if (k === 1) sfx.scrape(0.5);
   }, [k]);
@@ -1473,7 +1473,7 @@ export function NasibTries({}: Story) {
 //     the room turns edge-on, and the sum stands in line with the six. Three
 //     different pairs, three landings on the sheet.
 
-const NASIB_SAYS = ["নাসিব: দাঁড়াও, আরেকটা।", "নাসিব: শেষবার।", "নাসিব চুপ।"];
+const NASIB_SAYS = ["হামজা: দাঁড়াও, আরেকটা।", "হামজা: শেষবার।", "হামজা চুপ।"];
 
 export function AddFlats() {
   const pass = useGate();
@@ -1533,7 +1533,7 @@ export function AddFlats() {
             {tries.length > 0 && <span className="block text-muted">{NASIB_SAYS[Math.min(tries.length, 3) - 1]}</span>}
           </>
         ) : (
-          "নাসিবের হয়ে দুইটা flat বাছুন। প্রথমটার মাথা থেকে দ্বিতীয়টা হাঁটবে।"
+          "হামজাের হয়ে দুইটা flat বাছুন। প্রথমটার মাথা থেকে দ্বিতীয়টা হাঁটবে।"
         )}
       </div>
       <Task done={tries.length >= 3}>তিন জোড়া আলাদা flat যোগ করে দেখুন, যোগফল sheet থেকে পড়ে কিনা। ({Math.min(tries.length, 3)}/3)</Task>
@@ -2082,7 +2082,7 @@ const stepAt = (i: number): XY => [236 + 20 * i + 10, GR - 14 * (i + 1)];
 export function LastBox({}: Story) {
   const s = useScene(3, [700, 2200, 2400, 1800]);
   const k = s.k;
-  // নাসিব heaves the box up and climbs
+  // হামজা heaves the box up and climbs
   useEffect(() => {
     if (k === 3) sfx.thump();
   }, [k]);
@@ -2131,7 +2131,7 @@ export function BetSettled() {
     if (opened.includes(i)) return;
     const o = [...opened, i];
     setOpened(o);
-    if (o.length === 3) pass("দুই direction। বাক্স তুলবে নাসিব।");
+    if (o.length === 3) pass("দুই direction। বাক্স তুলবে হামজা।");
   };
 
   return (

@@ -127,7 +127,7 @@ export function NasibRemote({}: Story) {
 
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="evening" label="সন্ধ্যার পর নাসিব তিন button-এর একটা remote নিয়ে আসলো, দাম 150 টাকা; ফাহিমের হাতে দুই button-এর remote C">
+      <Stage backdrop="evening" label="সন্ধ্যার পর হামজা তিন button-এর একটা remote নিয়ে আসলো, দাম 150 টাকা; ফাহিমের হাতে দুই button-এর remote C">
         <CastPerson who="fahim" x={92} y={GROUND} facing={1} arm={k >= 4 ? "hold" : "down"} mood="plain" label />
         {k >= 4 && <RemoteProp x={108} y={GROUND - 42} n={2} />}
         <CastPerson who="nasib" x={k >= 1 ? 200 : 330} y={GROUND} facing={-1} walking={k === 1} arm={k >= 1 ? "hold" : "down"} mood={k === 3 ? "smug" : "plain"} label={k >= 1} />
@@ -206,7 +206,7 @@ export function ThirdBet() {
     <>
       <div className="flex items-center justify-center gap-3">
         <div className="w-[6.5rem] shrink-0">
-          <Plane f={NR_F} grid={1} axes={false} label="নাসিবের remote: e1 = (1, 0), e2 = (0, 1), w = (2, 3)" className="my-0! max-w-none">
+          <Plane f={NR_F} grid={1} axes={false} label="হামজাের remote: e1 = (1, 0), e2 = (0, 1), w = (2, 3)" className="my-0! max-w-none">
             <Arrow f={NR_F} from={O} to={[1, 0]} tone="blue" w={2.2} draw />
             <Arrow f={NR_F} from={O} to={[0, 1]} tone="coral" w={2.2} draw delay={250} />
             <Arrow f={NR_F} from={O} to={[2, 3]} tone="teal" w={2.2} draw delay={500} />
@@ -259,7 +259,7 @@ export function ThirdBet() {
 const NL_F = makeFrame(-1, 3, -1, 3.5, 22, 12);
 const NL_SAY = [
   "কাল remote B-র বাড়তি button চোখেই ধরা পড়েছিল। দুইটা একই line-এ।",
-  "নাসিবের remote-এ তিনটা button: e₁, e₂ আর w = (2, 3)।",
+  "হামজাের remote-এ তিনটা button: e₁, e₂ আর w = (2, 3)।",
   "প্রতিটার নিজের line। কোনো line-এ দুইটা button নাই। চোখে কোনো কপি নাই।",
   "তাহলে বাড়তি button, যদি থাকেই, ধরবো কীভাবে?",
 ];
@@ -280,7 +280,7 @@ export function NoLineHere() {
   return (
     <Scene scene={s} caption={<span key={k} className={FADE}>{NL_SAY[k]}</span>}>
       <div className="mx-auto w-[7rem]">
-        <Plane f={NL_F} grid={1} axes={false} label={k === 0 ? "remote B: u = (1, 1), v = (2, 2), একই line-এ" : "নাসিবের তিনটা button, তিনটা আলাদা line"} className="my-0! max-w-none">
+        <Plane f={NL_F} grid={1} axes={false} label={k === 0 ? "remote B: u = (1, 1), v = (2, 2), একই line-এ" : "হামজাের তিনটা button, তিনটা আলাদা line"} className="my-0! max-w-none">
           {k === 0 && (
             <>
               {line([1, 1], "stroke-cat-violet/60")}
@@ -768,7 +768,7 @@ export function NasibWalk() {
     <>
       <div className="flex items-start justify-center gap-3">
         <div className="w-[8rem] shrink-0">
-          <Plane f={NW_F} grid={1} axes={false} label={`নাসিবের তিন button, Shiku ${tup(at)}-এ`} className="my-0! max-w-none">
+          <Plane f={NW_F} grid={1} axes={false} label={`হামজাের তিন button, Shiku ${tup(at)}-এ`} className="my-0! max-w-none">
             <Chains f={NW_F} keys={TH_KEYS} amt={amt} />
             <Arrow f={NW_F} from={O} to={[2, 3]} tone="teal" w={2} faint />
             <Star f={NW_F} at={O} done={found} />
@@ -875,7 +875,7 @@ export function NasibObjects({}: Story) {
 
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="evening" label="নাসিব বললো, ওই w টাই খারাপ ছিল, অন্য কোনো button হলে দেখতে">
+      <Stage backdrop="evening" label="হামজা বললো, ওই w টাই খারাপ ছিল, অন্য কোনো button হলে দেখতে">
         <CastPerson who="fahim" x={84} y={GROUND} facing={1} mood="plain" label />
         <CastPerson who="nasib" x={190} y={GROUND} facing={-1} arm={k >= 1 ? "point" : "hold"} mood={k >= 1 ? "shout" : "plain"} label />
         <RemoteProp x={168} y={GROUND - 44} n={3} />
@@ -951,7 +951,7 @@ export function AnyThird() {
           </Plane>
         </div>
         <div className="min-w-0 flex-1">
-          <div className="text-[0.85rem] leading-snug text-muted">নাসিব বলছে, w টাই বাজে ছিল। যেখানে খুশি তিন নম্বর button বসান। Machine সাথে সাথে দরজায় ফেরার পথ খুঁজবে।</div>
+          <div className="text-[0.85rem] leading-snug text-muted">হামজা বলছে, w টাই বাজে ছিল। যেখানে খুশি তিন নম্বর button বসান। Machine সাথে সাথে দরজায় ফেরার পথ খুঁজবে।</div>
           <div key={placed.length} className={`${FADE} mt-2 rounded-xl bg-foreground/[0.04] px-2.5 py-1.5 text-[0.8rem] leading-relaxed`}>
             {line}
           </div>
@@ -1306,7 +1306,7 @@ export function NasibReturns({}: Story) {
 
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="street" label="নাসিব তিন button-এর remote ফেরত দিলো, দুই button-এরটা নিলো, দোকানদার চাচা 50 টাকা ফেরত দিলেন">
+      <Stage backdrop="street" label="হামজা তিন button-এর remote ফেরত দিলো, দুই button-এরটা নিলো, দোকানদার চাচা 50 টাকা ফেরত দিলেন">
         <CastPerson who="nana" x={96} y={GROUND - 8} facing={1} arm={k >= 3 ? "hold" : "down"} mood="plain" scale={0.9} />
         <Stall x={96} y={GROUND} sign="খেলনা" w={92} />
         <NameTag x={96} y={GROUND + 14} name="দোকানদার চাচা" />

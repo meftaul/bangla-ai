@@ -20,13 +20,13 @@ import { sfx } from "@/components/journey/sfx";
 // +25, straight in front −25; walking round the van on a ring of equal pushes,
 // the sign follows the angle (under 90° plus, exactly 90° zero, past 90°
 // minus); a strong push at a slant can beat a straight weak one, because the
-// number mixes direction with strength; নাসিব's coin arrows from 2.7 show the
+// number mixes direction with strength; হামজা's coin arrows from 2.7 show the
 // box's 0 is the right angle even where nothing can be drawn. Last, the reader
 // judges the five pushers from their numbers alone, sends the two useless ones
 // round the back, and the van comes out.
 //
 // The box is 4.1's DotBox. The setups that tell a scene get a story scene on
-// the stage (1a the van sinking, 4a the কুলি arriving, 5a নাসিবের coins
+// the stage (1a the van sinking, 4a the কুলি arriving, 5a হামজাের coins
 // remembered, 6a চাচা's 80, 12½ the van coming out, 12a the dinner bet), and
 // every <Then> gets one or two figures (1½, 2½, 2¾, 3½, 3¾, 4¼, 4½, 4¾, 5½,
 // 5¾, 6½, 6¾) — all watch-only but 4¼, which the reader breaks apart and
@@ -450,7 +450,7 @@ export function StrongPush() {
 }
 
 // ---------------------------------------------------------------------------
-// 5 · নাসিবের coins from 2.7, as ±1 lists (head +1, tail −1). The reader runs
+// 5 · হামজাের coins from 2.7, as ±1 lists (head +1, tail −1). The reader runs
 //     the box a pair at a time: a match gives +1, a mismatch −1, and 2 each
 //     sum to 0, which 2.7 called 90°. Then 100 tosses (seeded, so every visit
 //     sees the same ones): 52 matches, 48 mismatches, the box says 4 of a
@@ -1238,14 +1238,14 @@ export function CoinTug() {
 
 // ---------------------------------------------------------------------------
 // 5¾ · A figure for screen 5's review <Then>: perpendicularity needs no
-//      picture. The drawn pair shows its right angle; নাসিব's four-slot coins
+//      picture. The drawn pair shows its right angle; হামজা's four-slot coins
 //      can't be drawn, but the box runs — and 0 means the right angle at any
 //      size. The name lands last.
 
 const F9F = makeFrame(-1.5, 3.6, -0.5, 3.5, 26);
 const X9_SAY = [
   "আঁকা যায় এমন দুইটা arrow। কোণটা চোখেই পড়ে। ৯০ degree।",
-  "নাসিবের চার ঘরের coin arrow আঁকা যায় না। কিন্তু dot product চলে: +1 − 1 − 1 + 1 = 0।",
+  "হামজাের চার ঘরের coin arrow আঁকা যায় না। কিন্তু dot product চলে: +1 − 1 − 1 + 1 = 0।",
   "একশো ঘরের arrow-ও আঁকা যায় না। কিন্তু dot product তো চলেই। উত্তর 0 মানেই ৯০ degree কোণ।",
   "এই পরীক্ষার নাম? u ⊥ v। মানে u perpendicular to v।",
 ];
@@ -1843,7 +1843,7 @@ export function TitanicStrength() {
 
 // ---------------------------------------------------------------------------
 // 5a · A story scene for screen 5's setup, no task: চাচা catches his breath,
-//      and ফাহিম remembers নাসিব tossing two coins (2.7) — head +1, tail −1,
+//      and ফাহিম remembers হামজা tossing two coins (2.7) — head +1, tail −1,
 //      four tosses, two four-slot arrows. He can't draw them. Whether the box
 //      can still find the angle is the screen's question; nothing answers it.
 
@@ -1852,7 +1852,7 @@ export function CoinMemory({}: Story) {
   const k = s.k;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="evening" label="চাচা দম নিচ্ছেন; ফাহিমের মনে পড়লো নাসিবের দুইটা coin, চার ঘরের দুইটা arrow, যা কাগজে আঁকা যায় না">
+      <Stage backdrop="evening" label="চাচা দম নিচ্ছেন; ফাহিমের মনে পড়লো হামজাের দুইটা coin, চার ঘরের দুইটা arrow, যা কাগজে আঁকা যায় না">
         <P_Clouds />
         <P_Mud cx={60} />
         <g transform="translate(0 5)">
@@ -1873,7 +1873,7 @@ export function CoinMemory({}: Story) {
             <rect x={206} y={40} width={108} height={112} rx={14} fill="white" fillOpacity={0.6} stroke={P_INK} strokeOpacity={0.35} strokeDasharray="3 2" />
             <Person who="nasib" x={236} y={144} scale={0.75} arm="wave" mood="happy" />
             <text x={236} y={152} textAnchor="middle" fontSize={7.5} fontWeight={700} fill={P_INK}>
-              নাসিব
+              হামজা
             </text>
           </g>
         )}
@@ -2364,7 +2364,7 @@ export function TableCancel() {
 }
 
 // ---------------------------------------------------------------------------
-// 4b · The coin needle, from 2.7. A pick tosses নাসিবের two coins ten times
+// 4b · The coin needle, from 2.7. A pick tosses হামজাের two coins ten times
 //      (the first ten of 5's seeded hundred), marks each pair মিল or অমিল and
 //      swings the needle. 0° or 180° swings it there and lights the pairs that
 //      would have to change; near 90° lands where the ten tosses really put it.
@@ -2457,7 +2457,7 @@ export function CoinNeedle() {
   return (
     <>
       <P_Ask>দুইটা random coin-এর arrow-এর কোণ বারবার কোথায় গিয়ে থামছিল?</P_Ask>
-      <svg viewBox="0 0 300 112" role="img" aria-label="নাসিবের দুইটা coin দশবার toss, মিল আর অমিল, আর কোণের কাঁটা" className="mx-auto mt-2 block h-auto w-full max-w-[20rem] rounded-xl bg-white ring-1 ring-black/10">
+      <svg viewBox="0 0 300 112" role="img" aria-label="হামজাের দুইটা coin দশবার toss, মিল আর অমিল, আর কোণের কাঁটা" className="mx-auto mt-2 block h-auto w-full max-w-[20rem] rounded-xl bg-white ring-1 ring-black/10">
         <P_Tosses a={C4_A} b={C4_B} x0={16} up={k >= 1} marked={k >= 2} flag={flag} />
         {k >= 2 && (
           <text x={83} y={80} textAnchor="middle" fontSize={9} fontWeight={700} fill={P_INK} className={FADE}>
@@ -2517,7 +2517,7 @@ const X4B_ROUNDS = (() => {
   });
 })();
 const X4B_SAY = [
-  "নাসিবের দুইটা coin, দশবার করে toss।",
+  "হামজাের দুইটা coin, দশবার করে toss।",
   ...X4B_ROUNDS.map((r, i) => `${i === 0 ? "প্রথমবার" : "আবার"}: মিল ${r.m}, অমিল ${10 - r.m}। কাঁটা ${r.deg}°।`),
   "হেড আর টেল প্রায় সমান সমান পড়ে। তাই কাঁটা বারবার থামে 90°-এর আশেপাশে।",
 ];

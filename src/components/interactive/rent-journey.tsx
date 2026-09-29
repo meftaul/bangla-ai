@@ -2001,14 +2001,14 @@ function S8BRemote({ x, y }: { x: number; y: number }) {
 export function NasibAtDoor() {
   const s = useScene(3, [700, 2000, 1800, 2000]);
   const k = s.k;
-  // the dalal lets himself out, and there's নাসিব at the door
+  // the dalal lets himself out, and there's হামজা at the door
   useEffect(() => {
     if (k === 1) sfx.door();
   }, [k]);
 
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="room" label="দালাল ভাই চলে গেলেন; দরজায় নাসিব, হাতে তিন button-এর নতুন remote; তিন নম্বর button টা কারো কপি না, সেটা কি কাজের?">
+      <Stage backdrop="room" label="দালাল ভাই চলে গেলেন; দরজায় হামজা, হাতে তিন button-এর নতুন remote; তিন নম্বর button টা কারো কপি না, সেটা কি কাজের?">
         {/* the door, open once Nasib is in it */}
         <rect x={236} y={62} width={48} height={88} fill={k >= 1 ? "#3f2a17" : "#8b5a2b"} stroke="#6b4423" strokeWidth={2} />
         {k === 0 && <circle cx={276} cy={108} r={2.2} fill="#fbbf24" />}

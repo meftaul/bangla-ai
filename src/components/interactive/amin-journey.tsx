@@ -20,7 +20,7 @@ import { sfx } from "@/components/journey/sfx";
 // পাশ মাপো, গুণ দাও।
 //
 // Nine screens. 1 seals the bet: 12 (করিম, the whole box) · 7 (মামা, side ×
-// side) · 6 (নাসিব, half the box) · 5 (সামিন, counted roughly) (PlotBet).
+// side) · 6 (হামজা, half the box) · 5 (সামিন, counted roughly) (PlotBet).
 // 2 Mama's rule: lean the plot, sides fixed; side × side stays 7.07 while the
 // plot folds flat (SideTimesSide). 3 the আমিন's box: chain east 4, north 3,
 // 12 ঘর (TheBox). 4 predict, then cut the six corner pieces off: 5 (CutCorners).
@@ -289,7 +289,7 @@ function AJ_Mark({ ok }: { ok: boolean }) {
 
 // ---------------------------------------------------------------------------
 // 1 · The sealed bet. Four cards: করিম's 12 (the whole box), মামা's 7 (side ×
-//     side), নাসিব's 6 (half the box), সামিন's 5 (half-ঘর pieces joined by eye).
+//     side), হামজা's 6 (half the box), সামিন's 5 (half-ঘর pieces joined by eye).
 //     A pick draws its idea on the নকশা; sealing writes the number into the
 //     দলিল's blank with a "?". Never marked.
 
@@ -298,7 +298,7 @@ const NF = makeFrame(-0.7, 4.7, -0.7, 3.7, 50, 6);
 const X1_CARDS = [
   { who: "করিম", n: "12", line: "চারদিক ঘিরে পুরাটা" },
   { who: "মামা", n: "7", line: "পাশ × পাশ" },
-  { who: "নাসিব", n: "6", line: "পুরাটার অর্ধেক" },
+  { who: "হামজা", n: "6", line: "পুরাটার অর্ধেক" },
   { who: "সামিন", n: "5", line: "আধা ঘর জোড়া দিয়ে গোনা" },
 ];
 
@@ -1561,14 +1561,14 @@ export function SidesToLens() {
 const BO_ROWS: [string, boolean][] = [
   ["করিম: 12, পুরা বাক্স", false],
   ["মামা: 7, পাশ × পাশ", false],
-  ["নাসিব: 6, অর্ধেক", false],
+  ["হামজা: 6, অর্ধেক", false],
   ["সামিন: 5", true],
 ];
 const BO_SAY = [
   "চারটা card।",
   "করিমের 12 পুরা বাক্স। কোনাগুলো আপার না।",
   "মামার 7 শুধু পাশ দেখে, হেলানো দেখে না।",
-  "নাসিবের 6 আন্দাজ। কোনা বাদ গেলো 7, 6 না।",
+  "হামজাের 6 আন্দাজ। কোনা বাদ গেলো 7, 6 না।",
   "সামিনের 5। বাক্স থেকে কোনা বাদ, 12 − 7 = 5।",
 ];
 

@@ -500,7 +500,7 @@ function useRun(ms = 1100, frames = 22) {
 
 const F1 = makeFrame(-2.5, 5.5, -2.5, 5.5, 22, 8); // 192 × 192
 const X1_CARDS: { who: string; line: string; cols: Cols | null; fill: string; letter?: string }[] = [
-  { who: "নাসিব", line: "সব সংখ্যা উল্টাও", cols: NASIB, fill: GLASS_FILL.nasib },
+  { who: "হামজা", line: "সব সংখ্যা উল্টাও", cols: NASIB, fill: GLASS_FILL.nasib },
   { who: "সামিন", line: "ছোট করলেই তো হয়", cols: LENS_H, fill: GLASS_FILL.H, letter: "H" },
   { who: "ঝোলার lens", line: "কেউ চেনে না", cols: G_INV, fill: GLASS_FILL.bag, letter: "?" },
   { who: "করিম", line: "রং একবার দিলে আর ফেরে না", cols: null, fill: "white" },
@@ -754,7 +754,7 @@ export function OneOverEach() {
   return (
     <>
       <RunRow from="পলিথিন" glasses={[<GlassIcon key="n" fill={GLASS_FILL.nasib} letter="½" lit={run.running} size={28} />]} end={<span className="ml-1 text-sm font-bold"><span className="font-mono">{area(now)}</span> ঘর</span>} />
-      <CardSheet f={F4} label="দেয়ালের ফুল নাসিবের lens দিয়ে যায়; ফুল ছোট না হয়ে 11 ঘরের বেশি হয়, হেলানো, dashed stencil থেকে অনেক দূরে" className="max-w-[12.5rem]">
+      <CardSheet f={F4} label="দেয়ালের ফুল হামজাের lens দিয়ে যায়; ফুল ছোট না হয়ে 11 ঘরের বেশি হয়, হেলানো, dashed stencil থেকে অনেক দূরে" className="max-w-[12.5rem]">
         {t > 0 && <Print f={F4} pic="flower" move={PAINT_FLOWER} look="paint" soft />}
         <Print f={F4} pic="flower" look="ghost" />
         {run.running && <SheetBeam f={F4} to={[2.5, 2.5]} />}
@@ -771,11 +771,11 @@ export function OneOverEach() {
       {guess !== null && !ran && (
         <div className="mt-2 flex justify-center">
           <button type="button" className={primaryBtn} disabled={run.running} onClick={go}>
-            নাসিবের lens দিয়ে চালান
+            হামজাের lens দিয়ে চালান
           </button>
         </div>
       )}
-      <Task done={over}>আগে guess দিন, তারপর নাসিবের lens দিয়ে দেয়ালের ফুল চালান।</Task>
+      <Task done={over}>আগে guess দিন, তারপর হামজাের lens দিয়ে দেয়ালের ফুল চালান।</Task>
     </>
   );
 }
@@ -1382,7 +1382,7 @@ export function FourCards({}: Story) {
   }, [k]);
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="field" label="নাসিব G রোদের দিকে তুলে বললো সব সংখ্যা উল্টায় দেন, ফুল ফেরত; সামিন বললো ছোট করলেই তো হয়; করিম বললো রং একবার দিলে আর ফেরে না; লাইট ভাই চুপচাপ আরেকটা lens মাদুরে রাখলেন">
+      <Stage backdrop="field" label="হামজা G রোদের দিকে তুলে বললো সব সংখ্যা উল্টায় দেন, ফুল ফেরত; সামিন বললো ছোট করলেই তো হয়; করিম বললো রং একবার দিলে আর ফেরে না; লাইট ভাই চুপচাপ আরেকটা lens মাদুরে রাখলেন">
         <St_Mat x0={130} x1={250} glasses={[{ x: 146, fill: GLASS_FILL.H }, { x: 160, fill: GLASS_FILL.nasib }, ...(k >= 4 ? [{ x: 214, fill: GLASS_FILL.bag, mark: "?" }] : [])]} />
         <Person who="nasib" x={50} y={150} facing={1} arm={k === 1 ? "hold" : "down"} label />
         {k === 1 && <St_Glass x={62} y={104} r={7} fill={GLASS_FILL.G} label="G" />}
@@ -1440,7 +1440,7 @@ export function NasibTries({}: Story) {
   const [lx, ly] = projectorLens(PJ[0], PJ[1]);
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="field" label="নাসিব একটা সাদা কাঁচে marker দিয়ে লিখলো আধা, এক, এক, আধা; কাঁচটা যন্ত্রের সামনে বসিয়ে দিলো; বললো এইবার ফুল ফেরত">
+      <Stage backdrop="field" label="হামজা একটা সাদা কাঁচে marker দিয়ে লিখলো আধা, এক, এক, আধা; কাঁচটা যন্ত্রের সামনে বসিয়ে দিলো; বললো এইবার ফুল ফেরত">
         <StageWall x={SW[0]} y={SW[1]}>
           <St_Paintings />
         </StageWall>
@@ -1711,7 +1711,7 @@ export function ShearBack() {
 // 4½ · Why Nasib's lens misses: G sends e₁ to (2, 1); Nasib's lens sends
 //      (2, 1) to (2, 2.5), not back to e₁.
 
-const S4_SAY = ["এক ঘরের প্রথম পাশ, e₁।", "G এটাকে পাঠায় (2, 1) এ।", "নাসিবের lens (2, 1) কে পাঠায় (2, 2.5) এ।", "e₁ এ ফেরে না। ফেরার lens কে পুরা চলাটা উল্টাতে হবে।"];
+const S4_SAY = ["এক ঘরের প্রথম পাশ, e₁।", "G এটাকে পাঠায় (2, 1) এ।", "হামজাের lens (2, 1) কে পাঠায় (2, 2.5) এ।", "e₁ এ ফেরে না। ফেরার lens কে পুরা চলাটা উল্টাতে হবে।"];
 const S4F = makeFrame(-0.5, 3, -0.5, 3, 42, 6); // 159 × 159
 
 export function NasibMiss() {
@@ -1719,7 +1719,7 @@ export function NasibMiss() {
   const k = s.k;
   return (
     <Scene scene={s} caption={say(S4_SAY, k)}>
-      <CardSheet f={S4F} label="e1 কে G পাঠায় (2, 1) এ; নাসিবের lens (2, 1) কে পাঠায় (2, 2.5) এ; e1 এ ফেরে না" className="max-w-[9.5rem]">
+      <CardSheet f={S4F} label="e1 কে G পাঠায় (2, 1) এ; হামজাের lens (2, 1) কে পাঠায় (2, 2.5) এ; e1 এ ফেরে না" className="max-w-[9.5rem]">
         <circle cx={S4F.sx(1)} cy={S4F.sy(0)} r={8} fill="none" stroke={AMBER} strokeWidth={1.5} strokeDasharray={k >= 3 ? undefined : "3 2"} />
         {k < 1 && <Arrow f={S4F} from={[0, 0]} to={[1, 0]} tone="amber" w={2.4} />}
         {k >= 1 && <Arrow key="g" f={S4F} from={[0, 0]} to={[2, 1]} tone="teal" w={2.4} draw />}

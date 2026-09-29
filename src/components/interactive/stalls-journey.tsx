@@ -11,7 +11,7 @@ import { sfx } from "@/components/journey/sfx";
 //
 // Monday, the school by the Brahmaputra in Mymensingh. Twelve stalls are chalked
 // on the field for Friday's science fair, and রশিদ স্যার says the physics club may
-// hang its banner on every stall that is physics. নাসিব: chemistry and biology
+// hang its banner on every stall that is physics. হামজা: chemistry and biology
 // are separate, there is no physics in them. The reader bets which stalls get a
 // banner (FairMap), then earns the answer piece by piece: the tower of sciences
 // (chemistry on physics, biology on chemistry), matter all the way down to
@@ -297,7 +297,7 @@ function Bamboo({ x, y, w = 44, half = false }: { x: number; y: number; w?: numb
 // ---------------------------------------------------------------------------
 // 1a · A story scene for screen 1's setup, no task: Monday on the field. Bamboo
 //      frames half up and twelve plots in chalk; রশিদ স্যার gives the banner rule;
-//      আপা holds an X-ray film to the sun; নাসিব comes with the bundle of
+//      আপা holds an X-ray film to the sun; হামজা comes with the bundle of
 //      banners under his arm and says chemistry and biology have no physics.
 
 export function FieldMorning({}: Story) {
@@ -456,7 +456,7 @@ export function LensLeaf() {
 }
 
 // ---------------------------------------------------------------------------
-// 2 · নাসিব's first point: are chemistry and biology really separate? A tower of
+// 2 · হামজা's first point: are chemistry and biology really separate? A tower of
 //     blocks from the book: পদার্থবিজ্ঞান at the bottom, রসায়ন on it, জীববিজ্ঞান
 //     on that, "অন্য অনেক বিষয়" on top. The reader pulls each named block out;
 //     whatever stood on it falls. Passes once all three have been pulled.
@@ -638,7 +638,7 @@ export function OldestTower() {
 
 // ---------------------------------------------------------------------------
 // 3a · A story scene for screen 3's setup, no task: at the chemistry stall a
-//      bowl of salt; সামিন reads from the book; নাসিব picks up a grain.
+//      bowl of salt; সামিন reads from the book; হামজা picks up a grain.
 
 export function SaltBowl({}: Story) {
   const s = useScene(2, [600, 2400, 2400]);
@@ -1816,7 +1816,7 @@ export function BatteryInside() {
 
 // ---------------------------------------------------------------------------
 // 9a · A story scene for the last step's setup, no task: by afternoon the
-//      banners are up. The poetry stall has only a paper garland. নাসিব ties the
+//      banners are up. The poetry stall has only a paper garland. হামজা ties the
 //      chemistry stall's banner himself, and says nothing.
 
 export function BannersUp({}: Story) {

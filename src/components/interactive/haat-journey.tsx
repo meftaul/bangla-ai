@@ -15,7 +15,7 @@ import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 4.1 — ঘরে ঘরে গুণ, হাটের হিসাব", told as a Journey.
 //
-// নাসিবের movie club-এর black box (3.6), opened at the Friday হাট. মামা bets
+// হামজাের movie club-এর black box (3.6), opened at the Friday হাট. মামা bets
 // the box ("ঘরে ঘরে গুণ করে যোগ") can do all five of the day's jobs; মামী says
 // it's a film trick fit only for shop bills. The reader seals their own bet,
 // then the jobs come one by one: the grocery bill (the recipe, one number

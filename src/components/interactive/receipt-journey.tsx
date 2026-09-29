@@ -1175,7 +1175,7 @@ export function BiyePair({}: Story) {
   const k = s.k;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="field" label="বাবুর্চি বিয়ের দুইটা রসিদ তুলে ধরলেন; দুপুরে এক ডেকচি পোলাও এক ডেকচি রোস্ট; রাতে মেহমান বেশি, দুই দুই ডেকচি; নাসিব বললো, দুইটা রসিদ, দাম তো পাক্কা">
+      <Stage backdrop="field" label="বাবুর্চি বিয়ের দুইটা রসিদ তুলে ধরলেন; দুপুরে এক ডেকচি পোলাও এক ডেকচি রোস্ট; রাতে মেহমান বেশি, দুই দুই ডেকচি; হামজা বললো, দুইটা রসিদ, দাম তো পাক্কা">
         <St_House />
         <Baburchi x={70} y={150} arm="hold" pan={false} />
         {k >= 1 && <St_Slip x={86} y={104} tilt={-8} />}
@@ -1251,7 +1251,7 @@ export function NasibTwo({}: Story) {
   const k = s.k;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="field" label="নাসিব একটা কঞ্চি নিয়ে কাগজের উপর রাখলো; বললো, এমন দুইটা রসিদ হইতে পারে না, যাতে দুইটা দাম মিলে? সোম কাগজের দিকে তাকিয়ে আছে">
+      <Stage backdrop="field" label="হামজা একটা কঞ্চি নিয়ে কাগজের উপর রাখলো; বললো, এমন দুইটা রসিদ হইতে পারে না, যাতে দুইটা দাম মিলে? সোম কাগজের দিকে তাকিয়ে আছে">
         <St_House />
         <St_Madur x0={110} x1={230} />
         <g transform="translate(140 118) scale(1.4)">

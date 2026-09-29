@@ -20,7 +20,7 @@ import { sfx } from "@/components/journey/sfx";
 // and the arrow gets its name tag, ‖v‖. সোম's roof card has three slots:
 // square, add, root, done by hand. সামিন's card is lost, so it is rebuilt by
 // subtracting and then measured, which makes distance the length of a
-// difference. Then the objections, and each one is a rule of length: নাসিব
+// difference. Then the objections, and each one is a rule of length: হামজা
 // cannot make a length of zero or less; nor does flipping turn a length
 // negative (‖λv‖ = |λ|·‖v‖); and ফাহিম's "but I walked farther" is the
 // triangle inequality (the golf ball's 84.9). After the verdict, two tea
@@ -76,7 +76,7 @@ function Grab({ at, f, ping = false }: { at: XY; f: Frame; ping?: boolean }) {
 // 1a · A story scene for screen 1's setup, no task: the prize giving. ফাহিম
 //      calls out the rule at the Gate, then the finalists walk up one by one,
 //      each holding up a card of a different kind: সোম's has three slots,
-//      সামিন's is lost, and নাসিব has no card at all, only a claim.
+//      সামিন's is lost, and হামজা has no card at all, only a claim.
 
 const FA_AT = { fahim: 78, som: 140, samin: 198, nasib: 258 };
 const FA_OFF = 370;
@@ -89,7 +89,7 @@ export function FinalistsArrive() {
 
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="fair" label="prize giving at the fair: ফাহিম calls the rule, then সোম, সামিন and নাসিব walk up with their cards">
+      <Stage backdrop="fair" label="prize giving at the fair: ফাহিম calls the rule, then সোম, সামিন and হামজা walk up with their cards">
         <Gate x={34} y={FA_Y} />
         <Person who="fahim" x={FA_AT.fahim} y={FA_Y} arm={k === 1 ? "wave" : k >= 5 ? "hold" : "down"} mood={k === 1 ? "shout" : "happy"} label />
         {k === 1 && <Bubble x={FA_AT.fahim} y={FA_Y - 66} side="right" lines={["Gate থেকে যে সবচেয়ে দূরে,", "পুরস্কার তার!"]} />}
@@ -108,7 +108,7 @@ export function FinalistsArrive() {
 // ---------------------------------------------------------------------------
 // 1 · The prize row. Four finalists whose cards cannot yet be compared: one
 //     plain, one with three slots, one whose card has to be rebuilt, and
-//     নাসিব, who says the rule itself is broken. The reader bets on a winner
+//     হামজা, who says the rule itself is broken. The reader bets on a winner
 //     and the bet is sealed, never marked — PrizeGiven settles it. This is the
 //     question the whole journey answers.
 
@@ -116,9 +116,9 @@ const FINALISTS: { name: string; what: string; note: string; said?: boolean }[] 
   { name: "ফাহিম", what: "(3, 4)", note: "card-টা হাতেই আছে" },
   { name: "সোম", what: "(2, 3, 6)", note: "card ছাদের, তাই ঘর তিনটা" },
   { name: "সামিন", what: "(1, 2) → (7, 10)", note: "card হারানো, শুধু শুরু আর শেষটা মনে আছে" },
-  { name: "নাসিব", what: "“আমার length negative”", note: "বলছে নিয়মটাই খাটে না", said: true },
+  { name: "হামজা", what: "“আমার length negative”", note: "বলছে নিয়মটাই খাটে না", said: true },
 ];
-const WHO = ["ফাহিম", "সোম", "সামিন", "নাসিব ঠিক, এই নিয়মে বিচার হয় না"];
+const WHO = ["ফাহিম", "সোম", "সামিন", "হামজা ঠিক, এই নিয়মে বিচার হয় না"];
 
 export function PrizeRow() {
   const pass = useGate();
@@ -1049,7 +1049,7 @@ export function BothWaysQuestion() {
 }
 
 // ---------------------------------------------------------------------------
-// 5a · A story scene for screen 5's setup, no task: নাসিব's claim. He struts
+// 5a · A story scene for screen 5's setup, no task: হামজা's claim. He struts
 //      up to the Gate and says he'll make an arrow out of it with length 0,
 //      then a negative one, so the judging means nothing; ফাহিম, whose rule it
 //      is, is left scratching his head. Whether he can is the screen's job.
@@ -1061,7 +1061,7 @@ export function NasibClaims() {
   const k = s.k;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="fair" label="নাসিব walks up to the Gate and claims an arrow of length 0, even a negative one, so the judging means nothing">
+      <Stage backdrop="fair" label="হামজা walks up to the Gate and claims an arrow of length 0, even a negative one, so the judging means nothing">
         <Gate x={36} y={NC_Y} />
         <Person who="fahim" x={112} y={NC_Y} mood={k >= 4 ? "puzzled" : "plain"} label />
         <Person who="nasib" x={k >= 1 ? 214 : 370} y={NC_Y} ms={1400} facing={-1} walking={k === 1} mood="smug" arm={k >= 2 ? "point" : "down"} label />
@@ -1270,7 +1270,7 @@ export function OnlyZero() {
 }
 
 // ---------------------------------------------------------------------------
-// 6a · A story scene for screen 6's setup, no task: নাসিব's second go. By the
+// 6a · A story scene for screen 6's setup, no task: হামজা's second go. By the
 //      sherbet stall he turns his back on it, walks the other way from the Gate
 //      (an arrow on the ground behind him), and turns round: walking backwards
 //      must make the length minus. Whether it does is the screen's job.
@@ -1283,7 +1283,7 @@ export function NasibFlips() {
   const k = s.k;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="fair" label="নাসিব turns and walks the other way from the Gate, and says the length must now be minus">
+      <Stage backdrop="fair" label="হামজা turns and walks the other way from the Gate, and says the length must now be minus">
         <Stall x={284} y={NF_Y} sign="শরবত" color="#f97316" />
         <Gate x={NF_GATE} y={NF_Y} />
         {k >= 2 && (
@@ -1474,7 +1474,7 @@ export function TwiceBothWays() {
 
 // ---------------------------------------------------------------------------
 // 6⅜ · A figure for screen 6's explanation, no task: home to school and back.
-//      নাসিব walks from home to school, a blue tape unrolling under the road
+//      হামজা walks from home to school, a blue tape unrolling under the road
 //      behind him; then walks back, a red tape unrolling the other way. The
 //      two tapes get the same ticks, end to end, and he has to admit it.
 
@@ -1500,7 +1500,7 @@ export function HomeSchool() {
   const k = s.k;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="street" label="নাসিব walks from home to school and back; the tape for going and the tape for coming back come out the same length">
+      <Stage backdrop="street" label="হামজা walks from home to school and back; the tape for going and the tape for coming back come out the same length">
         <Building x={4} y={X6H_Y} w={56} h={62} color="#fde2c4" label="বাসা" />
         <Building x={256} y={X6H_Y} w={60} h={96} roof label="স্কুল" />
         {k >= 1 && <X6hTape y={166} from={X6H_HOME} to={X6H_SCHOOL} ink="stroke-[#2563eb]" ticks={k >= 3} />}
@@ -2061,7 +2061,7 @@ const MEASURED: { name: string; calc: string; out: string; said?: boolean }[] = 
   { name: "ফাহিম", calc: "‖(3, 4)‖ = √(9 + 16)", out: "5" },
   { name: "সোম", calc: "‖(2, 3, 6)‖ = √(4 + 9 + 36)", out: "7" },
   { name: "সামিন", calc: "‖(6, 8)‖ = √(36 + 64)", out: "10" },
-  { name: "নাসিব", calc: "length কখনো negative হয় না", out: "দাবি খারিজ", said: true },
+  { name: "হামজা", calc: "length কখনো negative হয় না", out: "দাবি খারিজ", said: true },
 ];
 const WINNER = 2;
 
@@ -2132,7 +2132,7 @@ export function PrizeGiven() {
 // ---------------------------------------------------------------------------
 // 8½ · A figure for screen 8's explanation, no task: one tape, four kinds of
 //      card. The same amber tape runs out along each row in turn: two slots,
-//      5; three slots, 7; the lost card rebuilt as (6, 8), 10; নাসিব's claim
+//      5; three slots, 7; the lost card rebuilt as (6, 8), 10; হামজা's claim
 //      gets no tape at all. Then, being numbers now, the rows sort themselves
 //      and সামিন comes to the top.
 
@@ -2140,16 +2140,16 @@ const X8_ROWS: { name: string; card: string; n: number; lost?: boolean; said?: b
   { name: "ফাহিম", card: "(3, 4)", n: 5 },
   { name: "সোম", card: "(2, 3, 6)", n: 7 },
   { name: "সামিন", card: "(6, 8)", n: 10, lost: true },
-  { name: "নাসিব", card: "negative", n: 0, said: true },
+  { name: "হামজা", card: "negative", n: 0, said: true },
 ];
-/** where each row ends up once they are sorted: সামিন, সোম, ফাহিম, নাসিব */
+/** where each row ends up once they are sorted: সামিন, সোম, ফাহিম, হামজা */
 const X8_SLOT = [2, 1, 0, 3];
 const X8_SAY = [
   "চারটা card, চার ধাঁচের।",
   "একই ফিতা, প্রথমে দুই ঘরের card: 5।",
   "তিন ঘরের card-এও খাটলো: 7।",
   "হারানো card আগে বিয়োগ করে বানানো, তারপর মাপ: 10।",
-  "নাসিবের দাবি ফিতা মানে না। length কখনো negative হয় না।",
+  "হামজাের দাবি ফিতা মানে না। length কখনো negative হয় না।",
   "সংখ্যা হয়ে গেলেই সাজানো যায়। সবার ওপরে সামিন।",
 ];
 
@@ -2158,7 +2158,7 @@ export function VerdictSort() {
   const k = s.k;
   return (
     <Scene scene={s} caption={beatSay(k, X8_SAY)}>
-      <div className="relative mx-auto h-[8.6rem] max-w-[19rem]" aria-label="the four finalists measured with one tape: সামিন 10, সোম 7, ফাহিম 5, নাসিব out">
+      <div className="relative mx-auto h-[8.6rem] max-w-[19rem]" aria-label="the four finalists measured with one tape: সামিন 10, সোম 7, ফাহিম 5, হামজা out">
         {X8_ROWS.map((r, i) => {
           const done = k > i;
           const won = k >= 5 && i === 2;

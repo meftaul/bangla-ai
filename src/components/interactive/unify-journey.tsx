@@ -12,7 +12,7 @@ import { EUROPE, FULL, GREEK, RopeBand, RopeCards, RopeLine, TONE, makeRope, typ
 //
 // Wednesday in the poster corner. The rope from 1.2 is bare after 1700. On the
 // desk: a plastic comb, paper bits, a torch cell, a wire, and করিম চাচা's old
-// compass. সামিন's rubbed comb lifts paper; one lodestone pulls another. নাসিব:
+// compass. সামিন's rubbed comb lifts paper; one lodestone pulls another. হামজা:
 // চুম্বক আর বিদ্যুৎ দুইটা আলাদা জিনিস। The reader does both tricks and seals a
 // bet (TwoTricks). 1760–1880's Coulomb, Rumford/Kelvin and Volta cards clip on
 // as plain explanation, no widget — none of the three is a surprise a class
@@ -23,7 +23,7 @@ import { EUROPE, FULL, GREEK, RopeBand, RopeCards, RopeLine, TONE, makeRope, typ
 // runs as fast as light (MaxwellWave) — these two ARE seen, because the
 // surprise (electricity making magnetism, and back) is the whole argument.
 // The whole chain is retold slowly, plain-Bangla, no widget (StoryRecap),
-// before the reader answers নাসিব by tying the two cards together
+// before the reader answers হামজা by tying the two cards together
 // (AnswerNasib). Electroweak unification (the weak force joining in) is told
 // the same explanation-first way, no widget, with FewFormulas as its only
 // figure. Then tags four everyday clips (TryTags), and the bet is opened
@@ -221,7 +221,7 @@ function Chacha({ x, y, arm = "down", facing = 1, walking = false }: { x: number
 // ---------------------------------------------------------------------------
 // 1a · A story scene for screen 1's setup, no task: Wednesday. The rope is
 //      bare after 1700. সামিন rubs the comb in his hair and it lifts paper
-//      bits; করিম চাচা brings his compass; নাসিব makes his claim.
+//      bits; করিম চাচা brings his compass; হামজা makes his claim.
 
 export function WednesdayDesk({}: Story) {
   const s = useScene(4, [600, 2000, 2000, 2600, 2600]);
@@ -835,7 +835,7 @@ export function SparkVsSteady() {
 
 // ---------------------------------------------------------------------------
 // 5a · A story scene for screen 5's setup, no task: করিম চাচা's compass on the
-//      desk, needle north; ফাহিম lays the wire over it along the needle; নাসিব
+//      desk, needle north; ফাহিম lays the wire over it along the needle; হামজা
 //      doubts anything will happen.
 
 export function KarimCompass({}: Story) {
@@ -1309,7 +1309,7 @@ export function YoungBands() {
 }
 
 // ---------------------------------------------------------------------------
-// 7 · Your turn: answer নাসিব. Tie the বিদ্যুৎ card to the চুম্বক card with
+// 7 · Your turn: answer হামজা. Tie the বিদ্যুৎ card to the চুম্বক card with
 //     the cards that prove they are one. A right card's thread holds and pulls
 //     them closer; a wrong one's thread snaps. Three threads, and the two
 //     cards become one.
@@ -1436,7 +1436,7 @@ export function AnswerNasib() {
         })}
       </div>
       {nc && !pl.running && <Nope key={miss}>{nc.nope}</Nope>}
-      <Task done={one}>নাসিবকে জবাব দিন: কোন card-গুলো বিদ্যুৎ আর চুম্বককে এক সুতায় বাঁধে? বেঁধে এক করুন।</Task>
+      <Task done={one}>হামজাকে জবাব দিন: কোন card-গুলো বিদ্যুৎ আর চুম্বককে এক সুতায় বাঁধে? বেঁধে এক করুন।</Task>
     </>
   );
 }
@@ -1695,7 +1695,7 @@ export function TryTags() {
 }
 
 // ---------------------------------------------------------------------------
-// 10a · A story scene for the last step's setup, no task: evening. নাসিব, on
+// 10a · A story scene for the last step's setup, no task: evening. হামজা, on
 //       his own, lays the wire over the compass and touches it to the cell.
 //       The needle turns. He looks at it a long while and says nothing.
 
@@ -1825,7 +1825,7 @@ export function RopeRecap13() {
 // 7a · A mid-journey recap, no task, plain হাতে-কলমে বাংলা: the rope from
 //      Coulomb to Maxwell fills in again, one beat per discovery, so the
 //      whole chain is seen together before the reader has to argue it back to
-//      নাসিব. Nothing new — same cards, same years, just retold slowly.
+//      হামজা. Nothing new — same cards, same years, just retold slowly.
 
 const XR_SAY = [
   "কুলম্ব: বিদ্যুতেরও নিজের একটা সূত্র আছে।",

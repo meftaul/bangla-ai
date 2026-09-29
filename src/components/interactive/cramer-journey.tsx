@@ -377,7 +377,7 @@ const X1_SPOTS: { at: XY; who: string; line: string }[] = [
   { at: [1, 2], who: "", line: "উপরে দুই, ডানে এক" },
   { at: [5, 4], who: "করিম", line: "দেয়ালে যেখানে, card এও সেখানে" },
   { at: [2, 1], who: "", line: "ডানে দুই, উপরে এক" },
-  { at: [2.5, 2], who: "নাসিব", line: "lens এ 2, তাই অর্ধেক" },
+  { at: [2.5, 2], who: "হামজা", line: "lens এ 2, তাই অর্ধেক" },
 ];
 const LETTER = ["A", "B", "C", "D"];
 
@@ -1366,7 +1366,7 @@ export function FourSpots({}: Story) {
   const k = s.k;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="evening" label="সোম খাতা খুলে বললো আগে G inverse বানাই; রিনা বললো দেয়ালে কৌটা গুনে বের করবো; নাসিব বললো কৌটা দিয়া ঠিকানা, জিন্দেগিতেও হবে না; করিম বললো যেখানে দেয়ালে সেখানেই card এ; নাসিব বললো অর্ধেক কইরা">
+      <Stage backdrop="evening" label="সোম খাতা খুলে বললো আগে G inverse বানাই; রিনা বললো দেয়ালে কৌটা গুনে বের করবো; হামজা বললো কৌটা দিয়া ঠিকানা, জিন্দেগিতেও হবে না; করিম বললো যেখানে দেয়ালে সেখানেই card এ; হামজা বললো অর্ধেক কইরা">
         <Person who="som" x={48} y={150} arm={k === 1 ? "hold" : "down"} label />
         {k >= 1 && <St_Khata x={58} y={102} />}
         {k === 1 && <Bubble x={48} y={84} side="right" lines={["আগে G⁻¹ বানাই।"]} />}
@@ -1579,7 +1579,7 @@ export function BaburchiNight({}: Story) {
   const k = s.k;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="night" label="রাত, হারিকেন জ্বলছে; বাবুর্চি আরেকটা পোঁটলা নিয়ে এলেন, বিয়ের খাবারের আরেকটা হিসাব; চারটা রসিদ, তিনটা দাম; নাসিব বললো এবার তো বেশিই আছে">
+      <Stage backdrop="night" label="রাত, হারিকেন জ্বলছে; বাবুর্চি আরেকটা পোঁটলা নিয়ে এলেন, বিয়ের খাবারের আরেকটা হিসাব; চারটা রসিদ, তিনটা দাম; হামজা বললো এবার তো বেশিই আছে">
         <g>
           <circle cx={132} cy={136} r={26} fill="#fde047" opacity={0.22} />
           <path d="M128 128q4 -5 8 0" fill="none" stroke="#e5e7eb" strokeWidth={1.2} />
@@ -1603,7 +1603,7 @@ export function BaburchiNight({}: Story) {
         <Person who="nasib" x={262} y={150} facing={-1} mood={k >= 3 ? "smug" : "plain"} />
         {[
           [196, "মামা"],
-          [262, "নাসিব"],
+          [262, "হামজা"],
         ].map(([x, t]) => (
           <text key={t} x={x} y={161} textAnchor="middle" fontSize={8.5} fontWeight={700} fill="#f8fafc" className="pointer-events-none">
             {t}

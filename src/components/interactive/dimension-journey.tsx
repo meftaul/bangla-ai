@@ -3313,8 +3313,8 @@ type Rec = { who: string; whose: string; cols: string[]; v: number[] };
 const PAIRINGS: { name: string; a: Rec; b: Rec }[] = [
   { name: "p আর q", a: { who: "p", whose: "p-এর", cols: COL5, v: P5 }, b: { who: "q", whose: "q-এর", cols: COL5, v: Q5 } },
   {
-    name: "নাসিব আর একজন রোগী",
-    a: { who: "নাসিব", whose: "নাসিবের", cols: ["height", "weight"], v: [170, 65] },
+    name: "হামজা আর একজন রোগী",
+    a: { who: "হামজা", whose: "হামজাের", cols: ["height", "weight"], v: [170, 65] },
     b: { who: "রোগী", whose: "রোগীর", cols: ["বয়স", "BP", "glucose"], v: [45, 130, 5.2] },
   },
 ];
@@ -3431,7 +3431,7 @@ export function PairUp() {
       <Ticks
         items={[
           ["p আর q", seen.includes(0)],
-          ["নাসিব আর রোগী", seen.includes(1)],
+          ["হামজা আর রোগী", seen.includes(1)],
         ]}
       />
       <Task done={seen.length === PAIRINGS.length}>দুইটা জোড়াই একবার করে Σ মেশিনে চালিয়ে দেখুন।</Task>

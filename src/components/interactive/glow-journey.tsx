@@ -279,7 +279,7 @@ function G_Lens({ cols, name, small = false }: { cols: Cols; name?: ReactNode; s
 
 const X1_CARDS = [
   { who: "লাইট ভাই", d: 12, name: "একই উজ্জ্বল", line: "বাতি তো একই" },
-  { who: "নাসিব", d: 6, name: "অর্ধেক", line: "একটু তো কমবেই" },
+  { who: "হামজা", d: 6, name: "অর্ধেক", line: "একটু তো কমবেই" },
   { who: "সামিন", d: 1, name: "12 ভাগের এক", line: "জায়গা 12 গুণ" },
   { who: "করিম", d: 1 / 12, name: "144 ভাগের এক", line: "লম্বায় 12, চওড়ায় 12" },
 ];
@@ -449,7 +449,7 @@ const X3F = patchFrame(-1.3, 1.3, -0.35, 1.3, 72); // 203 × 135
 const X3_GUESS = [
   { name: "আরো উজ্জ্বল", who: "" },
   { name: "একই", who: "" },
-  { name: "আরো ফিকে", who: "নাসিব" },
+  { name: "আরো ফিকে", who: "হামজা" },
 ];
 const X3_LENSES = [
   { name: "H", cols: LENS_H },
@@ -646,7 +646,7 @@ const X5_LENSES = [
   { name: "পুঁচকে", note: "রিনার", cols: TINY },
   { name: "L", note: "লাইট ভাইয়ের", cols: LENS_L },
   { name: "W", note: "7.3 এর", cols: LENS_W },
-  { name: "নাসিবের", note: "পকেটের", cols: CRUSH },
+  { name: "হামজাের", note: "পকেটের", cols: CRUSH },
 ];
 const X5_GATE = gateDots(-2.2, 7, -1.2, 6.8);
 
@@ -729,7 +729,7 @@ export function YourHeart() {
           heart ফেলুন
         </button>
       </div>
-      {verdict === "flat" && <Nope key={miss}>Heart চ্যাপ্টা হয়ে একটা দাগ। নাসিবের lens এর det 0, জায়গাই নাই।</Nope>}
+      {verdict === "flat" && <Nope key={miss}>Heart চ্যাপ্টা হয়ে একটা দাগ। হামজাের lens এর det 0, জায়গাই নাই।</Nope>}
       {verdict === "faint" && <Nope key={miss}>{`ঘরে ${fmt(+dens.toFixed(2))} ফোঁটা, 3 এর কম। Heart গেটের আলোয় মিশে গেলো। |det| কমান।`}</Nope>}
       {verdict === "small" && <Nope key={miss}>{`দেখা যায়, ঘরে ${fmt(+dens.toFixed(2))} ফোঁটা। কিন্তু আরো বড় করা যায়। ঘরে 3 হলেও চলে।`}</Nope>}
       <Task done={verdict === "right"}>Lens বেছে যন্ত্রে দিন, তিনটা পর্যন্ত। Heart যত বড় পারেন, কিন্তু ঘরে অন্তত 3 ফোঁটা থাকতে হবে।</Task>
@@ -1204,7 +1204,7 @@ export function NightGate({}: Story) {
 //      গুণ), Karim (144: 12 লম্বায়, 12 চওড়ায়)।
 
 const TG_SAY: { who: Who; name: string; x: number; lines: string[]; side: "left" | "mid" | "right" }[] = [
-  { who: "nasib", name: "নাসিব", x: 70, lines: ["একটু তো কমবেই।", "ধরেন অর্ধেক।"], side: "right" },
+  { who: "nasib", name: "হামজা", x: 70, lines: ["একটু তো কমবেই।", "ধরেন অর্ধেক।"], side: "right" },
   { who: "samin", name: "সামিন", x: 150, lines: ["জায়গা 12 গুণ।", "আলো 12 ভাগের এক।"], side: "mid" },
   { who: "karim", name: "করিম", x: 230, lines: ["লম্বায় 12, চওড়ায় 12।", "144 ভাগের এক।"], side: "left" },
 ];
@@ -1214,7 +1214,7 @@ export function ThreeGuesses({}: Story) {
   const k = s.k;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="night" label="উঠানে তিনজন; নাসিব বললো একটু তো কমবেই, ধরেন অর্ধেক; সামিন বললো জায়গা 12 গুণ, আলো 12 ভাগের এক; করিম বললো লম্বায় 12, চওড়ায় 12, 144 ভাগের এক">
+      <Stage backdrop="night" label="উঠানে তিনজন; হামজা বললো একটু তো কমবেই, ধরেন অর্ধেক; সামিন বললো জায়গা 12 গুণ, আলো 12 ভাগের এক; করিম বললো লম্বায় 12, চওড়ায় 12, 144 ভাগের এক">
         <St_Gate x={300} />
         {TG_SAY.map((p, i) => (
           <NightPerson key={p.who} who={p.who} name={p.name} x={p.x} facing={i < 1 ? 1 : -1} arm={k === i + 1 ? "point" : "down"} />
@@ -1232,10 +1232,10 @@ export function NasibSmall({}: Story) {
   const k = s.k;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="night" label="নাসিব কার্নিশ থেকে H lens টা তুললো; বললো বড় করলে ফিকে হলে, ছোট lens এ আলোও তো কম ঢুকবে">
+      <Stage backdrop="night" label="হামজা কার্নিশ থেকে H lens টা তুললো; বললো বড় করলে ফিকে হলে, ছোট lens এ আলোও তো কম ঢুকবে">
         <rect x={150} y={118} width={120} height={32} fill="#78716c" stroke="#57534e" />
         <circle cx={230} cy={113} r={5} fill="#bae6fd" stroke={INK} strokeWidth={0.8} />
-        <NightPerson who="nasib" x={k >= 1 ? 190 : 120} name="নাসিব" facing={1} arm={k >= 1 ? "hold" : "down"} walking={k === 1} />
+        <NightPerson who="nasib" x={k >= 1 ? 190 : 120} name="হামজা" facing={1} arm={k >= 1 ? "hold" : "down"} walking={k === 1} />
         {k >= 1 && (
           <g className={POP}>
             <circle cx={202} cy={106} r={5} fill="#e0f2fe" stroke={INK} strokeWidth={0.8} />
@@ -1282,12 +1282,12 @@ export function LensLedge({}: Story) {
   const glass = (x: number, c: string) => <circle cx={x} cy={113} r={5} fill={c} stroke={INK} strokeWidth={0.8} className={POP} />;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="night" label="গেটের পাশের কার্নিশে lens সাজানো হলো; রিনা রাখলো তার দুইটা, G আর পুঁচকে; লাইট ভাই রাখলেন L আর W; শেষে নাসিব পকেট থেকে তার চার এক এর lens টা বের করে রাখলো">
+      <Stage backdrop="night" label="গেটের পাশের কার্নিশে lens সাজানো হলো; রিনা রাখলো তার দুইটা, G আর পুঁচকে; লাইট ভাই রাখলেন L আর W; শেষে হামজা পকেট থেকে তার চার এক এর lens টা বের করে রাখলো">
         <rect x={90} y={118} width={150} height={32} fill="#78716c" stroke="#57534e" />
         <St_Gate x={290} />
         <NightPerson who="rina" x={60} name="রিনা" facing={1} arm={k === 1 ? "hold" : "down"} />
         <LightBhai x={176} y={150} facing={-1} arm={k === 2 ? "hold" : "down"} nameTone={NIGHT_INK} />
-        <NightPerson who="nasib" x={236} name="নাসিব" facing={-1} arm={k >= 3 ? "hold" : "down"} />
+        <NightPerson who="nasib" x={236} name="হামজা" facing={-1} arm={k >= 3 ? "hold" : "down"} />
         {k >= 1 && glass(104, "#a7f3d0")}
         {k >= 1 && glass(118, "#fef9c3")}
         {k >= 2 && glass(142, "#bae6fd")}
