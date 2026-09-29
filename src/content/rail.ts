@@ -199,7 +199,7 @@ export const MATH_RAIL: Line[] = [
       s("04e_tow_rope", "NDG", "নদীঘাট", "Nodighat", "Tow rope", "Splits a pull into the part that works and the part that's wasted.", Boat),
       s("04e2_bent_river", "BNK", "বাঁকা নদী", "Banka Nodi", "Bend cutter", "The shadow on any direction, not just an axis.", ArrowBendUpRight),
       s("04f_library_search", "PTG", "পাঠাগার", "Pathagar", "Index cards", "When to search by dot product, and when by cosine.", Books),
-      s("04f1_million_books", "LKB", "লাখবই", "Lakhboi", "Normalise stamp", "Divide once, and every search after is a plain dot product.", Stamp),
+      s("04f1_million_books", "LKB", "লাখ বই ", "Lakhboi", "Normalise stamp", "Divide once, and every search after is a plain dot product.", Stamp),
       s("04f2_attention_box", "MNJ", "মনোযোগ জংশন", "Monojog Junction", "Attention lens", "The same dot product, deciding what ChatGPT looks at.", Sparkle),
     ],
   },

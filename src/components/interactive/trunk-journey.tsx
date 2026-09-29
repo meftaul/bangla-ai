@@ -1701,7 +1701,7 @@ export function DoubleAnywhere() {
 // 5½ · Why a turn reads sideways: its two columns are 1 long and square to
 //      each other; read sideways, they turn the other way by the same 37°.
 
-const S5_SAY = ["37° lens এর দুইটা column.", "দুইটাই 1 লম্বা। মাঝে সোজা কোণ।", "কাত করলে row হয় column।", "নতুন column দুইটা: উল্টা দিকে 37°।", "তাই কাত করা lens টাই ফেরার lens: Rᵀ = R⁻¹।"];
+const S5_SAY = ["37° lens এর দুইটা column.", "দুইটাই 1 unit লম্বা। মাঝে সোজা কোণ।", "কাত করলে row হয় column।", "নতুন column দুইটা: উল্টা দিকে 37°।", "তাই কাত করা lens টাই ফেরার lens: Rᵀ = R⁻¹।"];
 const S5F = makeFrame(-1.1, 1.1, -0.8, 1.1, 64, 14);
 
 export function SidewaysFig() {

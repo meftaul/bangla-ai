@@ -785,7 +785,7 @@ const TOOL_JOBS: Job[] = [
   { t: "Chatbot কে প্রশ্ন করলেন: কোন paragraph এর মানে প্রশ্নের সবচেয়ে কাছে", bin: 1, why: "Dot product করলে লম্বা paragraph শুধু লম্বা বলেই জিতে যাবে।" },
   { t: "দালালের knob দিয়ে একটা ছাগলের দাম", bin: 0, why: "দামটা একটা পরিমাণ। Knob গুলা গুণ করে যোগ, মানে dot product।" },
   { t: "ডাক্তার আপার twin খেলা: standardise করার পর কে কার সবচেয়ে কাছে দাঁড়িয়ে", bin: 2, why: "প্রশ্নটা জায়গা নিয়ে, কে কোথায় দাঁড়িয়ে।" },
-  { t: "ছোট বড় হাজারটা informationের মধ্যে “বন্যা” র information খোঁজা", bin: 1, why: "Dot product করলে লম্বা information উপরে উঠবে, বন্যা নিয়ে না হলেও।" },
+  { t: "ছোট বড় হাজারটা information এর মধ্যে “বন্যা” র information খোঁজা", bin: 1, why: "Dot product করলে লম্বা information উপরে উঠবে, বন্যা নিয়ে না হলেও।" },
   { t: "ফাহিমের final number: marks আর weight মিলিয়ে", bin: 0, why: "Marks বেশি হলে number ও বেশি হবে, এটাই তো চাওয়া।" },
 ];
 const TOOL_BINS = [{ name: "dot product" }, { name: "cosine" }, { name: "distance" }];
@@ -1040,7 +1040,7 @@ const X1_SAY = [
   "4.6 এর ঘাট। নৌকা পাড় থেকে 3 metre দূরে, টান 10।",
   "4 metre দড়ি: angle বড়, নদী বরাবর যায় 6.6.",
   "15 metre দড়ি: angle ছোট, নদী বরাবর যায় 9.8.",
-  "লম্বা দড়ি, ছোট angle। Shadow প্রায় পুরা টানটাই।",
+  "লম্বা দড়ি, ছোট angle। Shadow প্রায় পুরা টানটার সমান।",
 ];
 const X1_M = 16.5; // px per metre
 const X1_BANK = 92;
@@ -1787,7 +1787,7 @@ const X10N_NEWS = [
 ];
 const X10N_SAY = [
   "তিনটা information, তিন সাইজের। নীল অংশটা ইলিশ।",
-  "Dot product গোনে শুধু নীল: দশ পাতার informationে নীল সবচেয়ে বেশি, 10।",
+  "Dot product গোনে শুধু নীল: দশ পাতার information-এ নীল সবচেয়ে বেশি, 10।",
   "Length দিয়ে ভাগ দিলে তিনটা informationই এক সাইজের।",
   "এবার জেতে যে informationের বেশিটা ইলিশ: 1.00, 0.99, আর দশ পাতা 0.16.",
 ];

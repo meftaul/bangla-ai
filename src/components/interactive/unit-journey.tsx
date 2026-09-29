@@ -1228,7 +1228,7 @@ export function HatOn() {
         ) : k < 4 ? (
           <span key="c3" className={FADE}>নিজের length দিয়ে ভাগ, আর পেলাম (0.6, 0.8)।</span>
         ) : (
-          <span key="c4" className={FADE}>এখন ঠিক 1 লম্বা, তাই মাথায় টুপি। এর নাম unit vector।</span>
+          <span key="c4" className={FADE}>এখন ঠিক 1 unit লম্বা, তাই মাথায় টুপি। এর নাম unit vector।</span>
         )
       }
     >
@@ -1518,7 +1518,7 @@ export function OnTheRing() {
             সব arrow-এর length 1 বানালে কোনগুলো একটুও নড়বে না? সেগুলোর মাথায় tap করুন ({bn(marks.length)}টা বাছাই)।
           </span>
         ) : right ? (
-          <span className={`${FADE} text-accent-text`}>ঠিক ধরেছেন! নড়েনি শুধু e₁ আর e₂, কারণ ওরা আগে থেকেই 1 লম্বা।</span>
+          <span className={`${FADE} text-accent-text`}>ঠিক ধরেছেন! নড়েনি শুধু e₁ আর e₂, কারণ ওরা আগে থেকেই 1 unit লম্বা।</span>
         ) : (
           <span className={FADE}>নড়েনি শুধু e₁ আর e₂, মানে পূর্বে এক step আর উত্তরে এক step। বাকি সবাই ছোট বা বড় হয়ে রিংয়ে এসে বসেছে।</span>
         )}
@@ -1594,7 +1594,7 @@ export function DroneRing() {
       scene={s}
       caption={
         k < 2 ? (
-          "খুঁটিতে বাঁধা drone, আর দড়িটা ঠিক 1 লম্বা।"
+          "খুঁটিতে বাঁধা drone, আর দড়িটা ঠিক 1 unit লম্বা।"
         ) : k < 3 ? (
           <span className={FADE}>Drone যেদিকেই উড়ুক, খুঁটি থেকে দূরত্ব সেই 1-ই থাকে।</span>
         ) : (
@@ -1676,7 +1676,7 @@ export function StillAndMerged() {
         k < 2 ? (
           "Shiku-র remote-এর প্রথম button: পূর্বে এক পা।"
         ) : k < 3 ? (
-          <span key="c2" className={FADE}>দ্বিতীয় button: উত্তরে এক পা। দুইটাই ঠিক 1 লম্বা।</span>
+          <span key="c2" className={FADE}>দ্বিতীয় button: উত্তরে এক পা। দুইটাই ঠিক 1 unit লম্বা।</span>
         ) : k < 4 ? (
           <span key="c3" className={FADE}>তাই রিংটা ওদের মাথা ছুঁয়েই যায়। ওরা জন্ম থেকেই unit vector।</span>
         ) : k < 5 ? (

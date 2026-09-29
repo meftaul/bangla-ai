@@ -213,7 +213,7 @@ Story:    Noon on the ছাদ, sun straight overhead, a bamboo stick and chalk
    the new directions (the PCA sentence).
 8. NoCrossTalk — A 2 × 2 tap grid (v₁e₁ + v₂e₂) against (w₁e₁ + w₂e₂): four cells.
    The reader taps each: e₁·e₁ = 1, e₂·e₂ = 1, e₁·e₂ = 0 (no shadow). The off-diagonal
-   cells vanish, leaving v₁w₁ + v₂w₂. → pass: "Axis-গুলো সোজা কোণে আর 1 লম্বা বলেই
+   cells vanish, leaving v₁w₁ + v₂w₂. → pass: "Axis-গুলো সোজা কোণে আর 1 unit লম্বাবলেই
    শুধু ঘরে ঘরে গুণ টিকে থাকে।"
 9. YourPair — এবার আপনার পালা: the reader drags any two arrows; before measuring,
    they predict মামা's number from the box alone. Wrong tries bounce.

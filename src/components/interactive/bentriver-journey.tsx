@@ -2811,7 +2811,7 @@ export function DivideCount() {
   return (
     <>
       <Legend now="নৌকা কোথায় থামে" />
-      <Plane f={f} ticks={1} label="সোজা নদী 3.61 লম্বা; shadow এর মাথা 1.94 এ; নৌকা ভাগের অংশ ধরে চলে" className="max-w-[20rem]">
+      <Plane f={f} ticks={1} label="সোজা নদী 3.61 unit লম্বা; shadow এর মাথা 1.94 এ; নৌকা ভাগের অংশ ধরে চলে" className="max-w-[20rem]">
         <path d={`M${f.sx(0)} ${f.sy(0)}H${f.sx(SQ3_L)}`} strokeWidth={16} className="pointer-events-none stroke-[#38bdf8]/20" />
         <path d={`M${f.sx(SQ3_L)} ${f.sy(0)}H${f.sx(7.4)}`} strokeWidth={1.2} strokeDasharray="3 4" className="pointer-events-none stroke-[#0f1b2d]/35" />
         <text x={f.sx(SQ3_L) + 4} y={f.sy(0.3)} fontSize={9} className="fill-[#5a6b7d]">
@@ -3019,7 +3019,7 @@ const SQ2B_U = 22;
 const SQ2B_SAY = [
   "First slot: দড়ির first number, মানে shadow, গুণ নদীর length.",
   "Second slot: দড়ির টানের বাকি অংশ নদীর 0। কিছুই যোগ হয় না।",
-  "তাই dot product = shadow এর length × নদীর length. 1.94 চওড়া, 3.61 লম্বা একটা আয়ত, ভিতরে প্রায় 7 ঘর।",
+  "তাই dot product = shadow এর length × নদীর length. 1.94 চওড়া, 3.61 unit লম্বাএকটা আয়ত, ভিতরে প্রায় 7 ঘর।",
   "বাঁকা নদীতেও একই 7: 2 × 2 + 3 × 1। কাগজ ঘুরালে dot product বদলায় না।",
 ];
 

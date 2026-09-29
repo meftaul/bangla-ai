@@ -808,7 +808,7 @@ export function TwoTapes() {
 
 const X5F = makeFrame(-0.5, 3.5, -0.5, 3.5, 24, 10);
 const X5_SAY = [
-  "Square রাস্তা, প্রতিটা block 1 লম্বা: map এর নিজের grid।",
+  "Square রাস্তা, প্রতিটা block 1 unit লম্বা: map এর নিজের grid।",
   "East এর রাস্তার উপর torch ফেলুন। Shadow 2 block.",
   "North এর রাস্তায় আরেকটা torch। Shadow 3 block.",
   "Shadow গুলাই card। বাঁকা রাস্তায় তা হয় না। সেখানে solve করতে হয়।",

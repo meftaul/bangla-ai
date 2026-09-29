@@ -102,7 +102,7 @@ Arrow একটাই। তাহলে দূরত্বও একটাই�
 
 <TapeOut story />
 
-Pythagoras ধরে নেয় card এর প্রতিটা block ঠিক 1 লম্বা। আগে সেটাই check করি। দুই রাস্তার এক block করে মাপুন।
+Pythagoras ধরে নেয় card এর প্রতিটা block ঠিক 1 unit লম্বা। আগে সেটাই check করি। দুই রাস্তার এক block করে মাপুন।
 
 <LaneBlock />
 
@@ -128,7 +128,7 @@ Pythagoras ধরে নেয় card এর প্রতিটা block ঠি
 
 <Then>
 
-Map grid এর কোণায় dot product 0. right angle. block ও 1 লম্বা। তাই (2, 3) এ Pythagoras চলে: √(2² + 3²) = 3.61.
+Map grid এর কোণায় dot product 0. right angle. block ও 1 unit লম্বা। তাই (2, 3) এ Pythagoras চলে: √(2² + 3²) = 3.61.
 
 রাস্তার grid এ? dot product 1. কোণটা হেলে আছে। আর গলির block 1.41. দুইটা শর্তই ভাঙা। তাই road card এ বর্গ করে কিছুই মাপা হয় না।
 
@@ -136,7 +136,7 @@ Map grid এর কোণায় dot product 0. right angle. block ও 1 ল�
 
 <SideQuest title="Square রাস্তা: solve করারও দরকার নাই">
 
-রাস্তা right angle এ মিলে, আর প্রতিটা block 1 লম্বা? তাহলে card বের করতে solve করাও লাগে না। Card এর প্রতিটা সংখ্যা একটা shadow। 4.3 এর torch গুলার মতো। বইতে এরকম grid কে বলে **orthonormal basis**। মানে, কোণ right angle, block 1 লম্বা। বাঁকা রাস্তায় shadow দিয়ে card পাওয়া যায় না। তাই সেখানে solve করতে হয়।
+রাস্তা right angle এ মিলে, আর প্রতিটা block 1 unit লম্বা? তাহলে card বের করতে solve করাও লাগে না। Card এর প্রতিটা সংখ্যা একটা shadow। 4.3 এর torch গুলার মতো। বইতে এরকম grid কে বলে **orthonormal basis**। মানে, কোণ right angle, block 1 unit লম্বা। বাঁকা রাস্তায় shadow দিয়ে card পাওয়া যায় না। তাই সেখানে solve করতে হয়।
 
 <ShadowRoads />
 
@@ -154,7 +154,7 @@ Map grid এর কোণায় dot product 0. right angle. block ও 1 ল�
 
 <Then>
 
-Road card কে আগে map এর card বানাতে হয়। গলিতে 1 block মানে (1, 1)। বড় রাস্তায় 3 block মানে (3, 0)। যোগ করলে (4, 1)। Map এর grid square. block 1 লম্বা। তাই এখানে Pythagoras খাটে: √17 = 4.12.
+Road card কে আগে map এর card বানাতে হয়। গলিতে 1 block মানে (1, 1)। বড় রাস্তায় 3 block মানে (3, 0)। যোগ করলে (4, 1)। Map এর grid square. block 1 unit লম্বা। তাই এখানে Pythagoras খাটে: √17 = 4.12.
 
 3.16 বেছেছেন? করিমের ভুলটাই করেছেন। আর 4.41 হলো রিকশার পুরা পথ, রাস্তা ধরে ধরে। সোজা line এর দূরত্ব সবসময় এর চেয়ে কম।
 
@@ -219,7 +219,7 @@ Road card কে আগে map এর card বানাতে হয়। গ�
     ["map এর card (2, 3)", "v = (2, 3), in the standard basis e₁, e₂"],
     ["রাস্তার card (−1, 3)", "[v]_B = (−1, 3), v's coordinates in the basis B"],
     ["এক slot এক slot করে, north আগে", "solving a system of linear equations"],
-    ["square রাস্তা, প্রতিটা block 1 লম্বা", "an orthonormal basis: the numbers are dot products"],
+    ["square রাস্তা, প্রতিটা block 1 unit লম্বা", "an orthonormal basis: the numbers are dot products"],
   ]}
 />
 
