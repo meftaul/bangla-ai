@@ -1,0 +1,330 @@
+/* The railway's physical things: the yellow station board and the printed
+   counter ticket. They keep their own colours in both themes, like real card
+   and paint; everything around them uses the app's tokens. The rest of the
+   rail UI is Tailwind. */
+
+.rail-board {
+  --board: #f3c623;
+  --board-ink: #141414;
+  background: var(--board);
+  color: var(--board-ink);
+  border: 2px solid var(--board-ink);
+  border-radius: 3px;
+  box-shadow: 0 2px 0 rgb(0 0 0 / 0.25);
+  text-align: center;
+}
+.rail-board-bn {
+  font-family: var(--font-hind-siliguri), sans-serif;
+  font-weight: 700;
+  line-height: 1.15;
+}
+.rail-board-en {
+  font-family: var(--font-big-shoulders), "Arial Narrow", sans-serif;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+.rail-board.dim {
+  filter: saturate(0.3);
+  opacity: 0.8;
+}
+
+/* ---- the ticket ---------------------------------------------------------- */
+
+.rail-ticket {
+  --paper: #efe2c1;
+  --grain: rgb(120 80 20 / 0.07);
+  --paper-ink: #3b2b14;
+  --paper-red: #a8322a;
+  --paper-blue: #2b4f7a;
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 7.5rem;
+  width: 100%;
+  max-width: 35rem;
+  color: var(--paper-ink);
+  font-family: var(--font-fredoka), sans-serif;
+  filter: drop-shadow(0 10px 14px rgb(40 25 5 / 0.25));
+}
+.rail-ticket.snigdha {
+  --paper: #dfe8ef;
+  --grain: rgb(20 60 110 / 0.07);
+}
+.rail-ticket.shovan {
+  --paper: #efd6d0;
+  --grain: rgb(120 30 20 / 0.06);
+}
+.rail-ticket-main,
+.rail-ticket-stub {
+  position: relative;
+  background:
+    repeating-linear-gradient(45deg, var(--grain) 0 1px, transparent 1px 7px),
+    repeating-linear-gradient(-45deg, var(--grain) 0 1px, transparent 1px 7px),
+    var(--paper);
+}
+/* Notches cut into both halves where they tear apart. */
+.rail-ticket-main {
+  border-radius: 12px 0 0 12px;
+  padding: 0.9rem 1.1rem;
+  display: grid;
+  gap: 0.6rem;
+  mask:
+    radial-gradient(circle 10px at 100% 0, #0000 98%, #000) top right / 100% 51% no-repeat,
+    radial-gradient(circle 10px at 100% 100%, #0000 98%, #000) bottom right / 100% 51% no-repeat;
+}
+.rail-ticket-stub {
+  border-radius: 0 12px 12px 0;
+  border-left: 2px dashed rgb(59 43 20 / 0.35);
+  padding: 0.9rem 0.7rem;
+  display: grid;
+  align-content: space-between;
+  justify-items: center;
+  gap: 0.35rem;
+  text-align: center;
+  mask:
+    radial-gradient(circle 10px at 0 0, #0000 98%, #000) top left / 100% 51% no-repeat,
+    radial-gradient(circle 10px at 0 100%, #0000 98%, #000) bottom left / 100% 51% no-repeat;
+}
+.rail-ticket .red {
+  color: var(--paper-red);
+}
+.rail-ticket .blue {
+  color: var(--paper-blue);
+}
+.rail-ticket .rule {
+  border-bottom: 2px solid var(--paper-red);
+}
+.rail-ticket .bn {
+  font-family: var(--font-baloo), sans-serif;
+}
+.rail-ticket .board-face {
+  font-family: var(--font-big-shoulders), "Arial Narrow", sans-serif;
+}
+.rail-ticket .label {
+  font-size: 0.625rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+.rail-ticket .bars {
+  width: 100%;
+  height: 1.8rem;
+  opacity: 0.8;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--paper-ink) 0 2px,
+    transparent 2px 4px,
+    var(--paper-ink) 4px 5px,
+    transparent 5px 8px,
+    var(--paper-ink) 8px 11px,
+    transparent 11px 12px
+  );
+}
+.rail-stamp {
+  color: var(--paper-red);
+  border: 2px solid var(--paper-red);
+  border-radius: 6px;
+  padding: 0.25rem 0.5rem;
+  transform: rotate(-8deg);
+  opacity: 0.8;
+  text-align: center;
+  mix-blend-mode: multiply;
+}
+/* A hole punched through the card shows whatever is behind it. */
+.rail-punch {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--background);
+  box-shadow: inset 0 1px 3px rgb(0 0 0 / 0.5);
+}
+/* The hawker's star: a star-shaped punch. */
+.rail-punch.rail-star {
+  width: 16px;
+  height: 16px;
+  border-radius: 0;
+  clip-path: polygon(50% 0, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+}
+.rail-punch.open {
+  background: transparent;
+  box-shadow: none;
+  border: 1.5px dashed currentColor;
+  opacity: 0.4;
+}
+.rail-ticket.small {
+  grid-template-columns: minmax(0, 1fr) 5.5rem;
+  max-width: 26rem;
+}
+
+/* ---- motion -------------------------------------------------------------- */
+
+@keyframes rail-drop {
+  from {
+    transform: translateY(-2.5rem);
+    opacity: 0.2;
+  }
+}
+@keyframes rail-pop {
+  from {
+    transform: scale(0.85) rotate(-3deg);
+    opacity: 0.2;
+  }
+}
+@keyframes rail-print {
+  from {
+    transform: translateY(-100%);
+  }
+}
+.rail-drop {
+  animation: rail-drop 0.7s cubic-bezier(0.3, 1.4, 0.5, 1) both;
+}
+.rail-pop {
+  animation: rail-pop 0.6s 0.5s cubic-bezier(0.3, 1.5, 0.5, 1) both;
+}
+.rail-print {
+  animation: rail-print 1.1s 0.9s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+/* The train's exhaust: three puffs off the roof, drifting back as it runs. */
+@keyframes rail-puff {
+  from {
+    opacity: 0.85;
+    transform: translate(0, 0) scale(0.4);
+  }
+  to {
+    opacity: 0;
+    transform: translate(-22px, -16px) scale(1.7);
+  }
+}
+.rail-puff circle {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: rail-puff 1.1s ease-out both;
+}
+.rail-puff circle:nth-child(2) {
+  animation-delay: 0.18s;
+}
+.rail-puff circle:nth-child(3) {
+  animation-delay: 0.36s;
+}
+/* A miss: the train lurches back as if the brakes caught, and settles. */
+@keyframes rail-jolt {
+  20% {
+    transform: translateX(-5px) rotate(-2.5deg);
+  }
+  45% {
+    transform: translateX(2px) rotate(1deg);
+  }
+  70% {
+    transform: translateX(-1px);
+  }
+}
+.rail-jolt {
+  transform-origin: 50% 100%;
+  animation: rail-jolt 0.55s ease-out;
+}
+/* The arrival board hangs from the platform roof and swings to rest. */
+@keyframes rail-swing {
+  0% {
+    transform: rotate(-9deg);
+  }
+  30% {
+    transform: rotate(6deg);
+  }
+  55% {
+    transform: rotate(-3deg);
+  }
+  78% {
+    transform: rotate(1.2deg);
+  }
+  100% {
+    transform: rotate(0);
+  }
+}
+.rail-swing {
+  transform-origin: 50% 0;
+  animation: rail-swing 1.6s 0.55s ease-out both;
+}
+
+/* The ticket checker walks in from the side, and back out. */
+@keyframes rail-tte-in {
+  from {
+    transform: translateX(120%);
+  }
+}
+.rail-tte {
+  animation: rail-tte-in 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.1) both;
+}
+.rail-tte.leaving {
+  transition: transform 0.4s ease-in, opacity 0.4s ease-in;
+  transform: translateX(120%);
+  opacity: 0;
+}
+/* His punch closing on the ticket, then the hole appearing. */
+@keyframes rail-clip {
+  40% {
+    transform: rotate(-18deg) translateY(2px);
+  }
+}
+.rail-clip {
+  transform-box: fill-box;
+  transform-origin: 20% 80%;
+  animation: rail-clip 0.35s 0.4s ease-in-out;
+}
+@keyframes rail-hole {
+  from {
+    transform: scale(0);
+  }
+}
+.rail-hole {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: rail-hole 0.2s 0.6s ease-out both;
+}
+/* A miss: a slow, kind shake of the head. */
+@keyframes rail-nod {
+  25% {
+    transform: rotate(-7deg);
+  }
+  60% {
+    transform: rotate(6deg);
+  }
+}
+.rail-nod {
+  transform-box: fill-box;
+  transform-origin: 50% 90%;
+  animation: rail-nod 0.9s 0.45s ease-in-out 2;
+}
+
+/* The picture phone's wire: one number's bulbs running from pole to pole. */
+@keyframes rail-wire {
+  from {
+    left: 0%;
+  }
+  to {
+    left: 100%;
+  }
+}
+.rail-wire {
+  animation: rail-wire linear both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rail-wire,
+  .rail-drop,
+  .rail-pop,
+  .rail-print,
+  .rail-puff circle,
+  .rail-jolt,
+  .rail-swing,
+  .rail-tte,
+  .rail-clip,
+  .rail-hole,
+  .rail-nod {
+    animation: none;
+  }
+  .rail-puff circle {
+    opacity: 0;
+  }
+}

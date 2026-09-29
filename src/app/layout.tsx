@@ -6,6 +6,9 @@ import {
   Hind_Siliguri,
   Hanken_Grotesk,
   JetBrains_Mono,
+  Big_Shoulders,
+  Fredoka,
+  Baloo_Da_2,
 } from "next/font/google";
 import "./globals.css";
 
@@ -38,6 +41,28 @@ const hindSiliguri = Hind_Siliguri({
   weight: ["400", "600", "700"],
 });
 
+// The railway around Math for AI (src/components/rail/): station boards and
+// printed tickets.
+const bigShoulders = Big_Shoulders({
+  variable: "--font-big-shoulders",
+  subsets: ["latin"],
+  weight: ["700", "800", "900"],
+  // next/font has no metrics to size a fallback for this face; a narrow system face stands in
+  adjustFontFallback: false,
+  fallback: ["Arial Narrow", "sans-serif"],
+});
+
+// Tickets: rounded, friendly faces for the printed text (Latin + Bangla).
+const fredoka = Fredoka({
+  variable: "--font-fredoka",
+  subsets: ["latin"],
+});
+
+const baloo = Baloo_Da_2({
+  variable: "--font-baloo",
+  subsets: ["latin", "bengali"],
+});
+
 export const metadata: Metadata = {
   title: "Bangla.AI — Let's Learn AI & Data Science",
   description:
@@ -53,7 +78,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${geistSans.variable} ${spaceGrotesk.variable} ${hindSiliguri.variable} ${hankenGrotesk.variable} ${jetbrainsMono.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${spaceGrotesk.variable} ${hindSiliguri.variable} ${hankenGrotesk.variable} ${jetbrainsMono.variable} ${bigShoulders.variable} ${fredoka.variable} ${baloo.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-background text-foreground font-sans">
         {/* Apply saved theme before paint to avoid a flash. next/script (beforeInteractive)

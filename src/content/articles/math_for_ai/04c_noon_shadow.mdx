@@ -1,0 +1,298 @@
+export const metadata = {
+  title: "Math for AI 4.3 — দুপুরের shadow, হিসাব দুইটা কিন্তু উত্তর একটা",
+  description: "মামা বলেন, ঘরে ঘরে একটাও গুণ না করে শুধু ফিতা আর চাঁদা দিয়ে তিনি dot product এর 7 বের করে দেবেন। সত্যিই কি পারবেন? উত্তর লুকিয়ে আছে দুপুরের ছায়ায়।",
+  type: "article",
+};
+
+{/* Told as a Brilliant-style journey, like 1.1 and 2.3: screen 1 seals the
+    reader's bet on what মামা's tape-and-protractor recipe will give for the
+    dot product's 7, and the bet is not settled until TwoTests, six screens later.
+    Each screen opens by reacting to the last; the explanation sits in <Then>
+    and shows only once the task is done. Whether the two recipes *always*
+    agree, and why, is 4.4's question (04c2_axis_shadow). The screens live in
+    components/interactive/shadow-journey.tsx and use 4.1's DotBox. The
+    third of eight "Dot product" journeys (Article 4); the plan is in
+    04_journey_specs.md. */}
+
+import { Journey, Step, Then } from "@/components/journey/journey";
+import {
+  TwoRecipes,
+  StickShadow,
+  BackShadow,
+  ArrowShadow,
+  TwoTests,
+  RoofNoon,
+  RecipeSlots,
+  StickOnRoof,
+  TwoSticks,
+  CosTriangle,
+  HalfTurn,
+  VanTable,
+  StickToArrow,
+  TorchDrop,
+  RotateVsDrop,
+  FirstNumber,
+  MamaRecipe,
+  RecipeBuild,
+  TurnPaper,
+  LengthTimesShadow,
+  RoadDebt,
+  NotYetProof,
+  ZeroMeans,
+  ThreeMetre,
+  CalcCos,
+  TapeThirteen,
+  RoadBox,
+  SixtyCheck,
+  MamaSeven,
+} from "@/components/interactive/shadow-journey";
+
+<Journey title="Dot product · ৪.৩">
+
+<Step>
+
+ছাদে ওঠার আগে ভ্যানের dot product থেকে একটা প্রশ্ন।
+
+<ZeroMeans>
+
+Plus মানে মোটামুটি একই দিকে। minus মানে উল্টো দিকে। আর ঠিক 0? 90 degree, কোনো পক্ষেই না। আজ মামা এই একই সংখ্যা calculate করবেন ভিন্নভাবে।
+
+</ZeroMeans>
+
+</Step>
+
+<Step>
+
+পরদিন দুপুরবেলা সূর্য যখন ঠিক মাথার ওপরে, ছাদে মামী তখন কাপড় শুকাতে নিয়ে গেছেন। মামা এক টুকরা চক দিয়ে মেঝেতে দুইটা arrow আঁকলেন, $v = (2, 3)$ আর $w = (2, 1)$। ফাহিম সাথে সাথে arrow টা নিয়ে dot product করে ফেললো: $2 \times 2 + 3 \times 1 = 7$।
+
+মামা বললেন, “এবার আমি ঘরে ঘরে গুণ করে যোগ করব না। কিন্তু 7 ঠিকই বের করবো। এটার জন্য আমার একটা ফিতা আর চাঁদা লাগবে”।
+
+ফাহিম মাথা নাড়লো। Dot product এর calculation pair-এ pair-এ সংখ্যা গুণ করে, আর এদিকে ফিতা আর চাঁদা মাপে length আর কোণ। তাহলে দুইটাই same answer কীভাবে দিবে?
+
+<RoofNoon story />
+
+<TwoRecipes />
+
+<Then>
+
+মামার ফিতা arrow-এর length মাপে। চাঁদা দিয়ে angle মাপে। কিন্তু angle-কে তো directly সংখ্যার সাথে গুণ করা যায় না। তাই মামার প্ল্যান? angle-কেও somehow কোনো সংখ্যায় convert করবেন। তারপর সেই সংখ্যাটা গুণ করবেন দুই arrow-এর length-এর সাথে। যে সংখ্যাটা পাবো, সেটাই বলবে দুইটা arrow-এর দিক কতটা কাছাকাছি।
+
+<RecipeSlots />
+
+আর একটা বাঁশের কঞ্চি আর দুপুরের রোদই সেই সংখ্যাটা আনতে যথেষ্ট।
+
+</Then>
+
+</Step>
+
+<Step>
+
+ছাদের কোণায় ঠিক ১ মিটার লম্বা একটা বাঁশের কঞ্চি পড়ে আছে। সূর্য একদম মাথার ওপরে, তাই যেকোনো জিনিসের ছায়া ঠিক তার নিচে পড়ছে।
+
+<StickOnRoof story />
+
+কঞ্চির একটা মাথা মেঝেতে রাখুন। অন্য মাথাটা একটু একটু করে তুলুন। দেখুন ছায়া কতটা লম্বা হয়।
+
+<StickShadow />
+
+<Then>
+
+শোয়ানো অবস্থায় ছায়া পুরো লাঠিটা জুড়েই আছে। তারমানে 1 মিটার। একদম দাঁড়া করিয়ে দিলে? ছায়া গুটিয়ে একটা বিন্দু। মানে 0। মাঝের angle-গুলোতে 1 আর 0 এর মাঝামাঝি কোন নাম্বার।
+
+আর 2 মিটারের লাঠিতে ছায়া দ্বিগুণ হয়েছে ঠিকই। কিন্তু (ছায়া ÷ লাঠি) বদলায়নি। তারমানে angle এর সাথে এই ratio-র, মানে (ছায়া ÷ লাঠি)-র, কোন একটা সম্পর্ক আছে। লাঠির length এর যাই করি না কেন, ratio তো একই থাকছে।
+
+<TwoSticks />
+
+</Then>
+
+</Step>
+
+<Step>
+
+Ratio-টা যদি শুধু কোণের ওপর নির্ভর করে, তাহলে? কোণ আর লাঠির length জানলেই ছায়া বলে দেওয়া যায়। মাপতে হয় না।
+
+<ThreeMetre />
+
+<Then>
+
+এই সংখ্যাটার একটা নাম আছে। **cosine**। লেখা হয় $\cos\theta$, পড়তে হয় “cos theta”। $\theta$ হলো কোণটা। লাঠি আর shadowর দুই মাথা add করলেই একটা right-angle ত্রিভুজ। লম্বা বাহুটা (side) লাঠি। angle এর সাথে লেগে থাকা বাহুটা (side) ছায়া:
+
+$$\cos\theta = \frac{\text{ছায়া}}{\text{লাঠি}}$$
+
+একটু অন্যভাবে দেখলে? $\text{ছায়া} = \text{লাঠি} \times \cos\theta$। ৩ মিটার লাঠির ছায়া তাই $3 \times 0.5 = 1.5$। এই ভিন্ন আঙ্গিকে দেখাটা একটু পরেই কাজে লাগবে।
+
+<CosTriangle />
+
+Trigonometry নামটা শুনে ভয় পাওয়ার কিছু নাই। এই series-এ এর বেশি trigonometry লাগবে না। বাকিটা করে দেবে ক্যালকুলেটর। যেমন $\cos 30^\circ \approx 0.87$।
+
+<CalcCos />
+
+</Then>
+
+</Step>
+
+<Step>
+
+এবার কঞ্চিটা আরও একটু তুলুন। 90° পার করলে shadow কোথায় যায়?
+
+<BackShadow />
+
+<Then>
+
+90° পার হতেই ছায়া চলে গেল পেছনের দিকে। সামনের ছায়াকে plus ধরলে পেছনের ছায়া minus। তাই $\cos 120^\circ = -0.5$। আর লাঠি উল্টো শুয়ে পড়লে $\cos 180^\circ = -1$।
+
+দুইটা কথা মনে রাখুন। সামনে শোয়ানো মানে 1। একদম দাঁড় করিয়ে রাখা মানে 0। উল্টো হয়ে শুয়ে থাকলে −1। আর ছায়া কখনোই লাঠির চেয়ে লম্বা হবে না। তাই $\cos\theta$ সবসময় −1 থেকে 1-এর মধ্যে থাকে।
+
+<HalfTurn />
+
+চেনা চেনা লাগছে? ৪.২-এ ভ্যানের table-টাও ঠিক এরকম ছিল। 90°-এর কম plus। ঠিক 90° শূন্য। বেশি হলে minus।
+
+<VanTable />
+
+</Then>
+
+</Step>
+
+<Step>
+
+এবার ছাদের মেঝেতে চক দিয়ে আঁকা দুইটা arrow এর দিকে নজর দেয়া যাক। $v$ এখানে shadowর মতো, আর $w$ তার সাথে কঞ্চির মত একটা angle করে উঠে গেছে।
+
+রোদ যদি $v$-এর ঠিক মাথার ওপর থেকে আসে, $v$-এর ওপর $w$-এর ছায়া কোথায় পড়বে?
+
+<StickToArrow story />
+
+রোদের বদলে একটা torchlight নিয়ে দেখা যাক। ঘর অন্ধকার করুন। $v$-এর ঠিক ওপরে torch-টা একবার জ্বালান, একবার নিভান।
+
+<TorchDrop story />
+
+<ArrowShadow />
+
+<Then>
+
+ছায়া মানে কি $w$-কে ঘুরিয়ে $v$-এর ওপর পুরোপুরি শুইয়ে দেওয়া? না। সেটা করলে ছায়া সবসময় $w$-এর পুরো length-ই হবে। ছায়া মানে $w$-এর মাথা থেকে $v$-এর ওপর লম্বালম্বি একটা দাগ নামানো। এর নাম **projection**। মানে $v$-এর ওপর $w$-এর projection।
+
+<RotateVsDrop />
+
+লাঠির হিসাব এখানেও খাটে। $w$ হলো কঞ্চি, তাই:
+
+$$v \text{-এর ওপর } w \text{-এর ছায়া} = \|w\| \cos\theta$$
+
+আর একটা জিনিস খেয়াল করেছেন? $v$ শোয়ানো থাকলে ছায়াটা হয় $w$-এর প্রথম সংখ্যাটা। $(2, 3)$-এর ছায়া 2।
+
+<FirstNumber />
+
+</Then>
+
+</Step>
+
+<Step>
+
+মামা ফিতা বের করার আগে ৪.১-এর একটা হিসাব মনে করি।
+
+<TapeThirteen>
+
+৪.১-এ দেখেছিলেন, নিজের সাথে dot product করলে আসে length-এর বর্গ। মনে আছে তো? তাই (2, 3)-এর length? 13-এর root, প্রায় 3.61। যারা 5 বেছেছিলেন, তারা 2 আর 3 সোজা যোগ করে ফেলেছিলেন।
+
+</TapeThirteen>
+
+</Step>
+
+<Step>
+
+এবার মামা তার calculation টা কীভাবে করবেন খুলে বললেন। “প্রথমে $v$-এর length মাপো। তারপর $v$-এর ওপর $w$-এর ছায়া পড়ে কতখানি সেটা মাপো। দুইটা গুণ করে দাও।”
+
+<MamaRecipe story />
+
+মানে দুইটা মাপ। v-এর length। আর v-এর ওপর w-এর shadow পড়ে যতখানি। গুণ করলে $\|v\| \times \|w\| \times \cos\theta$। এখানে $\|w\| \times \cos\theta$-টাই v এর ওপর w এর shadow।
+
+<RecipeBuild story />
+
+আগে একটা সহজ pair নিয়ে দেখা যাক।
+
+<TwoTests />
+
+<Then>
+
+দুইবারই মিললো। প্রথম pair-এ $2 \times 4.24 \times 0.707 = 6$। Dot product এ ও 6। পরের pair-এ $3.61 \times 2.24 \times 0.868 = 7.0$। Dot product এ ও 7। মামার ক্যালকুলেশনটা এভাবে পড়ুন: **$v$ এর length গুণ $w$ এর যেটুকু shadow $v$ এর ওপর পড়ে।**
+
+$$v \cdot w = \|v\| \, \|w\| \cos\theta$$
+
+<LengthTimesShadow />
+
+বাজির জোড়ায় $v = (2, 3)$ তো হেলানো। মেঝের মতো শোয়ানো না। হেলানো arrow-এর ওপর ছায়া মাপবেন কীভাবে? সহজ উপায় আছে। কাগজটা ঘুরিয়ে $v$-কে শুইয়ে নিন। তারপর ওপর থেকে রোদ ফেলুন।
+
+<TurnPaper />
+
+</Then>
+
+</Step>
+
+<Step>
+
+মামার হিসাব দিয়ে ৪.২-এর একটা পুরানো খটকা মেটানো যায়।
+
+এবার আপনার পালা।
+
+<RoadBox />
+
+<Then>
+
+রাস্তার card $(4, 3)$ ছিল 5 unit লম্বা। আর dot product এর উত্তর ছিল আসল ধাক্কার 5 গুণ। এখন কারণটা পরিষ্কার। Dot product মানে রাস্তার length গুণ রাস্তার ওপর ধাক্কার shadow। ফাহিমের ধাক্কার ছায়া রাস্তা বরাবর 5। তাই $5 \times 5 = 25$।
+
+<RoadDebt />
+
+</Then>
+
+</Step>
+
+<Step>
+
+## একটু ঝালিয়ে নিন
+
+<SixtyCheck>
+
+$2 \times 3 \times \cos 60^\circ = 2 \times 3 \times 0.5 = 3$।
+
+যারা 6 বেছেছিলেন, তারা length দুইটা গুণ করে থেমে গেছেন। কোণটা বাদ পড়ে গেছে। অথচ 60°-এ লাঠির ছায়া তো লাঠির মাত্র অর্ধেক।
+
+</SixtyCheck>
+
+</Step>
+
+<Step>
+
+## শেষ! মামার ফিতা-চাঁদাও বললো 7
+
+মামা বলেছিলেন, ঘরে ঘরে একটাও গুণ না করে dot product এর 7 বের করবেন। করলেনও: $3.61 \times 2.24 \times 0.868 = 7.0$। “ঠিক 7”-এ বাজি ধরেছিলেন? আপনিই জিতলেন।
+
+<MamaSeven story />
+
+এর জন্য লাগলো শুধু একটা বাঁশের কঞ্চি আর দুপুরের রোদ। লাঠির ছায়া ÷ লাঠি? সেটাই $\cos\theta$। আর এক arrow-এর ওপর আরেক arrow-এর ছায়া? $\|w\| \cos\theta$।
+
+এক লাইনে: **dot product এর নম্বর মানে একটা arrow-এর length, গুণ তার ওপর আরেকটার ছায়া।**
+
+<Table
+  head={["দেখবেন", "মুখে বলবেন"]}
+  rows={[
+    ["θ", "theta, দুইটা arrow-এর মাঝের কোণ"],
+    ["cos θ", "cos theta, ছায়া ÷ লাঠি, −1 থেকে 1"],
+    ["‖w‖ cos θ", "v-এর ওপর w-এর ছায়া, projection-এর length"],
+    ["v · w = ‖v‖ ‖w‖ cos θ", "dot product-এর arrow-চেহারা"],
+  ]}
+/>
+
+দুইবার মেলা মানেই কিছু প্রমাণ হওয়া না। হতে পারে এই দুইটা pair ভাগ্যক্রমে মিলে গেছে। কিন্তু মামার দাবি, এরা সবসময় মিলবে। কেন মেলে? সেটা জানতে হবে।
+
+<NotYetProof story />
+
+<LessonLink
+  href="/dashboard/articles/math_for_ai/04c2_axis_shadow"
+  eyebrow="পরের পাঠ"
+  title="দুই হিসাব কেন মেলে, axis-এর ছায়া"
+>
+  মামী বলেন দুইবার মেলা ভাগ্য, মামা বলেন সবসময় মিলবে। উত্তর লুকিয়ে আছে Shiku-র পুরানো remote-এ।
+</LessonLink>
+
+</Step>
+
+</Journey>

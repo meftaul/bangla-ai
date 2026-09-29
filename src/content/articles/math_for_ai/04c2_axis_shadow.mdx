@@ -1,0 +1,319 @@
+export const metadata = {
+  title: "Math for AI 4.4 — দুই হিসাব কেন মেলে, axis-এর ছায়া",
+  description: "মামার ফিতা-চাঁদা আর ফাহিমের dot product দুইবার মিলেছে। মামী বলেন ভাগ্য, মামা বলেন সবসময় মিলবে। দুইটা একদম আলাদা হিসাব সবসময় মিলবে কেন? উত্তর লুকিয়ে আছে axis-এর ছায়ায়।",
+  type: "article",
+};
+
+{/* Told as a Brilliant-style journey, like 1.1 and 2.3: screen 1 seals the
+    reader's bet on whether মামা's tape-and-protractor recipe (4.3) always
+    matches the dot product, and the bet is not settled until NoCrossTalk and
+    YourPair. Every step of the "why" is played by hand: shadows on the axes
+    (AxisShadow), on turned axes (TiltedAxes), the shadow's two rules
+    (ShadowRules), then the 2 × 2 grid. Each screen opens by reacting to the
+    last; the explanation sits in <Then> and shows only once the task is
+    done. The screens live in components/interactive/shadow-journey.tsx,
+    beside 4.3's. The fourth of eight "Dot product" journeys (Article 4);
+    the plan is in 04_journey_specs.md. */}
+
+import { Journey, Step, Then, SideQuest } from "@/components/journey/journey";
+import {
+  AlwaysBet,
+  MamiDoubt,
+  AxisShadow,
+  WalkIsShadow,
+  TiltedAxes,
+  TiltedAddress,
+  DataAxes,
+  PcaShadow,
+  ShadowRules,
+  TwoRules,
+  FourPieces,
+  NoCrossTalk,
+  ThreeSlots,
+  HiddenProtractor,
+  ThreePairs,
+  YourPair,
+  ZeroAndMinus,
+  TwoRoads,
+  TvArgue,
+  FlatShadow,
+  EndlessPairs,
+  RemotePress,
+  MinusPieces,
+  CrossedZero,
+  NineToThree,
+  MamiRoad,
+  NinetyBoth,
+} from "@/components/interactive/shadow-journey";
+
+<Journey title="Dot product · ৪.৪">
+
+<Step>
+
+বিকেলের আগে দুপুরের একটা shadow র কথা মনে করি।
+
+<FlatShadow>
+
+w-এর মাথা থেকে সোজা নিচে দাগ নামান। মেঝের কোথায় পড়লো? ঠিক 2-এর ওপর। 3.61 বেছেছিলেন যারা, তারা w-কে ঘুরিয়ে মেঝেতে শুইয়ে দিয়েছিলেন। সেটা shadow না।
+
+</FlatShadow>
+
+</Step>
+
+<Step>
+
+বিকেলে সূর্য কিছুটা হেলে পড়েছে, মেঝেতে চকের arrow দুইটা এখনও আছে। দুইবারই মিলেছে,  মামা খুব খুশি। কিন্তু মামী এত সহজে মানার পাত্রী না।
+
+<MamiDoubt story />
+
+কয়েকটা মিলল আর মেনে নিলাম? প্রমাণ কোথায় যে সবসময় মিলবে? 
+
+<AlwaysBet />
+
+<Then>
+
+দুইবার মিলেছে। এটুকু সত্যি। কিন্তু arrow-এর জোড়া তো অসংখ্য। সব মেপে দেখা সম্ভব না। তাহলে “সবসময়” মানবো কখন? যখন জানবো, কেন মেলে।
+
+প্রমাণ খোঁজা start হবে সবচেয়ে চেনা দুইটা arrow দিয়ে। শিকু-র remote-এর দুইটা button।
+
+<EndlessPairs />
+
+</Then>
+
+</Step>
+
+<Step>
+
+Axis-এর shadow দেখার আগে Shiku-র remote-টার কথা মনে করি।
+
+<RemotePress>
+
+প্রথম সংখ্যা 2। তাই ডান দিকে দুই পা। দ্বিতীয়টা 3। ওপরের দিকে তিন পা। মানে e₁ 2 বার, আর e₂ 3 বার। e₁ পাঁচবার বেছেছিলেন যারা? দুইটা সংখ্যা যোগ করে ফেলেছিলেন।
+
+</RemotePress>
+
+</Step>
+
+<Step>
+
+কেন মেলে? প্রথম formula-টা লুকিয়ে আছে সবচেয়ে চেনা দুইটা arrow-তে। Shiku-র remote-এর সেই দুইটা button। $e_1$ মানে পূর্বে এক পা, $e_2$ মানে উত্তরে এক পা। দুইটাই 1 unit লম্বা। আর একটা আরেকটার সাথে ৯০ degree angle করে আছে।
+
+ধরি একটা arrow $(2, 3)$। মানে ডানে যাচ্ছি 2 unit, ওপরে 3 unit। ওপর-নিচ বরাবর যে axis, ওটার নাম **y axis**। ডান-বাম বরাবরটা **x axis**। এবার দুই axis থেকে torch জ্বালাই। ছায়া কত লম্বা হবে, বলুন তো?
+
+<AxisShadow />
+
+<Then>
+
+ওপরের দিকে হাঁটলাম 3 unit। তাই y axis বরাবর ছায়ার length 3। x axis বরাবর হেঁটেছি 2 unit। তাই ওদিকে ছায়া 2।
+
+Dot productও ঠিক তাই বলে: $(2, 3) \cdot e_1 = 2$, আর $(2, 3) \cdot e_2 = 3$। মানে **vector-এর প্রতিটা সংখ্যা আসলে একেকটা axis-এর ওপর তার shadow।** সংখ্যাগুলো বলে “কোন axis ধরে কতদূর যাব”। কথাটা তারমানে: vector এর সংখ্যাগুলা আসলে shadow।
+
+<WalkIsShadow />
+
+</Then>
+
+</Step>
+
+<Step>
+
+Axis যদি বদলে যায়?
+
+ধরেন নতুন দুইটা axis নিলাম। দুইটাই একে অপরের সাথে ৯০ degree angle করে আছে। $(2, 3)$ arrow-টা যেখানে ছিল, সেখানেই থাকবে। ঘুরবে শুধু axis দুইটা। নতুন axis-এর ওপরও কি shadow আর dot product একই কথা বলবে?
+
+<TiltedAxes />
+
+<Then>
+
+আগের তেরছা remote-এর কথা মনে আছে তো? axis দুটাকে একটু change করলাম, আগের screen-এর মতো। অমনি একই জায়গার address-কে অন্যভাবে represent করা লাগে।
+
+নতুন address বের করবো কীভাবে? নতুন axis-গুলো একে অপরের সাথে ৯০ degree angle করে থাকলে, খুব সহজ। প্রতিটা নতুন direction বরাবর shadow বের করুন। ব্যস।
+
+<TiltedAddress />
+
+<SideQuest title="Axis কেউ ঘুরাবে কেন? (PCA)">
+
+{/* TODO(author): English অংশগুলো Banglish করা হয়েছে; নিজের মতো করে একবার দেখে নিন। */}
+
+বাস্তবের data-কে মাত্র দুটো number দিয়ে বোঝানো কঠিন। একটা ছবি, একটা গান, একজন customer। বোঝাতে শত শত number লাগতে পারে। এতগুলো number নিয়ে কাজ করা বেশ ঝামেলার।
+আমরা আসলে কী চাই?
+number-গুলো একটু কমাতে। যাতে সহজে কাজ করা যায়।
+
+এখানে একটা trick খাটাতে হবে। নিচের dot-গুলোর ঝাঁকটার দিকে তাকান। কী দেখছেন? একটা direction বরাবর dot-গুলো বেশ ছড়ানো। আরেকটা direction বরাবর তেমন না। ওই দিকে dot-গুলো বেশ কাছাকাছি।
+এবার axis-গুলোকে একটু ঘুরাই। axis 1 চলে আসুক সেই direction বরাবর, যেদিকে dot-গুলো লম্বালম্বি ছড়ানো।
+Dot-গুলো কি এখন axis 1 বরাবর ছড়িয়ে আছে?
+আছে। কিন্তু axis 2 বরাবর বেশ কাছাকাছি। distance প্রায় 0।
+
+<DataAxes />
+
+এখানে প্রতিটা dot-এর দ্বিতীয় number-টা বেশ ছোট। তাহলে একটা কাজ করি। দ্বিতীয় number-টা ফেলে দিই। রেখে দিই শুধু axis 1-এর ওপর dot-গুলোর shadow।
+দুটো axis-এর আর দরকারই থাকলো না।
+
+<PcaShadow />
+
+তার মানে ব্যাপারটা কী দাঁড়ালো?
+আপনার data-র জন্য সবচেয়ে ভালো কয়েকটা direction বেছে নিন। বাকিগুলো বাদ।
+সবচেয়ে ভালো direction কোনগুলো? যেগুলো বরাবর data সবচেয়ে বেশি ছড়ানো।
+এই বিখ্যাত trick-টার একটা নাম আছে। **PCA** (Principal Component Analysis)।
+ভালো direction-গুলো আসলে খুঁজে পাব কীভাবে? সেটা আরও পরে।
+
+</SideQuest>
+
+</Then>
+
+</Step>
+
+<Step>
+
+এবার আসল প্রশ্ন। মামার ছায়ার হিসাব দুইটা নিয়ম মেনে চলে। কোন দুইটা নিয়ম, নিজের হাতে বের করুন।
+
+<ShadowRules />
+
+<Then>
+
+খেয়াল করেছেন? নিয়ম দুইটা একইরকম।
+
+এক, দুইটা arrow জোড়া দিলে পুরো পথের ছায়া হলো দুই arrow এর shadow এর যোগফল। ৪.২-এর ভ্যানে dot product এর বেলায় এটা দেখেছিলেন। আগে যোগ পরে dot product, আর আগে dot product পরে যোগ। একই। দুই, arrow দ্বিগুণ হলে? ছায়াও দ্বিগুণ।
+
+<TwoRules />
+
+Minus দিয়ে গুণ করলে? ছায়াও পেছনে পড়ে। ৯০ degree পার হওয়া কঞ্চির মতো।
+
+তার মানে arrow-কে টুকরা টুকরা করে ভাঙলেও shadow এর হিসাব এক চুলও নড়ে না। টুকরাগুলোর shadow আলাদা বের করে যোগ করুন। পুরো shadow-টাই পেয়ে গেলেন। মামার হিসাব কেন মেলে? বুঝতে এই কথাটাই লাগবে।
+
+<MinusPieces />
+
+</Then>
+
+</Step>
+
+<Step>
+
+দুইটা নিয়মই হাতে-কলমে মিললো। তাই $v = 2e_1 + 3e_2$ আর $w = 2e_1 + 1e_2$ হলে মামার হিসাবটা ভেঙে চারটা টুকরা। প্রতিটায় একজোড়া axis।
+
+<FourPieces story />
+
+প্রতিটা জোড়ায় কতটা ছায়া পড়ে? tap করে দেখুন।
+
+<NoCrossTalk />
+
+<Then>
+
+চারটা ঘরের দুইটাই মুছে গেল। কেন? কারণ, $e_1$ আর $e_2$ ৯০ degree angle করে আছে। খাড়া কঞ্চির ছায়া 0। ছাদেই তো দেখেছেন।
+
+বাকি দুইটা ঘরে একটা axis নিজের সাথে। length 1-এর arrow নিজের ওপর পুরো shadow-টাই ফেলে। মানে 1। তাই টিকে থাকলো শুধু $2 \times 2$ আর $3 \times 1$:
+
+$$\begin{aligned} v \cdot w &= 2 \cdot 2\,(e_1 \cdot e_1) + 2 \cdot 1\,(e_1 \cdot e_2) \\ &\quad + 3 \cdot 2\,(e_2 \cdot e_1) + 3 \cdot 1\,(e_2 \cdot e_2) \\ &= 4 + 0 + 0 + 3 = 7 \end{aligned}$$
+
+<CrossedZero />
+
+মানে “ঘরে ঘরে গুণ করে যোগ” কোনো খামখেয়ালি নিয়ম না। **Axis-গুলো ৯০ degree কোণে আর 1 unit লম্বা বলেই shadow-এর হিসাব ঠিক এইরকম রূপ নেয়।**
+
+</Then>
+
+</Step>
+
+<Step>
+
+দুই ঘরে তো দেখলাম। ঘর বাড়লে কী হবে?
+
+<NineToThree />
+
+<Then>
+
+তিন ঘর হোক বা তিনশো ঘর, যুক্তি একই। আলাদা দুইটা axis-এর জোড়া 0। একই axis-এর জোড়া 1।
+
+<ThreeSlots />
+
+মামী মুখ বাঁকিয়ে বললেন, “তাহলে dot product এর হিসাবের ভেতরেই চাঁদা লুকান ছিল?” ঠিক তাই।
+
+<HiddenProtractor />
+
+</Then>
+
+</Step>
+
+<Step>
+
+মামার তিনটা জোড়ার আগে সেই কাদাওয়ালা রাস্তার কথা একবার মনে করি।
+
+<MamiRoad>
+
+$4 \times (-3) + 3 \times 4 = -12 + 12 = 0$। তারমানে মামীর ধাক্কাটা কাজেও লাগছে না, অকাজেও না। রাস্তার সাথে একদম ৯০ degree angle করে আছে। −5 বেছেছিলেন যারা, তারা ভাবছিলেন রফিকের ধাক্কার কথা।
+
+</MamiRoad>
+
+</Step>
+
+<Step>
+
+মামা চাঁদা হাতে আরও তিনটা জোড়া আঁকলেন। উত্তর কত আসবে? বলে দিতে হবে আপনাকে।
+
+<ThreePairs story />
+
+এবার আপনার পালা।
+
+<YourPair />
+
+<Then>
+
+তৃতীয় জোড়াটা খেয়াল করেছেন? Dot product 0। মামার চাঁদায় কোণ ঠিক 90°। আর $\cos 90^\circ = 0$। দুই calculation-ই একসাথে বলছে, ৯০ degree angle।
+
+দ্বিতীয় pair এ কোণ 90° পেরিয়ে গেছে। তাই দুই হিসাবেই minus।
+
+<ZeroAndMinus />
+
+মাপার আগেই মামার answer বলে দেওয়া গেল। কীভাবে? কারণ, দুইটা আসলে একই সংখ্যা।
+
+<TwoRoads />
+
+</Then>
+
+</Step>
+
+<Step>
+
+## একটু ঝালিয়ে নিন
+
+<NinetyBoth>
+
+Dot product: $1 \times 0 + 0 \times 4 = 0$। মামা: $\|v\| = 1$, $\|w\| = 4$, কোণ 90°, $\cos 90^\circ = 0$, তাই $1 \times 4 \times 0 = 0$।
+
+4 বেছেছিলেন যারা, তারা length দুইটা গুণ করে থেমে গেছেন। কিন্তু খাড়া কঞ্চির ছায়া নাই। তাই length যত বড়ই হোক, গুণফল 0।
+
+</NinetyBoth>
+
+</Step>
+
+<Step>
+
+Vector-এর যেমন দুইটা চেহারা ছিল, list আর arrow, dot product-এরও তারমানে দুইটা চেহারা:
+
+<Table
+  head={["", "হিসাব", "মুখে বলবেন"]}
+  rows={[
+    ["List-এর চোখে", "v₁w₁ + v₂w₂ + …", "ঘরে ঘরে গুণ করে যোগ"],
+    ["Arrow-এর চোখে", "‖v‖ ‖w‖ cos θ", "একটার length গুণ আরেকটার ছায়া"],
+  ]}
+/>
+
+এক লাইনে: **dot product এর নম্বর মানে length × length × তারা কতটা একই দিকে।** 
+
+রাতে TV-র সামনে তর্ক বাধলো। মামা ঘোষণা দিলেন, ৩.৬-এর club-এর নিয়মে তাঁর Mr. Bean পেয়েছিল 5.34, আর মামীর Titanic মাত্র 4.09। “মানে আমার ছবিটা আমার সাথে বেশি মানানসই।” কিন্তু মামী তা  মানতে নারাজ।
+
+<TvArgue story />
+
+কে ঠিক? Dot product এর নম্বরে length আর angle মিশে থাকে। আজ তো দেখলেন। length গুলো সরিয়ে শুধু angle বের করা গেলেই তর্ক মিটে যায়। কিন্তু সরাবো কীভাবে?
+
+<LessonLink
+  href="/dashboard/articles/math_for_ai/04d_cosine_movie"
+  eyebrow="পরের পাঠ"
+  title="Cosine similarity, কার ছবি বেশি মানানসই"
+>
+  মামা বলেন তাঁর নম্বর বড়, তাই তাঁর সাথে মুভিটা বেশি যায়। মামী মানেন না। angle দিয়ে ফয়সালা হবে।
+</LessonLink>
+
+</Step>
+
+</Journey>
+
+

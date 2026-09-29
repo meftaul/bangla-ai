@@ -2,6 +2,8 @@ import "katex/dist/katex.min.css";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import Deck from "@/components/deck";
+import { RailOpen } from "@/components/rail/open";
+import { RAIL_SLUGS } from "@/content/rail";
 import { createClient } from "@/lib/supabase/server";
 import { coursesForSlug, getRole } from "@/lib/articles";
 
@@ -50,18 +52,49 @@ export default async function ArticlePage({
   // never as a self-paced page. Admins may still open one to preview.
   if (role !== "admin" && metadata.type === "slides") notFound();
 
+  // A journey rides the railway only once it is published, and only between
+  // published stations (content/rail.ts), for admins too.
+  let railOpen: string[] | null = null;
+  if (RAIL_SLUGS.includes(slug)) {
+    const { data: open } = await supabase
+      .from("articles")
+      .select("slug")
+      .eq("status", "published")
+      .in("slug", RAIL_SLUGS);
+    const slugs = (open ?? []).map((r) => r.slug as string);
+    if (slugs.includes(slug)) railOpen = slugs;
+  }
+
   // Prose is a centered reading column (matching loading.tsx and every other
   // dashboard page); a deck stays full-bleed, since reveal scales to its frame.
   const isSlides = metadata.type === "slides";
 
+  // A journey (components/journey) is a one-screen app, not a scrolling page:
+  // when the article holds one, the card takes exactly the viewport under the
+  // 3.5rem header (less the main padding it keeps on sm+, 1.5rem / lg 2.5rem
+  // each side). On phones it goes edge to edge and the shell hides its header
+  // (dashboard-shell.tsx), so it gets the full 100dvh. The Journey's own ×
+  // replaces the Library link. Detected with :has(), so no MDX needs a flag.
   return (
-    <div className={`flex flex-col gap-4${isSlides ? "" : " mx-auto w-full max-w-3xl"}`}>
-      <Link href="/dashboard/articles" className="text-sm text-muted hover:text-accent-text">
+    <div
+      className={`group/page flex flex-col gap-4${
+        isSlides
+          ? ""
+          : " mx-auto w-full max-w-3xl max-sm:has-[[data-journey]]:-mx-4 max-sm:has-[[data-journey]]:-my-6 max-sm:has-[[data-journey]]:w-auto"
+      }`}
+    >
+      <Link href="/dashboard/articles" className="text-sm text-muted group-has-[[data-journey]]/page:hidden hover:text-accent-text">
         ← Library
       </Link>
       {!isSlides ? (
-        <article className="article surface-card p-5 sm:p-8">
-          <Article />
+        <article className="article surface-card p-5 sm:p-8 max-sm:has-[[data-journey]]:h-dvh has-[[data-journey]]:min-h-[26rem] has-[[data-journey]]:overflow-hidden has-[[data-journey]]:p-0 max-sm:has-[[data-journey]]:rounded-none max-sm:has-[[data-journey]]:border-0 max-sm:has-[[data-journey]]:shadow-none sm:has-[[data-journey]]:h-[calc(100dvh-6.5rem)] lg:has-[[data-journey]]:h-[calc(100dvh-8.5rem)]">
+          {railOpen ? (
+            <RailOpen slugs={railOpen}>
+              <Article />
+            </RailOpen>
+          ) : (
+            <Article />
+          )}
         </article>
       ) : (
         <div className="deck-frame">

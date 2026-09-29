@@ -1,0 +1,210 @@
+export const metadata = {
+  title: "Math for AI 4.3 — Dot product বললো 25",
+  description: "করিমের ভ্যান কাদায় আটকে আছে, শুকনা রাস্তায় উঠতে 6 ঘর গড়াতে হবে। ফাহিমের ধাক্কায় dot product বললো 25, অথচ ভ্যান এখনো কাদায়। Dot product এর number টা আসলে কী মাপে?",
+  type: "article",
+};
+
+{/* The discovery version of 4.3 (04c_noon_shadow and 04c1_mamas_card stay as
+    they are); built with .claude/skills/pathshala-discovery, plan in
+    04c1d_discovery_plan.md. Screen 1 seals a bet on how far the van rolled
+    when the dot product said 25; it is checked on the last screen. The reader pushes
+    first (two sandboxes), compares Fahim's, Samin's and Rina's rules, is
+    taught it from Samin's and Rina's (flat road → turned paper → the stick
+    in the sun), tests a longer road card, fixes Shiku's rule, and gets the
+    van out with no graph paper. 11 steps. The screens live in
+    components/interactive/mud-journey.tsx; FlatFloor, TurnThePaper,
+    StickMarks and the two figures come from noon-journey.tsx. */}
+
+import { Journey, Step, Then } from "@/components/journey/journey";
+import {
+  VanStuck,
+  StuckBet,
+  RollFour,
+  BendFlags,
+  WhoseRule,
+  LongerCard,
+  ShikuFlag,
+  PondRope,
+  VanOut,
+  RulesArrive,
+  VanShadow,
+  BoxThree,
+  SquareDrop,
+  RinaFive,
+  KarimCard,
+  DivideBack,
+  ShikuSure,
+  RopeBank,
+  MamiWhy,
+} from "@/components/interactive/mud-journey";
+import { FlatFloor, TurnThePaper, StickMarks, CosName, RecipeLine } from "@/components/interactive/noon-journey";
+
+<Journey title="Dot product · হিসাব বললো 25">
+
+<Step>
+
+বর্ষাকাল। গ্রামের রাস্তা। করিমের ভ্যান কাদায় আটকে আছে।
+
+<VanStuck story />
+
+<StuckBet />
+
+</Step>
+
+<Step>
+
+করিমের রাস্তাটা গেছে card (4, 3) এর মতো করে। ভ্যান শুধু রাস্তা ধরেই গড়াতে পারে।
+
+<RollFour />
+
+</Step>
+
+<Step>
+
+বাঁক নেওনের পরে রাস্তা গেছে (2, 1) এর মতো। প্রতিবার ধাক্কা দেওয়ার আগে একটা flag পুঁতে দিন। ভ্যান যেখানে থামবে বলে মনে হয়, ঠিক সেখানে।
+
+<BendFlags />
+
+</Step>
+
+<Step>
+
+ভ্যান কতদূর গড়াবে, সেটার একটা করে নিয়ম আছে ফাহিম, সামিন আর রিনার। আপনারও একটা আছে।
+
+<RulesArrive story />
+
+<WhoseRule />
+
+</Step>
+
+<Step>
+
+সামিনের নিয়ম যেখানে কাজ করে, সেখান থেকেই শুরু করি। কাগজের সাথে শোয়ানো একটা রাস্তা। রাস্তাটাকে বলি v। ধাক্কাটাকে w।
+
+<FlatFloor />
+
+<Then>
+
+সূর্য মাথার ঠিক উপরে। তাই w এর মাথা থেকে একটা দাগ সোজা নিচে নামে, রাস্তার উপরে। ভ্যান তো শুধু রাস্তা ধরেই যেতে পারে। তাই গড়ায় ঠিক ওই দাগ পর্যন্ত। এইটুকুই রাস্তার উপরে ধাক্কার **shadow**।
+
+<VanShadow />
+
+আর dot product? রাস্তার দ্বিতীয় number টা 0। তাই dot product আসে 3 × shadow। এই 3 হলো রাস্তার length।
+
+<BoxThree />
+
+</Then>
+
+</Step>
+
+<Step>
+
+এবার (2, 1) রাস্তা। আগে সামিনের কায়দাটাই চালিয়ে দেখুন।
+
+<TurnThePaper />
+
+<Then>
+
+কাগজটা ঘুরিয়ে রাস্তাটাকে শুইয়ে দিন। সূর্য আবার w এর মাথা থেকে রাস্তার উপরে দাগ নামাবে। এই দাগটার নাম **projection**। মানে রাস্তার সাথে right angle এ নামা দাগ। দাগটা পড়ে কোথায়? 3.13 এ। ভ্যান ঠিক যেখানে থেমেছিল।
+
+<SquareDrop />
+
+তাহলে dot product হলো রাস্তার length গুণ shadow: 2.24 × 3.13 = 7. প্রথম রাস্তায় রিনার ÷ 5 মিলে গিয়েছিল কেন? কারণ, প্রথম রাস্তার card টা ছিল 5 লম্বা।
+
+<RinaFive />
+
+</Then>
+
+</Step>
+
+<Step>
+
+কাদার মধ্যে তো ঘোরানোর মতো graph paper নাই। তাহলে shadow এর length টা আসবে কোথা থেকে?
+
+<StickMarks />
+
+<Then>
+
+লাঠির ছায়া ÷ লাঠি। লাঠি যতটুকু হেলানো, তার জন্য একটাই number। এর একটা নাম আছে: **cos θ** (পড়তে হয় “cos theta”)। θ হলো angle টা। তাই রাস্তার উপরে ধাক্কার shadow হলো ধাক্কার জোর × cos θ। আর dot product সেটাকে গুণ করে রাস্তার length দিয়ে:
+
+$$v \cdot w = \|v\| \, \|w\| \cos\theta$$
+
+<CosName />
+
+<RecipeLine />
+
+</Then>
+
+</Step>
+
+<Step>
+
+## এবার একটা কেচাল
+
+করিমের হাতে একই রাস্তার আরেকটা card। (8, 6). একই দিকে যায়। লম্বায় দ্বিগুণ।
+
+<KarimCard story />
+
+<LongerCard />
+
+<Then>
+
+Dot product এর number বেড়েছে কেন? card লম্বা হয়েছে বলে। ভ্যান বেশি গড়িয়েছে বলে না।
+
+আসল গড়ানোটা ফেরত পেতে? card এর length দিয়ে ভাগ করুন: 50 ÷ 10 = 5।
+
+<DivideBack />
+
+</Then>
+
+</Step>
+
+<Step>
+
+## Shiku কে শেখান
+
+Shiku রও একটা নিয়ম আছে। নিয়মটা নিয়ে ওর কোনো সন্দেহ নাই।
+
+<ShikuSure story />
+
+<ShikuFlag />
+
+</Step>
+
+<Step>
+
+## ভ্যানটা বের করুন
+
+Graph paper নাই, dot product ও নাই। করিমের হাতে একটা দড়ি। দড়িতে লাগানো spring balance এ 7। সামনের রাস্তায় গভীর কাদা। তাই করিম টানবে শুকনা পাড় থেকে।
+
+<RopeBank story />
+
+<PondRope />
+
+</Step>
+
+<Step>
+
+## শেষ! করিমের ভ্যান কাদা থেকে উঠলো
+
+<VanOut story />
+
+Dot product বলেছিল 25। ভ্যান গড়িয়েছিল 5। “25 ঘরের কম” এ বাজি ধরেছিলেন? আপনি জিতেছেন। কারণ, রাস্তার card টা ছিল 5 লম্বা। আর dot product ওই length দিয়ে গুণ করে দেয়।
+
+এক line এ: **dot product এর number হলো রাস্তার length গুণ রাস্তার উপরে ধাক্কার shadow।**
+
+মামির অবশ্য খটকা গেলো না। Dot product গুণ করে জোড়ায় জোড়ায়। লাঠি মাপে length আর angle। দুইটা সবসময় একই number দিবে কেন?
+
+<MamiWhy story />
+
+<LessonLink
+  href="/dashboard/articles/math_for_ai/04c2_axis_shadow"
+  eyebrow="পরের lesson"
+  title="দুই হিসাব কেন সবসময় মেলে"
+>
+  মামি বলেন ভাগ্য। মামা বলেন সবসময় মিলবে। উত্তর লুকিয়ে আছে Shiku র পুরানো remote এ।
+</LessonLink>
+
+</Step>
+
+</Journey>
