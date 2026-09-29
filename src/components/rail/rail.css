@@ -297,7 +297,21 @@
   animation: rail-nod 0.9s 0.45s ease-in-out 2;
 }
 
+/* The picture phone's wire: one number's bulbs running from pole to pole. */
+@keyframes rail-wire {
+  from {
+    left: 0%;
+  }
+  to {
+    left: 100%;
+  }
+}
+.rail-wire {
+  animation: rail-wire linear both;
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .rail-wire,
   .rail-drop,
   .rail-pop,
   .rail-print,

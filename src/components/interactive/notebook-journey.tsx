@@ -1217,7 +1217,7 @@ export function CornerMap({}: Story) {
   const k = s.k;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="room" label="শোভাযাত্রার রাস্তার ম্যাপ; গেট থেকে বের হয়ে পাঁচটা মোড়; তিন নম্বর মোড়ে রাস্তা বাঁয়ে এক কোণা ঘুরেছে; নাসিব বললো এইটা আমি লিখবো">
+      <Stage backdrop="room" label="শোভাযাত্রার রাস্তার ম্যাপ; গেট থেকে বের হয়ে পাঁচটা মোড়; তিন নম্বর মোড়ে রাস্তা বামে এক কোণা ঘুরেছে; নাসিব বললো এইটা আমি লিখবো">
         <g transform="translate(6 14) scale(0.76)">
         <rect x={10} y={20} width={300} height={120} rx={3} fill="#fffbeb" stroke={INK} strokeOpacity={0.25} />
         <path d={MAP_ROUTE} fill="none" stroke="#9ca3af" strokeWidth={8} strokeLinejoin="round" />

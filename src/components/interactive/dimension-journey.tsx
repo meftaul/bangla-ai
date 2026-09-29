@@ -1077,7 +1077,7 @@ export function RuleVsTape() {
       <div className="mt-2 min-h-6 text-center text-sm text-muted">
         {d[0] < 0 && (
           <span className={FADE}>
-            বাঁয়ে গেলে তফাত negative, কিন্তু বর্গ করলে minus চলে যায়: {sq(d[0])} = {d[0] ** 2}।
+            বামে গেলে তফাত negative, কিন্তু বর্গ করলে minus চলে যায়: {sq(d[0])} = {d[0] ** 2}।
           </span>
         )}
       </div>
@@ -1088,7 +1088,7 @@ export function RuleVsTape() {
         ]}
       />
       <Task done={spots.length >= SPOTS && leftDone}>
-        বেগুনি point-টা টেনে তিনটা আলাদা কোণাকুনি জায়গায় নিন, অন্তত একটা কালো point-এর বাঁয়ে। প্রত্যেকবার নিয়ম আর ফিতা মিলিয়ে দেখুন।
+        বেগুনি point-টা টেনে তিনটা আলাদা কোণাকুনি জায়গায় নিন, অন্তত একটা কালো point-এর বামে। প্রত্যেকবার নিয়ম আর ফিতা মিলিয়ে দেখুন।
       </Task>
     </>
   );
@@ -1184,7 +1184,7 @@ export function GapNames() {
       <div className="my-3 flex justify-center">
         {stage === 0 && (
           <button type="button" onClick={next} className={primaryBtn}>
-            ১ · ডানে-বাঁয়ে তফাত
+            ১ · ডানে-বামে তফাত
           </button>
         )}
         {stage === 1 && (
@@ -1206,7 +1206,7 @@ export function GapNames() {
       <div className="mx-auto grid min-h-24 max-w-md gap-1.5 text-center font-mono text-[1.02rem]">
         {stage >= 1 && (
           <div className={FADE}>
-            <span className="font-sans text-sm text-muted">ডানে-বাঁয়ে</span> a<sub>1</sub> − b<sub>1</sub> = {GA[0]} − {GB[0]} ={" "}
+            <span className="font-sans text-sm text-muted">ডানে-বামে</span> a<sub>1</sub> − b<sub>1</sub> = {GA[0]} − {GB[0]} ={" "}
             <b className="text-cat-blue">{d1}</b>
           </div>
         )}
@@ -1224,7 +1224,7 @@ export function GapNames() {
       </div>
       <Ticks
         items={[
-          ["ডানে-বাঁয়ে", stage >= 1],
+          ["ডানে-বামে", stage >= 1],
           ["ওপরে-নিচে", stage >= 2],
           ["দূরত্ব", stage >= 3],
         ]}
@@ -2572,8 +2572,8 @@ export function OneKnob() {
             </b>
           </div>
           <div className="flex gap-2">
-            <button type="button" aria-label="বাঁয়ে ঘোরান" onClick={() => turn(-0.5)} disabled={k <= 0} className={`${quietBtn} px-3`}>
-              − বাঁয়ে
+            <button type="button" aria-label="বামে ঘোরান" onClick={() => turn(-0.5)} disabled={k <= 0} className={`${quietBtn} px-3`}>
+              − বামে
             </button>
             <button type="button" aria-label="ডানে ঘোরান" onClick={() => turn(0.5)} disabled={k >= 10} className={`${quietBtn} px-3`}>
               ডানে +
@@ -2844,7 +2844,7 @@ const COMPASS: XY[] = Array.from({ length: 8 }, (_, i): XY => [Math.cos((i * Mat
 const RISE = COMPASS.map(([dx, dy]) => loss([GW[0] + dx, GW[1] + dy]) - loss(GW));
 const UP = RISE.indexOf(Math.max(...RISE));
 const GRAD: XY = [GW[0] - MIN[0], 2 * (GW[1] - MIN[1])];
-const DIR_NAME = ["ডানে", "ডানে-ওপরে", "ওপরে", "বাঁয়ে-ওপরে", "বাঁয়ে", "বাঁয়ে-নিচে", "নিচে", "ডানে-নিচে"];
+const DIR_NAME = ["ডানে", "ডানে-ওপরে", "ওপরে", "বামে-ওপরে", "বামে", "বামে-নিচে", "নিচে", "ডানে-নিচে"];
 const DIR_CELL = [
   "col-start-3 row-start-2",
   "col-start-3 row-start-1",

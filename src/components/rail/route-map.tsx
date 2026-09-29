@@ -1,46 +1,49 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore, type ComponentType } from "react";
 
 import { bn } from "@/components/interactive/figure-kit";
-import { RAIL, nextStop, stopOf, type Line, type Stop } from "@/content/rail";
+import { RAIL, railNet, type Line, type RailNet, type Stop } from "@/content/rail";
 import { buildMachine, classOf, finishedBefore, toggleFitted, useRail, type RailState } from "@/lib/rail";
 
 import { Board, Ticket, Train, stampDate } from "./parts";
+import { PicturePhone } from "./picture-phone";
 
 // A course on the railway, in place of its list of lessons: one tab per line
 // (chapter), the line's stations on a track with the train where the reader
 // left off, the tools they have collected, the workbench where the line's tools
 // become its machine, and the tickets they were handed on the way.
 
-export type RouteItem = { slug: string; href: string; badge?: string };
+export type RouteItem = { slug: string; href: string };
 
 const GAP = 136; // px between stations
+
+/** Line id → its machine, working, once built. A line not here shows only its ring of tools. */
+const WORKING: Record<string, ComponentType<{ stations: Stop[] }>> = { l1: PicturePhone };
 const hydrated = () => true;
 const onServer = () => false;
 const never = () => () => {};
 
 /**
  * `course` names the railway in RAIL (looked up here: its tools carry icon
- * components, which can't cross from the server page).
+ * components, which can't cross from the server page). `items` are the
+ * published journeys: only they are stations, and only their tools are in the
+ * trunk and on the workbench.
  */
 export function RouteMap({ course, items }: { course: string; items: RouteItem[] }) {
-  const lines = RAIL[course] ?? [];
+  const net = useMemo(() => (RAIL[course] ? railNet(new Set(items.map((it) => it.slug))) : null), [course, items]);
   const rail = useRail();
   // localStorage exists only after hydration; before that everything is unreached.
   const live = useSyncExternalStore(never, hydrated, onServer);
   const reached = (slug: string) => !!rail.arrived[slug] || (live && finishedBefore(slug));
 
   const bySlug = new Map(items.map((it) => [it.slug, it]));
-  // Only the stations this reader can open (drafts are hidden from learners).
-  const shown = lines
-    .map((line) => ({ line, stops: line.stations.filter((st) => bySlug.has(st.slug)).map((st) => stopOf(st.slug)!) }))
-    .filter((l) => l.stops.length);
+  const shown = (net?.lines ?? []).map((line) => ({ line, stops: line.stations.map((st) => net!.stopOf(st.slug)!) }));
   const current = shown.find((l) => l.stops.some((st) => !reached(st.slug))) ?? shown.at(-1);
   const [picked, setPicked] = useState<string | null>(null);
   const open = shown.find((l) => l.line.id === picked) ?? current;
-  if (!open) return null;
+  if (!open || !net) return null;
 
   return (
     // min-w-0 all the way down: the track scrolls inside its card, never the page
@@ -70,7 +73,7 @@ export function RouteMap({ course, items }: { course: string; items: RouteItem[]
         <LineView key={open.line.id} line={open.line} stops={open.stops} bySlug={bySlug} rail={rail} reached={reached} />
       </div>
       <Workshop line={open.line} stops={open.stops} rail={rail} reached={reached} />
-      <Album stops={open.stops} rail={rail} reached={reached} />
+      <Album stops={open.stops} net={net} rail={rail} reached={reached} />
     </div>
   );
 }
@@ -183,7 +186,6 @@ function LineView({
                   <span className={`mt-1.5 max-w-[7.5rem] text-xs leading-tight ${here ? "font-semibold" : "text-muted"}`}>
                     {here ? st.tool.name : "Tool waiting"}
                   </span>
-                  {item.badge ? <span className="mt-1 rounded bg-accent/10 px-1.5 text-[0.65rem] font-medium text-accent-text">{item.badge}</span> : null}
                 </Link>
               </li>
             );
@@ -198,6 +200,7 @@ function LineView({
 }
 
 function Workshop({ line, stops, rail, reached }: { line: Line; stops: Stop[]; rail: RailState; reached: (slug: string) => boolean }) {
+  const Working = WORKING[line.id];
   const fitted = rail.fitted[line.id] ?? [];
   const built = rail.built[line.id];
   const have = stops.filter((st) => reached(st.slug));
@@ -306,6 +309,7 @@ function Workshop({ line, stops, rail, reached }: { line: Line; stops: Stop[]; r
           )}
         </div>
       </div>
+      {built && Working ? <Working stations={stops} /> : null}
     </section>
   );
 }
@@ -340,10 +344,10 @@ function Machine({ stops, on }: { stops: Stop[]; on: string }) {
   );
 }
 
-function Album({ stops, rail, reached }: { stops: Stop[]; rail: RailState; reached: (slug: string) => boolean }) {
+function Album({ stops, net, rail, reached }: { stops: Stop[]; net: RailNet; rail: RailState; reached: (slug: string) => boolean }) {
   // One ticket per station reached: the one it handed over for the ride after it.
   const tickets = stops.flatMap((st) => {
-    const to = nextStop(st.slug);
+    const to = net.nextStop(st.slug);
     return reached(st.slug) && to ? [{ from: st, to, arrival: rail.arrived[st.slug] }] : [];
   });
   if (!tickets.length) return null;

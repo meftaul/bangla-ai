@@ -339,7 +339,7 @@ export function RowToNumber() {
             <div key={i} className={`contents ${FADE}`}>
               <span className="font-mono">{bn(i + 1)}</span>
               <span>
-                {bn(w.lo + halfAt(i))} বা বেশি? <span className="text-xs text-muted">(বাঁয়ে {bn(halfAt(i))}টা)</span>
+                {bn(w.lo + halfAt(i))} বা বেশি? <span className="text-xs text-muted">(বামে {bn(halfAt(i))}টা)</span>
               </span>
               <b className={a ? "text-cat-violet" : "text-cat-teal"}>{a ? "হ্যাঁ" : "না"}</b>
               <span className="text-right font-mono">{a ? `+${bn(halfAt(i))}` : "+০"}</span>

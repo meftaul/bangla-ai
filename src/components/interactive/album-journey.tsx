@@ -1016,7 +1016,7 @@ export function TryLayerSize() {
     }
   return (
     <>
-      <svg viewBox="0 0 240 184" role="img" aria-label="বাঁয়ে 300 input, ডানে 100 output, প্রতিটা dot 10 টা; W এর প্রতিটা weight একটা তার" className="mx-auto block h-auto w-full rounded-lg bg-white max-w-[17rem]">
+      <svg viewBox="0 0 240 184" role="img" aria-label="বামে 300 input, ডানে 100 output, প্রতিটা dot 10 টা; W এর প্রতিটা weight একটা তার" className="mx-auto block h-auto w-full rounded-lg bg-white max-w-[17rem]">
         {shown && (
           <g key={`${rows}-${cols}-${miss}`}>
             {good && <Draw d={good} ms={800} strokeWidth={0.25} className="stroke-cat-blue/60" />}

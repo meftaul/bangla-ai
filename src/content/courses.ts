@@ -39,6 +39,7 @@ export const COURSES: Course[] = [
     title: "Math for AI",
     description: "The maths under the hood, from first principles — starting with what an image actually is.",
     items: [
+      "math_for_ai/00_why_math",
       "math_for_ai/01_intro",
       "math_for_ai/01c_image_numbers",
       "math_for_ai/01d_color_image",

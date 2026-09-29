@@ -1592,7 +1592,7 @@ export function SolveFig() {
   const cell = 9;
   return (
     <Scene scene={s} caption={say(X9B_SAY, k)}>
-      <svg viewBox="0 0 220 84" className="mx-auto h-auto w-full max-w-[14rem]" role="img" aria-label="বাঁয়ে inv: পুরা n × n ঘর ভরা; ডানে solve: শুধু একটা column">
+      <svg viewBox="0 0 220 84" className="mx-auto h-auto w-full max-w-[14rem]" role="img" aria-label="বামে inv: পুরা n × n ঘর ভরা; ডানে solve: শুধু একটা column">
         <text x={50} y={12} textAnchor="middle" fontSize={10} fontWeight={700} fontFamily={MONO} fill={INK}>
           inv(A)
         </text>

@@ -1,0 +1,167 @@
+export const metadata = {
+  title: "Math for AI 1.0 — ফোন কখনো পাখি দেখে নাই",
+  description: "আম্মুর ফোনে 4000 ছবি। Search এ bird লিখতেই এক second এ বারোটা পাখির ছবি। অথচ ফোন কখনো পাখি দেখে নাই, জানে শুধু গুণ আর যোগ। তাহলে পাখি খুঁজলো কীভাবে?",
+  type: "article",
+};
+
+{/* The course's opening journey, a short hook: why AI needs maths. It
+    replaces 01_intro (one long article) as the first lesson; 01_intro stays
+    in the repo for the author to unpublish.
+
+    Screen 1 seals the reader's bet on how many sums Ammu's phone did to find
+    the doyel photo, and asks how sums alone can find a bird. Three small
+    pieces, no more: file names say nothing (Nasib's claim), a photo is a grid
+    of numbers, and a word becomes numbers too, an arrow that points the same
+    way as the bird photos. The end settles the bet and leaves the rest as
+    open questions for the course. 5 steps.
+
+    The screens live in components/interactive/whymath-journey.tsx. */}
+
+import { Journey, Step, Then } from "@/components/journey/journey";
+import {
+  BirdSearch,
+  OnlySums,
+  SumsBet,
+  BlackBox,
+  NasibNames,
+  FileNames,
+  NameDecoded,
+  ZoomBird,
+  PixelCount,
+  NasibWord,
+  ThingCards,
+  BothBecomeArrows,
+  NightCharge,
+  Finale,
+  OpenQuestions,
+} from "@/components/interactive/whymath-journey";
+
+<Journey title="পাখির খোঁজ · 1.0">
+
+<Step>
+
+শীতের ছুটির সকাল। বারান্দায় রোদ পড়ছে। আম্মু চা হাতে গ্রিলের দিকে তাকিয়ে ছিলেন।
+
+আম্মু বললেন, গত শীতে এই গ্রিলে একটা দোয়েল বসেছিল। ছবি তুলেছিলাম। খুঁজে দে তো।
+
+আম্মুর ফোনে ছবি 4000 এর বেশি। ফাহিম scroll করে, scroll করে। দোয়েল আসে না।
+
+নাসিব ফোনটা নিয়ে search এ লিখলো bird। এক second। বারোটা পাখির ছবি। দোয়েলটাও আছে।
+
+<BirdSearch story />
+
+নাসিব বললো, ফোন পাখি চেনে। ভিতরে AI আছে।
+
+সোম মাথা নাড়লো। চেনে না। ফোন শুধু গুণ আর যোগ করে। calculation করা ছাড়া ফোন আর কিছু পারে না।
+
+নাসিব হাসলো। গুণ-যোগ দিয়ে পাখি চিনে ফেলে? তাহলে কতবার গুণ করা লাগল সেটাও বল।
+
+<OnlySums story />
+
+আপনার আন্দাজ কী? এই বারোটা ছবি খুঁজে বের করতে আম্মুর ফোনে মোট কয়টা গুণ-যোগ হয়েছে?
+
+<SumsBet />
+
+<Then>
+
+আন্দাজটা তোলা থাকলো। শেষে মিলায়ে দেখব।
+
+তবে আসল প্রশ্ন আরেকটা। ফোন কখনো পাখি দেখে নাই। দোয়েল কী, জানেও না। তাহলে শুধু গুণ-যোগ করে পাখি খুঁজলো কীভাবে?
+
+<BlackBox />
+
+</Then>
+
+</Step>
+
+<Step>
+
+নাসিব হাল ছাড়লো না। বললো, আরে, ফোন ছবির নাম পড়ে। নামে bird লেখা থাকে।
+
+<NasibNames story />
+
+আম্মুর gallery খুলুন। ছবি উল্টালে পেছনে নাম।
+
+<FileNames />
+
+<Then>
+
+ফোনের camera ছবির নাম দেয় নিজে নিজে। তারিখ আর সময় দিয়ে। কোথাও পাখি লেখা নাই।
+
+<NameDecoded />
+
+**নাসিবের যুক্তি ধোপে টিকলো না।** তাহলে ফোনের হাতে থাকলো শুধু ছবিটা নিজে। কিন্তু ফোনের তো চোখ নাই। ছবির দিকে ও তাকায় কীভাবে?
+
+</Then>
+
+</Step>
+
+<Step>
+
+উত্তর আছে ছবির ভিতরেই। দোয়েলের ছবিটা zoom করতে থাকুন। যতক্ষণ না ফোন যা দেখে, আপনিও তা দেখেন। হেহ সংখ্যা কীভাবে? সেটাই সামনের journey-তে জানব।  
+
+<ZoomBird />
+
+<Then>
+
+খেয়াল করেছেন? কাছে গেলে ছবিটা ছোট ছোট ঘর হয়ে যাচ্ছে। প্রতিটা ঘরে একটা করে সংখ্যা। ঘুটঘুটে কালো হলে 0, ধবধবে সাদা হলে 255। মাঝের ধূসর গুলো মাঝামাঝি।
+
+ফোন দোয়েল save রাখ করে না। save করে সংখ্যা। আর কতগুলা সংখ্যা,সেটা দেখুন।
+
+<PixelCount />
+
+</Then>
+
+</Step>
+
+<Step>
+
+নাসিব এবার আসল প্যাঁচটা ধরলো। ছবি না হয় সংখ্যা। কিন্তু আমি তো লিখছি bird। শব্দ তো আর ছবি না।
+
+<NasibWord story />
+
+ফোনের চালাকিটা হলো, শব্দকেও সংখ্যা বানানো। পাঁচটা জিনিসকে দুইটা সংখ্যা দিয়ে লিখে দেখি। কতটা উড়তে পারে, আর কতটা পানিতে থাকে। Graph paper না চিনে থাকলে সামনের journey-তে সেটাও চিনব।
+
+<ThingCards />
+
+<Then>
+
+দেখুন, দোয়েল, কাক আর bird শব্দের arrow প্রায় একই দিকে। ইলিশ একদম অন্য দিকে। ছবি হোক বা শব্দ, একই রকম জিনিস একই দিকে। ঘাবড়ানোর কিছু নাই। এখন যেটাকে অতীব জটিল বস্তু মনে হচ্ছে। পুরো journey শেষ হলে মনে হবে এমনি তো হওয়ার কথা ছিল।
+
+<BothBecomeArrows />
+
+ফোনও এটাই করে। Bird এর arrow এর সাথে 4000 ছবির arrow মিলিয়ে দেখে, কোনগুলো একই দিকে। শুধু list এ দুইটা না, 512 টা করে সংখ্যা। এগুলা কীভাবে হয় সেটাও আমরা একটা journey-তে শিখব।
+
+</Then>
+
+</Step>
+
+<Step>
+
+## শেষ! ফোন কয়টা গুণ করলো
+
+রাত হয়ে গেছে। ঘর অন্ধকার। আম্মুর ফোন টেবিলে, charge এ দেয়া। একটু পর পর screen জ্বলে উঠছে।
+
+<NightCharge story />
+
+ফোন আসল কাজটা আগেই করে রাখে। রাতে, charge এর সময়। প্রতিটা ছবিকে একবার সংখ্যার list বানায়। তারপর search এর সময় বাকি থাকে শুধু মিলানো। এবার গুনে দেখি।
+
+<Finale />
+
+<Then>
+
+বাজির মীমাংসা: 1 লাখ কোটির বেশি। ফোন একটাও পাখি চেনে নাই। দোয়েল খুঁজেছে শুধু সংখ্যা বানিয়ে আর গুণ-যোগ করে। অনেক অনেক বার।
+
+**AI এ আসলে কোনো জাদু নাই। আছে সংখ্যা, আর সংখ্যার উপর গুণ-যোগ।** এই journey তে আমরা AI এর এই রহস্য ভেদ করার mission এ নামব। 
+
+<OpenQuestions />
+
+<LessonLink href="/dashboard/articles/math_for_ai/01c_image_numbers" eyebrow="পরের lesson" title="ছবি থেকে সংখ্যা, একটা ফোনকলে">
+  প্রথম প্রশ্নটা দিয়ে শুরু। একটা পাখির ছবি কীভাবে সংখ্যা হয়, নিজের হাতে করে দেখবেন।
+</LessonLink>
+
+</Then>
+
+</Step>
+
+</Journey>

@@ -187,6 +187,8 @@ function Board({
   onTile,
   onHover,
   onKeyDown,
+  className = "mx-auto my-5 w-full",
+  rest = 2.5,
   children,
 }: {
   label: string;
@@ -195,12 +197,22 @@ function Board({
   onTile?: (c: Cell) => void;
   onHover?: (c: Cell | null) => void;
   onKeyDown?: (e: ReactKeyboardEvent<SVGSVGElement>) => void;
+  /** the wrapper's sizing; the default centres the board on its own line */
+  className?: string;
+  /** rem the rest of the screen takes (the board's margins, the controls under it) */
+  rest?: number;
   children?: ReactNode;
 }) {
   const ref = useRef<SVGSVGElement>(null);
   const cell = (e: { clientX: number; clientY: number }) => (ref.current ? tileAt(ref.current, e) : null);
+  // The board is taller than wide, so on a short screen it is the height that
+  // runs out: it takes the journey screen's height (100cqh, the Journey's
+  // scroller) less its padding and the rest, never scrolling the screen.
+  // Outside a Journey, cqh falls back to the viewport.
+  // Beside its controls (Side), the board's rest is only its own margins.
+  const fit = `min(22rem, max(9rem, (100cqh - 3.75rem - var(--board-rest, ${rest}rem)) * ${VW / VH}))`;
   return (
-    <div className="mx-auto my-5 w-full max-w-[22rem]">
+    <div className={className} style={{ maxWidth: fit }}>
       <svg
         ref={ref}
         viewBox={`0 0 ${VW} ${VH}`}
@@ -225,6 +237,25 @@ function Board({
         {floor && <Floor paper={paper} />}
         {children}
       </svg>
+    </div>
+  );
+}
+
+/**
+ * A board and its controls. Stacked on a phone; on a screen wider than tall (a
+ * laptop, where the height runs out first) the controls stand beside the board,
+ * so the board only has to fit the screen's height, not the controls' as well.
+ * `before` sits above the board when stacked, and heads the column beside it.
+ */
+function Side({ board, before, children }: { board: ReactNode; before?: ReactNode; children: ReactNode }) {
+  return (
+    <div className="flex flex-col [@container(min-width:34rem)_and_(min-aspect-ratio:6/5)]:grid [@container(min-width:34rem)_and_(min-aspect-ratio:6/5)]:grid-cols-[minmax(0,22rem)_minmax(0,1fr)] [@container(min-width:34rem)_and_(min-aspect-ratio:6/5)]:items-center [@container(min-width:34rem)_and_(min-aspect-ratio:6/5)]:gap-x-6 [@container(min-width:34rem)_and_(min-aspect-ratio:6/5)]:[--board-rest:2.5rem]">
+      {board}
+      {/* stacked, its blocks join the column (so `before` can go first); beside, it is the column */}
+      <div className="contents [@container(min-width:34rem)_and_(min-aspect-ratio:6/5)]:block">
+        {before ? <div className="order-first">{before}</div> : null}
+        {children}
+      </div>
     </div>
   );
 }
@@ -370,9 +401,9 @@ const choiceBtn =
 // ---------------------------------------------------------------------------
 // 1 · Where are you? (And, on paper later: where does the pencil dot go?)
 
-/** "বাঁয়ে আর ওপরে" — which way to go from a missed tap back to the middle. */
+/** "বামে আর ওপরে" — which way to go from a missed tap back to the middle. */
 function towardMiddle([x, y]: Cell) {
-  return [x > 1 ? "বাঁয়ে" : x < -1 ? "ডানে" : "", y > 1 ? "নিচে" : y < -1 ? "ওপরে" : ""].filter(Boolean).join(" আর ");
+  return [x > 1 ? "বামে" : x < -1 ? "ডানে" : "", y > 1 ? "নিচে" : y < -1 ? "ওপরে" : ""].filter(Boolean).join(" আর ");
 }
 
 export function FindMiddle({ paper = false }: { paper?: boolean }) {
@@ -457,7 +488,7 @@ export function MeetShiku() {
 
 const PAD_KEYS: (Dir | "diag" | null)[] = ["diag", "U", "diag", "L", null, "R", "diag", "D", "diag"];
 const ARROW: Record<Dir, string> = { R: "→", L: "←", U: "↑", D: "↓" };
-const ARROW_NAME: Record<Dir, string> = { R: "ডানে", L: "বাঁয়ে", U: "উপরে", D: "নিচে" };
+const ARROW_NAME: Record<Dir, string> = { R: "ডানে", L: "বামে", U: "উপরে", D: "নিচে" };
 const DIAG: Record<number, string> = { 0: "↖", 2: "↗", 6: "↙", 8: "↘" };
 const DRIVE_GOAL = 5;
 
@@ -516,52 +547,56 @@ export function DrivePad() {
 
   return (
     <>
-      <Board label="drive Shiku one tile at a time">
-        <Trail cells={trail} className="fill-cat-violet/20" />
-        <You />
-        <Ball at={BALL} />
-        <Bot at={at} shake={bump} />
-      </Board>
+      {/* The pad sits beside the room, so the whole screen fits without
+          scrolling — on a phone too, where the pad shrinks. */}
+      <div className="mx-auto my-5 flex w-full max-w-[34rem] items-center gap-3 sm:gap-5">
+        <Board label="drive Shiku one tile at a time" className="min-w-0 flex-1">
+          <Trail cells={trail} className="fill-cat-violet/20" />
+          <You />
+          <Ball at={BALL} />
+          <Bot at={at} shake={bump} />
+        </Board>
 
-      <div className="flex items-center justify-center gap-5">
-        <div className="grid w-44 grid-cols-3 gap-1.5">
-          {PAD_KEYS.map((k, i) =>
-            k === null ? (
-              <div key={i} className="grid place-items-center text-center font-mono text-xs leading-tight text-muted tabular-nums">
-                {bn(moves)}
-                <br />
-                চাল
-              </div>
-            ) : k === "diag" ? (
-              <button
-                key={i}
-                type="button"
-                aria-label="কোণাকুনি"
-                onClick={() => move("diag")}
-                className="grid aspect-square cursor-pointer place-items-center rounded-xl border border-dashed border-border text-lg text-muted/60 transition-colors hover:border-danger/50 hover:text-danger"
-              >
-                {DIAG[i]}
-              </button>
-            ) : (
-              <button
-                key={i}
-                type="button"
-                aria-label={ARROW_NAME[k]}
-                onClick={() => move(k)}
-                className="grid aspect-square cursor-pointer place-items-center rounded-xl border-b-4 border-cat-violet/50 bg-cat-violet/15 text-xl font-bold text-cat-violet transition-all hover:bg-cat-violet/25 active:translate-y-0.5 active:border-b-2"
-              >
-                {ARROW[k]}
-              </button>
-            ),
-          )}
+        <div className="flex w-[7.5rem] shrink-0 flex-col items-center gap-3 sm:w-44">
+          <div className="grid w-full grid-cols-3 gap-1 sm:gap-1.5">
+            {PAD_KEYS.map((k, i) =>
+              k === null ? (
+                <div key={i} className="grid place-items-center text-center font-mono text-xs leading-tight text-muted tabular-nums">
+                  {bn(moves)}
+                  <br />
+                  চাল
+                </div>
+              ) : k === "diag" ? (
+                <button
+                  key={i}
+                  type="button"
+                  aria-label="কোণাকুনি"
+                  onClick={() => move("diag")}
+                  className="grid aspect-square cursor-pointer place-items-center rounded-lg border border-dashed border-border text-base text-muted/60 transition-colors hover:border-danger/50 hover:text-danger sm:rounded-xl sm:text-lg"
+                >
+                  {DIAG[i]}
+                </button>
+              ) : (
+                <button
+                  key={i}
+                  type="button"
+                  aria-label={ARROW_NAME[k]}
+                  onClick={() => move(k)}
+                  className="grid aspect-square cursor-pointer place-items-center rounded-lg border-b-4 border-cat-violet/50 bg-cat-violet/15 text-lg font-bold text-cat-violet transition-all hover:bg-cat-violet/25 active:translate-y-0.5 active:border-b-2 sm:rounded-xl sm:text-xl"
+                >
+                  {ARROW[k]}
+                </button>
+              ),
+            )}
+          </div>
+          <button
+            type="button"
+            onClick={reset}
+            className="cursor-pointer rounded-full border border-border px-3 py-1.5 text-xs whitespace-nowrap text-muted transition-colors hover:border-accent hover:text-foreground sm:text-sm"
+          >
+            ↺ শুরুর জায়গায়
+          </button>
         </div>
-        <button
-          type="button"
-          onClick={reset}
-          className="cursor-pointer rounded-full border border-border px-3 py-1.5 text-sm text-muted transition-colors hover:border-accent hover:text-foreground"
-        >
-          ↺ শুরুর জায়গায়
-        </button>
       </div>
 
       {msg && (
@@ -609,31 +644,33 @@ export function VagueOrders() {
   const reply = VAGUE.find((v) => v.id === pick);
 
   return (
-    <>
-      <Board label="Shiku next to you, the ball in the far corner">
-        {pick === "diag" && (
-          <g key={n}>
-            <Draw d={`M${mx(0)} ${my(0)}L${mx(CX)} ${my(CY)}`} strokeWidth={1.5} className="stroke-danger/70" />
-            <text
-              x={(mx(0) + mx(CX)) / 2}
-              y={(my(0) + my(CY)) / 2 + 5}
-              textAnchor="middle"
-              className={`${POP} delay-700 fill-danger text-[16px] font-bold`}
-            >
-              ✕
-            </text>
-          </g>
-        )}
-        <You />
-        <Ball at={BALL} />
-        <Bot shake={n} />
-        {pick === "fetch" && (
-          <text key={n} x={mx(0) + 8} y={my(0) - 10} className={`${POP} fill-danger text-[14px] font-bold`}>
-            ?
-          </text>
-        )}
-      </Board>
-
+    <Side
+      board={
+          <Board label="Shiku next to you, the ball in the far corner" rest={11.5}>
+            {pick === "diag" && (
+              <g key={n}>
+                <Draw d={`M${mx(0)} ${my(0)}L${mx(CX)} ${my(CY)}`} strokeWidth={1.5} className="stroke-danger/70" />
+                <text
+                  x={(mx(0) + mx(CX)) / 2}
+                  y={(my(0) + my(CY)) / 2 + 5}
+                  textAnchor="middle"
+                  className={`${POP} delay-700 fill-danger text-[16px] font-bold`}
+                >
+                  ✕
+                </text>
+              </g>
+            )}
+            <You />
+            <Ball at={BALL} />
+            <Bot shake={n} />
+            {pick === "fetch" && (
+              <text key={n} x={mx(0) + 8} y={my(0) - 10} className={`${POP} fill-danger text-[14px] font-bold`}>
+                ?
+              </text>
+            )}
+          </Board>
+      }
+    >
       <div className="text-sm font-medium text-muted">Shiku-কে বলুন:</div>
       <div className="mt-2 flex flex-col gap-2">
         {VAGUE.map((v) => (
@@ -658,7 +695,7 @@ export function VagueOrders() {
       <Task done={tried.length === VAGUE.length}>
         দুইটা instruction-ই দিয়ে দেখুন ({bn(tried.length)}/{bn(VAGUE.length)})
       </Task>
-    </>
+    </Side>
   );
 }
 
@@ -721,32 +758,35 @@ export function BuildOrder() {
   const rest = out?.kind === "short" ? out.rest : null;
 
   return (
-    <>
-      <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-3 rounded-2xl bg-cat-violet/5 px-4 py-4">
-        <span>ডানে</span>
-        <Stepper label="ডানে" value={r} onChange={setR} disabled={w.running} />
-        <span>ঘর, তারপর উপরে</span>
-        <Stepper label="উপরে" value={u} onChange={setU} disabled={w.running} />
-        <span>ঘর</span>
-        <button
-          type="button"
-          onClick={run}
-          disabled={w.running}
-          className="ml-1 inline-flex h-10 cursor-pointer items-center gap-1.5 rounded-full bg-cat-violet px-4 font-semibold text-white transition-all hover:-translate-y-px disabled:cursor-default disabled:opacity-50 disabled:hover:translate-y-0"
-        >
-          ▶ চালান
-        </button>
-      </div>
-
-      <Board label="Shiku walks your instruction">
-        <Trail cells={w.walked} />
-        {out?.kind === "wall" && <Wall side={out.side} />}
-        <You />
-        <Bot at={w.here} shake={out?.kind === "wall" ? tries : 0} />
-        <Ball at={BALL} ping={out?.kind === "ball"} />
-      </Board>
-
-      <div className="text-center font-mono text-sm text-muted">
+    <Side
+      before={
+          <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-3 rounded-2xl bg-cat-violet/5 px-4 py-4">
+            <span>ডানে</span>
+            <Stepper label="ডানে" value={r} onChange={setR} disabled={w.running} />
+            <span>ঘর, তারপর উপরে</span>
+            <Stepper label="উপরে" value={u} onChange={setU} disabled={w.running} />
+            <span>ঘর</span>
+            <button
+              type="button"
+              onClick={run}
+              disabled={w.running}
+              className="ml-1 inline-flex h-10 cursor-pointer items-center gap-1.5 rounded-full bg-cat-violet px-4 font-semibold text-white transition-all hover:-translate-y-px disabled:cursor-default disabled:opacity-50 disabled:hover:translate-y-0"
+            >
+              ▶ চালান
+            </button>
+          </div>
+      }
+      board={
+          <Board label="Shiku walks your instruction" rest={8.5}>
+            <Trail cells={w.walked} />
+            {out?.kind === "wall" && <Wall side={out.side} />}
+            <You />
+            <Bot at={w.here} shake={out?.kind === "wall" ? tries : 0} />
+            <Ball at={BALL} ping={out?.kind === "ball"} />
+          </Board>
+      }
+    >
+      <div className="mt-3 text-center font-mono text-sm text-muted">
         Shiku হাঁটল: ডানে <b className="text-foreground">{bn(w.here[0])}</b> · উপরে{" "}
         <b className="text-foreground">{bn(w.here[1])}</b>
       </div>
@@ -767,7 +807,7 @@ export function BuildOrder() {
         </Say>
       )}
       <Task done={out?.kind === "ball"}>সংখ্যা দুইটা ঠিক করে Shiku-কে ball পর্যন্ত পাঠান।</Task>
-    </>
+    </Side>
   );
 }
 
@@ -796,19 +836,22 @@ export function PredictSwap() {
   };
 
   return (
-    <>
-      <div className="rounded-2xl bg-cat-violet/5 px-4 py-3 text-center">
-        আপনি বললেন: <b className="font-semibold">“ডানে ১২ ঘর, তারপর উপরে ১০ ঘর”</b>
-      </div>
-
-      <Board label="Shiku walks right 12, then up 10">
-        <Trail cells={w.walked} />
-        {over && SWAPPED.walled && <Wall side={SWAPPED.walled} />}
-        <You />
-        <Ball at={BALL} />
-        <Bot at={w.here} shake={over ? 1 : 0} />
-      </Board>
-
+    <Side
+      before={
+          <div className="mb-3 rounded-2xl bg-cat-violet/5 px-4 py-3 text-center">
+            আপনি বললেন: <b className="font-semibold">“ডানে ১২ ঘর, তারপর উপরে ১০ ঘর”</b>
+          </div>
+      }
+      board={
+          <Board label="Shiku walks right 12, then up 10" rest={18.75}>
+            <Trail cells={w.walked} />
+            {over && SWAPPED.walled && <Wall side={SWAPPED.walled} />}
+            <You />
+            <Ball at={BALL} />
+            <Bot at={w.here} shake={over ? 1 : 0} />
+          </Board>
+      }
+    >
       <div className="text-sm font-medium text-muted">কী হবে বলে মনে হয়?</div>
       <div className="mt-2 flex flex-col gap-2">
         {GUESSES.map((g, i) => {
@@ -842,7 +885,7 @@ export function PredictSwap() {
       </div>
       {over && <Say tone="bad">ধাম! ডানে ১০ ঘর যেতেই দেয়াল। বাকি ২ ঘর যাব কোথায়?</Say>}
       <Task done={over}>আগে ভাবুন, তারপর একটা বেছে নিন — Shiku তখনই হাঁটা Start করবে।</Task>
-    </>
+    </Side>
   );
 }
 
@@ -891,17 +934,19 @@ export function TwoRoutes() {
   const cur = ROUTES.find((x) => x.id === active);
 
   return (
-    <>
-      <Board label="two routes to the ball">
-        {ROUTES.filter((r) => done.includes(r.id)).map((r) => (
-          <Draw key={r.id} d={r.d} strokeWidth={2.5} ms={900} className={r.line} />
-        ))}
-        <Trail cells={w.walked} className={cur?.trail} />
-        <You />
-        <Ball at={BALL} ping={done.length === ROUTES.length} />
-        <Bot at={w.here} />
-      </Board>
-
+    <Side
+      board={
+          <Board label="two routes to the ball" rest={11.5}>
+            {ROUTES.filter((r) => done.includes(r.id)).map((r) => (
+              <Draw key={r.id} d={r.d} strokeWidth={2.5} ms={900} className={r.line} />
+            ))}
+            <Trail cells={w.walked} className={cur?.trail} />
+            <You />
+            <Ball at={BALL} ping={done.length === ROUTES.length} />
+            <Bot at={w.here} />
+          </Board>
+      }
+    >
       <div className="text-sm font-medium text-muted">Shiku-কে বলুন:</div>
       <div className="mt-2 flex flex-col gap-2">
         {ROUTES.map((r) => (
@@ -921,7 +966,7 @@ export function TwoRoutes() {
       <Task done={done.length === ROUTES.length}>
         দুইটা রাস্তাই চালিয়ে দেখুন ({bn(done.length)}/{bn(ROUTES.length)})
       </Task>
-    </>
+    </Side>
   );
 }
 
@@ -959,7 +1004,7 @@ export function BallAddress({ goal = "spots" }: { goal?: "spots" | "negative" })
     if (goal === "spots" && next.length === SPOTS_GOAL) pass("address বলতে দুইটা সংখ্যাই যথেষ্ট।");
     if (goal === "negative" && (c[0] < 0 || c[1] < 0)) {
       setNeg(true);
-      pass("বাঁয়ে বা নিচে মানে সংখ্যার আগে “−”।");
+      pass("বামে বা নিচে মানে সংখ্যার আগে “−”।");
     }
   };
 
@@ -977,38 +1022,41 @@ export function BallAddress({ goal = "spots" }: { goal?: "spots" | "negative" })
   const [bx, by] = ball;
 
   return (
-    <>
-      <Board
-        label={`the ball is ${Math.abs(bx)} tiles ${bx < 0 ? "left" : "right"} and ${Math.abs(by)} tiles ${
-          by < 0 ? "down" : "up"
-        }. Tap a tile, or use the arrow keys, to move it.`}
-        onTile={drop}
-        onKeyDown={onKey}
-      >
-        <path d={`M${mx(0)} ${my(0)}H${mx(sx)}`} strokeWidth={2.5} strokeLinecap="round" className="fill-none stroke-cat-blue" />
-        <path d={`M${mx(sx)} ${my(0)}V${my(sy)}`} strokeWidth={2.5} strokeLinecap="round" className="fill-none stroke-cat-coral" />
-        {sx !== 0 && (
-          <text x={(mx(0) + mx(sx)) / 2} y={my(0) - T * 0.55} textAnchor="middle" className="fill-cat-blue text-[8px] font-semibold">
-            {bx < 0 ? "বাঁয়ে" : "ডানে"} {bn(Math.abs(sx))}
-          </text>
-        )}
-        {sy !== 0 && (
-          <text
-            x={mx(sx) + (sx > 0 ? -T * 0.6 : T * 0.6)}
-            y={(my(0) + my(sy)) / 2}
-            textAnchor={sx > 0 ? "end" : "start"}
-            className="fill-cat-coral text-[8px] font-semibold"
+    <Side
+      board={
+          <Board
+            label={`the ball is ${Math.abs(bx)} tiles ${bx < 0 ? "left" : "right"} and ${Math.abs(by)} tiles ${
+              by < 0 ? "down" : "up"
+            }. Tap a tile, or use the arrow keys, to move it.`}
+            onTile={drop}
+            rest={11.25}
+            onKeyDown={onKey}
           >
-            {by < 0 ? "নিচে" : "উপরে"} {bn(Math.abs(sy))}
-          </text>
-        )}
-        <You />
-        <Ball at={ball} />
-        {w.running && <circle cx={mx(sx)} cy={my(sy)} r={T * 0.22} className="fill-foreground" />}
-      </Board>
-
+            <path d={`M${mx(0)} ${my(0)}H${mx(sx)}`} strokeWidth={2.5} strokeLinecap="round" className="fill-none stroke-cat-blue" />
+            <path d={`M${mx(sx)} ${my(0)}V${my(sy)}`} strokeWidth={2.5} strokeLinecap="round" className="fill-none stroke-cat-coral" />
+            {sx !== 0 && (
+              <text x={(mx(0) + mx(sx)) / 2} y={my(0) - T * 0.55} textAnchor="middle" className="fill-cat-blue text-[8px] font-semibold">
+                {bx < 0 ? "বামে" : "ডানে"} {bn(Math.abs(sx))}
+              </text>
+            )}
+            {sy !== 0 && (
+              <text
+                x={mx(sx) + (sx > 0 ? -T * 0.6 : T * 0.6)}
+                y={(my(0) + my(sy)) / 2}
+                textAnchor={sx > 0 ? "end" : "start"}
+                className="fill-cat-coral text-[8px] font-semibold"
+              >
+                {by < 0 ? "নিচে" : "উপরে"} {bn(Math.abs(sy))}
+              </text>
+            )}
+            <You />
+            <Ball at={ball} />
+            {w.running && <circle cx={mx(sx)} cy={my(sy)} r={T * 0.22} className="fill-foreground" />}
+          </Board>
+      }
+    >
       <div className="mx-auto grid max-w-xs gap-1.5 rounded-2xl border border-border px-4 py-3 text-[0.95rem]">
-        <AddrRow word={bx < 0 ? "বাঁয়ে" : "ডানে"} n={Math.abs(sx)} axis="x" v={sx} tone="text-cat-blue" />
+        <AddrRow word={bx < 0 ? "বামে" : "ডানে"} n={Math.abs(sx)} axis="x" v={sx} tone="text-cat-blue" />
         <AddrRow word={by < 0 ? "নিচে" : "উপরে"} n={Math.abs(sy)} axis="y" v={sy} tone="text-cat-coral" />
         <div className="mt-1 border-t border-border pt-2 text-center font-mono text-2xl font-semibold">
           (<span className="text-cat-blue">{sg(sx)}</span>, <span className="text-cat-coral">{sg(sy)}</span>)
@@ -1019,7 +1067,7 @@ export function BallAddress({ goal = "spots" }: { goal?: "spots" | "negative" })
         <div className="mt-3 rounded-xl bg-cat-amber/10 px-3.5 py-2.5 text-[0.95rem] leading-snug transition duration-300 starting:opacity-0">
           {bx < 0 && (
             <>
-              বাঁয়ে {bn(-bx)} ঘর = ডানে <b className="font-semibold">−{bn(-bx)}</b> ঘর।{" "}
+              বামে {bn(-bx)} ঘর = ডানে <b className="font-semibold">−{bn(-bx)}</b> ঘর।{" "}
             </>
           )}
           {by < 0 && (
@@ -1037,9 +1085,9 @@ export function BallAddress({ goal = "spots" }: { goal?: "spots" | "negative" })
           {bn(SPOTS_GOAL)})
         </Task>
       ) : (
-        <Task done={neg}>এবার ball-টা আপনার বাঁয়ে বা নিচে কোথাও রাখুন।</Task>
+        <Task done={neg}>এবার ball-টা আপনার বামে বা নিচে কোথাও রাখুন।</Task>
       )}
-    </>
+    </Side>
   );
 }
 
@@ -1063,7 +1111,7 @@ export function PaperReveal() {
 
   return (
     <>
-      <Board label={paper ? "a blank white sheet of paper" : "the room, fading away"} floor={false}>
+      <Board label={paper ? "a blank white sheet of paper" : "the room, fading away"} floor={false} rest={5.25}>
         <g className={`transition-opacity duration-1000 ${paper ? "opacity-0" : "opacity-100"}`}>
           <Floor paper={false} />
           <You />
@@ -1175,7 +1223,7 @@ export function NameAxes() {
 
   return (
     <>
-      <Board paper label="graph paper with a dot in the middle">
+      <Board paper label="graph paper with a dot in the middle" rest={5.75}>
         {x && (
           <g>
             <Draw d={X_AXIS} strokeWidth={1.3} className="stroke-cat-blue" />
@@ -1210,7 +1258,7 @@ export function NameAxes() {
           onClick={() => draw("x")}
           className="inline-flex cursor-pointer items-center gap-2 rounded-full border-2 border-cat-blue px-4 py-2 font-semibold text-cat-blue transition-colors hover:bg-cat-blue/10 disabled:cursor-default disabled:opacity-40 disabled:hover:bg-transparent"
         >
-          ↔ ডানে-বাঁয়ে দাগ: <i className="font-bold">x</i>
+          ↔ ডানে-বামে দাগ: <i className="font-bold">x</i>
         </button>
         <button
           type="button"
@@ -1246,7 +1294,7 @@ export function ReadAddresses() {
     const next = [...seen, i];
     setSeen(next);
     if (next.length === MYSTERY.length)
-      pass("ডানে-ওপরে +, বাঁয়ে-নিচে −।");
+      pass("ডানে-ওপরে +, বামে-নিচে −।");
   };
 
   return (
@@ -1319,10 +1367,10 @@ const TARGETS: Cell[] = [
 ];
 
 function missHint(got: Cell, want: Cell) {
-  if (same(got, [want[1], want[0]])) return "উল্টে গেছে! প্রথম সংখ্যাটা x (ডানে-বাঁয়ে), দ্বিতীয়টা y (ওপরে-নিচে)।";
+  if (same(got, [want[1], want[0]])) return "উল্টে গেছে! প্রথম সংখ্যাটা x (ডানে-বামে), দ্বিতীয়টা y (ওপরে-নিচে)।";
   if (Math.abs(got[0]) === Math.abs(want[0]) && Math.abs(got[1]) === Math.abs(want[1]))
-    return "সংখ্যা ঠিক আছে, দিকটা দেখুন — “−” মানে বাঁয়ে বা নিচে।";
-  return `এটা ${addr(got)}। Origin থেকে ${want[0] < 0 ? "বাঁয়ে" : "ডানে"} ${bn(Math.abs(want[0]))} ঘর, তারপর ${
+    return "সংখ্যা ঠিক আছে, দিকটা দেখুন — “−” মানে বামে বা নিচে।";
+  return `এটা ${addr(got)}। Origin থেকে ${want[0] < 0 ? "বামে" : "ডানে"} ${bn(Math.abs(want[0]))} ঘর, তারপর ${
     want[1] < 0 ? "নিচে" : "ওপরে"
   } ${bn(Math.abs(want[1]))} ঘর গুনে দেখুন।`;
 }
@@ -1359,7 +1407,7 @@ export function FindPoint() {
         ))}
       </div>
 
-      <Board paper label="graph paper — tap the tile with the given address" onTile={target ? tap : undefined} onHover={setHover}>
+      <Board paper label="graph paper — tap the tile with the given address" onTile={target ? tap : undefined} onHover={setHover} rest={5}>
         {hover && target && (
           <rect x={px(hover[0])} y={py(hover[1])} width={T} height={T} className="pointer-events-none fill-cat-blue/20" />
         )}
@@ -1430,7 +1478,7 @@ export function SwapCheck() {
 // ---------------------------------------------------------------------------
 // 16 · The last picture: the whole lesson in one line and one address.
 
-export function Finale() {
+export function Finale({}: { story?: boolean }) {
   return (
     <Board paper label="Shiku's walk to the ball, written as the address (10, 12)">
       <Axes ticks />

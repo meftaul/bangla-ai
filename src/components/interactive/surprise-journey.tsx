@@ -490,7 +490,7 @@ export function CoinArrows() {
             <thead>
               <tr className="text-xs text-muted">
                 <th />
-                <th className="font-normal">First Toss<br />ডানে/বাঁয়ে</th>
+                <th className="font-normal">First Toss<br />ডানে/বামে</th>
                 <th className="font-normal">Second Toss<br />ওপরে/নিচে</th>
               </tr>
             </thead>

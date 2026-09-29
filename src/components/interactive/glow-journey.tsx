@@ -306,7 +306,7 @@ export function GlowBet() {
   const guess = bet === null ? [] : claimDots(d);
   return (
     <>
-      <PatchWall f={X1F} dark label="রাতের দেয়াল; বাঁয়ে উপরে কালকের ছোট heart, ঘন আলোর ফোঁটা; ডানে বড় heart এর দাগ, যত বড় হবে; বাছাই করা বাজির মতো ফোঁটা তাতে; প্রশ্নবোধক" className="max-w-[16rem]" pin={false}>
+      <PatchWall f={X1F} dark label="রাতের দেয়াল; বামে উপরে কালকের ছোট heart, ঘন আলোর ফোঁটা; ডানে বড় heart এর দাগ, যত বড় হবে; বাছাই করা বাজির মতো ফোঁটা তাতে; প্রশ্নবোধক" className="max-w-[16rem]" pin={false}>
         <HeartGlow f={X1F} poly={X1_SMALL} d={12} />
         <Dots f={X1F} pts={shift(HEART_DOTS, X1_SMALL_AT)} r={1.7} />
         <WallText x={X1F.sx(-2.05)} y={X1F.sy(3.8)} size={9}>
