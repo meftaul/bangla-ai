@@ -6,6 +6,7 @@ import { Task, useGate } from "@/components/journey/journey";
 import { Choice, FADE, Nope, POP, Speech, predictLook, primaryBtn, quietBtn, useCountUp, usePlay, useTween } from "@/components/journey/kit";
 import { NORMAL_MAIL, SPAM_MAIL, capsShare, countFree, countLinks } from "./email-data";
 import { bn } from "./figure-kit";
+import { ThingIcon, type ThingKind } from "./thing-icons";
 import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 1.5 — Representation", told as a Journey.
@@ -958,15 +959,15 @@ export function KhichuriVector() {
 // 8 · Six things, one road. Each passes through the same middle box; the
 //     first arrow earns its name only once all six have gone through.
 
-type Thing = { icon: string; name: string; what: string; nums: [string, string][]; more?: boolean; ask: string };
+type Thing = { icon: ThingKind; name: string; what: string; nums: [string, string][]; more?: boolean; ask: string };
 
 const THINGS: Thing[] = [
-  { icon: "🧑‍🎓", name: "নাসিব", what: "ক্লাসের একজন student", nums: [["height", "180"], ["weight", "78"], ["জুতা", "43"], ["বয়স", "18"]], ask: "কার সাথে কার মিল বেশি?" },
-  { icon: "🖼️", name: "একটা photo", what: "3000 × 4000 pixel", nums: [["px 1", "10"], ["px 2", "20"], ["px 3", "15"], ["px 4", "25"]], more: true, ask: "ছবিতে কি পাখি আছে?" },
-  { icon: "✉️", name: "আম্মুর mail", what: "রাত 3:47-এ আসা", nums: [["free", "6"], ["link", "14"], ["caps", "0.31"], ["৩–৫টা", "1"]], ask: "এটা কি spam?" },
-  { icon: "🎬", name: "Toy Story", what: "0 থেকে 5 score", nums: [["drama", "2"], ["comedy", "5"]], ask: "আর কার ভালো লাগবে?" },
-  { icon: "🍲", name: "খিচুড়ি", what: "সোমের প্রিয় খাবার", nums: [["ঝাল", "3"], ["মিষ্টি", "0"], ["টক", "1"]], ask: "সোমের আর কী ভালো লাগবে?" },
-  { icon: "🩺", name: "একজন রোগী", what: "ডাক্তারের চেম্বারে", nums: [["বয়স", "42"], ["bp", "142"], ["sugar", "180"], ["bmi", "27.4"]], ask: "ঝুঁকি আছে কি?" },
+  { icon: "student", name: "নাসিব", what: "ক্লাসের একজন student", nums: [["height", "180"], ["weight", "78"], ["জুতা", "43"], ["বয়স", "18"]], ask: "কার সাথে কার মিল বেশি?" },
+  { icon: "photo", name: "একটা photo", what: "3000 × 4000 pixel", nums: [["px 1", "10"], ["px 2", "20"], ["px 3", "15"], ["px 4", "25"]], more: true, ask: "ছবিতে কি পাখি আছে?" },
+  { icon: "mail", name: "আম্মুর mail", what: "রাত 3:47-এ আসা", nums: [["free", "6"], ["link", "14"], ["caps", "0.31"], ["৩–৫টা", "1"]], ask: "এটা কি spam?" },
+  { icon: "movie", name: "Toy Story", what: "0 থেকে 5 score", nums: [["drama", "2"], ["comedy", "5"]], ask: "আর কার ভালো লাগবে?" },
+  { icon: "food", name: "খিচুড়ি", what: "সোমের প্রিয় খাবার", nums: [["ঝাল", "3"], ["মিষ্টি", "0"], ["টক", "1"]], ask: "সোমের আর কী ভালো লাগবে?" },
+  { icon: "patient", name: "একজন রোগী", what: "ডাক্তারের চেম্বারে", nums: [["বয়স", "42"], ["bp", "142"], ["sugar", "180"], ["bmi", "27.4"]], ask: "ঝুঁকি আছে কি?" },
 ];
 const tupleOf = (t: Thing) => `(${t.nums.map(([, x]) => x).join(", ")}${t.more ? ", …" : ""})`;
 
@@ -1019,9 +1020,7 @@ export function Pipeline() {
         <Station delay={0}>
           {t ? (
             <div>
-              <div aria-hidden="true" className="text-3xl">
-                {t.icon}
-              </div>
+              <ThingIcon kind={t.icon} className="mx-auto block size-11" />
               <b className="mt-1 block font-semibold">{t.name}</b>
               <span className="text-xs text-muted">{t.what}</span>
             </div>
@@ -1063,7 +1062,7 @@ export function Pipeline() {
           <div className="grid gap-1.5">
             {THINGS.slice(0, n).map((x) => (
               <div key={x.name} className={`${FADE} flex items-center gap-2 rounded-lg border border-border px-3 py-1.5`}>
-                <span aria-hidden="true">{x.icon}</span>
+                <ThingIcon kind={x.icon} className="size-6" />
                 <b className="text-sm font-semibold">{x.name}</b>
                 <span className="ml-auto font-mono text-sm">{tupleOf(x)}</span>
               </div>
@@ -1175,9 +1174,7 @@ function FinaleReel({ onReplay }: { onReplay: () => void }) {
             key={x.name}
             className={`flex items-center gap-3 rounded-lg border px-3 py-2 transition-colors duration-500 ${i < k ? "border-accent/40 bg-accent/5" : "border-border"}`}
           >
-            <span aria-hidden="true" className="text-xl">
-              {x.icon}
-            </span>
+            <ThingIcon kind={x.icon} className="size-7" />
             <b className="text-sm font-semibold">{x.name}</b>
             <span className="ml-auto font-mono text-sm">
               {i < k ? <span className={`${POP} inline-block`}>{tupleOf(x)}</span> : <span className="text-muted">…</span>}
