@@ -801,7 +801,7 @@ export function WrongOrder() {
           </Choice>
         ))}
       </div>
-      {over && <Rafi tone="bad">এ কী! তোর পাখি দেখি বাদুড়ের মতো ডাল থেকে ঝুলে আছে!</Rafi>}
+      {over && <Rafi tone="bad">এ কী! তোর পাখি দেখি Batman।উলটা হয়ে ঝুলে আছে!</Rafi>}
       <Task done={over}>আগে ভাবুন, তারপর একটা বেছে নিন — রাফি তখনই ভরা Start করবে।</Task>
     </>
   );

@@ -5,8 +5,13 @@
 //
 // Keyed by article slug, in the course's order (src/content/courses.ts decides
 // which journeys exist and in what order; a slug missing here just isn't a
-// station). Station names are the story's own places, in Bangla, with an
+// station). Only published journeys ride: railNet() builds the network from the
+// stations that are open, so a draft is off the map, off every ticket and out
+// of its line's tools until it is published. Station names are the story's own places, in Bangla, with an
 // English reading and a three-letter code for the ticket.
+//
+// ponytail: only Line 1 runs for now (MATH_RAIL below); lines 2–10 wait in
+// LINES with their names and tools, and join by widening the slice.
 //
 // ponytail: only Math for AI rides the rail. Another course joins by getting its
 // own RailNetwork here and a branch in dashboard/courses/[slug]/page.tsx.
@@ -85,7 +90,6 @@ import {
   Swap,
   Table,
   Television,
-  ToggleLeft,
   Triangle,
   Trophy,
   Wind,
@@ -130,7 +134,7 @@ const s = (slug: string, code: string, bn: string, en: string, name: string, doe
   tool: { name, does, icon },
 });
 
-export const MATH_RAIL: Line[] = [
+const LINES: Line[] = [
   {
     id: "l1",
     no: 1,
@@ -138,14 +142,14 @@ export const MATH_RAIL: Line[] = [
     topic: "Pictures, colours and things as numbers",
     machine: { name: "Picture phone", does: "Sends anything, a photo, a colour, even an email, down the line as a list of numbers." },
     stations: [
+      s("00_why_math", "PKH", "পাখির খোঁজ", "Pakhir Khoj", "Multiply-add counter", "Finds a bird among 4,000 photos with nothing but multiplying and adding.", Bird),
       s("01_intro", "CBG", "ছবিঘর", "Chhobighar", "Pixel loupe", "Reads a photo as a grid of brightness numbers.", MagnifyingGlass),
       s("01c_image_numbers", "BTF", "বাটন ফোন", "Button Phone", "Grid call code", "Reads a drawing aloud, square by square, as numbers.", Phone),
       s("01d_color_image", "RFK", "রাফির খাতা", "Rafir Khata", "Three-lamp mixer", "Any colour as three numbers: red, green, blue.", Lightbulb),
       s("01e_vector", "PTM", "পিটি মাঠ", "PT Math", "Measuring list", "A person as an ordered list of measurements: a vector.", Ruler),
       s("01f_representation", "AIB", "আম্মুর ইনবক্স", "Ammur Inbox", "Feature sieve", "Turns things with no numbers in them into numbers.", Funnel),
       s("01a_graph_paper", "KHG", "খালি ঘর", "Khali Ghor", "Two-number address", "Any spot in the room as (x, y).", GridFour),
-      s("01b_binary", "SMA", "সোমের আড্ডা", "Somer Adda", "Yes-no ladder", "Any number from five yes/no answers.", Binary),
-      s("01b2_binary_drums", "CLD", "চালের ড্রাম", "Chaler Drum", "Five-bulb signal", "32 messages from five bulbs, each on or off.", ToggleLeft),
+      s("01b_binary", "BSB", "বাঁশের বাল্ব", "Basher Balb", "Priced-bulb scoreboard", "Reads a score off bulbs priced 1, 2, 4, 8, 16.", Binary),
     ],
   },
   {
@@ -300,22 +304,49 @@ export const MATH_RAIL: Line[] = [
   },
 ];
 
+export const MATH_RAIL: Line[] = LINES.slice(0, 1);
+
 /** Course slug → its railway. Only Math for AI for now. */
 export const RAIL: Record<string, Line[]> = { math_for_ai: MATH_RAIL };
 
+/** Every slug with a station on the network, published or not. */
+export const RAIL_SLUGS: string[] = MATH_RAIL.flatMap((line) => line.stations.map((st) => st.slug));
+
 /** Every station in riding order, with its line, its number on the line (1…) and its place on the whole network. */
 export type Stop = Station & { line: Line; n: number; index: number };
-const ALL: Stop[] = MATH_RAIL.flatMap((line) => line.stations.map((st, i) => ({ ...st, line, n: i + 1 }))).map((st, index) => ({ ...st, index }));
-const BY_SLUG = new Map(ALL.map((st) => [st.slug, st]));
 
-export const stopOf = (slug: string): Stop | undefined => BY_SLUG.get(slug);
-/** The station you ride from to reach `slug` (none for the first on the network). */
-export const prevStop = (slug: string): Stop | undefined => {
-  const st = BY_SLUG.get(slug);
-  return st && st.index > 0 ? ALL[st.index - 1] : undefined;
+export type RailNet = {
+  /** the lines, each holding only its open stations; a line with none is gone */
+  lines: Line[];
+  stopOf: (slug: string) => Stop | undefined;
+  /** The station you ride from to reach `slug` (none for the first on the network). */
+  prevStop: (slug: string) => Stop | undefined;
+  /** The station after `slug`: the next ride's destination (none at the end of the network). */
+  nextStop: (slug: string) => Stop | undefined;
 };
-/** The station after `slug`: the next ride's destination (none at the end of the network). */
-export const nextStop = (slug: string): Stop | undefined => {
-  const st = BY_SLUG.get(slug);
-  return st ? ALL[st.index + 1] : undefined;
-};
+
+/**
+ * The railway as it runs: only the stations in `open` (the published journeys).
+ * Numbers, neighbours and each line's tools all skip the rest, so a draft
+ * between two stations is ridden straight past.
+ */
+export function railNet(open: ReadonlySet<string>): RailNet {
+  const lines = MATH_RAIL.map((line) => ({ ...line, stations: line.stations.filter((st) => open.has(st.slug)) })).filter(
+    (line) => line.stations.length,
+  );
+  const all: Stop[] = lines.flatMap((line) => line.stations.map((st, i) => ({ ...st, line, n: i + 1, index: 0 })));
+  all.forEach((st, index) => (st.index = index));
+  const bySlug = new Map(all.map((st) => [st.slug, st]));
+  return {
+    lines,
+    stopOf: (slug) => bySlug.get(slug),
+    prevStop: (slug) => {
+      const st = bySlug.get(slug);
+      return st && st.index > 0 ? all[st.index - 1] : undefined;
+    },
+    nextStop: (slug) => {
+      const st = bySlug.get(slug);
+      return st ? all[st.index + 1] : undefined;
+    },
+  };
+}

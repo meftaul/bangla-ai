@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState, type Ref } from "react";
 
 import { bn } from "@/components/interactive/figure-kit";
-import { nextStop, type Stop } from "@/content/rail";
+import type { Stop } from "@/content/rail";
 import { CLASS_LABEL, classOf, useRail } from "@/lib/rail";
 
 import { Hawker } from "./hawker";
@@ -21,19 +21,21 @@ import { SoundToggle } from "./sound-toggle";
 export function Arrival({
   ref,
   stop,
+  next,
   checks,
   found,
   onAgain,
 }: {
   ref: Ref<HTMLDivElement>;
   stop: Stop;
+  /** the next published station: where the ticket runs to (none at the end of the network) */
+  next: Stop | undefined;
   /** this ride's checks: how many, and how many passed on the first try */
   checks: { total: number; first: number };
   found: string[];
   onAgain: () => void;
 }) {
   const rail = useRail();
-  const next = nextStop(stop.slug);
   const score = checks.total ? checks.first / checks.total : null;
   const cls = classOf(score);
   const Icon = stop.tool.icon;

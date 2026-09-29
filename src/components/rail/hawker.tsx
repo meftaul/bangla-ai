@@ -36,7 +36,7 @@ export function recallFor(stop: Stop): Recall {
   // Rotate so the right one isn't always first.
   const shift = stop.index % pool.length;
   const options = [...pool.slice(shift), ...pool.slice(0, shift)];
-  return { q: `${stop.bn} থেকে কোন কথাটা নিয়ে এলেন?`, options, answer: options.indexOf(stop.tool.does) };
+  return { q: `${stop.bn} থেকে কি শিখলেন?`, options, answer: options.indexOf(stop.tool.does) };
 }
 
 export function Hawker({ stop, onDone }: { stop: Stop; onDone: () => void }) {

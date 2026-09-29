@@ -1220,7 +1220,7 @@ export function NasibSideBySide({}: Story) {
   const k = s.k;
   return (
     <StoryFrame scene={s}>
-      <Stage backdrop="evening" label="নাসিব দুইটা ছবি রেলিং এর উপর পাশাপাশি রাখলো, বাঁয়ে ফাহিমের map, ডানে রাস্তা; বললো দুইটা একসাথে চালাও, একই দুই দড়ি, দেখি কী হয়">
+      <Stage backdrop="evening" label="নাসিব দুইটা ছবি রেলিং এর উপর পাশাপাশি রাখলো, বামে ফাহিমের map, ডানে রাস্তা; বললো দুইটা একসাথে চালাও, একই দুই দড়ি, দেখি কী হয়">
         <P_Roof />
         <Person who="fahim" x={48} y={150} label />
         <Person who="nasib" x={110} y={150} label arm={k === 1 ? "hold" : k >= 2 ? "point" : "down"} />

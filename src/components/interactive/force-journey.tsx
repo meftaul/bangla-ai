@@ -377,7 +377,7 @@ export function TablePush() {
           </>
         )}
         <text x={TW / 2} y={TABLE.y + TABLE.h + 44} textAnchor="middle" fontSize={11} fontWeight={600} className="fill-muted">
-          মোট ধাক্কা: {net === 0 ? "0" : net > 0 ? `ডানে ${net}` : `বাঁয়ে ${-net}`}
+          মোট ধাক্কা: {net === 0 ? "0" : net > 0 ? `ডানে ${net}` : `বামে ${-net}`}
         </text>
         <PxArrow x1={TW / 2} x2={TW / 2 + net * PER} y={TABLE.y + TABLE.h + 22} stroke="stroke-foreground" fill="fill-foreground" />
         {net === 0 && <circle cx={TW / 2} cy={TABLE.y + TABLE.h + 22} r={4} className="fill-foreground" />}

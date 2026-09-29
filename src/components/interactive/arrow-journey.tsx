@@ -790,7 +790,7 @@ export function Opposite() {
         setNote((m) => ({
           n: (m?.n ?? 0) + 1,
           text: `তারা এখনো ${[
-            off[0] ? `${off[0] > 0 ? "ডানে" : "বাঁয়ে"} ${bn(Math.abs(off[0]))} ঘর` : "",
+            off[0] ? `${off[0] > 0 ? "ডানে" : "বামে"} ${bn(Math.abs(off[0]))} ঘর` : "",
             off[1] ? `${off[1] > 0 ? "ওপরে" : "নিচে"} ${bn(Math.abs(off[1]))} ঘর` : "",
           ]
             .filter(Boolean)
@@ -879,7 +879,7 @@ export function ZeroArrow() {
 const UNIT_GOAL: XY = [3, -2];
 const STEP_BTNS: { d: XY; glyph: string; label: string; tone: string }[] = [
   { d: [1, 0], glyph: "→", label: "ডানে এক পা", tone: "text-cat-blue" },
-  { d: [-1, 0], glyph: "←", label: "বাঁয়ে এক পা", tone: "text-cat-blue" },
+  { d: [-1, 0], glyph: "←", label: "বামে এক পা", tone: "text-cat-blue" },
   { d: [0, 1], glyph: "↑", label: "ওপরে এক পা", tone: "text-cat-coral" },
   { d: [0, -1], glyph: "↓", label: "নিচে এক পা", tone: "text-cat-coral" },
 ];

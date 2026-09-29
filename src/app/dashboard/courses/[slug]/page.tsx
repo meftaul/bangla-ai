@@ -41,12 +41,15 @@ export default async function CoursePage({
   const bySlug = new Map(disk.map((a) => [a.slug, a]));
 
   // Keep the author-defined order. Learners see only published articles (slides
-  // are session-only); admins see everything, with a status badge.
+  // are session-only); admins see everything, with a status badge. On the
+  // railway only published journeys are stations, for admins too: a draft joins
+  // the line when it is published (content/rail.ts).
+  const onRail = Boolean(RAIL[slug]);
   const members = course.items
     .map((s) => bySlug.get(s))
     .filter((a): a is NonNullable<typeof a> => Boolean(a))
     .map((a) => ({ ...a, status: statusBySlug.get(a.slug) ?? "draft" }))
-    .filter((a) => isAdmin || (a.status === "published" && a.type === "article"));
+    .filter((a) => (isAdmin && !onRail) || (a.status === "published" && a.type === "article"));
 
   return (
     <div className="mx-auto max-w-4xl">
@@ -72,15 +75,11 @@ export default async function CoursePage({
 
       {members.length === 0 ? (
         <p className="mt-8 text-sm text-muted">Nothing published in this course yet.</p>
-      ) : RAIL[slug] ? (
+      ) : onRail ? (
         // A course on the railway shows its route map instead of a list.
         <RouteMap
           course={slug}
-          items={members.map((a) => ({
-            slug: a.slug,
-            href: `/dashboard/articles/${a.slug}`,
-            badge: isAdmin && a.status !== "published" ? STATUS_LABELS[a.status] : undefined,
-          }))}
+          items={members.map((a) => ({ slug: a.slug, href: `/dashboard/articles/${a.slug}` }))}
         />
       ) : (
         <ol className="mt-8 flex flex-col gap-3">

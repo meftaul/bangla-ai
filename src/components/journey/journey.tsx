@@ -21,11 +21,12 @@ import { createPortal } from "react-dom";
 
 import { bn } from "@/components/interactive/figure-kit";
 import { COURSES } from "@/content/courses";
-import { prevStop, stopOf, type Stop } from "@/content/rail";
+import type { Stop } from "@/content/rail";
 import { GROW_WIDGET, MissCtx } from "@/components/journey/kit";
 import { MegaphoneSimple } from "@phosphor-icons/react";
 
 import { Arrival } from "@/components/rail/arrival";
+import { useRailNet } from "@/components/rail/open";
 import { Train, type TrainFx } from "@/components/rail/parts";
 import { arriveSound, horn, punchSound } from "@/components/rail/sound";
 import { SoundToggle } from "@/components/rail/sound-toggle";
@@ -206,6 +207,8 @@ export function Journey({
   const [next, setNext] = useState<string | null>(null);
   // The station this ride goes to, when the lesson is on the railway.
   const [stop, setStop] = useState<Stop | null>(null);
+  // The railway between published stations, when the page puts this ride on it.
+  const net = useRailNet();
   // Steps with a task, and those whose task saw a miss before it was done.
   const [checked, setChecked] = useState<number[]>([]);
   const [missed, setMissed] = useState<number[]>([]);
@@ -542,14 +545,16 @@ export function Journey({
     if (detour) return;
     const key = `journey:${window.location.pathname}`;
     saveKey.current = key;
-    // The lesson after this one in its course, for the ending. Client-side because
-    // the MDX page does not tell the Journey its own slug.
+    // The lesson after this one in its course, for the ending: on the railway, the
+    // next published station. Client-side because the MDX page does not tell the
+    // Journey its own slug.
     const slug = decodeURIComponent(window.location.pathname.replace(/^\/dashboard\/articles\//, ""));
+    const here = net?.stopOf(slug);
     const course = COURSES.find((c) => c.items.includes(slug));
-    const after = course?.items[course.items.indexOf(slug) + 1];
+    const after = here ? net?.nextStop(slug)?.slug : course?.items[course.items.indexOf(slug) + 1];
     // eslint-disable-next-line react-hooks/set-state-in-effect -- the pathname, which the server render cannot see
     setNext(after ? `/dashboard/articles/${after}` : null);
-    setStop(stopOf(slug) ?? null);
+    setStop(here ?? null);
     try {
       const saved = JSON.parse(localStorage.getItem(key) ?? "null") as Saved | null;
       if (saved && Number.isInteger(saved.furthest) && Number.isInteger(saved.at)) {
@@ -568,7 +573,7 @@ export function Journey({
     } catch {
       // storage blocked or corrupt: start from screen 1
     }
-  }, [last, detour]);
+  }, [last, detour, net]);
   useEffect(() => {
     if (!saveKey.current) return;
     try {
@@ -712,7 +717,7 @@ export function Journey({
             <span className="min-w-0 truncate font-semibold">{title}</span>
           </div>
         ) : stop ? (
-          <RideLine stop={stop} checks={checks} aim={finished ? null : aim} />
+          <RideLine stop={stop} from={net?.prevStop(stop.slug)} checks={checks} aim={finished ? null : aim} />
         ) : title ? (
           <div className="mb-2 hidden truncate text-xs font-semibold tracking-wider text-accent-text uppercase sm:block">{title}</div>
         ) : null}
@@ -785,7 +790,8 @@ export function Journey({
         onPointerDownCapture={touch}
         onClickCapture={touch}
         onKeyDownCapture={touch}
-        className="min-h-0 flex-1 overflow-y-auto overscroll-contain"
+        // A size container, so a widget can size itself to the screen's height (100cqh).
+        className="min-h-0 flex-1 overflow-y-auto overscroll-contain [container-type:size]"
       >
         <GateCtx.Provider value={gateApi}>
           <MissCtx.Provider value={detour ? null : onMiss}>
@@ -847,7 +853,7 @@ export function Journey({
         </GateCtx.Provider>
         {finished ? (
           stop ? (
-            <Arrival ref={ending} stop={stop} checks={checks} found={foundNotes(found)} onAgain={again} />
+            <Arrival ref={ending} stop={stop} next={net?.nextStop(stop.slug)} checks={checks} found={foundNotes(found)} onAgain={again} />
           ) : (
             <Ending ref={ending} title={title} steps={steps.length} found={found} next={next} onAgain={again} />
           )
@@ -922,8 +928,12 @@ export function Journey({
                 {stop ? "পরের ট্রেনে উঠুন" : "পরের পাঠ"} <span aria-hidden="true">→</span>
               </Link>
             ) : (
-              <Link href="/dashboard/articles" style={{ textDecoration: "none" }} className={`${bigBtn} ${goBtn} text-accent-foreground!`}>
-                লাইব্রেরিতে ফিরুন
+              <Link
+                href={stop ? "/dashboard/courses/math_for_ai" : "/dashboard/articles"}
+                style={{ textDecoration: "none" }}
+                className={`${bigBtn} ${goBtn} text-accent-foreground!`}
+              >
+                {stop ? "Route map-এ ফিরুন" : "লাইব্রেরিতে ফিরুন"}
               </Link>
             )
           ) : locked ? (
@@ -1100,8 +1110,18 @@ const foundNotes = (found: Record<number, string>) =>
  * and the ticket in hand with a hole for every check passed on the first try.
  * Hidden on a phone, like the title it stands in for.
  */
-function RideLine({ stop, checks, aim }: { stop: Stop; checks: { total: number; first: number }; aim: Chase | null }) {
-  const from = prevStop(stop.slug);
+function RideLine({
+  stop,
+  from,
+  checks,
+  aim,
+}: {
+  stop: Stop;
+  /** the station this ride leaves from */
+  from: Stop | undefined;
+  checks: { total: number; first: number };
+  aim: Chase | null;
+}) {
   const chip = "rounded-[3px] border-[1.5px] border-[#141414] bg-[#f3c623] px-1 py-px font-ticket text-[0.65rem] font-bold text-[#141414]";
   return (
     <div className="mb-2 hidden items-center gap-2 text-xs sm:flex">

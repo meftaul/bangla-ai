@@ -1778,7 +1778,7 @@ export function HalfTurn() {
 //      carry the same sign.
 
 const X3B_SAY = [
-  "বাঁয়ে লাঠির ছায়া, ডানে ৪.২-এর ভ্যানের dot product।",
+  "বামে লাঠির ছায়া, ডানে ৪.২-এর ভ্যানের dot product।",
   "90°-এর কম: দুইটাই plus।",
   "ঠিক 90°: দুইটাই 0।",
   "90°-এর বেশি: দুইটাই minus।",
