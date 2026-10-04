@@ -10,7 +10,7 @@
 // of its line's tools until it is published. Station names are the story's own places, in Bangla, with an
 // English reading and a three-letter code for the ticket.
 //
-// ponytail: only Line 1 runs for now (MATH_RAIL below); lines 2–10 wait in
+// ponytail: only Lines 1–2 run for now (MATH_RAIL below); lines 3–10 wait in
 // LINES with their names and tools, and join by widening the slice.
 //
 // ponytail: only Math for AI rides the rail. Another course joins by getting its
@@ -35,6 +35,7 @@ import {
   Bird,
   Boat,
   BowlFood,
+  BracketsSquare,
   Books,
   Buildings,
   Camera,
@@ -160,7 +161,9 @@ const LINES: Line[] = [
     machine: { name: "Word compass", does: "Finds a word by walking arrows: king − man + woman lands near queen." },
     stations: [
       s("02a_vector_list", "SMF", "সামিনের ফাইল", "Saminer File", "Order lock", "Keeps every number in its own slot, in the same order.", ListNumbers),
+      s("02a2_vector_notation", "SKD", "সামিনের কোড", "Saminer Code", "Slot ruler", "Counts the slots from 1 on paper and from 0 in code.", BracketsSquare),
       s("02b_vector_arrow", "SKK", "শিকুর কাগজ", "Shikur Kagoj", "Loose arrow", "The same vector, wherever you put it on the paper.", ArrowUpRight),
+      s("02b2_point_or_move", "DMM", "ধানমন্ডির মোড়", "Dhanmondir Mor", "Street card", "Tells a place from a move: one instruction, walked from any corner.", MapPin),
       s("02c_king_queen", "CHD", "চায়ের দোকান", "Chayer Dokan", "Arrow shifter", "Lifts an arrow and sets it down somewhere else.", Crown),
       s("02d_real_arrows", "MJG", "মাঝির ঘাট", "Majhir Ghat", "Wind vane", "Tells real arrows from ones we chose to draw as arrows.", Wind),
       s("02e_high_dimension", "DZD", "দর্জির দোকান", "Dorjir Dokan", "Tile Pythagoras", "Distance, however many directions there are.", Triangle),
@@ -304,7 +307,7 @@ const LINES: Line[] = [
   },
 ];
 
-export const MATH_RAIL: Line[] = LINES.slice(0, 1);
+export const MATH_RAIL: Line[] = LINES.slice(0, 2);
 
 /** Course slug → its railway. Only Math for AI for now. */
 export const RAIL: Record<string, Line[]> = { math_for_ai: MATH_RAIL };

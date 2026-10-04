@@ -2,6 +2,7 @@
 
 import { useState, type KeyboardEvent, type ReactNode } from "react";
 
+import { Bubble, Person, Stage, Stall, StoryFrame } from "@/components/journey/cast";
 import { Task, useGate } from "@/components/journey/journey";
 import {
   Choice,
@@ -11,6 +12,7 @@ import {
   Nope,
   Out,
   POP,
+  Scene,
   Speech,
   Ticks,
   predictLook,
@@ -18,12 +20,17 @@ import {
   quietBtn,
   useCountUp,
   usePlay,
+  useScene,
+  useSeed,
   useTween,
+  type Fixtures,
 } from "@/components/journey/kit";
 import { bn } from "./figure-kit";
 import { sfx } from "@/components/journey/sfx";
 
-// Screens for "Math for AI 2.1 — List, সামিনের গড়বড় file", told as a Journey.
+// Screens for "Math for AI 2.1 — List, সামিনের গড়বড় file" and its second half
+// 2.1b (02a2_vector_notation), told as Journeys. 2.1 runs from the wrestling
+// file to the silent bug; 2.1b opens at the definition's three words.
 //
 // Wrestling practice, and partners have to be matched by size. Samin puts the
 // class in a file and on a sheet of graph paper, where the closest dot is the
@@ -498,7 +505,7 @@ export function OneSlip() {
   const fix = () => {
     sfx.typing(0.4);
     setFixed(true);
-    settle.play(1, () => pass("Order উল্টালে উত্তর চুপচাপ ভুল।"));
+    settle.play(1, () => pass("Order উল্টালে program চুপচাপ ভুল উত্তর দেয়।"));
   };
 
   return (
@@ -723,7 +730,7 @@ export function MissingAge() {
         )}
       </div>
 
-      {last === "empty" && <SaminSays tone="bad">যাক, এবার অন্তত program চিৎকার করলো। কিন্তু ঘরে একটা কিছু তো বসাতেই হবে।</SaminSays>}
+      {last === "empty" && <SaminSays tone="bad">যাক, এবার অন্তত program জানান দিল। কিন্তু ঘরে একটা কিছু তো বসাতেই হবে।</SaminSays>}
       {last === "zero" && (
         <SaminSays tone="bad">0 বছর?! Program তো ভাবছে ফাহিম সদ্য জন্মানো বাচ্চা। তাই ক্লাসের সবচেয়ে ছোট আরিফকে ধরিয়ে দিলো।</SaminSays>
       )}
@@ -805,7 +812,7 @@ export function SafeOrBug() {
     }
     setMiss(0);
     setK(k + 1);
-    if (k + 1 === EDITS.length) pass("বিপজ্জনক ভুল চিৎকার করে না।");
+    if (k + 1 === EDITS.length) pass("বিপজ্জনক ভুল জানান দেয় না।");
   };
 
   return (
@@ -820,7 +827,7 @@ export function SafeOrBug() {
         {done ? (
           <div className={`${FADE} mt-4 text-center text-lg font-semibold`}>ছয়টাই বাছাই শেষ!</div>
         ) : (
-          <div key={k} className={`${FADE} mx-auto mt-3 max-w-md -rotate-1 rounded-xl border-2 border-dashed border-cat-amber/60 bg-cat-amber/5 px-4 py-3 text-center`}>
+          <div key={`${k}-${miss}`} className={`${miss > 0 ? "nudge" : FADE} mx-auto mt-3 max-w-md -rotate-1 rounded-xl border-2 border-dashed border-cat-amber/60 bg-cat-amber/5 px-4 py-3 text-center`}>
             <div className="mb-1 text-xs font-medium text-muted">
               সামিনের কাজ {bn(k + 1)}/{bn(EDITS.length)}
             </div>
@@ -863,35 +870,13 @@ export function SafeOrBug() {
 // ---------------------------------------------------------------------------
 // 6 · The definition's three words, each opened onto the story behind it.
 
-function Tuple({ v, bad }: { v: ReactNode[]; bad?: number }) {
-  return (
-    <span className="font-mono whitespace-nowrap">
-      (
-      {v.map((x, i) => (
-        <span key={i}>
-          {i > 0 && ", "}
-          <span className={i === bad ? "rounded border border-dashed border-danger/60 px-1 text-danger" : ""}>{x}</span>
-        </span>
-      ))}
-      )
-    </span>
-  );
-}
-
 const WORDS: { word: ReactNode; story: string; body: ReactNode }[] = [
   {
     word: "ordered",
     story: "তানভীরের row",
     body: (
       <>
-        <div className="my-2 grid gap-1 text-sm">
-          <div>
-            <Tuple v={[175, 75]} /> → তানভীর
-          </div>
-          <div>
-            <Tuple v={[75, 175]} /> → কাগজের বাইরের কেউ
-          </div>
-        </div>
+        <WordFig n={0} />
         একই দুইটা সংখ্যা, জায়গা বদলালেই অন্য মানুষ। Set-এর কাছে অবশ্য {"{75, 175}"} আর {"{175, 75}"} একই জিনিস, set order-এর ধার ধারে না। Vector ধারে।
       </>
     ),
@@ -905,15 +890,8 @@ const WORDS: { word: ReactNode; story: string; body: ReactNode }[] = [
     story: "ফাহিমের খালি ঘর",
     body: (
       <>
-        <div className="my-2 grid gap-1 text-sm">
-          <div>
-            <Tuple v={[170, 60, 17]} /> → সামিন
-          </div>
-          <div>
-            <Tuple v={[165, 54, "?"]} bad={2} /> → ফাহিম
-          </div>
-        </div>
-        সবার ঘর সমান হতে হবে। ঘর কম হলে তুলনাই চলে না। আর খালি ঘরে কী বসাবেন, সেটা একটা decision, যেটা result বদলে দেয়।
+        <WordFig n={1} />
+        সবার ঘর সংখ্যা সমান হতে হবে। ঘর সংখ্যা কম হলে তুলনাই চলে না। আর খালি ঘরে কী বসাবেন, সেটা একটা decision, যেটা result বদলে দেয়।
       </>
     ),
   },
@@ -922,11 +900,8 @@ const WORDS: { word: ReactNode; story: string; body: ReactNode }[] = [
     story: "সামিনের আয়না",
     body: (
       <>
-        <div className="my-2 grid gap-1 font-mono text-sm">
-          <div>(height, weight) ✓</div>
-          <div>(weight, height) ✓</div>
-        </div>
-        ঘরের মানে সংখ্যার গায়ে লেখা থাকে না, থাকে একটা rule-এ। Rule-টা কী, তাতে কিছু যায় আসে না। Rule-টা সবাই মানছে কিনা, সেটাই আসল।
+        <WordFig n={2} />
+        ঘরের মানে সংখ্যার গায়ে লেখা থাকে না, থাকে একটা rule-এ। Rule-টা কী, তাতে কিছু যায় আসে না। Rule-টা সবাই মানছে কিনা, সেটাই দেখার বিষয়।
       </>
     ),
   },
@@ -1417,3 +1392,1274 @@ export function Finale() {
   const [run, setRun] = useState(0);
   return <FinaleReel key={run} onReplay={() => setRun((r) => r + 1)} />;
 }
+
+// ---------------------------------------------------------------------------
+// 0 · The binary recall as an animated question. Eight lamps with their place
+//     values; each pick plays out on them. 255 lights all eight, one by one,
+//     with the running sum; 8 and 128 light only as many as it takes to pass
+//     the number they claimed, and stop there.
+
+const LAMPS = [128, 64, 32, 16, 8, 4, 2, 1];
+const BIT_OPTIONS = [255, 8, 128];
+// Which lamps each pick lights, in order: the right one all eight from the
+// big end; "8" from the small end until the sum passes 8; "128" from the big
+// end until the second lamp carries it past 128.
+const BIT_ORDER = [
+  [0, 1, 2, 3, 4, 5, 6, 7],
+  [7, 6, 5, 4],
+  [0, 1],
+];
+
+export function BitPick() {
+  const pass = useGate();
+  const [pick, setPick] = useState<number | null>(null);
+  const [over, setOver] = useState(false);
+  const play = usePlay(300);
+
+  const order = pick === null ? [] : BIT_ORDER[pick];
+  const lit = order.slice(0, play.k);
+  const sum = lit.reduce((t, i) => t + LAMPS[i], 0);
+
+  const choose = (i: number) => {
+    setPick(i);
+    setOver(false);
+    sfx.pencil(0.2);
+    play.play(BIT_ORDER[i].length, () => {
+      setOver(true);
+      if (i === 0) pass("আটটা হ্যাঁ মানে ২৫৫।");
+    });
+  };
+
+  const right = over && pick === 0;
+  return (
+    <>
+      <div className="my-4 rounded-2xl border border-border bg-foreground/[0.02] px-3 py-4">
+        <div className="mx-auto flex max-w-xs justify-between gap-1">
+          {LAMPS.map((v, i) => {
+            const on = lit.includes(i);
+            return (
+              <div key={v} className="flex flex-1 flex-col items-center gap-1.5">
+                <div
+                  className={`size-7 rounded-full border-2 transition-[background-color,border-color,box-shadow] duration-200 motion-reduce:transition-none ${
+                    on ? "border-cat-amber bg-cat-amber shadow-[0_0_10px_var(--color-cat-amber)]" : "border-border bg-surface"
+                  }`}
+                />
+                <span className={`font-mono text-xs tabular-nums ${on ? "font-bold text-foreground" : "text-muted"}`}>{v}</span>
+              </div>
+            );
+          })}
+        </div>
+        <div className="mt-3 min-h-7 text-center font-mono text-lg font-bold tabular-nums">
+          {pick === null ? <span className="text-sm font-normal text-muted">একটা উত্তর বেছে নিন</span> : sum}
+        </div>
+      </div>
+      <div className="space-y-2">
+        {BIT_OPTIONS.map((v, i) => (
+          <Choice
+            key={v}
+            n={i}
+            look={predictLook(i, pick, over, 0)}
+            disabled={play.running || right}
+            onClick={() => choose(i)}
+          >
+            <span className="font-mono">{v === 255 ? "২৫৫" : v === 8 ? "৮" : "১২৮"}</span>
+          </Choice>
+        ))}
+      </div>
+      {over && pick === 1 && <Nope key="p1">ছোট ঘর থেকে জ্বালাতে জ্বালাতে যোগফল ৮ ছাড়িয়ে গেল, অথচ ঘর এখনো বাকি।</Nope>}
+      {over && pick === 2 && <Nope key="p2">১২৮-এর সাথে ৬৪-র ঘরটা জ্বালালেই ১২৮ পেরিয়ে গেল। বাকি ঘরগুলো এখনো নেভানো।</Nope>}
+      <Task done={right}>সবচেয়ে বড় সংখ্যাটা বেছে নিন</Task>
+    </>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 1a · Story scenes for the opening of screen 2.
+
+type Story = { story?: boolean };
+const INK2 = "#0f1b2d";
+
+/** Shom at the tea stall with the king − man + woman puzzle. */
+export function TeaStallSom({}: Story) {
+  const s = useScene(3, [600, 2400, 2800]);
+  const k = s.k;
+  return (
+    <StoryFrame scene={s}>
+      <Stage backdrop="evening" label="চায়ের দোকানে সোম ফোন হাতে বন্ধুকে একটা আবিষ্কারের কথা বলছে">
+        <Stall x={60} y={150} sign="চা" />
+        <Person who="som" x={170} y={150} facing={-1} arm={k >= 1 ? "hold" : "down"} mood={k >= 1 ? "smug" : "plain"} label />
+        <Person who="fahim" x={250} y={150} facing={-1} mood={k >= 2 ? "puzzled" : "plain"} />
+        {k === 1 && <Bubble x={170} y={84} side="left" lines={["King − man + woman", "= Queen."]} />}
+        {k >= 2 && <Bubble x={250} y={84} side="left" tone="think" lines={["শব্দ আবার", "বিয়োগ হয় কীভাবে?"]} />}
+      </Stage>
+    </StoryFrame>
+  );
+}
+
+// 1b · A figure for the paragraph after Shom's puzzle: the puzzle parked, the
+//      two faces of a vector (the second kept hidden for 2.2), the list
+//      with its conditions hanging off it, and one of them coming loose.
+
+const TF_CAP = [
+  "শব্দ আবার বিয়োগ হয় কীভাবে? প্রশ্নটা আপাতত মাথায় রেখে দিন.",
+  "তার জন্য vector-কে দুইটা রূপে চিনতে হবে.",
+  "প্রথম রূপটা আপনার চেনা, সংখ্যার একটা list.",
+  "কিন্তু সেই list-এর গায়ে কয়েকটা ছোট ছোট শর্ত লেখা আছে.",
+  "না মানলে কী হয়, আজকে সামিন সেটা হাতেনাতে টের পাবে.",
+];
+const TF_TAGS = [36, 65, 94];
+
+export function TwoForms({}: Story) {
+  const s = useScene(4, [600, 2400, 2200, 2400, 2400]);
+  const k = s.k;
+  return (
+    <Scene scene={s} caption={<span key={k} className={FADE}>{TF_CAP[k]}</span>}>
+      <svg viewBox="0 0 240 132" className="mx-auto h-auto w-full max-w-[16rem]" role="img" aria-label="vector-এর দুই রূপ: একটা সংখ্যার list, আরেকটা এখনো ঢাকা">
+        {k === 0 ? (
+          <text key="big" x={120} y={70} textAnchor="middle" fontSize={15} fontWeight={700} className={`${FADE} fill-foreground`}>
+            King − man + woman = ?
+          </text>
+        ) : (
+          <text key="small" x={120} y={12} textAnchor="middle" fontSize={8} className={`${FADE} fill-muted`}>
+            King − man + woman = ?
+          </text>
+        )}
+        {k >= 1 && (
+          <>
+            <g className={POP}>
+              <rect x={18} y={24} width={94} height={62} rx={8} className={`fill-surface transition-[stroke,stroke-width] duration-300 ${k >= 2 ? "stroke-cat-blue" : "stroke-border"}`} strokeWidth={k >= 2 ? 2 : 1} />
+              <text x={65} y={40} textAnchor="middle" fontSize={8.5} className="fill-muted">
+                রূপ ১
+              </text>
+              <text x={65} y={66} textAnchor="middle" fontSize={14} fontWeight={700} fontFamily="ui-monospace, monospace" className="fill-foreground">
+                (170, 60)
+              </text>
+            </g>
+            <g className={`${POP} transition-opacity duration-300 ${k >= 2 ? "opacity-35" : ""}`} style={{ transitionDelay: "250ms" }}>
+              <rect x={128} y={24} width={94} height={62} rx={8} className="fill-surface stroke-border" strokeDasharray="4 3" />
+              <text x={175} y={40} textAnchor="middle" fontSize={8.5} className="fill-muted">
+                রূপ ২
+              </text>
+              <text x={175} y={70} textAnchor="middle" fontSize={22} fontWeight={700} className="fill-muted">
+                ?
+              </text>
+            </g>
+          </>
+        )}
+        {k >= 3 &&
+          TF_TAGS.map((x, i) => {
+            const loose = k >= 4 && i === 1;
+            return (
+              <g key={x} className={POP} style={{ transitionDelay: `${i * 180}ms` }}>
+                {!loose && <path d={`M${x} 86V102`} className="stroke-muted" strokeWidth={1} />}
+                <g
+                  className="transition-transform duration-700 ease-in motion-reduce:transition-none"
+                  style={{ transformOrigin: `${x}px 102px`, transform: loose ? "translate(6px, 16px) rotate(28deg)" : "none" }}
+                >
+                  <rect x={x - 13} y={102} width={26} height={13} rx={3} className={loose ? "fill-danger/10 stroke-danger" : "fill-cat-amber/20 stroke-cat-amber"} />
+                  <text x={x} y={111.5} textAnchor="middle" fontSize={7} className={loose ? "fill-danger" : "fill-foreground"}>
+                    শর্ত
+                  </text>
+                </g>
+              </g>
+            );
+          })}
+      </svg>
+    </Scene>
+  );
+}
+
+// 1c · PT sir's Thursday wrestling rule, and why a 49 kg boy against an 82 kg
+//      one will not do: the rule, the pairing rule, the mismatch, the fall.
+export function WrestlingRule({}: Story) {
+  const s = useScene(4, [600, 2400, 2400, 2400]);
+  const k = s.k;
+  const tag = (x: number, text: string) => (
+    <g key={text} className={FADE}>
+      <rect x={x - 21} y={62} width={42} height={14} rx={7} fill="white" stroke={INK2} strokeOpacity={0.35} />
+      <text x={x} y={72} textAnchor="middle" fontSize={8.5} fontWeight={700} fill={INK2}>
+        {text}
+      </text>
+    </g>
+  );
+  const fall = k >= 4;
+  return (
+    <StoryFrame scene={s}>
+      <Stage backdrop="field" label="মাঠে PT স্যার বলছেন, প্রতি বৃহস্পতিবার কুস্তির practice, জোড়া হবে সমানে সমান। ৪৯ কেজির আরিফকে ৮২ কেজির ইমন ঠেলে ফেলে দেয়">
+        <Person who="mama" x={50} y={150} arm={k <= 1 ? "point" : "down"} />
+        <text x={50} y={165} textAnchor="middle" fontSize={8} fill={INK2}>
+          PT স্যার
+        </text>
+        {k === 0 && <Bubble x={50} y={80} side="right" lines={["প্রতি বৃহস্পতিবার", "কুস্তির practice."]} />}
+        {k === 1 && <Bubble x={50} y={80} side="right" lines={["জোড়া হবে", "সমানে সমান."]} />}
+        {k >= 2 && (
+          <>
+            <g
+              className="transition-transform duration-500 ease-in motion-reduce:transition-none"
+              style={{ transformOrigin: "160px 150px", transform: fall ? "rotate(-78deg)" : "none", transitionDelay: fall ? "450ms" : "0ms" }}
+            >
+              <Person who="fahim" x={170} y={150} scale={0.85} mood={fall ? "sad" : "plain"} />
+            </g>
+            <Person who="nasib" x={fall ? 200 : 240} y={150} facing={-1} scale={1.12} walking={fall} ms={600} arm={fall ? "point" : "down"} />
+            <text x={fall ? 135 : 170} y={165} textAnchor="middle" fontSize={8} fill={INK2}>
+              আরিফ
+            </text>
+            <text x={fall ? 200 : 240} y={165} textAnchor="middle" fontSize={8} fill={INK2}>
+              ইমন
+            </text>
+          </>
+        )}
+        {k >= 3 && !fall && tag(170, "৪৯ কেজি")}
+        {k >= 3 && !fall && tag(240, "৮২ কেজি")}
+      </Stage>
+    </StoryFrame>
+  );
+}
+
+// 1d · A figure for Samin's paragraph: the file, one row placed as a dot by
+//      its two numbers, the whole class on the sheet, and close measurements
+//      as close dots. Same length per unit on both axes, as on the widget.
+
+const SS_CAP = [
+  "ক্লাসের সবার (height, weight) একটা file-এ তুললো.",
+  "height কে x axis বরাবর, weight কে y axis বরাবর place করলো.",
+  "প্রত্যেককে কাগজে একটা dot বানিয়ে বসিয়ে দিলো.",
+  "দুইজনের measurements যত কাছাকাছি, কাগজে ওদের dot-ও তত কাছাকাছি.",
+  "দুজনের মাঝের distance সবচেয়ে কম হলে তারাই partner.",
+];
+const SS_U = 2.6;
+const ssAt = (c: Kid): [number, number] => [124 + (c.h - 150) * SS_U, 116 - (c.w - 45) * SS_U];
+const SS_NEAR = FAHIM;
+const SS_FAR = IMON;
+
+export function SaminSheet({}: Story) {
+  const s = useScene(4, [600, 2400, 2200, 2400, 2400]);
+  const k = s.k;
+  const [sx, sy] = ssAt(SAMIN);
+  const [nx, ny] = ssAt(SS_NEAR);
+  const [fx, fy] = ssAt(SS_FAR);
+  const hot = (c: Kid) => (k >= 1 && c === SAMIN) || (k >= 3 && (c === SS_NEAR || (k === 3 && c === SS_FAR)));
+  return (
+    <Scene scene={s} caption={<span key={k} className={FADE}>{SS_CAP[k]}</span>}>
+      <svg viewBox="0 0 260 136" className="mx-auto h-auto w-full max-w-[17rem]" role="img" aria-label="সামিনের file থেকে গ্রাফ পেপারে dot: height x axis-এ, weight y axis-এ">
+        <rect x={4} y={8} width={98} height={120} rx={6} fill="#0b1220" />
+        <text x={12} y={21} fontSize={6.5} fill="#94a3b8">
+          নাম
+        </text>
+        <text x={66} y={21} textAnchor="end" fontSize={6.5} fill="#94a3b8" fontFamily="ui-monospace, monospace">
+          h
+        </text>
+        <text x={92} y={21} textAnchor="end" fontSize={6.5} fill="#94a3b8" fontFamily="ui-monospace, monospace">
+          w
+        </text>
+        {CLASS.map((c, i) => (
+          <g key={c.name} className={FADE} style={{ transitionDelay: `${i * 110}ms` }}>
+            {hot(c) && <rect x={7} y={26 + i * 14} width={92} height={13} rx={2} fill="#2563eb" opacity={0.35} />}
+            <text x={12} y={35.5 + i * 14} fontSize={7} fill="#e2e8f0">
+              {c.name}
+            </text>
+            <text x={66} y={35.5 + i * 14} textAnchor="end" fontSize={7} fill="#e2e8f0" fontFamily="ui-monospace, monospace">
+              {c.h}
+            </text>
+            <text x={92} y={35.5 + i * 14} textAnchor="end" fontSize={7} fill="#e2e8f0" fontFamily="ui-monospace, monospace">
+              {c.w}
+            </text>
+          </g>
+        ))}
+        <rect x={110} y={8} width={146} height={120} rx={4} fill="white" stroke={INK2} strokeOpacity={0.25} />
+        <path d="M124 116H246M124 116V14" stroke={INK2} strokeOpacity={0.55} fill="none" />
+        <text x={246} y={124} textAnchor="end" fontSize={6.5} fill={INK2}>
+          height →
+        </text>
+        <text x={118} y={14} textAnchor="end" fontSize={6.5} fill={INK2} transform="rotate(-90 118 14)">
+          weight →
+        </text>
+        {k >= 1 && (
+          <g key="guide">
+            <Draw d={`M${sx} 116V${sy}`} className="stroke-[#2563eb]" strokeWidth={0.9} ms={500} />
+            <Draw d={`M124 ${sy}H${sx}`} className="stroke-[#2563eb]" strokeWidth={0.9} ms={500} delay={500} />
+            <text x={sx} y={124} textAnchor="middle" fontSize={6} fill="#2563eb" fontFamily="ui-monospace, monospace" className={FADE}>
+              {SAMIN.h}
+            </text>
+            <text x={121} y={sy + 2} textAnchor="end" fontSize={6} fill="#2563eb" fontFamily="ui-monospace, monospace" className={FADE}>
+              {SAMIN.w}
+            </text>
+          </g>
+        )}
+        {k >= 3 && (
+          <g key="lines">
+            <g className={`transition-opacity duration-500 ${k >= 4 ? "opacity-20" : ""}`}>
+              <Draw d={`M${sx} ${sy}L${fx} ${fy}`} className="stroke-[#e11d48]" strokeWidth={1.3} ms={700} />
+            </g>
+            <Draw d={`M${sx} ${sy}L${nx} ${ny}`} className="stroke-[#0d9488]" strokeWidth={k >= 4 ? 2.4 : 1.3} ms={500} delay={300} />
+          </g>
+        )}
+        {CLASS.map((c, i) => {
+          if (k < 2 && c !== SAMIN) return null;
+          if (k < 1) return null;
+          const [x, y] = ssAt(c);
+          const ring = k >= 4 && (c === SAMIN || c === SS_NEAR);
+          return (
+            <g key={c.name}>
+              <circle cx={x} cy={y} r={3} className={`${POP} ${c === SAMIN ? "fill-[#2563eb]" : "fill-[#475569]"}`} style={{ transitionDelay: c === SAMIN ? "900ms" : `${i * 120}ms` }} />
+              {ring && <circle cx={x} cy={y} r={6} fill="none" stroke="#0d9488" strokeWidth={1.2} className={POP} />}
+            </g>
+          );
+        })}
+        {k >= 1 && (
+          <text x={sx + 5} y={sy + 9} fontSize={6.5} fill={INK2} className={FADE}>
+            {SAMIN.name}
+          </text>
+        )}
+        {k >= 3 && (
+          <text x={nx - 5} y={ny - 3} textAnchor="end" fontSize={6.5} fill={INK2} className={FADE}>
+            {SS_NEAR.name}
+          </text>
+        )}
+        {k === 3 && (
+          <text x={fx - 4} y={fy - 4} textAnchor="end" fontSize={6.5} fill={INK2} className={FADE}>
+            {SS_FAR.name}
+          </text>
+        )}
+      </svg>
+    </Scene>
+  );
+}
+
+// 1e · A story scene for the program paragraph: measuring dot to dot with a
+//      ruler is slow (21 pairs for seven dots), so Samin types three
+//      instructions instead. It stops before any pair is shown: finding the
+//      partners is the reader's job on the widget.
+
+// the sheet on the wall: 2.3 px per unit on both axes, so close on the sheet is close in the file
+const wallAt = (k: Kid): [number, number] => [205 + (k.h - 155) * 2.3, 125 - (k.w - 45) * 2.3];
+const ALL_PAIRS = (CLASS.length * (CLASS.length - 1)) / 2;
+const RULER_PAIRS: [Kid, Kid][] = [
+  [ARIF, FAHIM],
+  [SHOM, IMON],
+];
+const SCREEN_ROWS = ["170 60", "158 49", "165 54"];
+const SCREEN_CODE = ["read(file)", "nearest()", "show()"];
+
+export function SaminProgram({}: Story) {
+  const s = useScene(3, [600, 2000, 2400]);
+  const k = s.k;
+  const coding = k >= 3;
+  const lines = coding ? SCREEN_CODE : SCREEN_ROWS;
+  const ruler = !coding && k >= 1 ? RULER_PAIRS[k - 1] : null;
+  return (
+    <StoryFrame scene={s}>
+      <Stage backdrop="room" label="সামিন স্কেল দিয়ে dot থেকে dot মাপছে, মোট ২১টা মাপ। তারপর laptop-এ তিন লাইনের program লিখছে">
+        <rect x={20} y={110} width={92} height={40} fill="#92400e" />
+        <rect x={20} y={108} width={92} height={4} fill="#78350f" />
+        <rect x={36} y={72} width={60} height={37} rx={3} fill="#1e293b" />
+        <rect x={39} y={75} width={54} height={31} rx={1.5} fill="#0b1220" />
+        {lines.map((l, i) => (
+          <text
+            key={`${coding}${l}`}
+            x={44}
+            y={87 + i * 9}
+            fontSize={6.5}
+            fontFamily="ui-monospace, monospace"
+            fill={coding ? "#6ee7b7" : "#cbd5e1"}
+            className={FADE}
+            style={{ transitionDelay: coding ? `${i * 600}ms` : "0ms" }}
+          >
+            {l}
+          </text>
+        ))}
+        <Person who="samin" x={coding ? 130 : 165} y={150} facing={coding ? -1 : 1} arm={ruler ? "point" : coding ? "point" : "down"} walking={k === 3} ms={600} label />
+        <rect x={192} y={22} width={106} height={112} rx={3} fill="white" stroke={INK2} strokeOpacity={0.3} />
+        <path d="M200 128H292M200 128V28" stroke={INK2} strokeOpacity={0.5} fill="none" />
+        {CLASS.map((c) => {
+          const [x, y] = wallAt(c);
+          return <circle key={c.name} cx={x} cy={y} r={3.2} className="fill-[#2563eb]" />;
+        })}
+        {ruler && (
+          <g key={ruler[0].name}>
+            <Draw d={`M${wallAt(ruler[0]).join(" ")}L${wallAt(ruler[1]).join(" ")}`} className="stroke-[#eab308]" strokeWidth={4} ms={700} />
+          </g>
+        )}
+        {k >= 1 && (
+          <text key={k} x={245} y={16} textAnchor="middle" fontSize={8} fontWeight={600} fill={INK2} className={FADE}>
+            {coding ? `মোট ${bn(ALL_PAIRS)}টা মাপ` : `মাপ ${bn(Math.min(k, 2))}, বাকি ${bn(ALL_PAIRS - Math.min(k, 2))}টা`}
+          </text>
+        )}
+      </Stage>
+    </StoryFrame>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 11 · Shared bits for the scenes and figures below.
+
+/** Samin's desk with a laptop; `x` is the desk's left edge, `warn` reddens one line. */
+function DeskLaptop({ x = 20, lines, code = false, warn }: { x?: number; lines: string[]; code?: boolean; warn?: number }) {
+  return (
+    <g transform={`translate(${x - 20} 0)`}>
+      <rect x={20} y={110} width={92} height={40} fill="#92400e" />
+      <rect x={20} y={108} width={92} height={4} fill="#78350f" />
+      <rect x={36} y={72} width={60} height={37} rx={3} fill="#1e293b" />
+      <rect x={39} y={75} width={54} height={31} rx={1.5} fill="#0b1220" />
+      {lines.map((l, i) => (
+        <text
+          key={`${i}${l}`}
+          x={44}
+          y={87 + i * 9}
+          fontSize={6.2}
+          fontFamily="ui-monospace, monospace"
+          fill={i === warn ? "#fca5a5" : code ? "#6ee7b7" : "#cbd5e1"}
+          className={FADE}
+        >
+          {l}
+        </text>
+      ))}
+    </g>
+  );
+}
+
+/** A tick drawn as a path, so it never turns into an emoji. */
+function TickMark({ x, y, className = "stroke-accent" }: { x: number; y: number; className?: string }) {
+  return <path d={`M${x} ${y}l3 3l6 -7`} strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" className={`${POP} fill-none ${className}`} />;
+}
+
+/** The small white sheet the two mirror figures share: 100 units across and up. */
+const MS_X = 70;
+const MS_Y = 114;
+const msx = (a: number) => MS_X + a;
+const msy = (b: number) => MS_Y - b;
+
+function MiniSheet({ flipped, children }: { flipped: boolean; children: ReactNode }) {
+  const lab = "text-[7.5px] font-semibold";
+  return (
+    <>
+      <rect x={MS_X} y={msy(100)} width={100} height={100} rx={3} fill="white" stroke={INK2} strokeOpacity={0.3} />
+      <path d={[0, 25, 50, 75].map((i) => `M${msx(i)} ${msy(0)}V${msy(100)}M${msx(0)} ${msy(i)}H${msx(100)}`).join("")} strokeWidth={0.5} className="fill-none stroke-cat-blue/25" />
+      <text x={msx(50)} y={MS_Y + 11} textAnchor="middle" className={lab} fill={INK2}>
+        {flipped ? "weight →" : "height →"}
+      </text>
+      <text transform={`translate(${MS_X - 5} ${msy(50)}) rotate(-90)`} textAnchor="middle" className={lab} fill={INK2}>
+        {flipped ? "height →" : "weight →"}
+      </text>
+      {children}
+    </>
+  );
+}
+
+/** A dot that glides to its mirror image when `flip` turns on. */
+function MirrorDot({ a, b, flip, fill = "fill-[#2563eb]", ms = 700 }: { a: number; b: number; flip: boolean; fill?: string; ms?: number }) {
+  const [x, y] = flip ? [b, a] : [a, b];
+  return (
+    <g style={{ transform: `translate(${msx(x)}px, ${msy(y)}px)`, transitionDuration: `${ms}ms` }} className="transition-transform ease-in-out motion-reduce:transition-none">
+      <circle r={3.4} className={fill} />
+    </g>
+  );
+}
+
+const MS_DOTS: [number, number][] = [
+  [18, 30],
+  [30, 22],
+  [66, 70],
+  [80, 62],
+  [24, 74],
+];
+const MS_PAIRS: [number, number][] = [
+  [0, 1],
+  [2, 3],
+];
+
+// ---------------------------------------------------------------------------
+// 2a · Screen 3's question, animated: Hamza's row went in the wrong way round,
+//      and each pick plays out how sir would then read it. The right one grows
+//      a boy 78 cm tall and 180 kg wide.
+
+const HR_OPTS = ["লাইনটা ভুল, তাই বাদ দিলেন", "কিছুই হয়নি, স্যার বুঝে নিলেন", "হামজা 78 cm লম্বা, ওজন 180 kg"];
+const HR_RIGHT = 2;
+const HR_NOPE = [
+  "লাইনটা বাদ গেলে হামজা file-এই থাকতো না. স্যার তো ওকে একজন মানুষ ধরেই নিয়েছিলেন.",
+  "ঘরের সংখ্যা তো বদলায়নি. height-এর ঘরে 78 বসে আছে, অথচ ছবির হামজা লম্বা.",
+  "",
+];
+
+export function HamzaRow() {
+  const pass = useGate();
+  const [pick, setPick] = useSeed<number | null>("pick", null);
+  const [miss, setMiss] = useState(0);
+  const play = usePlay(900);
+  const [h, w] = useTween(pick === HR_RIGHT ? [78, 180] : [180, 78], 900);
+  const over = pick !== null && !play.running;
+  const right = over && pick === HR_RIGHT;
+
+  const choose = (i: number) => {
+    if (play.running || right) return;
+    setPick(i);
+    sfx.pencil(0.2);
+    play.play(1, () => (i === HR_RIGHT ? pass("একটা লাইন উল্টো, একদম অন্য মানুষ.") : setMiss((m) => m + 1)));
+  };
+
+  const bodyH = h * 0.42;
+  const bodyW = w * 0.22;
+  const gone = pick === 0;
+  return (
+    <>
+      <svg viewBox="0 0 260 128" role="img" aria-label="স্যারের file-এর একটা row আর তার পাশে সেই row থেকে আঁকা একজন মানুষ" className="mx-auto my-4 block h-auto w-full max-w-sm select-none">
+        <rect x={6} y={16} width={118} height={64} rx={8} fill="#0b1220" />
+        <text x={67} y={30} textAnchor="middle" fontSize={7.5} fill="#94a3b8" fontFamily="ui-monospace, monospace">
+          height
+        </text>
+        <text x={102} y={30} textAnchor="middle" fontSize={7.5} fill="#94a3b8" fontFamily="ui-monospace, monospace">
+          weight
+        </text>
+        <g className={`transition-opacity duration-300 ${gone && over ? "opacity-40" : ""}`}>
+          <text x={14} y={52} fontSize={9} fill="#e2e8f0">
+            হামজা
+          </text>
+          <rect x={52} y={38} width={30} height={20} rx={5} fill="none" strokeWidth={1.6} className={`transition-colors duration-300 ${over && pick === 1 ? "stroke-danger" : "stroke-transparent"}`} />
+          <text x={67} y={52} textAnchor="middle" fontSize={11} fontWeight={700} fill="#e2e8f0" fontFamily="ui-monospace, monospace">
+            78
+          </text>
+          <text x={102} y={52} textAnchor="middle" fontSize={11} fontWeight={700} fill="#e2e8f0" fontFamily="ui-monospace, monospace">
+            180
+          </text>
+          {gone && <path d="M12 47H116" strokeWidth={1.8} className={`${FADE} stroke-danger`} />}
+        </g>
+        <path d="M130 48h14" strokeWidth={1.5} className="stroke-muted" />
+        <g className={`transition-opacity duration-300 ${gone ? "opacity-15" : ""}`}>
+          <path d="M150 116H252" strokeWidth={1.2} className="stroke-border" />
+          <circle cx={200} cy={116 - bodyH - 8} r={7} className="fill-[#d49a6a]" />
+          <rect x={200 - bodyW / 2} y={116 - bodyH} width={bodyW} height={bodyH} rx={Math.min(8, bodyW / 3)} className="fill-[#dc2626]" />
+          <text x={200} y={127} textAnchor="middle" fontSize={7.5} fontWeight={600} className="fill-foreground font-mono">
+            {Math.round(h)} cm · {Math.round(w)} kg
+          </text>
+        </g>
+        {gone && over && (
+          <text x={200} y={70} textAnchor="middle" fontSize={9} className={`${FADE} fill-danger`}>
+            বাদ
+          </text>
+        )}
+      </svg>
+      <div className="grid gap-2">
+        {HR_OPTS.map((o, i) => (
+          <Choice key={o} n={i} look={pick === i && over ? (i === HR_RIGHT ? "right" : "wrong") : "idle"} disabled={play.running || right} onClick={() => choose(i)}>
+            {o}
+          </Choice>
+        ))}
+      </div>
+      {over && pick !== HR_RIGHT && <Nope key={miss}>{HR_NOPE[pick]}</Nope>}
+      <Task done={right}>হামজার লাইন (78, 180) উল্টো লেখায় স্যার কী ধরে নিয়েছিলেন, বেছে নিন.</Task>
+    </>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 3½ · A figure for screen 4's explanation: the sheet mirrored in its diagonal.
+
+const MF_CAP = [
+  "ক্লাসের কাগজ, আগের মতো. কাছাকাছি দুইজন, কাছাকাছি dot.",
+  "file উল্টাতেই কাগজে একটা আয়না এসে দাঁড়ালো.",
+  "প্রত্যেকটা dot আয়নায় দেখার মতো সরে গেল. দুই axis-এর নামও জায়গা বদলালো.",
+  "কে কার কাছে, সেটা একই. কাছের জোড়াগুলো কাছেই আছে.",
+  "হামজাের বেলায় যেটা সর্বনাশ ছিল, পুরো ক্লাসের বেলায় সেটা কোনো সমস্যা create করল না. কেন?",
+];
+
+export function MirrorFold({}: Story) {
+  const s = useScene(4, [600, 1800, 2200, 2200, 2400]);
+  const k = s.k;
+  const flip = k >= 2;
+  return (
+    <Scene scene={s} caption={<span key={k} className={FADE}>{MF_CAP[k]}</span>}>
+      <svg viewBox="0 0 240 130" className="mx-auto h-auto w-full max-w-[16rem]" role="img" aria-label="কাগজের ছবি তির্যক আয়নায় উল্টে যাচ্ছে, কাছের জোড়া কাছেই থাকছে">
+        <MiniSheet flipped={flip}>
+          {k >= 1 && <Draw d={`M${msx(0)} ${msy(0)}L${msx(100)} ${msy(100)}`} className="stroke-[#94a3b8]" strokeWidth={1.2} ms={700} />}
+          {k >= 1 && (
+            <text x={msx(100) - 4} y={msy(100) + 12} textAnchor="end" fontSize={8} fill="#5a6b7d" className={FADE}>
+              আয়না
+            </text>
+          )}
+          {k >= 3 &&
+            MS_PAIRS.map(([i, j]) => {
+              const f = (p: [number, number]) => `${msx(flip ? p[1] : p[0])} ${msy(flip ? p[0] : p[1])}`;
+              return <Draw key={`${i}${j}`} d={`M${f(MS_DOTS[i])}L${f(MS_DOTS[j])}`} className="stroke-[#0d9488]" strokeWidth={2} ms={500} />;
+            })}
+          {MS_DOTS.map(([a, b], i) => (
+            <MirrorDot key={i} a={a} b={b} flip={flip} />
+          ))}
+          {k >= 4 && (
+            <text x={msx(50)} y={msy(50)} textAnchor="middle" fontSize={22} fontWeight={700} fill="#0f1b2d" fillOpacity={0.55} className={POP}>
+              ?
+            </text>
+          )}
+        </MiniSheet>
+      </svg>
+    </Scene>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 3a · Story scenes: the night Samin rewrote the file, and the morning after.
+
+export function SaminRewrites({}: Story) {
+  const s = useScene(2, [600, 2400]);
+  const k = s.k;
+  const rows = k >= 1 ? ["60 170", "49 158", "54 165"] : ["170 60", "158 49", "165 54"];
+  return (
+    <StoryFrame scene={s}>
+      <Stage backdrop={k >= 2 ? "street" : "night"} label="রাতে সামিন পুরো file নতুন করে লিখছে, আগে weight, তারপর height। পরদিন সকালে হামজা ভাবছে 78 cm লম্বা আর 180 kg ওজনের কথা">
+        {k < 2 ? (
+          <>
+            <DeskLaptop lines={rows} />
+            <Person who="samin" x={130} y={150} facing={-1} arm={k >= 1 ? "point" : "down"} label />
+            {k === 0 && <Bubble x={130} y={84} side="left" lines={["ওজনটা আগে লিখলেই", "সুবিধা."]} />}
+          </>
+        ) : (
+          <>
+            <Person who="nasib" x={170} y={150} mood="puzzled" label />
+            <Bubble x={170} y={84} tone="think" lines={["78 cm লম্বা,", "ওজন 180 kg!"]} />
+          </>
+        )}
+      </Stage>
+    </StoryFrame>
+  );
+}
+
+// 4a · Tanvir's chit, written weight first, and Samin copying it as it stands.
+
+export function TanvirSlip({}: Story) {
+  const s = useScene(2, [600, 2400]);
+  const k = s.k;
+  const rows = k === 0 ? ["170 60", "158 49", "165 54"] : k === 1 ? ["158 49", "165 54", "75 175"] : ["165 54", "75 175", "$ run"];
+  return (
+    <StoryFrame scene={s}>
+      <Stage backdrop="room" label="তানভীর চিরকুটে লিখে দিলো 75 kg, 175 cm। সামিন তাড়াহুড়ায় ঠিক সেভাবেই file-এ তুলে program চালিয়ে দিলো">
+        <DeskLaptop x={190} lines={rows} />
+        <Person who="som" x={60} y={150} arm={k === 0 ? "hold" : "down"} />
+        <text x={60} y={165} textAnchor="middle" fontSize={8} fill={INK2}>
+          তানভীর
+        </text>
+        {k === 0 && (
+          <g className={POP}>
+            <rect x={70} y={92} width={34} height={24} rx={2} fill="white" stroke={INK2} strokeOpacity={0.4} />
+            <text x={87} y={102} textAnchor="middle" fontSize={7.5} fontFamily="ui-monospace, monospace" fill={INK2}>
+              75 kg
+            </text>
+            <text x={87} y={111} textAnchor="middle" fontSize={7.5} fontFamily="ui-monospace, monospace" fill={INK2}>
+              175 cm
+            </text>
+          </g>
+        )}
+        <Person who="samin" x={k === 0 ? 120 : 172} y={150} facing={k === 0 ? -1 : 1} walking={k === 1} ms={600} arm={k >= 1 ? "point" : "hold"} label />
+      </Stage>
+    </StoryFrame>
+  );
+}
+
+// 4½ · A figure for screen 5's explanation: the program reads every cell by a
+//      rule, and never asks whether the row obeys it.
+
+const RR_ROWS = [
+  { name: "সামিন", a: 170, b: 60 },
+  { name: "আরিফ", a: 158, b: 49 },
+  { name: "তানভীর", a: 75, b: 175 },
+];
+const RR_CAP = [
+  "program-এর হাতে file, আর একটা rule: প্রথম ঘর height, দ্বিতীয় ঘর weight.",
+  "প্রত্যেকটা ঘরের value সে ধরে নেয় একটা rule থেকে.",
+  "পরের row-ও একই নিয়মে পড়া হলো.",
+  "তানভীরের row উল্টো. rule-টা কী, তাতে ওর কিছু যায় আসে না. কোনো দাগও পড়লো না.",
+  "rule বদলে পুরো file উল্টালে সবাই একই নিয়মে. rule-টা সবাই মানছে কিনা, সেটাই দেখার বিষয়.",
+];
+
+export function RuleReader({}: Story) {
+  const s = useScene(4, [600, 2200, 1800, 2600, 2600]);
+  const k = s.k;
+  const all = k >= 4;
+  return (
+    <Scene scene={s} caption={<span key={k} className={FADE}>{RR_CAP[k]}</span>}>
+      <svg viewBox="0 0 240 118" className="mx-auto h-auto w-full max-w-[16rem]" role="img" aria-label="program rule ধরে প্রত্যেকটা row-এর ঘর পড়ছে">
+        <rect x={34} y={4} width={172} height={18} rx={9} className="fill-cat-amber/15 stroke-cat-amber" />
+        <text key={String(all)} x={120} y={16} textAnchor="middle" fontSize={8.5} fontWeight={600} className={`${FADE} fill-foreground`}>
+          {all ? "প্রথম ঘর weight, দ্বিতীয় ঘর height" : "প্রথম ঘর height, দ্বিতীয় ঘর weight"}
+        </text>
+        {RR_ROWS.map((r, i) => {
+          const y = 32 + i * 26;
+          const [a, b] = all && i < 2 ? [r.b, r.a] : [r.a, r.b];
+          const read = k >= i + 1;
+          return (
+            <g key={r.name}>
+              <rect x={6} y={y} width={228} height={22} rx={6} className="fill-surface stroke-border" />
+              <text x={12} y={y + 14} fontSize={8.5} className="fill-foreground">
+                {r.name}
+              </text>
+              <text x={80} y={y + 14.5} textAnchor="end" fontSize={9.5} fontWeight={600} fontFamily="ui-monospace, monospace" className="fill-foreground">
+                {a}
+              </text>
+              <text x={108} y={y + 14.5} textAnchor="end" fontSize={9.5} fontWeight={600} fontFamily="ui-monospace, monospace" className="fill-foreground">
+                {b}
+              </text>
+              {read && (
+                <g key={`${i}${all}`} className={FADE}>
+                  <path d={`M114 ${y + 11}h8`} strokeWidth={1.2} className="stroke-muted" />
+                  <text x={122} y={y + 14.5} fontSize={8.5} className="fill-muted">
+                    {all ? `weight ${a}, height ${b}` : `height ${a}, weight ${b}`}
+                  </text>
+                  <TickMark x={221} y={y + 11} />
+                </g>
+              )}
+            </g>
+          );
+        })}
+      </svg>
+    </Scene>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 5a · A story scene: sir wants the age as well, Samin adds a column, and
+//      Fahim's seat is empty.
+
+export function AgeColumn({}: Story) {
+  const s = useScene(2, [600, 2400]);
+  const k = s.k;
+  const rows = k === 0 ? ["170 60", "158 49", "165 54"] : k === 1 ? ["170 60 17", "158 49 15"] : ["170 60 17", "158 49 15", "165 54 ?"];
+  return (
+    <StoryFrame scene={s}>
+      <Stage backdrop="room" label="PT স্যার বলছেন বয়সও দেখো। সামিন সবার row-এর শেষে বয়সের ঘর জোড়ে। ফাহিম আসেনি, তার বয়সের ঘরে ?">
+        <Person who="mama" x={46} y={150} arm={k === 0 ? "point" : "down"} />
+        <text x={46} y={165} textAnchor="middle" fontSize={8} fill={INK2}>
+          PT স্যার
+        </text>
+        {k === 0 && <Bubble x={46} y={80} side="right" lines={["বয়সও দেখো."]} />}
+        <DeskLaptop x={96} lines={rows} warn={k >= 2 ? 2 : undefined} />
+        <Person who="samin" x={206} y={150} facing={-1} arm={k >= 1 ? "point" : "down"} label />
+        {k >= 2 && (
+          <g className={FADE}>
+            <rect x={252} y={128} width={50} height={5} rx={1} fill="#78350f" />
+            <rect x={256} y={133} width={3} height={17} fill="#78350f" />
+            <rect x={295} y={133} width={3} height={17} fill="#78350f" />
+            <text x={277} y={120} textAnchor="middle" fontSize={8} fill={INK2}>
+              ফাহিম আসেনি
+            </text>
+          </g>
+        )}
+      </Stage>
+    </StoryFrame>
+  );
+}
+
+// 5½ · A figure for screen 6's explanation: three boxes against two, the
+//      hole, and whatever goes into it.
+
+const EB_CAP = [
+  "হামজা থাকে তিন dimension-এর জগতে, আর ফাহিম দুইয়ের.",
+  "সবার ঘর সংখ্যা সমান না হলে program তুলনাই করতে পারে না.",
+  "ঘরটা ভরাতে গেলেই আসল প্যাঁচটা লাগে. 0 বসানো নিরীহ শোনায়, কিন্তু…",
+  "…তাতে ফাহিমের partner বদলে গেল, আরিফ.",
+  "average বসালে আবার অন্য জন. খালি ঘরে কী বসাচ্ছেন, সেটা একটা decision, আর decision result বদলে দিতে পারে.",
+];
+
+export function EmptyBox({}: Story) {
+  const s = useScene(4, [600, 2200, 2200, 2400, 2600]);
+  const k = s.k;
+  const box = (x: number, y: number, v: string, tone = "stroke-border") => (
+    <g key={`${x}${y}${v}`} className={POP}>
+      <rect x={x} y={y} width={38} height={24} rx={6} className={`fill-surface ${tone}`} strokeWidth={1.6} />
+      <text x={x + 19} y={y + 16} textAnchor="middle" fontSize={11} fontWeight={600} fontFamily="ui-monospace, monospace" className="fill-foreground">
+        {v}
+      </text>
+    </g>
+  );
+  const fill = k >= 2 ? (k >= 4 ? String(AVG) : "0") : null;
+  const mate = k === 3 ? ARIF.name : k >= 4 ? SAMIN.name : null;
+  return (
+    <Scene scene={s} caption={<span key={k} className={FADE}>{EB_CAP[k]}</span>}>
+      <svg viewBox="0 0 240 124" className="mx-auto h-auto w-full max-w-[16rem]" role="img" aria-label="হামজার তিনটা ঘর, ফাহিমের দুইটা আর একটা খালি ঘর, সেখানে 0 বা average বসানো">
+        <text x={4} y={30} fontSize={9} className="fill-foreground">
+          হামজা
+        </text>
+        <text x={4} y={90} fontSize={9} className="fill-foreground">
+          ফাহিম
+        </text>
+        {[NASIB.h, NASIB.w, NASIB.age].map((v, i) => box(52 + i * 58, 16, String(v)))}
+        {[FAHIM.h, FAHIM.w].map((v, i) => box(52 + i * 58, 76, String(v)))}
+        {fill === null ? (
+          <rect x={168} y={76} width={38} height={24} rx={6} fill="none" strokeWidth={1.6} strokeDasharray="4 3" className={k >= 1 ? "stroke-danger" : "stroke-border"} />
+        ) : (
+          box(168, 76, fill, "stroke-cat-amber")
+        )}
+        {[0, 1, 2].map((i) => {
+          if (i === 2 && fill === null && k < 1) return null;
+          const ok = i < 2 || fill !== null;
+          return (
+            <path
+              key={`${i}${ok}`}
+              d={`M${71 + i * 58} 40V76`}
+              strokeWidth={1.4}
+              strokeDasharray={ok ? undefined : "3 3"}
+              className={`${FADE} ${ok ? "stroke-cat-teal" : "stroke-danger"}`}
+              style={{ opacity: k >= 1 ? 1 : 0 }}
+            />
+          );
+        })}
+        {k >= 1 && fill === null && (
+          <text x={187} y={62} textAnchor="middle" fontSize={8} className={`${FADE} fill-danger`}>
+            মিলছে না
+          </text>
+        )}
+        {mate && (
+          <text key={mate} x={120} y={118} textAnchor="middle" fontSize={9.5} fontWeight={600} className={`${POP} fill-foreground`}>
+            ফাহিমের partner: {mate}
+          </text>
+        )}
+      </svg>
+    </Scene>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 6½ · A figure for screen 7's explanation: three kinds of edit, and the one
+//      that never makes a sound.
+
+const QO_CAP = [
+  "খেয়াল করেছেন, সবচেয়ে dangerous কোন ব্যাপারটা?",
+  "যেটা জানান দেয় সেটা না. program থেমে গেল, লাল দাগ পড়লো.",
+  "যেটা চুপচাপ থাকে, সেটা. program চলছে, কিছুই বলছে না.",
+  "বেশিরভাগ data related bug এরকম. কোথাও একবার না একবার একটা rule ভাঙার ভুল.",
+];
+const QO_COLS = [
+  { x: 4, name: "নিরাপদ" },
+  { x: 84, name: "Error দেবে" },
+  { x: 164, name: "চুপচাপ bug" },
+];
+
+export function QuietOnes({}: Story) {
+  const s = useScene(3, [600, 2400, 2600, 2800]);
+  const k = s.k;
+  return (
+    <Scene scene={s} caption={<span key={k} className={FADE}>{QO_CAP[k]}</span>}>
+      <svg viewBox="0 0 240 118" className="mx-auto h-auto w-full max-w-[16rem]" role="img" aria-label="তিন রকম program: নিরাপদ, error দেয়, আর চুপচাপ ভুল করে">
+        {QO_COLS.map((c, i) => {
+          const loud = i === 1 && k >= 1;
+          return (
+            <g key={c.name}>
+              <rect x={c.x} y={10} width={72} height={46} rx={6} fill="#0b1220" strokeWidth={2} className={`transition-colors duration-300 ${loud ? "stroke-danger" : "stroke-transparent"}`} />
+              {i === 0 && (
+                <>
+                  <text x={c.x + 36} y={30} textAnchor="middle" fontSize={8} fontFamily="ui-monospace, monospace" fill="#cbd5e1">
+                    170 60
+                  </text>
+                  <TickMark x={c.x + 30} y={39} />
+                </>
+              )}
+              {i === 1 && (
+                <text key={String(loud)} x={c.x + 36} y={36} textAnchor="middle" fontSize={9} fontWeight={700} fontFamily="ui-monospace, monospace" fill={loud ? "#fca5a5" : "#475569"} className={FADE}>
+                  {loud ? "Error!" : "…"}
+                </text>
+              )}
+              {i === 2 && (
+                <>
+                  <text x={c.x + 36} y={26} textAnchor="middle" fontSize={8} fill="#cbd5e1">
+                    তানভীর ↔ রাহাত
+                  </text>
+                  {k >= 2 && (
+                    <text key="ok" x={c.x + 36} y={42} textAnchor="middle" fontSize={8} fontFamily="ui-monospace, monospace" fill="#6ee7b7" className={FADE}>
+                      ok
+                    </text>
+                  )}
+                </>
+              )}
+              <text x={c.x + 36} y={72} textAnchor="middle" fontSize={9} fontWeight={600} className="fill-foreground">
+                {c.name}
+              </text>
+            </g>
+          );
+        })}
+        {k >= 3 &&
+          [0, 1, 2, 3, 4].map((r) => (
+            <g key={r} className={FADE} style={{ transitionDelay: `${r * 120}ms` }}>
+              <rect x={170 + (r % 5) * 12} y={84} width={9} height={14} rx={2} className={r === 3 ? "fill-cat-amber" : "fill-cat-blue/35"} />
+              <path d={`M${174.5 + r * 12} 98v${r === 3 ? 6 : 0}`} className="stroke-cat-amber" strokeWidth={1.4} />
+            </g>
+          ))}
+      </svg>
+    </Scene>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 8 · The recall question, animated: a colleague flips 100 rows. Whatever you
+//     pick, the program runs and the screen shows what really happens.
+
+const HD_ROWS: [number, number][] = [
+  [28, 42000],
+  [35, 55000],
+  [41, 61000],
+  [52, 70000],
+  [30, 38000],
+  [45, 64000],
+];
+const HD_FLIPPED = 3;
+const HD_AVG = (HD_ROWS.reduce((t, [a, b], i) => t + (i < HD_FLIPPED ? b : a), 0) / HD_ROWS.length).toFixed(1);
+const HD_OPTS = [
+  "Program error দেবে, কারণ row-গুলো একটার সাথে আরেকটা মিলছে না",
+  "কিছুই হবে না, সংখ্যা তো সবই আছে",
+  "কোনো error আসবে না, কিন্তু ওই 100 জনের সব হিসাব চুপচাপ ভুল হবে",
+];
+const HD_RIGHT = 2;
+const HD_NOPE = [
+  "লাল দাগ তো এলোই না. কোনো error নাই, সব row-তেই দুইটা করে ঘর, তাই program খুশি.",
+  "program কিছু বলেনি ঠিকই, কিন্তু গড় বয়সটা দেখুন. সংখ্যা সবই আছে, শুধু কয়েকটা ঘর জায়গা বদলেছে.",
+  "",
+];
+
+export function HundredRows() {
+  const pass = useGate();
+  const [pick, setPick] = useSeed<number | null>("pick", null);
+  const [miss, setMiss] = useState(0);
+  const run = usePlay(800);
+  const shown = pick === null ? 0 : run.running ? run.k : 3;
+  const over = pick !== null && !run.running;
+  const right = over && pick === HD_RIGHT;
+
+  const choose = (i: number) => {
+    if (run.running || right) return;
+    setPick(i);
+    sfx.typing(0.5);
+    run.play(3, () => (i === HD_RIGHT ? pass("কোনো error নাই, শুধু ভুল উত্তর.") : setMiss((m) => m + 1)));
+  };
+
+  return (
+    <>
+      <div className="my-4 flex flex-col items-center gap-4 md:flex-row md:items-start md:justify-center">
+        <div className="w-full max-w-[15.5rem] rounded-xl border border-border bg-surface px-3 py-2 text-sm">
+          <div className="mb-1 flex justify-between text-xs text-muted">
+            <span>বয়স</span>
+            <span>আয়</span>
+          </div>
+          {HD_ROWS.map(([a, b], i) => {
+            const flipped = i < HD_FLIPPED;
+            return (
+              <div key={i} className={`flex justify-between rounded px-1.5 font-mono tabular-nums ${flipped ? "bg-cat-amber/15" : ""}`}>
+                <span>{flipped ? b : a}</span>
+                <span>{flipped ? a : b}</span>
+              </div>
+            );
+          })}
+          <div className="mt-1 text-center text-xs text-muted">… মোট 100টা row, প্রথম 100টা উল্টো</div>
+        </div>
+        <Laptop file="run.py">
+          {shown >= 1 && <Out>$ python run.py</Out>}
+          {shown >= 2 && <Out tone="ok">✓ কোনো error নাই</Out>}
+          {shown >= 3 && <Out tone="plain">গড় বয়স: {HD_AVG}</Out>}
+        </Laptop>
+      </div>
+      <div className="grid gap-2">
+        {HD_OPTS.map((o, i) => (
+          <Choice key={o} n={i} look={pick === i && over ? (i === HD_RIGHT ? "right" : "wrong") : "idle"} disabled={run.running || right} onClick={() => choose(i)}>
+            {o}
+          </Choice>
+        ))}
+      </div>
+      {over && pick !== HD_RIGHT && <Nope key={miss}>{HD_NOPE[pick]}</Nope>}
+      <Task done={right}>colleague (বয়স, আয়) ঘুরিয়ে দিলে কী হবে, বেছে নিন. program চালিয়ে দেখবেন.</Task>
+    </>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 9 · Three small figures for the three words, in place of the static lines:
+//     each opens, waits a beat, and then does the thing the word is about.
+
+const WF_BOX = "fill-surface stroke-border";
+
+function WordFig({ n }: { n: 0 | 1 | 2 }) {
+  const k = useCountUp(1, 900);
+  const glide = "transition-transform duration-500 ease-in-out motion-reduce:transition-none";
+  const box = (x: number, y: number, t: string, extra = "") => (
+    <g key={`${x}${y}${t}`} className={extra}>
+      <rect x={x} y={y} width={36} height={22} rx={6} strokeWidth={1.6} className={WF_BOX} />
+      <text x={x + 18} y={y + 15} textAnchor="middle" fontSize={11} fontWeight={600} fontFamily="ui-monospace, monospace" className="fill-foreground">
+        {t}
+      </text>
+    </g>
+  );
+  if (n === 0) {
+    return (
+      <svg viewBox="0 0 200 60" className="my-2 block h-auto w-full max-w-[13rem]" role="img" aria-label="(175, 75) জায়গা বদলালে অন্য মানুষ">
+        {[175, 75].map((v, i) => (
+          <g key={v} style={{ transform: `translateX(${(k >= 1 ? 1 - 2 * i : 0) * 44}px)` }} className={glide}>
+            {box(52 + i * 44, 8, String(v))}
+          </g>
+        ))}
+        <text key={k} x={100} y={50} textAnchor="middle" fontSize={9.5} fontWeight={600} className={`${FADE} ${k >= 1 ? "fill-danger" : "fill-foreground"}`}>
+          {k >= 1 ? "কাগজের বাইরের কেউ" : "তানভীর"}
+        </text>
+      </svg>
+    );
+  }
+  if (n === 1) {
+    return (
+      <svg viewBox="0 0 200 66" className="my-2 block h-auto w-full max-w-[13rem]" role="img" aria-label="সামিনের তিনটা ঘর, ফাহিমের দুইটা আর একটা খালি">
+        <text x={4} y={20} fontSize={9} className="fill-foreground">
+          সামিন
+        </text>
+        <text x={4} y={52} fontSize={9} className="fill-foreground">
+          ফাহিম
+        </text>
+        {[170, 60, 17].map((v, i) => box(44 + i * 44, 6, String(v)))}
+        {[165, 54].map((v, i) => box(44 + i * 44, 38, String(v)))}
+        <rect x={132} y={38} width={36} height={22} rx={6} fill="none" strokeWidth={1.6} strokeDasharray="4 3" className={`transition-colors duration-500 ${k >= 1 ? "stroke-danger" : "stroke-border"}`} />
+        <text x={150} y={53} textAnchor="middle" fontSize={11} fontWeight={700} className={k >= 1 ? "fill-danger" : "fill-muted"}>
+          ?
+        </text>
+      </svg>
+    );
+  }
+  return (
+    <svg viewBox="0 0 200 64" className="my-2 block h-auto w-full max-w-[13rem]" role="img" aria-label="height আর weight জায়গা বদলালেও দুটোই চলে, যদি সবাই একই rule মানে">
+      {["height", "weight"].map((t, i) => (
+        <g key={t} style={{ transform: `translateX(${(k >= 1 ? 1 - 2 * i : 0) * 60}px)` }} className={glide}>
+          <rect x={34 + i * 60} y={6} width={52} height={20} rx={6} strokeWidth={1.6} className={WF_BOX} />
+          <text x={60 + i * 60} y={20} textAnchor="middle" fontSize={9.5} fontWeight={600} className="fill-foreground font-mono">
+            {t}
+          </text>
+        </g>
+      ))}
+      <TickMark x={86} y={42} />
+      {k >= 1 && <TickMark x={106} y={42} />}
+      <text x={100} y={60} textAnchor="middle" fontSize={8.5} className="fill-muted">
+        {k >= 1 ? "(weight, height)" : "(height, weight)"}
+      </text>
+    </svg>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 10 · Screen 3 of 2.1b, animated: which box is v₂? A pointer drops onto the
+//      pick and its small number says whose it is.
+
+const PS_VALS = [175, 75, 42, 19];
+const PS_OPTS = [0, 1, 2];
+const PS_RIGHT = 1;
+
+export function PickSlot() {
+  const pass = useGate();
+  const [pick, setPick] = useSeed<number | null>("pick", null);
+  const [miss, setMiss] = useState(0);
+  const play = usePlay(700);
+  const over = pick !== null && !play.running;
+  const right = over && pick === PS_RIGHT;
+
+  const choose = (i: number) => {
+    if (play.running || right) return;
+    setPick(i);
+    sfx.pencil(0.2);
+    play.play(1, () => (i === PS_RIGHT ? pass("v₂ মানে দ্বিতীয় ঘর: 75.") : setMiss((m) => m + 1)));
+  };
+
+  return (
+    <>
+      <svg viewBox="0 0 260 96" role="img" aria-label="সোমের vector (175, 75, 42, 19), প্রত্যেক ঘরের নিচে তার নম্বর" className="mx-auto my-4 block h-auto w-full max-w-sm select-none">
+        <text x={8} y={50} fontSize={11} className="fill-foreground font-mono">
+          v =
+        </text>
+        {PS_VALS.map((v, i) => {
+          const on = pick === i;
+          const look = on && over ? (i === PS_RIGHT ? "stroke-accent fill-accent/10" : "stroke-danger fill-danger/5") : on ? "stroke-cat-blue fill-cat-blue/10" : "fill-surface stroke-border";
+          return (
+            <g key={v}>
+              <rect x={40 + i * 54} y={30} width={46} height={32} rx={7} strokeWidth={2} className={`transition-colors duration-300 ${look}`} />
+              <text x={63 + i * 54} y={51} textAnchor="middle" fontSize={15} fontWeight={600} className="fill-foreground font-mono">
+                {v}
+              </text>
+              <text x={63 + i * 54} y={78} textAnchor="middle" fontSize={10} className="fill-muted font-mono">
+                {vSub(i + 1)}
+              </text>
+            </g>
+          );
+        })}
+        <g style={{ transform: `translateX(${(pick ?? 0) * 54}px)`, opacity: pick === null ? 0 : 1 }} className="transition-[transform,opacity] duration-500 ease-in-out motion-reduce:transition-none">
+          <path d="M63 25l-5 -9h10z" className="fill-cat-blue" />
+        </g>
+      </svg>
+      <div className="grid grid-cols-3 gap-2">
+        {PS_OPTS.map((i) => (
+          <Choice key={i} n={i} look={pick === i && over ? (i === PS_RIGHT ? "right" : "wrong") : "idle"} disabled={play.running || right} onClick={() => choose(i)}>
+            <span className="font-mono">{PS_VALS[i]}</span>
+          </Choice>
+        ))}
+      </div>
+      {over && pick !== PS_RIGHT && (
+        <Nope key={miss}>
+          ওটা {vSub((pick ?? 0) + 1)}, নিচের ছোট সংখ্যা {(pick ?? 0) + 1}. আমরা চাইছি v₂, মানে 2 নম্বর ঘর.
+        </Nope>
+      )}
+      <Task done={right}>সোমের vector-এ v₂ কত, বেছে নিন.</Task>
+    </>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 11a · A story scene for the code paragraph: Samin types v[1], sure the
+//       first place is 1.
+
+export function SaminPrint({}: Story) {
+  const s = useScene(2, [600, 2200]);
+  const k = s.k;
+  const lines = k === 0 ? ["v=[180,78,18]"] : ["v=[180,78,18]", "print(v[1])"];
+  return (
+    <StoryFrame scene={s}>
+      <Stage backdrop="room" label="সামিন code লিখছে, v = [180, 78, 18], তারপর print(v[1])। মনে মনে ভাবছে, প্রথম ঘর মানে 1">
+        <DeskLaptop x={150} lines={lines} code />
+        <Person who="samin" x={130} y={150} arm={k >= 1 ? "point" : "down"} label />
+        {k >= 2 && <Bubble x={130} y={84} side="left" tone="think" lines={["প্রথম ঘর মানে 1,", "সোজা হিসাব."]} />}
+      </Stage>
+    </StoryFrame>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 12 · Two figures for the ending. The first: king minus man, 300 boxes at a
+//      time, and a list that cannot say "queen".
+
+const KM_KING = [0.8, 0.2, -0.4, 0.6, 0.1];
+const KM_MAN = [0.7, -0.1, -0.3, 0.2, 0.1];
+const KM_CAP = [
+  "list-এর চোখে king একটা তিনশো ঘরের list.",
+  "man-ও তাই. দুইটার ঘরে ঘরে বিয়োগ.",
+  "হাতে আসে আরও তিনশোটা সংখ্যা.",
+  "তাতে queen কোথা থেকে আসবে, list দেখে তার কোনো কূলকিনারা পাওয়া যায় না.",
+];
+
+export function KingMinusMan({}: Story) {
+  const s = useScene(3, [600, 2200, 2400, 2800]);
+  const k = s.k;
+  const col = (x: number, title: string, vals: string[], show: boolean) =>
+    show && (
+      <g key={title} className={POP}>
+        <text x={x + 19} y={14} textAnchor="middle" fontSize={9} fontWeight={700} className="fill-foreground">
+          {title}
+        </text>
+        {vals.map((v, i) => (
+          <g key={i}>
+            <rect x={x} y={22 + i * 18} width={38} height={16} rx={4} className="fill-surface stroke-border" />
+            <text x={x + 19} y={34 + i * 18} textAnchor="middle" fontSize={9} fontWeight={600} fontFamily="ui-monospace, monospace" className="fill-foreground">
+              {v}
+            </text>
+          </g>
+        ))}
+        {[0, 5, 10].map((d) => (
+          <circle key={d} cx={x + 19} cy={22 + vals.length * 18 + 4 + d} r={1.3} className="fill-muted" />
+        ))}
+      </g>
+    );
+  const diff = KM_KING.map((v, i) => (v - KM_MAN[i]).toFixed(1));
+  return (
+    <Scene scene={s} caption={<span key={k} className={FADE}>{KM_CAP[k]}</span>}>
+      <svg viewBox="0 0 240 152" className="mx-auto h-auto w-full max-w-[16rem]" role="img" aria-label="king আর man দুইটাই তিনশো সংখ্যার list, ঘরে ঘরে বিয়োগ করলে আরও তিনশো সংখ্যা, queen কোথাও দেখা যায় না">
+        {col(14, "king", KM_KING.map((v) => v.toFixed(1)), true)}
+        {k >= 1 && (
+          <text x={64} y={58} textAnchor="middle" fontSize={20} fontWeight={700} className={`${POP} fill-foreground`}>
+            −
+          </text>
+        )}
+        {col(78, "man", KM_MAN.map((v) => v.toFixed(1)), k >= 1)}
+        {k >= 2 && (
+          <text x={128} y={58} textAnchor="middle" fontSize={20} fontWeight={700} className={`${POP} fill-foreground`}>
+            =
+          </text>
+        )}
+        {col(142, "বাকি", diff, k >= 2)}
+        {k >= 3 && (
+          <g className={POP}>
+            <rect x={196} y={36} width={38} height={38} rx={8} fill="none" strokeWidth={1.6} strokeDasharray="4 3" className="stroke-muted" />
+            <text x={215} y={62} textAnchor="middle" fontSize={20} fontWeight={700} className="fill-muted">
+              ?
+            </text>
+            <text x={215} y={86} textAnchor="middle" fontSize={8.5} className="fill-muted">
+              queen?
+            </text>
+          </g>
+        )}
+        <text x={120} y={146} textAnchor="middle" fontSize={8.5} className="fill-muted">
+          প্রত্যেকটা list-এ ৩০০টা করে ঘর
+        </text>
+      </svg>
+    </Scene>
+  );
+}
+
+// 12a · The second: the dots slid like a reflection, and Tanvir shot off the
+//       paper in one particular direction, so the numbers have a place and a
+//       direction. The second face stays covered until 2.2.
+
+const DF_CAP = [
+  "ক্লাসের কাগজ, তানভীর সোমের পাশে.",
+  "পুরো file উল্টাতে dot-গুলো আয়নায় দেখানো reflection-এর মতো সরে গেল.",
+  "শুধু তানভীরের row উল্টো হতেই সে ছিটকে গেল কাগজের বাইরে, একটা নির্দিষ্ট দিকে.",
+  "সংখ্যাগুলোর যেন একটা জায়গা আছে, একটা দিক আছে.",
+  "Vector-এর সেই দ্বিতীয় রূপ পরের lesson-এ আপনার জন্য অপেক্ষা করছে.",
+];
+const DF_TANVIR: [number, number] = [63, 61];
+const DF_OFF: [number, number] = [-14, 108];
+
+export function DotsFly({}: Story) {
+  const s = useScene(4, [600, 2000, 2600, 2400, 2600]);
+  const k = s.k;
+  const away = k >= 2;
+  const [ta, tb] = away ? DF_OFF : DF_TANVIR;
+  return (
+    <Scene scene={s} caption={<span key={k} className={FADE}>{DF_CAP[k]}</span>}>
+      <svg viewBox="0 0 240 130" className="mx-auto h-auto w-full max-w-[16rem]" role="img" aria-label="file উল্টাতে dot-গুলো আয়নায় সরে গেল, তানভীরের উল্টো row তাকে কাগজের বাইরে ছিটকে দিলো">
+        <MiniSheet flipped={k === 1}>
+          {[...MS_DOTS, [60, 56] as [number, number]].map(([a, b], i) => (
+            <MirrorDot key={i} a={a} b={b} flip={k === 1} />
+          ))}
+          {k >= 3 && <Draw d={`M${msx(0)} ${msy(0)}L${msx(ta)} ${msy(tb)}`} className="stroke-[#7c3aed]" strokeWidth={1.4} ms={700} />}
+          <MirrorDot a={ta} b={tb} flip={k === 1} fill="fill-[#7c3aed]" ms={k === 2 ? 900 : 700} />
+          {k >= 3 && (
+            <text x={msx(ta) + 8} y={msy(tb) + 16} fontSize={11} fontWeight={700} fill="#7c3aed" className={POP}>
+              ?
+            </text>
+          )}
+          {k >= 2 && (
+            <text x={msx(ta) + 8} y={msy(tb) + 4} fontSize={7.5} fill="#0f1b2d" className={FADE}>
+              তানভীর
+            </text>
+          )}
+        </MiniSheet>
+        {k >= 4 && (
+          <g className={POP}>
+            <rect x={176} y={20} width={58} height={44} rx={8} className="fill-surface stroke-border" strokeDasharray="4 3" />
+            <text x={205} y={38} textAnchor="middle" fontSize={8.5} className="fill-muted">
+              রূপ ২
+            </text>
+            <text x={205} y={57} textAnchor="middle" fontSize={18} fontWeight={700} className="fill-muted">
+              ?
+            </text>
+          </g>
+        )}
+      </svg>
+    </Scene>
+  );
+}
+
+export const fixtures: Fixtures = {
+  TeaStallSom: { mid: { k: 2 } },
+  TwoForms: { start: { k: 0 }, two: { k: 2 }, tags: { k: 3 }, loose: { k: 4 } },
+  WrestlingRule: { pair: { k: 3 }, fall: { k: 4 } },
+  SaminSheet: { one: { k: 1 }, all: { k: 2 }, close: { k: 3 }, partner: { k: 4 } },
+  SaminProgram: { ruler: { k: 1 }, ruler2: { k: 2 }, code: { k: 3 } },
+  HamzaRow: { start: {}, gone: { pick: 0 }, same: { pick: 1 }, right: { pick: 2 } },
+  MirrorFold: { sheet: { k: 0 }, mirror: { k: 1 }, flipped: { k: 2 }, pairs: { k: 3 }, why: { k: 4 } },
+  SaminRewrites: { night: { k: 0 }, rewritten: { k: 1 }, morning: { k: 2 } },
+  TanvirSlip: { chit: { k: 0 }, typed: { k: 1 }, run: { k: 2 } },
+  RuleReader: { rule: { k: 0 }, read: { k: 2 }, slip: { k: 3 }, flipped: { k: 4 } },
+  AgeColumn: { sir: { k: 0 }, column: { k: 1 }, gap: { k: 2 } },
+  EmptyBox: { boxes: { k: 0 }, gap: { k: 1 }, zero: { k: 3 }, avg: { k: 4 } },
+  QuietOnes: { start: { k: 0 }, loud: { k: 1 }, quiet: { k: 2 }, rule: { k: 3 } },
+  HundredRows: { start: {}, wrong: { pick: 0 }, wrong2: { pick: 1 }, right: { pick: 2 } },
+  PickSlot: { start: {}, wrong: { pick: 0 }, right: { pick: 1 } },
+  SaminPrint: { typed: { k: 1 }, think: { k: 2 } },
+  KingMinusMan: { king: { k: 0 }, minus: { k: 1 }, rest: { k: 2 }, question: { k: 3 } },
+  DotsFly: { sheet: { k: 0 }, mirror: { k: 1 }, off: { k: 2 }, dir: { k: 3 }, face: { k: 4 } },
+};

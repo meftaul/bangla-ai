@@ -1,0 +1,118 @@
+export const metadata = {
+  title: "Math for AI 2.1b — Vector-এর তিন শব্দ আর লেখার নিয়ম",
+  description: "Ordered, n fixed, আর ঘরের fixed মানে: সামিনের তিন কাণ্ডের তিনটা শব্দ। তারপর v₁ আর v[0]-এর ফাঁদ, আর x ∈ ℝ³⁰⁰ জোরে পড়া।",
+  type: "article",
+};
+
+{/* Second half of 2.1 (02a_vector_list): the definition's three words, each
+    tied to something Samin did, then the notation: three ways of writing one
+    vector, v₁ against v[0], and x ∈ ℝ³⁰⁰ read aloud. Shell in
+    components/journey/journey.tsx; the screens live in
+    components/interactive/list-journey.tsx, shared with 2.1. */}
+
+import { Journey, Step, Then } from "@/components/journey/journey";
+import {
+  ThreeWords,
+  SameVector,
+  PickSlot,
+  SaminPrint,
+  IndexTrap,
+  ReadAloud,
+  KingMinusMan,
+  DotsFly,
+} from "@/components/interactive/list-journey";
+
+<Journey title="Vector-এর দুই চেহারা · 2.1b">
+
+<Step>
+
+এবার vector-এর definition-টা একটু ঘষামাজা করা যাক। আগে বলেছিলাম, vector হলো ordered list of numbers, যেখানে প্রত্যেকটা number কোনো না কোনো meaning carry করে। কথাটা ভুল না, তবে একটু কেতাবি ভাষায় পুরোটা বললে দাঁড়ায় এরকম:
+
+> একটা **vector** হলো $n$টা সংখ্যার একটা ordered list, যেখানে $n$ fixed, আর প্রত্যেকটা position-এর একটা fixed মানে আছে।
+
+এই এক লাইনে তিনটা শব্দ আসল কাজটা করছে, আর তিনটার পেছনেই সামিনের একেকটা কাণ্ড related। একেকটা শব্দ খুলে দেখুন।
+
+<ThreeWords />
+
+</Step>
+
+<Step>
+
+এবার লেখার নিয়মকানুন। Paper বা কোনো library-র documentation পড়তে গেলে একই vector কয়েক রকম ভাবে দেখবেন। আগে থেকে চেনা থাকলে আর ধাক্কা খাবেন না।
+
+প্রথমে নাম। Vector-কে একটা অক্ষর দিয়ে ডাকা হয়, আর সাধারণ সংখ্যা থেকে আলাদা করতে বইগুলো তিন রকম কায়দা করে। Machine learning-এর paper-এ মোটা অক্ষরে, $\mathbf{v}$। Physics-এর বইয়ে মাথায় একটা তীর দিয়ে, $\vec{v}$। আর অনেক জায়গায় সাদামাটা $v$, ধরে নেওয়া হয় আপনি context থেকে বুঝে নেবেন। তিনটাই একই জিনিস।
+
+তারপর সংখ্যাগুলো কীভাবে সাজানো। পাশাপাশি আর ওপর-নিচে, সংখ্যা তো একই, তাহলে দুই রকম লেখার দরকার কী? কারণ সামনে যখন vector-এর সাথে matrix-এর দেখা হবে, row আর column তখন আলাদা আচরণ করবে। আপাতত হামজাের vector-টা তিনভাবে সাজিয়ে দেখুন।
+
+<SameVector />
+
+</Step>
+
+<Step>
+
+লেখার কায়দা তো দেখলেন। এবার ঘরগুলোর নাম, vector-এর lesson থেকে।
+
+<PickSlot />
+
+<Then>
+
+নিচের ছোট সংখ্যাটা বলে কত নম্বর ঘর, আর গোনা শুরু 1 থেকে। তাই v₁ = 175, আর v₂ = 75।
+
+</Then>
+
+</Step>
+
+<Step>
+
+Vector-এর ভেতরের এক একটা সংখ্যার নাম **component**। Vector-এর lesson-এ ওদের ডেকেছিলাম $v_1$, $v_2$ দিয়ে, count শুরু 1 থেকে। হামজাের বয়সসহ vector $v = (180, 78, 18)$ হলে $v_1 = 180$, $v_2 = 78$, আর $v_3 = 18$।
+
+সামিন এবার একটু code লিখছে। সবার height দিয়ে একটা list বানাবে। হামজাকে দিয়ে শুরু করলো, `print(v[1])`। মনে মনে ভাবলো, প্রথম ঘর মানে 1, সোজা হিসাব।
+
+<SaminPrint story />
+
+<IndexTrap />
+
+<Then>
+
+Mathematics এ গোনা শুরু হয় ১ থেকে, আর বেশির ভাগ programming language এ, সেখানে 0 থেকে। Numerical computing-এ এই এক অমিল যত bug বানিয়েছে, আর কোনো একক জিনিস ততটা বানায়নি। আর খেয়াল করেছেন, এটাও সেই চুপচাপ দলের? সামিনের code কোনো error দেয়নি, শুধু height-এর জায়গায় weight ধরিয়ে দিয়েছে।
+
+</Then>
+
+</Step>
+
+<Step>
+
+শেষ একটা অভ্যাস। Dimension তো আগে থেকেই চেনেন, মানে vector-এ কয়টা ঘর। হামজাের (180, 78)-এর dimension 2, আর paper-এ এটা লেখা হয় $v \in \mathbb{R}^2$ দিয়ে। প্রথম দেখায় ভড়কিয়ে যাওয়াই স্বাভাবিক। আসলে এটা একটা পুরো sentence, reading পড়া যায়।
+
+ধরেন কোনো paper-এ লেখা, $x \in \mathbb{R}^{300}$। প্রত্যেকটা টুকরায় tap করে sentence টা জোড়া লাগান।
+
+<ReadAloud />
+
+</Step>
+
+<Step>
+
+## শেষ! Vector কীভাবে লেখে সেটা এখন আপনি জানেন।
+
+* অঙ্কে গোনা শুরু 1 থেকে ($v_1$), code-এ 0 থেকে (`v[0]`)।
+* $v \in \mathbb{R}^n$ মানে “$v$ হলো $n$টা সাধারণ সংখ্যার একটা list।” $n$টা ঘরের যেকোনো vector লেখা হয় $v = (v_1, v_2, \ldots, v_n)$, মাঝের $\ldots$ মানে “এভাবেই চলতে থাকবে”।
+
+এবার সোমের প্রশ্নে একটু ফেরত আসি। List-এর চোখে king থেকে man বিয়োগ মানে ৩০০টা ঘরে ঘরে বিয়োগ, আর হাতে আসে আরও ৩০০টা সংখ্যা। তাতে queen কোথা থেকে আসবে, list দেখে তার কোনো কূলকিনারা পাওয়া যায় না।
+
+<KingMinusMan story />
+
+তবে একটা জিনিস খেয়াল করেছিলেন? পুরো file উল্টানোর সময় কাগজের dot-গুলো আয়নাতে দেখানো reflection এর মতো সরে গেল, আর তানভীর ছিটকে গেল কাগজের বাইরে, একটা নির্দিষ্ট দিকে। সংখ্যাগুলোর যেন একটা জায়গা আছে, একটা দিক আছে। Vector-এর সেই দ্বিতীয় রূপ, একটা arrow, পরের lesson-এ আপনার জন্য অপেক্ষা করছে।
+
+<DotsFly story />
+
+<LessonLink
+  href="/dashboard/articles/math_for_ai/02b_vector_arrow"
+  eyebrow="পরের পাঠ"
+  title="Arrow, যার কোনো address নাই"
+>
+  Shiku-কে একটা recipe পড়ে শোনাবেন, আর সে রেখে যাবে একটা arrow।
+</LessonLink>
+
+</Step>
+
+</Journey>

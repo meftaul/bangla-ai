@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useState, type KeyboardEvent } from "react";
+import { useEffect, useId, useRef, useState, type KeyboardEvent } from "react";
 
+import { Bubble, Person, Robot, Stage, StoryFrame } from "@/components/journey/cast";
 import { Task, useGate } from "@/components/journey/journey";
-import { FADE, Nope, POP, Stepper, Ticks, primaryBtn, quietBtn, useCountUp, usePlay, useTween } from "@/components/journey/kit";
+import { Choice, Draw, FADE, Nope, POP, Scene, Stepper, Ticks, primaryBtn, quietBtn, useCountUp, usePlay, useScene, useSeed, useSeeded, useTween, type Fixtures } from "@/components/journey/kit";
 import {
   Arrow,
   Dot,
@@ -323,6 +324,37 @@ const PLACES_GOAL = 3;
 /** Where (3, 1) may sit so that it stays on the sheet. */
 const keepOn = (t: XY): XY => [clamp(Math.round(t[0]), F1.x0, F1.x1 - V31[0]), clamp(Math.round(t[1]), F1.y0, F1.y1 - V31[1])];
 
+/** শেষ − শুরু worked out ঘরে ঘরে: x first, then y, whenever the arrow is moved. */
+function MinusReadout({ head, tail }: { head: XY; tail: XY }) {
+  return <MinusSteps key={`${head.join()}|${tail.join()}`} head={head} tail={tail} />;
+}
+
+function MinusSteps({ head, tail }: { head: XY; tail: XY }) {
+  const k = useCountUp(2, 330);
+  const d = minus(head, tail);
+  const out = (i: 0 | 1) => (
+    <b className={`inline-block min-w-[1ch] ${k > i ? `${POP} text-cat-blue` : "text-transparent"}`}>{d[i]}</b>
+  );
+  return (
+    <div className="grid gap-0.5 text-center">
+      <span className="font-sans text-sm text-muted">শেষ − শুরু</span>
+      <div className="flex flex-wrap items-baseline justify-center gap-x-2 text-lg">
+        <span className="whitespace-nowrap text-muted">
+          ({head[0]} − {tail[0]}, {head[1]} − {tail[1]})
+        </span>
+        <span className="text-muted">=</span>
+        <span className="whitespace-nowrap">
+          <span className="text-muted">(</span>
+          {out(0)}
+          <span className="text-muted">, </span>
+          {out(1)}
+          <span className="text-muted">)</span>
+        </span>
+      </div>
+    </div>
+  );
+}
+
 export function SlideArrow() {
   const pass = useGate();
   const [tail, setTail] = useState<XY>(O);
@@ -388,10 +420,7 @@ export function SlideArrow() {
             {tup(head)}
           </b>
         </div>
-        <div className="text-lg">
-          <span className="font-sans text-base text-muted">Start - End = </span>
-          <b className="text-cat-blue">{tup(minus(head, tail))}</b>
-        </div>
+        <MinusReadout head={head} tail={tail} />
       </div>
       <Task done={spots.length >= PLACES_GOAL}>
         Arrow-টা ধরে কাগজের অন্তত তিনটা আলাদা জায়গায় রাখুন ({bn(Math.min(spots.length, PLACES_GOAL))}/{bn(PLACES_GOAL)})
@@ -418,33 +447,42 @@ const toneOf = (v: XY): Tone => (same(v, V31) ? "blue" : "coral");
 
 export function SortArrows() {
   const pass = useGate();
-  const [open, setOpen] = useState(0);
+  const clip = useId();
+  const [open, setOpen] = useSeed("open", 0);
   const [solved, setSolved] = useState<number[]>([]);
-  const [miss, setMiss] = useState<{ n: number; msg: string } | null>(null);
+  const [cand, setCand] = useSeed<XY | null>("cand", null);
+  const [miss, setMiss] = useState(0);
+  const grow = usePlay(110);
   const a = ABCD[open];
   const want = minus(a.e, a.s);
   const done = solved.length === ABCD.length;
+  const t = cand === null ? 0 : grow.running ? Math.min(1, grow.k / 6) : 1;
+  const wrong = cand !== null && !grow.running && !same(cand, want);
 
   const choose = (c: XY) => {
-    if (solved.includes(open)) return;
-    if (!same(c, want)) {
-      setMiss((m) => ({
-        n: (m?.n ?? 0) + 1,
-        msg: same(c, a.e) ? `${tup(c)} তো শেষের point-টা। শুরুরটা বিয়োগ করতে ভুলে গেছেন।` : `উঁহু। ${tup(a.e)} থেকে ${tup(a.s)} ঘরে ঘরে বিয়োগ করে দেখুন।`,
-      }));
-      return;
-    }
-    const next = [...solved, open];
-    setSolved(next);
-    setMiss(null);
-    const rest = ABCD.findIndex((_, i) => !next.includes(i));
-    if (rest >= 0) setOpen(rest);
-    else pass("একই vector, তিন জায়গায় আঁকা।");
+    if (grow.running || solved.includes(open)) return;
+    setCand(c);
+    // laid on the picture from the arrow's own tail; one beat more to land
+    grow.play(7, () => {
+      if (!same(c, want)) {
+        setMiss((m) => m + 1);
+        return;
+      }
+      const next = [...solved, open];
+      setSolved(next);
+      setCand(null);
+      const rest = ABCD.findIndex((_, i) => !next.includes(i));
+      if (rest >= 0) setOpen(rest);
+      else pass("একই vector, তিন জায়গায় আঁকা।");
+    });
   };
 
   return (
     <>
       <Plane f={F1} ticks={1} label="four arrows, A to D, drawn in different places">
+        <defs>
+          <SheetClip id={clip} f={F1} />
+        </defs>
         {ABCD.map((r, i) => {
           const ok = solved.includes(i);
           const mid = mix(r.s, r.e, 0.5);
@@ -456,13 +494,16 @@ export function SortArrows() {
               aria-label={`arrow ${r.id}`}
               className="cursor-pointer outline-none"
               onClick={() => {
+                if (grow.running) return;
                 setOpen(i);
-                setMiss(null);
+                setCand(null);
               }}
               onKeyDown={(e) => {
                 if (e.key === "Enter" || e.key === " ") {
                   e.preventDefault();
+                  if (grow.running) return;
                   setOpen(i);
+                  setCand(null);
                 }
               }}
             >
@@ -475,6 +516,7 @@ export function SortArrows() {
             </g>
           );
         })}
+        {cand !== null && !done && <Ghost f={F1} from={a.s} v={cand} t={t} id={clip} />}
       </Plane>
       {done ? (
         <div className={`${FADE} text-center text-lg font-semibold`}>
@@ -494,8 +536,9 @@ export function SortArrows() {
               <button
                 key={c.join()}
                 type="button"
+                disabled={grow.running}
                 onClick={() => choose(c)}
-                className="h-10 cursor-pointer rounded-full border-2 border-border px-4 font-mono font-semibold transition-colors hover:border-cat-blue/60"
+                className="h-10 cursor-pointer rounded-full border-2 border-border px-4 font-mono font-semibold transition-colors hover:border-cat-blue/60 disabled:cursor-default disabled:opacity-60"
               >
                 {tup(c)}
               </button>
@@ -503,7 +546,13 @@ export function SortArrows() {
           </div>
         </div>
       )}
-      {miss && !done && <Nope key={miss.n}>{miss.msg}</Nope>}
+      {wrong && cand && !done && (
+        <Nope key={miss}>
+          {same(cand, a.e)
+            ? `${tup(cand)} তো শেষের point-টা. শুরু থেকে আঁকলে মাথায় মিললো না, শুরুরটা বিয়োগ করতে ভুলে গেছেন।`
+            : `শুরু থেকে ${tup(cand)} আঁকলাম, মাথায় মিললো না. ${tup(a.e)} থেকে ${tup(a.s)} ঘরে ঘরে বিয়োগ করে দেখুন।`}
+        </Nope>
+      )}
       <Task done={done}>
         চারটা arrow-এরই vector বের করুন ({bn(solved.length)}/{bn(ABCD.length)})। চাইলে অন্য arrow-এ tap করে আগে সেটা নিয়ে কাজ করতে পারেন।
       </Task>
@@ -1000,3 +1049,651 @@ export function Finale() {
   const [run, setRun] = useState(0);
   return <FinaleReel key={run} onReplay={() => setRun((r) => r + 1)} />;
 }
+
+// ---------------------------------------------------------------------------
+// Animation pass. 2.2 was one journey of fifteen steps; it is now two. 2.2
+// (02b_vector_arrow) runs from Shiku's recipe to the arrow with no address and
+// its position vector; 2.2b (02b2_point_or_move) is the street, point against
+// move, signs, the zero vector and the numbers as unit steps. Everything below
+// is new: the three recall Checks turned into animated questions, a story scene
+// where a setup tells one, and a figure where the words describe a picture.
+
+type Story = { story?: boolean };
+
+/** The corner of a sheet a figure may not draw past: a clip for arrows that run off it. */
+function SheetClip({ id, f }: { id: string; f: Frame }) {
+  return (
+    <clipPath id={id}>
+      <rect x={f.sx(f.x0)} y={f.sy(f.y1)} width={(f.x1 - f.x0) * f.u} height={(f.y1 - f.y0) * f.u} />
+    </clipPath>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 0 · 2.2 screen 1, the recall as an animated question: the whole file flipped.
+//     Whatever the reader picks, the sheet plays the real thing: every dot
+//     glides to its mirror image and the two pairs stay pairs.
+
+const FR_DOTS: XY[] = [
+  [18, 30],
+  [30, 22],
+  [66, 70],
+  [80, 62],
+  [24, 74],
+];
+const FR_PAIRS: [number, number][] = [
+  [0, 1],
+  [2, 3],
+];
+const FR_OPTS = ["কে কার কাছাকাছি, কিছুই বদলালো না", "সবার partner বদলে গেল", "Program error দিলো"];
+const FR_RIGHT = 0;
+const FR_NOPE = [
+  "",
+  "Partner বদলায়নি. দাগগুলো ঘুরলো, তবে যে দুইজন পাশাপাশি ছিল তারা এখনো পাশাপাশি. আয়নায় দেখা ম্যাপের কথা মনে করুন.",
+  "Error আসেনি. Program ঠিক যা বলা হলো তাই করলো, শুধু দাগগুলো ঘুরলো. আয়নায় দেখা ম্যাপের কথা মনে করুন.",
+];
+
+function FlipSheet({ run }: { run: boolean }) {
+  const seeded = useSeeded();
+  const [t] = useTween([run ? 1 : 0], 1000, [0]);
+  const p = seeded ? (run ? 1 : 0) : t;
+  const at = FR_DOTS.map(([a, b]): XY => [a + (b - a) * p, b + (a - b) * p]);
+  const X = (a: number) => 40 + a;
+  const Y = (b: number) => 112 - b;
+  return (
+    <svg viewBox="0 0 180 132" role="img" aria-label="ক্লাসের পাঁচজনের dot, একটা কাগজে. পুরো file উল্টালে dot-গুলো আয়নায় দেখার মতো সরে যায়" className="mx-auto my-3 block h-auto w-full max-w-[13rem] select-none">
+      <rect x={40} y={12} width={100} height={100} rx={3} fill="white" stroke="#0f1b2d" strokeOpacity={0.3} />
+      {run && <path d={`M40 112L140 12`} strokeDasharray="3 4" strokeWidth={1} className={`${FADE} fill-none stroke-[#94a3b8]`} />}
+      {FR_PAIRS.map(([i, j]) => (
+        <path key={i} d={`M${X(at[i][0])} ${Y(at[i][1])}L${X(at[j][0])} ${Y(at[j][1])}`} strokeWidth={1.4} className="fill-none stroke-cat-amber" />
+      ))}
+      {at.map((d, i) => (
+        <circle key={i} cx={X(d[0])} cy={Y(d[1])} r={3.6} className="fill-[#2563eb]" />
+      ))}
+      <text x={90} y={125} textAnchor="middle" fontSize={8} fontWeight={600} fill="#0f1b2d">
+        {p < 0.5 ? "height →" : "weight →"}
+      </text>
+      <text transform="translate(33 62) rotate(-90)" textAnchor="middle" fontSize={8} fontWeight={600} fill="#0f1b2d">
+        {p < 0.5 ? "weight →" : "height →"}
+      </text>
+    </svg>
+  );
+}
+
+export function FlipRecall() {
+  const pass = useGate();
+  const [pick, setPick] = useSeed<number | null>("pick", null);
+  const [tries, setTries] = useState(0);
+  const [miss, setMiss] = useState(0);
+  const play = usePlay(1100);
+  const over = pick !== null && !play.running;
+  const right = over && pick === FR_RIGHT;
+
+  const choose = (i: number) => {
+    if (play.running || right) return;
+    setPick(i);
+    setTries((t) => t + 1);
+    play.play(1, () => (i === FR_RIGHT ? pass("পুরো file উল্টালে কিছুই বদলায় না.") : setMiss((m) => m + 1)));
+  };
+
+  return (
+    <>
+      <FlipSheet key={tries} run={pick !== null} />
+      <div className="grid gap-2">
+        {FR_OPTS.map((o, i) => (
+          <Choice key={o} n={i} look={pick === i && over ? (i === FR_RIGHT ? "right" : "wrong") : pick === i ? "picked" : "idle"} disabled={play.running || right} onClick={() => choose(i)}>
+            {o}
+          </Choice>
+        ))}
+      </div>
+      {over && pick !== FR_RIGHT && <Nope key={miss}>{FR_NOPE[pick ?? 0]}</Nope>}
+      <Task done={right}>সামিন পুরো file-এর সব row একই নিয়মে উল্টে দিলে কী হয়েছিল, বেছে নিন.</Task>
+    </>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 1a · A story scene for screen 2: "go and get the ball" gets Shiku nowhere;
+//      the two numbers get him there.
+
+export function ShikuErrand({}: Story) {
+  const s = useScene(2, [600, 2400, 3000]);
+  const k = s.k;
+  return (
+    <StoryFrame scene={s}>
+      <Stage backdrop="room" label="ফাহিম Shiku-কে বলটা আনতে বলছে. শুধু যাও বললে সে নড়ে না. ডানে ১০ ঘর, ওপরে ১২ ঘর বললে হাঁটতে শুরু করে">
+        <circle cx={288} cy={145} r={5} fill="#f59e0b" />
+        <Person who="fahim" x={70} y={150} arm={k >= 1 ? "point" : "down"} label />
+        <Robot x={k >= 2 ? 268 : 150} y={150} ms={1800} walking={k >= 2} />
+        {k === 1 && <Bubble x={70} y={84} side="right" lines={["যাও, গিয়ে বলটা", "নিয়ে আসো."]} />}
+        {k >= 2 && <Bubble x={70} y={84} side="right" lines={["ডানে 10 ঘর যাও,", "তারপর ওপরে 12 ঘর."]} />}
+      </Stage>
+    </StoryFrame>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 1½ · A figure for screen 3's setup: Shiku walks right, then up; what stays on
+//      the paper is one straight arrow from where he started to where he
+//      stopped. Then its two names: the way it points, and how long it is. No
+//      numbers on either: PointIt's bars come next, and measuring is 2.3's job.
+
+const WA_F = makeFrame(-2, 4, -1, 5, 24, 12);
+const WA_V: XY = [2, 3];
+const WA_CAP = [
+  "Shiku origin-এ দাঁড়িয়ে. এখান থেকেই শুরু.",
+  "আগে ডানে 2 ঘর.",
+  "তারপর ওপরে 3 ঘর. এখানে থামলো.",
+  "হাঁটা শেষে কাগজে রয়ে গেল একটা সোজা arrow. শুরু থেকে থামা পর্যন্ত.",
+  "Arrow-টা কোন দিকে তাক করা, সেটা ওর direction.",
+  "আর arrow-টা কত লম্বা, সেটা ওর magnitude.",
+];
+
+export function WalkLeavesArrow({}: Story) {
+  const s = useScene(5, [600, 1400, 1600, 2600, 2400]);
+  const k = s.k;
+  const [x, y] = useTween(k >= 2 ? WA_V : k === 1 ? [2, 0] : O, 1000);
+  const trail: XY[] = y > 0.01 ? [O, [2, 0], [x, y]] : [O, [x, 0]];
+  // the arrow on screen, its far end pushed on along the same line, and a tape
+  // laid beside it on the empty upper-left side (the trail has the other), all
+  // in screen units
+  const [ax, ay, bx, by] = [WA_F.sx(0), WA_F.sy(0), WA_F.sx(WA_V[0]), WA_F.sy(WA_V[1])];
+  const len = Math.hypot(bx - ax, by - ay);
+  const [ux, uy] = [(bx - ax) / len, (by - ay) / len];
+  const [nx, ny] = [uy, -ux];
+  const off = 11;
+  const tape = `M${ax + nx * off} ${ay + ny * off}L${bx + nx * off} ${by + ny * off}`;
+  const ends = [0, 1].map((t) => {
+    const [px, py] = [ax + (bx - ax) * t + nx * off, ay + (by - ay) * t + ny * off];
+    return `M${px - nx * 4} ${py - ny * 4}L${px + nx * 4} ${py + ny * 4}`;
+  });
+  const ray = WA_F.sy(4.6);
+  const rayX = ax + (ux / uy) * (ray - ay);
+  return (
+    <Scene scene={s} caption={<span key={k} className={FADE}>{WA_CAP[k]}</span>}>
+      <Plane f={WA_F} grid={1} label="Shiku origin থেকে ডানে 2 ঘর, তারপর ওপরে 3 ঘর হাঁটলো. হাঁটা শেষে শুরু থেকে থামা পর্যন্ত একটা সোজা arrow রয়ে গেল; তার direction আর magnitude" className="my-0! max-w-[11rem]">
+        <Trail f={WA_F} cells={trail} faint={k >= 3} />
+        <Dot f={WA_F} at={O} r={3.5} />
+        <Label f={WA_F} at={O} dx={-5} dy={14} anchor="end" size={10}>
+          শুরু
+        </Label>
+        {k >= 4 && (
+          <g className={POP}>
+            <path d={`M${bx} ${by}L${rayX} ${ray}`} strokeWidth={2} strokeDasharray="3 4" strokeLinecap="round" className="fill-none stroke-[#0d9488]" />
+            <text x={rayX - 6} y={ray + 4} textAnchor="end" fontSize={10} fontWeight={600} className="fill-[#0f766e]">
+              direction
+            </text>
+          </g>
+        )}
+        {k >= 5 && (
+          <g>
+            <Draw d={tape} ms={700} strokeWidth={3} className="stroke-[#d97706]" />
+            {ends.map((d) => (
+              <path key={d} d={d} strokeWidth={2} strokeLinecap="round" className={`${POP} fill-none stroke-[#d97706]`} />
+            ))}
+            <text x={(ax + bx) / 2 + nx * 18} y={(ay + by) / 2 + ny * 18 + 4} textAnchor="end" fontSize={10} fontWeight={600} className={`${FADE} fill-[#b45309]`}>
+              magnitude
+            </text>
+          </g>
+        )}
+        <g className={`transition-opacity duration-500 motion-reduce:transition-none ${k >= 3 ? "opacity-25" : "opacity-100"}`}>
+          <Shiku f={WA_F} at={[x, y]} />
+        </g>
+        {k >= 3 && <Arrow key="a" f={WA_F} from={O} to={WA_V} draw w={3} />}
+      </Plane>
+    </Scene>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 3½ · A figure for screen 4's setup: the definition asks two things of an
+//      arrow and a third thing it never asks.
+
+const TA_CAP = [
+  "একটা arrow.",
+  "কোন দিকে তাক করা, definition সেটা বলেছে.",
+  "কত লম্বা, তাও বলেছে.",
+  "কাগজের কোথায় বসে আছে? এই কথা কোথাও নাই.",
+];
+const TA_CHIPS = ["দিক", "দৈর্ঘ্য", "জায়গা"];
+
+export function ThreeAsks({}: Story) {
+  const s = useScene(3, [600, 1800, 1800, 2400]);
+  const k = s.k;
+  return (
+    <Scene scene={s} caption={<span key={k} className={FADE}>{TA_CAP[k]}</span>}>
+      <svg viewBox="0 0 240 120" className="mx-auto h-auto w-full max-w-[15rem]" role="img" aria-label="একটা arrow, তার পাশে তিনটা প্রশ্ন: দিক, দৈর্ঘ্য, জায়গা. প্রথম দুইটার উত্তর আছে, তৃতীয়টার নাই">
+        <rect x={6} y={14} width={96} height={92} rx={8} className="fill-surface stroke-border" />
+        <path d="M22 86L80 42" strokeWidth={3} strokeLinecap="round" className="fill-none stroke-cat-blue" />
+        <path d="M88 36L72 40L80 52Z" className="fill-cat-blue" />
+        {TA_CHIPS.map((c, i) => {
+          const y = 18 + i * 32;
+          const shown = k >= i + 1;
+          const lacks = i === 2;
+          return (
+            <g key={c} className={`transition-opacity duration-500 motion-reduce:transition-none ${shown ? "opacity-100" : "opacity-0"}`}>
+              <rect x={122} y={y} width={100} height={24} rx={7} strokeDasharray={lacks ? "4 3" : undefined} className={lacks ? "fill-danger/5 stroke-danger" : "fill-cat-teal/10 stroke-cat-teal"} />
+              <text x={134} y={y + 16} fontSize={11} fontWeight={600} className="fill-foreground">
+                {c}
+              </text>
+              {lacks ? (
+                <text x={206} y={y + 17} textAnchor="middle" fontSize={14} fontWeight={700} className="fill-danger">
+                  ?
+                </text>
+              ) : (
+                <path d={`M200 ${y + 12}l4 4l8 -9`} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="fill-none stroke-cat-teal" />
+              )}
+            </g>
+          );
+        })}
+      </svg>
+    </Scene>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 4a · The sort question, animated. Each pick is laid on the picture from the
+//      arrow's own tail: the right one lands on the head, a wrong one runs past
+//      it, or short of it, or off the sheet. SortArrows below plays this.
+
+/** Draws the picked vector from `from`, `t` of the way along it, clipped to the sheet. */
+function Ghost({ f, from, v, t, id }: { f: Frame; from: XY; v: XY; t: number; id: string }) {
+  return (
+    <g clipPath={`url(#${id})`}>
+      <Arrow f={f} from={from} to={mix(from, plus(from, v), t)} tone="amber" w={3.2} dashed list={false} />
+    </g>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 2.2b · 1 · The apartment game as an animated question. Two Shikus set off
+//      together, one right-then-up, the other up-then-right; whatever is
+//      picked, they walk, and they meet on the star.
+
+const SO_F = makeFrame(-1, 11, -1, 13, 15, 10);
+const SO_GOAL: XY = [10, 12];
+const SO_A = route(O, SO_GOAL);
+const SO_B: XY[] = [O, ...Array.from({ length: 12 }, (_, i): XY => [0, i + 1]), ...Array.from({ length: 10 }, (_, i): XY => [i + 1, 12])];
+const SO_OPTS = ["দুইবার দুই জায়গায়", "দ্বিতীয়বার দেয়ালে ধাক্কা খায়", "দুইবারই একই জায়গায়"];
+const SO_RIGHT = 2;
+const SO_NOPE = [
+  "দুই Shiku দুই রাস্তায় হাঁটলো, তবু তারায় একসাথে পৌঁছালো. ডানে মোট কত, উপরে মোট কত?",
+  "দেয়ালে কেউ ধাক্কা খায়নি. দুইজনই তারায় পৌঁছালো. ডানে মোট কত, উপরে মোট কত?",
+  "",
+];
+
+function ShikuTwin({ f, at }: { f: Frame; at: XY }) {
+  return (
+    <g style={{ transform: `translate(${f.sx(at[0])}px, ${f.sy(at[1])}px)` }} className="pointer-events-none transition-transform duration-100 ease-linear motion-reduce:transition-none">
+      <path d="M0 -8V-12.5" strokeWidth={1.2} className="stroke-cat-coral" />
+      <circle cy={-13.5} r={1.8} className="fill-cat-coral" />
+      <rect x={-8} y={-8} width={16} height={15} rx={4} className="fill-cat-coral" />
+      <circle cx={-3.2} cy={-1.5} r={1.7} className="fill-white" />
+      <circle cx={3.2} cy={-1.5} r={1.7} className="fill-white" />
+    </g>
+  );
+}
+
+export function ShikuOrder() {
+  const pass = useGate();
+  const [pick, setPick] = useSeed<number | null>("pick", null);
+  const [miss, setMiss] = useState(0);
+  const play = usePlay(70);
+  const last = SO_A.length - 1;
+  const k = pick === null ? 0 : play.running ? play.k : last;
+  const over = pick !== null && !play.running;
+  const right = over && pick === SO_RIGHT;
+  const trail = (cells: XY[], cls: string) =>
+    cells.length > 1 && <path d={cells.map((c, i) => `${i ? "L" : "M"}${SO_F.sx(c[0])} ${SO_F.sy(c[1])}`).join("")} strokeWidth={3} strokeLinejoin="round" strokeLinecap="round" className={`pointer-events-none fill-none ${cls}`} />;
+
+  const choose = (i: number) => {
+    if (play.running || right) return;
+    setPick(i);
+    play.play(last, () => (i === SO_RIGHT ? pass("হাঁটার ক্রম বদলালে address বদলায় না.") : setMiss((m) => m + 1)));
+  };
+
+  return (
+    <>
+      <Plane f={SO_F} ticks={2} label="দুই Shiku origin থেকে (10, 12)-এর তারার দিকে হাঁটছে, একজন আগে ডানে, আরেকজন আগে উপরে" className="my-2 max-w-[11rem]">
+        {trail(SO_A.slice(0, k + 1), "stroke-cat-violet/60")}
+        {trail(SO_B.slice(0, k + 1), "stroke-cat-coral/60")}
+        <Star f={SO_F} at={SO_GOAL} done={right} />
+        <Shiku f={SO_F} at={SO_A[k]} />
+        <ShikuTwin f={SO_F} at={SO_B[k]} />
+      </Plane>
+      <div className="grid gap-2">
+        {SO_OPTS.map((o, i) => (
+          <Choice key={o} n={i} look={pick === i && over ? (i === SO_RIGHT ? "right" : "wrong") : pick === i ? "picked" : "idle"} disabled={play.running || right} onClick={() => choose(i)}>
+            {o}
+          </Choice>
+        ))}
+      </div>
+      {over && pick !== SO_RIGHT && <Nope key={miss}>{SO_NOPE[pick ?? 0]}</Nope>}
+      <Task done={right}>Shiku একবার আগে ডানে ১০ তারপর উপরে ১২, আরেকবার আগে উপরে ১২ তারপর ডানে ১০. কোথায় পৌঁছায়, বেছে নিন.</Task>
+    </>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 2.2b · 2a · A story scene for the street instruction.
+
+export function StreetAsk({}: Story) {
+  const s = useScene(2, [600, 2200, 2600]);
+  const k = s.k;
+  return (
+    <StoryFrame scene={s}>
+      <Stage backdrop="street" label="রাস্তায় একজন পথচারী ফাহিমকে বলছেন, দুই গলি পূর্বে যান, তারপর এক গলি উত্তরে">
+        <Person who="fahim" x={100} y={150} label />
+        <Person who="mama" x={220} y={150} facing={-1} arm={k >= 1 ? "point" : "down"} />
+        <text x={220} y={166} textAnchor="middle" fontSize={9} fontWeight={600} fill="#0f1b2d">
+          পথচারী
+        </text>
+        {k === 1 && <Bubble x={220} y={84} side="left" lines={["দুই গলি পূর্বে যান,"]} />}
+        {k >= 2 && <Bubble x={220} y={84} side="left" lines={["তারপর এক গলি", "উত্তরে."]} />}
+      </Stage>
+    </StoryFrame>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 2.2b · 3½ · A figure for screen 4's setup: we say "point" and mean an arrow
+//      from the origin; subtract two points and what you hold is an arrow with
+//      no place at all.
+
+const PV_F = makeFrame(0, 7, 0, 5, 26, 12);
+const PV_CAP = [
+  "হামজাকে বলি vector (180, 78). মুখে বলছি, এটা একটা point.",
+  "আসলে বোঝাই origin থেকে ওই point পর্যন্ত arrow.",
+  "এবার দুইটা point, A আর B. বিয়োগ করলে হাতে আসে A থেকে B-তে যাওয়ার arrow.",
+  "ওটা কোনো জায়গা না. একটা relation, যেখানে খুশি বসানো যায়.",
+];
+const PV_HAMZA: XY = [5, 4];
+const PV_A: XY = [1, 1];
+const PV_B: XY = [4, 3];
+
+export function PointVsArrow({}: Story) {
+  const s = useScene(3, [600, 2200, 2800, 2800]);
+  const k = s.k;
+  const slide = k >= 3 ? minus(O, PV_A) : O;
+  return (
+    <Scene scene={s} caption={<span key={k} className={FADE}>{PV_CAP[k]}</span>}>
+      <Plane f={PV_F} grid={1} label="একটা point আর origin থেকে তার arrow, তারপর দুইটা point A আর B আর তাদের মাঝের arrow" className="my-0! max-w-[14rem]">
+        <g className={`transition-opacity duration-500 motion-reduce:transition-none ${k >= 2 ? "opacity-20" : "opacity-100"}`}>
+          {k >= 1 && <Arrow key="h" f={PV_F} from={O} to={PV_HAMZA} tone="blue" draw w={3} list={false} />}
+          <Dot f={PV_F} at={PV_HAMZA} r={4.5} className="fill-cat-blue" />
+          <Label f={PV_F} at={PV_HAMZA} dx={-6} dy={-9} anchor="end" size={9} className="fill-[#0f1b2d]">
+            হামজা (180, 78)
+          </Label>
+        </g>
+        {k >= 2 && (
+          <g className={POP}>
+            <g style={{ transform: `translate(${slide[0] * PV_F.u}px, ${-slide[1] * PV_F.u}px)` }} className="transition-transform duration-700 ease-in-out motion-reduce:transition-none">
+              <Arrow f={PV_F} from={PV_A} to={PV_B} tone="coral" w={3} list={false} />
+            </g>
+            {k < 3 && (
+              <>
+                <Dot f={PV_F} at={PV_A} r={4} />
+                <Dot f={PV_F} at={PV_B} r={4} />
+                <Label f={PV_F} at={PV_A} dx={-8} dy={4} anchor="end" size={11}>
+                  A
+                </Label>
+                <Label f={PV_F} at={PV_B} dx={8} dy={-6} anchor="start" size={11}>
+                  B
+                </Label>
+              </>
+            )}
+          </g>
+        )}
+      </Plane>
+    </Scene>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 2.2b · 5½ · A figure for the zero vector's explanation: shrink an arrow and
+//      it keeps its direction right down to the last bit; at zero there is no
+//      direction left to ask for.
+
+const ZN_F = makeFrame(-3, 3, -2, 2, 26);
+const ZN_CAP = [
+  "সব arrow-র একটা দিক আছে. কোন দিকে তাক করা, বলা যায়.",
+  "ছোট করুন. দিক তবুও আছে.",
+  "length শূন্য হলে arrow একটা বিন্দু হয়ে যায়.",
+  "কোন দিকে মুখ করবে? সব দিকই চলে, কোনোটাই বলা যায় না.",
+];
+const ZN_ALL: XY[] = [
+  [2, 0],
+  [0, 1.5],
+  [-2, 0],
+  [0, -1.5],
+];
+
+export function ZeroNowhere({}: Story) {
+  const s = useScene(3, [600, 1600, 1600, 2600]);
+  const k = s.k;
+  return (
+    <Scene scene={s} caption={<span key={k} className={FADE}>{ZN_CAP[k]}</span>}>
+      <Plane f={ZN_F} grid={1} axes={false} label="একটা arrow ছোট হতে হতে একটা বিন্দু হয়ে গেল" className="my-0! max-w-[13rem]">
+        {k === 0 && <Arrow key="a" f={ZN_F} from={O} to={[2, 1]} tone="blue" draw w={3} />}
+        {k === 1 && <Arrow key="b" f={ZN_F} from={O} to={[1, 0.5]} tone="blue" w={3} />}
+        {k >= 3 && ZN_ALL.map((t, i) => <Arrow key={i} f={ZN_F} from={O} to={t} tone="ink" dashed faint w={2} list={false} />)}
+        <Dot f={ZN_F} at={O} r={k >= 2 ? 5.5 : 3} className={k >= 2 ? "fill-danger" : "fill-[#0f1b2d]"} />
+        {k >= 3 && (
+          <Label f={ZN_F} at={O} dx={0} dy={-14} size={16} weight={700} className={`${POP} fill-danger`}>
+            ?
+          </Label>
+        )}
+      </Plane>
+    </Scene>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 2.2b · 6 · The code recall as an animated question: v[2]. A pointer for each
+//      guess, then the numbers 0, 1, 2 come up under the boxes and v[2] walks
+//      to its own.
+
+const SC_VALS = [180, 78, 18];
+const SC_OPTS = [
+  { t: "দ্বিতীয় ঘর", box: 1 },
+  { t: "তৃতীয় ঘর", box: 2 },
+  { t: "প্রথম ঘর", box: 0 },
+];
+const SC_RIGHT = 1;
+const SC_X = (i: number) => 50 + i * 70;
+
+export function SlotCode() {
+  const pass = useGate();
+  const [pick, setPick] = useSeed<number | null>("pick", null);
+  const [miss, setMiss] = useState(0);
+  const play = usePlay(500);
+  const k = pick === null ? 0 : play.running ? play.k : 3;
+  const over = pick !== null && !play.running;
+  const right = over && pick === SC_RIGHT;
+
+  const choose = (i: number) => {
+    if (play.running || right) return;
+    setPick(i);
+    play.play(3, () => (i === SC_RIGHT ? pass("Code-এ গোনা শুরু 0 থেকে.") : setMiss((m) => m + 1)));
+  };
+
+  return (
+    <>
+      <svg viewBox="0 0 260 112" role="img" aria-label="vector v = (180, 78, 18), তিনটা ঘর. code-এ v[2] লিখলে কোন ঘরটা আসে" className="mx-auto my-4 block h-auto w-full max-w-sm select-none">
+        <text x={6} y={46} fontSize={12} className="fill-foreground font-mono">
+          v =
+        </text>
+        {SC_VALS.map((v, i) => {
+          const claimed = pick !== null && SC_OPTS[pick].box === i;
+          const look = claimed && over ? (i === 2 ? "stroke-accent fill-accent/10" : "stroke-danger fill-danger/5") : claimed ? "stroke-cat-blue fill-cat-blue/10" : "fill-surface stroke-border";
+          return (
+            <g key={v}>
+              <rect x={SC_X(i) - 26} y={26} width={52} height={30} rx={7} strokeWidth={2} className={`transition-colors duration-300 ${look}`} />
+              <text x={SC_X(i)} y={46} textAnchor="middle" fontSize={15} fontWeight={600} className="fill-foreground font-mono">
+                {v}
+              </text>
+              <text x={SC_X(i)} y={71} textAnchor="middle" fontSize={10} className={`fill-muted font-mono transition-opacity duration-500 motion-reduce:transition-none ${k >= 1 ? "opacity-100" : "opacity-0"}`}>
+                {i}
+              </text>
+            </g>
+          );
+        })}
+        <g style={{ transform: `translateX(${SC_X(pick === null ? 0 : SC_OPTS[pick].box)}px)`, opacity: pick === null ? 0 : 1 }} className="transition-[transform,opacity] duration-500 ease-in-out motion-reduce:transition-none">
+          <path d="M0 21l-5 -9h10z" className="fill-cat-blue" />
+        </g>
+        <g style={{ transform: `translateX(${k >= 2 ? SC_X(2) : SC_X(0) - 40}px)`, opacity: k >= 2 ? 1 : 0 }} className="transition-[transform,opacity] duration-700 ease-in-out motion-reduce:transition-none">
+          <rect x={-22} y={79} width={44} height={20} rx={10} className="fill-cat-amber/20 stroke-cat-amber" />
+          <text y={93} textAnchor="middle" fontSize={11} fontWeight={700} className="fill-foreground font-mono">
+            v[2]
+          </text>
+        </g>
+      </svg>
+      <div className="grid grid-cols-3 gap-2">
+        {SC_OPTS.map((o, i) => (
+          <Choice key={o.t} n={i} look={pick === i && over ? (i === SC_RIGHT ? "right" : "wrong") : pick === i ? "picked" : "idle"} disabled={play.running || right} onClick={() => choose(i)}>
+            {o.t}
+          </Choice>
+        ))}
+      </div>
+      {over && pick !== SC_RIGHT && <Nope key={miss}>v[2] গিয়ে বসলো তৃতীয় ঘরে. নিচের ছোট সংখ্যাগুলো দেখুন, code-এ গোনা শুরু কোথা থেকে?</Nope>}
+      <Task done={right}>Code-এ v[2] লিখলে কোন ঘরটা আসে, বেছে নিন.</Task>
+    </>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 2.2b · 8 · Try it, animated: an arrow from (3, 7) to (8, 9). The pick is
+//      drawn from the origin; then the arrow itself slides home, and the two
+//      either lie on top of each other or they do not.
+
+const SE_F = makeFrame(-6, 12, -3, 10, 17);
+const SE_S: XY = [3, 7];
+const SE_E: XY = [8, 9];
+const SE_OPTS: XY[] = [
+  [8, 9],
+  [5, 2],
+  [11, 16],
+  [-5, -2],
+];
+const SE_RIGHT = 1;
+const SE_NOPE = [
+  "(8, 9) তো শেষের point-টা. মাথাটা আছে (8, 9)-এ, কিন্তু arrow-টা ওখানে গিয়ে মেলেনি. শুরুর (3, 7) বিয়োগ করতে ভুলে গেছেন.",
+  "",
+  "ওটা কাগজের কিনারা ছাড়িয়ে গেল, arrow-এর সাথে মিললো না. শেষ থেকে শুরু বিয়োগ করুন, যোগ না.",
+  "ঠিক উল্টো দিকে তাক করা. শেষ থেকে শুরু বিয়োগ করতে হয়, শুরু থেকে শেষ না.",
+];
+
+export function StartEnd() {
+  const pass = useGate();
+  const clip = useId();
+  const [pick, setPick] = useSeed<number | null>("pick", null);
+  const [miss, setMiss] = useState(0);
+  const play = usePlay(600);
+  const k = pick === null ? 0 : play.running ? play.k : 3;
+  const over = pick !== null && !play.running;
+  const right = over && pick === SE_RIGHT;
+  const home = k >= 2;
+
+  const choose = (i: number) => {
+    if (play.running || right) return;
+    setPick(i);
+    play.play(3, () => (i === SE_RIGHT ? pass("End − Start, তারপর যেখানে খুশি.") : setMiss((m) => m + 1)));
+  };
+
+  return (
+    <>
+      <Plane f={SE_F} ticks={2} label="একটা arrow (3, 7) থেকে (8, 9)-এ গিয়ে থেমেছে. বেছে নেওয়া vector origin থেকে আঁকা হয়েছে, তারপর arrow-টা origin-এ সরে এসেছে" className="my-2 max-w-[20rem]">
+        <defs>
+          <SheetClip id={clip} f={SE_F} />
+        </defs>
+        {k >= 1 && pick !== null && (
+          <g key={pick} clipPath={`url(#${clip})`}>
+            <Arrow f={SE_F} from={O} to={SE_OPTS[pick]} tone="amber" w={3} dashed draw list={false} />
+          </g>
+        )}
+        <g style={{ transform: `translate(${home ? -SE_S[0] * SE_F.u : 0}px, ${home ? SE_S[1] * SE_F.u : 0}px)` }} className="transition-transform duration-700 ease-in-out motion-reduce:transition-none">
+          <Arrow f={SE_F} from={SE_S} to={SE_E} tone="blue" w={3.2} list={false} />
+          <Dot f={SE_F} at={SE_S} r={3.5} className="fill-[#0f1b2d]" />
+        </g>
+      </Plane>
+      <div className="grid grid-cols-2 gap-2">
+        {SE_OPTS.map((c, i) => (
+          <Choice key={c.join()} n={i} look={pick === i && over ? (i === SE_RIGHT ? "right" : "wrong") : pick === i ? "picked" : "idle"} disabled={play.running || right} onClick={() => choose(i)}>
+            <span className="font-mono">{tup(c)}</span>
+          </Choice>
+        ))}
+      </div>
+      {over && pick !== SE_RIGHT && <Nope key={miss}>{SE_NOPE[pick ?? 0]}</Nope>}
+      <Task done={right}>Arrow-টা (3, 7) থেকে শুরু হয়ে (8, 9)-এ থেমেছে. এটা কোন vector, বেছে নিন.</Task>
+    </>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 2.2b · 9 · A figure for the ending: every word a point, king minus man an
+//      arrow, and an arrow that can be set down anywhere. Stops at the "?".
+
+const MK_F = makeFrame(0, 8, 0, 5, 24, 12);
+const MK_MAN: XY = [1, 1];
+const MK_KING: XY = [3, 3];
+const MK_V = minus(MK_KING, MK_MAN);
+const MK_WOMAN: XY = [5, 1];
+const MK_CAP = [
+  "ধরেন প্রত্যেকটা শব্দ একটা point.",
+  "king থেকে man বিয়োগ করলে কোনো point পাবেন না. পাবেন man থেকে king-এ যাওয়ার রাস্তা, একটা arrow.",
+  "আর arrow-এর তো কোনো address নাই. যেখান থেকে খুশি বসানো যায়.",
+  "যেখান থেকে খুশি হাঁটা শুরু করা যায়, woman থেকেও…",
+];
+
+export function ManToKing({}: Story) {
+  const s = useScene(3, [600, 2400, 2400, 2600]);
+  const k = s.k;
+  return (
+    <Scene scene={s} caption={<span key={k} className={FADE}>{MK_CAP[k]}</span>}>
+      <Plane f={MK_F} grid={1} axes={false} label="man আর king দুইটা point, মাঝে একটা arrow. সেই arrow অন্য জায়গায় বসালেও একই থাকে" className="my-0! max-w-[15rem]">
+        {k >= 2 && (
+          <g className={POP}>
+            <Arrow f={MK_F} from={[4, 0]} to={plus([4, 0], MK_V)} tone="coral" faint w={2.6} list={false} />
+            <Arrow f={MK_F} from={[0, 3]} to={plus([0, 3], MK_V)} tone="coral" faint w={2.6} list={false} />
+          </g>
+        )}
+        {k >= 1 && <Arrow key="v" f={MK_F} from={MK_MAN} to={MK_KING} tone="coral" draw w={3.2} list={false} />}
+        {k >= 3 && (
+          <g className={POP}>
+            <Arrow f={MK_F} from={MK_WOMAN} to={plus(MK_WOMAN, MK_V)} tone="coral" dashed w={2.6} list={false} />
+            <Dot f={MK_F} at={MK_WOMAN} r={4.5} className="fill-cat-teal" />
+            <Label f={MK_F} at={MK_WOMAN} dx={0} dy={16} size={10}>
+              woman
+            </Label>
+            <Label f={MK_F} at={plus(MK_WOMAN, MK_V)} dx={10} dy={-4} anchor="start" size={16} weight={700} className="fill-danger">
+              ?
+            </Label>
+          </g>
+        )}
+        <Dot f={MK_F} at={MK_MAN} r={4.5} className="fill-cat-blue" />
+        <Dot f={MK_F} at={MK_KING} r={4.5} className="fill-cat-blue" />
+        <Label f={MK_F} at={MK_MAN} dx={0} dy={16} size={10}>
+          man
+        </Label>
+        <Label f={MK_F} at={MK_KING} dx={-8} dy={-8} anchor="end" size={10}>
+          king
+        </Label>
+      </Plane>
+    </Scene>
+  );
+}
+
+export const fixtures: Fixtures = {
+  FlipRecall: { start: {}, wrong: { pick: 1 }, wrong2: { pick: 2 }, right: { pick: 0 } },
+  ShikuErrand: { stand: { k: 0 }, order: { k: 1 }, walk: { k: 2 } },
+  WalkLeavesArrow: { start: { k: 0 }, right: { k: 1 }, up: { k: 2 }, arrow: { k: 3 }, dir: { k: 4 }, mag: { k: 5 } },
+  ThreeAsks: { arrow: { k: 0 }, dir: { k: 1 }, len: { k: 2 }, place: { k: 3 } },
+  SortArrows: { start: {}, wrong: { cand: [5, 3], open: 2 }, over: { cand: [4, 5], open: 1 } },
+  ShikuOrder: { start: {}, wrong: { pick: 0 }, wrong2: { pick: 1 }, right: { pick: 2 } },
+  StreetAsk: { stand: { k: 0 }, east: { k: 1 }, north: { k: 2 } },
+  PointVsArrow: { point: { k: 0 }, arrow: { k: 1 }, two: { k: 2 }, free: { k: 3 } },
+  ZeroNowhere: { arrow: { k: 0 }, short: { k: 1 }, dot: { k: 2 }, nowhere: { k: 3 } },
+  SlotCode: { start: {}, wrong: { pick: 0 }, wrong2: { pick: 2 }, right: { pick: 1 } },
+  StartEnd: { start: {}, wrong: { pick: 0 }, wrong2: { pick: 2 }, wrong3: { pick: 3 }, right: { pick: 1 } },
+  ManToKing: { points: { k: 0 }, arrow: { k: 1 }, anywhere: { k: 2 }, woman: { k: 3 } },
+};
