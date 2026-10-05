@@ -54,7 +54,7 @@ const INK = "fill-[#0f1b2d]";
 // ---------------------------------------------------------------------------
 // Dice.
 
-const FRIENDS = ["সোম", "সামিন", "ফাহিম", "হামজা", "মিতু", "রাফি"];
+const FRIENDS = ["সোম", "সামিন", "ফাহিম", "হামজা", "মিতু", "জোবায়ের"];
 const PIPS: Record<number, XY[]> = {
   1: [[0, 0]],
   2: [
@@ -132,7 +132,7 @@ function TotalBars({ totals, most, marks }: { totals: number[]; most: number; ma
   );
 }
 
-/** "সোম", "সোম আর মিতু", "সোম, মিতু আর রাফি": everyone who got v */
+/** "সোম", "সোম আর মিতু", "সোম, মিতু আর জোবায়ের": everyone who got v */
 function who(totals: number[], v: number) {
   const names = FRIENDS.filter((_, i) => totals[i] === v);
   return names.length === 1 ? names[0] : `${names.slice(0, -1).join(", ")} আর ${names[names.length - 1]}`;

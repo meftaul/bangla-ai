@@ -52,7 +52,7 @@ only at the end.**
 
 - **Screen 1 asks it and does not answer it.** 2.3 opens with `king − man + woman ≈
   queen` and withholds the answer for eight screens; 1.1 opens with a task that can fail
-  (Rafi's drawing must match *exactly*, over a voice-only phone). **Never let the first
+  (Jobair's drawing must match *exactly*, over a voice-only phone). **Never let the first
   `<Then>` resolve the hook** — that is the single most common way a journey goes flat.
   If the hook dies on screen 1, the rest has nothing pulling it.
 - **Seal the reader's guess.** A prediction screen that locks a bet in and refuses to

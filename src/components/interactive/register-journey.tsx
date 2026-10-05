@@ -43,7 +43,7 @@ export type Story = { story?: boolean };
 // ---------------------------------------------------------------------------
 // The register: eight students at the trials, three numbers each.
 
-export const R_NAMES = ["রাফি", "তানভীর", "রিনা", "করিম", "সাকিব", "জুয়েল", "মিতু", "শুভ"];
+export const R_NAMES = ["জোবায়ের", "তানভীর", "রিনা", "করিম", "সাকিব", "জুয়েল", "মিতু", "শুভ"];
 export const R_HEAD = ["height", "weight", "বুকডন"];
 export const R_DATA = [
   [1.52, 45, 22],
@@ -871,7 +871,7 @@ export function FlipSideways() {
         ))}
       </svg>
       <div className="mx-auto mt-1 min-h-10 max-w-xs rounded-lg px-3 py-1.5 text-center font-mono text-[0.8rem] leading-snug" style={{ backgroundColor: "#0f172a", color: fed === null ? "#94a3b8" : fed ? "#fca5a5" : "#6ee7b7" }}>
-        {counting ? `student গুনছি: ${Math.min(count.k + 1, rows)} জন…` : fed === null ? "team-picker: table দিন" : fed ? "3 জন student, প্রত্যেকের 8 টা feature? রাফি কি একটা feature?" : "8 জন student, 3 টা feature। ঠিক আছে।"}
+        {counting ? `student গুনছি: ${Math.min(count.k + 1, rows)} জন…` : fed === null ? "team-picker: table দিন" : fed ? "3 জন student, প্রত্যেকের 8 টা feature? জোবায়ের কি একটা feature?" : "8 জন student, 3 টা feature। ঠিক আছে।"}
       </div>
       <div className="mt-2 flex flex-wrap justify-center gap-2">
         <button type="button" className={quietBtn} onClick={flip} disabled={counting}>

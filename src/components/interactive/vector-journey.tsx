@@ -18,7 +18,7 @@ import { sfx } from "@/components/journey/sfx";
 // agreed, and the units drop off because the slot already says what a number
 // is. A new boy with Shom's exact height, weight and shoe size forces a fourth
 // feature. Only then the names: vector, v₁ … v₄, dimension, feature — and
-// Rafi's 64-number bird from 1.1 unrolls into one line to show it was a vector
+// Jobair's 64-number bird from 1.1 unrolls into one line to show it was a vector
 // all along.
 //
 // The students are drawn from their own two numbers (Person), so a swapped
@@ -730,7 +730,7 @@ export function NameSlots() {
 }
 
 // ---------------------------------------------------------------------------
-// 8 · Rafi's pencil bird from 1.1: sixty-four numbers read in a fixed order.
+// 8 · Jobair's pencil bird from 1.1: sixty-four numbers read in a fixed order.
 //     Unroll the grid into one line — it was a vector all along.
 
 const PENCIL = CELL_TONES[8];
@@ -749,7 +749,7 @@ export function Unroll() {
 
   return (
     <>
-      <div className="relative mx-auto my-5 h-[17rem] w-full max-w-md" role="img" aria-label={`Rafi's 8 by 8 bird, ${k} of 64 cells laid out in one line`}>
+      <div className="relative mx-auto my-5 h-[17rem] w-full max-w-md" role="img" aria-label={`Jobair's 8 by 8 bird, ${k} of 64 cells laid out in one line`}>
         {PENCIL.map((t, i) => {
           const out = i < k;
           return (
@@ -803,7 +803,7 @@ export function Unroll() {
           <div className="text-sm text-muted">dimension-এর একটা vector</div>
         </div>
       )}
-      <Task done={done}>রাফিকে যে order-এ পড়ে শুনিয়েছিলেন, সেই order-এ ছকটা এক লাইনে খুলে ফেলুন।</Task>
+      <Task done={done}>জোবায়েরকে যে order-এ পড়ে শুনিয়েছিলেন, সেই order-এ ছকটা এক লাইনে খুলে ফেলুন।</Task>
     </>
   );
 }
