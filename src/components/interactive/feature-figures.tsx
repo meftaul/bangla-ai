@@ -2,7 +2,9 @@
 
 import { useRef, useState } from "react";
 
+import { NORMAL_MAIL, SPAM_MAIL, capsShare, countFree, countLinks } from "./email-data";
 import { Btn, Head, useInView } from "./figure-kit";
+import { ThingIcon, type ThingKind } from "./thing-icons";
 import "./pixel-figures.css";
 import "./feature-figures.css";
 
@@ -160,59 +162,10 @@ export function StudentVectorFigure() {
 //     get made. Both columns of the article's table are measured live from text
 //     you can edit — type FREE a few times and the vector moves under your hand.
 
-// Both emails are written so the live measures land on the article's table:
-// spam (6, 14, 0.31, 1), normal (0, 1, 0.02, 0). Rewording either one moves
-// its capitals share, so re-check it against the table after any edit.
-const SPAM_MAIL = `Subject: CONGRATULATIONS!!! You Have WON
-
-DEAR LUCKY WINNER,
-
-Your EMAIL has been SELECTED today. CLAIM your FREE iPHONE NOW,
-100% free, delivery free, and a free gift card for the first 50
-people. DO NOT WAIT, this free offer ends TONIGHT. You pay
-nothing, it is ALL FREE.
-
-CLAIM HERE: http://prize-claim.example/a
-MIRROR: http://prize-claim.example/b
-BACKUP: http://prize-claim.example/c
-OR HERE: http://prize-claim.example/d
-FAST LINK: http://prize-claim.example/e
-GIFT CARD: http://prize-claim.example/f
-BONUS: http://prize-claim.example/g
-VERIFY: http://prize-claim.example/h
-CLAIM AGAIN: http://prize-claim.example/i
-LAST CHANCE: http://prize-claim.example/j
-UNSUBSCRIBE: http://prize-claim.example/k
-TERMS: http://prize-claim.example/l
-SUPPORT: http://prize-claim.example/m
-MORE: http://prize-claim.example/n`;
-
-const NORMAL_MAIL = `Subject: Tomorrow's class
-
-Nasib,
-
-Tomorrow's class will be in room 204, same time as before; the
-projector in our old room is still broken and nobody has come to
-fix it, so we are borrowing the big room upstairs until the end of
-the month, and this week's practice sheet is on the class page, here:
-http://university.example/sheet-3
-
-Bring last week's notes, and if you get a chance before the
-morning, remind the rest of the group about the reading.
-
-Thanks,
-Samin`;
+// The two emails and their measures live in email-data.ts, shared with the
+// side lesson, so both read the very same letters.
 
 type Mail = "spam" | "normal";
-
-const countFree = (t: string) => (t.match(/\bfree\b/gi) ?? []).length;
-const countLinks = (t: string) => (t.match(/https?:\/\/|www\./gi) ?? []).length;
-/** share of the letters that are capitals — the machine's stand-in for shouting */
-const capsShare = (t: string) => {
-  const letters = t.match(/[A-Za-z]/g) ?? [];
-  if (!letters.length) return 0;
-  return letters.filter((c) => c >= "A" && c <= "Z").length / letters.length;
-};
 
 const ROWS = [
   { label: "how many times “free” appears", key: "free" },
@@ -334,7 +287,7 @@ export function EmailVectorFigure() {
 
 type Thing = {
   id: string;
-  icon: string;
+  icon: ThingKind;
   name: string;
   what: string;
   features: [string, string][];
@@ -345,7 +298,7 @@ type Thing = {
 const THINGS: Thing[] = [
   {
     id: "student",
-    icon: "🧑‍🎓",
+    icon: "student",
     name: "A student",
     what: "Nasib, from the classroom above",
     features: [["height", "180"], ["weight", "78"], ["shoe", "43"], ["age", "18"]],
@@ -353,7 +306,7 @@ const THINGS: Thing[] = [
   },
   {
     id: "photo",
-    icon: "🖼️",
+    icon: "photo",
     name: "A photo",
     what: "3000 × 4000 pixels, in color",
     features: [["px 1", "10"], ["px 2", "20"], ["px 3", "15"], ["px 4", "25"]],
@@ -362,7 +315,7 @@ const THINGS: Thing[] = [
   },
   {
     id: "email",
-    icon: "✉️",
+    icon: "mail",
     name: "An email",
     what: "the spam email from Figure 9",
     features: [["free", "6"], ["links", "14"], ["caps", "0.31"], ["3–5 am", "1"]],
@@ -370,7 +323,7 @@ const THINGS: Thing[] = [
   },
   {
     id: "movie",
-    icon: "🎬",
+    icon: "movie",
     name: "A movie",
     what: "Toy Story, scored from 0 to 5",
     features: [["drama", "2"], ["comedy", "5"]],
@@ -378,7 +331,7 @@ const THINGS: Thing[] = [
   },
   {
     id: "patient",
-    icon: "🩺",
+    icon: "patient",
     name: "A patient",
     what: "one visit to the doctor",
     features: [["age", "42"], ["bp", "142"], ["sugar", "180"], ["bmi", "27.4"]],
@@ -399,7 +352,7 @@ export function RepresentationFigure() {
       <div className="pfig-body">
         <div className="ffig-flow">
           <div className="ffig-card">
-            <span className="ffig-icon">{t.icon}</span>
+            <ThingIcon kind={t.icon} className="size-9" />
             <b>{t.name}</b>
             <small>{t.what}</small>
           </div>
@@ -434,7 +387,8 @@ export function RepresentationFigure() {
       <div className="mfig-controls">
         {THINGS.map((x) => (
           <Btn key={x.id} on={x.id === pick} onClick={() => setPick(x.id)}>
-            {x.icon} {x.name}
+            <ThingIcon kind={x.icon} className="mr-1 size-5 align-[-0.3em]" />
+            {x.name}
           </Btn>
         ))}
       </div>

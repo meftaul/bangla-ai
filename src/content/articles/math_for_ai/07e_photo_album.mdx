@@ -1,0 +1,286 @@
+export const metadata = {
+  title: "Math for AI 7.5 — ফটোগ্রাফার ভাইয়ের পঞ্চাশটা filter",
+  description: "বিয়ের দিন। 300 টা ছবি, প্রতিটা যায় 50 টা colour filter এর ভেতর দিয়ে। ফটোগ্রাফার ভাই বলেন 50 রকম সুন্দর, সময় তো লাগবেই। সামিন বলে একটা filter এই সব হয়। কে ঠিক? আর 50 টা filter জোড়া দিয়ে আসলে লাভটা কী?",
+  type: "article",
+};
+
+{/* Told as a Brilliant-style journey, like 1.1 and 2.3: screen 1 seals the
+    reader's bet on what fifty filters in a row really are, and the bet is
+    opened only on the last screen (BetOpen). 10 steps. The screens live in
+    components/interactive/album-journey.tsx. The plan is block 7.5 of
+    07_journey_specs.md. It pays 6.6's StackThree promise ("হিসাবটা Article 7
+    এ") without re-running it. */}
+
+import { Journey, Step, Then, SideQuest } from "@/components/journey/journey";
+import { FilterBet, TwoFilters, FiftyIntoOne, TheBend, AllPhotos, ShapeFits, ShapeGame, TryLayerSize, AlbumDone, BetOpen } from "@/components/interactive/album-journey";
+import { WeddingCorner, SaminOpensList, ContrastSlider, MikeCall, SaminError, SomSettings, LastPhoto, NanaAlbum } from "@/components/interactive/album-journey";
+import { FiftyInARow, TwoHopsOneHop, LayersCollapse, ThreeJobs, RowsThroughOne, ColumnOrRow, BookC, LayerMatrix, RowPerOutput, AlbumRecap, NanaGamcha } from "@/components/interactive/album-journey";
+
+<Journey title="ফটোগ্রাফারের পঞ্চাশ filter · 7.5">
+
+<Step>
+
+বিয়ের দিন। দুপুর দুইটা।
+
+নানাবাড়ির উঠানে প্যান্ডেল। লাল আর হলুদ কাপড়। গেটে গাঁদা ফুলের মালা। কাল রাতের হলুদের বাটিগুলা এখনো বারান্দার এক কোণায়। দেয়ালের light machine টা বন্ধ।
+
+প্যান্ডেলের পিছনের কোণায় একটা প্লাস্টিকের টেবিল। তার উপর laptop। পাশে ফটোগ্রাফার ভাই। গলায় camera। কপালে ঘাম।
+
+হলুদের রাতের ছবি 300 টা। বরপক্ষ ফিরে যাওয়ার আগে album হাতে দিতে হবে। প্রতিটা ছবি যায় 50 টা colour filter এর ভেতর দিয়ে। একটার পর একটা। Screen এর নিচে একটা সবুজ দাগ। খুব slowly বাড়ছে। 3 / 300.
+
+সামিন পাশে দাঁড়িয়ে অনেকক্ষণ দেখলো। তারপর বললো, ভাই, পঞ্চাশটা লাগবে না। একটাতেই হবে।
+
+ফটোগ্রাফার ভাই চোখ তুললেন না। বললেন, পঞ্চাশটা filter, পঞ্চাশ রকম সুন্দর। সময় তো লাগবোই।
+
+<WeddingCorner story />
+
+50 টা filter পরপর চালালে আসলে কী হয়?
+
+<FilterBet />
+
+<Then>
+
+বাজি সিল হলো। শেষে খুলবো।
+
+বাজিটা শুধু ফটোগ্রাফার ভাইয়ের সময়ের না। এক ছবিতে 50 বার filter। 300 টা ছবিতে 15,000 বার। সামিনের কথা ঠিক হলে কাজটা নেমে আসবে 300 বারে। ঠিক না হলে বরপক্ষ album ছাড়াই ফিরবে।
+
+<FiftyInARow />
+
+</Then>
+
+</Step>
+
+<Step>
+
+সামিন laptop টা নিজের দিকে টেনে নিলো। Filter এর list খুললো। পঞ্চাশটা লাইন। প্রথম দুইটা: গরম আর উজ্জ্বল।
+
+<SaminOpensList story />
+
+প্রতিটা filter ছবির রং বদলায়। রং আমরা লিখবো দুইটা number এ: লাল কতটা, হলুদ কতটা। তাহলে একটা ছবির রং হলো কাগজে একটা point। আর একটা filter হলো 2 × 2 matrix। Article 6 এর move এর মতো পুরা কাগজ সরায়। গরম filter লালের সাথে হলুদ যতটা, ততটা যোগ করে। উজ্জ্বল দুইটাকেই দ্বিগুণ করে।
+
+একটা ছবির রং (1, 1)। আগে দুইটা filter পরপর চালান। তারপর দুইটার বদলে একটা বানান।
+
+<TwoFilters />
+
+<Then>
+
+খেয়াল করেছেন? দুই লাফে (4, 2)। নতুন filter এ এক লাফেও (4, 2)। নতুন filter বানাতে কোনো নিয়ম মুখস্থ লাগেনি। 7.3 এর মতো দড়ি দুইটার মাথা দুই filter এর ভেতর দিয়ে পাঠিয়েছি। যেখানে থামলো, ওরাই নতুন matrix এর দুই column: $\begin{bmatrix} 2 & 2 \\ 0 & 2 \end{bmatrix}$.
+
+6.6 এ সামিন তিনটা matrix পরপর চালিয়েছিল। তখন বলেছিলাম, হিসাবটা Article 7 এ। এটাই সেই হিসাব: $W_2(W_1x) = (W_2W_1)x$। আর $W_2W_1$ আরেকটা matrix মাত্র।
+
+<TwoHopsOneHop />
+
+</Then>
+
+</Step>
+
+<Step>
+
+দুইটা জুড়ে একটা হলো। বাকি 48 টা?
+
+একই কাজ বারবার। পাশাপাশি দুইটা করে জোড়া লাগান। প্রতিবার filter অর্ধেক হবে। কাগজে চোখ রাখুন: ছবির রং শেষে কোথায় থামে।
+
+<FiftyIntoOne />
+
+<Then>
+
+জোড়া লাগাতে লাগাতে 50 টা থেকে 1 টা। প্রতিবার লাফ কমেছে। কিন্তু শেষ জায়গাটা এক চুলও নড়েনি। তাই 300 টা ছবিতে এখন 15,000 বার না। 300 বার।
+
+Network এর layer ও ঠিক এমন। মাঝখানে কিছু না রেখে linear layer পরপর বসালে 50 টা layer আসলে 1 টা। দেখতে গভীর। কাজে এক layer। আসল ছবিতে রং তিনটা (লাল, সবুজ, নীল), তাই filter হয় 3 × 3। কথা একই।
+
+<LayersCollapse />
+
+</Then>
+
+</Step>
+
+<Step>
+
+ফটোগ্রাফার ভাই কিছুক্ষণ চুপ করে screen দেখলেন। তারপর নিচের একটা slider টানলেন। Contrast.
+
+বললেন, এইটা দেখো। অন্ধকার আরো অন্ধকার। আলো আরো আলো।
+
+সামিন বললো, এইটাও জোড়া লাগাই।
+
+<ContrastSlider story />
+
+Contrast লাল আর হলুদ, দুইটা number কেই আলাদা করে বাঁকায়। ছোট হলে আরো ছোট, বড় হলে আরো বড়। এটাও কি বাকিগুলার সাথে জোড়া লাগবে?
+
+<TheBend />
+
+<Then>
+
+Contrast এর পরে ঘর আর সমান থাকে না। মাঝের ঘর চওড়া, কিনারার ঘর সরু। কোনাকুনি দাগ বেঁকে যায়। 6.6 এর race এ এটাই ধরা পড়তো। তাই কোনো 2 × 2 দিয়ে contrast লেখা যায় না। জোড়াও লাগে না।
+
+Network এর আসল layer তাই তিনটা কাজ করে: $\text{bend}(Wx + b)$. W মেশায়। b সরায়, যেটা matrix পারে না (6.6). আর **bend**, মানে বাঁক, জোড়া লাগতে দেয় না। বাঁক না থাকলে গভীরতা মিছা।
+
+<ThreeJobs />
+
+</Then>
+
+</Step>
+
+<Step>
+
+বাইরে মাইকে কেউ বললো, বরপক্ষ খেতে বসছে।
+
+ফটোগ্রাফার ভাই ঘড়ি দেখলেন। Filter এখন একটা। কিন্তু ছবি তো 300 টা। একটা একটা করে?
+
+সামিন বললো, সবগুলা একসাথে।
+
+<MikeCall story />
+
+300 টা ছবির রং একটা table এ রাখি। 6.1 এর register এর মতো। প্রতিটা ছবি এক row: (লাল, হলুদ)। Table টার নাম X।
+
+<AllPhotos />
+
+<Then>
+
+300 টা ছবি, একটাই গুণ। প্রতিটা row এর হিসাব আলাদা। কেউ কারো জন্য বসে থাকে না। তাই GPU এরকম হাজারটা হিসাব একসাথে করে। এর নাম **batch**।
+
+হিসাব কিন্তু কম না। দুইটা 1000 × 1000 matrix গুণ করতে লাগে প্রায় 1000 × 1000 × 1000, মানে একশো কোটি ছোট গুণ আর যোগ। সবগুলা একই রকম, তাই GPU র কাছে এটা সহজ কাজ।
+
+<RowsThroughOne />
+
+<SideQuest title="বইয়ে Wx, code এ X @ Wᵀ">
+
+বই একটা ছবিকে লেখে খাড়া column হিসেবে, matrix এর ডানে: $Wx$। Code এ ছবিগুলো শোয়ানো row, table এর ভেতরে, matrix এর বামে: `X @ Wᵀ`. হিসাব একই। দুই পাশই শুধু কাত করা, 6.1 এর ᵀ দিয়ে।
+
+<ColumnOrRow />
+
+</SideQuest>
+
+</Then>
+
+</Step>
+
+<Step>
+
+সামিন নিজের laptop এ হিসাবটা আরেকবার চালাতে গেলো। তাড়াহুড়ায় উল্টা order এ লিখলো। Screen লাল হয়ে গেলো। একটা error.
+
+সামিন কিছু বললো না। Order ঠিক করে আবার লিখলো। এবার চললো।
+
+<SaminError story />
+
+দুইটা matrix সবসময় গুণ হয় না। Shape মিলতে হয়। আগে ছবির table আর filter। তারপর বইয়ের একটা জোড়া।
+
+<ShapeFits />
+
+<Then>
+
+প্রথম matrix এর column কয়টা, মানে তার প্রতিটা row তে কয়টা number। দ্বিতীয়টার row কয়টা, মানে সে কয়টা number খায়। এই দুইটা মিলতেই হবে। মিললে ওরা গায়েব। থাকে বাইরের দুইটা: $(m \times n)(n \times p) \to (m \times p)$.
+
+বইয়ের C তে row 2 আর row 4 হুবহু এক। কেন? A এর row 2 আর row 4 ই এক। হিসাব ওদের আলাদা করতে পারে না। Dataset এ একই ছবি দুইবার থাকলে ভেতরে ঠিক এটাই হয়।
+
+<BookC />
+
+</Then>
+
+</Step>
+
+<Step>
+
+## এবার আপনার পালা
+
+সামিনের খাতায় ছয় জোড়া matrix। কোনটা গুণ হয়, কোনটা হয় না? আপনি বলুন।
+
+<ShapeGame />
+
+<Then>
+
+64 × 768 আর 768 × 512 খেয়াল করেছেন? 64 টা ছবি, প্রতিটায় 768 টা number, এক গুণে 512 টা করে number। এটাই batch.
+
+আর 768 টা number নিয়ে 512 টা দেয় যে layer, তার W হলো 512 × 768। প্রতিটা output এর এক row। প্রতিটা input এর এক column। Model কত বড়, মোটামুটি এসব matrix এর number গুনলেই বোঝা যায়।
+
+<LayerMatrix />
+
+</Then>
+
+</Step>
+
+<Step>
+
+## Try it
+
+সোম ফটোগ্রাফার ভাইয়ের app এর setting ঘাঁটছিল। ভেতরে একটা ছোট network। ছবিতে মুখ খুঁজে বের করে। তার একটা layer 300 টা number নেয়, 100 টা দেয়।
+
+সোম বললো, এর W কত বড়?
+
+<SomSettings story />
+
+<TryLayerSize />
+
+<Then>
+
+100 টা output, প্রতিটার এক row। প্রতিটা row তে 300 টা input এর জন্য 300 টা weight। তাই 100 × 300, মানে 30,000 টা number। সাথে প্রতিটা output এর নিজের একটা b: আরো 100।
+
+300 × 100 ভেবেছিলেন? তাহলে W খেতো 100 টা number, আর দিতো 300 টা। Layer টা উল্টা দিকে চলতো।
+
+<RowPerOutput />
+
+</Then>
+
+</Step>
+
+<Step>
+
+সাড়ে চারটা। শেষ ছবিটা filter থেকে বের হলো। ফটোগ্রাফার ভাই laptop বন্ধ করলেন। গেটে বরের গাড়ির হর্ন।
+
+<LastPhoto story />
+
+শেষবার পুরা album টা চালান: একটা filter, তারপর contrast।
+
+<AlbumDone />
+
+</Step>
+
+<Step>
+
+## শেষ! পঞ্চাশটা ছিল একটা
+
+রাত আটটা। প্যান্ডেলের বাতি জ্বলছে। Album টা নানার কোলে।
+
+নানা পাতা উল্টাচ্ছেন। খুব ধীরে। প্রতিটা পাতায় একটু থামেন। একটা ছবিতে আপা। গায়ে হলুদ শাড়ি। নানা ছবিটার উপর আঙুল রাখলেন। কিছু বললেন না।
+
+<NanaAlbum story />
+
+এবার বাজি খোলার পালা। তিনটা card একটা একটা করে খুলুন।
+
+<BetOpen />
+
+<Then>
+
+বাজির হিসাব। 50 টা filter জোড়া লেগে একটা। সামিন ঠিক। মাঝামাঝি? জোড়া লাগানো মাঝপথে থামে না। **ফটোগ্রাফার ভাইয়ের পঞ্চাশ রকম সুন্দর টিকলো না।** তবে ছবি সত্যিই বদলেছে: একটা filter এ, আর তার contrast এর বাঁকে।
+
+এক line এ: **linear layer যতই জোড়া দিন, শেষে একটাই matrix। বাঁক না থাকলে গভীরতা মিছা।**
+
+<AlbumRecap />
+
+<SideQuest title="এই lesson এর চিহ্ন">
+
+<Table
+  head={["যেটা দেখবেন", "যেভাবে বলবেন"]}
+  rows={[
+    ["W₂W₁", "আগে W₁, তারপর W₂, একটা matrix এ"],
+    ["W₂(W₁x) = (W₂W₁)x", "দুই লাফ আর এক লাফ, একই জায়গা"],
+    ["(m × n)(n × p) → (m × p)", "ভেতরের দুইটা মিলবে, বাইরের দুইটা থাকবে"],
+    ["X @ Wᵀ", "সব ছবি row হয়ে, এক গুণে: batch"],
+    ["bend(Wx + b)", "একটা layer: মেশানো, সরানো, বাঁকানো"],
+  ]}
+/>
+
+</SideQuest>
+
+নানা album টা পাশে রাখলেন। উঠে ঘরে গেলেন। ফিরলেন একটা ভাঁজ করা গামছা হাতে। বরের জন্য, নিজের তাঁতে বোনা। দুই রঙের সুতা। লম্বালম্বি আর আড়াআড়ি।
+
+<NanaGamcha />
+
+<LessonLink href="/dashboard/articles/math_for_ai/07f_nanar_gamcha" eyebrow="পরের lesson" title="নানার গামছা, দুই সুতায় একটা grid">
+  একবারে একটা চেকই ওঠে। তাহলে আপার নামের অক্ষর বুনতে কয়টা চেক লাগবে?
+</LessonLink>
+
+</Then>
+
+</Step>
+
+</Journey>

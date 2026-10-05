@@ -1,0 +1,220 @@
+export const metadata = {
+  title: "Math for AI 4.6 — Towing the boat, how much of the pull works",
+  description: "Majhi chacha says: the longer the tow rope, the less pull is wasted. How is pull wasted, and where does the wasted part go? Split a pull into its shadow and the rest, and measure it yourself.",
+  type: "article",
+};
+
+{/* Told as a Brilliant-style journey, like 1.1 and 2.3: screen 2 seals the
+    reader's bet on Majhi chacha's claim about rope length, and the bet is not
+    settled until LongRope, three screens later, from the reader's own slider.
+    8 steps. Each screen opens by reacting to the last; the explanation sits in
+    <Then> and shows only once the task is done, one figure each. The screens
+    live in components/interactive/towrope-journey.tsx.
+
+    Screen 1 is the recall at the door: 4.5's cosine, asked on a picture rather
+    than as a sum, and on unit arrows so the shadow's length *is* the cosine —
+    the tool the rest of the journey runs on.
+
+    The river here is always straight, so every shadow can be read straight off
+    a slot — no projection sum is needed. "East is easy" (EastEasy) therefore
+    sits on the last screen, where the words about the bend are, instead of in
+    the middle: it is the bridge, not a lesson of its own. The bent river, and
+    the sum that goes with it, is its own journey: 04e2_bent_river. The sixth
+    of the "Dot product" journeys (Article 4); the plan is in
+    04_journey_specs.md. */}
+
+import { Journey, Step, Then, SideQuest } from "@/components/journey/journey";
+import { CosRecall, RopeBet, SplitPull, SidePull, LongRope, PickRope, MamiPick } from "@/components/interactive/towrope-journey";
+import { RaateKhata, GunTana, SlantRope, ShadowDrop, RudderMan, RudderHolds, MamiSays, ZeroNotMinus, RopeFan, SagRope, HalfWaste, NoonBend, EastEasy, GunHisab } from "@/components/interactive/towrope-journey";
+
+<Journey title="Dot product · 4.6">
+
+<Step>
+
+কালরাতে cosine এর কথা হচ্ছিল। খাওয়ার পর ফাহিম খাতা নিয়ে বসলো। তিনটা জোড়া আঁকলো। তিনটা তিন রকম angle এ, কিন্তু প্রতিটা arrow ঠিক এক ঘর লম্বা।
+
+এক ঘর লম্বা রাখাটা ফাহিম ইচ্ছা করেই করেছে। 4.3 এ দেখেছিলেন, ছায়ার length হলো arrow এর length গুণ cos θ। Arrow এক ঘর হলে ছায়াটাই তাই cos θ।
+
+<RaateKhata story />
+
+<CosRecall />
+
+</Step>
+
+<Step>
+
+সকালবেলা হাটের বাকি মালপত্র নৌকায় তোলা হলো। ধানের বস্তা, নতুন হাঁড়িপাতিল। নদীর স্রোত উল্টা দিকে, বাতাসও নাই। পাল খাটিয়ে কোনো লাভ নাই।
+
+মাঝি চাচা আর তার ভাই পাড়ে নেমে গেলেন। নৌকার মাস্তুলের মাথায় বাঁধা লম্বা একটা দড়ি। দড়ি কাঁধে নিয়ে দুইজন পাড় ধরে হাঁটা শুরু করলেন। এটাকেই বলে গুন টানা।
+
+ফাহিম দেখলো দড়িটা বেশ লম্বা, হাত বিশেক হবে। জিজ্ঞেস করতেই মাঝি চাচা শান্ত গলায় বললেন, দড়ি লম্বা যত বেশি হইবো, টানা তত কম লাগবো। সন্ধ্যার আগে ঘাটে পৌঁছাইতে হইবো। টান নষ্ট করার সময় নাই।
+
+<GunTana story />
+
+<RopeBet />
+
+<Then>
+
+বাজি ধরা হয়ে গেলো। এবার একটা জিনিস খেয়াল করুন। মাঝিরা হাঁটছে পাড় দিয়ে, আর নৌকা চলছে নদীতে। তাই দড়িটা যাচ্ছে বাঁকা হয়ে।
+
+মাঝি চাচা বলছেন টানের একটা part নাকি নষ্ট হয়। টান তো একটাই। ওটার আবার একটা part নষ্ট হয় কেমনে? আগে ওটাই বুঝে নেই।
+
+<SlantRope />
+
+</Then>
+
+</Step>
+
+<Step>
+
+নদীটা এখানে সোজা, east দিকে গেছে। আর টান যাচ্ছে দড়ি বরাবর, কোনাকুনি।
+
+দড়ির মাথাটা ধরে এদিক ওদিক ঘুরান। দেখুন কখন নৌকা পুরা টানটা সামনে পায়, আর কখন একটুও পায় না।
+
+<SplitPull />
+
+<Then>
+
+খেয়াল করেছেন, প্রতিবারই দুইটা number বসে আছে? একটা নদী বরাবর সামনে, আরেকটা পাড়ের দিকে, নদীর সাথে right angle এ।
+
+সবুজ part টা হলো নদীর উপরে টানের **shadow** — 4.3 এর সেই projection। হলুদ part টা যেটুকু বাকি থেকে গেলো। দুইটা জোড়া লাগালে পুরা টানটা আবার ফেরত আসে:
+
+$$w = (\text{the shadow along the river}) + (\text{the rest, at a right angle})$$
+
+<ShadowDrop />
+
+</Then>
+
+</Step>
+
+<Step>
+
+তাহলে হলুদ part টা যায় কোথায়?
+
+নৌকার পিছনে হাল ধরে বসে আছে আরেকজন মাঝি। সারাক্ষণ হাল ধরা। একবারও ছাড়ে না।
+
+<RudderMan story />
+
+<SidePull />
+
+<Then>
+
+হাল ছাড়ার সাথে সাথে নৌকা পাড়ের দিকে ভেসে যেতে শুরু করলো। হলুদ part টা নৌকাকে এক পা-ও সামনে নেয় না। শুধু পাশের দিকে টানে, আর হালের মাঝি সারাক্ষণ ওটাকে ঠেকিয়ে রাখে।
+
+মাঝি চাচা এই টানটার কথাই বলছিলেন। **নষ্ট হওয়া টান।**
+
+<RudderHolds />
+
+</Then>
+
+</Step>
+
+<Step>
+
+এবার বাজির মীমাংসা। নৌকা থেকে পাড় 3 metre দূরে। দড়ি ছোট হোক বা লম্বা, মাঝিরা টানে সমান জোরে — মোট 10।
+
+দড়িটা ছোট বড় করুন, আর দেখুন ওই 10 এর কতটুকু সামনের দিকে যায়।
+
+<LongRope />
+
+<Then>
+
+দড়ি ছোট হলে? মাঝিরা প্রায় নৌকার বরাবর দাঁড়ায়। দড়িটা খাড়া হয়ে যায়। টানের বড় একটা অংশ চলে যায় পাড়ের দিকে। দড়ি লম্বা হলে ওরা থাকে অনেক সামনে। angle ছোট হয়ে আসে, আর $\cos\theta$ চলে আসে 1 এর কাছাকাছি।
+
+তাহলে সামনে যায় ঠিক **10 × cos θ**। কালরাতের খাতায় arrow ছিল এক ঘর, ছায়া ছিল cos θ। এখানে টান 10, ছায়াও তাই 10 গুণ। **মাঝি চাচা ঠিকই বলেছিলেন।**
+
+<RopeFan />
+
+<SideQuest title="তাহলে দড়ি যত লম্বা তত ভালো?">
+
+খুব লম্বা দড়ি ভারি, পানিতে ঝুলে পড়ে, বাঁকের মুখে সামলানো কঠিন। তাই মাঝিরা মাঝামাঝি একটা length বেছে নেয়, আর দড়িটা বাঁধে মাস্তুলের মাথায়, যাতে পাড়ের ঝোপঝাড়ে আটকে না যায়। Maths বলছে, লম্বা হলে ভালো। কত লম্বা, সেটা ঠিক করে বাস্তবতা।
+
+<SagRope />
+
+</SideQuest>
+
+</Then>
+
+</Step>
+
+<Step>
+
+সন্ধ্যায় বাড়ি ফিরে ফাহিম সারাদিনের গল্প করলো। মামি চুপচাপ শুনলেন। তারপর শান্ত গলায় একটা কথা বলে বসলেন।
+
+<MamiSays story />
+
+<MamiPick />
+
+<Then>
+
+$\cos 90^\circ = 0$, মানে right angle। মামি নিজেই 4.2 এ ভ্যানটাকে right angle এ ধাক্কা দিয়েছিলেন। ভ্যান এক চুলও নড়ে নাই — সামনেও না, পিছনেও না। একটার direction এ আরেকটার কিছুই নাই। একটা যতদূরই যাক, ওটা আরেকটার ব্যাপারে কিছুই বলে না। কোনো relationship নাই।
+
+উল্টা হলো $\cos 180^\circ = -1$। আর ওটা কিন্তু strong একটা relationship। 4.2 এ রফিক 90° থেকে একটু পিছনে হেলে ছিল। তাই ওর ধাক্কার সামান্য একটু পিছন দিকে যাচ্ছিল, −5। ভ্যানের ক্ষতি ওইটুকুই করছিল।
+
+মামি 0 আর −1 গুলিয়ে ফেলেছেন।
+
+<ZeroNotMinus />
+
+</Then>
+
+</Step>
+
+<Step>
+
+## Try it
+
+ঘাটে বাঁধা তিনটা নৌকা। তিনটারই পাড় 3 metre দূরে, তিনজন মাঝিই সমান জোরে টানে। শুধু দড়ির length আলাদা।
+
+<PickRope />
+
+<Then>
+
+লম্বা দড়িতে মাঝি থাকে অনেক সামনে। দড়ি শুয়ে পড়ে, angle ছোট। ছোট angle মানে cos θ প্রায় 1। মানে টানের প্রায় পুরাটাই সামনে। ছোট দড়িতে? উল্টাটা। দড়ি খাড়া, হলুদ বারটা বড়। আর ওই পুরোটা মাঝিকে হাল দিয়ে সারাক্ষণ ঠেকিয়ে রাখতে হয়।
+
+নষ্টটুকু গুনেও দেখতে পারেন। দড়ি দ্বিগুণ লম্বা করলে নষ্ট ঠিক অর্ধেক হয়ে যায়।
+
+<HalfWaste />
+
+</Then>
+
+</Step>
+
+<Step>
+
+## শেষ! গুনের হিসাব মিলে গেলো
+
+মাঝি চাচা বলেছিলেন, দড়ি যত লম্বা, টান তত কম নষ্ট হয়। কথাটা টিকে গেলো। লম্বা দড়ি মানে ছোট angle, আর ছোট angle এ shadow প্রায় পুরা টানটাই। প্রথমটার উপরে বাজি ধরে থাকলে আপনি জিতেছেন। আর নষ্ট হওয়া টান কোথায় যায় সেটাও পাওয়া গেলো: নদীর সাথে right angle এ, পাড়ের দিকে।
+
+<GunHisab story />
+
+এক line এ: **যেকোনো টান দুই টুকরা হয় — নদী বরাবর shadow, আর বাকিটা right angle এ। সামনে নেয় শুধু shadow টুকু।**
+
+<Table
+  head={["যেটা দেখবেন", "যেভাবে বলবেন"]}
+  rows={[
+    ["নদী বরাবর part", "টানের shadow, এইটুকুই নৌকাকে সামনে নেয়"],
+    ["Right angle এর part", "নষ্ট টান, হাল দিয়ে ঠেকিয়ে রাখতে হয়"],
+    ["cos θ = 0", "কোনো relationship নাই, উল্টা না"],
+    ["cos θ 1 এর কাছে", "লম্বা দড়ি, ছোট angle, টান কাজে লাগছে"],
+  ]}
+/>
+
+দুপুর গড়িয়ে গেলো। নৌকা চলছে। সামনে নদী বাঁক নিয়েছে।
+
+<NoonBend story />
+
+এতক্ষণ নদী ছিল সোজা east দিকে। তাই shadow টা চোখেই দেখা যাচ্ছিল — টানের first number। 4.4 এ দেখেছিলেন, axis এর উপরে shadow মানেই ওই slot এর number। এখন নদী গেছে কোনাকুনি। দড়ির টানের shadow এর মাথা এখন কোথায় পড়বে? চোখে দেখে আর বলা যায় না।
+
+<EastEasy />
+
+<LessonLink
+  href="/dashboard/articles/math_for_ai/04e2_bent_river"
+  eyebrow="পরের lesson"
+  title="বাঁকা নদী। Shadow এর মাথা কোথায় পড়ে"
+>
+  নদী বাঁকা হলে হিসাবটা চোখে দেখা যায় না। দুইটা dot product, একটা ভাগ — এইটুকু দিয়েই বের করে ফেলবো।
+</LessonLink>
+
+</Step>
+
+</Journey>

@@ -57,12 +57,14 @@ export default function Roster({ joinCode }: { joinCode: string }) {
         className="m-auto rounded-2xl border border-border bg-surface p-0 shadow-card backdrop:bg-black/60"
       >
         <div className="flex flex-col items-center gap-4 p-8">
-          {/* eslint-disable-next-line @next/next/no-img-element -- data URL */}
-          <img
-            src={qr}
-            alt={`Scan to join with code ${joinCode}`}
-            className="h-[min(70vmin,32rem)] w-[min(70vmin,32rem)] rounded-lg"
-          />
+          {qr && (
+            // eslint-disable-next-line @next/next/no-img-element -- data URL
+            <img
+              src={qr}
+              alt={`Scan to join with code ${joinCode}`}
+              className="h-[min(70vmin,32rem)] w-[min(70vmin,32rem)] rounded-lg"
+            />
+          )}
           <p className="font-display text-4xl font-bold tracking-widest text-foreground">
             {joinCode}
           </p>

@@ -124,14 +124,14 @@ const PLANS: Plan[] = [
     label: "“যাও, ball টা নিয়ে আসো”",
     legs: [],
     kind: "vague",
-    say: "Shiku একদমই নড়ল না। ও জানেই না ball কী বা ballটা কোথায় আছে। ও শুধু জানে, ও ডানে, বাঁয়ে, উপরে আর নিচে একবারে এক ঘর করে move করতে পারবে।",
+    say: "Shiku একদমই নড়ল না। ও জানেই না ball কী বা ballটা কোথায় আছে। ও শুধু জানে, ও ডানে, বামে, উপরে আর নিচে একবারে এক ঘর করে move করতে পারবে।",
   },
   {
     id: "diag",
     label: "কোণাকুনি হেঁটে গিয়ে নিয়ে আসো।",
     legs: [],
     kind: "diagonal",
-    say: "এটাই shortest way। But ও এভাবে নড়তে পারবে না, ও শুধু ডানে, বাঁয়ে, উপরে, নিচে এক ঘর করে move করতে পারবে।",
+    say: "এটাই shortest way। But ও এভাবে নড়তে পারবে না, ও শুধু ডানে, বামে, উপরে, নিচে এক ঘর করে move করতে পারবে।",
   },
   {
     id: "right-up",
@@ -296,7 +296,7 @@ export function RobotPlanFigure() {
 
           <p className={`gfig-say${plan ? (reached ? " good" : plan.kind === "walk" && done ? " bad" : plan.kind !== "walk" ? " bad" : "") : ""}`}>
             {!plan
-              ? "একটা বেছে নিয়ে দেখুন ও কী করে। ও ওপর, নিচ, বাঁয়ে, ডানে একবারে এক ঘর করে move করতে পারে।"
+              ? "একটা বেছে নিয়ে দেখুন ও কী করে। ও ওপর, নিচ, বামে, ডানে একবারে এক ঘর করে move করতে পারে।"
               : plan.kind !== "walk" || done
                 ? plan.say
                 : "হাঁটছে…"}
@@ -400,7 +400,7 @@ export function BallAddressFigure() {
 
             {bx !== 0 && (
               <text x={(mx(0) + mx(bx)) / 2} y={my(0) + T * 1.25} textAnchor="middle" className="gfig-legtag x">
-                {bx < 0 ? "বাঁয়ে" : "ডানে"} {bn(Math.abs(at === null ? bx : shown[0]))}
+                {bx < 0 ? "বামে" : "ডানে"} {bn(Math.abs(at === null ? bx : shown[0]))}
               </text>
             )}
             {by !== 0 && (
@@ -428,7 +428,7 @@ export function BallAddressFigure() {
           </p>
           <div className="gfig-addr">
             <div className="gfig-addr-row">
-              <span>{bx < 0 ? "বাঁয়ে" : "ডানে"}</span>
+              <span>{bx < 0 ? "বামে" : "ডানে"}</span>
               <b>{Math.abs(bx)}</b>
               <u>→</u>
               <i>x = {bx}</i>
@@ -445,10 +445,10 @@ export function BallAddressFigure() {
           </p>
           {(bx < 0 || by < 0) && (
             <p className="gfig-say">
-              <b>{bx < 0 ? "বাঁয়ে" : "নিচে"}</b> যাওয়া মানে আসলে{" "}
-              {bx < 0 ? "ডানে" : "উপরে"} ঋণাত্মক কয়েক ঘর যাওয়া। ৪ ঘর বাঁয়ে যাচ্ছি বলা আর −৪ ঘর ডানে
+              <b>{bx < 0 ? "বামে" : "নিচে"}</b> যাওয়া মানে আসলে{" "}
+              {bx < 0 ? "ডানে" : "উপরে"} ঋণাত্মক কয়েক ঘর যাওয়া। ৪ ঘর বামে যাচ্ছি বলা আর −৪ ঘর ডানে
               যাচ্ছি বলা — একই কথা। তেমনি ৪ ঘর নিচে যাচ্ছি বলা আর −৪ ঘর উপরে যাচ্ছি বলাও একই কথা।
-              অর্থাৎ এখানে “−” চিহ্নটা direction বোঝাতে ব্যবহার হচ্ছে। ডানে আর উপরের জন্য “+”, আর বাঁয়ে
+              অর্থাৎ এখানে “−” চিহ্নটা direction বোঝাতে ব্যবহার হচ্ছে। ডানে আর উপরের জন্য “+”, আর বামে
               আর নিচের জন্য “−”।
             </p>
           )}
@@ -466,12 +466,12 @@ export function BallAddressFigure() {
           আপনার পায়ের কাছে
         </Btn>
         <span className="mfig-read">
-          ঠিকানা: <b>({bx}, {by})</b>
+          address: <b>({bx}, {by})</b>
         </span>
       </div>
 
       <figcaption>
-        <b>গুনে গুনে দেখান-এ click</b> করলে এক এক ঘর করে Shiku যে move করছে, তা দেখতে পাবেন। Ball-টাকে আপনার নিচে আর বাঁয়ে drop করে দেখুন।
+        <b>গুনে গুনে দেখান-এ click</b> করলে এক এক ঘর করে Shiku যে move করছে, তা দেখতে পাবেন। Ball-টাকে আপনার নিচে আর বামে drop করে দেখুন।
       </figcaption>
     </figure>
   );
@@ -490,7 +490,7 @@ const STEPS: Step[] = [
   { title: "একটা pencil দিয়ে ঠিক মাঝখানে একটা dot দিন", note: "আপনি যেমন room-এর ঠিক মাঝখানে দাঁড়িয়ে ছিলেন, dot-টাও room-এর ঠিক মাঝখানে পড়ে আছে" },
   { title: "এবার দুইটা direction-এর নাম দেওয়া যাক", note: "বাম থেকে ডান দিক বরাবর একটা দাগ দিয়ে সেটার নাম দিলাম 'X', আর ওপর থেকে নিচ বরাবর একটা দাগ দিয়ে সেটার নাম দিলাম 'Y'" },
   { title: "Dot-টার নিজের একটা address পেল: (0, 0)", note: "ডানেও শূন্য ঘর, উপরেও শূন্য ঘর। সবকিছু আমরা এটা থেকে কত দূরে, সেই হিসাবে মাপব। তাই এর নাম দিলাম origin" },
-  { title: "এই page-এর প্রত্যেকটা square-এর একটা address আছে", note: "ডানে আর ওপরে positive দিকে count করি; বাঁয়ে আর নিচে negative দিকে count করি। তারমানে, দুইটা সংখ্যা দিয়ে আমরা যেকোনো square-এর address বলতে পারব" },
+  { title: "এই page-এর প্রত্যেকটা square-এর একটা address আছে", note: "ডানে আর ওপরে positive দিকে count করি; বামে আর নিচে negative দিকে count করি। তারমানে, দুইটা সংখ্যা দিয়ে আমরা যেকোনো square-এর address বলতে পারব" },
   { title: "page-এর যেকোনো জায়গায় একটা point বসান", note: "Paper-এর ওপর যেকোনো জায়গায় click করুন। দুইটা number ফেরত আসবে" },
 ];
 

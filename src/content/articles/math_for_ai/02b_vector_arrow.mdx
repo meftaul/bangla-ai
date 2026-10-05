@@ -1,0 +1,139 @@
+export const metadata = {
+  title: "Math for AI 2.2 — Arrow, যার কোনো address নাই",
+  description: "Shiku-কে একটা recipe পড়ে শোনাবেন, আর সে রেখে যাবে একটা arrow। Arrow-টা কাগজের যেখানেই সরান, vector একই থাকে। Vector-এর দ্বিতীয় চেহারা, নিজের হাতে দেখবেন।",
+  type: "article",
+};
+
+{/* Told as a Brilliant-style journey, like 2.1: one screen at a time, each
+    with a visual and one thing to do, and the Continue arrow stays locked
+    until it is done. The shell is components/journey/journey.tsx; the screens
+    live in components/interactive/arrow-journey.tsx, on the graph-paper sheet
+    in components/journey/plane.tsx. This was one fifteen-step journey; it is
+    now two. This half runs from Shiku's recipe to the arrow with no address
+    and its position vector. The street, point against move, signs, the zero
+    vector and the unit steps are 2.2b (02b2_point_or_move). */}
+
+import { Journey, Step, Then } from "@/components/journey/journey";
+import {
+  FlipRecall,
+  ShikuErrand,
+  RecipeWalk,
+  WalkLeavesArrow,
+  PointIt,
+  ThreeAsks,
+  SlideArrow,
+  SortArrows,
+  SlideHome,
+  Finale,
+} from "@/components/interactive/arrow-journey";
+
+<Journey title="Vector-এর দুই চেহারা · ২.২">
+
+<Step>
+
+শুরুর আগে আগের lesson-এর সামিনের file-টা মনে করি।
+
+<FlipRecall />
+
+<Then>
+
+কাগজের ছবিটা শুধু আয়নায় দেখার মতো উল্টে গিয়েছিল, কে কার কাছাকাছি সেটা একচুলও নড়েনি। অথচ একটা row উল্টালে তানভীর ছিটকে গেল।
+
+</Then>
+
+</Step>
+
+<Step>
+
+আগের lesson-এ vector-কে দেখলেন সংখ্যার list হিসেবে। সামিনের file, কুস্তির partnership, ফাহিমের খালি ঘর। File উল্টানোর সময় কাগজের dot-গুলো আয়নার reflection-এর মতো সরে গেল, আর তানভীর ছিটকে গেল কাগজের বাইরে, একটা নির্দিষ্ট দিকে। মনে হচ্ছিল, সংখ্যাগুলোর একটা দিক আছে। আজ সেই দিকটা নিয়েই কথা বলবো।
+
+গ্রাফ পেপারের lesson-এর Shiku-কে মনে আছে? সেই বোকাসোকা robot, যে একবারে শুধু এক ঘর উপরে, নিচে, ডানে বা বামে যেতে পারে। ওকে যাও, গিয়ে বলটা নিয়ে আসো, বলে কোনো লাভ হয়নি। শেষমেশ বলতে হয়েছিল, ডানে ১০ ঘর যাও, তারপর উপরে ১২ ঘর যাও। দুইটা সংখ্যাই enough ছিল। 
+
+<ShikuErrand story />
+
+এবার উল্টো দিক থেকে দেখি। $v = (2, 3)$-কে list হিসেবে না পড়ে Shiku-র জন্য একটা step by step guide হিসেবে পড়ুন। Origin থেকে শুরু করো, x axis ধরে 2 ঘর যাও, তারপর y axis ধরে 3 ঘর যাও। Shiku-কে পড়ে শোনান। দেখুন কী হয়।
+
+<RecipeWalk />
+
+</Step>
+
+<Step>
+
+খেয়াল করেছেন, Shiku কীভাবে হাঁটলো? আগে ডানে, তারপর ওপরে। কিন্তু হাঁটা শেষে কাগজে রয়ে গেল একটা সোজা arrow। যেখান থেকে শুরু করেছিল, সেখান থেকে যেখানে থামলো, ঠিক সেই পর্যন্ত। এই arrow-টাই vector-এর দ্বিতীয় রূপ।
+
+একটু কেতাবি ভাষায় বললে:
+
+> একটা **vector** হলো এমন একটা জিনিস যার একটা **direction** আছে আর একটা **magnitude** আছে।
+
+<WalkLeavesArrow story />
+
+Direction মানে arrow-টা কোন দিকে তাক করা। Magnitude মানে arrow-টা কত লম্বা। এটাকে length বা norm-ও বলে। Length কীভাবে মাপে, সেটা সামনের lesson-এর কাজ। আপাতত “কত লম্বা” বুঝলেই চলবে। আর দেখুন, Shiku-কেও ঠিক এই দুইটা জিনিসই বলতে হয়েছিল। কোন দিকে, আর কত দূর।
+
+নিচে arrow-টার মাথা ধরে টেনে দুইটা তারার ওপর বসান। Direction আর length-এর দিকে নজর রাখবেন।
+
+<PointIt />
+
+</Step>
+
+<Step>
+
+(3, 1) আর (1, 3)। Length-এর bar দুইটা হুবহু সমান, অথচ দিক আলাদা। তাই vector-ও আলাদা। Order এখানেও matter করে।
+
+এবার definition-টা আরেকবার পড়ুন, আর দেখুন কী *নাই*। Direction আছে। Magnitude আছে। কিন্তু arrow-টা কাগজের কোথায় বসে আছে, সেই কথা কোথাও নাই। বেশিরভাগ মানুষ এখানেই হোঁচট খায়। তাই lets slow down a bit। সোমের king − man + woman ধাঁধাটা কাজ করে ঠিক এই কথাটার জোরে।
+
+<ThreeAsks story />
+
+নিচের arrow-টা ধরে কাগজের যেখানে খুশি বসিয়ে দেখুন। শুরু আর শেষের সংখ্যাগুলোর কী হয়? আর ওদের difference-এর কী হয়?
+
+<SlideArrow />
+
+</Step>
+
+<Step>
+
+শুরু বদলায়, শেষ বদলায়। কিন্তু শেষ থেকে শুরু বিয়োগ করলে সবসময় সেই (3, 1)। তাহলে একই দিকে তাক করা, একই length-এর দুইটা arrow আসলে **একই vector**। কাগজের যেখানেই আঁকান না কেন। মানে, vector কোনো জায়গায় আটকে থাকে না।
+
+তাহলে একটা arrow দেখে বুঝবো কীভাবে, এটা কোন vector? Arrow-টা কোথায় আছে, সেটা জিজ্ঞেস করে লাভ নাই। প্রশ্ন হলো, প্রত্যেক axis ধরে সে কতটা সরলো? শেষের point থেকে শুরুর point বিয়োগ করলেই উত্তর পাওয়া যায়।
+
+নিচের কাগজে চারটা arrow। Option দেখার আগে মনে মনে একবার হিসাবটা করে নিন। তারপর pick করুন।
+
+<SortArrows />
+
+</Step>
+
+<Step>
+
+A, B আর C একই vector, তিন জায়গায় আঁকা। D আলাদা। আর খেয়াল করেছেন? D-তেও সেই একই দুইটা সংখ্যা, শুধু উল্টো order-এ। Order matter করে। সবসময়ই করে।
+
+তাহলে এত জায়গা থাকতে vector আঁকার standard জায়গা কোনটা? Origin। Origin থেকে শুরু হওয়া arrow-কে বলে **position vector**। সুবিধা হলো, arrow-এর মাথা দেখেই component-গুলো পড়ে ফেলা যায়, কোনো বিয়োগ করা লাগে না। তবে এটা শুধু আঁকার সুবিধার জন্য, definition-এর অংশ না। চারটা arrow-কেই এবার origin-এ ফিরিয়ে আনুন।
+
+<SlideHome />
+
+</Step>
+
+<Step>
+
+## শেষ! Arrow-এর রূপটাও দেখে ফেললেন। 
+
+খেয়াল করেছেন? পুরো lesson-এ নতুন কোনো math-ই লাগলো না। Shiku, একটা গ্রাফ পেপার, আর একটা subtraction: **End − Start**।
+
+<Finale />
+
+* Vector-এর দ্বিতীয় রূপ একটা **arrow**, যার একটা **direction** আছে আর একটা **magnitude**।
+* Arrow-এর কোনো নির্দিষ্ট জায়গা নাই। একই দিকে, একই length-এর সব arrow একই vector।
+* কোন vector, সেটা বের করতে হয় **End − Start** দিয়ে।
+* Origin থেকে আঁকলে সেটা **position vector**, মাথা থেকেই component পড়া যায়।
+
+তবে একটা প্রশ্ন বাকি। Arrow-এর যদি কোনো জায়গাই না থাকে, তাহলে “এই জায়গা” আর “এই দিকে এতটুকু যাও”, দুইটাকে আলাদা করবো কীভাবে? রাস্তায় নেমে দেখি।
+
+<LessonLink
+  href="/dashboard/articles/math_for_ai/02b2_point_or_move"
+  eyebrow="পরের পাঠ"
+  title="জায়গা আর যাওয়া, দুইটা আলাদা জিনিস"
+>
+  এক রাস্তার কথা তিন মোড় থেকে হেঁটে দেখবেন।
+</LessonLink>
+
+</Step>
+
+</Journey>

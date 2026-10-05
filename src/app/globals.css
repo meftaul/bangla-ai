@@ -127,6 +127,8 @@
   --font-sans: var(--font-geist-sans);
   --font-display: var(--font-space-grotesk);
   --font-bangla: var(--font-hind-siliguri);
+  --font-board: var(--font-big-shoulders);
+  --font-ticket: var(--font-fredoka);
 }
 
 body {
