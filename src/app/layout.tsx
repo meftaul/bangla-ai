@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import {
   Geist,
@@ -10,6 +10,7 @@ import {
   Fredoka,
   Baloo_Da_2,
 } from "next/font/google";
+import Pwa from "@/components/pwa";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -67,6 +68,16 @@ export const metadata: Metadata = {
   title: "Bangla.AI — Let's Learn AI & Data Science",
   description:
     "Structured courses, hands-on notebooks, and real projects in AI and data science, built for Bengali and English learners.",
+  applicationName: "Pathshala",
+  appleWebApp: { capable: true, title: "Pathshala", statusBarStyle: "default" },
+};
+
+// Browser chrome matches the page background (globals.css).
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f6f8fb" },
+    { media: "(prefers-color-scheme: dark)", color: "#0e1626" },
+  ],
 };
 
 export default function RootLayout({
@@ -88,6 +99,7 @@ export default function RootLayout({
           {`(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||t==='light')document.documentElement.classList.add(t);}catch(e){}})();`}
         </Script>
         {children}
+        <Pwa />
       </body>
     </html>
   );

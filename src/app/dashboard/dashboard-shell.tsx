@@ -173,7 +173,14 @@ export default function DashboardShell({
                 <p className="text-xs text-muted">{isAdmin ? "Instructor" : "Learner"}</p>
               </div>
             </div>
-            <form action={signOut}>
+            {/* Cached lesson pages include this shell (email), so drop them on sign-out.
+                ponytail: "pages-v1" must match V in public/sw.js. */}
+            <form
+              action={signOut}
+              onSubmit={() => {
+                if ("caches" in window) caches.delete("pages-v1");
+              }}
+            >
               <FormPendingOverlay />
               <button type="submit" className="btn-secondary w-full">
                 Sign out
