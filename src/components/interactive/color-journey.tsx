@@ -9,13 +9,13 @@ import { sfx } from "@/components/journey/sfx";
 
 // Screens for "Math for AI 1.3 — রঙিন ছবি", told as a Journey.
 //
-// Rafi again (from 1.1), and this time the drawing is a watercolour
+// Jobair again (from 1.1), and this time the drawing is a watercolour
 // watermelon. Read out the old way — one brightness per cell — it arrives
 // grey, and worse: the red flesh and the green rind are tuned to the same
 // brightness, so they turn into one grey. A drop of water on a phone screen
 // shows why: every pixel is three little lamps. The reader finds the eight
 // on/off colours (2 × 2 × 2, the binary lesson again), dials real colours with
-// three 0–255 numbers, sorts Rafi's three unlabelled sheets, stacks them into
+// three 0–255 numbers, sorts Jobair's three unlabelled sheets, stacks them into
 // the colour picture, pulls one out, reads colours from numbers, and finds that
 // grey is just three equal numbers.
 //
@@ -190,13 +190,13 @@ function Sheet({
   );
 }
 
-/** Your page and Rafi's, side by side. */
+/** Your page and Jobair's, side by side. */
 function Pages({ children }: { children: ReactNode }) {
   return <div className="mx-auto my-5 grid w-full max-w-md grid-cols-2 items-end gap-3 sm:gap-5">{children}</div>;
 }
 
-function Rafi(props: { tone?: "plain" | "good" | "bad"; children: ReactNode }) {
-  return <Speech who="রাফি" initial="র" tint="blue" {...props} />;
+function Jobair(props: { tone?: "plain" | "good" | "bad"; children: ReactNode }) {
+  return <Speech who="জোবায়ের" initial="জ" tint="blue" {...props} />;
 }
 
 function Swatch({ c, label }: { c: string; label: string }) {
@@ -323,7 +323,7 @@ export function ColorCall() {
   const started = read.running || k > 0;
   const done = k === ALL;
 
-  // Rafi's brush, cell after cell
+  // Jobair's brush, cell after cell
   useEffect(() => {
     if (k > 0) sfx.brush(0.15);
   }, [k]);
@@ -338,7 +338,7 @@ export function ColorCall() {
           <Lines />
           {read.running && <Ring i={k} />}
         </Sheet>
-        <Sheet who="রাফির খাতা" label={`Rafi's copy: ${k} of ${ALL} cells painted`}>
+        <Sheet who="জোবায়েরের খাতা" label={`Jobair's copy: ${k} of ${ALL} cells painted`}>
           <Cells fill={(i) => (i < k ? grey(luma(MELON[i])) : "#fafafa")} />
           <Lines />
           {read.running && <Ring i={k} />}
@@ -362,8 +362,8 @@ export function ColorCall() {
           </button>
         </div>
       )}
-      {done && <Rafi tone="bad">ছবি তো আসলো, কিন্তু এটা কী আঁকলি? ধূসর রঙের অর্ধেক চাঁদ, ভেতরে চারটা কালো point?</Rafi>}
-      <Task done={done}>আগের নিয়মে, প্রতিটা ঘর কতটা উজ্জ্বল সেই সংখ্যাটা রাফিকে বলে দিন।</Task>
+      {done && <Jobair tone="bad">ছবি তো আসলো, কিন্তু এটা কী আঁকলি? ধূসর রঙের অর্ধেক চাঁদ, ভেতরে চারটা কালো point?</Jobair>}
+      <Task done={done}>আগের নিয়মে, প্রতিটা ঘর কতটা উজ্জ্বল সেই সংখ্যাটা জোবায়েরকে বলে দিন।</Task>
     </>
   );
 }
@@ -396,7 +396,7 @@ export function SameNumber() {
           <Lines />
           {at !== null && <Ring i={at} />}
         </Sheet>
-        <Sheet who="রাফির খাতা" label="Rafi's grey copy">
+        <Sheet who="জোবায়েরের খাতা" label="Jobair's grey copy">
           <Cells fill={(i) => grey(luma(MELON[i]))} />
           <Lines />
           {at !== null && <Ring i={at} />}
@@ -408,12 +408,12 @@ export function SameNumber() {
           <span className="text-muted">→ বলেছিলেন</span>
           <b className="font-mono text-2xl">{luma(c)}</b>
           <span className="text-muted">→</span>
-          <Swatch c={grey(luma(c))} label="রাফির ঘর" />
+          <Swatch c={grey(luma(c))} label="জোবায়েরের ঘর" />
         </div>
       ) : (
         <div className="text-center text-sm text-muted">আপনার খাতার যেকোনো ঘরে tap করুন</div>
       )}
-      {both && <Rafi>লাল ঘরটাও 105, সবুজটাও 105? তাহলে তো দুইটা একই রঙ! আমি তো ঠিকই আঁকছি।</Rafi>}
+      {both && <Jobair>লাল ঘরটাও 105, সবুজটাও 105? তাহলে তো দুইটা একই রঙ! আমি তো ঠিকই আঁকছি।</Jobair>}
       <Ticks
         items={[
           ["লাল শাঁসের একটা ঘর", seen.includes("flesh")],
@@ -729,10 +729,10 @@ export function MatchColor() {
 }
 
 // ---------------------------------------------------------------------------
-// 6 · Rafi's three sheets came without labels. Which one keeps the red count?
+// 6 · Jobair's three sheets came without labels. Which one keeps the red count?
 //     Each is a plain grey picture of one colour's numbers.
 
-/** The order Rafi handed the sheets over in: green, blue, red. */
+/** The order Jobair handed the sheets over in: green, blue, red. */
 const HANDED = [1, 2, 0];
 const SHEET_NAME = ["ক", "খ", "গ"];
 const ASK = [0, 1];
@@ -940,7 +940,7 @@ export function PullSheet() {
 }
 
 // ---------------------------------------------------------------------------
-// 9 · The other way round: Rafi sends three numbers, you name the colour.
+// 9 · The other way round: Jobair sends three numbers, you name the colour.
 
 const ROUNDS: { say: RGB; options: RGB[]; right: number }[] = [
   {
@@ -1007,7 +1007,7 @@ export function GuessColor() {
       </div>
       {round ? (
         <>
-          <Rafi key={r}>“{trip(round.say)}” — এই ঘরটা কোন রঙের, বল তো?</Rafi>
+          <Jobair key={r}>“{trip(round.say)}” — এই ঘরটা কোন রঙের, বল তো?</Jobair>
           <div className="mt-4 grid grid-cols-2 gap-2.5 sm:grid-cols-4">
             {round.options.map((o, i) => {
               const bad = wrong.includes(i);
@@ -1030,10 +1030,10 @@ export function GuessColor() {
           </div>
         </>
       ) : (
-        <Rafi tone="good">তিনটাই ঠিক! তুই তো দেখি সংখ্যা দেখেই রঙ দেখতে পাস।</Rafi>
+        <Jobair tone="good">তিনটাই ঠিক! তুই তো দেখি সংখ্যা দেখেই রঙ দেখতে পাস।</Jobair>
       )}
       <Task done={!round}>
-        রাফির পাঠানো সংখ্যা দেখে ঠিক রঙটা বেছে নিন ({bn(Math.min(r, ROUNDS.length))}/{bn(ROUNDS.length)})
+        জোবায়েরের পাঠানো সংখ্যা দেখে ঠিক রঙটা বেছে নিন ({bn(Math.min(r, ROUNDS.length))}/{bn(ROUNDS.length)})
       </Task>
     </>
   );

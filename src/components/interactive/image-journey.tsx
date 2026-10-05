@@ -39,7 +39,7 @@ import {
 // Screens for "Math for AI 1.1 — ছবি থেকে সংখ্যা", told as a Journey.
 //
 // The same story as the article's GridStoryFigure, one beat per screen: you
-// have a pencil bird, your friend Rafi is in another city, and all you have is
+// have a pencil bird, your friend Jobair is in another city, and all you have is
 // a button phone. Saying "bird" fails, describing it fails; ruling the same
 // grid on both pages and reading out one number per cell, in an order you both
 // know, works. Then the reader turns it round — numbers into a picture — and
@@ -155,7 +155,7 @@ function Page({
   );
 }
 
-/** Your page and Rafi's, side by side. */
+/** Your page and Jobair's, side by side. */
 function Pages({ children }: { children: ReactNode }) {
   return <div className="mx-auto my-5 grid w-full max-w-md grid-cols-2 items-end gap-3 sm:gap-5">{children}</div>;
 }
@@ -261,9 +261,9 @@ function Outline({ i, pulse = false }: { i: number; pulse?: boolean }) {
   );
 }
 
-/** Rafi on the other end of the line. */
-function Rafi(props: { tone?: "plain" | "good" | "bad"; children: ReactNode }) {
-  return <Speech who="রাফি" initial="র" tint="blue" {...props} />;
+/** Jobair on the other end of the line. */
+function Jobair(props: { tone?: "plain" | "good" | "bad"; children: ReactNode }) {
+  return <Speech who="জোবায়ের" initial="জ" tint="blue" {...props} />;
 }
 
 /** A 0–255 slider over the black-to-white scale it stands for. */
@@ -289,12 +289,12 @@ function Shade({ value, onChange, label }: { value: number; onChange: (v: number
 }
 
 // ---------------------------------------------------------------------------
-// 1 · The bird draws itself on your page; you ring Rafi.
+// 1 · The bird draws itself on your page; you ring Jobair.
 
 type Call = "idle" | "ringing" | "on";
 
 function ButtonPhone({ call }: { call: Call }) {
-  const screen = call === "idle" ? "রাফি" : call === "ringing" ? "কল যাচ্ছে…" : "কথা চলছে";
+  const screen = call === "idle" ? "জোবায়ের" : call === "ringing" ? "কল যাচ্ছে…" : "কথা চলছে";
   return (
     <svg
       viewBox="0 0 56 104"
@@ -364,11 +364,11 @@ export function CallFriend() {
       </div>
       <div className="flex justify-center">
         <button type="button" disabled={call !== "idle"} onClick={() => setCall("ringing")} className={primaryBtn}>
-          ☎ রাফিকে ফোন দিন
+          ☎ জোবায়েরকে ফোন দিন
         </button>
       </div>
-      {call === "on" && <Rafi>হ্যালো! কী খবর, দোস্ত?</Rafi>}
-      <Task done={call === "on"}>রাফিকে একটা ফোন দিন।</Task>
+      {call === "on" && <Jobair>হ্যালো! কী খবর, দোস্ত?</Jobair>}
+      <Task done={call === "on"}>জোবায়েরকে একটা ফোন দিন।</Task>
     </>
   );
 }
@@ -404,7 +404,7 @@ export function JustWords() {
   const choose = (id: string) => {
     setPick(id);
     setN((k) => k + 1);
-    // Rafi's pencil: one sweep for the bird in his head, three rings for the guesses
+    // Jobair's pencil: one sweep for the bird in his head, three rings for the guesses
     if (id === "bird") sfx.pencil(0.9);
     else sfx.scribble(3, 0.25, 0.3);
     const t = tried.includes(id) ? tried : [...tried, id];
@@ -420,13 +420,13 @@ export function JustWords() {
           <Pencil />
         </Page>
         <Page
-          who="রাফির খাতা"
+          who="জোবায়েরের খাতা"
           label={
             pick === "bird"
-              ? "Rafi's page: the bird in his head, not yours"
+              ? "Jobair's page: the bird in his head, not yours"
               : pick === "words"
-                ? "Rafi's page: three circles, any of which fits your description"
-                : "Rafi's page, still blank"
+                ? "Jobair's page: three circles, any of which fits your description"
+                : "Jobair's page, still blank"
           }
         >
           {pick === "bird" && (
@@ -454,7 +454,7 @@ export function JustWords() {
         </Page>
       </Pages>
 
-      <div className="text-sm font-medium text-muted">রাফিকে বলুন:</div>
+      <div className="text-sm font-medium text-muted">জোবায়েরকে বলুন:</div>
       <div className="mt-2 flex flex-col gap-2">
         {SAY.map((s) => (
           <button
@@ -471,9 +471,9 @@ export function JustWords() {
         ))}
       </div>
       {reply && (
-        <Rafi key={n} tone="bad">
+        <Jobair key={n} tone="bad">
           {reply.reply}
-        </Rafi>
+        </Jobair>
       )}
       <Task done={tried.length === SAY.length}>
         দুইভাবেই বলে দেখুন ({bn(tried.length)}/{bn(SAY.length)})
@@ -511,7 +511,7 @@ export function RuleGrid() {
           <Pencil />
           {ruled && <RuleLines />}
         </Page>
-        <Page who="রাফির খাতা" label={ruled ? "Rafi's blank page, ruled into the same 8 by 8 cells" : "Rafi's blank page"}>
+        <Page who="জোবায়েরের খাতা" label={ruled ? "Jobair's blank page, ruled into the same 8 by 8 cells" : "Jobair's blank page"}>
           {ruled && <RuleLines />}
         </Page>
       </Pages>
@@ -673,7 +673,7 @@ export function MixedCell() {
         </div>
       </Pages>
 
-      <div className="text-sm font-medium text-muted">এই ঘরের জন্য রাফিকে কোন সংখ্যা বলবেন?</div>
+      <div className="text-sm font-medium text-muted">এই ঘরের জন্য জোবায়েরকে কোন সংখ্যা বলবেন?</div>
       <div className="mt-2 flex flex-col gap-2">
         {MIX_OPTIONS.map((o, i) => (
           <Choice key={i} n={i} look={predictLook(i, guess, over, MIX_RIGHT)} disabled={guess !== null} onClick={() => setGuess(i)}>
@@ -688,7 +688,7 @@ export function MixedCell() {
 
 // ---------------------------------------------------------------------------
 // 6 · Read it out. The first row by hand, one number per press; the rest in
-//     one go. Rafi shades each cell the moment he hears its number.
+//     one go. Jobair shades each cell the moment he hears its number.
 
 export function ReadOut() {
   const pass = useGate();
@@ -702,7 +702,7 @@ export function ReadOut() {
   const row = rowOf(Math.max(0, said - 1));
   const heard = TONES.slice(row * N, said);
 
-  // Rafi's pencil shades each cell as he hears its number
+  // Jobair's pencil shades each cell as he hears its number
   useEffect(() => {
     if (said > 0) sfx.pencil(0.12);
   }, [said]);
@@ -718,7 +718,7 @@ export function ReadOut() {
           ))}
           {!done && <Outline i={said} pulse />}
         </Page>
-        <Page who="রাফির খাতা" label={`Rafi's page; ${said} of ${ALL} cells shaded`}>
+        <Page who="জোবায়েরের খাতা" label={`Jobair's page; ${said} of ${ALL} cells shaded`}>
           <Cells tones={TONES} count={said} />
           <Ruling />
         </Page>
@@ -746,7 +746,7 @@ export function ReadOut() {
           </button>
         )}
       </div>
-      {done && <Rafi tone="good">হয়ে গেছে! দেখ তো, মিললো?</Rafi>}
+      {done && <Jobair tone="good">হয়ে গেছে! দেখ তো, মিললো?</Jobair>}
       <Task done={done}>
         প্রথম row-এর {bn(N)}টা ঘর নিজে এক এক করে বলুন ({bn(Math.min(said, N))}/{bn(N)}), তারপর বাকিগুলো একটানা।
       </Task>
@@ -755,7 +755,7 @@ export function ReadOut() {
 }
 
 // ---------------------------------------------------------------------------
-// 7 · Same numbers, same order — but Rafi fills from the bottom row up.
+// 7 · Same numbers, same order — but Jobair fills from the bottom row up.
 
 const flip = (k: number) => (N - 1 - rowOf(k)) * N + colOf(k);
 const ORDER_OPTIONS = ["হুবহু একই পাখি", "উল্টো পাখি — মাথা নিচের দিকে", "কিছুই চেনা যাবে না, সব এলোমেলো"];
@@ -787,13 +787,13 @@ export function WrongOrder() {
           <Pencil />
           <Ruling />
         </Page>
-        <Page who="রাফির খাতা · নিচ থেকে" label="Rafi's page, filled from the bottom row up">
+        <Page who="জোবায়েরের খাতা · নিচ থেকে" label="Jobair's page, filled from the bottom row up">
           <Cells tones={TONES} count={fill.k} at={flip} />
           <Ruling />
         </Page>
       </Pages>
 
-      <div className="text-sm font-medium text-muted">রাফির খাতায় কী আসবে বলে মনে হয়?</div>
+      <div className="text-sm font-medium text-muted">জোবায়েরের খাতায় কী আসবে বলে মনে হয়?</div>
       <div className="mt-2 flex flex-col gap-2">
         {ORDER_OPTIONS.map((o, i) => (
           <Choice key={i} n={i} look={predictLook(i, guess, over, ORDER_RIGHT)} disabled={guess !== null} onClick={() => choose(i)}>
@@ -801,8 +801,8 @@ export function WrongOrder() {
           </Choice>
         ))}
       </div>
-      {over && <Rafi tone="bad">এ কী! তোর পাখি দেখি Batman।উলটা হয়ে ঝুলে আছে!</Rafi>}
-      <Task done={over}>আগে ভাবুন, তারপর একটা বেছে নিন — রাফি তখনই ভরা Start করবে।</Task>
+      {over && <Jobair tone="bad">এ কী! তোর পাখি দেখি Batman।উলটা হয়ে ঝুলে আছে!</Jobair>}
+      <Task done={over}>আগে ভাবুন, তারপর একটা বেছে নিন — জোবায়ের তখনই ভরা Start করবে।</Task>
     </>
   );
 }
@@ -829,7 +829,7 @@ export function PixelHunt() {
   return (
     <>
       <div className="mx-auto my-5 w-full max-w-[17rem]">
-        <Page who="রাফির খাতা" label="Rafi's finished page, 64 pixels. Tap a pixel to read its number." onCell={tap}>
+        <Page who="জোবায়েরের খাতা" label="Jobair's finished page, 64 pixels. Tap a pixel to read its number." onCell={tap}>
           <Cells tones={TONES} />
           <Ruling />
           {seen.map((i) => (
@@ -850,7 +850,7 @@ export function PixelHunt() {
       {at !== null && !found && (
         <Nope key={`${at}-${seen.length}`}>এটার value {TONES[at]}। এর চেয়েও কালো ঘর আছে — মানে আরো ছোট সংখ্যা।</Nope>
       )}
-      <Task done={found}>রাফির খাতার সবচেয়ে কালো pixel-টা খুঁজে বের করুন।</Task>
+      <Task done={found}>জোবায়েরের খাতার সবচেয়ে কালো pixel-টা খুঁজে বের করুন।</Task>
     </>
   );
 }
@@ -880,7 +880,7 @@ export function FinerGrid() {
           <Pencil />
           {n <= 24 && <Ruling n={n} />}
         </Page>
-        <Page who="রাফির খাতা" label={`Rafi's page, shaded from a ${n} by ${n} grid`}>
+        <Page who="জোবায়েরের খাতা" label={`Jobair's page, shaded from a ${n} by ${n} grid`}>
           <g key={n}>
             <Cells tones={CELL_TONES[n]} n={n} />
           </g>

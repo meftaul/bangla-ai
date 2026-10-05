@@ -146,7 +146,7 @@ const LINES: Line[] = [
       s("00_why_math", "PKH", "পাখির খোঁজ", "Pakhir Khoj", "Multiply-add counter", "Finds a bird among 4,000 photos with nothing but multiplying and adding.", Bird),
       s("01_intro", "CBG", "ছবিঘর", "Chhobighar", "Pixel loupe", "Reads a photo as a grid of brightness numbers.", MagnifyingGlass),
       s("01c_image_numbers", "BTF", "বাটন ফোন", "Button Phone", "Grid call code", "Reads a drawing aloud, square by square, as numbers.", Phone),
-      s("01d_color_image", "RFK", "রাফির খাতা", "Rafir Khata", "Three-lamp mixer", "Any colour as three numbers: red, green, blue.", Lightbulb),
+      s("01d_color_image", "RFK", "জোবায়েরের খাতা", "Jobairer Khata", "Three-lamp mixer", "Any colour as three numbers: red, green, blue.", Lightbulb),
       s("01e_vector", "PTM", "পিটি মাঠ", "PT Math", "Measuring list", "A person as an ordered list of measurements: a vector.", Ruler),
       s("01f_representation", "AIB", "আম্মুর ইনবক্স", "Ammur Inbox", "Feature sieve", "Turns things with no numbers in them into numbers.", Funnel),
       s("01a_graph_paper", "KHG", "খালি ঘর", "Khali Ghor", "Two-number address", "Any spot in the room as (x, y).", GridFour),
