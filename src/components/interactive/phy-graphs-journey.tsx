@@ -10,7 +10,7 @@ import { Gauge, PArrow, PH, Ripple, Sheet, Tag, Txt, WrongMark, svgPoint, toneHe
 import { Rickshaw } from "@/components/interactive/phy-rest-journey";
 
 // Screens for "Physics for High School 14 — Graph থেকে বেগ আর ত্বরণ"
-// (src/content/articles/physics_for_high_school/14_motion_graphs.mdx), the
+// (src/content/articles/physics_for_high_school/chapter_2/14_motion_graphs.mdx), the
 // journey of video EP 14 (physics_9_10/chapter-2/14-motion-graphs/script.md).
 // Book "নিজে করো", pp. 51–54 (টেবিল ২.০১, চিত্র ২.০৯).
 //

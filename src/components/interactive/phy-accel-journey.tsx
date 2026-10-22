@@ -9,7 +9,7 @@ import { sfx } from "@/components/journey/sfx";
 import { Bicycle, Gauge, PArrow, PH, Ripple, School, Sheet, Tag, Txt, WrongMark, chip, useWalk } from "@/components/interactive/phy-kit";
 
 // Screens for "Physics for High School 9 — ত্বরণ"
-// (src/content/articles/physics_for_high_school/09_acceleration.mdx), the
+// (src/content/articles/physics_for_high_school/chapter_2/09_acceleration.mdx), the
 // journey of video EP 09 (physics_9_10/09-acceleration/script.md). Book §2.6,
 // pp. 43–45.
 //

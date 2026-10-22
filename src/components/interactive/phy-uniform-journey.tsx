@@ -9,7 +9,7 @@ import { sfx } from "@/components/journey/sfx";
 import { Bicycle, Gauge, PArrow, PH, ROAD, RoadBase, Ripple, Sheet, Tag, Txt, WrongMark, chip, svgPoint, useWalk, type PhTone } from "@/components/interactive/phy-kit";
 
 // Screens for "Physics for High School 8 — সমদ্রুতি, তবু বেগ বদলায়"
-// (src/content/articles/physics_for_high_school/08_uniform_speed.mdx), the
+// (src/content/articles/physics_for_high_school/chapter_2/08_uniform_speed.mdx), the
 // journey of video EP 08 (physics_9_10/08-uniform-speed/script.md). Book §2.5,
 // p. 42.
 //

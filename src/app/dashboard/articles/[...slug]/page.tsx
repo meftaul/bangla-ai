@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import Deck from "@/components/deck";
 import { RailOpen } from "@/components/rail/open";
-import { RAIL_SLUGS } from "@/content/rail";
+import { railCourseOf, railSlugs } from "@/content/rail";
 import { createClient } from "@/lib/supabase/server";
 import { coursesForSlug, getRole } from "@/lib/articles";
 
@@ -54,13 +54,14 @@ export default async function ArticlePage({
 
   // A journey rides the railway only once it is published, and only between
   // published stations (content/rail.ts), for admins too.
+  const railCourse = railCourseOf(slug);
   let railOpen: string[] | null = null;
-  if (RAIL_SLUGS.includes(slug)) {
+  if (railCourse) {
     const { data: open } = await supabase
       .from("articles")
       .select("slug")
       .eq("status", "published")
-      .in("slug", RAIL_SLUGS);
+      .in("slug", railSlugs(railCourse));
     const slugs = (open ?? []).map((r) => r.slug as string);
     if (slugs.includes(slug)) railOpen = slugs;
   }
@@ -89,7 +90,7 @@ export default async function ArticlePage({
       {!isSlides ? (
         <article className="article surface-card p-5 sm:p-8 max-sm:has-[[data-journey]]:h-dvh has-[[data-journey]]:min-h-[26rem] has-[[data-journey]]:overflow-hidden has-[[data-journey]]:p-0 max-sm:has-[[data-journey]]:rounded-none max-sm:has-[[data-journey]]:border-0 max-sm:has-[[data-journey]]:shadow-none sm:has-[[data-journey]]:h-[calc(100dvh-6.5rem)] lg:has-[[data-journey]]:h-[calc(100dvh-8.5rem)]">
           {railOpen ? (
-            <RailOpen slugs={railOpen}>
+            <RailOpen course={railCourse!} slugs={railOpen}>
               <Article />
             </RailOpen>
           ) : (

@@ -9,7 +9,7 @@ import { sfx } from "@/components/journey/sfx";
 import { Gauge, GroundShadow, PArrow, PH, Ripple, Sheet, Tag, Txt, WrongMark, chip, fontFor, textW, toneHex, useWalk, type PhTone } from "@/components/interactive/phy-kit";
 
 // Screens for "Physics for High School 12 — পড়ন্ত বস্তু"
-// (src/content/articles/physics_for_high_school/12_falling_bodies.mdx), the
+// (src/content/articles/physics_for_high_school/chapter_2/12_falling_bodies.mdx), the
 // journey of video EP 12 (physics_9_10/12-falling-bodies/script.md). Book
 // §2.8, pp. 48–49.
 //

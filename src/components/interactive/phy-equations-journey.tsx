@@ -10,7 +10,7 @@ import { Bicycle, Gauge, PH, Ripple, Sheet, Tag, Txt, WrongMark, chip, svgPoint,
 import { Chip } from "@/components/interactive/phy-speed-journey";
 
 // Screens for "Physics for High School 10 — v = u + at আর s = ut + ½at²"
-// (src/content/articles/physics_for_high_school/10_equations_of_motion.mdx),
+// (src/content/articles/physics_for_high_school/chapter_2/10_equations_of_motion.mdx),
 // the journey of video EP 10 (physics_9_10/10-equations-of-motion/script.md).
 // Book §2.7, pp. 45–46.
 //

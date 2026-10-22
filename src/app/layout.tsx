@@ -42,7 +42,7 @@ const hindSiliguri = Hind_Siliguri({
   weight: ["400", "600", "700"],
 });
 
-// The railway around Math for AI (src/components/rail/): station boards and
+// The course railways (src/components/rail/): station boards and
 // printed tickets.
 const bigShoulders = Big_Shoulders({
   variable: "--font-big-shoulders",

@@ -9,7 +9,7 @@ import { sfx } from "@/components/journey/sfx";
 import { Bicycle, PArrow, PH, ROAD, RoadBase, RoadTrace, Ripple, Sheet, Tag, Txt, WrongMark, chip, svgPoint, useWalk } from "@/components/interactive/phy-kit";
 
 // Screens for "Physics for High School 6 — দূরত্ব আর সরণ"
-// (src/content/articles/physics_for_high_school/06_distance_displacement.mdx),
+// (src/content/articles/physics_for_high_school/chapter_2/06_distance_displacement.mdx),
 // the journey of video EP 06 (physics_9_10/06-distance-displacement/script.md).
 // Book §2.4, pp. 39–40.
 //

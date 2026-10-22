@@ -9,7 +9,7 @@ import { sfx } from "@/components/journey/sfx";
 import { GroundShadow, PArrow, PH, Ripple, Sheet, Tag, Txt, WrongMark, chip, svgPoint, useWalk } from "@/components/interactive/phy-kit";
 
 // Screens for "Physics for High School 4 — দোলনার গতি"
-// (src/content/articles/physics_for_high_school/04_periodic_motion.mdx), the
+// (src/content/articles/physics_for_high_school/chapter_2/04_periodic_motion.mdx), the
 // journey of video EP 04 (physics_9_10/04-periodic-motion/script.md). Book
 // §2.2, p. 37.
 //

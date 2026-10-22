@@ -9,7 +9,7 @@ import { sfx } from "@/components/journey/sfx";
 import { GroundShadow, PArrow, PH, Ripple, Sheet, Tag, Txt, WrongMark, isBn, svgPoint, useWalk } from "@/components/interactive/phy-kit";
 
 // Screens for "Physics for High School 13 — উপরে ছুড়লে কত উঁচু?"
-// (src/content/articles/physics_for_high_school/13_throw_up.mdx), the journey
+// (src/content/articles/physics_for_high_school/chapter_2/13_throw_up.mdx), the journey
 // of video EP 13 (physics_9_10/13-throw-up/script.md). Book §2.8, pp. 49–50.
 //
 // The spine: a pace bowler's 150 km/h ball, thrown straight up. How high? The

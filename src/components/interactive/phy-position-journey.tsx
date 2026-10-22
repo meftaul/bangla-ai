@@ -9,7 +9,7 @@ import { sfx } from "@/components/journey/sfx";
 import { BusStop, Compass, GateS, PArrow, PH, Ripple, School, SchoolS, Sheet, Tag, Txt, WrongMark, chip, svgPoint, useWalk } from "@/components/interactive/phy-kit";
 
 // Screens for "Physics for High School 1 — অবস্থান বলতে কী লাগে?"
-// (src/content/articles/physics_for_high_school/01_position.mdx), the journey
+// (src/content/articles/physics_for_high_school/chapter_2/01_position.mdx), the journey
 // of video EP 01 (physics_9_10/01-position/script.md). Book §2.1, p. 34.
 //
 // The spine: তিথির নানু comes from ঢাকা and must find her school alone. The

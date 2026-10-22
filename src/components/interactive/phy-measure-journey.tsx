@@ -11,7 +11,7 @@ import { Rickshaw } from "@/components/interactive/phy-rest-journey";
 import { NoIcon } from "@/components/interactive/phy-graphs-journey";
 
 // Screens for "Physics for High School 15 — নিজে মাপুন: রিকশার দ্রুতি"
-// (src/content/articles/physics_for_high_school/15_measure_speed.mdx), the
+// (src/content/articles/physics_for_high_school/chapter_2/15_measure_speed.mdx), the
 // journey of video EP 15 (physics_9_10/chapter-2/15-measure-speed/script.md).
 // Book অনুসন্ধান ২.০৩, pp. 57–58. The last journey of chapter 2.
 //

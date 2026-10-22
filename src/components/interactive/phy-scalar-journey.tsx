@@ -10,7 +10,7 @@ import { Compass, GroundShadow, PArrow, PH, Ripple, Sheet, Tag, Txt, WrongMark, 
 import { TownMap } from "@/components/interactive/phy-position-journey";
 
 // Screens for "Physics for High School 5 — স্কেলার না ভেক্টর?"
-// (src/content/articles/physics_for_high_school/05_scalar_vector.mdx), the
+// (src/content/articles/physics_for_high_school/chapter_2/05_scalar_vector.mdx), the
 // journey of video EP 05 (physics_9_10/05-scalar-vector/script.md). Book §2.3,
 // p. 38.
 //

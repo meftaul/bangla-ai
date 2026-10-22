@@ -80,7 +80,7 @@ const TTE_ON = false;
 // ponytail: per browser, not per user; move it to Supabase if readers switch
 // devices, or if the Library should show which journeys are finished.
 //
-// On the Math for AI railway (src/content/rail.ts) the journey is a train ride
+// On a course's railway (src/content/rail.ts) the journey is a train ride
 // to its station: the progress bar is a stretch of track the train runs along,
 // a step with a task is a ticket check, and the ending is the platform, where
 // the station hands over its tool and the next ticket. A check counts as passed
@@ -733,7 +733,7 @@ export function Journey({
             </button>
           ) : (
           <Link
-            href={stop ? "/dashboard/courses/math_for_ai" : "/dashboard/articles"}
+            href={stop && net ? `/dashboard/courses/${net.course}` : "/dashboard/articles"}
             aria-label={stop ? "Route map-এ ফিরে যান" : "লাইব্রেরিতে ফিরে যান"}
             // .article's unlayered `a` rule (accent, underline) beats utilities; only inline style wins
             style={{ color: "inherit", textDecoration: "none" }}
@@ -853,7 +853,7 @@ export function Journey({
         </GateCtx.Provider>
         {finished ? (
           stop ? (
-            <Arrival ref={ending} stop={stop} next={net?.nextStop(stop.slug)} checks={checks} found={foundNotes(found)} onAgain={again} />
+            <Arrival ref={ending} course={net?.course ?? ""} stop={stop} next={net?.nextStop(stop.slug)} checks={checks} found={foundNotes(found)} onAgain={again} />
           ) : (
             <Ending ref={ending} title={title} steps={steps.length} found={found} next={next} onAgain={again} />
           )
@@ -929,7 +929,7 @@ export function Journey({
               </Link>
             ) : (
               <Link
-                href={stop ? "/dashboard/courses/math_for_ai" : "/dashboard/articles"}
+                href={stop && net ? `/dashboard/courses/${net.course}` : "/dashboard/articles"}
                 style={{ textDecoration: "none" }}
                 className={`${bigBtn} ${goBtn} text-accent-foreground!`}
               >

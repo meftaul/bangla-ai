@@ -9,7 +9,7 @@ import { sfx } from "@/components/journey/sfx";
 import { Bicycle, Gauge, PH, Ripple, Sheet, Txt, WrongMark, svgPoint, toneHex, useWalk, type PhTone, useClock } from "@/components/interactive/phy-kit";
 
 // Screens for "Physics for High School 11 — সময় ছাড়া সমীকরণ"
-// (src/content/articles/physics_for_high_school/11_v_squared.mdx), the
+// (src/content/articles/physics_for_high_school/chapter_2/11_v_squared.mdx), the
 // journey of video EP 11 (physics_9_10/11-v-squared/script.md). Book §2.7,
 // pp. 46–48.
 //

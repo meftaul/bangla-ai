@@ -9,7 +9,7 @@ import { sfx } from "@/components/journey/sfx";
 import { GroundShadow, PArrow, PH, Ripple, Sheet, Tag, Txt, WrongMark, chip, useWalk } from "@/components/interactive/phy-kit";
 
 // Screens for "Physics for High School 2 — স্থির, না গতিশীল?"
-// (src/content/articles/physics_for_high_school/02_rest_motion.mdx), the journey
+// (src/content/articles/physics_for_high_school/chapter_2/02_rest_motion.mdx), the journey
 // of video EP 02 (physics_9_10/02-rest-motion/script.md). Book §2.1, pp. 34–35.
 //
 // The spine: you, sitting still on a chair. Are you moving? The reader bets

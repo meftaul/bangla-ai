@@ -9,7 +9,7 @@ import { sfx } from "@/components/journey/sfx";
 import { Bicycle, Gauge, PArrow, PH, ROAD, RoadBase, RoadTrace, Ripple, Sheet, Txt, WrongMark, svgPoint, toneHex, useWalk, type PhTone } from "@/components/interactive/phy-kit";
 
 // Screens for "Physics for High School 7 — দ্রুতি আর বেগ"
-// (src/content/articles/physics_for_high_school/07_speed_velocity.mdx), the
+// (src/content/articles/physics_for_high_school/chapter_2/07_speed_velocity.mdx), the
 // journey of video EP 07 (physics_9_10/07-speed-velocity/script.md). Book
 // §2.5, pp. 40–41.
 //

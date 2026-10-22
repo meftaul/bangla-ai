@@ -9,7 +9,7 @@ import { sfx } from "@/components/journey/sfx";
 import { GroundShadow, PArrow, PH, Ripple, Sheet, Tag, Txt, WrongMark, chip, svgPoint, toneHex, useWalk, type PhTone } from "@/components/interactive/phy-kit";
 
 // Screens for "Physics for High School 3 — সোজা, গোল আর চলন"
-// (src/content/articles/physics_for_high_school/03_types_of_motion.mdx), the
+// (src/content/articles/physics_for_high_school/chapter_2/03_types_of_motion.mdx), the
 // journey of video EP 03 (physics_9_10/03-types-of-motion/script.md). Book
 // §2.2, pp. 35–36.
 //
