@@ -1,0 +1,203 @@
+export const metadata = {
+  title: "Physics for High School 11 — সময় ছাড়া সমীকরণ",
+  description: "একটা বুলেট দেয়ালে দশ সেন্টিমিটার ঢুকে থেমে গেলো। কত সময় লাগলো, কেউ জানে না। তবু দেয়াল ওকে কতটা জোরে থামালো, সেটা বের করা যায়। কীভাবে? আর এর জন্য কী কী জানা লাগে?",
+  type: "article",
+};
+
+{/* The journey of video EP 11 (physics_9_10/11-v-squared/script.md), NCTB
+    physics 9-10 §2.7, pp. 46–48. Screen 1 seals a bet on what must be known
+    to find how hard the wall stopped the bullet; it is settled on the last
+    screen. The middle screens follow the video's scenes in order: both old
+    equations carry t, square the first, take 2a common and t is gone, the
+    check on তিথির brake (EP 09's −2), the bullet's মন্দন, its time, double
+    the speed and four times the path; then Your turn (half the speed).
+    10 steps. Screens in components/interactive/phy-vsquared-journey.tsx. */}
+
+import { Journey, Step, Then } from "@/components/journey/journey";
+import {
+  BulletWall,
+  VsqBet,
+  TwoHaveT,
+  SquareArea,
+  CommonOut,
+  TithiBrake,
+  BrakeSum,
+  MatchEp09,
+  BulletNumbers,
+  BulletDecel,
+  BulletSum,
+  BulletTime,
+  DoubleStop,
+  FourNines,
+  HalfSpeed,
+  BulletSolved,
+  RoofTeaser,
+} from "@/components/interactive/phy-vsquared-journey";
+
+<Journey title="সময় ছাড়া সমীকরণ · 11">
+
+<Step>
+
+একটা বুলেট দেয়ালে দশ সেন্টিমিটার ঢুকে থেমে গেলো। কত সময় লাগলো, কেউ জানে না।
+
+<BulletWall story />
+
+তবু দেয়াল ওকে কতটা জোরে থামালো, সেটা বের করা যায়। কীভাবে?
+
+<VsqBet />
+
+</Step>
+
+<Step>
+
+আগের দুইটা সমীকরণ: $v = u + at$, আর $s = ut + \frac{1}{2}at^2$।
+
+<TwoHaveT />
+
+<Then>
+
+দুটোতেই t আছে। সময় না জানলে, এখানেই আটকে যাই।
+
+</Then>
+
+</Step>
+
+<Step>
+
+তাই t-কে বিদায় করি। প্রথম সমীকরণের দুই দিক বর্গ করি: $v^2 = (u + at)^2$।
+
+<SquareArea />
+
+<Then>
+
+বর্গটা ভরতে লাগলো চারটা ঘর: $u^2$, দুইটা $uat$, আর $a^2t^2$। তাই v স্কয়ার সমান u স্কয়ার, প্লাস টু u a t, প্লাস a স্কয়ার t স্কয়ার: $v^2 = u^2 + 2uat + a^2t^2$।
+
+</Then>
+
+</Step>
+
+<Step>
+
+এবার শেষের দুইটা পদ, $2uat + a^2t^2$। এখান থেকে কিছু একটা common নিই।
+
+<CommonOut />
+
+<Then>
+
+টু a common নিলে, ভেতরে থাকে $ut + \frac{1}{2}at^2$। আরে, এটা তো s!
+
+তাহলে **$v^2 = u^2 + 2as$**। সময় উধাও।
+
+</Then>
+
+</Step>
+
+<Step>
+
+আগে তিথিকে দিয়ে পরীক্ষা করি। ছয় মিটার পার সেকেন্ডে চলছিল, brake কষে থামলো নয় মিটার গিয়ে। শেষ বেগ শূন্য।
+
+<TithiBrake story />
+
+নতুন সমীকরণে বসালে তিথির ত্বরণ কত আসে?
+
+<BrakeSum />
+
+<Then>
+
+$0 = 6^2 + 2 \times a \times 9$। ছত্রিশ প্লাস আঠারো a সমান শূন্য, তাই a মাইনাস দুই, $a = -2$ m/s²।
+
+<MatchEp09 />
+
+ত্বরণের journey-তে brake-এর হিসাবের সাথে হুবহু মিলে গেছে।
+
+</Then>
+
+</Step>
+
+<Step>
+
+এবার বুলেট। বেগ দেড় কিলোমিটার পার সেকেন্ড, মানে পনেরোশো মিটার পার সেকেন্ড। থামলো দশ সেন্টিমিটারে, মানে শূন্য দশমিক এক মিটারে।
+
+<BulletNumbers story />
+
+দেয়াল ওকে কত জোরে থামালো?
+
+<BulletDecel />
+
+<Then>
+
+পনেরোশোর স্কয়ার, বাইশ লক্ষ পঞ্চাশ হাজার। ভাগ টু গুণ শূন্য দশমিক এক, মানে শূন্য দশমিক দুই। মন্দন এক কোটি বারো লক্ষ পঞ্চাশ হাজার মিটার পার সেকেন্ড স্কয়ার!
+
+<BulletSum />
+
+</Then>
+
+</Step>
+
+<Step>
+
+আর এখন চাইলে সময়ও বের করা যায়: বেগ ভাগ মন্দন।
+
+<BulletTime />
+
+<Then>
+
+$t = 1500 / 11{,}250{,}000 = 1/7500$ s। পুরো ব্যাপারটা ঘটেছে এক সেকেন্ডের সাড়ে সাত হাজার ভাগের মাত্র এক ভাগে।
+
+</Then>
+
+</Step>
+
+<Step>
+
+এই সমীকরণ আরেকটা জরুরি কথা বলে। থামার পথ $s = u^2 / 2a$। তিথি যদি দ্বিগুণ, বারো মিটার পার সেকেন্ডে চালায়, একই brake-এ থামতে কত পথ লাগবে?
+
+<DoubleStop />
+
+<Then>
+
+নয় না, ছত্রিশ মিটার। গতি দ্বিগুণ, থামার পথ চারগুণ। কারণ পথ বাড়ে **বেগের বর্গের সাথে**।
+
+<FourNines />
+
+এজন্যই রাস্তায় বাস-ট্রাকের গতিসীমা মানা এত জরুরি।
+
+</Then>
+
+</Step>
+
+<Step>
+
+## Your turn: অর্ধেক গতিতে
+
+এবার তিথি চালালো অর্ধেক গতিতে, তিন মিটার পার সেকেন্ডে। brake একই।
+
+<HalfSpeed />
+
+<Then>
+
+$s = 3^2 / (2 \times 2) = 9/4 = 2.25$ m। নয় মিটারের ঠিক চার ভাগের এক ভাগ। গতি অর্ধেক, থামার পথ চার ভাগের এক। এখানেও সময় লাগেনি।
+
+</Then>
+
+</Step>
+
+<Step>
+
+## শেষ! দেয়াল কত জোরে থামালো
+
+<BulletSolved story />
+
+বাজির মীমাংসা: **বুলেটের বেগ আর থামার পথ**, এই দুইটাই। সময় লাগেনি। উল্টো, মন্দন জানার পর সময়টাই বের হলো, এক সেকেন্ডের সাড়ে সাত হাজার ভাগের এক ভাগ।
+
+তাহলে সময় না জানলেও চলে: **$v^2 = u^2 + 2as$**।
+
+আমাদের চারপাশে সবচেয়ে পরিচিত সমত্বরণ কোনটা? উপর থেকে কিছু ছেড়ে দিলে যা হয়।
+
+<RoofTeaser story />
+
+পড়ন্ত বস্তু, পরের journey-তে।
+
+</Step>
+
+</Journey>

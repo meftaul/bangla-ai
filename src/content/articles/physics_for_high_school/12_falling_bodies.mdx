@@ -1,0 +1,211 @@
+export const metadata = {
+  title: "Physics for High School 12 — পড়ন্ত বস্তু",
+  description: "একটা পানিভর্তি বোতল আর এক টুকরো কাগজ, একসাথে ছাদ থেকে ছেড়ে দিলেন। কোনটা আগে মাটিতে পড়বে? ভারী জিনিস কি সত্যিই আগে পড়ে, নাকি ঝামেলাটা অন্য কোথাও?",
+  type: "article",
+};
+
+{/* The journey of video EP 12 (physics_9_10/12-falling-bodies/script.md), NCTB
+    physics 9-10 §2.8, pp. 48–49. Screen 1 seals a bet on which lands first,
+    the bottle or the paper; it is settled on the last screen. The middle
+    screens follow the video's scenes in order: তিথি's drop (ভারী আগে পড়ে),
+    Galileo and the paper ball, the tube with no air and the Moon, the same g,
+    s → h and a → g, v = gt, h = ½gt²; then Your turn (three things, 3 s).
+    10 steps. Screens in components/interactive/phy-falling-journey.tsx. */}
+
+import { Journey, Step, Then } from "@/components/journey/journey";
+import {
+  RoofHold,
+  DropBet,
+  RoofDrop,
+  TithiVerdict,
+  GalileoNo,
+  CrumpleDrop,
+  AirPush,
+  TubePump,
+  MoonDrop,
+  GPick,
+  FirstLaw,
+  EqSwap,
+  FallClock,
+  HeightPick,
+  OneFourNine,
+  FallThree,
+  SameG,
+  ThrowUp,
+} from "@/components/interactive/phy-falling-journey";
+
+<Journey title="পড়ন্ত বস্তু · 12">
+
+<Step>
+
+একটা পানিভর্তি বোতল আর এক টুকরো কাগজ, একসাথে ছাদ থেকে ছেড়ে দিলেন।
+
+<RoofHold story />
+
+কোনটা আগে মাটিতে পড়বে?
+
+<DropBet />
+
+</Step>
+
+<Step>
+
+তিথি ছাদে গিয়ে করেই দেখলো।
+
+<RoofDrop />
+
+<Then>
+
+বোতল ধপাস করে আগে পড়লো, কাগজ দুলতে দুলতে অনেক পরে। তিথির সিদ্ধান্ত: ভারী জিনিস আগে পড়ে।
+
+<TithiVerdict />
+
+</Then>
+
+</Step>
+
+<Step>
+
+দুই হাজার বছর ধরে মানুষ এটাই বিশ্বাস করতো। তারপর ইতালির বিজ্ঞানী Galileo বললেন: না। ঝামেলাটা ভরে না, বাতাসে।
+
+<GalileoNo story />
+
+তিথি এবার কাগজটা দলা পাকিয়ে ছোট্ট একটা বল বানাবে। একই কাগজ, একই ভর।
+
+<CrumpleDrop />
+
+<Then>
+
+এবার বোতল আর কাগজের বল, প্রায় একসাথে মাটিতে!
+
+চ্যাপ্টা কাগজকে বাতাস নিচ থেকে ঠেলে আটকে রাখছিল। দলা পাকালে **বাতাসের বাধা** কমে যায়।
+
+<AirPush />
+
+</Then>
+
+</Step>
+
+<Step>
+
+আর বাতাসহীন একটা নলে ছেড়ে দিলে?
+
+<TubePump />
+
+<Then>
+
+পালক আর পাথর একদম একসাথে পড়ে।
+
+উনিশশো একাত্তর সালে চাঁদে, যেখানে বাতাসই নেই, এক নভোচারী একটা হাতুড়ি আর একটা পালক একসাথে ছেড়ে দিলেন। দুটো ঠিক একসাথে মাটি ছুঁলো।
+
+<MoonDrop />
+
+</Then>
+
+</Step>
+
+<Step>
+
+ভারী বোতল আর হালকা পালক, বাতাস না থাকলে তবু একসাথে পড়ে। কেন?
+
+<GPick />
+
+<Then>
+
+কারণ পৃথিবীর টানে সব জিনিসের ত্বরণ একই। এর নাম **মাধ্যাকর্ষণজনিত ত্বরণ**, $g$। পৃথিবীর পৃষ্ঠের কাছে এর মান 9.8 m/s²।
+
+এটাই Galileo-র **প্রথম সূত্র**: স্থির অবস্থা থেকে, একই উচ্চতা থেকে, বিনা বাধায় পড়ন্ত সব বস্তু সমান সময়ে সমান পথ পড়ে।
+
+<FirstLaw />
+
+</Then>
+
+</Step>
+
+<Step>
+
+পড়ন্ত বস্তু মানে আসলে সমত্বরণ। তাই আগের তিনটা সমীকরণই চলবে, শুধু দুইটা অক্ষর বদলাবে।
+
+<EqSwap />
+
+<Then>
+
+শুধু $s$-এর জায়গায় উচ্চতা $h$, আর $a$-এর জায়গায় $g$:
+
+$$
+\begin{gathered}
+v = u + gt \\
+h = ut + \tfrac{1}{2}gt^2 \\
+v^2 = u^2 + 2gh
+\end{gathered}
+$$
+
+</Then>
+
+</Step>
+
+<Step>
+
+স্থির থেকে ছাড়লে $u$ শূন্য, তাই $v = gt$।
+
+<FallClock />
+
+<Then>
+
+এক সেকেন্ডে 9.8, দুই সেকেন্ডে 19.6, তিন সেকেন্ডে 29.4 m/s। বেগ সময়ের সমানুপাতিক: এটা **দ্বিতীয় সূত্র**, $v \propto t$।
+
+</Then>
+
+</Step>
+
+<Step>
+
+আর $h = \tfrac{1}{2}gt^2$। এক সেকেন্ডে চার দশমিক নয় মিটার।
+
+<HeightPick />
+
+<Then>
+
+দুই সেকেন্ডে তার চারগুণ, তিন সেকেন্ডে নয়গুণ। পড়ার পথ সময়ের বর্গের সমানুপাতিক: **তৃতীয় সূত্র**, $h \propto t^2$।
+
+<OneFourNine />
+
+</Then>
+
+</Step>
+
+<Step>
+
+## Your turn: তিন সেকেন্ড পর
+
+বাতাস নেই। বোতল, কাগজের বল আর পালক, তিনটা একসাথে ছেড়ে দিলেন।
+
+<FallThree />
+
+<Then>
+
+তিন সেকেন্ডে পথ এক সেকেন্ডের নয়গুণ: 4.9 × 9 = 44.1 m। আর $g$ তিনটার জন্যই একই, তাই তিনটাই পাশাপাশি, 44.1 m নিচে। কোনটা ভারী, কোনটা হালকা, তাতে কিছু যায় আসে না।
+
+</Then>
+
+</Step>
+
+<Step>
+
+## শেষ! কোনটা আগে পড়ে
+
+বাজির মীমাংসা: ছাদে, বাতাসের মধ্যে, **বোতল আগে**। কিন্তু ভারী বলে না। চ্যাপ্টা কাগজকে বাতাস নিচ থেকে ঠেলে আটকে রাখে, দলা পাকালেই প্রায় একসাথে। আর বাতাস সরিয়ে দিলে, নলে বা চাঁদে, দুটো একদম **একসাথে**।
+
+<SameG story />
+
+তাহলে, **বাতাসের বাধা না থাকলে ভারী-হালকা সব একসাথে পড়ে, কারণ g সবার জন্য একই**।
+
+আর নিচে না ফেলে উপরে ছুড়লে? একটা ক্রিকেট বল কত উঁচুতে উঠবে?
+
+<ThrowUp story />
+
+পরের journey-তে।
+
+</Step>
+
+</Journey>

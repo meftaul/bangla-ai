@@ -1,0 +1,178 @@
+export const metadata = {
+  title: "Physics for High School 9 — ত্বরণ",
+  description: "গাড়ির বিজ্ঞাপনে বলে, শূন্য থেকে একশো, মাত্র ছয় সেকেন্ডে। এখানে আসলে কোন জিনিসটার বড়াই করা হচ্ছে? তিথির সাইকেলের speedometer দিয়ে খুঁজে দেখি।",
+  type: "article",
+};
+
+{/* The journey of video EP 09 (physics_9_10/09-acceleration/script.md), NCTB
+    physics 9-10 §2.6, pp. 43–45. Screen 1 seals a bet on what the car ad is
+    boasting about; it is settled on the last screen. The middle screens follow
+    the video's scenes in order: তিথির speedometer, the name and the rule, her
+    ত্বরণ, the odd unit, the slope and the brake (মন্দন), the v–t graph, the
+    stone on a string (vector); then Your turn (the ad car). 9 steps. Screens
+    in components/interactive/phy-accel-journey.tsx. */}
+
+import { Journey, Step, Then } from "@/components/journey/journey";
+import {
+  AdBoast,
+  AdBet,
+  SchoolOut,
+  SpeedLog,
+  RateFormula,
+  UnitPick,
+  DimBuild,
+  SlopeCorner,
+  BrakePick,
+  RideGraph,
+  StoneSpin,
+  KmhToMs,
+  AdRate,
+  AdAnswer,
+  BridgeTeaser,
+} from "@/components/interactive/phy-accel-journey";
+
+<Journey title="ত্বরণ · 9">
+
+<Step>
+
+গাড়ির বিজ্ঞাপনে বলে, শূন্য থেকে একশো, মাত্র ছয় সেকেন্ডে।
+
+<AdBoast story />
+
+এখানে আসলে কোন জিনিসটার বড়াই করা হচ্ছে?
+
+<AdBet />
+
+</Step>
+
+<Step>
+
+স্কুল ছুটির পর তিথি সাইকেলে প্যাডেল মারছে। পেছনের চাকায় একটা ছোট speedometer লাগানো, প্রতি সেকেন্ডে একটা করে মান লিখে রাখে।
+
+<SchoolOut story />
+
+<SpeedLog />
+
+<Then>
+
+শূন্য, এক, দুই, তিন, চার, পাঁচ মিটার পার সেকেন্ড। প্রতি সেকেন্ডে বেগ বাড়ছে ঠিক এক মিটার পার সেকেন্ড করে।
+
+</Then>
+
+</Step>
+
+<Step>
+
+সময়ের সাথে বেগ বদলানোর এই হারের নাম **ত্বরণ**, ইংরেজিতে **acceleration**। শেষ বেগ থেকে আদি বেগ বাদ দিয়ে, ভাগ সময়: $a = \dfrac{v - u}{t}$।
+
+<RateFormula />
+
+<Then>
+
+তিথির বেলায়, পাঁচ মাইনাস শূন্য, ভাগ পাঁচ সেকেন্ড: এক। প্রতি সেকেন্ডে, এক মিটার পার সেকেন্ড করে বাড়ছে।
+
+</Then>
+
+</Step>
+
+<Step>
+
+কিন্তু এই এক-এর একক কী? উপরে বেগের বদল, m/s-এ। নিচে সময়, s-এ।
+
+<UnitPick />
+
+<Then>
+
+তাই এককটা একটু অদ্ভুত শোনায়: মিটার পার সেকেন্ড, পার সেকেন্ড। মানে মিটার পার সেকেন্ড স্কয়ার, **m/s²**। মাত্রা $LT^{-2}$।
+
+<DimBuild />
+
+</Then>
+
+</Step>
+
+<Step>
+
+তারপর কিছুক্ষণ তিথি পাঁচেই চললো, বেগ বদলালো না। ব্রিজ থেকে নামার ঢালে বেগ উঠলো ছয়ে। তারপর সামনে মোড়, তিথি brake কষলো: ছয় থেকে শূন্য, তিন সেকেন্ডে।
+
+<SlopeCorner story />
+
+এবার তিথির ত্বরণ কত?
+
+<BrakePick />
+
+<Then>
+
+শূন্য মাইনাস ছয়, ভাগ তিন: মাইনাস দুই মিটার পার সেকেন্ড স্কয়ার। বেগ কমলে ত্বরণ ঋণাত্মক হয়, এর নাম **মন্দন**, ইংরেজিতে **deceleration**।
+
+</Then>
+
+</Step>
+
+<Step>
+
+পুরো যাত্রাটা একটা বেগ-সময় graph-এ আঁকি।
+
+<RideGraph />
+
+<Then>
+
+A অংশে লাইন উঠছে, ত্বরণ আছে। B অংশে লাইন সমান, বেগ বদলাচ্ছে না, তাই ত্বরণ শূন্য। C-তে আবার ত্বরণ, আর D-তে লাইন নামছে: **মন্দন**।
+
+</Then>
+
+</Step>
+
+<Step>
+
+আর সুতায় বাঁধা ঢিলটা মনে আছে?
+
+<StoneSpin />
+
+<Then>
+
+দ্রুতি না বদলালেও দিক বদলাচ্ছিল, তাই বেগ বদলাচ্ছিল। মানে, ওখানেও ত্বরণ ছিল। ত্বরণ তাই একটা **vector**।
+
+</Then>
+
+</Step>
+
+<Step>
+
+## Your turn: বিজ্ঞাপনের গাড়ি
+
+আর বিজ্ঞাপনের গাড়ি? একশো কিলোমিটার পার আওয়ার মানে প্রায় সাতাশ দশমিক আট মিটার পার সেকেন্ড।
+
+<KmhToMs story />
+
+শূন্য থেকে এই বেগে উঠতে গাড়ির লাগে ছয় সেকেন্ড।
+
+<AdRate />
+
+<Then>
+
+27.8 m/s, ভাগ ছয় সেকেন্ড: প্রায় চার দশমিক ছয় মিটার পার সেকেন্ড স্কয়ার, মানে 4.6 m/s²। প্রতি সেকেন্ডে গাড়ির বেগ বাড়ে প্রায় 4.6 m/s করে।
+
+</Then>
+
+</Step>
+
+<Step>
+
+## শেষ! বিজ্ঞাপনের বড়াই
+
+<AdAnswer story />
+
+বাজির মীমাংসা: **বেগ কত তাড়াতাড়ি বাড়ে**। 100 km/h শুধু একটা বেগ, 6 s শুধু একটা সময়। বিজ্ঞাপনের আসল কথা দুটো মিলিয়ে: প্রতি সেকেন্ডে প্রায় 4.6 m/s করে বেগ বাড়ে। ওরা বড়াই করছিল ত্বরণের।
+
+তাহলে **ত্বরণ মানে, প্রতি সেকেন্ডে বেগ কতটা বদলায়**।
+
+ত্বরণ জানলে বলা যায়, কিছুক্ষণ পর বেগ কত হবে, আর ততক্ষণে কতদূর যাবে।
+
+<BridgeTeaser story />
+
+সেই গতির সমীকরণ, পরের journey-তে।
+
+</Step>
+
+</Journey>

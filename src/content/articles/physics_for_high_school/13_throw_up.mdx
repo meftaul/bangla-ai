@@ -1,0 +1,207 @@
+export const metadata = {
+  title: "Physics for High School 13 — উপরে ছুড়লে কত উঁচু?",
+  description: "একজন pace bowler ঘণ্টায় একশো পঞ্চাশ কিলোমিটার বেগে বল ছোড়েন। সেই বল সোজা আকাশের দিকে ছুড়লে কত উঁচুতে উঠবে? টুটুল বলে মেঘ ছুঁয়ে ফেলবে। তিথি বলে, আন্দাজ না, হিসাব করি।",
+  type: "article",
+};
+
+{/* The journey of video EP 13 (physics_9_10/13-throw-up/script.md), NCTB
+    physics 9-10 §2.8, pp. 49–50. Screen 1 seals a bet on how high the
+    150 km/h ball goes; it is settled on the last screen. The middle screens
+    follow the video's scenes in order: টুটুল at the TV and the units
+    (41.67 m/s), the speed falling 9.8 a second, v² = u² − 2gh with its minus,
+    h = u²/2g ≈ 88.6 m, 30 floors, টুটুল's cannon and 5,102 km, the sum right
+    but the answer wrong because g changes, the formula's conditions; then
+    Your turn (the climb left from 22.1 m/s). 10 steps. Screens in
+    components/interactive/phy-throw-journey.tsx. */}
+
+import { Journey, Step, Then } from "@/components/journey/journey";
+import {
+  BowlerBall,
+  HeightBet,
+  TutulTv,
+  PerSecond,
+  UnitSum,
+  EverySecond,
+  WhichSign,
+  ZeroIn,
+  HowHigh,
+  FloorStack,
+  TutulCannon,
+  CannonZoom,
+  WhereWrong,
+  ShellBurns,
+  RuleCard,
+  TheRest,
+  PeakRecap,
+  GraphPaper,
+} from "@/components/interactive/phy-throw-journey";
+
+<Journey title="উপরে ছুড়লে · 13">
+
+<Step>
+
+একজন pace bowler ঘণ্টায় একশো পঞ্চাশ কিলোমিটার বেগে বল ছোড়েন। সেই বল যদি সোজা আকাশের দিকে ছোড়েন, কত উঁচুতে উঠবে?
+
+<BowlerBall story />
+
+আপনার আন্দাজটা আগে বলে রাখুন।
+
+<HeightBet />
+
+</Step>
+
+<Step>
+
+টুটুল টিভিতে খেলা দেখছে। Screen-এ ভেসে উঠলো: একশো পঞ্চাশ কিলোমিটার পার আওয়ার। টুটুল বললো, এই বল উপরে ছুড়লে তো মেঘ ছুঁয়ে ফেলবে! তিথি বললো, আন্দাজ না, হিসাব করি।
+
+<TutulTv story />
+
+আগে এককটা মিলাই।
+
+<PerSecond />
+
+<Then>
+
+একশো পঞ্চাশ কিলোমিটার মানে দেড় লক্ষ মিটার, আর এক ঘণ্টা মানে তিন হাজার ছয়শো সেকেন্ড। ভাগ করলে, **একচল্লিশ দশমিক ছয় সাত মিটার পার সেকেন্ড**।
+
+<UnitSum />
+
+</Then>
+
+</Step>
+
+<Step>
+
+উপরে ওঠার সময় g কাজ করে উল্টো দিকে, মন্দন হিসেবে।
+
+<EverySecond />
+
+<Then>
+
+প্রতি সেকেন্ডে বেগ কমে নয় দশমিক আট করে: একচল্লিশ, একত্রিশ, বাইশ, বারো, দুই, তারপর শূন্য। **চূড়ায় বল এক মুহূর্ত থামে।**
+
+</Then>
+
+</Step>
+
+<Step>
+
+চূড়ায় শেষ বেগ শূন্য। সময় আমরা জানি না, দরকারও নেই।
+
+<WhichSign />
+
+<Then>
+
+v স্কয়ার সমান u স্কয়ার মাইনাস টু g h: **$v^2 = u^2 - 2gh$**। মাইনাস, কারণ g এখানে বেগ কমাচ্ছে।
+
+</Then>
+
+</Step>
+
+<Step>
+
+v শূন্য বসিয়ে সাজালে, h সমান u স্কয়ার ভাগ টু g।
+
+<ZeroIn story />
+
+এবার বলের সংখ্যাগুলো বসান।
+
+<HowHigh />
+
+<Then>
+
+একচল্লিশ দশমিক ছয় সাতের বর্গ, ভাগ উনিশ দশমিক ছয়: **প্রায় অষ্টাশি দশমিক ছয় মিটার**।
+
+$$h = \frac{41.67^2}{2 \times 9.8} \approx 88.6 \text{ m}$$
+
+</Then>
+
+</Step>
+
+<Step>
+
+অষ্টাশি দশমিক ছয় মিটার। সেটা কতটা উঁচু?
+
+<FloorStack />
+
+<Then>
+
+মানে প্রায় **ত্রিশ তলা দালানের ছাদ**! মেঘ পর্যন্ত না, কিন্তু তাও অনেক উঁচু।
+
+</Then>
+
+</Step>
+
+<Step>
+
+টুটুলের পরের প্রশ্ন: মহাকাশযান পৃথিবীকে ঘিরে ঘোরে প্রায় দশ কিলোমিটার পার সেকেন্ড বেগে। এত জোরে একটা কামানের গোলা সোজা উপরে ছুড়লে?
+
+<TutulCannon story />
+
+একই সূত্র।
+
+<CannonZoom />
+
+<Then>
+
+দশ হাজারের বর্গ, দশ কোটি, ভাগ উনিশ দশমিক ছয়। উত্তর আসে প্রায় একান্ন লক্ষ মিটার, মানে **পাঁচ হাজার একশো দুই কিলোমিটার**।
+
+</Then>
+
+</Step>
+
+<Step>
+
+হিসাবে কোনো ভুল নেই, তবু উত্তরটা ভুল!
+
+<WhereWrong />
+
+<Then>
+
+কারণ সূত্রটা ধরে নিয়েছে g সবসময় নয় দশমিক আট। পৃথিবী থেকে অনেক উপরে উঠলে **g কমতে থাকে**। আর এত জোরে ছুটলে বাতাসের ঘর্ষণে গোলাটা পুড়েই যাবে।
+
+<ShellBurns />
+
+তাই সূত্র ব্যবহারের আগে দেখে নিতে হয়, এর শর্তগুলো খাটছে কিনা। পৃথিবীর কাছাকাছি, বাতাসের বাধা কম হলে, এই সমীকরণ দারুণ কাজ করে।
+
+<RuleCard />
+
+</Then>
+
+</Step>
+
+<Step>
+
+## Your turn: বাকি পথ
+
+আবার সেই ক্রিকেট বল। ছোড়ার দুই সেকেন্ড পরে বেগ বাকি বাইশ দশমিক এক মিটার পার সেকেন্ড।
+
+<TheRest />
+
+<Then>
+
+একই সূত্র, শুধু u এখন 22.1: $22.1^2 / 19.6 \approx 25$ m। বল তখন যেখানে ছিল, তার থেকে আরও প্রায় পঁচিশ মিটার। মানে চূড়া সেই আগের জায়গাতেই, প্রায় 88.6 m-এ।
+
+</Then>
+
+</Step>
+
+<Step>
+
+## শেষ! বল উঠলো প্রায় ত্রিশ তলা
+
+<PeakRecap story />
+
+বাজির মীমাংসা: **প্রায় 30 তলা**, মানে প্রায় 88.6 m। মেঘ ছুঁয়ে ফেলবে মনে হয়, কারণ 150 সংখ্যাটা বড় শোনায়। কিন্তু 150 km/h আসলে 41.67 m/s, আর g প্রতি সেকেন্ডে তার থেকে 9.8 করে কমায়।
+
+তাহলে উপরে ছুড়লে **g বেগ কমায়, আর বল ওঠে $u^2/2g$ পর্যন্ত, যতক্ষণ g বদলায় না**।
+
+এতক্ষণ সব সংখ্যা দিয়ে হিসাব করলাম। পুরো গতিটা কি একটা ছবিতে দেখা যায়?
+
+<GraphPaper story />
+
+Graph থেকে বেগ আর ত্বরণ, পরের journey-তে।
+
+</Step>
+
+</Journey>

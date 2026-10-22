@@ -22,9 +22,11 @@ import { sfx } from "./sfx";
 // The cast. মামী (ফাহিমের মামার স্ত্রী) came in with Article 4's হাট; নানা (Moumachi
 // Nana, the beekeeper: white hair and beard, white panjabi) with Calculus for AI.
 // জোবায়ের: swept-up wavy hair, black rectangular glasses, a short full beard,
-// navy button-up shirt.
+// navy button-up shirt. তিথি (Physics for High School: class nine, ফরিদপুর) has two
+// braids with cream ribbons and a brick-red uniform; টুটুল, her little brother, a navy
+// cricket jersey (draw him at scale 0.8).
 
-export type Who = "fahim" | "samin" | "som" | "nasib" | "ammu" | "apa" | "mama" | "rina" | "karim" | "mami" | "nana" | "jobair";
+export type Who = "fahim" | "samin" | "som" | "nasib" | "ammu" | "apa" | "mama" | "rina" | "karim" | "mami" | "nana" | "jobair" | "tithi" | "tutul";
 
 type Look = { name: string; shirt: string; pants: string; skin: string; hair: string };
 export const CAST: Record<Who, Look> = {
@@ -40,6 +42,8 @@ export const CAST: Record<Who, Look> = {
   mami: { name: "মামী", shirt: "#9d174d", pants: "#9d174d", skin: "#d8a47a", hair: "#1c1917" },
   nana: { name: "নানা", shirt: "#f1f5f9", pants: "#4d7c0f", skin: "#c68e5f", hair: "#e5e7eb" },
   jobair: { name: "জোবায়ের", shirt: "#1e2847", pants: "#27272a", skin: "#c48a5c", hair: "#18130f" },
+  tithi: { name: "তিথি", shirt: "#b8473a", pants: "#f1e9da", skin: "#c08458", hair: "#1c1917" },
+  tutul: { name: "টুটুল", shirt: "#1e3a8a", pants: "#334155", skin: "#d49a6a", hair: "#1c1917" },
 };
 
 const INK = "#0f1b2d";
@@ -181,6 +185,13 @@ export function Person({
             <path d="M-11 -48q0 -15 11 -15t11 15q-1 -9 -11 -10t-11 10Z" fill={who === "mami" ? "#f9a8d4" : "#a78bfa"} />
           ) : who === "rina" ? (
             <path d="M-9.5 -52q0 -10 9.5 -10t9.5 10q-5 -5 -9.5 -5t-9.5 5ZM-9.5 -52q-3 8 1 12M9.5 -52q3 8 -1 12" fill={c.hair} stroke={c.hair} strokeWidth={2} />
+          ) : who === "tithi" ? (
+            <>
+              <path d="M-9.5 -52q0 -11 9.5 -11t9.5 11q-4 -6 -9.5 -6t-9.5 6Z" fill={c.hair} />
+              <path d="M-9 -50q-3 6 -2 14M9 -50q3 6 2 14" fill="none" stroke={c.hair} strokeWidth={3.4} strokeLinecap="round" />
+              <circle cx={-10.4} cy={-49} r={2} fill="#f5ecd7" />
+              <circle cx={10.4} cy={-49} r={2} fill="#f5ecd7" />
+            </>
           ) : who === "samin" ? (
             <path d="M-9.5 -52q-1 -11 9.5 -11t9.5 11q-2 -3 -4 -4q-1 2 -3 1q-2 2 -4 0q-2 2 -4 0q-2 1 -4 2Z" fill={c.hair} />
           ) : who === "jobair" ? (
@@ -196,6 +207,7 @@ export function Person({
               <path d={`M-0.8 ${eyeY}h1.6`} />
             </g>
           )}
+          {who === "tutul" && <path d="M-4 -34h8" stroke="white" strokeWidth={1.6} strokeLinecap="round" />}
           {who === "mama" && <path d="M-4 -47.5q4 -2.5 8 0q-4 1.5 -8 0Z" fill="#3f3f46" />}
           {who === "jobair" && (
             <>
