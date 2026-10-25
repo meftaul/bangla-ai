@@ -1,0 +1,186 @@
+export const metadata = {
+  title: "Physics for High School 15 — নিজে মাপুন: রিকশার দ্রুতি",
+  description: "রাস্তা দিয়ে একটা রিকশা যাচ্ছে। Speedometer নেই, stopwatch-ও নেই। তবু কি বলা যায়, রিকশাটা কত জোরে যাচ্ছে? তিথির হাতে শুধু একটা স্কেল, আর নিজের পা।",
+  type: "article",
+};
+
+{/* The journey of video EP 15 (physics_9_10/chapter-2/15-measure-speed/script.md),
+    NCTB physics 9-10 অনুসন্ধান ২.০৩, pp. 57–58; the last journey of chapter 2.
+    Screen 1 seals a bet on the rickshaw's speed in km/h; it is settled on the
+    last screen. The middle screens follow the video's scenes in order: the
+    homework and দূরত্ব ÷ সময়, the 60 cm step and why ten, 167 steps ≈ 100 m,
+    "এক হাজার এক" and the count of 20, 5 m/s = 18 km/h, the bicycle and the
+    table; then Your turn (the reader's own count against a stopwatch, the
+    video's "কতটা নিখুঁত?"). 9 steps. Screens in
+    components/interactive/phy-measure-journey.tsx. */}
+
+import { Journey, Step, Then } from "@/components/journey/journey";
+import {
+  NoMeter,
+  SpeedBet,
+  HomeworkCard,
+  WhatToMeasure,
+  StepLength,
+  TenSteps,
+  PostToPost,
+  DistanceIn,
+  CountAloud,
+  CountPosts,
+  PerHour,
+  HourSum,
+  CycleSpeed,
+  SpeedTable,
+  CountYourself,
+  PostsRecap,
+  WhyStop,
+} from "@/components/interactive/phy-measure-journey";
+
+<Journey title="নিজে মাপুন · 15">
+
+<Step>
+
+রাস্তা দিয়ে একটা রিকশা যাচ্ছে। Speedometer নেই, stopwatch-ও নেই। তবু কি বলা যায়, রিকশাটা কত জোরে যাচ্ছে?
+
+<NoMeter story />
+
+আপনার আন্দাজটা আগে বলে রাখুন।
+
+<SpeedBet />
+
+</Step>
+
+<Step>
+
+তিথির স্কুলের homework: রাস্তার যানবাহনের দ্রুতি মাপো। হাতে শুধু একটা স্কেল।
+
+<HomeworkCard story />
+
+<WhatToMeasure />
+
+<Then>
+
+তিথি ভাবলো, দ্রুতি মানে **দূরত্ব ভাগ সময়**। তাহলে দুটোই নিজেকে মাপতে হবে।
+
+</Then>
+
+</Step>
+
+<Step>
+
+প্রথমে দূরত্ব। স্কেল দিয়ে পুরো রাস্তা মাপা কঠিন, তাই তিথি মাপলো নিজের পা।
+
+<StepLength />
+
+<Then>
+
+দশ পা হেঁটে মাপলো ছয় মিটার, তাহলে একেক পা **ষাট সেন্টিমিটার**।
+
+কেন দশ পা? একটা পা মাপলে ভুল বেশি হয়। দশ পা মেপে দশ দিয়ে ভাগ করলে, ছোটখাটো ভুলগুলো দশ ভাগ হয়ে যায়।
+
+<TenSteps />
+
+</Then>
+
+</Step>
+
+<Step>
+
+রাস্তার পাশে দুইটা ল্যাম্পপোস্ট। এক পোস্ট থেকে আরেক পোস্টে হেঁটে তিথি গুনলো একশো সাতষট্টি পা।
+
+<PostToPost />
+
+<Then>
+
+একশো সাতষট্টি গুণ শূন্য দশমিক ছয়: **প্রায় একশো মিটার**।
+
+<DistanceIn />
+
+</Then>
+
+</Step>
+
+<Step>
+
+এবার সময়। ঘড়ি নেই, তাই একটা পুরনো কৌশল: স্বাভাবিকভাবে বলুন, এক হাজার এক, এক হাজার দুই। প্রতিটা বলতে মোটামুটি এক সেকেন্ড লাগে।
+
+<CountAloud story />
+
+<CountPosts />
+
+<Then>
+
+রিকশাটা প্রথম পোস্ট পার হতেই তিথি গোনা শুরু করলো, দ্বিতীয় পোস্ট পার হতেই থামলো। গুনলো **বিশ**। দূরত্ব আর সময়, দুটোই হাতে।
+
+</Then>
+
+</Step>
+
+<Step>
+
+একশো মিটার ভাগ বিশ সেকেন্ড: পাঁচ মিটার পার সেকেন্ড। কিন্তু রিকশার কথা আমরা বলি ঘণ্টায় কত কিলোমিটার।
+
+<PerHour />
+
+<Then>
+
+এক ঘণ্টায় তিন হাজার ছয়শো সেকেন্ড, তাই পাঁচ গুণ তিন হাজার ছয়শো, আঠারো হাজার মিটার। মানে **ঘণ্টায় আঠারো কিলোমিটার**।
+
+<HourSum />
+
+</Then>
+
+</Step>
+
+<Step>
+
+একই দুই পোস্ট দিয়ে আরো মাপা হলো। একটা সাইকেল পার হলো বারো সেকেন্ডে।
+
+<CycleSpeed />
+
+<Then>
+
+সাইকেল প্রায় **আট দশমিক তিন মিটার পার সেকেন্ড**। একজন পথচারী নিলেন সত্তর সেকেন্ড, প্রায় এক দশমিক চার।
+
+<SpeedTable />
+
+তবে এগুলো গড় দ্রুতি, আর একদম নিখুঁত না। পায়ের মাপে একটু ভুল, গোনায় একটু তাড়াহুড়া।
+
+</Then>
+
+</Step>
+
+<Step>
+
+## Your turn: আপনার গোনা কতটা ঠিক?
+
+ফোনের stopwatch-এর সাথে মিলিয়ে দেখুন। শুরু চাপুন, মনে মনে গুনুন, এক হাজার দশ বলেই থামুন।
+
+<CountYourself />
+
+<Then>
+
+একটু আগে বা একটু পরে, সবারই হয়। তাই মাপা দ্রুতি সবসময় **মোটামুটি**, একদম নিখুঁত না। বেশি নিখুঁত চাইলে ঘড়িটা ভালো চাই, আর দূরত্বটা লম্বা।
+
+</Then>
+
+</Step>
+
+<Step>
+
+## শেষ! রিকশা যাচ্ছিলো ঘণ্টায় আঠারো কিলোমিটার
+
+<PostsRecap story />
+
+বাজির মীমাংসা: **ঘণ্টায় প্রায় 18 km**। রিকশা ধীর মনে হয়, কিন্তু 5 m/s মানে প্রতি সেকেন্ডে পাঁচ মিটার, এক ঘণ্টায় আঠারো কিলোমিটার। ঘণ্টায় 5 km তো মানুষের হাঁটার গতি, পথচারীর 1.4 m/s-এর কাছাকাছি।
+
+তাহলে, **একটা মাপা দূরত্ব আর গোনা কয়েক সেকেন্ড থাকলেই, যেকোনো কিছুর দ্রুতি বের করা যায়**।
+
+এই অধ্যায়ে আমরা শিখলাম, গতিকে কীভাবে মাপতে হয়। কিন্তু একটা প্রশ্ন বাকি: গতি বদলায় কেন? রিকশা চলতে শুরু করে কেন, থামে কেন?
+
+<WhyStop story />
+
+পরের অধ্যায়ে, বল।
+
+</Step>
+
+</Journey>

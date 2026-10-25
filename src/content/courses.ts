@@ -134,4 +134,28 @@ export const COURSES: Course[] = [
     description: "নবম-দশম শ্রেণির পদার্থবিজ্ঞান, অধ্যায় ধরে ধরে, ময়মনসিংহের এক স্কুলের বিজ্ঞান মেলার সপ্তাহে।",
     items: ["nctb/phy01a_fair_stalls", "nctb/phy01b_dark_gap", "nctb/phy01c_amber_lodestone", "nctb/phy01d_falling_atom"],
   },
+  {
+    // One journey per video of the Physics 9–10 playlist (physics_9_10/, NCTB
+    // chapter 2 গতি): তিথি in ফরিদপুর, the video's own scenes made playable.
+    slug: "physics_for_high_school",
+    title: "Physics for High School",
+    description: "নবম-দশম শ্রেণির পদার্থবিজ্ঞান, অধ্যায় ২: গতি. তিথির সাথে ফরিদপুরে, অবস্থান থেকে শুরু করে নিজে রিকশার দ্রুতি মাপা পর্যন্ত.",
+    items: [
+      "physics_for_high_school/chapter_2/01_position",
+      "physics_for_high_school/chapter_2/02_rest_motion",
+      "physics_for_high_school/chapter_2/03_types_of_motion",
+      "physics_for_high_school/chapter_2/04_periodic_motion",
+      "physics_for_high_school/chapter_2/05_scalar_vector",
+      "physics_for_high_school/chapter_2/06_distance_displacement",
+      "physics_for_high_school/chapter_2/07_speed_velocity",
+      "physics_for_high_school/chapter_2/08_uniform_speed",
+      "physics_for_high_school/chapter_2/09_acceleration",
+      "physics_for_high_school/chapter_2/10_equations_of_motion",
+      "physics_for_high_school/chapter_2/11_v_squared",
+      "physics_for_high_school/chapter_2/12_falling_bodies",
+      "physics_for_high_school/chapter_2/13_throw_up",
+      "physics_for_high_school/chapter_2/14_motion_graphs",
+      "physics_for_high_school/chapter_2/15_measure_speed",
+    ],
+  },
 ];

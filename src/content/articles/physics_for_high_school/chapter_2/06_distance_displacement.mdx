@@ -1,0 +1,195 @@
+export const metadata = {
+  title: "Physics for High School 6 — দূরত্ব আর সরণ",
+  description: "তিথি নদীর পাড়ের আঁকাবাঁকা রাস্তায় সাইকেলে চার কিলোমিটার চালালো, কিন্তু শুরুর জায়গা থেকে সরলো মাত্র তিন কিলোমিটার। এটা কীভাবে সম্ভব? আর বেশি পথ চালালে কি বেশি সরা হয়?",
+  type: "article",
+};
+
+{/* The journey of video EP 06 (physics_9_10/06-distance-displacement/script.md),
+    NCTB physics 9-10 §2.4, pp. 39-40. Screen 1 seals a bet on what happens to
+    the 3 km when তিথি rides 2 km more; it is settled on the last screen. The
+    middle screens follow the video's scenes in order on its river road: ride
+    A → B (দূরত্ব 4 km), দূরত্বে দিক নেই (scalar), the straight arrow (সরণ), the
+    arrow measured (3 km, vector, AB), on to C (6 km, সরণ 1.5 km), back B → A
+    (BA = −AB), the loop home in Your turn (12 km, 0), the same unit. 10 steps.
+    Screens in components/interactive/phy-distance-journey.tsx. */}
+
+import { Journey, Step, Then } from "@/components/journey/journey";
+import {
+  RiverRide,
+  MoreRoadBet,
+  RideToB,
+  CountKm,
+  DrawArrow,
+  MeasureArrow,
+  ArrowName,
+  ToNanuBari,
+  OnToC,
+  BackToA,
+  FlipArrow,
+  LoopHome,
+  SameUnit,
+  PathAndArrow,
+  TwentyMin,
+} from "@/components/interactive/phy-distance-journey";
+
+<Journey title="দূরত্ব আর সরণ · 6">
+
+<Step>
+
+চার কিলোমিটার সাইকেল চালালেন, কিন্তু শুরুর জায়গা থেকে সরলেন মাত্র তিন কিলোমিটার। এটা কীভাবে সম্ভব?
+
+তিথি সাইকেলে করে নানুবাড়ি যাচ্ছে।
+
+<RiverRide story />
+
+তিথি যদি আরো বেশি পথ চালায়, শুরুর জায়গা থেকে কি আরো বেশি সরে যাবে? আপনার আন্দাজটা আগে বলে রাখুন।
+
+<MoreRoadBet />
+
+</Step>
+
+<Step>
+
+রাস্তাটা নদীর পাড় ধরে, সাপের মতো আঁকাবাঁকা। রাস্তার পাশে প্রতি কিলোমিটারে একটা করে মাইলফলক: শূন্য, এক, দুই, তিন।
+
+তিথি শুরু করলো বাসার মোড় A থেকে, থামলো বটতলা B-তে।
+
+<RideToB />
+
+<Then>
+
+মাইলফলক বলছে চার। পথ ধরে যতটা গেলো, তার নাম **দূরত্ব**, ইংরেজিতে **Distance**। দূরত্ব চার কিলোমিটার।
+
+</Then>
+
+</Step>
+
+<Step>
+
+রাস্তার চারটা কিলোমিটার চার রকম দিকে ঘুরেছে। কোনটা উপরে উঠেছে, কোনটা নিচে নেমেছে। দূরত্ব গুনতে কি এই দিকগুলো লাগে?
+
+<CountKm />
+
+<Then>
+
+দূরত্বে কোনো দিক নেই। পথ যেমনই ঘুরুক, শুধু গুনে যাই কত কিলোমিটার। তাই দূরত্ব একটা **scalar**।
+
+</Then>
+
+</Step>
+
+<Step>
+
+এবার একটা অন্য প্রশ্ন: A থেকে দেখলে B ঠিক কোথায়?
+
+A থেকে B পর্যন্ত একটা সোজা তীর টানি।
+
+<DrawArrow />
+
+<Then>
+
+এই তীরের নাম **সরণ**, ইংরেজিতে **Displacement**।
+
+</Then>
+
+</Step>
+
+<Step>
+
+তীরটা কত লম্বা? একটা ফিতা ফেলে মেপে দেখুন।
+
+<MeasureArrow />
+
+<Then>
+
+তীরটা মাপলে তিন কিলোমিটার, আর তীরের মাথা দেখাচ্ছে দিক। সরণে মান আর দিক দুটোই আছে, তাই সরণ একটা **vector**। একে লিখি $\vec{AB}$, মাথায় একটা তীর।
+
+<ArrowName />
+
+</Then>
+
+</Step>
+
+<Step>
+
+তিথি আরো দুই কিলোমিটার চালিয়ে পৌঁছালো নানুবাড়ি, C-তে। মোট দূরত্ব ছয় কিলোমিটার। তিথি ভাবলো, সরণও নিশ্চয়ই বেড়েছে।
+
+<ToNanuBari story />
+
+তিথির কথা ঠিক কি না, B থেকে C পর্যন্ত চালিয়ে দেখুন।
+
+<OnToC />
+
+<Then>
+
+কিন্তু রাস্তাটা ঘুরে আবার A-এর দিকেই ফিরে এসেছে! A থেকে C-এর সোজা তীর মাত্র দেড় কিলোমিটার। বেশি পথ চালিয়েও, সরণ কমে গেছে।
+
+</Then>
+
+</Step>
+
+<Step>
+
+এবার ফেরার পালা। B থেকে A।
+
+<BackToA />
+
+<Then>
+
+দূরত্ব আবারও চার কিলোমিটার, একই। কিন্তু সরণের তীর এখন উল্টো দিকে। তাই $\vec{BA} = -\vec{AB}$।
+
+<FlipArrow />
+
+</Then>
+
+</Step>
+
+<Step>
+
+## Your turn: বাসায় ফেরা
+
+আর বিকেলে তিথি যখন পুরো পথ ঘুরে বাসায় ফিরলো? A থেকে C, তারপর C থেকে আবার A।
+
+<LoopHome />
+
+<Then>
+
+ছয় গিয়ে ছয় ফিরে, দূরত্ব বারো কিলোমিটার। কিন্তু শুরু আর শেষ একই জায়গা, তাই সরণ শূন্য।
+
+</Then>
+
+</Step>
+
+<Step>
+
+দূরত্ব আর সরণ, দুজনেই দৈর্ঘ্য মাপে। তাহলে একক, মাত্রা আর দিক, কোনটা কার?
+
+<SameUnit />
+
+<Then>
+
+তাই একক একই, মিটার, আর মাত্রা L। পার্থক্য শুধু এক জায়গায়: সরণের দিক আছে।
+
+</Then>
+
+</Step>
+
+<Step>
+
+## শেষ! 4 km পথ, 3 km তীর
+
+<PathAndArrow story />
+
+বাজির মীমাংসা: **কমেও যেতে পারে**। A থেকে C, ছয় কিলোমিটার চালিয়েও সরণ মাত্র দেড় কিলোমিটার। আর পুরো পথ ঘুরে বাসায় ফিরলে, বারো কিলোমিটার চালিয়েও সরণ শূন্য।
+
+তাহলে **দূরত্ব হলো যে পথ ধরে গেছেন তার পুরো দৈর্ঘ্য, আর সরণ হলো শুরু থেকে শেষ পর্যন্ত একটা সোজা তীর**।
+
+তিথির এই যাত্রায় লেগেছিল বিশ মিনিট।
+
+<TwentyMin story />
+
+তাহলে ও কত জোরে চালিয়েছে? উত্তর দুইটা: দ্রুতি আর বেগ, পরের journey-তে।
+
+</Step>
+
+</Journey>

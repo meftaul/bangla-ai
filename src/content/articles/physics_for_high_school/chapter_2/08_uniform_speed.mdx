@@ -1,0 +1,209 @@
+export const metadata = {
+  title: "Physics for High School 8 — সমদ্রুতি, তবু বেগ বদলায়",
+  description: "টুটুল ছাদে সুতায় বাঁধা একটা ঢিল মাথার উপর একই জোরে ঘোরাচ্ছে। প্রতিটা পাকে সমান সময়। বেশিরভাগ মানুষ বলবে, ঢিলের বেগ বদলাচ্ছে না। সত্যিই কি তাই?",
+  type: "article",
+};
+
+{/* The journey of video EP 08 (physics_9_10/08-uniform-speed/script.md),
+    NCTB physics 9-10 §2.5, p. 42. Screen 1 seals a bet on whether the
+    whirling stone's velocity changes; it is settled on the last screen. The
+    middle screens follow the video's scenes in order: the lap timer (1 s a
+    lap), তিথি's সমবেগ and বেগ is a vector, the rim unrolled to 3 m so 3 m/s
+    (সমদ্রুতি), the turning arrow, the fan of arrows, the bike on the river
+    road, the one-way rule, the string let go and সমবেগ at last; then Your
+    turn with the wet umbrella. 10 steps.
+    Screens in components/interactive/phy-uniform-journey.tsx. */}
+
+import { Journey, Step, Then } from "@/components/journey/journey";
+import {
+  RoofWhirl,
+  WhirlBet,
+  LapTimer,
+  TithiClaim,
+  SpeedTape,
+  SpeedChipRide,
+  ArrowRide,
+  SamePair,
+  FanFour,
+  RoadPick,
+  OneWay,
+  LetGo,
+  ReleasePick,
+  FinallyUniform,
+  UmbrellaTurn,
+  UmbrellaSpray,
+  RoofAgain,
+  CircleRecap,
+} from "@/components/interactive/phy-uniform-journey";
+
+<Journey title="সমদ্রুতি · 8">
+
+<Step>
+
+সুতায় বাঁধা একটা ঢিল, মাথার উপর একই জোরে ঘুরছে। এর বেগ কি বদলাচ্ছে? বেশিরভাগ মানুষ বলবে, না।
+
+টুটুল ছাদে সুতা দিয়ে একটা ছোট ঢিল বেঁধে মাথার উপর বনবন করে ঘোরাচ্ছে।
+
+<RoofWhirl story />
+
+উপর থেকে দেখলে এমন। আপনি কী বলেন?
+
+<WhirlBet />
+
+</Step>
+
+<Step>
+
+তিথি দেখছে, প্রতিটা পাকে ঢিলটা সমান সময় নিচ্ছে।
+
+<LapTimer />
+
+<Then>
+
+তিথি বললো, সমান জোরে ঘুরছে, তাই এটা সমবেগ, ইংরেজিতে uniform velocity।
+
+<TithiClaim />
+
+কিন্তু দাঁড়ান। বেগ তো vector! শুধু মান না, দিকটাও দেখতে হবে।
+
+</Then>
+
+</Step>
+
+<Step>
+
+আগে দ্রুতি। এক পাক মানে তিন মিটার পথ, আর এক পাকে লাগে এক সেকেন্ড।
+
+<SpeedTape />
+
+<Then>
+
+তাহলে দ্রুতি সবসময় তিন মিটার পার সেকেন্ড, $3\ \text{m} \div 1\ \text{s} = 3\ \text{m/s}$। দ্রুতি বদলাচ্ছে না, এটা **সমদ্রুতি**, ইংরেজিতে **uniform speed**।
+
+<SpeedChipRide />
+
+</Then>
+
+</Step>
+
+<Step>
+
+এবার বেগের তীর আঁকি।
+
+<ArrowRide />
+
+<Then>
+
+এই মুহূর্তে ঢিল যাচ্ছে ডানে, তীর ডানে। একটু পরে উপরে, তারপর বামে, তারপর নিচে।
+
+তীরের দৈর্ঘ্য একই, কিন্তু দিক প্রতি মুহূর্তে বদলাচ্ছে।
+
+</Then>
+
+</Step>
+
+<Step>
+
+দৈর্ঘ্য একই থাকলে কি বেগও একই? দুইটা মুহূর্তের তীর পাশাপাশি এনে দেখা যাক।
+
+<SamePair />
+
+<Then>
+
+দিক বদলানো মানেই বেগ বদলানো।
+
+<FanFour />
+
+তাই ঢিলটা **সমদ্রুতিতে** চলছে, কিন্তু **সমবেগে** না।
+
+</Then>
+
+</Step>
+
+<Step>
+
+তিথির সাইকেলেও একই কথা।
+
+<RoadPick />
+
+<Then>
+
+নদীর পাড়ের আঁকাবাঁকা রাস্তায় speedometer-এর কাঁটা একটুও না নড়লেও, প্রতিটা বাঁকে বেগ বদলে যায়। সমবেগে চলা যায় শুধু সোজা পথে।
+
+</Then>
+
+</Step>
+
+<Step>
+
+তাহলে সমবেগ আর সমদ্রুতির মধ্যে নিয়মটা কোন দিকে চলে?
+
+<OneWay />
+
+<Then>
+
+নিয়মটা তাহলে এক দিকে চলে। সমবেগ হলে সমদ্রুতি হবেই। কিন্তু সমদ্রুতি হলেই যে সমবেগ হবে, তার কোনো নিশ্চয়তা নেই।
+
+</Then>
+
+</Step>
+
+<Step>
+
+এবার টুটুল হঠাৎ সুতাটা ছেড়ে দিলো।
+
+<LetGo story />
+
+ঢিলটা কি গোল পথেই ঘুরতে থাকবে?
+
+<ReleasePick />
+
+<Then>
+
+না। ছাড়ার মুহূর্তে বেগের তীর যেদিকে ছিল, ঢিল সোজা সেদিকে ছুটে যায়।
+
+বাতাসের বাধা আর মাধ্যাকর্ষণ না থাকলে, ঢিলটা সেই দিকে একই দ্রুতিতে সোজা চলতেই থাকতো। তখন, অবশেষে, সেটা হতো **সমবেগ**।
+
+<FinallyUniform />
+
+</Then>
+
+</Step>
+
+<Step>
+
+## Your turn: ফোঁটা কোন দিকে যায়?
+
+বৃষ্টির দিনে ভেজা ছাতা ঘোরালে কী দেখবেন? কিনারার ফোঁটাগুলো কোন দিকে যায়, এবার আপনি বলুন।
+
+<UmbrellaTurn />
+
+<Then>
+
+বৃষ্টির দিনে ভেজা ছাতা ঘোরালে ঠিক এটাই দেখবেন। পানির ফোঁটাগুলো ছাতার কিনারা থেকে গোল হয়ে ঘোরে না, সোজা ছিটকে যায়, যেদিকে ওদের বেগের তীর ছিল।
+
+<UmbrellaSpray />
+
+</Then>
+
+</Step>
+
+<Step>
+
+## শেষ! ঢিলের বেগ বদলাচ্ছিলই
+
+বিকেলে টুটুল আবার ছাদে ঢিল ঘোরাচ্ছে। তিথি এবার আর সমবেগ বললো না।
+
+<RoofAgain story />
+
+বাজির মীমাংসা: **হ্যাঁ, বদলাচ্ছিল**। দ্রুতি কিন্তু বদলায়নি, পুরো সময় 3 m/s। বদলাচ্ছিল দিক, প্রতি মুহূর্তে, আর দিক বদলানো মানেই বেগ বদলানো। একই জোরে ঘুরছে দেখে না বলাটাই সবচেয়ে সহজ ভুল।
+
+<CircleRecap story />
+
+তাহলে মনে রাখুন: **দিক বদলালেই বেগ বদলায়, দ্রুতি এক থাকলেও**।
+
+বেগ বদলালে, সেই বদলের একটা নাম আছে, আর একটা হিসাবও আছে। সেটা ত্বরণ, পরের journey-তে।
+
+</Step>
+
+</Journey>

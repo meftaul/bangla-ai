@@ -13,8 +13,9 @@
 // ponytail: only Lines 1–2 run for now (MATH_RAIL below); lines 3–10 wait in
 // LINES with their names and tools, and join by widening the slice.
 //
-// ponytail: only Math for AI rides the rail. Another course joins by getting its
-// own RailNetwork here and a branch in dashboard/courses/[slug]/page.tsx.
+// Physics for High School rides too (PHYSICS_RAIL below): one line per NCTB
+// chapter, its stations the places of তিথির ফরিদপুর. Another course joins by
+// getting its own Line[] in RAIL; the course page and the journeys pick it up.
 
 import type { Icon } from "@phosphor-icons/react";
 import {
@@ -23,6 +24,7 @@ import {
   Aperture,
   ArrowBendUpRight,
   ArrowCounterClockwise,
+  ArrowLineDown,
   ArrowsClockwise,
   ArrowsCounterClockwise,
   ArrowsIn,
@@ -34,6 +36,7 @@ import {
   Binary,
   Bird,
   Boat,
+  Bridge,
   BowlFood,
   BracketsSquare,
   Books,
@@ -46,6 +49,7 @@ import {
   Compass,
   CookingPot,
   Cpu,
+  Crosshair,
   Crown,
   Cube,
   EyeSlash,
@@ -53,6 +57,7 @@ import {
   Flashlight,
   FlowerLotus,
   Footprints,
+  Function,
   Funnel,
   Gauge,
   Grains,
@@ -62,6 +67,7 @@ import {
   Key,
   Lamp,
   Lightbulb,
+  LineSegment,
   LineSegments,
   ListNumbers,
   MagnifyingGlass,
@@ -85,12 +91,16 @@ import {
   Sparkle,
   SquaresFour,
   Stack,
+  Speedometer,
   Stamp,
   Sun,
   SunDim,
   Swap,
   Table,
   Television,
+  Timer,
+  Train,
+  TrendUp,
   Triangle,
   Trophy,
   Wind,
@@ -127,13 +137,18 @@ export type Line = {
   stations: Station[];
 };
 
-const s = (slug: string, code: string, bn: string, en: string, name: string, does: string, icon: Icon): Station => ({
-  slug: `math_for_ai/${slug}`,
-  code,
-  bn,
-  en,
-  tool: { name, does, icon },
-});
+/** A station maker for the journeys in one folder of src/content/articles. */
+const stationsIn =
+  (dir: string) =>
+  (slug: string, code: string, bn: string, en: string, name: string, does: string, icon: Icon): Station => ({
+    slug: `${dir}/${slug}`,
+    code,
+    bn,
+    en,
+    tool: { name, does, icon },
+  });
+const s = stationsIn("math_for_ai");
+const p2 = stationsIn("physics_for_high_school/chapter_2");
 
 const LINES: Line[] = [
   {
@@ -309,16 +324,55 @@ const LINES: Line[] = [
 
 export const MATH_RAIL: Line[] = LINES.slice(0, 2);
 
-/** Course slug → its railway. Only Math for AI for now. */
-export const RAIL: Record<string, Line[]> = { math_for_ai: MATH_RAIL };
+// Physics for High School: the line number is the NCTB chapter, so stations
+// read 2.1, 2.2… like the book's sections. Line ids start with "p" to stay
+// apart from Math for AI's on the reader's workbench (lib/rail.ts).
+export const PHYSICS_RAIL: Line[] = [
+  {
+    id: "p2",
+    no: 2,
+    train: { bn: "গতি এক্সপ্রেস", en: "Goti Express", no: 802 },
+    topic: "Motion: where a thing is, how fast it goes, and how that changes",
+    machine: { name: "Rickshaw meter", does: "Reads any ride: where it is, how far it went, how fast, which way, and how its speed changes." },
+    stations: [
+      p2("01_position", "JHT", "ঝিলটুলি", "Jhiltuli", "Origin pin", "Says where anything is: a starting point, a distance and a direction.", MapPin),
+      p2("02_rest_motion", "PLF", "প্ল্যাটফর্ম", "Platform", "Train window", "Rest or motion, always compared with something else.", Train),
+      p2("03_types_of_motion", "RMR", "রাস্তার মোড়", "Rastar Mor", "Motion sorter", "Sorts any movement: a straight line, a spin, or every point moving together.", Funnel),
+      p2("04_periodic_motion", "UTN", "উঠানের দোলনা", "Uthaner Dolna", "Swing stopwatch", "Motion that repeats in equal time, and how long one round takes.", Timer),
+      p2("05_scalar_vector", "MTD", "মাঠের ধার", "Mather Dhar", "Direction tag", "Tells a quantity that needs a direction (vector) from one that doesn't (scalar).", ArrowUpRight),
+      p2("06_distance_displacement", "NDP", "নদীর পাড়", "Nodir Par", "Straight string", "Displacement: start to finish in a straight line, with its direction.", LineSegment),
+      p2("07_speed_velocity", "BRP", "বাড়ি ফেরার পথ", "Bari Pherar Poth", "Two meters", "Speed from the path walked, velocity from the arrow, both per second.", Speedometer),
+      p2("08_uniform_speed", "CHD", "ছাদ", "Chhad", "Turning arrow", "The same speed can still mean a changing velocity, when the direction turns.", ArrowsClockwise),
+      p2("09_acceleration", "SPM", "সাইকেলের কাঁটা", "Cycler Kata", "Speed-change dial", "Acceleration: how much the velocity changes every second.", Gauge),
+      p2("10_equations_of_motion", "BRJ", "ব্রিজের ঢাল", "Brijer Dhal", "Two formulas", "v = u + at and s = ut + ½at²: speed and distance at any moment.", Bridge),
+      p2("11_v_squared", "DYL", "দেয়াল", "Deyal", "Time-free formula", "v² = u² + 2as, for when nobody knows how long it took.", Crosshair),
+      p2("12_falling_bodies", "CKN", "ছাদের কিনারা", "Chhader Kinara", "Same-g drop", "Without air, everything falls with the same acceleration g.", ArrowLineDown),
+      p2("13_throw_up", "TVS", "টিভির সামনে", "Tivir Samne", "Climb counter", "How high a throw goes: h = u²/2g, while g stays the same.", TrendUp),
+      p2("14_motion_graphs", "BRD", "স্কুলের বারান্দা", "Schooler Baranda", "Slope reader", "Reads velocity and acceleration off a graph's slope.", Function),
+      p2("15_measure_speed", "RKS", "রিকশার রাস্তা", "Rickshar Rasta", "Step counter", "Measures any speed with your own steps and a counted second.", Footprints),
+    ],
+  },
+];
 
-/** Every slug with a station on the network, published or not. */
-export const RAIL_SLUGS: string[] = MATH_RAIL.flatMap((line) => line.stations.map((st) => st.slug));
+/** Course slug → its railway. */
+export const RAIL: Record<string, Line[]> = { math_for_ai: MATH_RAIL, physics_for_high_school: PHYSICS_RAIL };
+
+/** The course whose railway has a station for `slug`, published or not. */
+export function railCourseOf(slug: string): string | undefined {
+  return Object.keys(RAIL).find((course) => RAIL[course].some((line) => line.stations.some((st) => st.slug === slug)));
+}
+
+/** Every slug with a station on a course's railway, published or not. */
+export function railSlugs(course: string): string[] {
+  return (RAIL[course] ?? []).flatMap((line) => line.stations.map((st) => st.slug));
+}
 
 /** Every station in riding order, with its line, its number on the line (1…) and its place on the whole network. */
 export type Stop = Station & { line: Line; n: number; index: number };
 
 export type RailNet = {
+  /** the course this railway belongs to, for links back to its route map */
+  course: string;
   /** the lines, each holding only its open stations; a line with none is gone */
   lines: Line[];
   stopOf: (slug: string) => Stop | undefined;
@@ -329,18 +383,19 @@ export type RailNet = {
 };
 
 /**
- * The railway as it runs: only the stations in `open` (the published journeys).
- * Numbers, neighbours and each line's tools all skip the rest, so a draft
- * between two stations is ridden straight past.
+ * A course's railway as it runs: only the stations in `open` (the published
+ * journeys). Numbers, neighbours and each line's tools all skip the rest, so a
+ * draft between two stations is ridden straight past.
  */
-export function railNet(open: ReadonlySet<string>): RailNet {
-  const lines = MATH_RAIL.map((line) => ({ ...line, stations: line.stations.filter((st) => open.has(st.slug)) })).filter(
+export function railNet(course: string, open: ReadonlySet<string>): RailNet {
+  const lines = (RAIL[course] ?? []).map((line) => ({ ...line, stations: line.stations.filter((st) => open.has(st.slug)) })).filter(
     (line) => line.stations.length,
   );
   const all: Stop[] = lines.flatMap((line) => line.stations.map((st, i) => ({ ...st, line, n: i + 1, index: 0 })));
   all.forEach((st, index) => (st.index = index));
   const bySlug = new Map(all.map((st) => [st.slug, st]));
   return {
+    course,
     lines,
     stopOf: (slug) => bySlug.get(slug),
     prevStop: (slug) => {

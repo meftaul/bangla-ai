@@ -40,7 +40,7 @@ function Idle({ calm, type, values, dur, begin = 0 }: { calm: boolean; type: "ro
 // ---------------------------------------------------------------------------
 // People.
 
-const BLINK_AT: Record<Who, number> = { fahim: 0.3, samin: 1.4, som: 2.1, nasib: 0.9, ammu: 1.8, apa: 2.6, mama: 0.6, rina: 1.1, karim: 2.3, mami: 1.6, nana: 0.1, jobair: 1.2 };
+const BLINK_AT: Record<Who, number> = { fahim: 0.3, samin: 1.4, som: 2.1, nasib: 0.9, ammu: 1.8, apa: 2.6, mama: 0.6, rina: 1.1, karim: 2.3, mami: 1.6, nana: 0.1, jobair: 1.2, tithi: 0.7, tutul: 2.0 };
 
 function Eye({ cx, calm, begin }: { cx: number; calm: boolean; begin: number }) {
   return (

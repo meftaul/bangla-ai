@@ -1,0 +1,200 @@
+export const metadata = {
+  title: "Physics for High School 14 — Graph থেকে বেগ আর ত্বরণ",
+  description: "শুধু একটা সংখ্যার table: কোন সেকেন্ডে কতদূর। তিথির খেলনা গাড়ির এই table থেকে কি বেগ আর ত্বরণ, দুটোই বের করা যায়? যায়, শুধু একটা graph paper লাগে।",
+  type: "article",
+};
+
+{/* The journey of video EP 14 (physics_9_10/chapter-2/14-motion-graphs/script.md),
+    NCTB physics 9-10 "নিজে করো", pp. 51–54 (টেবিল ২.০১, চিত্র ২.০৯). Screen 1
+    seals a bet on the shape of the v–t graph; it is settled on the last
+    screen. The middle screens follow the video's scenes in order: six dots
+    and a bending curve, 2.5 s read off it, the first second's 1 m/s at 0.5 s,
+    3 5 7 9 on a straight line, slope = বেগ, (6 − 4)/(3 − 2) = 2 = ত্বরণ, the
+    flat a–t line and s = t²; then Your turn (the book's second table).
+    10 steps. Screens in components/interactive/phy-graphs-journey.tsx. */}
+
+import { Journey, Step, Then } from "@/components/journey/journey";
+import {
+  ToyCarRamp,
+  GraphBet,
+  PlotDots,
+  ReadMiddle,
+  FirstSecond,
+  NextSeconds,
+  ReadSix,
+  WhereFast,
+  SlopeIsSpeed,
+  AccelSlope,
+  FlatAccel,
+  SquaresMatch,
+  Homework,
+  HomeworkSlopes,
+  ThreeGraphs,
+  RickshawTease,
+} from "@/components/interactive/phy-graphs-journey";
+
+<Journey title="Graph থেকে বেগ আর ত্বরণ · 14">
+
+<Step>
+
+শুধু একটা সংখ্যার table: কোন সেকেন্ডে কতদূর। এ থেকে কি বেগ আর ত্বরণ, দুটোই বের করা যায়? যায়, শুধু একটা graph paper লাগে।
+
+স্কুলের লম্বা বারান্দায় তিথি একটা খেলনা গাড়ি ঢালু পথে ছেড়ে দিলো। বন্ধুরা প্রতি সেকেন্ডে দাগ দিলো: শূন্য, এক, চার, নয়, ষোলো, পঁচিশ মিটার।
+
+<ToyCarRamp story />
+
+এই table থেকে প্রতি সেকেন্ডের বেগ বের করে graph-এ বসালে, রেখাটা দেখতে কেমন হবে? আপনার আন্দাজটা আগে বলে রাখুন।
+
+<GraphBet />
+
+</Step>
+
+<Step>
+
+Graph paper-এ নিচে সময়, পাশে দূরত্ব। Table-এর প্রতিটা সারি একটা বিন্দু।
+
+<PlotDots />
+
+<Then>
+
+ছয়টা বিন্দু বসিয়ে মিলিয়ে দিলে পাই একটা **বাঁকা রেখা**, যেটা যত এগোয় তত খাড়া হয়।
+
+</Then>
+
+</Step>
+
+<Step>
+
+Graph-এর একটা সুবিধা: মাঝের সময়ও পড়া যায়। Table-এ আড়াই সেকেন্ড নেই। তাহলে আড়াই সেকেন্ডে গাড়ি কোথায়?
+
+<ReadMiddle />
+
+<Then>
+
+আড়াই সেকেন্ডে রেখাটা প্রায় **ছয় দশমিক দুই পাঁচ মিটারে**। কেউ দাগ দেয়নি, তবু রেখা থেকে পড়ে ফেললাম।
+
+</Then>
+
+</Step>
+
+<Step>
+
+এবার বেগ। প্রথম সেকেন্ডে গাড়ি শূন্য থেকে এক মিটার গেলো, তাই গড় বেগ এক মিটার পার সেকেন্ড। নিচে আরেকটা graph paper, এবার বেগের।
+
+<FirstSecond />
+
+<Then>
+
+গড় বেগ মানে মাঝখানের মুহূর্তের বেগ। তাই এটা বসাই **শূন্য দশমিক পাঁচ সেকেন্ডে**, প্রথম সেকেন্ডের ঠিক মাঝখানে।
+
+</Then>
+
+</Step>
+
+<Step>
+
+এক থেকে দুই সেকেন্ডে, চার মাইনাস এক, তিন। বাকিগুলো আপনি মাপুন।
+
+<NextSeconds />
+
+<Then>
+
+তিন, পাঁচ, সাত, নয়। প্রতিটা বসলো সেই সেকেন্ডের মাঝখানে: দেড়, আড়াই, সাড়ে তিন, সাড়ে চার। আর দেখুন, বিন্দুগুলো একটা **সোজা রেখায়** দাঁড়িয়ে গেছে! এটাই বেগ-সময় graph।
+
+<ReadSix />
+
+এ থেকে যেকোনো মুহূর্তের বেগ পড়া যায়: তিন সেকেন্ডে, ছয় মিটার পার সেকেন্ড।
+
+</Then>
+
+</Step>
+
+<Step>
+
+আমরা আসলে কী করলাম? প্রতিবার দেখলাম, এক সেকেন্ডে রেখাটা কতটা উঠলো।
+
+<WhereFast />
+
+<Then>
+
+রেখা যেখানে বেশি খাড়া, সেখানে এক সেকেন্ডে বেশি ওঠে, আর গাড়িও ছোটে বেশি জোরে। এক সেকেন্ডে রেখা কতটা ওঠে, এর নাম রেখার **ঢাল**, ইংরেজিতে **slope**।
+
+<SlopeIsSpeed />
+
+দূরত্ব-সময় graph-এর ঢালই **বেগ**।
+
+</Then>
+
+</Step>
+
+<Step>
+
+এবার বেগের graph-এ একই কাজ। দুই থেকে তিন সেকেন্ডে বেগ চার থেকে ছয়।
+
+<AccelSlope />
+
+<Then>
+
+ঢাল, ছয় মাইনাস চার ভাগ এক: **দুই মিটার পার সেকেন্ড স্কয়ার**। প্রতি সেকেন্ডে বেগ কতটা বাড়ে, সেটাই তো ত্বরণ। তাই বেগ-সময় graph-এর ঢালই **ত্বরণ**।
+
+$$a = \frac{6 - 4}{3 - 2} = 2 \text{ m/s}^2$$
+
+</Then>
+
+</Step>
+
+<Step>
+
+অন্য কোথাও মাপলে ঢাল কি বদলাবে? নিচে আরেকটা graph paper, এবার ত্বরণের।
+
+<FlatAccel />
+
+<Then>
+
+রেখাটা সোজা, তাই যেখানেই মাপি, ঢাল দুই। ত্বরণ-সময় graph তাই একটা সমান সরলরেখা, দুইয়ের উচ্চতায়। এটা **সমত্বরণ**।
+
+আর ত্বরণ দুই হলে, s সমান অর্ধেক গুণ দুই গুণ t স্কয়ার, মানে শুধু t স্কয়ার।
+
+<SquaresMatch />
+
+</Then>
+
+</Step>
+
+<Step>
+
+## Your turn: বইয়ের table
+
+বইয়ের দ্বিতীয় table: দুই সেকেন্ডে ছয় মিটার, চার সেকেন্ডে চব্বিশ, ছয় সেকেন্ডে চুয়ান্ন। এই গাড়ির ত্বরণ কত?
+
+<Homework />
+
+<Then>
+
+Graph-এর পথেও একই উত্তর। প্রতি দুই সেকেন্ডের গড় বেগ 3, 9, 15, 21, 27 m/s, প্রতিবার 6 করে বাড়ে। ঢাল 6 ভাগ 2, মানে **3 m/s²**।
+
+<HomeworkSlopes />
+
+</Then>
+
+</Step>
+
+<Step>
+
+## শেষ! Table থেকে বেগ, বেগ থেকে ত্বরণ
+
+<ThreeGraphs story />
+
+বাজির মীমাংসা: **সোজা রেখা**। বাঁকা মনে হয়, কারণ দূরত্বের রেখাটা বাঁকা। কিন্তু প্রতি সেকেন্ডে দূরত্ব বাড়ে 1, 3, 5, 7, 9 করে, প্রতিবার ঠিক 2 বেশি। তাই বেগ বাড়ে একই হারে, আর রেখা হয় সোজা।
+
+তাহলে, **দূরত্ব-সময় graph-এর ঢাল হলো বেগ, আর বেগ-সময় graph-এর ঢাল হলো ত্বরণ**।
+
+এবার table-টা নিজেই বানালে কেমন হয়?
+
+<RickshawTease story />
+
+নিজে মাপুন: রিকশার দ্রুতি, পরের journey-তে।
+
+</Step>
+
+</Journey>

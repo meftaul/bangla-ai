@@ -1,0 +1,204 @@
+export const metadata = {
+  title: "Physics for High School 10 — v = u + at আর s = ut + ½at²",
+  description: "ব্রিজের মাথা থেকে তিথি ঢালে সাইকেল ছেড়ে দিলো, বেগ বাড়ছেই। চার সেকেন্ডে কতদূর গেলো? সোজা হিসাব মনে হয়, কিন্তু প্রথম চেষ্টায় প্রায় সবাই ভুল করে।",
+  type: "article",
+};
+
+{/* The journey of video EP 10 (physics_9_10/10-equations-of-motion/script.md),
+    NCTB physics 9-10 §2.7, pp. 45–46. Screen 1 seals a bet on how far তিথি
+    rolls in 4 s; it is settled on the last screen. The middle screens follow
+    the video's scenes in order: the five letters, the bridge slope and
+    v = u + at, তিথি's s = vt = 24 m, the average speed at the middle moment
+    and 16 m, the general formula, the check 8 + 8, the uneven acceleration;
+    then Your turn (the first 2 s). 10 steps. Screens in
+    components/interactive/phy-equations-journey.tsx. */}
+
+import { Journey, Step, Then } from "@/components/journey/journey";
+import {
+  BridgeTop,
+  DistanceBet,
+  PlaceLetters,
+  RollStart,
+  SecondBySecond,
+  FirstEquation,
+  TithiClaim,
+  SixCheck,
+  SteadyOnly,
+  SteadyGhost,
+  MidMoment,
+  NotTwentyFour,
+  Derive,
+  EightAndEight,
+  NotEven,
+  FirstTwoSeconds,
+  MidpointRecap,
+  TwoEquations,
+} from "@/components/interactive/phy-equations-journey";
+
+<Journey title="গতির সমীকরণ · 10">
+
+<Step>
+
+ঢালে সাইকেল ছেড়ে দিলেন, বেগ বাড়ছেই। চার সেকেন্ডে কতদূর গেলেন?
+
+<BridgeTop story />
+
+সোজা হিসাব মনে হয়, কিন্তু প্রথম চেষ্টায় প্রায় সবাই ভুল করে।
+
+<DistanceBet />
+
+</Step>
+
+<Step>
+
+আগে পাঁচটা অক্ষর।
+
+<PlaceLetters />
+
+<Then>
+
+$u$ হলো আদি বেগ, মানে শুরুর বেগ। $v$ শেষ বেগ। $a$ ত্বরণ। $t$ সময়। আর $s$, এই সময়ের মধ্যে কতটা দূরত্ব গেলো।
+
+</Then>
+
+</Step>
+
+<Step>
+
+ব্রিজের মাথায় তিথির বেগ দুই মিটার পার সেকেন্ড। ঢালে প্যাডেল না মেরেও প্রতি সেকেন্ডে বেগ বাড়ছে এক মিটার পার সেকেন্ড করে। মানে $u$ দুই, $a$ এক।
+
+<RollStart story />
+
+চার সেকেন্ড পর বেগ কত?
+
+<SecondBySecond />
+
+<Then>
+
+শুরুর দুই, তার সাথে প্রতি সেকেন্ডে এক করে চারবার যোগ: ছয়। এটাই প্রথম সমীকরণ, **$v = u + at$**। আসলে এটা ত্বরণের সংজ্ঞাটাই, একটু সাজিয়ে লেখা।
+
+<FirstEquation />
+
+</Then>
+
+</Step>
+
+<Step>
+
+এবার দূরত্ব। তিথি বললো, দূরত্ব তো বেগ গুণ সময়: ছয় গুণ চার, চব্বিশ মিটার।
+
+<TithiClaim story />
+
+<SixCheck />
+
+<Then>
+
+কিন্তু ছয় তো শেষ মুহূর্তের বেগ! পুরো সময় তিথি ছয়ে চলেনি, শুরু করেছিল দুই থেকে।
+
+$s = vt$ খাটে শুধু তখন, যখন **বেগ বদলায় না**।
+
+<SteadyOnly />
+
+</Then>
+
+</Step>
+
+<Step>
+
+তাহলে লাগবে গড় বেগ।
+
+<SteadyGhost />
+
+<Then>
+
+বেগ যেহেতু সমান হারে বাড়ছে, গড় বেগ হলো ঠিক **মাঝখানের মুহূর্তের বেগ**: দুই আর ছয়ের মাঝামাঝি, চার মিটার পার সেকেন্ড।
+
+<MidMoment />
+
+চার মিটার পার সেকেন্ড গুণ চার সেকেন্ড: ষোলো মিটার। চব্বিশ না, ষোলো।
+
+<NotTwentyFour />
+
+</Then>
+
+</Step>
+
+<Step>
+
+সাধারণভাবে, গড় বেগ হলো $u$ প্লাস $v$, ভাগ দুই: $V = \frac{u + v}{2}$।
+
+<Derive />
+
+<Then>
+
+$v$-এর জায়গায় $u + at$ বসালে, গড় বেগ হয় $u + \frac{1}{2}at$। সময় দিয়ে গুণ করলে, **$s = ut + \frac{1}{2}at^2$**।
+
+</Then>
+
+</Step>
+
+<Step>
+
+মিলিয়ে দেখি।
+
+<EightAndEight />
+
+<Then>
+
+$ut$ মানে দুই গুণ চার, আট। অর্ধেক গুণ এক গুণ চারের স্কয়ার, আট। আট আর আট, ষোলো মিটার। মিলে গেছে।
+
+</Then>
+
+</Step>
+
+<Step>
+
+আর ত্বরণ যদি সমান না থাকে?
+
+<NotEven />
+
+<Then>
+
+তখন মাঝখানের বেগের এই সহজ কৌশল খাটে না, লাগে calculus। কিন্তু **সমত্বরণে**, ইংরেজিতে যাকে বলে uniform acceleration, এই দুইটা সমীকরণই যথেষ্ট।
+
+</Then>
+
+</Step>
+
+<Step>
+
+## Your turn: প্রথম দুই সেকেন্ড
+
+একই ঢাল, একই শুরু। এবার শুধু প্রথম দুই সেকেন্ড।
+
+<FirstTwoSeconds />
+
+<Then>
+
+$u = 2$, $a = 1$, $t = 2$. $ut$ মানে 2 গুণ 2, চার। অর্ধেক গুণ এক গুণ দুইয়ের স্কয়ার, দুই। চার আর দুই, 6 m।
+
+গড় বেগ দিয়েও মেলে: শুরু 2, শেষ 4, মাঝামাঝি 3। তিন গুণ দুই সেকেন্ড, সেই 6 m।
+
+</Then>
+
+</Step>
+
+<Step>
+
+## শেষ! চার সেকেন্ডে ষোলো মিটার
+
+বাজির মীমাংসা: **16 m**। চব্বিশ মনে হয়, কারণ হাতের কাছে থাকে শেষের বেগ, ছয়। কিন্তু পুরো সময় তিথি ছয়ে চলেনি, গড়ে চলেছে চারে।
+
+<MidpointRecap story />
+
+তাহলে, **সমত্বরণে গড় বেগ হলো শুরু আর শেষের বেগের ঠিক মাঝামাঝি**। আর সেখান থেকেই, $s = ut + \frac{1}{2}at^2$।
+
+দুইটা সমীকরণেই সময় $t$ আছে। কিন্তু সময় না জানলে?
+
+<TwoEquations story />
+
+তৃতীয় সমীকরণ, যেখানে $t$ নেই, পরের journey-তে।
+
+</Step>
+
+</Journey>

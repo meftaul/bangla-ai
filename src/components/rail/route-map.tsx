@@ -32,7 +32,7 @@ const never = () => () => {};
  * trunk and on the workbench.
  */
 export function RouteMap({ course, items }: { course: string; items: RouteItem[] }) {
-  const net = useMemo(() => (RAIL[course] ? railNet(new Set(items.map((it) => it.slug))) : null), [course, items]);
+  const net = useMemo(() => (RAIL[course] ? railNet(course, new Set(items.map((it) => it.slug))) : null), [course, items]);
   const rail = useRail();
   // localStorage exists only after hydration; before that everything is unreached.
   const live = useSyncExternalStore(never, hydrated, onServer);

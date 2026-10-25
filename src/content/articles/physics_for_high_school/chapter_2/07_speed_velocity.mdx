@@ -1,0 +1,197 @@
+export const metadata = {
+  title: "Physics for High School 7 — দ্রুতি আর বেগ",
+  description: "একই যাত্রা, একই বিশ মিনিট। তবু তিথি কত জোরে চালিয়েছে, তার উত্তর আসে দুইটা: 3.33 m/s আর 2.5 m/s। কোনটা ঠিক?",
+  type: "article",
+};
+
+{/* The journey of video EP 07 (physics_9_10/07-speed-velocity/script.md), NCTB
+    physics 9-10 §2.5, pp. 40–41. Screen 1 seals a bet on which of the two
+    answers is right; it is settled on the last screen. The middle screens
+    follow the video's scenes in order: the 100 m sprint and the name দ্রুতি,
+    the বেগ card, the road in m and s, average speed from the time dots,
+    average velocity, the straight road, uniform speed; then Your turn (the ride
+    home). 10 steps. Screens in components/interactive/phy-speed-journey.tsx. */}
+
+import { Journey, Step, Then } from "@/components/journey/journey";
+import {
+  OneRideTwoAnswers,
+  SpeedBet,
+  SprintPace,
+  SpeedCard,
+  VelocityCard,
+  RoadPace,
+  UnitSwap,
+  TimeDots,
+  AvgNeedle,
+  VelocityPick,
+  TwoChips,
+  Straighten,
+  SteadyRide,
+  ReturnRide,
+  RecapCards,
+  StoneTeaser,
+} from "@/components/interactive/phy-speed-journey";
+
+<Journey title="দ্রুতি আর বেগ · 7">
+
+<Step>
+
+একই যাত্রা, একই বিশ মিনিট। তবু তিথি কত জোরে চালিয়েছে, তার উত্তর আসে দুইটা: তিন দশমিক তিন তিন, আর দুই দশমিক পাঁচ।
+
+<OneRideTwoAnswers story />
+
+কোনটা ঠিক?
+
+<SpeedBet />
+
+</Step>
+
+<Step>
+
+আগে সহজটা। স্কুলের দৌড়ে তিথি একশো মিটার দৌড়ালো বিশ সেকেন্ডে। প্রতি সেকেন্ডে কতটা?
+
+<SprintPace />
+
+<Then>
+
+একশো ভাগ বিশ: পাঁচ মিটার পার সেকেন্ড, মানে 5 m/s। খেয়াল করেছেন, প্রতি সেকেন্ডের দাগগুলো সমান 5 m ফাঁকে পড়লো।
+
+সময়ের সাথে দূরত্ব যে হারে বাড়ে, তার নাম **দ্রুতি**, ইংরেজিতে **speed**। একে লিখি ছোট হাতের $v$। একক মিটার পার সেকেন্ড, m/s, আর মাত্রা $LT^{-1}$।
+
+<SpeedCard />
+
+</Then>
+
+</Step>
+
+<Step>
+
+আর সময়ের সাথে সরণ যে হারে বদলায়, তার নাম বেগ, ইংরেজিতে velocity।
+
+<VelocityCard />
+
+<Then>
+
+খেয়াল করেছেন, সরণের তীরটা বসতেই $v$-এর মাথায় একটা ছোট তীর উঠলো। সরণ vector, তাই বেগও **vector**: মানের সাথে দিকটাও বলতে হয়।
+
+</Then>
+
+</Step>
+
+<Step>
+
+এবার তিথির নানুবাড়ির পথ। A থেকে B, পথ ধরে চার কিলোমিটার, সময় বিশ মিনিট।
+
+<RoadPace />
+
+<Then>
+
+মিটার আর সেকেন্ডে নিলে, চার হাজার মিটার ভাগ বারোশো সেকেন্ড: তিন দশমিক তিন তিন মিটার পার সেকেন্ড।
+
+<UnitSwap />
+
+</Then>
+
+</Step>
+
+<Step>
+
+কিন্তু তিথি কি পুরো সময় একই জোরে চালিয়েছে?
+
+<TimeDots />
+
+<Then>
+
+না। কোথাও জোরে চালিয়েছে, কোথাও আস্তে চালিয়েছে। dot যেখানে ফাঁকা, সেখানে একই সময়ে বেশি পথ, needle-ও উপরে।
+
+তাই 3.33 m/s হলো **গড় দ্রুতি**: মোট দূরত্ব ভাগ মোট সময়।
+
+<AvgNeedle />
+
+</Then>
+
+</Step>
+
+<Step>
+
+এবার বেগ। A থেকে B-এর সরণ তিন কিলোমিটার।
+
+<VelocityPick />
+
+<Then>
+
+তিন হাজার মিটার ভাগ বারোশো সেকেন্ড: 2.5 m/s, A থেকে B-এর দিকে। এটা **গড় বেগ**।
+
+দেখুন, গড় বেগ গড় দ্রুতির চেয়ে কম। কারণ আঁকাবাঁকা পথে তিথি চালিয়েছে অনেকটা, কিন্তু সরেছে কম।
+
+<TwoChips />
+
+</Then>
+
+</Step>
+
+<Step>
+
+রাস্তা যদি সোজা হতো?
+
+<Straighten />
+
+<Then>
+
+তাহলে দূরত্ব আর সরণ সমান, তাই গড় দ্রুতি আর গড় বেগের মানও সমান: দুটোই 2.5 m/s। সোজা পথে, **বেগের মানটাই দ্রুতি**।
+
+</Then>
+
+</Step>
+
+<Step>
+
+আর তিথি যদি একটুও বাড়িয়ে-কমিয়ে না চালিয়ে, পুরো পথ একই জোরে চালাতো?
+
+<SteadyRide />
+
+<Then>
+
+সেটা হতো **সুষম দ্রুতি**। সমান সময়ে সমান পথ, তাই dot-গুলো পড়লো সমান ফাঁকে, needle-ও নড়লো না।
+
+তখন যেকোনো মুহূর্তের দ্রুতি, মানে **তাৎক্ষণিক দ্রুতি**, আর গড় দ্রুতি একই হতো: 3.33 m/s।
+
+</Then>
+
+</Step>
+
+<Step>
+
+## Your turn: বাসায় ফেরা
+
+বটতলা থেকে তিথি একই পথে বাসায় ফিরলো, এবারও বিশ মিনিটে।
+
+<ReturnRide />
+
+<Then>
+
+পথ সেই একই 4 km, সময়ও 20 মিনিট, তাই গড় দ্রুতি আবার 3.33 m/s। সরণও 3 km, কিন্তু এবার B থেকে A-এর দিকে। তাই গড় বেগ 2.5 m/s, A-এর দিকে। মান একই, দিক উল্টা।
+
+</Then>
+
+</Step>
+
+<Step>
+
+## শেষ! দুই উত্তর, দুই রাশি
+
+বাজির মীমাংসা: **দুটোই ঠিক**। দুটো উত্তরই ঠিক, শুধু দুই রাশির উত্তর। 3.33 m/s হলো গড় দ্রুতি, আর 2.5 m/s হলো গড় বেগ, B-এর দিকে।
+
+<RecapCards story />
+
+তাহলে, **দ্রুতি হলো দূরত্ব ভাগ সময়, আর বেগ হলো সরণ ভাগ সময়**। আঁকাবাঁকা পথে তাই গড় বেগ, গড় দ্রুতির চেয়ে কম।
+
+এখন একটা ধাঁধা: দ্রুতি একটুও বদলাচ্ছে না, অথচ বেগ প্রতি মুহূর্তে বদলাচ্ছে। এমন কি হয়?
+
+<StoneTeaser story />
+
+সুতায় বাঁধা একটা ঢিল নিয়ে ব্যাপারটা দেখবো পরের journey-তে।
+
+</Step>
+
+</Journey>

@@ -20,6 +20,7 @@ import { SoundToggle } from "./sound-toggle";
  */
 export function Arrival({
   ref,
+  course,
   stop,
   next,
   checks,
@@ -27,6 +28,8 @@ export function Arrival({
   onAgain,
 }: {
   ref: Ref<HTMLDivElement>;
+  /** the course whose railway this is, for the route map link */
+  course: string;
   stop: Stop;
   /** the next published station: where the ticket runs to (none at the end of the network) */
   next: Stop | undefined;
@@ -137,7 +140,7 @@ export function Arrival({
       ) : null}
 
       <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm">
-        <Link href="/dashboard/courses/math_for_ai" style={{ color: "inherit" }} className="text-muted underline-offset-2 hover:underline">
+        <Link href={`/dashboard/courses/${course}`} style={{ color: "inherit" }} className="text-muted underline-offset-2 hover:underline">
           Route map দেখুন
         </Link>
         <button type="button" onClick={onAgain} className="cursor-pointer text-muted underline-offset-2 hover:underline">
